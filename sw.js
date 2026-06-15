@@ -8,7 +8,7 @@
 // (a) uses network-first for navigations so a stale shell can never trap the
 // user, and (b) deletes every cache it does not own on activate.
 
-const CACHE_NAME = 'shomer-v3-cache';
+const CACHE_NAME = 'shomer-v4-cache';
 const urlsToCache = [
   './',
   'index.html',
@@ -17,7 +17,8 @@ const urlsToCache = [
   'logo-192.png',
   'logo-512.png',
   'sos-icon-96.png',
-  'report-icon-96.png'
+  'report-icon-96.png',
+  '3shamrocks.png'
 ];
 
 self.addEventListener('install', event => {

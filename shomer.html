@@ -462,6 +462,12 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 /* Branding */
 .branding{text-align:center;font-size:10px;color:var(--tx3);letter-spacing:.5px;padding:12px 0 4px;}
 .branding a{color:var(--g2);text-decoration:none;}
+/* Studio credit / copyright footer */
+.studio-credit{display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 16px 8px;}
+.studio-credit img{height:22px;width:auto;max-width:80%;opacity:.92;}
+.studio-credit .cr{font-size:10px;color:var(--tx3);letter-spacing:.3px;text-align:center;line-height:1.7;direction:ltr;}
+.studio-credit .cr b{color:var(--g2);font-weight:700;}
+.tm{font-size:.52em;vertical-align:super;font-weight:800;letter-spacing:0;-webkit-text-fill-color:var(--g3);color:var(--g3);}
 /* scrollbar */
 ::-webkit-scrollbar{width:3px;}
 ::-webkit-scrollbar-track{background:transparent;}
@@ -491,9 +497,10 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
   <div class="ob-hero">
     <div class="ob-glow" aria-hidden="true"></div>
     <img class="ob-logo" src="logo-192.png" alt="שומר לוגו" width="120" height="120">
-    <div class="ob-title" aria-label="שומר">SHOMER</div>
-    <div class="ob-sub">Citizens Protecting Citizens</div>
-    <div class="branding" style="margin-bottom:4px;">by <a href="#">3Shamrocks.Studio</a></div>
+    <div class="ob-title" aria-label="שומר" dir="ltr">SHOMER<span class="tm">™</span></div>
+    <div class="ob-sub">שומר · Citizens Protecting Citizens</div>
+    <img src="3shamrocks.png" alt="3Shamrocks Studio" width="160" height="24" style="height:20px;width:auto;opacity:.9;margin-top:9px;">
+    <div dir="ltr" style="font-size:9px;color:var(--tx3);letter-spacing:.3px;margin-top:5px;">© 2026 3Shamrocks Studio</div>
     <!-- Language pick in onboarding -->
     <div class="ob-lang-pick" role="group" aria-label="שפה">
       <button class="olb on" onclick="setLang('he')">🇮🇱 עברית</button>
@@ -572,6 +579,12 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
       <button class="ob-back" onclick="goStep(1)" id="ob-back2">← חזרה</button>
     </div>
   </div>
+
+  <!-- Studio credit / copyright footer -->
+  <footer class="studio-credit">
+    <img src="3shamrocks.png" alt="3Shamrocks Studio" width="160" height="24">
+    <div class="cr">SHOMER<span class="tm">™</span> (שומר) — <b>3Shamrocks Studio</b><br>© 2026 3Shamrocks Studio · כל הזכויות שמורות · All rights reserved.</div>
+  </footer>
 </div>
 
 <!-- ═══════════════════════════════
@@ -676,7 +689,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
     </div>
     <div class="hdr-center">
       <img class="hdr-logo" src="logo-192.png" alt="" width="32" height="32" aria-hidden="true">
-      <span class="hdr-name">שומר</span>
+      <span class="hdr-name">שומר<span class="tm">™</span></span>
     </div>
     <div class="hdr-right">
       <div class="hdr-live" aria-label="שומרים פעילים" aria-live="polite">
@@ -767,6 +780,10 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
         <button class="chip" onclick="chipOn(this)">נסגר ✓</button>
       </div>
       <div id="upd-list" role="list"></div>
+      <footer class="studio-credit">
+        <img src="3shamrocks.png" alt="3Shamrocks Studio" width="160" height="24">
+        <div class="cr">SHOMER<span class="tm">™</span> (שומר)<br>© 2026 3Shamrocks Studio · כל הזכויות שמורות · All rights reserved.</div>
+      </footer>
     </div>
   </div>
 
@@ -943,9 +960,11 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
       </div>
       <div class="sec-cap mb12" style="margin-top:18px">אודות שומר</div>
       <div class="set-grp">
+        <div class="ai-row"><span class="ai-l">מוצר / Product</span><span class="ai-v" dir="ltr">SHOMER<span class="tm">™</span> (שומר)</span></div>
         <div class="ai-row"><span class="ai-l">גרסה</span><span class="ai-v">1.0.0</span></div>
         <div class="ai-row"><span class="ai-l">על שם</span><span class="ai-v">תנועת השומר, 1909</span></div>
         <div class="ai-row"><span class="ai-l">מוטו</span><span class="ai-v">שׁוֹמֵר אָחִי אָנֹכִי</span></div>
+        <div class="ai-row"><span class="ai-l">זכויות יוצרים</span><span class="ai-v" dir="ltr">© 2026 3Shamrocks Studio</span></div>
       </div>
       <div class="sec-cap mb12" style="margin-top:18px" id="reset-cap">בדיקה / נתוני דמו</div>
       <div class="set-grp" style="border-color:var(--b4);">
@@ -953,7 +972,10 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
       </div>
       <div class="sr-sb" id="reset-hint" style="margin:-10px 2px 16px;line-height:1.6">מוחק פרופיל, דיווחים, היסטוריית SOS והגדרות — וחוזר להרשמה.</div>
       <button style="width:100%;padding:13px;border:1px solid var(--b1);border-radius:var(--r12);background:var(--n3);font-size:13px;font-weight:600;color:#FF7080;margin-top:8px;cursor:pointer;" onclick="toast('יציאה בוצעה','red')">יציאה מהחשבון</button>
-      <div class="branding">by <a href="#">3Shamrocks.Studio</a></div>
+      <footer class="studio-credit">
+        <img src="3shamrocks.png" alt="3Shamrocks Studio" width="160" height="24">
+        <div class="cr">SHOMER<span class="tm">™</span> (שומר) — a <b>3Shamrocks Studio</b> product<br>© 2026 3Shamrocks Studio · כל הזכויות שמורות · All rights reserved.</div>
+      </footer>
     </div>
   </div>
 
