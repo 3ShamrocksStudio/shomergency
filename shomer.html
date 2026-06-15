@@ -559,7 +559,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
       </div>
       <div class="ob-vol-wrap">
         <div class="vol-row"><span class="vol-lbl" id="vol-lbl">עוצמת קול</span><span class="vol-val" id="ob-vv">100%</span></div>
-        <input type="range" min="10" max="100" value="100" aria-label="עוצמת קול" oninput="document.getElementById('ob-vv').textContent=this.value+'%';alarmVol=this.value/100;">
+        <input type="range" id="ob-vol-slider" min="10" max="100" value="100" aria-label="עוצמת קול" oninput="document.getElementById('ob-vv').textContent=this.value+'%';alarmVol=this.value/100;" onchange="SS.alarm.vol=alarmVol;saveStore();">
       </div>
       <button class="test-alarm-btn" onclick="testAlarm()" id="test-btn">🔊 <span id="test-lbl">בדוק אזעקה</span></button>
       <div class="shake-notice">
@@ -843,9 +843,9 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
       </div>
       <div class="sec-cap mb12" id="dms-interval-lbl">בחר מרווח זמן</div>
       <div class="dms-intervals" id="dms-intervals" role="group">
-        <div class="dms-iv" onclick="dmsPickIv(this,3)" tabindex="0"><div class="dms-iv-n">3</div><div class="dms-iv-l" id="dms-min-lbl">דק׳</div></div>
-        <div class="dms-iv sel" onclick="dmsPickIv(this,5)" tabindex="0"><div class="dms-iv-n">5</div><div class="dms-iv-l" id="dms-min-lbl2">דק׳</div></div>
-        <div class="dms-iv" onclick="dmsPickIv(this,10)" tabindex="0"><div class="dms-iv-n">10</div><div class="dms-iv-l" id="dms-min-lbl3">דק׳</div></div>
+        <div class="dms-iv" data-min="1" onclick="dmsPickIv(this,1)" tabindex="0"><div class="dms-iv-n">1</div><div class="dms-iv-l" id="dms-demo-lbl">דמו</div></div>
+        <div class="dms-iv sel" data-min="5" onclick="dmsPickIv(this,5)" tabindex="0"><div class="dms-iv-n">5</div><div class="dms-iv-l" id="dms-min-lbl2">דק׳</div></div>
+        <div class="dms-iv" data-min="10" onclick="dmsPickIv(this,10)" tabindex="0"><div class="dms-iv-n">10</div><div class="dms-iv-l" id="dms-min-lbl3">דק׳</div></div>
       </div>
       <div id="dms-status-card" style="display:none;background:var(--n3);border:1px solid var(--b1);border-radius:var(--r12);padding:20px;text-align:center;margin-bottom:14px">
         <div class="dms-timer-display" id="dms-display" aria-live="polite">5:00</div>
@@ -884,10 +884,10 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
       </div>
       <div class="ob-vol-wrap mb12">
         <div class="vol-row"><span class="vol-lbl">עוצמת קול</span><span class="vol-val" id="vol-val">100%</span></div>
-        <input type="range" id="vol-slider" min="10" max="100" value="100" aria-label="עוצמת קול" oninput="document.getElementById('vol-val').textContent=this.value+'%';alarmVol=this.value/100;">
+        <input type="range" id="vol-slider" min="10" max="100" value="100" aria-label="עוצמת קול" oninput="document.getElementById('vol-val').textContent=this.value+'%';alarmVol=this.value/100;" onchange="SS.alarm.vol=alarmVol;saveStore();">
       </div>
       <button class="test-alarm-btn mb16" onclick="testAlarm()">🔊 בדוק אזעקה עכשיו</button>
-      <button class="cta-red" onclick="cl('sh-alarm');toast(T('saved'),'grn')">✓ שמור הגדרות</button>
+      <button class="cta-red" onclick="saveAlarmSettings()">✓ שמור הגדרות</button>
     </div>
   </div>
 
@@ -896,23 +896,33 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
     <div class="sh-pill" aria-hidden="true"></div>
     <div class="sh-head"><span class="sh-ttl" id="set-ttl">הגדרות</span><button class="sh-x" onclick="cl('sh-set')" aria-label="סגור">✕</button></div>
     <div class="sh-body">
-      <div class="sec-cap mb12">רדיוס התראה</div>
+      <div class="sec-cap mb12" id="set-radius-lbl">רדיוס התראה</div>
       <div class="sl-card mb20">
         <div class="rad-big"><span id="rad-v">5</span><span class="rad-u"> ק"מ</span></div>
-        <input type="range" min="1" max="25" value="5" aria-label="רדיוס בקילומטרים" oninput="document.getElementById('rad-v').textContent=this.value">
+        <input type="range" id="rad-slider" min="1" max="25" value="5" aria-label="רדיוס בקילומטרים" oninput="saveRadius(this.value)">
         <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--tx3);margin-top:6px"><span>1</span><span>25 ק"מ</span></div>
       </div>
-      <div class="sec-cap mb12">התראות</div>
+      <div class="sec-cap mb12" id="set-notif-lbl">התראות</div>
       <div class="set-grp">
-        <div class="set-row"><div class="sr-l"><div class="sr-ic">🚨</div><div><div class="sr-nm">SOS חירום</div><div class="sr-sb">כל SOS באזורך</div></div></div><div class="tog on" onclick="this.classList.toggle('on')" role="switch"></div></div>
-        <div class="set-row"><div class="sr-l"><div class="sr-ic">👁️</div><div><div class="sr-nm">מעקב ואיומים</div></div></div><div class="tog on" onclick="this.classList.toggle('on')" role="switch"></div></div>
-        <div class="set-row"><div class="sr-l"><div class="sr-ic">🏥</div><div><div class="sr-nm">עזרה רפואית</div></div></div><div class="tog" onclick="this.classList.toggle('on')" role="switch"></div></div>
-        <div class="set-row"><div class="sr-l"><div class="sr-ic">✅</div><div><div class="sr-nm">אירועים שנסגרו</div></div></div><div class="tog" onclick="this.classList.toggle('on')" role="switch"></div></div>
+        <div class="set-row"><div class="sr-l"><div class="sr-ic">🚨</div><div><div class="sr-nm">SOS חירום</div><div class="sr-sb">כל SOS באזורך</div></div></div><div class="tog on" data-skey="n_sos" onclick="this.classList.toggle('on');saveToggle(this)" role="switch"></div></div>
+        <div class="set-row"><div class="sr-l"><div class="sr-ic">👁️</div><div><div class="sr-nm">מעקב ואיומים</div></div></div><div class="tog on" data-skey="n_stalk" onclick="this.classList.toggle('on');saveToggle(this)" role="switch"></div></div>
+        <div class="set-row"><div class="sr-l"><div class="sr-ic">🏥</div><div><div class="sr-nm">עזרה רפואית</div></div></div><div class="tog" data-skey="n_med" onclick="this.classList.toggle('on');saveToggle(this)" role="switch"></div></div>
+        <div class="set-row"><div class="sr-l"><div class="sr-ic">✅</div><div><div class="sr-nm">אירועים שנסגרו</div></div></div><div class="tog" data-skey="n_closed" onclick="this.classList.toggle('on');saveToggle(this)" role="switch"></div></div>
       </div>
-      <div class="sec-cap mb12">פרטיות</div>
+      <div class="sec-cap mb12" id="shake-set-lbl">Shake-to-SOS</div>
       <div class="set-grp">
-        <div class="set-row"><div class="sr-l"><div class="sr-ic">📍</div><div><div class="sr-nm">שיתוף מיקום ברקע</div><div class="sr-sb">נדרש ל-SOS ו-DMS</div></div></div><div class="tog on" onclick="this.classList.toggle('on')" role="switch"></div></div>
-        <div class="set-row"><div class="sr-l"><div class="sr-ic">👤</div><div><div class="sr-nm">הצג שם בעדכונים</div></div></div><div class="tog on" onclick="this.classList.toggle('on')" role="switch"></div></div>
+        <div class="set-row"><div class="sr-l"><div class="sr-ic">📳</div><div><div class="sr-nm" id="shake-tog-lbl">הפעל Shake-to-SOS</div><div class="sr-sb" id="shake-tog-sub">5 ניעורים חזקים → SOS</div></div></div><div class="tog on" id="shake-tog" onclick="toggleShake(this)" role="switch"></div></div>
+      </div>
+      <div class="sl-card mb20">
+        <div class="vol-row"><span class="vol-lbl" id="shake-sens-lbl">רגישות ניעור</span><span class="vol-val" id="shake-sens-v">בינונית</span></div>
+        <input type="range" id="shake-sens" min="12" max="32" value="22" aria-label="shake sensitivity" oninput="setShakeSens(this.value)">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--tx3);margin-top:6px"><span>גבוהה</span><span>נמוכה</span></div>
+        <button class="test-alarm-btn" style="margin-top:12px" onclick="simulateShake()" id="sim-shake-btn">📳 <span id="sim-shake-lbl">סימולציית ניעור (בדיקה)</span></button>
+      </div>
+      <div class="sec-cap mb12" id="set-priv-lbl">פרטיות</div>
+      <div class="set-grp">
+        <div class="set-row"><div class="sr-l"><div class="sr-ic">📍</div><div><div class="sr-nm">שיתוף מיקום ברקע</div><div class="sr-sb">נדרש ל-SOS ו-DMS</div></div></div><div class="tog on" data-skey="p_bgloc" onclick="this.classList.toggle('on');saveToggle(this)" role="switch"></div></div>
+        <div class="set-row"><div class="sr-l"><div class="sr-ic">👤</div><div><div class="sr-nm">הצג שם בעדכונים</div></div></div><div class="tog on" data-skey="p_showname" onclick="this.classList.toggle('on');saveToggle(this)" role="switch"></div></div>
       </div>
       <div class="sec-cap mb12">אנשי קשר חירום</div>
       <div class="set-grp" id="contacts-grp">
@@ -937,6 +947,11 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
         <div class="ai-row"><span class="ai-l">על שם</span><span class="ai-v">תנועת השומר, 1909</span></div>
         <div class="ai-row"><span class="ai-l">מוטו</span><span class="ai-v">שׁוֹמֵר אָחִי אָנֹכִי</span></div>
       </div>
+      <div class="sec-cap mb12" style="margin-top:18px" id="reset-cap">בדיקה / נתוני דמו</div>
+      <div class="set-grp" style="border-color:var(--b4);">
+        <button style="width:100%;padding:14px;background:var(--rb);border:none;font-size:14px;font-weight:800;color:#FF7080;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;" onclick="resetApp()" id="reset-btn"><span id="reset-btn-lbl">🔄 איפוס אפליקציה / נתוני דמו</span></button>
+      </div>
+      <div class="sr-sb" id="reset-hint" style="margin:-10px 2px 16px;line-height:1.6">מוחק פרופיל, דיווחים, היסטוריית SOS והגדרות — וחוזר להרשמה.</div>
       <button style="width:100%;padding:13px;border:1px solid var(--b1);border-radius:var(--r12);background:var(--n3);font-size:13px;font-weight:600;color:#FF7080;margin-top:8px;cursor:pointer;" onclick="toast('יציאה בוצעה','red')">יציאה מהחשבון</button>
       <div class="branding">by <a href="#">3Shamrocks.Studio</a></div>
     </div>
@@ -953,16 +968,20 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
         <div class="p-rk" id="prof-rank">שומר מדרגה ב׳</div>
       </div>
       <div class="stats" role="group">
-        <div class="st"><div class="st-n">7</div><div class="st-l">דיווחים</div></div>
-        <div class="st"><div class="st-n">3</div><div class="st-l">תגובות</div></div>
-        <div class="st"><div class="st-n">142</div><div class="st-l">נקודות</div></div>
+        <div class="st"><div class="st-n" id="stat-reports">0</div><div class="st-l" id="stat-reports-lbl">דיווחים</div></div>
+        <div class="st"><div class="st-n" id="stat-sos">0</div><div class="st-l" id="stat-sos-lbl">אירועי SOS</div></div>
+        <div class="st"><div class="st-n">★</div><div class="st-l" id="stat-pts-lbl">נקודות</div></div>
       </div>
       <div class="sec-cap mb12">פעולות מהירות</div>
-      <div class="set-grp">
+      <div class="set-grp mb20">
         <div class="set-row" onclick="op('sh-dms');cl('sh-prof')"><div class="sr-l"><div class="sr-ic">⏱️</div><div class="sr-nm">Dead Man's Switch</div></div><span style="color:var(--tx3);font-size:18px">›</span></div>
         <div class="set-row" onclick="op('sh-alarm');cl('sh-prof')"><div class="sr-l"><div class="sr-ic">🚨</div><div class="sr-nm">הגדרות אזעקה</div></div><span style="color:var(--tx3);font-size:18px">›</span></div>
         <div class="set-row" onclick="op('sh-em');cl('sh-prof')"><div class="sr-l"><div class="sr-ic">📞</div><div class="sr-nm">מספרי חירום</div></div><span style="color:var(--tx3);font-size:18px">›</span></div>
       </div>
+      <div class="sec-cap mb12" id="myrep-cap">הדיווחים שלי</div>
+      <div id="my-reports-list" class="mb20" role="list"></div>
+      <div class="sec-cap mb12" id="soshist-cap">היסטוריית SOS</div>
+      <div id="sos-hist-list" role="list"></div>
     </div>
   </div>
 
@@ -1226,6 +1245,277 @@ let dmsActive=false, dmsInterval=5, dmsTimer=null, dmsCountdown=0, dmsWarning=fa
 let dmsWarningTimer=null;
 const DETAILS_DB=[];
 
+/* ═══════════════════════════════════
+   PERSISTENCE — LocalStorage (front-end only, single device)
+   Every key here survives a page reload. See TEST_AUDIT.md.
+═══════════════════════════════════ */
+const SKEY='shomer_state_v1';
+let SS={
+  onboarded:false,
+  lang:'he',
+  user:{name:'',phone:''},
+  alarm:{type:'siren',vol:1.0},
+  shake:{enabled:true,sensitivity:22},
+  dms:{interval:5,active:false,deadline:0},
+  settings:{radius:5,toggles:{}},
+  reports:[],     // {id,type,desc,loc,lat,lng,photos:[thumbs],ts,anon}
+  sosHistory:[]   // {id,ts,lat,lng,trigger}
+};
+function deepMerge(base,o){
+  const out=Array.isArray(base)?[]:{...base};
+  if(Array.isArray(o))return o.slice();
+  for(const k in o){
+    if(o[k]&&typeof o[k]==='object'&&!Array.isArray(o[k])&&base[k]&&typeof base[k]==='object'&&!Array.isArray(base[k]))
+      out[k]=deepMerge(base[k],o[k]);
+    else out[k]=o[k];
+  }
+  return out;
+}
+function loadStore(){try{const r=localStorage.getItem(SKEY);if(r)SS=deepMerge(SS,JSON.parse(r));}catch(e){}}
+function saveStore(){try{
+  // Strip transient fields (_detIdx) before persisting.
+  const clean={...SS,reports:SS.reports.map(r=>{const c={...r};delete c._detIdx;return c;})};
+  localStorage.setItem(SKEY,JSON.stringify(clean));
+}catch(e){}}
+
+function relTime(ts){
+  const s=Math.max(0,Math.floor((Date.now()-ts)/1000));
+  const he=currentLang==='he';
+  if(s<60)return he?'עכשיו':'now';
+  const m=Math.floor(s/60);if(m<60)return he?`לפני ${m} דק׳`:`${m} min ago`;
+  const h=Math.floor(m/60);if(h<24)return he?`לפני ${h} שעות`:`${h}h ago`;
+  const d=Math.floor(h/24);return he?`לפני ${d} ימים`:`${d}d ago`;
+}
+/* Downscale a dataURL to a small thumbnail so reports persist within quota. */
+function makeThumb(src){return new Promise(res=>{
+  const img=new Image();
+  img.onload=()=>{try{
+    const max=160;let w=img.width,h=img.height;const sc=Math.min(1,max/Math.max(w,h));
+    w=Math.max(1,w*sc|0);h=Math.max(1,h*sc|0);
+    const c=document.createElement('canvas');c.width=w;c.height=h;
+    c.getContext('2d').drawImage(img,0,0,w,h);
+    res(c.toDataURL('image/jpeg',.6));
+  }catch(e){res(null);}};
+  img.onerror=()=>res(null);
+  img.src=src;
+});}
+
+/* Apply stored settings to globals + UI on load (before app shows). */
+function applyStoredSettings(){
+  alarmType=SS.alarm.type||'siren';
+  alarmVol=(SS.alarm.vol!=null?SS.alarm.vol:1);
+  dmsIv=SS.dms.interval||5; dmsInterval=dmsIv;
+  if(SS.user){user.name=SS.user.name||'';user.phone=SS.user.phone||'';}
+  reflectAlarmSelection();
+  reflectDmsSelection();
+  // Volume sliders + labels
+  const vp=Math.round(alarmVol*100);
+  [['ob-vol-slider','ob-vv'],['vol-slider','vol-val']].forEach(([s,l])=>{
+    const se=document.getElementById(s);if(se)se.value=vp;
+    const le=document.getElementById(l);if(le)le.textContent=vp+'%';
+  });
+  // Shake UI
+  const st=document.getElementById('shake-tog');if(st)st.classList.toggle('on',SS.shake.enabled!==false);
+  const ssl=document.getElementById('shake-sens');if(ssl)ssl.value=SS.shake.sensitivity||22;
+  updateShakeSensLabel();
+  // Settings toggles
+  document.querySelectorAll('.tog[data-skey]').forEach(t=>{
+    const k=t.getAttribute('data-skey');
+    if(SS.settings.toggles&&SS.settings.toggles[k]!==undefined)t.classList.toggle('on',!!SS.settings.toggles[k]);
+  });
+  // Radius
+  const rs=document.getElementById('rad-slider');if(rs)rs.value=SS.settings.radius||5;
+  setText('rad-v',String(SS.settings.radius||5));
+  // Prefill onboarding fields if a returning user re-onboards after reset (no-op normally)
+  const pn=document.getElementById('ob-name');if(pn&&user.name&&user.name!=='שומר')pn.value=user.name;
+}
+function reflectAlarmSelection(){
+  [['#ob-alarms .ob-alarm','obPickAlarm'],['#alarm-list .ob-alarm','pickAlarm']].forEach(([sel])=>{
+    document.querySelectorAll(sel).forEach(a=>{
+      const on=a.getAttribute('onclick')||'';
+      const isSel=on.includes("'"+alarmType+"'");
+      a.classList.toggle('sel',isSel);a.setAttribute('aria-checked',String(isSel));
+    });
+  });
+}
+function reflectDmsSelection(){
+  document.querySelectorAll('.dms-iv').forEach(d=>{
+    const m=Number(d.getAttribute('data-min'));
+    d.classList.toggle('sel',m===dmsIv);
+  });
+}
+function updateShakeSensLabel(){
+  const v=SS.shake.sensitivity||22;
+  const he=currentLang==='he';
+  let lbl=he?'בינונית':'Medium';
+  if(v<18)lbl=he?'גבוהה':'High';else if(v>26)lbl=he?'נמוכה':'Low';
+  setText('shake-sens-v',lbl);
+}
+
+/* ── Generic settings toggle persistence ── */
+function saveToggle(el){
+  const k=el.getAttribute('data-skey');if(!k)return;
+  SS.settings.toggles=SS.settings.toggles||{};
+  SS.settings.toggles[k]=el.classList.contains('on');
+  saveStore();
+}
+function saveRadius(v){SS.settings.radius=Number(v);setText('rad-v',String(v));saveStore();}
+
+/* ── Shake settings handlers ── */
+function toggleShake(el){
+  el.classList.toggle('on');
+  SS.shake.enabled=el.classList.contains('on');
+  saveStore();
+  toast(SS.shake.enabled?(currentLang==='he'?'📳 Shake-to-SOS פעיל':'📳 Shake-to-SOS on'):(currentLang==='he'?'Shake-to-SOS כבוי':'Shake-to-SOS off'),SS.shake.enabled?'grn':'');
+}
+function setShakeSens(v){
+  SS.shake.sensitivity=Number(v);
+  updateShakeSensLabel();
+  saveStore();
+}
+/* Manual trigger for desktop testing — behaves like 5 real shakes. */
+function simulateShake(){
+  toast(currentLang==='he'?'📳 ניעור זוהה (סימולציה)':'📳 Shake detected (simulated)','amb');
+  if(!sosActive)setTimeout(()=>triggerSOS('shake'),400);
+}
+
+/* ── Alarm settings persistence ── */
+function saveAlarmSettings(){
+  SS.alarm.type=alarmType;SS.alarm.vol=alarmVol;saveStore();
+  cl('sh-alarm');toast(T('saved'),'grn');
+}
+
+/* ── Reset / demo data ── */
+function resetApp(){
+  const msg=currentLang==='he'
+    ?'לאפס את כל הנתונים (פרופיל, דיווחים, היסטוריית SOS, הגדרות) ולהתחיל מחדש מההרשמה?'
+    :'Reset ALL data (profile, reports, SOS history, settings) and restart from onboarding?';
+  if(!window.confirm(msg))return;
+  try{localStorage.removeItem(SKEY);}catch(e){}
+  location.reload();
+}
+
+/* ── Reports: map pins, cards, list ── */
+function typeLabelOf(t){const o=TYPES[t];return o?o.label():'';}
+function buildDetailFromReport(rep){
+  const sv=(rep.lat!=null&&rep.lng!=null)?geoToSVG(rep.lat,rep.lng):{x:170,y:299};
+  return {title:(currentLang==='he'?'דיווח: ':'Report: ')+(typeLabelOf(rep.type)||(currentLang==='he'?'אירוע':'incident')),
+    type:rep.type||'viol',time:relTime(rep.ts),loc:rep.loc||'—',cx:sv.x,cy:sv.y,
+    desc:rep.desc||'',responders:[],photos:(rep.photos?rep.photos.length:0),
+    status:currentLang==='he'?'פתוח':'open'};
+}
+function addReportPin(rep){
+  const ns='http://www.w3.org/2000/svg',g=document.getElementById('pins');
+  if(!g)return;
+  const sv=(rep.lat!=null&&rep.lng!=null)?geoToSVG(rep.lat,rep.lng):{x:170,y:299};
+  const id='rpt-'+rep.id;const old=document.getElementById(id);if(old)old.remove();
+  const c=document.createElementNS(ns,'circle');
+  c.id=id;c.setAttribute('cx',sv.x);c.setAttribute('cy',sv.y);c.setAttribute('r','6');
+  c.setAttribute('fill','#1852C0');c.setAttribute('stroke','#fff');c.setAttribute('stroke-width','2.2');
+  c.style.cursor='pointer';c.style.filter='drop-shadow(0 1px 6px #1852C0AA)';
+  c.setAttribute('tabindex','0');c.setAttribute('role','button');
+  c.setAttribute('aria-label',(currentLang==='he'?'הדיווח שלי':'My report')+' — '+(rep.loc||''));
+  c.addEventListener('click',ev=>{ev.stopPropagation();if(rep._detIdx!=null)openDetail(rep._detIdx);});
+  c.addEventListener('keydown',ev=>{if((ev.key==='Enter'||ev.key===' ')&&rep._detIdx!=null){ev.stopPropagation();openDetail(rep._detIdx);}});
+  g.appendChild(c);
+}
+function renderReportsList(){
+  const l=document.getElementById('my-reports-list');if(!l)return;
+  l.innerHTML='';
+  if(!SS.reports.length){
+    const e=document.createElement('div');e.className='sr-sb';e.style.padding='4px 2px';
+    e.textContent=currentLang==='he'?'אין דיווחים עדיין. שלח דיווח ראשון מהתפריט.':'No reports yet. Submit one from the menu.';
+    l.appendChild(e);return;
+  }
+  [...SS.reports].reverse().forEach(rep=>{
+    const div=document.createElement('div');div.className='ucard t-new';div.style.marginBottom='8px';
+    div.setAttribute('role','listitem');div.setAttribute('tabindex','0');
+    if(rep._detIdx!=null){div.onclick=()=>openDetail(rep._detIdx);div.onkeydown=e=>{if(e.key==='Enter')openDetail(rep._detIdx);};}
+    const inner=document.createElement('div');inner.className='uc-in';
+    const top=document.createElement('div');top.className='uc-top';
+    const hd=document.createElement('div');hd.className='uc-hd';
+    const dot=document.createElement('div');dot.className='uc-dot';dot.setAttribute('aria-hidden','true');
+    const ttl=document.createElement('span');ttl.className='uc-ttl';
+    ttl.textContent=(rep.photos&&rep.photos.length?`📷${rep.photos.length} `:'')+'📝 '+(typeLabelOf(rep.type)||(currentLang==='he'?'דיווח':'report'));
+    hd.appendChild(dot);hd.appendChild(ttl);top.appendChild(hd);
+    const meta=document.createElement('div');meta.className='uc-meta';
+    meta.textContent=relTime(rep.ts)+(rep.loc?' · '+rep.loc:'');
+    const desc=document.createElement('div');desc.className='uc-desc';
+    desc.textContent=(rep.desc||'').substring(0,90)+((rep.desc||'').length>90?'…':'');
+    inner.appendChild(top);inner.appendChild(meta);inner.appendChild(desc);
+    if(rep.photos&&rep.photos.length){
+      const row=document.createElement('div');row.style.cssText='display:flex;gap:6px;margin-top:7px';
+      rep.photos.forEach(src=>{const img=document.createElement('img');img.src=src;img.alt='';img.style.cssText='width:46px;height:46px;border-radius:8px;object-fit:cover;border:1px solid var(--b2)';row.appendChild(img);});
+      inner.appendChild(row);
+    }
+    div.appendChild(inner);l.appendChild(div);
+  });
+}
+function renderSosHistory(){
+  const l=document.getElementById('sos-hist-list');if(!l)return;
+  l.innerHTML='';
+  if(!SS.sosHistory.length){
+    const e=document.createElement('div');e.className='sr-sb';e.style.padding='4px 2px';
+    e.textContent=currentLang==='he'?'אין אירועי SOS בהיסטוריה.':'No SOS events logged.';
+    l.appendChild(e);return;
+  }
+  [...SS.sosHistory].reverse().forEach(ev=>{
+    const row=document.createElement('div');row.className='resp-row';
+    const av=document.createElement('div');av.className='resp-av';av.textContent='🚨';
+    const mid=document.createElement('div');mid.style.flex='1';
+    const nm=document.createElement('div');nm.className='resp-nm';
+    const dt=new Date(ev.ts);
+    nm.textContent=(currentLang==='he'?'SOS':'SOS')+' · '+dt.toLocaleString(currentLang==='he'?'he-IL':'en-US');
+    const d=document.createElement('div');d.className='resp-d';
+    d.textContent=(ev.lat!=null&&ev.lng!=null)?`${ev.lat.toFixed(4)}, ${ev.lng.toFixed(4)}`:(currentLang==='he'?'ללא מיקום':'no location');
+    mid.appendChild(nm);mid.appendChild(d);
+    const tg=document.createElement('span');tg.className='resp-st';tg.style.background='var(--rb)';tg.style.color='#FF7080';
+    tg.textContent=ev.trigger==='shake'?(currentLang==='he'?'ניעור':'shake'):ev.trigger==='dms'?'DMS':(currentLang==='he'?'ידני':'manual');
+    row.appendChild(av);row.appendChild(mid);row.appendChild(tg);
+    l.appendChild(row);
+  });
+}
+function updateProfileStats(){
+  setText('stat-reports',String(SS.reports.length));
+  setText('stat-sos',String(SS.sosHistory.length));
+}
+/* Re-create persisted reports as map pins + detail entries + updates cards on load. */
+function restorePersistedData(){
+  SS.reports.forEach(rep=>{
+    rep._detIdx=DETAILS.push(buildDetailFromReport(rep))-1;
+    addReportPin(rep);
+    injectReportCard(rep,true);
+  });
+  renderReportsList();renderSosHistory();updateProfileStats();
+}
+function injectReportCard(rep,silent){
+  injectCard({cls:'t-new',dotC:'#1852C0',
+    title:(rep.photos&&rep.photos.length?`📷${rep.photos.length} `:'')+'📝 '+(typeLabelOf(rep.type)||(currentLang==='he'?'דיווח':'report')),
+    bdg:'<span class="ubdg">✨</span>',time:relTime(rep.ts),loc:rep.loc||'',
+    desc:(rep.desc||'').substring(0,80)+((rep.desc||'').length>80?'…':''),
+    detIdx:rep._detIdx},silent);
+}
+
+/* ── DMS resume after reload ── */
+function resumeDMS(){
+  if(!SS.dms.active||!SS.dms.deadline)return;
+  const remain=Math.floor((SS.dms.deadline-Date.now())/1000);
+  if(remain>0){
+    dmsActive=true;dmsWarning=false;dmsCountdown=remain;
+    document.getElementById('dms-strip').classList.add('on');
+    document.getElementById('dms-status-card').style.display='block';
+    const tb=document.getElementById('dms-toggle-btn');if(tb)tb.textContent=T('dms_stop');
+    const badge=document.getElementById('dms-dd-badge');if(badge){badge.textContent=T('dms_on_badge');badge.classList.remove('off');}
+    updateDMSDisplay();
+    dmsTimer=setInterval(dmsTick,1000);
+    toast(currentLang==='he'?'⏱️ DMS ממשיך אחרי רענון':'⏱️ DMS resumed after reload','');
+  } else {
+    // Expired while the app was closed — clear state, don't blast alarm on load.
+    SS.dms.active=false;saveStore();
+    toast(currentLang==='he'?'⏱️ DMS פג בזמן שהאפליקציה הייתה סגורה':'⏱️ DMS expired while app was closed','amb');
+  }
+}
+
 /* ── Crime data (seeded — based on real police crime hotspots in Israel) ── */
 const CRIMES=[
   /* Tel Aviv / Gush Dan */
@@ -1272,6 +1562,7 @@ const TYPES={
 function setLang(code){
   currentLang=code;
   L=LANGS[code]||LANGS.he;
+  SS.lang=code; saveStore();
   const d=L.dir;
   document.documentElement.lang=code;
   document.documentElement.dir=d;
@@ -1345,6 +1636,27 @@ function applyTranslations(){
   ['dms-min-lbl','dms-min-lbl2','dms-min-lbl3'].forEach(id=>setText(id,T('dms_min')));
   // Anon
   setText('anon-lbl',T('anon'));setText('anon-sub',T('anon_sub'));
+  // New controls (bilingual inline — fall back to he/en for all locales)
+  const he=currentLang==='he';
+  setText('shake-set-lbl',he?'Shake-to-SOS':'Shake-to-SOS');
+  setText('shake-tog-lbl',he?'הפעל Shake-to-SOS':'Enable Shake-to-SOS');
+  setText('shake-tog-sub',he?'5 ניעורים חזקים → SOS':'5 hard shakes → SOS');
+  setText('shake-sens-lbl',he?'רגישות ניעור':'Shake sensitivity');
+  setText('sim-shake-lbl',he?'סימולציית ניעור (בדיקה)':'Simulate shake (test)');
+  setText('set-radius-lbl',he?'רדיוס התראה':'Alert radius');
+  setText('set-notif-lbl',he?'התראות':'Notifications');
+  setText('set-priv-lbl',he?'פרטיות':'Privacy');
+  setText('reset-cap',he?'בדיקה / נתוני דמו':'Testing / demo data');
+  setText('reset-btn-lbl',he?'🔄 איפוס אפליקציה / נתוני דמו':'🔄 Reset app / demo data');
+  setText('reset-hint',he?'מוחק פרופיל, דיווחים, היסטוריית SOS והגדרות — וחוזר להרשמה.':'Clears profile, reports, SOS history & settings — returns to onboarding.');
+  setText('myrep-cap',he?'הדיווחים שלי':'My reports');
+  setText('soshist-cap',he?'היסטוריית SOS':'SOS history');
+  setText('stat-reports-lbl',he?'דיווחים':'Reports');
+  setText('stat-sos-lbl',he?'אירועי SOS':'SOS events');
+  setText('stat-pts-lbl',he?'נקודות':'Points');
+  setText('dms-demo-lbl',he?'דמו':'demo');
+  updateShakeSensLabel();
+  renderReportsList();renderSosHistory();
 }
 
 /* ═══════════════════════════════════
@@ -1411,30 +1723,46 @@ function showGeoResult(ok,msg){
 function obPickAlarm(el,type){
   document.querySelectorAll('#ob-alarms .ob-alarm').forEach(a=>{a.classList.remove('sel');a.setAttribute('aria-checked','false');});
   el.classList.add('sel'); el.setAttribute('aria-checked','true'); alarmType=type;
+  SS.alarm.type=type; saveStore();
 }
 function obFinish(){
+  user.name=user.name||'שומר';
+  // Persist onboarding so it never loops on reload.
+  SS.onboarded=true;
+  SS.user={name:user.name,phone:user.phone||''};
+  SS.alarm.type=alarmType;
+  SS.lang=currentLang;
+  saveStore();
+  enterApp(false);
+}
+/* Shared app-entry path — used by fresh onboarding AND by returning users on load. */
+function enterApp(returning){
   const profNm=document.getElementById('profNm');
   if(profNm)profNm.textContent=user.name||'שומר';
-  // Best-effort setup — never let a failure here trap the user in onboarding.
+  // Best-effort setup — never let a failure here trap the user.
   try{ startShakeDetection(); }catch(e){}
   try{ registerPush(); }catch(e){}
   try{ buildPins(); }catch(e){}
   try{ buildInitialUpdates(); }catch(e){}
+  try{ restorePersistedData(); }catch(e){}
   try{ startSim(); }catch(e){}
   // Hide lang bar on main screen
   document.getElementById('lang-bar').classList.add('hidden');
   document.body.classList.remove('lb-on');
   // Hide onboarding
   const ob=document.getElementById('ob');
-  ob.classList.add('out');
-  setTimeout(()=>{ob.style.display='none';},420);
+  if(returning){ ob.style.display='none'; }
+  else { ob.classList.add('out'); setTimeout(()=>{ob.style.display='none';},420); }
   document.getElementById('app').classList.add('on');
   if(userLat!==null) moveUserDot(userLat,userLng);
   startGeoWatch();
-  setTimeout(()=>{
-    const nm=user.name?user.name.split(' ')[0]:T('nav_map');
-    toast(`${T('welcome')}, ${nm} 👋`,'grn');
-  },650);
+  try{ resumeDMS(); }catch(e){}
+  if(!returning){
+    setTimeout(()=>{
+      const nm=user.name?user.name.split(' ')[0]:T('nav_map');
+      toast(`${T('welcome')}, ${nm} 👋`,'grn');
+    },650);
+  }
 }
 
 /* ═══════════════════════════════════
@@ -1455,19 +1783,23 @@ function pushNotify(title,body,tag){
 /* ═══════════════════════════════════
    SHAKE-TO-SOS
 ═══════════════════════════════════ */
+let shakeStarted=false;
 function startShakeDetection(){
-  if(!window.DeviceMotionEvent) return;
-  const THRESHOLD=22, WINDOW=1500, REQUIRED=5;
+  if(!window.DeviceMotionEvent||shakeStarted) return;
+  shakeStarted=true;
+  const WINDOW=1500, REQUIRED=5;
   const handler=e=>{
+    if(SS.shake.enabled===false) return;
     const a=e.acceleration||e.accelerationIncludingGravity;
     if(!a) return;
+    const THRESHOLD=SS.shake.sensitivity||22;
     const mag=Math.sqrt((a.x||0)**2+(a.y||0)**2+(a.z||0)**2);
     if(mag>THRESHOLD){
       const now=Date.now();
       if(now-shakeLastT>300){shakeCount++;shakeLastT=now;}
       if(shakeCount>=REQUIRED){
         shakeCount=0;
-        if(!sosActive)triggerSOS();
+        if(!sosActive)triggerSOS('shake');
       }
       setTimeout(()=>{shakeCount=Math.max(0,shakeCount-1);},WINDOW);
     }
@@ -1486,7 +1818,10 @@ function startShakeDetection(){
 let dmsIv=5;
 function dmsPickIv(el,mins){
   document.querySelectorAll('.dms-iv').forEach(d=>d.classList.remove('sel'));
-  el.classList.add('sel'); dmsIv=mins;
+  el.classList.add('sel'); dmsIv=mins; dmsInterval=mins;
+  SS.dms.interval=mins; saveStore();
+  // Refresh the "how it works" text which embeds the interval.
+  const di=document.getElementById('dms-intro-txt');if(di)di.innerHTML=T('dms_how').replace(/X/g,mins);
 }
 function toggleDMS(){
   if(dmsActive){stopDMS();}else{startDMS();}
@@ -1494,6 +1829,7 @@ function toggleDMS(){
 function startDMS(){
   dmsActive=true; dmsWarning=false;
   dmsCountdown=dmsIv*60;
+  SS.dms.active=true; SS.dms.interval=dmsIv; SS.dms.deadline=Date.now()+dmsCountdown*1000; saveStore();
   document.getElementById('dms-strip').classList.add('on');
   document.getElementById('dms-status-card').style.display='block';
   const tb=document.getElementById('dms-toggle-btn');if(tb)tb.textContent=T('dms_stop');
@@ -1505,6 +1841,7 @@ function startDMS(){
 }
 function stopDMS(){
   dmsActive=false; dmsWarning=false;
+  SS.dms.active=false; SS.dms.deadline=0; saveStore();
   clearInterval(dmsTimer); clearTimeout(dmsWarningTimer);
   document.getElementById('dms-strip').classList.remove('on');
   document.getElementById('dms-status-card').style.display='none';
@@ -1528,13 +1865,14 @@ function dmsTick(){
     clearInterval(dmsTimer);
     dmsActive=false;
     stopDMS();
-    triggerSOS();
+    triggerSOS('dms');
     toast(currentLang==='he'?'⚠️ Dead Man\'s Switch — SOS אוטומטי!':'⚠️ DMS — Auto SOS!','red');
   }
 }
 function dmsConfirm(){
   if(!dmsActive) return;
   dmsWarning=false; dmsCountdown=dmsIv*60;
+  SS.dms.deadline=Date.now()+dmsCountdown*1000; saveStore();
   document.getElementById('dms-strip').classList.remove('warn');
   document.getElementById('dms-strip').className='dms-strip on';
   const fill=document.getElementById('dms-prog-fill');if(fill)fill.style.width='100%';
@@ -1646,14 +1984,21 @@ function playAlarm(durMs){
 function pickAlarm(el,type){
   document.querySelectorAll('#alarm-list .ob-alarm').forEach(a=>{a.classList.remove('sel');a.setAttribute('aria-checked','false');});
   el.classList.add('sel'); el.setAttribute('aria-checked','true'); alarmType=type;
+  SS.alarm.type=type; saveStore();
 }
 
 /* ═══════════════════════════════════
    SOS
 ═══════════════════════════════════ */
-function triggerSOS(){
+function triggerSOS(trigger){
   if(sosActive){cancelSOS();return;}
   sosActive=true;
+  // Log to persistent SOS history.
+  try{
+    SS.sosHistory.push({id:'s'+Date.now(),ts:Date.now(),lat:userLat,lng:userLng,trigger:trigger||'manual'});
+    if(SS.sosHistory.length>50)SS.sosHistory=SS.sosHistory.slice(-50);
+    saveStore();renderSosHistory();updateProfileStats();
+  }catch(e){}
   const btn=document.getElementById('sos-btn');
   if(btn){btn.classList.add('active');btn.setAttribute('aria-pressed','true');}
   document.getElementById('sos-strip').classList.add('on');
@@ -1959,7 +2304,7 @@ function injectSOSCard(){
   l.insertBefore(div,l.firstChild);
   newUpd++;updBdg();
 }
-function injectCard(d){
+function injectCard(d,silent){
   const l=document.getElementById('upd-list');
   const div=document.createElement('div');
   div.className=`ucard ${d.cls}`;
@@ -1980,7 +2325,7 @@ function injectCard(d){
   inner.appendChild(top);inner.appendChild(meta);inner.appendChild(desc);inner.appendChild(hint);
   div.appendChild(inner);
   l.insertBefore(div,l.firstChild);
-  newUpd++;updBdg();
+  if(!silent){newUpd++;updBdg();}
 }
 function chipOn(btn){document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));btn.classList.add('on');}
 function updBdg(){
@@ -2075,13 +2420,33 @@ function sendReport(){
   const loc=document.getElementById('rep-loc-txt').textContent;
   if(loc.includes('שתף')||loc.includes('Share')||loc.includes('Share')||loc.includes('мест')||loc.includes('位置')){toast(currentLang==='he'?'שתף מיקום תחילה':'Share your location first','amb');return;}
   repLock=true;
-  const type=document.querySelector('.ropt.sel span')?.textContent||'אירוע';
   const n=photos.length;
+  const fullPhotos=photos.slice();
+  // Map the selected report option to a type key.
+  const opts=[...document.querySelectorAll('.ropt')];
+  const selIdx=opts.findIndex(o=>o.classList.contains('sel'));
+  const typeKeys=['viol','stalk','sex','med','drug','viol'];
+  const typeKey=typeKeys[selIdx>=0?selIdx:0];
   toast(`${T('sent')}${n>0?' +'+n+'📷':''}`, 'grn');
-  // Add to details
-  const ni=DETAILS.length;
-  DETAILS.push({title:type,type:'viol',time:currentLang==='he'?'עכשיו':'now',loc,cx:170,cy:299,desc:ta.value.substring(0,500),responders:[],photos:n,status:currentLang==='he'?'פתוח':'open'});
-  injectCard({cls:'t-new',dotC:'#1852C0',title:(n?`📷${n} `:'')+'📝 '+type,bdg:`<span class="ubdg">✨</span>`,time:currentLang==='he'?'עכשיו':'now',loc,desc:ta.value.substring(0,80)+(ta.value.length>80?'...':''),detIdx:ni});
+  // Build + persist the report.
+  const rep={id:'r'+Date.now(),type:typeKey,desc:ta.value.substring(0,500),loc,
+    lat:userLat,lng:userLng,photos:[],ts:Date.now(),
+    anon:!!document.querySelector('#sh-rep .tog.on')};
+  SS.reports.push(rep);
+  rep._detIdx=DETAILS.push(buildDetailFromReport(rep))-1;
+  addReportPin(rep);
+  injectReportCard(rep,false);
+  renderReportsList(); updateProfileStats();
+  saveStore();
+  // Thumbnails are generated async (downscaled) so reports survive reload within quota.
+  if(fullPhotos.length){
+    Promise.all(fullPhotos.map(makeThumb)).then(th=>{
+      rep.photos=th.filter(Boolean);
+      // refresh the detail entry's photo count + lists
+      if(DETAILS[rep._detIdx])DETAILS[rep._detIdx].photos=rep.photos.length;
+      saveStore(); renderReportsList();
+    });
+  }
   // Reset
   ta.value=''; document.getElementById('char-c').textContent='0 / 1000';
   document.getElementById('rep-loc-txt').textContent=T('share_loc');
@@ -2205,10 +2570,17 @@ document.addEventListener('keydown',e=>{
 /* ═══════════════════════════════════
    INIT
 ═══════════════════════════════════ */
-// Apply Hebrew on load
-setLang('he');
+// Load persisted state, apply settings, then language.
+loadStore();
+applyStoredSettings();
+setLang(SS.lang||'he');
 // Init DMS display
 updateDMSDisplay();
+// Returning user — skip onboarding, restore everything.
+if(SS.onboarded){
+  user.name=SS.user.name||'שומר'; user.phone=SS.user.phone||'';
+  try{ enterApp(true); }catch(e){ console&&console.warn&&console.warn(e); }
+}
 
 /* ═══════════════════════════════════
    SERVICE WORKER + PWA INSTALL
