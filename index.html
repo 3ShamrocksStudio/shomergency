@@ -14,7 +14,11 @@
 // isn't SHOMER's, then continue to the app.
 (function () {
   var BASE = location.pathname.replace(/index\.html$/, '');
-  var go = function () { location.replace('shomer.html' + location.search + location.hash); };
+  // Cache-bust the app shell so a stale HTTP/SW copy can never pin an old build.
+  var go = function () {
+    var sep = location.search ? '&' : '?';
+    location.replace('shomer.html' + location.search + sep + 'v=' + Date.now() + location.hash);
+  };
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.getRegistrations().then(function (regs) {
       var jobs = regs

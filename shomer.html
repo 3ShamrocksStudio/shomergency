@@ -2613,10 +2613,26 @@ if('serviceWorker' in navigator){
   // register ours. SHOMER's scope is this folder, so once registered it wins
   // over any broader/root worker for these pages.
   const SHOMER_SCOPE=location.origin+location.pathname.replace(/[^/]*$/,'');
+  // Auto-update: when a NEW worker takes control (i.e. a fresh deploy), reload
+  // once so the user always lands on the latest build — never a stale shell.
+  const hadController=!!navigator.serviceWorker.controller;
+  let reloadedForUpdate=false;
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{
+    if(reloadedForUpdate||!hadController)return;
+    reloadedForUpdate=true; location.reload();
+  });
   navigator.serviceWorker.getRegistrations().then(regs=>{
     regs.forEach(r=>{ if(r.scope.indexOf(SHOMER_SCOPE)!==0) r.unregister(); });
   }).catch(()=>{}).then(()=>{
-    navigator.serviceWorker.register('sw.js').catch(()=>{});
+    navigator.serviceWorker.register('sw.js').then(reg=>{
+      reg.addEventListener('updatefound',()=>{
+        const nw=reg.installing; if(!nw)return;
+        nw.addEventListener('statechange',()=>{
+          // A newer version finished installing while an old one runs — activate now.
+          if(nw.state==='installed'&&navigator.serviceWorker.controller) nw.postMessage('skipWaiting');
+        });
+      });
+    }).catch(()=>{});
   });
 }
 let deferredPrompt=null;
