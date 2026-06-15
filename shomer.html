@@ -490,7 +490,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 <div id="ob" role="main" aria-label="הרשמה">
   <div class="ob-hero">
     <div class="ob-glow" aria-hidden="true"></div>
-    <img class="ob-logo" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cpath d='M60 6L112 30V68Q112 100 60 116Q8 100 8 68V30Z' fill='%230A1628' stroke='%23E0A828' stroke-width='3'/%3E%3Cg stroke='%23E0A828' stroke-width='2.5' fill='none' stroke-linejoin='round'%3E%3Cpath d='M60 32L78 62H42Z'/%3E%3Cpath d='M60 72L42 42H78Z'/%3E%3C/g%3E%3C/svg%3E" alt="שומר לוגו" width="120" height="120">
+    <img class="ob-logo" src="logo-192.png" alt="שומר לוגו" width="120" height="120">
     <div class="ob-title" aria-label="שומר">SHOMER</div>
     <div class="ob-sub">Citizens Protecting Citizens</div>
     <div class="branding" style="margin-bottom:4px;">by <a href="#">3Shamrocks.Studio</a></div>
@@ -675,7 +675,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
       </button>
     </div>
     <div class="hdr-center">
-      <img class="hdr-logo" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cpath d='M60 6L112 30V68Q112 100 60 116Q8 100 8 68V30Z' fill='%230A1628' stroke='%23E0A828' stroke-width='3'/%3E%3Cg stroke='%23E0A828' stroke-width='2.5' fill='none' stroke-linejoin='round'%3E%3Cpath d='M60 32L78 62H42Z'/%3E%3Cpath d='M60 72L42 42H78Z'/%3E%3C/g%3E%3C/svg%3E" alt="" width="32" height="32" aria-hidden="true">
+      <img class="hdr-logo" src="logo-192.png" alt="" width="32" height="32" aria-hidden="true">
       <span class="hdr-name">שומר</span>
     </div>
     <div class="hdr-right">
@@ -948,7 +948,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
     <div class="sh-head"><span class="sh-ttl" id="prof-ttl">הפרופיל שלי</span><button class="sh-x" onclick="cl('sh-prof')" aria-label="סגור">✕</button></div>
     <div class="sh-body">
       <div class="prof-top">
-        <img class="p-logo" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cpath d='M60 6L112 30V68Q112 100 60 116Q8 100 8 68V30Z' fill='%230A1628' stroke='%23E0A828' stroke-width='3'/%3E%3Cg stroke='%23E0A828' stroke-width='2.5' fill='none' stroke-linejoin='round'%3E%3Cpath d='M60 32L78 62H42Z'/%3E%3Cpath d='M60 72L42 42H78Z'/%3E%3C/g%3E%3C/svg%3E" alt="לוגו שומר" width="72" height="72">
+        <img class="p-logo" src="logo-192.png" alt="לוגו שומר" width="72" height="72">
         <div class="p-nm" id="profNm">שומר</div>
         <div class="p-rk" id="prof-rank">שומר מדרגה ב׳</div>
       </div>
@@ -1415,14 +1415,12 @@ function obPickAlarm(el,type){
 function obFinish(){
   const profNm=document.getElementById('profNm');
   if(profNm)profNm.textContent=user.name||'שומר';
-  // Start shake detection
-  startShakeDetection();
-  // Register push notifications
-  registerPush();
-  // Build map
-  buildPins();
-  buildInitialUpdates();
-  startSim();
+  // Best-effort setup — never let a failure here trap the user in onboarding.
+  try{ startShakeDetection(); }catch(e){}
+  try{ registerPush(); }catch(e){}
+  try{ buildPins(); }catch(e){}
+  try{ buildInitialUpdates(); }catch(e){}
+  try{ startSim(); }catch(e){}
   // Hide lang bar on main screen
   document.getElementById('lang-bar').classList.add('hidden');
   document.body.classList.remove('lb-on');
@@ -1432,6 +1430,7 @@ function obFinish(){
   setTimeout(()=>{ob.style.display='none';},420);
   document.getElementById('app').classList.add('on');
   if(userLat!==null) moveUserDot(userLat,userLng);
+  startGeoWatch();
   setTimeout(()=>{
     const nm=user.name?user.name.split(' ')[0]:T('nav_map');
     toast(`${T('welcome')}, ${nm} 👋`,'grn');
@@ -1581,23 +1580,33 @@ function playAlarm(durMs){
   dist.curve=curve;dist.oversample='4x';
   dist.connect(comp);
   if(alarmType==='siren'){
-    // Layer 1: Primary siren sweep — aggressive sawtooth
+    // Layer 1: Primary sweep — aggressive sawtooth, fast "yelp" modulation.
+    // Cycles alternate between slow "wail" (0.5s) and fast "yelp" (0.18s)
+    // sweeps the way real police/ambulance sirens do — far more alarming.
     const o1=ctx.createOscillator(),g1=ctx.createGain();
-    o1.type='sawtooth';g1.gain.value=alarmVol*0.7;
-    let t=now;
-    while(t<end){o1.frequency.setValueAtTime(440,t);o1.frequency.linearRampToValueAtTime(1800,t+0.3);o1.frequency.linearRampToValueAtTime(440,t+0.6);t+=0.6;}
+    o1.type='sawtooth';g1.gain.value=alarmVol*0.9;
+    let t=now,fast=true;
+    while(t<end){
+      const dur=fast?0.18:0.46;
+      o1.frequency.setValueAtTime(620,t);
+      o1.frequency.linearRampToValueAtTime(1750,t+dur*0.55);
+      o1.frequency.linearRampToValueAtTime(620,Math.min(end,t+dur));
+      t+=dur; fast=!fast;
+    }
     o1.connect(g1);g1.connect(dist);
     o1.start(now);o1.stop(end);oscillators.push(o1);
-    // Layer 2: Octave-up square for piercing overtone
+    // Layer 2: Octave-up square — piercing, physically grating overtone.
     const o2=ctx.createOscillator(),g2=ctx.createGain();
-    o2.type='square';g2.gain.value=alarmVol*0.35;
+    o2.type='square';g2.gain.value=alarmVol*0.5;
     t=now;
-    while(t<end){o2.frequency.setValueAtTime(880,t);o2.frequency.linearRampToValueAtTime(3600,t+0.3);o2.frequency.linearRampToValueAtTime(880,t+0.6);t+=0.6;}
+    while(t<end){o2.frequency.setValueAtTime(1240,t);o2.frequency.linearRampToValueAtTime(3500,t+0.18);o2.frequency.linearRampToValueAtTime(1240,t+0.36);t+=0.36;}
     o2.connect(g2);g2.connect(dist);
     o2.start(now);o2.stop(end);oscillators.push(o2);
-    // Layer 3: Sub-bass rumble for chest-thumping presence
+    // Layer 3: Hard sub-bass pulse for chest-thumping urgency.
     const o3=ctx.createOscillator(),g3=ctx.createGain();
-    o3.type='sine';o3.frequency.value=80;g3.gain.value=alarmVol*0.5;
+    o3.type='sine';o3.frequency.value=90;g3.gain.value=alarmVol*0.6;
+    t=now;
+    while(t<end){g3.gain.setValueAtTime(alarmVol*0.6,t);g3.gain.linearRampToValueAtTime(alarmVol*0.15,t+0.22);t+=0.36;}
     o3.connect(g3);g3.connect(comp);
     o3.start(now);o3.stop(end);oscillators.push(o3);
   } else if(alarmType==='horn'){
@@ -1689,9 +1698,15 @@ function cancelSOS(){
 function addSOSPin(){
   removeSOSPin();
   const ns='http://www.w3.org/2000/svg',g=document.getElementById('pins');
-  const cx=userLat?170:170, cy=userLat?299:299;
+  // Drop the SOS pin at the user's real location when we have it.
+  let cx=170,cy=299;
+  if(userLat!==null&&userLng!==null){const sv=geoToSVG(userLat,userLng);cx=sv.x;cy=sv.y;}
   ['sos-r2','sos-r1','sos-p'].forEach(id=>{const e=document.getElementById(id);if(e)e.remove();});
-  const r2=document.createElementNS(ns,'circle');r2.id='sos-r2';r2.setAttribute('cx',cx);r2.setAttribute('cy',cy);r2.setAttribute('r','22');r2.setAttribute('fill','#CC1426');r2.setAttribute('opacity','.14');g.appendChild(r2);
+  // Expanding, pulsing alert ring (SMIL — CSP-safe, no inline JS)
+  const r2=document.createElementNS(ns,'circle');r2.id='sos-r2';r2.setAttribute('cx',cx);r2.setAttribute('cy',cy);r2.setAttribute('r','8');r2.setAttribute('fill','#CC1426');
+  const ar=document.createElementNS(ns,'animate');ar.setAttribute('attributeName','r');ar.setAttribute('values','8;30');ar.setAttribute('dur','1.1s');ar.setAttribute('repeatCount','indefinite');
+  const ao=document.createElementNS(ns,'animate');ao.setAttribute('attributeName','opacity');ao.setAttribute('values','.55;0');ao.setAttribute('dur','1.1s');ao.setAttribute('repeatCount','indefinite');
+  r2.appendChild(ar);r2.appendChild(ao);g.appendChild(r2);
   const r1=document.createElementNS(ns,'circle');r1.id='sos-r1';r1.setAttribute('cx',cx);r1.setAttribute('cy',cy);r1.setAttribute('r','14');r1.setAttribute('fill','#CC1426');r1.setAttribute('opacity','.22');g.appendChild(r1);
   const p=document.createElementNS(ns,'circle');p.id='sos-p';p.setAttribute('cx',cx);p.setAttribute('cy',cy);p.setAttribute('r','8');p.setAttribute('fill','#CC1426');p.setAttribute('stroke','#fff');p.setAttribute('stroke-width','2.5');p.style.filter='drop-shadow(0 0 16px #CC1426CC)';g.appendChild(p);
 }
@@ -1796,6 +1811,23 @@ function locMe(){
     ()=>toast(T('geo_err'),'amb'),
     {enableHighAccuracy:true,timeout:10000}
   );
+  startGeoWatch();
+}
+/* Live tracking — the blue "me" dot follows the real device position. */
+let geoWatchId=null;
+function startGeoWatch(){
+  if(!navigator.geolocation||geoWatchId!==null) return;
+  try{
+    geoWatchId=navigator.geolocation.watchPosition(
+      pos=>{
+        userLat=pos.coords.latitude; userLng=pos.coords.longitude;
+        moveUserDot(userLat,userLng);
+        if(sosActive) addSOSPin(); // keep the live SOS pin on the user
+      },
+      ()=>{},
+      {enableHighAccuracy:true,timeout:20000,maximumAge:5000}
+    );
+  }catch(e){}
 }
 window.addEventListener('DOMContentLoaded',()=>{
   const svg=document.getElementById('map-svg');
@@ -2182,7 +2214,16 @@ updateDMSDisplay();
    SERVICE WORKER + PWA INSTALL
 ═══════════════════════════════════ */
 if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('sw.js').catch(()=>{});
+  // Self-heal: unregister any service worker on this shared github.io origin
+  // that isn't SHOMER's own (e.g. left behind by a sibling org project), then
+  // register ours. SHOMER's scope is this folder, so once registered it wins
+  // over any broader/root worker for these pages.
+  const SHOMER_SCOPE=location.origin+location.pathname.replace(/[^/]*$/,'');
+  navigator.serviceWorker.getRegistrations().then(regs=>{
+    regs.forEach(r=>{ if(r.scope.indexOf(SHOMER_SCOPE)!==0) r.unregister(); });
+  }).catch(()=>{}).then(()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
 }
 let deferredPrompt=null;
 window.addEventListener('beforeinstallprompt',e=>{
@@ -2192,7 +2233,7 @@ window.addEventListener('beforeinstallprompt',e=>{
 function showA2HS(){
   if(!deferredPrompt||document.querySelector('.a2hs'))return;
   const d=document.createElement('div');d.className='a2hs';
-  d.innerHTML=`<img class="a2hs-icon" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cpath d='M60 6L112 30V68Q112 100 60 116Q8 100 8 68V30Z' fill='%230A1628' stroke='%23E0A828' stroke-width='3'/%3E%3Cg stroke='%23E0A828' stroke-width='2.5' fill='none' stroke-linejoin='round'%3E%3Cpath d='M60 32L78 62H42Z'/%3E%3Cpath d='M60 72L42 42H78Z'/%3E%3C/g%3E%3C/svg%3E" alt=""><div class="a2hs-text"><div class="a2hs-t">${currentLang==='he'?'התקן את שומר':'Install Shomer'}</div><div class="a2hs-s">${currentLang==='he'?'גישה מהירה מהמסך הראשי':'Quick access from home screen'}</div></div><button class="a2hs-btn" id="a2hs-install">${currentLang==='he'?'התקן':'Install'}</button><span class="a2hs-x" id="a2hs-close">✕</span>`;
+  d.innerHTML=`<img class="a2hs-icon" src="logo-192.png" alt=""><div class="a2hs-text"><div class="a2hs-t">${currentLang==='he'?'התקן את שומר':'Install Shomer'}</div><div class="a2hs-s">${currentLang==='he'?'גישה מהירה מהמסך הראשי':'Quick access from home screen'}</div></div><button class="a2hs-btn" id="a2hs-install">${currentLang==='he'?'התקן':'Install'}</button><span class="a2hs-x" id="a2hs-close">✕</span>`;
   document.body.appendChild(d);
   document.getElementById('a2hs-install').onclick=async()=>{deferredPrompt.prompt();const r=await deferredPrompt.userChoice;d.remove();deferredPrompt=null;if(r.outcome==='accepted')toast(currentLang==='he'?'✓ שומר הותקן!':'✓ Shomer installed!','grn');};
   document.getElementById('a2hs-close').onclick=()=>d.remove();
