@@ -1,0 +1,2202 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#0A1628">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="שומר">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="X-Frame-Options" content="DENY">
+<meta http-equiv="Referrer-Policy" content="no-referrer">
+<!-- CSP: no inline eval, no external tracking -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob:; connect-src 'self'; script-src 'self' 'unsafe-inline';">
+<title>שומר — Citizens Protecting Citizens</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="logo-192.png">
+<link rel="apple-touch-icon" href="logo-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════
+   SHOMER v12 — DESIGN SYSTEM
+   Authority Navy · Emergency Gold/Red
+   Accessible contrast ratios throughout
+═══════════════════════════════════════ */
+:root {
+  /* Navy depth scale */
+  --n0:#060F1E; --n1:#0A1628; --n2:#101E34; --n3:#162440;
+  --n4:#1C2C4E; --n5:#243460; --n6:#2E4070;
+  /* Gold — brand authority */
+  --g1:#9A6C1A; --g2:#C09020; --g3:#E0A828; --g4:#F5C840;
+  --gd:rgba(224,168,40,.18); --gg:rgba(224,168,40,.36); --gb:rgba(224,168,40,.55);
+  /* Emergency red */
+  --r1:#8A0E1A; --r2:#B01220; --r3:#CC1426; --r4:#E8182C;
+  --rb:rgba(204,20,38,.14); --rg:rgba(204,20,38,.36); --rs:rgba(204,20,38,.55);
+  /* Status */
+  --grn:#0E8840; --grn-b:rgba(14,136,64,.14);
+  --amb:#C07808; --amb-b:rgba(192,120,8,.14);
+  --blu:#1852C0; --blu-b:rgba(24,82,192,.14);
+  --pur:#6B32D8; --pur-b:rgba(107,50,216,.14);
+  /* Text */
+  --tx0:#F0F4FF; --tx1:#C8D4E8; --tx2:#8898B8; --tx3:#506080; --tx4:#344060;
+  /* Borders */
+  --b1:rgba(136,152,184,.12); --b2:rgba(136,152,184,.22); --b3:rgba(224,168,40,.28);
+  --b4:rgba(204,20,38,.28);
+  /* Elevation */
+  --e1:0 2px 8px rgba(0,0,0,.4);
+  --e2:0 6px 24px rgba(0,0,0,.5);
+  --e3:0 14px 48px rgba(0,0,0,.65);
+  --e4:0 24px 72px rgba(0,0,0,.75),0 8px 24px rgba(0,0,0,.4);
+  /* Layout */
+  --hdr:52px; --nav:80px;
+  --r4px:4px; --r8:8px; --r12:12px; --r16:16px; --r24:24px;
+  /* Type */
+  --font-main:'Inter','Heebo',system-ui,sans-serif;
+  --font-heb:'Heebo','Inter',system-ui,sans-serif;
+}
+/* Accessibility: reduced motion */
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important;}}
+/* High contrast mode */
+@media(prefers-contrast:high){:root{--b1:rgba(255,255,255,.3);--b2:rgba(255,255,255,.5);}}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;font-size:16px;}
+body{font-family:var(--font-main);background:var(--n1);color:var(--tx0);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+[dir=ltr]{font-family:var(--font-main);}
+[lang=he],[lang=ar]{font-family:var(--font-heb);}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+button:focus-visible{outline:2px solid var(--g3);outline-offset:2px;border-radius:var(--r8);}
+input,textarea,select{font-family:inherit;color:inherit;}
+input:focus,textarea:focus{outline:2px solid var(--g3);outline-offset:1px;}
+a{color:inherit;text-decoration:none;}
+svg{display:block;flex-shrink:0;}
+img{display:block;}
+/* Skip to content — accessibility */
+.skip-link{position:absolute;top:-40px;left:0;background:var(--g3);color:var(--n0);padding:8px 16px;font-size:14px;font-weight:700;border-radius:0 0 var(--r8) 0;z-index:99999;transition:top .15s;}
+.skip-link:focus{top:0;}
+
+/* ══════════ LANGUAGE BAR ══════════ */
+#lang-bar{position:fixed;top:0;left:0;right:0;z-index:9998;background:rgba(6,15,30,.92);backdrop-filter:blur(20px);height:32px;display:flex;align-items:center;justify-content:center;gap:4px;border-bottom:1px solid var(--b2);transition:height .3s,opacity .3s;}
+#lang-bar.hidden{height:0;overflow:hidden;opacity:0;}
+.lbtn{padding:3px 9px;border-radius:4px;font-size:11px;font-weight:600;color:var(--tx2);cursor:pointer;transition:all .15s;border:1px solid transparent;}
+.lbtn.on{background:var(--gd);border-color:var(--b3);color:var(--g3);}
+.lbtn:hover:not(.on){color:var(--tx1);}
+/* When lang bar visible, offset everything */
+body.lb-on{--hdr-top:32px;}
+body:not(.lb-on){--hdr-top:0px;}
+
+/* ══════════ ONBOARDING ══════════ */
+#ob{position:fixed;inset:0;z-index:9999;background:radial-gradient(ellipse at 50% 18%,#1A2C50 0%,#0A1628 60%);overflow-y:auto;display:flex;flex-direction:column;align-items:center;padding-bottom:48px;}
+#ob.out{opacity:0;transform:scale(.97);transition:.4s ease;pointer-events:none;}
+.ob-hero{display:flex;flex-direction:column;align-items:center;padding:48px 0 20px;position:relative;width:100%;}
+.ob-glow{position:absolute;top:44px;left:50%;transform:translateX(-50%);width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,var(--gb) 0%,transparent 70%);pointer-events:none;}
+.ob-logo{width:120px;height:120px;border-radius:50%;object-fit:cover;border:2px solid var(--b3);box-shadow:0 0 60px var(--gg),var(--e3);}
+.ob-title{font-size:40px;font-weight:900;letter-spacing:-1.5px;background:linear-gradient(135deg,#E0A828 0%,#F5C840 50%,#C09020 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-top:14px;line-height:1;}
+.ob-sub{font-size:11px;color:var(--tx2);letter-spacing:1.4px;text-transform:uppercase;margin-top:6px;margin-bottom:8px;}
+.ob-lang-pick{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;padding:0 20px;margin-bottom:28px;}
+.olb{padding:4px 11px;border:1px solid var(--b2);border-radius:20px;font-size:11px;font-weight:600;color:var(--tx2);background:var(--n3);cursor:pointer;transition:all .15s;}
+.olb.on{background:var(--gd);border-color:var(--b3);color:var(--g3);}
+.ob-steps{display:flex;gap:7px;margin-bottom:24px;}
+.ob-st{width:32px;height:3px;border-radius:2px;background:var(--n5);transition:background .3s;}
+.ob-st.on{background:var(--g3);}
+.ob-panel{width:100%;max-width:390px;padding:0 20px;display:none;}
+.ob-panel.active{display:block;animation:pfade .25s ease;}
+@keyframes pfade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.ob-card{background:var(--n3);border:1px solid var(--b2);border-radius:var(--r16);padding:24px;box-shadow:var(--e3);}
+.ob-card h3{font-size:17px;font-weight:800;color:var(--tx0);margin-bottom:4px;}
+.ob-card .desc{font-size:12px;color:var(--tx2);margin-bottom:20px;line-height:1.7;}
+.ob-f{display:block;width:100%;background:var(--n4);border:1px solid var(--b1);border-radius:var(--r12);padding:14px 15px;color:var(--tx0);font-size:16px;outline:none;transition:border-color .15s,box-shadow .15s;margin-bottom:10px;-webkit-appearance:none;}
+.ob-f:focus{border-color:var(--b3);box-shadow:0 0 0 3px rgba(224,168,40,.12);}
+.ob-f::placeholder{color:var(--tx3);}
+.ob-row{display:flex;gap:8px;}
+.ob-cta{width:100%;padding:15px;background:linear-gradient(135deg,#C09020 0%,#E0A828 60%,#F5C840 100%);border-radius:var(--r12);color:var(--n0);font-size:15px;font-weight:800;letter-spacing:.3px;box-shadow:0 4px 24px var(--gg);transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:6px;}
+.ob-cta:hover{filter:brightness(1.08);transform:translateY(-1px);box-shadow:0 6px 28px var(--gg);}
+.ob-cta:active{transform:scale(.97);}
+.ob-back{width:100%;padding:12px;background:var(--n4);border:1px solid var(--b1);border-radius:var(--r12);color:var(--tx2);font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:6px;margin-top:8px;transition:background .15s;}
+.ob-back:hover{background:var(--n5);}
+/* Geo */
+.geo-box{background:var(--n4);border:1px solid var(--b2);border-radius:var(--r12);padding:18px;text-align:center;margin-bottom:16px;transition:all .3s;}
+.geo-ic{font-size:36px;margin-bottom:8px;}
+.geo-t{font-size:14px;font-weight:700;color:var(--tx0);margin-bottom:4px;}
+.geo-s{font-size:12px;color:var(--tx2);line-height:1.7;}
+.geo-ok{border-color:rgba(14,136,64,.4);background:rgba(14,136,64,.1);}
+.geo-ok .geo-t{color:#4CD888;}
+.geo-err{border-color:rgba(192,120,8,.4);background:rgba(192,120,8,.08);}
+.geo-err .geo-t{color:#E09030;}
+/* Alarm in OB */
+.ob-alarms{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
+.ob-alarm{background:var(--n4);border:2px solid var(--b1);border-radius:var(--r12);padding:14px 15px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .15s;}
+.ob-alarm-ic{font-size:26px;flex-shrink:0;}
+.ob-alarm-info .nm{font-size:14px;font-weight:700;color:var(--tx0);}
+.ob-alarm-info .ds{font-size:11px;color:var(--tx2);margin-top:2px;line-height:1.5;}
+.ob-alarm.sel{border-color:var(--b4);background:var(--rb);}
+.ob-alarm.sel .nm{color:#FF7080;}
+/* Dead man notice */
+.dms-notice{background:linear-gradient(135deg,rgba(204,20,38,.1),rgba(24,82,192,.1));border:1px solid var(--b4);border-radius:var(--r12);padding:14px;margin-bottom:16px;font-size:12px;color:var(--tx1);line-height:1.7;}
+.dms-notice strong{color:var(--g3);}
+.vol-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.vol-lbl{font-size:12px;font-weight:600;color:var(--tx1);}
+.vol-val{font-size:16px;font-weight:800;color:var(--g3);}
+.ob-vol-wrap{background:var(--n4);border:1px solid var(--b1);border-radius:var(--r12);padding:14px;margin-bottom:12px;}
+input[type=range]{width:100%;-webkit-appearance:none;height:6px;background:var(--n5);border-radius:3px;outline:none;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#C09020,#E0A828);border:2.5px solid var(--n1);box-shadow:0 2px 8px var(--gg);cursor:pointer;}
+input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,40,.2);}
+.test-alarm-btn{width:100%;padding:13px;background:var(--n3);border:1px solid rgba(204,20,38,.4);border-radius:var(--r12);color:#FF7080;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px;transition:all .15s;cursor:pointer;}
+.test-alarm-btn:hover{background:var(--rb);border-color:rgba(204,20,38,.6);}
+.shake-notice{background:var(--rb);border:1px solid var(--b4);border-radius:var(--r12);padding:12px 14px;font-size:11px;color:var(--tx1);line-height:1.7;margin-bottom:12px;display:flex;gap:10px;align-items:flex-start;}
+.shake-ic{font-size:22px;flex-shrink:0;}
+
+/* ══════════ APP SHELL ══════════ */
+#app{display:none;position:fixed;inset:0;}
+#app.on{display:block;}
+
+/* ══════════ MAP ══════════ */
+#map-wrap{position:absolute;inset:0;overflow:hidden;background:#EDF1F8;touch-action:none;}
+#map-svg{width:100%;height:100%;cursor:grab;transform-origin:center center;will-change:transform;}
+#map-svg.drag{cursor:grabbing;}
+
+/* ══════════ HEADER ══════════ */
+.hdr{position:absolute;top:var(--hdr-top,0px);left:0;right:0;z-index:600;height:var(--hdr);background:rgba(8,18,36,.97);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--b3);display:flex;align-items:center;padding:0 12px;gap:0;box-shadow:0 2px 24px rgba(0,0,0,.6);}
+.hdr::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent 5%,var(--gd) 35%,var(--gd) 65%,transparent 95%);}
+.hdr-left{display:flex;align-items:center;}
+.hdr-bell{position:relative;width:40px;height:40px;border-radius:var(--r8);background:var(--n3);border:1px solid var(--b1);display:flex;align-items:center;justify-content:center;font-size:18px;transition:all .15s;flex-shrink:0;}
+.hdr-bell:hover{background:var(--n4);}
+.bell-dot{position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:var(--r3);border:2px solid rgba(8,18,36,.97);display:none;}
+.bell-dot.on{display:block;animation:blink 1.2s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.hdr-center{flex:1;display:flex;align-items:center;justify-content:center;gap:9px;}
+.hdr-logo{width:32px;height:32px;border-radius:50%;object-fit:cover;border:1.5px solid var(--b3);box-shadow:0 0 12px var(--gg);flex-shrink:0;}
+.hdr-name{font-size:20px;font-weight:900;letter-spacing:-.4px;background:linear-gradient(135deg,#E0A828 0%,#F5C840 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hdr-right{display:flex;align-items:center;gap:6px;}
+.hdr-live{display:flex;align-items:center;gap:5px;background:var(--n3);border:1px solid var(--b1);border-radius:20px;padding:4px 10px;font-size:10px;font-weight:700;color:var(--tx2);}
+.ldot{width:5px;height:5px;border-radius:50%;background:#2ECC71;flex-shrink:0;animation:ld 1.8s ease-in-out infinite;}
+@keyframes ld{0%,100%{opacity:1}50%{opacity:.15}}
+.hdr-menu{width:40px;height:40px;border-radius:var(--r8);background:var(--n3);border:1px solid var(--b1);display:flex;align-items:center;justify-content:center;font-size:17px;transition:all .15s;flex-shrink:0;}
+.hdr-menu:hover{background:var(--n4);}
+
+/* ══════════ DROPDOWN ══════════ */
+#dd{position:absolute;top:calc(var(--hdr-top,0px) + var(--hdr) + 6px);left:12px;z-index:700;background:var(--n3);border:1px solid var(--b3);border-radius:var(--r16);box-shadow:var(--e4);width:240px;display:none;overflow:hidden;}
+#dd.open{display:block;animation:dda .16s ease;}
+@keyframes dda{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.ddr{display:flex;align-items:center;gap:12px;padding:13px 15px;font-size:13px;font-weight:500;color:var(--tx1);border-bottom:1px solid var(--b1);width:100%;text-align:right;transition:background .12s;cursor:pointer;}
+.ddr:last-child{border-bottom:none;}
+.ddr:hover{background:var(--n4);}
+.dd-ic{width:32px;height:32px;border-radius:var(--r8);background:var(--n4);border:1px solid var(--b1);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.dd-sep{height:1px;background:var(--b2);margin:4px 0;}
+/* DMS badge in menu */
+.dms-badge{margin-right:auto;background:rgba(14,136,64,.15);color:#40C880;border:1px solid rgba(14,136,64,.3);border-radius:4px;padding:1px 7px;font-size:10px;font-weight:700;}
+.dms-badge.off{background:var(--n5);color:var(--tx3);border-color:var(--b1);}
+
+/* ══════════ SOS STRIP ══════════ */
+.sos-strip{position:absolute;top:calc(var(--hdr-top,0px) + var(--hdr));left:0;right:0;z-index:590;background:var(--r3);padding:10px 14px;display:none;align-items:center;gap:10px;animation:ssf 1.1s ease-in-out infinite;}
+.sos-strip.on{display:flex;}
+@keyframes ssf{0%,100%{background:var(--r3)}50%{background:var(--r2)}}
+.ss-main{flex:1;min-width:0;}
+.ss-t{color:#fff;font-size:12px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ss-s{color:rgba(255,255,255,.72);font-size:10px;margin-top:2px;}
+.ss-x{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.32);border-radius:var(--r8);padding:6px 13px;color:#fff;font-size:11px;font-weight:700;white-space:nowrap;flex-shrink:0;}
+.ss-x:hover{background:rgba(255,255,255,.28);}
+
+/* DMS strip */
+.dms-strip{position:absolute;top:calc(var(--hdr-top,0px) + var(--hdr));left:0;right:0;z-index:585;background:var(--blu);padding:10px 14px;display:none;align-items:center;gap:10px;}
+.dms-strip.on{display:flex;}
+.dms-strip.warn{background:#B06000;animation:dw .9s ease-in-out infinite;}
+@keyframes dw{0%,100%{background:#B06000}50%{background:#804400}}
+.dms-bar{flex:1;}
+.dms-t{color:#fff;font-size:12px;font-weight:800;}
+.dms-s{color:rgba(255,255,255,.7);font-size:10px;margin-top:1px;}
+.dms-ok{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.35);border-radius:var(--r8);padding:6px 14px;color:#fff;font-size:12px;font-weight:800;white-space:nowrap;flex-shrink:0;}
+.dms-ok:hover{background:rgba(255,255,255,.3);}
+.dms-prog{height:3px;background:rgba(255,255,255,.15);position:absolute;bottom:0;left:0;right:0;}
+.dms-prog-fill{height:100%;background:rgba(255,255,255,.7);transition:width 1s linear;}
+
+/* ══════════ MAP CONTROLS ══════════ */
+.map-ctrls{position:absolute;top:calc(var(--hdr-top,0px) + var(--hdr) + 10px);right:10px;z-index:400;display:flex;flex-direction:column;gap:5px;}
+.mc{width:36px;height:36px;border-radius:var(--r8);background:rgba(255,255,255,.94);border:1px solid rgba(0,0,0,.1);box-shadow:var(--e1);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;color:#333;transition:all .15s;}
+.mc:hover{background:#fff;box-shadow:var(--e2);}
+.loc-fab{position:absolute;bottom:calc(var(--nav)+14px);left:12px;z-index:400;width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.95);border:1px solid rgba(0,0,0,.1);box-shadow:var(--e2);display:flex;align-items:center;justify-content:center;font-size:20px;transition:all .15s;}
+.loc-fab:hover{background:#fff;box-shadow:var(--e3);}
+.map-legend{position:absolute;bottom:calc(var(--nav)+14px);right:10px;z-index:400;background:rgba(255,255,255,.95);border:1px solid rgba(0,0,0,.08);border-radius:var(--r12);padding:10px 13px;box-shadow:var(--e1);}
+.leg{display:flex;align-items:center;gap:8px;font-size:10px;font-weight:600;color:#334;margin-bottom:4px;}
+.leg:last-child{margin-bottom:0;}
+.ldc{width:11px;height:11px;border-radius:50%;flex-shrink:0;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.22);}
+
+/* Map tooltip */
+#mtip{position:absolute;z-index:500;background:#fff;border:1px solid rgba(0,0,0,.1);border-radius:var(--r12);padding:13px 14px 11px;min-width:195px;max-width:235px;box-shadow:0 8px 36px rgba(0,0,0,.22);direction:rtl;display:none;pointer-events:none;}
+#mtip.show{display:block;}
+#mtip.ptr{pointer-events:auto;}
+.mt-row{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
+.mt-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;}
+.mt-t{font-size:13px;font-weight:800;color:#111;}
+.mt-m{font-size:11px;color:#555;margin-bottom:5px;line-height:1.5;}
+.mt-badge{display:inline-flex;align-items:center;padding:2px 9px;border-radius:5px;font-size:10px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;margin-bottom:5px;}
+.mt-note{font-size:11px;color:#444;line-height:1.55;margin-bottom:6px;}
+.mt-open{display:block;width:100%;padding:7px;background:#F5F7FF;border:1px solid #DDE4F4;border-radius:var(--r8);font-size:12px;font-weight:700;color:#1852C0;text-align:center;cursor:pointer;transition:background .12s;}
+.mt-open:hover{background:#ECF0FF;}
+
+/* ══════════ NAV ══════════ */
+.nav{position:absolute;bottom:0;left:0;right:0;z-index:600;height:var(--nav);background:rgba(8,18,36,.98);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid var(--b3);display:flex;align-items:center;justify-content:space-around;padding:0 8px;padding-bottom:env(safe-area-inset-bottom,0);box-shadow:0 -4px 32px rgba(0,0,0,.7);}
+.nav::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent 5%,var(--gd) 30%,var(--gd) 70%,transparent 95%);}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:7px 4px;color:var(--tx3);font-size:10px;font-weight:600;transition:color .15s;position:relative;}
+.nb.on{color:var(--g3);}
+.nb.on::after{content:'';position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--g3);}
+.nb-icon{font-size:22px;line-height:1.2;}
+
+/* ══════════ SOS BUTTON ══════════ */
+.sos-wrap{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:4px;position:relative;padding:0 10px;}
+.sos-ring1{position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);width:94px;height:94px;border-radius:50%;border:1.5px solid rgba(204,20,38,.32);animation:rng 2.2s ease-in-out infinite;pointer-events:none;}
+.sos-ring2{position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);width:112px;height:112px;border-radius:50%;border:1px solid rgba(204,20,38,.16);animation:rng 2.2s ease-in-out .5s infinite;pointer-events:none;}
+@keyframes rng{0%,100%{opacity:1}50%{opacity:.18}}
+.sos-btn{width:74px;height:74px;border-radius:50%;background:radial-gradient(circle at 36% 30%,#E82234 0%,#9A0F1E 100%);border:3px solid rgba(255,255,255,.16);box-shadow:0 0 0 3px rgba(204,20,38,.38),0 8px 36px rgba(204,20,38,.62),0 0 60px rgba(204,20,38,.16);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transition:transform .12s,box-shadow .12s;position:relative;z-index:1;}
+.sos-btn:active{transform:scale(.88);}
+.sos-btn.active{background:radial-gradient(circle at 36% 30%,#D08012 0%,#7A4A00 100%);box-shadow:0 0 0 3px rgba(192,120,8,.42),0 8px 36px rgba(192,120,8,.62);animation:sa .9s ease-in-out infinite;}
+@keyframes sa{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+.sos-txt{font-size:13px;font-weight:900;letter-spacing:2.5px;color:#fff;line-height:1;}
+.sos-sub{font-size:9px;font-weight:700;letter-spacing:.5px;color:rgba(204,20,38,.75);}
+
+/* ══════════ SHEETS ══════════ */
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:550;background:var(--n2);border-radius:22px 22px 0 0;border-top:1px solid var(--b3);box-shadow:0 -10px 60px rgba(0,0,0,.8);transform:translateY(100%);transition:transform .35s cubic-bezier(.25,1,.35,1);max-height:calc(100vh - var(--hdr) - 14px);display:flex;flex-direction:column;overflow:hidden;}
+.sheet.open{transform:translateY(0);}
+.sheet::before{content:'';position:absolute;top:0;left:25%;right:25%;height:1px;background:linear-gradient(90deg,transparent,var(--gd),transparent);}
+.sh-pill{width:42px;height:3px;border-radius:2px;background:var(--n5);margin:10px auto 0;flex-shrink:0;}
+.sh-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 11px;flex-shrink:0;border-bottom:1px solid var(--b1);}
+.sh-ttl{font-size:17px;font-weight:900;letter-spacing:-.3px;background:linear-gradient(135deg,#E0A828 0%,#F5C840 60%,#C09020 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.sh-x{width:30px;height:30px;border-radius:50%;background:var(--n4);border:1px solid var(--b1);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--tx2);transition:background .12s;}
+.sh-x:hover{background:var(--n5);}
+.sh-body{overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1;padding:14px 16px 36px;}
+/* section label */
+.sec-cap{font-size:10px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;color:var(--g2);margin-bottom:9px;display:flex;align-items:center;gap:7px;}
+.sec-cap::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--gd),transparent);}
+.mb12{margin-bottom:12px;} .mb16{margin-bottom:16px;} .mb20{margin-bottom:20px;}
+
+/* ══════════ UPDATE CARDS ══════════ */
+.chip-row{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:14px;padding-bottom:2px;}
+.chip-row::-webkit-scrollbar{display:none;}
+.chip{flex-shrink:0;padding:5px 13px;border:1px solid var(--b1);border-radius:20px;background:var(--n3);font-size:11px;font-weight:600;color:var(--tx2);cursor:pointer;transition:all .15s;}
+.chip.on{background:var(--gd);border-color:var(--b3);color:var(--g3);}
+.chip:hover:not(.on){color:var(--tx1);}
+/* Incident type colors */
+.t-sex  {--tc:#CC1426;--tb:rgba(204,20,38,.12);}
+.t-viol {--tc:#EA5A00;--tb:rgba(234,90,0,.12);}
+.t-stalk{--tc:#C07808;--tb:rgba(192,120,8,.12);}
+.t-theft{--tc:#1852C0;--tb:rgba(24,82,192,.12);}
+.t-drug {--tc:#6B32D8;--tb:rgba(107,50,216,.12);}
+.t-med  {--tc:#0E8840;--tb:rgba(14,136,64,.12);}
+.t-sos  {--tc:#CC1426;--tb:rgba(204,20,38,.18);}
+.t-new  {--tc:#1852C0;--tb:rgba(24,82,192,.12);}
+.ucard{border-radius:var(--r12);margin-bottom:10px;overflow:hidden;cursor:pointer;transition:transform .12s,box-shadow .15s;position:relative;border:1px solid var(--b1);background:linear-gradient(105deg,var(--tb) 0%,var(--n1) 45%);border-color:color-mix(in srgb,var(--tc) 28%,transparent);}
+.ucard:hover{transform:translateY(-2px);box-shadow:var(--e2);}
+.ucard:active{transform:translateY(0);}
+.ucard::after{content:'';position:absolute;top:0;right:0;bottom:0;width:4px;background:var(--tc);}
+.uc-in{padding:13px 18px 12px 13px;}
+.uc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:5px;}
+.uc-hd{display:flex;align-items:center;gap:8px;flex:1;min-width:0;}
+.uc-dot{width:13px;height:13px;border-radius:50%;background:var(--tc);flex-shrink:0;box-shadow:0 0 9px var(--tc);}
+.uc-ttl{font-size:13px;font-weight:700;color:var(--tx0);line-height:1.3;}
+.ubdg{font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:2px 8px;border-radius:5px;white-space:nowrap;flex-shrink:0;background:color-mix(in srgb,var(--tc) 18%,transparent);color:color-mix(in srgb,var(--tc) 80%,white);}
+.uc-meta{font-size:11px;color:var(--tx3);margin-bottom:6px;display:flex;align-items:center;gap:5px;}
+.uc-sep{width:3px;height:3px;border-radius:50%;background:var(--tx4);}
+.uc-desc{font-size:12px;color:var(--tx1);line-height:1.65;margin-bottom:7px;}
+.uc-resp{display:flex;align-items:center;gap:7px;margin-top:7px;padding-top:7px;border-top:1px solid var(--b1);font-size:11px;color:var(--tx3);}
+.avs{display:flex;}.av{width:20px;height:20px;border-radius:50%;background:var(--n4);border:1.5px solid var(--n2);margin-right:-6px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--tx2);}
+.dtag{margin-right:auto;background:var(--n4);border:1px solid var(--b1);padding:1px 7px;border-radius:5px;font-size:10px;font-weight:600;}
+.uc-hint{font-size:10px;color:var(--tx3);margin-top:6px;padding-top:6px;border-top:1px solid var(--b1);}
+
+/* ══════════ INCIDENT DETAIL ══════════ */
+#det-sheet{z-index:650;}
+.det-head{margin-bottom:14px;border-radius:var(--r12);padding:14px;border-right:5px solid var(--tc);background:var(--tb);}
+.det-title{font-size:17px;font-weight:900;color:var(--tx0);margin-bottom:8px;}
+.det-tags{display:flex;flex-wrap:wrap;gap:6px;}
+.det-tag{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--tx1);background:var(--n4);border:1px solid var(--b1);border-radius:20px;padding:3px 10px;}
+.det-desc{font-size:14px;color:var(--tx1);line-height:1.8;margin-bottom:4px;}
+.det-map{height:120px;border-radius:var(--r12);overflow:hidden;border:1px solid var(--b2);}
+.det-photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;}
+.det-ph{aspect-ratio:1;border-radius:var(--r8);background:var(--n3);border:1px solid var(--b1);display:flex;align-items:center;justify-content:center;font-size:28px;}
+.det-ctas{display:flex;flex-direction:column;gap:8px;margin-top:4px;}
+.dcta{width:100%;padding:15px;border-radius:var(--r12);font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .15s;}
+.dcta.pr{background:var(--r3);color:#fff;box-shadow:0 4px 22px var(--rs);}
+.dcta.pr:hover{background:var(--r2);}
+.dcta.pr:disabled{opacity:.45;cursor:default;transform:none;}
+.dcta.gd{background:linear-gradient(135deg,#C09020,#E0A828);color:var(--n0);box-shadow:0 4px 20px var(--gg);}
+.dcta.gd:hover{filter:brightness(1.08);}
+.dcta.sc{background:var(--n3);border:1px solid var(--b2);color:var(--tx1);}
+.dcta.sc:hover{background:var(--n4);}
+.resp-row{display:flex;align-items:center;gap:10px;background:var(--n3);border:1px solid var(--b1);border-radius:var(--r8);padding:10px 12px;margin-bottom:6px;}
+.resp-av{width:32px;height:32px;border-radius:50%;background:var(--n4);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--tx1);flex-shrink:0;}
+.resp-nm{font-size:13px;font-weight:600;color:var(--tx0);}
+.resp-d{font-size:11px;color:var(--tx3);}
+.resp-st{margin-right:auto;font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;background:var(--grn-b);color:#40C880;}
+
+/* ══════════ REPORT ══════════ */
+.rep-intro{background:var(--n3);border:1px solid var(--b1);border-right:4px solid var(--g3);border-radius:var(--r12);padding:12px 14px;font-size:13px;color:var(--tx1);line-height:1.7;}
+.rep-intro strong{color:var(--g3);}
+.type-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.ropt{background:var(--n3);border:1px solid var(--b1);border-radius:var(--r12);padding:13px 9px;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--tx2);cursor:pointer;transition:all .15s;text-align:center;}
+.ropt-ic{font-size:22px;}
+.ropt.sel,.ropt:hover{border-color:var(--b3);background:var(--gd);color:var(--g3);}
+.rep-ta{width:100%;background:var(--n3);border:1px solid var(--b1);border-radius:var(--r12);padding:13px 14px;color:var(--tx0);font-size:14px;resize:none;height:92px;outline:none;line-height:1.65;transition:border-color .15s,box-shadow .15s;}
+.rep-ta:focus{border-color:var(--b3);box-shadow:0 0 0 3px rgba(224,168,40,.1);}
+.rep-ta::placeholder{color:var(--tx3);}
+.cam-card{background:var(--n3);border:1px solid var(--b1);border-radius:var(--r12);overflow:hidden;}
+.cam-bar{display:flex;align-items:center;gap:8px;padding:11px 13px;background:var(--n4);border-bottom:1px solid var(--b1);}
+.cam-lbl{font-size:12px;font-weight:600;color:var(--tx1);flex:1;}
+.cam-cnt{font-size:11px;font-weight:700;color:var(--g3);background:var(--gd);border:1px solid var(--b3);border-radius:20px;padding:2px 9px;}
+.cam-btn{padding:7px 13px;border-radius:var(--r8);font-size:12px;font-weight:700;display:flex;align-items:center;gap:5px;cursor:pointer;}
+.cam-btn.d{background:linear-gradient(135deg,#C09020,#E0A828);color:var(--n0);}
+.cam-btn.l{background:var(--n5);border:1px solid var(--b2);color:var(--tx2);}
+.cam-btn.l:hover{color:var(--tx1);}
+#cam-v{width:100%;height:180px;object-fit:cover;display:none;background:#000;}
+#cam-snap{display:none;justify-content:center;align-items:center;gap:12px;padding:10px;background:rgba(0,0,0,.82);}
+.snap-c{width:54px;height:54px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:var(--e2);cursor:pointer;}
+.cam-stop{padding:7px 14px;border-radius:var(--r8);background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:11px;font-weight:600;cursor:pointer;}
+.cam-ph{height:70px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:12px;color:var(--tx3);}
+.cam-grid{display:flex;gap:8px;padding:10px 12px;overflow-x:auto;scrollbar-width:none;}
+.cam-grid::-webkit-scrollbar{display:none;}
+.cam-thumb{width:74px;height:74px;border-radius:var(--r8);object-fit:cover;flex-shrink:0;border:2px solid var(--b2);cursor:pointer;transition:transform .15s;}
+.cam-thumb:hover{transform:scale(1.06);}
+.row-btn{display:flex;align-items:center;gap:10px;width:100%;background:var(--n3);border:1px solid var(--b1);border-radius:var(--r12);padding:13px 14px;cursor:pointer;transition:border-color .15s;}
+.row-btn:hover{border-color:var(--b3);}
+.row-txt{font-size:13px;color:var(--tx2);flex:1;text-align:right;}
+.tog-row{display:flex;align-items:center;justify-content:space-between;background:var(--n3);border:1px solid var(--b1);border-radius:var(--r12);padding:12px 14px;}
+.tl{font-size:13px;font-weight:600;color:var(--tx1);}
+.ts{font-size:11px;color:var(--tx3);margin-top:2px;}
+.tog{width:44px;height:24px;border-radius:12px;background:var(--n5);position:relative;cursor:pointer;transition:background .2s;flex-shrink:0;}
+.tog.on{background:var(--grn);}
+.tog::after{content:'';position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:3px;right:3px;transition:transform .2s;box-shadow:0 1px 4px rgba(0,0,0,.3);}
+.tog.on::after{transform:translateX(-20px);}
+.cta-gold{width:100%;padding:15px;background:linear-gradient(135deg,#C09020 0%,#E0A828 60%,#F5C840 100%);border-radius:var(--r12);color:var(--n0);font-size:15px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:9px;box-shadow:0 4px 24px var(--gg);transition:all .15s;letter-spacing:.3px;}
+.cta-gold:hover{filter:brightness(1.08);transform:translateY(-1px);}
+.cta-red{width:100%;padding:15px;background:radial-gradient(circle at 38% 30%,#E82234,#9A0F1E);border-radius:var(--r12);color:#fff;font-size:15px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:9px;box-shadow:0 4px 24px var(--rs);transition:all .15s;letter-spacing:.3px;}
+.cta-red:hover{filter:brightness(1.08);}
+
+/* ══════════ DMS SHEET ══════════ */
+.dms-card{border-radius:var(--r12);padding:16px;margin-bottom:12px;}
+.dms-timer-display{font-size:56px;font-weight:900;text-align:center;background:linear-gradient(135deg,#E0A828,#F5C840);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;}
+.dms-status{font-size:12px;font-weight:600;color:var(--tx2);text-align:center;margin-top:4px;}
+.dms-intervals{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.dms-iv{background:var(--n3);border:2px solid var(--b1);border-radius:var(--r12);padding:14px 8px;text-align:center;cursor:pointer;transition:all .15s;}
+.dms-iv.sel{border-color:var(--b4);background:var(--rb);}
+.dms-iv-n{font-size:24px;font-weight:900;background:linear-gradient(135deg,#E0A828,#F5C840);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.dms-iv-l{font-size:10px;font-weight:600;color:var(--tx2);margin-top:2px;}
+
+/* ══════════ SETTINGS ══════════ */
+.set-grp{background:var(--n3);border:1px solid var(--b1);border-radius:var(--r12);overflow:hidden;margin-bottom:18px;}
+.set-row{display:flex;align-items:center;justify-content:space-between;padding:13px 14px;border-bottom:1px solid var(--b1);cursor:pointer;transition:background .12s;}
+.set-row:last-child{border-bottom:none;}
+.set-row:hover{background:var(--n4);}
+.sr-l{display:flex;align-items:center;gap:12px;}
+.sr-ic{width:34px;height:34px;border-radius:var(--r8);background:var(--n4);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.sr-nm{font-size:14px;font-weight:500;color:var(--tx1);}
+.sr-sb{font-size:11px;color:var(--tx3);margin-top:1px;}
+.sl-card{background:var(--n3);border:1px solid var(--b1);border-radius:var(--r12);padding:16px;margin-bottom:18px;}
+.rad-big{font-size:32px;font-weight:900;text-align:center;margin-bottom:10px;background:linear-gradient(135deg,#E0A828,#F5C840);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.rad-u{font-size:13px;font-weight:400;-webkit-text-fill-color:var(--tx2);}
+.c-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--b1);}
+.c-row:last-child{border-bottom:none;}
+.c-av{width:38px;height:38px;border-radius:50%;background:var(--n4);border:1px solid var(--b2);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:var(--tx1);flex-shrink:0;}
+.c-nm{font-size:13px;font-weight:600;color:var(--tx0);}
+.c-ph{font-size:11px;color:var(--tx3);}
+.c-tag{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;padding:2px 8px;border-radius:5px;background:var(--gd);color:var(--g3);margin-right:auto;border:1px solid var(--b3);}
+.add-c{width:100%;padding:12px;border:1.5px dashed var(--b2);border-radius:var(--r12);background:transparent;font-size:13px;font-weight:600;color:var(--tx3);display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;transition:all .15s;margin-top:8px;}
+.add-c:hover{border-color:var(--b3);color:var(--g3);}
+.ai-row{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--b1);font-size:13px;}
+.ai-row:last-child{border-bottom:none;}
+.ai-l{color:var(--tx2);}
+.ai-v{font-weight:600;color:var(--tx1);}
+
+/* ══════════ PROFILE ══════════ */
+.prof-top{display:flex;flex-direction:column;align-items:center;padding:6px 0 20px;}
+.p-logo{width:72px;height:72px;border-radius:50%;object-fit:cover;border:2.5px solid var(--b3);box-shadow:0 0 28px var(--gg);}
+.p-nm{font-size:22px;font-weight:900;letter-spacing:-.4px;background:linear-gradient(135deg,#E0A828,#F5C840);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:12px 0 5px;}
+.p-rk{font-size:11px;font-weight:600;color:var(--tx2);background:var(--n3);border:1px solid var(--b3);padding:3px 12px;border-radius:20px;}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px;}
+.st{background:var(--n3);border:1px solid var(--b1);border-radius:var(--r12);padding:14px 8px;text-align:center;}
+.st-n{font-size:28px;font-weight:900;background:linear-gradient(135deg,#E0A828,#F5C840);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.st-l{font-size:10px;color:var(--tx3);margin-top:2px;line-height:1.35;}
+
+/* ══════════ EMERGENCY ══════════ */
+.call-btn{display:flex;align-items:center;gap:13px;padding:14px;border-radius:var(--r12);background:var(--n3);border:1px solid var(--b1);margin-bottom:8px;cursor:pointer;transition:all .15s;width:100%;text-align:right;box-shadow:var(--e1);}
+.call-btn:hover{background:var(--n4);border-color:var(--b2);}
+.call-btn.pr{background:var(--r3);border-color:var(--r3);box-shadow:0 4px 22px var(--rs);}
+.call-btn.pr:hover{background:var(--r2);}
+.call-btn.pr .cc-nm{color:#fff;}
+.call-btn.pr .cc-sb{color:rgba(255,255,255,.7);}
+.call-btn.pr .cc-ic{background:rgba(255,255,255,.12);border-color:transparent;}
+.cc-ic{width:46px;height:46px;border-radius:var(--r12);background:var(--n4);border:1px solid var(--b1);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.cc-nm{font-size:14px;font-weight:700;color:var(--tx0);}
+.cc-sb{font-size:11px;color:var(--tx2);}
+.lock-card{background:var(--n3);border:1px solid var(--b2);border-radius:var(--r12);padding:14px;margin-top:14px;}
+.lc-t{font-size:11px;font-weight:700;color:var(--tx1);margin-bottom:7px;}
+.lc-b{font-size:11px;color:var(--tx2);line-height:1.85;}
+
+/* ══════════ TOASTS ══════════ */
+#toasts{position:fixed;top:calc(var(--hdr-top,0px) + var(--hdr) + 10px);left:12px;right:12px;z-index:9000;pointer-events:none;display:flex;flex-direction:column;gap:8px;}
+.toast{border-radius:var(--r12);padding:13px 14px;display:flex;align-items:center;gap:11px;box-shadow:var(--e3);pointer-events:auto;animation:tin .22s ease;position:relative;overflow:hidden;}
+.toast{background:#162238;border:1px solid rgba(136,152,184,.22);}
+.toast::before{content:'';position:absolute;top:0;right:0;bottom:0;width:5px;}
+.toast.red{background:#1E0810;border-color:rgba(204,20,38,.38);}
+.toast.red::before{background:var(--r3);}
+.toast.grn{background:#081812;border-color:rgba(14,136,64,.38);}
+.toast.grn::before{background:#2ECC71;}
+.toast.amb{background:#1C1006;border-color:rgba(192,120,8,.38);}
+.toast.amb::before{background:var(--amb);}
+.toast::before{background:var(--g3);}
+.toast-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.t-tx{flex:1;font-size:13px;font-weight:600;color:#fff;line-height:1.45;}
+.t-x{color:rgba(255,255,255,.4);font-size:16px;cursor:pointer;flex-shrink:0;padding:0 2px;}
+@keyframes tin{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+
+/* User location pulse */
+@keyframes locpulse{0%{r:18;opacity:.25}100%{r:36;opacity:0}}
+#me-loc .pulse{animation:locpulse 2s ease-out infinite;}
+/* A2HS Install Banner */
+.a2hs{position:fixed;bottom:calc(var(--nav)+8px);left:10px;right:10px;z-index:9500;background:linear-gradient(135deg,#162440,#0A1628);border:1.5px solid var(--b3);border-radius:var(--r16);padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--e4);animation:tin .22s ease;}
+.a2hs-icon{width:44px;height:44px;border-radius:var(--r12);border:1.5px solid var(--b3);flex-shrink:0;}
+.a2hs-text{flex:1;}
+.a2hs-t{font-size:14px;font-weight:800;color:var(--g3);}
+.a2hs-s{font-size:11px;color:var(--tx2);margin-top:2px;}
+.a2hs-btn{padding:8px 16px;background:linear-gradient(135deg,#C09020,#E0A828);border-radius:var(--r8);color:var(--n0);font-size:12px;font-weight:800;white-space:nowrap;flex-shrink:0;}
+.a2hs-x{color:var(--tx3);font-size:18px;padding:4px;cursor:pointer;flex-shrink:0;}
+/* Branding */
+.branding{text-align:center;font-size:10px;color:var(--tx3);letter-spacing:.5px;padding:12px 0 4px;}
+.branding a{color:var(--g2);text-decoration:none;}
+/* scrollbar */
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--n5);border-radius:2px;}
+</style>
+</head>
+<body class="lb-on">
+<a href="#main-content" class="skip-link">עבור לתוכן</a>
+
+<!-- LANGUAGE BAR -->
+<div id="lang-bar" role="navigation" aria-label="בחירת שפה">
+  <button class="lbtn on" onclick="setLang('he')" lang="he">עברית</button>
+  <button class="lbtn" onclick="setLang('en')" lang="en">English</button>
+  <button class="lbtn" onclick="setLang('ar')" lang="ar">العربية</button>
+  <button class="lbtn" onclick="setLang('ru')" lang="ru">Рус</button>
+  <button class="lbtn" onclick="setLang('am')" lang="am">አማ</button>
+  <button class="lbtn" onclick="setLang('fr')" lang="fr">FR</button>
+</div>
+
+<input type="file" id="file-in" accept="image/*" multiple style="display:none" onchange="handleFiles(this.files)">
+<div id="toasts" role="alert" aria-live="assertive" aria-atomic="false"></div>
+
+<!-- ═══════════════════════════════
+     ONBOARDING
+═══════════════════════════════ -->
+<div id="ob" role="main" aria-label="הרשמה">
+  <div class="ob-hero">
+    <div class="ob-glow" aria-hidden="true"></div>
+    <img class="ob-logo" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cpath d='M60 6L112 30V68Q112 100 60 116Q8 100 8 68V30Z' fill='%230A1628' stroke='%23E0A828' stroke-width='3'/%3E%3Cg stroke='%23E0A828' stroke-width='2.5' fill='none' stroke-linejoin='round'%3E%3Cpath d='M60 32L78 62H42Z'/%3E%3Cpath d='M60 72L42 42H78Z'/%3E%3C/g%3E%3C/svg%3E" alt="שומר לוגו" width="120" height="120">
+    <div class="ob-title" aria-label="שומר">SHOMER</div>
+    <div class="ob-sub">Citizens Protecting Citizens</div>
+    <div class="branding" style="margin-bottom:4px;">by <a href="#">3Shamrocks.Studio</a></div>
+    <!-- Language pick in onboarding -->
+    <div class="ob-lang-pick" role="group" aria-label="שפה">
+      <button class="olb on" onclick="setLang('he')">🇮🇱 עברית</button>
+      <button class="olb" onclick="setLang('en')">🇬🇧 English</button>
+      <button class="olb" onclick="setLang('ar')">🇸🇦 عربى</button>
+      <button class="olb" onclick="setLang('ru')">🇷🇺 Рус</button>
+      <button class="olb" onclick="setLang('am')">🇪🇹 አማ</button>
+      <button class="olb" onclick="setLang('fr')">🇫🇷 FR</button>
+    </div>
+  </div>
+  <div class="ob-steps" role="progressbar" aria-valuemin="1" aria-valuemax="3" aria-valuenow="1">
+    <div class="ob-st on" id="st0"></div>
+    <div class="ob-st" id="st1"></div>
+    <div class="ob-st" id="st2"></div>
+  </div>
+
+  <!-- STEP 0: Registration -->
+  <div class="ob-panel active" id="step0">
+    <div class="ob-card">
+      <h3 id="ob-h0">יצירת חשבון שומר</h3>
+      <p class="desc" id="ob-d0">מפת בטיחות חיה · SOS + אזעקה מיידית · עזרה הדדית</p>
+      <input class="ob-f" id="ob-name" type="text" autocomplete="given-name" maxlength="40" placeholder="שם פרטי (אופציונלי)" aria-label="שם פרטי">
+      <input class="ob-f" id="ob-phone" type="tel" autocomplete="tel" maxlength="15" placeholder="050-000-0000" inputmode="tel" aria-label="מספר טלפון">
+      <p style="font-size:11px;color:var(--tx3);margin:-4px 0 12px;line-height:1.6" id="ob-why">מספר הטלפון משמש לשליחת עזרה. אופציונלי במצב דמו.</p>
+      <button class="ob-cta" id="ob-cta0" onclick="obStep0()"><span id="ob-cta0-t">המשך ←</span></button>
+    </div>
+  </div>
+
+  <!-- STEP 1: Geolocation -->
+  <div class="ob-panel" id="step1">
+    <div class="ob-card">
+      <h3 id="ob-h1">📍 אישור מיקום</h3>
+      <p class="desc" id="ob-d1">נדרש לשליחת SOS מיידי לשומרים בקרבתך ולמיפוי אירועים.</p>
+      <div class="geo-box" id="geo-box">
+        <div class="geo-ic" aria-hidden="true">📍</div>
+        <div class="geo-t" id="geo-t">נדרש אישור מיקום</div>
+        <div class="geo-s" id="geo-s">לחץ 'אפשר' ואשר בחלון שיפתח.<br>המיקום משמש אך ורק לצורכי בטיחות.</div>
+      </div>
+      <button class="ob-cta" id="geo-btn" onclick="requestGeo()"><span id="geo-btn-t">📍 אפשר גישה למיקום</span></button>
+      <button class="ob-cta" style="background:var(--n4);color:var(--tx1);box-shadow:none;margin-top:8px;border:1px solid var(--b2);" onclick="goStep(2)" id="geo-skip-btn"><span id="geo-skip-t">דלג — המשך בלי מיקום</span></button>
+      <button class="ob-back" onclick="goStep(0)" id="ob-back1">← חזרה</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: Alarm + DMS + Shake -->
+  <div class="ob-panel" id="step2">
+    <div class="ob-card">
+      <h3 id="ob-h2">🚨 הגדרות חירום</h3>
+      <p class="desc" id="ob-d2">בחר אזעקה — תופעל מיד עם לחיצת SOS בעוצמה מרבית.</p>
+      <div class="ob-alarms" id="ob-alarms" role="group" aria-label="סוג אזעקה">
+        <div class="ob-alarm sel" onclick="obPickAlarm(this,'siren')" role="radio" aria-checked="true" tabindex="0">
+          <div class="ob-alarm-ic" aria-hidden="true">🚨</div>
+          <div class="ob-alarm-info"><div class="nm" id="al1-nm">סירנת ניידת</div><div class="ds" id="al1-ds">גלי צליל 440→1800Hz — הכי מזוהה כחירום</div></div>
+        </div>
+        <div class="ob-alarm" onclick="obPickAlarm(this,'horn')" role="radio" aria-checked="false" tabindex="0">
+          <div class="ob-alarm-ic" aria-hidden="true">📢</div>
+          <div class="ob-alarm-info"><div class="nm" id="al2-nm">קרן חירום</div><div class="ds" id="al2-ds">פיצוצי square 1200Hz — מנפץ ריכוז</div></div>
+        </div>
+        <div class="ob-alarm" onclick="obPickAlarm(this,'pulse')" role="radio" aria-checked="false" tabindex="0">
+          <div class="ob-alarm-ic" aria-hidden="true">⚡</div>
+          <div class="ob-alarm-info"><div class="nm" id="al3-nm">פולסים מהירים</div><div class="ds" id="al3-ds">2800Hz — פיזית צורם ביותר</div></div>
+        </div>
+      </div>
+      <div class="ob-vol-wrap">
+        <div class="vol-row"><span class="vol-lbl" id="vol-lbl">עוצמת קול</span><span class="vol-val" id="ob-vv">100%</span></div>
+        <input type="range" min="10" max="100" value="100" aria-label="עוצמת קול" oninput="document.getElementById('ob-vv').textContent=this.value+'%';alarmVol=this.value/100;">
+      </div>
+      <button class="test-alarm-btn" onclick="testAlarm()" id="test-btn">🔊 <span id="test-lbl">בדוק אזעקה</span></button>
+      <div class="shake-notice">
+        <div class="shake-ic" aria-hidden="true">📳</div>
+        <div id="shake-notice-txt"><strong>Shake-to-SOS:</strong> 5 ניעורים חזקים מפעילים SOS אוטומטי — גם בלי לפתוח האפליקציה.</div>
+      </div>
+      <div class="dms-notice" id="dms-notice-ob">
+        <strong>Dead Man's Switch:</strong> אם לא אישרת "הכל בסדר" תוך X דקות — המערכת שולחת SOS אוטומטי. מושלם להליכות לבד.</div>
+      <button class="ob-cta" onclick="obFinish()" id="ob-finish-btn">✓ <span id="ob-finish-t">כניסה לשומר</span></button>
+      <button class="ob-back" onclick="goStep(1)" id="ob-back2">← חזרה</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════
+     APP
+═══════════════════════════════ -->
+<div id="app" role="application" aria-label="שומר">
+
+  <!-- LIGHT MAP -->
+  <div id="map-wrap" role="img" aria-label="מפת אירועי בטיחות">
+    <svg id="map-svg" viewBox="0 0 400 700" preserveAspectRatio="xMidYMid slice" focusable="false" aria-hidden="true">
+      <!-- Land -->
+      <rect width="400" height="700" fill="#EDF1F8"/>
+      <!-- Sea -->
+      <path d="M0,0L92,0L82,100L72,200L63,300L56,400L50,500L46,600L42,700L0,700Z" fill="#C0D4F0" opacity=".6"/>
+      <text x="28" y="250" font-size="8" fill="#7896C8" font-family="Heebo,Arial" font-weight="600" transform="rotate(-80,28,250)">הים התיכון</text>
+      <!-- Major roads (Route 1, Ayalon, Route 6) -->
+      <g stroke="#C4CCDC" stroke-width="2.8" fill="none" stroke-linecap="round">
+        <path d="M106,50Q111,200 113,320Q116,445 120,605Q122,642 126,680"/><!-- Route 4 coastal -->
+        <path d="M132,50Q135,162 138,284Q140,404 142,504Q144,582 146,662"/><!-- Route 2 -->
+        <path d="M150,40Q157,162 160,284Q164,404 167,524"/><!-- Route 20 -->
+      </g>
+      <g stroke="#D0D6E4" stroke-width="1.4" fill="none" stroke-linecap="round">
+        <path d="M174,298Q210,330 250,370Q284,402 304,432"/><!-- Route 1 -->
+        <path d="M174,298L138,306L108,301"/>
+        <path d="M250,370L284,357L315,346"/>
+        <path d="M214,133L238,147L252,162"/>
+      </g>
+      <!-- City fills -->
+      <g fill="#CDD2E4" opacity=".75">
+        <ellipse cx="170" cy="299" rx="30" ry="20"/><!-- TA -->
+        <ellipse cx="256" cy="435" rx="24" ry="17"/><!-- Jerusalem -->
+        <ellipse cx="213" cy="132" rx="21" ry="14"/><!-- Haifa -->
+        <ellipse cx="197" cy="368" rx="14" ry="10"/><!-- Rishon -->
+        <ellipse cx="218" cy="326" rx="14" ry="9"/><!-- Pet -->
+        <ellipse cx="252" cy="526" rx="16" ry="11"/><!-- BS -->
+        <ellipse cx="167" cy="193" rx="14" ry="9"/><!-- Netanya -->
+        <ellipse cx="186" cy="342" rx="11" ry="8"/><!-- Bat Yam -->
+        <ellipse cx="200" cy="248" rx="11" ry="7"/><!-- Herzl -->
+      </g>
+      <!-- Danger zone overlays (dashed) -->
+      <g fill="none" stroke-dasharray="4,3" stroke-width="1.2">
+        <rect x="155" y="289" width="23" height="19" rx="5" fill="#CC1426" fill-opacity=".06" stroke="#CC1426"/>
+        <rect x="163" y="309" width="20" height="16" rx="4" fill="#C07808" fill-opacity=".06" stroke="#C07808"/>
+        <rect x="204" y="123" width="18" height="13" rx="3" fill="#CC1426" fill-opacity=".06" stroke="#CC1426"/>
+        <rect x="248" y="427" width="17" height="13" rx="3" fill="#C07808" fill-opacity=".06" stroke="#C07808"/>
+      </g>
+      <!-- City labels -->
+      <g font-family="Heebo,Arial" font-weight="800" fill="#6A7890" font-size="9">
+        <text x="170" y="298" text-anchor="middle">תל אביב</text>
+        <text x="258" y="434" text-anchor="middle">ירושלים</text>
+        <text x="215" y="131" text-anchor="middle">חיפה</text>
+        <text x="199" y="367" text-anchor="middle">ראשון</text>
+        <text x="220" y="325" text-anchor="middle">פ"ת</text>
+        <text x="254" y="525" text-anchor="middle">באר שבע</text>
+        <text x="169" y="192" text-anchor="middle">נתניה</text>
+        <text x="187" y="341" text-anchor="middle">בת ים</text>
+        <text x="201" y="247" text-anchor="middle">הרצליה</text>
+      </g>
+      <!-- Crime pins group -->
+      <g id="pins"></g>
+      <!-- User location -->
+      <g id="me-loc" display="none">
+        <circle class="pulse" cx="170" cy="299" r="18" fill="rgba(24,82,192,.18)" stroke="none"/>
+        <circle cx="170" cy="299" r="18" fill="rgba(24,82,192,.12)" stroke="rgba(24,82,192,.3)" stroke-width="1.5"/>
+        <circle cx="170" cy="299" r="10" fill="#2070E0" stroke="#fff" stroke-width="3" filter="drop-shadow(0 0 6px rgba(32,112,224,.7))"/>
+        <circle cx="170" cy="299" r="4" fill="#fff"/>
+      </g>
+    </svg>
+    <!-- Map tooltip (light themed) -->
+    <div id="mtip" role="tooltip" aria-live="polite">
+      <div class="mt-row"><div class="mt-dot" id="mt-dot"></div><div class="mt-t" id="mt-t"></div></div>
+      <div class="mt-m" id="mt-m"></div>
+      <div id="mt-badge"></div>
+      <div class="mt-note" id="mt-note"></div>
+      <button class="mt-open" id="mt-open" style="display:none">פתח פרטים מלאים ←</button>
+    </div>
+    <!-- Legend -->
+    <div class="map-legend" role="list" aria-label="מקרא מפה">
+      <div class="leg" role="listitem"><div class="ldc" style="background:#CC1426" aria-hidden="true"></div><span id="l1">עבירת מין</span></div>
+      <div class="leg" role="listitem"><div class="ldc" style="background:#EA5A00" aria-hidden="true"></div><span id="l2">תקיפה</span></div>
+      <div class="leg" role="listitem"><div class="ldc" style="background:#C07808" aria-hidden="true"></div><span id="l3">מעקב</span></div>
+      <div class="leg" role="listitem"><div class="ldc" style="background:#1852C0" aria-hidden="true"></div><span id="l4">גנבה</span></div>
+      <div class="leg" role="listitem"><div class="ldc" style="background:#6B32D8" aria-hidden="true"></div><span id="l5">סמים</span></div>
+      <div class="leg" role="listitem"><div class="ldc" style="background:#0E8840" aria-hidden="true"></div><span id="l6">רפואי</span></div>
+      <div class="leg" role="listitem"><div class="ldc" style="background:#CC1426;box-shadow:0 0 6px #CC1426;animation:ld .5s ease-in-out infinite" aria-hidden="true"></div><span id="l7">SOS חי</span></div>
+    </div>
+    <!-- Controls -->
+    <div class="map-ctrls" role="group" aria-label="שליטה במפה">
+      <button class="mc" onclick="zm(1.3)" aria-label="הגדל">+</button>
+      <button class="mc" onclick="zm(.77)" aria-label="הקטן">−</button>
+    </div>
+    <button class="loc-fab" onclick="locMe()" aria-label="מיקומי על המפה" title="מיקומי">📍</button>
+  </div>
+
+  <!-- HEADER -->
+  <header class="hdr" role="banner" id="main-content">
+    <div class="hdr-left">
+      <button class="hdr-bell" onclick="openUpdates()" aria-label="עדכונים" title="עדכונים">
+        🔔
+        <span class="bell-dot" id="bell-dot" aria-hidden="true"></span>
+      </button>
+    </div>
+    <div class="hdr-center">
+      <img class="hdr-logo" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cpath d='M60 6L112 30V68Q112 100 60 116Q8 100 8 68V30Z' fill='%230A1628' stroke='%23E0A828' stroke-width='3'/%3E%3Cg stroke='%23E0A828' stroke-width='2.5' fill='none' stroke-linejoin='round'%3E%3Cpath d='M60 32L78 62H42Z'/%3E%3Cpath d='M60 72L42 42H78Z'/%3E%3C/g%3E%3C/svg%3E" alt="" width="32" height="32" aria-hidden="true">
+      <span class="hdr-name">שומר</span>
+    </div>
+    <div class="hdr-right">
+      <div class="hdr-live" aria-label="שומרים פעילים" aria-live="polite">
+        <div class="ldot" aria-hidden="true"></div>
+        <span id="liveN">247</span>
+      </div>
+      <button class="hdr-menu" id="menu-btn" onclick="toggleDD()" aria-label="תפריט" aria-expanded="false" aria-haspopup="true">☰</button>
+    </div>
+  </header>
+
+  <!-- DROPDOWN -->
+  <nav id="dd" role="menu" aria-label="תפריט ניווט" hidden>
+    <button class="ddr" onclick="navTo('rep');closeDD()" role="menuitem">
+      <div class="dd-ic" aria-hidden="true">📝</div><span id="dd-rep">דיווח אירוע</span>
+    </button>
+    <button class="ddr" onclick="op('sh-dms');closeDD()" role="menuitem">
+      <div class="dd-ic" aria-hidden="true">⏱️</div>
+      <span id="dd-dms">Dead Man's Switch</span>
+      <span class="dms-badge off" id="dms-dd-badge">כבוי</span>
+    </button>
+    <button class="ddr" onclick="op('sh-alarm');closeDD()" role="menuitem">
+      <div class="dd-ic" aria-hidden="true">🚨</div><span id="dd-alarm">הגדרות אזעקה</span>
+    </button>
+    <div class="dd-sep"></div>
+    <button class="ddr" onclick="op('sh-prof');closeDD()" role="menuitem">
+      <div class="dd-ic" aria-hidden="true">👤</div><span id="dd-prof">פרופיל</span>
+    </button>
+    <button class="ddr" onclick="op('sh-set');closeDD()" role="menuitem">
+      <div class="dd-ic" aria-hidden="true">⚙️</div><span id="dd-set">הגדרות</span>
+    </button>
+    <button class="ddr" onclick="op('sh-em');closeDD()" role="menuitem">
+      <div class="dd-ic" aria-hidden="true">📞</div><span id="dd-em">מספרי חירום</span>
+    </button>
+  </nav>
+
+  <!-- SOS STRIP -->
+  <div class="sos-strip" id="sos-strip" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="ss-main">
+      <div class="ss-t" id="ss-t">🚨 SOS פעיל — אזעקה פועלת · מיקומך שותף</div>
+      <div class="ss-s" id="ss-s">ממתין לתגובה...</div>
+    </div>
+    <button class="ss-x" onclick="cancelSOS()" id="ss-cancel">בטל SOS</button>
+  </div>
+
+  <!-- DMS STRIP -->
+  <div class="dms-strip" id="dms-strip" role="alert" aria-live="assertive">
+    <div class="dms-bar">
+      <div class="dms-t" id="dms-strip-t">⏱️ Dead Man's Switch פעיל</div>
+      <div class="dms-s" id="dms-strip-s">בדיקה הבאה בעוד 5:00</div>
+    </div>
+    <button class="dms-ok" onclick="dmsConfirm()" id="dms-ok-btn">✓ הכל בסדר</button>
+    <div class="dms-prog"><div class="dms-prog-fill" id="dms-prog-fill" style="width:100%"></div></div>
+  </div>
+
+  <!-- NAV -->
+  <nav class="nav" role="navigation" aria-label="ניווט ראשי">
+    <button class="nb on" id="nb-map" onclick="navTo('map')" aria-label="מפה">
+      <span class="nb-icon" aria-hidden="true">🗺️</span>
+      <span id="nav-map">מפה</span>
+    </button>
+    <div class="sos-wrap" role="group" aria-label="כפתור חירום SOS">
+      <div class="sos-ring1" aria-hidden="true"></div>
+      <div class="sos-ring2" aria-hidden="true"></div>
+      <button class="sos-btn" id="sos-btn" onclick="triggerSOS()" aria-label="שלח SOS חירום" aria-pressed="false">
+        <span class="sos-txt">SOS</span>
+      </button>
+      <span class="sos-sub" id="nav-sos">חירום מיידי</span>
+    </div>
+    <button class="nb" id="nb-upd" onclick="openUpdates()" aria-label="עדכונים">
+      <span class="nb-icon" aria-hidden="true">🔔</span>
+      <span id="nav-upd">עדכונים</span>
+    </button>
+  </nav>
+
+  <!-- ═══ UPDATES ═══ -->
+  <div class="sheet" id="sh-upd" role="dialog" aria-modal="true" aria-labelledby="upd-ttl">
+    <div class="sh-pill" aria-hidden="true"></div>
+    <div class="sh-head">
+      <span class="sh-ttl" id="upd-ttl">עדכונים</span>
+      <button class="sh-x" onclick="cl('sh-upd')" aria-label="סגור">✕</button>
+    </div>
+    <div class="sh-body">
+      <div class="chip-row" role="group" aria-label="סנן עדכונים">
+        <button class="chip on" onclick="chipOn(this)">הכל</button>
+        <button class="chip" onclick="chipOn(this)">SOS פעיל</button>
+        <button class="chip" onclick="chipOn(this)">קרוב אליי</button>
+        <button class="chip" onclick="chipOn(this)">תקיפה</button>
+        <button class="chip" onclick="chipOn(this)">נסגר ✓</button>
+      </div>
+      <div id="upd-list" role="list"></div>
+    </div>
+  </div>
+
+  <!-- ═══ INCIDENT DETAIL ═══ -->
+  <div class="sheet" id="det-sheet" style="z-index:700" role="dialog" aria-modal="true" aria-labelledby="det-ttl">
+    <div class="sh-pill" aria-hidden="true"></div>
+    <div class="sh-head"><span class="sh-ttl" id="det-ttl">פרטי אירוע</span><button class="sh-x" onclick="cl('det-sheet')" aria-label="סגור">✕</button></div>
+    <div class="sh-body" id="det-body"></div>
+  </div>
+
+  <!-- ═══ REPORT ═══ -->
+  <div class="sheet" id="sh-rep" role="dialog" aria-modal="true" aria-labelledby="rep-ttl">
+    <div class="sh-pill" aria-hidden="true"></div>
+    <div class="sh-head"><span class="sh-ttl" id="rep-ttl">דיווח אירוע</span><button class="sh-x" onclick="cl('sh-rep')" aria-label="סגור">✕</button></div>
+    <div class="sh-body">
+      <div class="rep-intro mb16" id="rep-intro"><strong>דיווח</strong> — לתיעוד מפורט. לחירום מיידי — כפתור SOS.</div>
+      <div class="mb16">
+        <div class="sec-cap" id="rep-type-lbl">סוג האירוע</div>
+        <div class="type-grid">
+          <div class="ropt sel" onclick="rt(this)" role="radio" aria-checked="true"><div class="ropt-ic">🆘</div><span id="rt1">תקיפה / סכנה</span></div>
+          <div class="ropt" onclick="rt(this)" role="radio" aria-checked="false"><div class="ropt-ic">👁️</div><span id="rt2">מעקב חשוד</span></div>
+          <div class="ropt" onclick="rt(this)" role="radio" aria-checked="false"><div class="ropt-ic">⚠️</div><span id="rt3">הטרדה מינית</span></div>
+          <div class="ropt" onclick="rt(this)" role="radio" aria-checked="false"><div class="ropt-ic">🏥</div><span id="rt4">עזרה רפואית</span></div>
+          <div class="ropt" onclick="rt(this)" role="radio" aria-checked="false"><div class="ropt-ic">💊</div><span id="rt5">סמים / עבירות</span></div>
+          <div class="ropt" onclick="rt(this)" role="radio" aria-checked="false"><div class="ropt-ic">📋</div><span id="rt6">אחר</span></div>
+        </div>
+      </div>
+      <div class="mb16">
+        <div class="sec-cap" id="rep-desc-lbl">תיאור מפורט</div>
+        <textarea class="rep-ta" id="rep-ta" maxlength="1000" aria-label="תיאור האירוע" aria-required="true"></textarea>
+        <div style="text-align:left;font-size:10px;color:var(--tx3);margin-top:3px" id="char-c" aria-live="polite">0 / 1000</div>
+      </div>
+      <div class="mb16">
+        <div class="sec-cap" id="rep-photo-lbl">תיעוד תמונות</div>
+        <div class="cam-card">
+          <div class="cam-bar">
+            <span aria-hidden="true">📷</span>
+            <span class="cam-lbl" id="cam-lbl">צרף תמונות</span>
+            <span class="cam-cnt" id="cam-cnt" style="display:none" aria-live="polite">0</span>
+            <button class="cam-btn d" onclick="openCam()" id="cam-cam-btn">📷</button>
+            <button class="cam-btn l" onclick="document.getElementById('file-in').click()" id="cam-gal-btn">🖼️</button>
+          </div>
+          <video id="cam-v" autoplay playsinline muted></video>
+          <div id="cam-snap" style="display:none">
+            <button class="cam-stop" onclick="stopCam()" id="cam-stop-btn">✕</button>
+            <button class="snap-c" onclick="snapPhoto()" aria-label="צלם">📷</button>
+          </div>
+          <div class="cam-ph" id="cam-ph" aria-live="polite">📷 <span id="cam-empty-lbl">אין תמונות</span></div>
+          <div class="cam-grid" id="cam-grid" style="display:none" role="list" aria-label="תמונות מצורפות"></div>
+        </div>
+      </div>
+      <div class="mb16">
+        <div class="sec-cap" id="rep-loc-lbl">מיקום</div>
+        <button class="row-btn" onclick="getRepLoc()" aria-label="שתף מיקום">
+          <span aria-hidden="true">📍</span>
+          <span class="row-txt" id="rep-loc-txt">שתף מיקום נוכחי</span>
+          <span aria-hidden="true" style="color:var(--tx3);font-size:18px">›</span>
+        </button>
+      </div>
+      <div class="mb16">
+        <div class="tog-row"><div><div class="tl" id="anon-lbl">דיווח אנונימי</div><div class="ts" id="anon-sub">שמך לא יוצג</div></div><div class="tog on" onclick="this.classList.toggle('on')" role="switch" aria-checked="true"></div></div>
+      </div>
+      <button class="cta-gold" onclick="sendReport()" id="rep-send-btn">📤 <span id="rep-send-lbl">שלח דיווח לכל השומרים</span></button>
+    </div>
+  </div>
+
+  <!-- ═══ DEAD MAN'S SWITCH ═══ -->
+  <div class="sheet" id="sh-dms" role="dialog" aria-modal="true" aria-labelledby="dms-ttl">
+    <div class="sh-pill" aria-hidden="true"></div>
+    <div class="sh-head"><span class="sh-ttl" id="dms-ttl">⏱️ Dead Man's Switch</span><button class="sh-x" onclick="cl('sh-dms')" aria-label="סגור">✕</button></div>
+    <div class="sh-body">
+      <div style="background:var(--rb);border:1px solid var(--b4);border-radius:var(--r12);padding:14px;margin-bottom:16px;font-size:13px;color:var(--tx1);line-height:1.7" id="dms-intro-txt">
+        <strong style="color:#FF7080">כיצד זה עובד:</strong> הפעל לפני הליכה לבד בלילה. כל X דקות תקבל שאלה "הכל בסדר?" — אם לא ענית תוך 60 שניות, המערכת שולחת SOS אוטומטי עם מיקומך האחרון.
+      </div>
+      <div class="sec-cap mb12" id="dms-interval-lbl">בחר מרווח זמן</div>
+      <div class="dms-intervals" id="dms-intervals" role="group">
+        <div class="dms-iv" onclick="dmsPickIv(this,3)" tabindex="0"><div class="dms-iv-n">3</div><div class="dms-iv-l" id="dms-min-lbl">דק׳</div></div>
+        <div class="dms-iv sel" onclick="dmsPickIv(this,5)" tabindex="0"><div class="dms-iv-n">5</div><div class="dms-iv-l" id="dms-min-lbl2">דק׳</div></div>
+        <div class="dms-iv" onclick="dmsPickIv(this,10)" tabindex="0"><div class="dms-iv-n">10</div><div class="dms-iv-l" id="dms-min-lbl3">דק׳</div></div>
+      </div>
+      <div id="dms-status-card" style="display:none;background:var(--n3);border:1px solid var(--b1);border-radius:var(--r12);padding:20px;text-align:center;margin-bottom:14px">
+        <div class="dms-timer-display" id="dms-display" aria-live="polite">5:00</div>
+        <div class="dms-status" id="dms-status-txt">עד הבדיקה הבאה</div>
+        <button class="dms-ok" style="margin-top:12px;padding:10px 28px;border-radius:var(--r12);font-size:14px;cursor:pointer;border:none" onclick="dmsConfirm()" id="dms-ok-big">✓ הכל בסדר</button>
+      </div>
+      <button class="cta-gold mb16" id="dms-toggle-btn" onclick="toggleDMS()">▶ הפעל Dead Man's Switch</button>
+      <div style="background:var(--n3);border:1px solid var(--b1);border-radius:var(--r12);padding:13px;font-size:12px;color:var(--tx2);line-height:1.75" id="dms-tips-txt">
+        💡 <strong>מומלץ לשימוש:</strong> הליכות לבד בלילה · כניסה לחניון מבודד · מפגש עם זר · ריצה בשעות חשוכות
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ ALARM SETTINGS ═══ -->
+  <div class="sheet" id="sh-alarm" role="dialog" aria-modal="true" aria-labelledby="alarm-ttl">
+    <div class="sh-pill" aria-hidden="true"></div>
+    <div class="sh-head"><span class="sh-ttl" id="alarm-ttl">🚨 הגדרות אזעקה</span><button class="sh-x" onclick="cl('sh-alarm')" aria-label="סגור">✕</button></div>
+    <div class="sh-body">
+      <div style="background:var(--rb);border:1px solid var(--b4);border-right:4px solid var(--r3);border-radius:var(--r12);padding:13px;margin-bottom:16px;font-size:13px;color:var(--tx1);line-height:1.65" id="alarm-intro-txt">
+        <strong style="color:#FF7080">מטרה:</strong> משיכת תשומת לב מרבית ועזרה מיידית. מופעלת בעוצמה מלאה.
+      </div>
+      <div class="sec-cap mb12" id="alarm-type-lbl">סוג אזעקה</div>
+      <div id="alarm-list" role="group" style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
+        <div class="ob-alarm sel" onclick="pickAlarm(this,'siren')" role="radio" aria-checked="true" tabindex="0">
+          <div class="ob-alarm-ic" aria-hidden="true">🚨</div>
+          <div class="ob-alarm-info"><div class="nm">סירנת ניידת</div><div class="ds">440→1800Hz sawtooth · הכי מזוהה</div></div>
+        </div>
+        <div class="ob-alarm" onclick="pickAlarm(this,'horn')" role="radio" aria-checked="false" tabindex="0">
+          <div class="ob-alarm-ic" aria-hidden="true">📢</div>
+          <div class="ob-alarm-info"><div class="nm">קרן חירום</div><div class="ds">1200Hz square blasts · מנפץ ריכוז</div></div>
+        </div>
+        <div class="ob-alarm" onclick="pickAlarm(this,'pulse')" role="radio" aria-checked="false" tabindex="0">
+          <div class="ob-alarm-ic" aria-hidden="true">⚡</div>
+          <div class="ob-alarm-info"><div class="nm">פולסים מהירים</div><div class="ds">2800Hz · פיזית צורם ביותר</div></div>
+        </div>
+      </div>
+      <div class="ob-vol-wrap mb12">
+        <div class="vol-row"><span class="vol-lbl">עוצמת קול</span><span class="vol-val" id="vol-val">100%</span></div>
+        <input type="range" id="vol-slider" min="10" max="100" value="100" aria-label="עוצמת קול" oninput="document.getElementById('vol-val').textContent=this.value+'%';alarmVol=this.value/100;">
+      </div>
+      <button class="test-alarm-btn mb16" onclick="testAlarm()">🔊 בדוק אזעקה עכשיו</button>
+      <button class="cta-red" onclick="cl('sh-alarm');toast(T('saved'),'grn')">✓ שמור הגדרות</button>
+    </div>
+  </div>
+
+  <!-- ═══ SETTINGS ═══ -->
+  <div class="sheet" id="sh-set" role="dialog" aria-modal="true" aria-labelledby="set-ttl">
+    <div class="sh-pill" aria-hidden="true"></div>
+    <div class="sh-head"><span class="sh-ttl" id="set-ttl">הגדרות</span><button class="sh-x" onclick="cl('sh-set')" aria-label="סגור">✕</button></div>
+    <div class="sh-body">
+      <div class="sec-cap mb12">רדיוס התראה</div>
+      <div class="sl-card mb20">
+        <div class="rad-big"><span id="rad-v">5</span><span class="rad-u"> ק"מ</span></div>
+        <input type="range" min="1" max="25" value="5" aria-label="רדיוס בקילומטרים" oninput="document.getElementById('rad-v').textContent=this.value">
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--tx3);margin-top:6px"><span>1</span><span>25 ק"מ</span></div>
+      </div>
+      <div class="sec-cap mb12">התראות</div>
+      <div class="set-grp">
+        <div class="set-row"><div class="sr-l"><div class="sr-ic">🚨</div><div><div class="sr-nm">SOS חירום</div><div class="sr-sb">כל SOS באזורך</div></div></div><div class="tog on" onclick="this.classList.toggle('on')" role="switch"></div></div>
+        <div class="set-row"><div class="sr-l"><div class="sr-ic">👁️</div><div><div class="sr-nm">מעקב ואיומים</div></div></div><div class="tog on" onclick="this.classList.toggle('on')" role="switch"></div></div>
+        <div class="set-row"><div class="sr-l"><div class="sr-ic">🏥</div><div><div class="sr-nm">עזרה רפואית</div></div></div><div class="tog" onclick="this.classList.toggle('on')" role="switch"></div></div>
+        <div class="set-row"><div class="sr-l"><div class="sr-ic">✅</div><div><div class="sr-nm">אירועים שנסגרו</div></div></div><div class="tog" onclick="this.classList.toggle('on')" role="switch"></div></div>
+      </div>
+      <div class="sec-cap mb12">פרטיות</div>
+      <div class="set-grp">
+        <div class="set-row"><div class="sr-l"><div class="sr-ic">📍</div><div><div class="sr-nm">שיתוף מיקום ברקע</div><div class="sr-sb">נדרש ל-SOS ו-DMS</div></div></div><div class="tog on" onclick="this.classList.toggle('on')" role="switch"></div></div>
+        <div class="set-row"><div class="sr-l"><div class="sr-ic">👤</div><div><div class="sr-nm">הצג שם בעדכונים</div></div></div><div class="tog on" onclick="this.classList.toggle('on')" role="switch"></div></div>
+      </div>
+      <div class="sec-cap mb12">אנשי קשר חירום</div>
+      <div class="set-grp" id="contacts-grp">
+        <div class="c-row"><div class="c-av">א</div><div style="flex:1"><div class="c-nm">אמא</div><div class="c-ph">052-XXX-XXXX</div></div><span class="c-tag">ראשון</span></div>
+        <div class="c-row"><div class="c-av">ד</div><div style="flex:1"><div class="c-nm">דני</div><div class="c-ph">054-XXX-XXXX</div></div><span class="c-tag">שני</span></div>
+      </div>
+      <button class="add-c mb20" onclick="toast('בקרוב: הוספת אנשי קשר','amb')">+ הוסף איש קשר</button>
+      <div class="sec-cap mb12" id="set-lang-lbl">שפה</div>
+      <div class="set-grp" style="padding:10px 14px;">
+        <div style="display:flex;gap:6px;flex-wrap:wrap;" id="set-lang-btns">
+          <button class="olb on" onclick="setLang('he')" lang="he">🇮🇱 עברית</button>
+          <button class="olb" onclick="setLang('en')" lang="en">🇬🇧 English</button>
+          <button class="olb" onclick="setLang('ar')" lang="ar">🇸🇦 عربى</button>
+          <button class="olb" onclick="setLang('ru')" lang="ru">🇷🇺 Рус</button>
+          <button class="olb" onclick="setLang('am')" lang="am">🇪🇹 አማ</button>
+          <button class="olb" onclick="setLang('fr')" lang="fr">🇫🇷 FR</button>
+        </div>
+      </div>
+      <div class="sec-cap mb12" style="margin-top:18px">אודות שומר</div>
+      <div class="set-grp">
+        <div class="ai-row"><span class="ai-l">גרסה</span><span class="ai-v">1.0.0</span></div>
+        <div class="ai-row"><span class="ai-l">על שם</span><span class="ai-v">תנועת השומר, 1909</span></div>
+        <div class="ai-row"><span class="ai-l">מוטו</span><span class="ai-v">שׁוֹמֵר אָחִי אָנֹכִי</span></div>
+      </div>
+      <button style="width:100%;padding:13px;border:1px solid var(--b1);border-radius:var(--r12);background:var(--n3);font-size:13px;font-weight:600;color:#FF7080;margin-top:8px;cursor:pointer;" onclick="toast('יציאה בוצעה','red')">יציאה מהחשבון</button>
+      <div class="branding">by <a href="#">3Shamrocks.Studio</a></div>
+    </div>
+  </div>
+
+  <!-- ═══ PROFILE ═══ -->
+  <div class="sheet" id="sh-prof" role="dialog" aria-modal="true" aria-labelledby="prof-ttl">
+    <div class="sh-pill" aria-hidden="true"></div>
+    <div class="sh-head"><span class="sh-ttl" id="prof-ttl">הפרופיל שלי</span><button class="sh-x" onclick="cl('sh-prof')" aria-label="סגור">✕</button></div>
+    <div class="sh-body">
+      <div class="prof-top">
+        <img class="p-logo" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cpath d='M60 6L112 30V68Q112 100 60 116Q8 100 8 68V30Z' fill='%230A1628' stroke='%23E0A828' stroke-width='3'/%3E%3Cg stroke='%23E0A828' stroke-width='2.5' fill='none' stroke-linejoin='round'%3E%3Cpath d='M60 32L78 62H42Z'/%3E%3Cpath d='M60 72L42 42H78Z'/%3E%3C/g%3E%3C/svg%3E" alt="לוגו שומר" width="72" height="72">
+        <div class="p-nm" id="profNm">שומר</div>
+        <div class="p-rk" id="prof-rank">שומר מדרגה ב׳</div>
+      </div>
+      <div class="stats" role="group">
+        <div class="st"><div class="st-n">7</div><div class="st-l">דיווחים</div></div>
+        <div class="st"><div class="st-n">3</div><div class="st-l">תגובות</div></div>
+        <div class="st"><div class="st-n">142</div><div class="st-l">נקודות</div></div>
+      </div>
+      <div class="sec-cap mb12">פעולות מהירות</div>
+      <div class="set-grp">
+        <div class="set-row" onclick="op('sh-dms');cl('sh-prof')"><div class="sr-l"><div class="sr-ic">⏱️</div><div class="sr-nm">Dead Man's Switch</div></div><span style="color:var(--tx3);font-size:18px">›</span></div>
+        <div class="set-row" onclick="op('sh-alarm');cl('sh-prof')"><div class="sr-l"><div class="sr-ic">🚨</div><div class="sr-nm">הגדרות אזעקה</div></div><span style="color:var(--tx3);font-size:18px">›</span></div>
+        <div class="set-row" onclick="op('sh-em');cl('sh-prof')"><div class="sr-l"><div class="sr-ic">📞</div><div class="sr-nm">מספרי חירום</div></div><span style="color:var(--tx3);font-size:18px">›</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ EMERGENCY ═══ -->
+  <div class="sheet" id="sh-em" role="dialog" aria-modal="true" aria-labelledby="em-ttl">
+    <div class="sh-pill" aria-hidden="true"></div>
+    <div class="sh-head"><span class="sh-ttl" id="em-ttl">מספרי חירום</span><button class="sh-x" onclick="cl('sh-em')" aria-label="סגור">✕</button></div>
+    <div class="sh-body">
+      <p style="font-size:12px;color:var(--tx2);margin-bottom:14px;line-height:1.7" id="em-intro">הקש לחיוג ישיר. אם אינך מסוגל לדבר — השאר הקו פתוח.</p>
+      <button class="call-btn pr" onclick="callNum('100')" aria-label="התקשר למשטרה 100">
+        <div class="cc-ic">🚔</div><div><div class="cc-nm">100 — משטרת ישראל</div><div class="cc-sb">חיוג ישיר ברמקול</div></div>
+      </button>
+      <button class="call-btn" onclick="callNum('101')"><div class="cc-ic">🚑</div><div><div class="cc-nm">101 — מד"א</div><div class="cc-sb">דחיפות רפואית</div></div></button>
+      <button class="call-btn" onclick="callNum('102')"><div class="cc-ic">🚒</div><div><div class="cc-nm">102 — כבאות</div><div class="cc-sb">שריפה / חילוץ</div></div></button>
+      <button class="call-btn" onclick="callNum('1201')"><div class="cc-ic">⭐</div><div><div class="cc-nm">1201 — ZAKA</div><div class="cc-sb">תאונות ואסונות</div></div></button>
+      <button class="call-btn" onclick="callNum('1202')"><div class="cc-ic">🛡️</div><div><div class="cc-nm">1202 — שב"כ</div><div class="cc-sb">אירוע ביטחוני</div></div></button>
+      <div class="lock-card">
+        <div class="lc-t">🔒 SOS מנעילת מסך — ללא פתיחת אפליקציה</div>
+        <div class="lc-b">
+          <strong>iPhone:</strong> לחץ 3× על כפתור הצד → Emergency SOS.<br>
+          <strong>Android:</strong> לחץ 5× על כפתור ההפעלה → Emergency SOS.<br>
+          <strong>שומר Shake:</strong> ניעור 5× חזק מפעיל SOS אוטומטי.<br>
+          הגדר 100 כאיש קשר חירום ראשון בטלפון.
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- #app -->
+
+<script>
+/* ═══════════════════════════════════════════════════
+   SHOMER v12 — CORE JAVASCRIPT
+   Security: XSS-safe (textContent only, no innerHTML for user data)
+   All user-supplied data sanitized via ESC() before any HTML context
+═══════════════════════════════════════════════════ */
+'use strict';
+
+/* ── Security helpers ── */
+function ESC(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+function setText(id,t){const e=document.getElementById(id);if(e)e.textContent=t;}
+
+/* ── Multi-language strings ── */
+const LANGS={
+  he:{
+    dir:'rtl',font:"'Heebo','Inter',sans-serif",
+    ob_h0:'יצירת חשבון שומר',ob_d0:'מפת בטיחות חיה · SOS + אזעקה מיידית · עזרה הדדית',
+    ob_phone:'050-000-0000 *',ob_why:'* מספר הטלפון משמש לאימות ולשליחת עזרה. לא ישמש לשיווק.',
+    ob_h1:'📍 אישור מיקום',ob_d1:'נדרש לשליחת SOS מיידי לשומרים בקרבתך.',
+    ob_h2:'🚨 הגדרות חירום',ob_d2:'בחר אזעקה — תופעל מיד עם לחיצת SOS.',
+    geo_need:'נדרש אישור מיקום',geo_wait:'מחפש מיקום...',geo_ok:'מיקום אושר!',geo_err:'לא ניתן לאתר מיקום',
+    geo_allow:'📍 אפשר גישה למיקום',geo_next:'← המשך להגדרות חירום',geo_retry:'↩ נסה שוב',geo_skip:'דלג (מוגבל)',
+    al1:'סירנת ניידת',al1d:'גלי צליל 440→1800Hz',al2:'קרן חירום',al2d:'1200Hz — מנפץ ריכוז',al3:'פולסים מהירים',al3d:'2800Hz — הכי צורם',
+    vol:'עוצמת קול',test:'בדוק אזעקה',finish:'✓ כניסה לשומר',back:'← חזרה',
+    shake:'<strong>Shake-to-SOS:</strong> 5 ניעורים חזקים מפעילים SOS אוטומטי.',
+    dms_ob:'<strong>Dead Man\'s Switch:</strong> אם לא אישרת "הכל בסדר" תוך X דק׳ — SOS אוטומטי.',
+    nav_map:'מפה',nav_sos:'חירום מיידי',nav_upd:'עדכונים',
+    dd_rep:'דיווח אירוע',dd_dms:"Dead Man's Switch",dd_alarm:'הגדרות אזעקה',dd_prof:'פרופיל',dd_set:'הגדרות',dd_em:'מספרי חירום',
+    ss_t:'🚨 SOS פעיל — אזעקה פועלת',ss_wait:'ממתין לתגובה...',
+    cancel:'בטל SOS',ok_all:'✓ הכל בסדר',
+    upd_ttl:'עדכונים',rep_ttl:'דיווח אירוע',dms_ttl:"⏱️ Dead Man's Switch",
+    set_ttl:'הגדרות',prof_ttl:'הפרופיל שלי',em_ttl:'מספרי חירום',alarm_ttl:'🚨 הגדרות אזעקה',
+    l1:'עבירת מין',l2:'תקיפה',l3:'מעקב',l4:'גנבה',l5:'סמים',l6:'רפואי',l7:'SOS חי',
+    saved:'✓ הגדרות נשמרו',sent:'📤 דיווח נשלח!',dms_on:'DMS פעיל',dms_off:'DMS כבוי',
+    rep_desc:'מה ראית? תאר: האירוע, המעורבים, מיקום מדויק, פרטים מזהים...',
+    share_loc:'שתף מיקום נוכחי',loc_ok:'📍 מיקום נקלט ✓',
+    send:'📤 שלח דיווח לכל השומרים',
+    open_det:'פתח פרטים מלאים ←',respond:'🚶 אני בדרך לעזור',call100:'📞 התקשר ל-100',close:'סגור',responded:'✅ תגובה נרשמה',
+    dms_how:'<strong style="color:#FF7080">כיצד זה עובד:</strong> הפעל לפני הליכה לבד. כל X דקות — "הכל בסדר?" — אם לא ענית תוך 60 שניות, SOS אוטומטי.',
+    dms_start:'▶ הפעל',dms_stop:'⏹ הפסק',dms_next:'בדיקה הבאה בעוד',dms_min:'דק׳',
+    dms_on_badge:'פעיל',dms_off_badge:'כבוי',
+    em_intro:'הקש לחיוג ישיר. אם אינך מסוגל לדבר — השאר הקו פתוח.',
+    profile_rank:'שומר מדרגה ב׳',
+    anon:'דיווח אנונימי',anon_sub:'שמך לא יוצג',
+    cam_empty:'אין תמונות',cam_taken:'📷 תמונה צולמה ✓',cam_added:'📷 תמונה נוספה ✓',cam_denied:'📷 גישה נדחתה — אפשר בהגדרות',cam_nf:'📷 מצלמה לא נמצאה',
+    welcome:'ברוך הבא',
+  },
+  en:{
+    dir:'ltr',font:"'Inter',sans-serif",
+    ob_h0:'Create your Shomer account',ob_d0:'Live safety map · SOS + instant alarm · mutual aid',
+    ob_phone:'Phone number *',ob_why:'* Your phone is used for verification and sending help. Never for marketing.',
+    ob_h1:'📍 Location access',ob_d1:'Required to send SOS instantly to guardians nearby.',
+    ob_h2:'🚨 Emergency settings',ob_d2:'Choose your alarm — fires immediately on SOS.',
+    geo_need:'Location access needed',geo_wait:'Locating...',geo_ok:'Location confirmed!',geo_err:'Could not locate you',
+    geo_allow:'📍 Allow location access',geo_next:'Continue →',geo_retry:'↩ Retry',geo_skip:'Skip (limited)',
+    al1:'Police siren',al1d:'440→1800Hz sweep — most recognizable',al2:'Emergency horn',al2d:'1200Hz blasts — attention-grabbing',al3:'Rapid pulses',al3d:'2800Hz — most physically jarring',
+    vol:'Volume',test:'Test alarm',finish:'✓ Enter Shomer',back:'← Back',
+    shake:'<strong>Shake-to-SOS:</strong> 5 hard shakes trigger automatic SOS.',
+    dms_ob:"<strong>Dead Man's Switch:</strong> If you don't confirm 'All OK' in X min — auto SOS.",
+    nav_map:'Map',nav_sos:'Emergency',nav_upd:'Updates',
+    dd_rep:'Report incident',dd_dms:"Dead Man's Switch",dd_alarm:'Alarm settings',dd_prof:'Profile',dd_set:'Settings',dd_em:'Emergency numbers',
+    ss_t:'🚨 SOS active — alarm firing',ss_wait:'Waiting for response...',
+    cancel:'Cancel SOS',ok_all:'✓ I\'m OK',
+    upd_ttl:'Updates',rep_ttl:'Report incident',dms_ttl:"⏱️ Dead Man's Switch",
+    set_ttl:'Settings',prof_ttl:'My profile',em_ttl:'Emergency numbers',alarm_ttl:'🚨 Alarm settings',
+    l1:'Sexual assault',l2:'Violence',l3:'Stalking',l4:'Theft',l5:'Drugs',l6:'Medical',l7:'Live SOS',
+    saved:'✓ Settings saved',sent:'📤 Report sent!',dms_on:'DMS active',dms_off:'DMS off',
+    rep_desc:'What did you see? Describe: the incident, people involved, exact location, identifying details...',
+    share_loc:'Share current location',loc_ok:'📍 Location captured ✓',
+    send:'📤 Send report to all guardians',
+    open_det:'Open full details →',respond:'🚶 I\'m on my way',call100:'📞 Call 100',close:'Close',responded:'✅ Response recorded',
+    dms_how:"<strong style='color:#FF7080'>How it works:</strong> Activate before walking alone. Every X minutes — 'All OK?' — no reply in 60 seconds = auto SOS.",
+    dms_start:'▶ Activate',dms_stop:'⏹ Stop',dms_next:'Next check in',dms_min:'min',
+    dms_on_badge:'Active',dms_off_badge:'Off',
+    em_intro:"Tap to call directly. If you can't speak — keep the line open.",
+    profile_rank:'Guardian level 2',
+    anon:'Anonymous report',anon_sub:'Your name will not be shown',
+    cam_empty:'No photos',cam_taken:'📷 Photo taken ✓',cam_added:'📷 Photo added ✓',cam_denied:'📷 Access denied — allow in browser settings',cam_nf:'📷 Camera not found',
+    welcome:'Welcome',
+  },
+  ar:{
+    dir:'rtl',font:"'Heebo','Inter',sans-serif",
+    ob_h0:'إنشاء حساب شومير',ob_d0:'خريطة أمان مباشرة · نداء استغاثة فوري · مساعدة متبادلة',
+    ob_phone:'رقم الهاتف *',ob_why:'* يُستخدم رقم هاتفك للتحقق وإرسال المساعدة فقط.',
+    ob_h1:'📍 تحديد الموقع',ob_d1:'مطلوب لإرسال نداء الاستغاثة فوراً للحراس القريبين منك.',
+    ob_h2:'🚨 إعدادات الطوارئ',ob_d2:'اختر الإنذار — يُفعَّل فوراً عند الضغط على SOS.',
+    geo_need:'مطلوب إذن الموقع',geo_wait:'جارٍ التحديد...',geo_ok:'تم تأكيد الموقع!',geo_err:'لا يمكن تحديد موقعك',
+    geo_allow:'📍 السماح بالوصول للموقع',geo_next:'التالي ←',geo_retry:'↩ أعد المحاولة',geo_skip:'تخطي (محدود)',
+    al1:'صفارة الإنذار',al1d:'440→1800Hz — الأكثر تعرفاً',al2:'بوق الطوارئ',al2d:'1200Hz — يستقطب الانتباه',al3:'نبضات سريعة',al3d:'2800Hz — الأكثر إزعاجاً',
+    vol:'مستوى الصوت',test:'اختبار الإنذار',finish:'✓ الدخول لشومير',back:'← رجوع',
+    shake:'<strong>هز للاستغاثة:</strong> 5 هزات قوية تُفعّل نداء الاستغاثة تلقائياً.',
+    dms_ob:'<strong>مفتاح الأمان الميت:</strong> إذا لم تؤكد خلال X دقائق — إرسال تلقائي لنداء الاستغاثة.',
+    nav_map:'الخريطة',nav_sos:'طوارئ',nav_upd:'التحديثات',
+    dd_rep:'الإبلاغ عن حادثة',dd_dms:'مفتاح الأمان الميت',dd_alarm:'إعدادات الإنذار',dd_prof:'الملف الشخصي',dd_set:'الإعدادات',dd_em:'أرقام الطوارئ',
+    ss_t:'🚨 نداء استغاثة نشط',ss_wait:'في انتظار الرد...',
+    cancel:'إلغاء SOS',ok_all:'✓ كل شيء بخير',
+    upd_ttl:'التحديثات',rep_ttl:'الإبلاغ عن حادثة',dms_ttl:'⏱️ مفتاح الأمان الميت',
+    set_ttl:'الإعدادات',prof_ttl:'ملفي الشخصي',em_ttl:'أرقام الطوارئ',alarm_ttl:'🚨 إعدادات الإنذار',
+    l1:'اعتداء جنسي',l2:'عنف',l3:'مطاردة',l4:'سرقة',l5:'مخدرات',l6:'طبي',l7:'SOS مباشر',
+    saved:'✓ تم حفظ الإعدادات',sent:'📤 تم إرسال البلاغ!',dms_on:'مفتاح الأمان نشط',dms_off:'مفتاح الأمان متوقف',
+    rep_desc:'ماذا رأيت؟ صف: الحادثة، الأشخاص المتورطين، الموقع الدقيق...',
+    share_loc:'مشاركة الموقع الحالي',loc_ok:'📍 تم تسجيل الموقع ✓',
+    send:'📤 إرسال البلاغ لجميع الحراس',
+    open_det:'فتح التفاصيل الكاملة ←',respond:'🚶 أنا في الطريق',call100:'📞 الاتصال بـ 100',close:'إغلاق',responded:'✅ تم تسجيل الاستجابة',
+    dms_how:"<strong style='color:#FF7080'>كيف يعمل:</strong> فعّله قبل السير وحدك. كل X دقائق — 'كل شيء بخير؟' — بدون رد خلال 60 ثانية = إرسال تلقائي لنداء الاستغاثة.",
+    dms_start:'▶ تفعيل',dms_stop:'⏹ إيقاف',dms_next:'الفحص التالي خلال',dms_min:'دقيقة',
+    dms_on_badge:'نشط',dms_off_badge:'متوقف',
+    em_intro:'انقر للاتصال المباشر. إذا لم تستطع الكلام — أبقِ الخط مفتوحاً.',
+    profile_rank:'حارس المستوى الثاني',
+    anon:'بلاغ مجهول',anon_sub:'لن يظهر اسمك',
+    cam_empty:'لا توجد صور',cam_taken:'📷 تم التقاط الصورة ✓',cam_added:'📷 تمت إضافة الصورة ✓',cam_denied:'📷 تم رفض الوصول',cam_nf:'📷 الكاميرا غير موجودة',
+    welcome:'مرحباً',
+  },
+  ru:{
+    dir:'ltr',font:"'Inter',sans-serif",
+    ob_h0:'Создать аккаунт Shomer',ob_d0:'Карта безопасности · SOS + мгновенная сирена · взаимопомощь',
+    ob_phone:'Номер телефона *',ob_why:'* Используется только для верификации и вызова помощи.',
+    ob_h1:'📍 Доступ к геолокации',ob_d1:'Необходим для мгновенной отправки SOS.',
+    ob_h2:'🚨 Настройки экстренной помощи',ob_d2:'Выберите сигнал — сработает сразу при нажатии SOS.',
+    geo_need:'Требуется разрешение',geo_wait:'Определяем местоположение...',geo_ok:'Местоположение подтверждено!',geo_err:'Не удалось определить',
+    geo_allow:'📍 Разрешить геолокацию',geo_next:'Далее →',geo_retry:'↩ Повторить',geo_skip:'Пропустить',
+    al1:'Полицейская сирена',al1d:'440→1800Hz — самый узнаваемый',al2:'Сигнал тревоги',al2d:'1200Hz вспышки',al3:'Быстрые импульсы',al3d:'2800Hz — самый резкий',
+    vol:'Громкость',test:'Тест сигнала',finish:'✓ Войти в Shomer',back:'← Назад',
+    shake:'<strong>Встряска для SOS:</strong> 5 сильных встряхиваний запускают SOS.',
+    dms_ob:'<strong>Мёртвая рука:</strong> Нет ответа через X мин — автоматический SOS.',
+    nav_map:'Карта',nav_sos:'Тревога',nav_upd:'Обновления',
+    dd_rep:'Сообщить об инциденте',dd_dms:'Мёртвая рука',dd_alarm:'Настройки сигнала',dd_prof:'Профиль',dd_set:'Настройки',dd_em:'Экстренные номера',
+    ss_t:'🚨 SOS активен — сигнал работает',ss_wait:'Ожидание ответа...',
+    cancel:'Отмена SOS',ok_all:'✓ Всё в порядке',
+    upd_ttl:'Обновления',rep_ttl:'Сообщить об инциденте',dms_ttl:'⏱️ Мёртвая рука',
+    set_ttl:'Настройки',prof_ttl:'Мой профиль',em_ttl:'Экстренные номера',alarm_ttl:'🚨 Настройки сигнала',
+    l1:'Сексуальное насилие',l2:'Насилие',l3:'Слежка',l4:'Кража',l5:'Наркотики',l6:'Медицина',l7:'SOS онлайн',
+    saved:'✓ Настройки сохранены',sent:'📤 Отчёт отправлен!',dms_on:'Мёртвая рука активна',dms_off:'Мёртвая рука выкл.',
+    rep_desc:'Что вы видели? Опишите: инцидент, участников, точное место...',
+    share_loc:'Поделиться местоположением',loc_ok:'📍 Местоположение зафиксировано ✓',
+    send:'📤 Отправить всем охранникам',
+    open_det:'Открыть подробности →',respond:'🚶 Я еду',call100:'📞 Позвонить 100',close:'Закрыть',responded:'✅ Ответ записан',
+    dms_how:"<strong style='color:#FF7080'>Как работает:</strong> Включите перед одиночной прогулкой. Каждые X минут — «Всё в порядке?» — нет ответа 60 сек = авто SOS.",
+    dms_start:'▶ Активировать',dms_stop:'⏹ Стоп',dms_next:'Следующая проверка через',dms_min:'мин',
+    dms_on_badge:'Активно',dms_off_badge:'Выкл.',
+    em_intro:'Нажмите для прямого звонка. Если не можете говорить — держите линию открытой.',
+    profile_rank:'Охранник уровня 2',
+    anon:'Анонимный отчёт',anon_sub:'Ваше имя не будет показано',
+    cam_empty:'Нет фото',cam_taken:'📷 Фото сделано ✓',cam_added:'📷 Фото добавлено ✓',cam_denied:'📷 Доступ запрещён',cam_nf:'📷 Камера не найдена',
+    welcome:'Добро пожаловать',
+  },
+  am:{
+    dir:'ltr',font:"'Inter',sans-serif",
+    ob_h0:'Shomer መለያ ይፍጠሩ',ob_d0:'የደህንነት ካርታ · SOS + ፈጣን ማንቂያ · ጋራ እርዳታ',
+    ob_phone:'ስልክ ቁጥር *',ob_why:'* ስልክዎ ለማረጋገጥና እርዳታ ለመላክ ብቻ ይጠቅማል።',
+    ob_h1:'📍 የቦታ አቀማመጥ',ob_d1:'ለ SOS ወዲያውኑ ለመላክ ያስፈልጋል።',
+    ob_h2:'🚨 አደጋ ጊዜ ቅንጅቶች',ob_d2:'ማንቂያ ይምረጡ — SOS ሲጫኑ ወዲያውኑ ይሰራል።',
+    geo_need:'የቦታ ፍቃድ ያስፈልጋል',geo_wait:'ቦታ በማፈላለግ ላይ...',geo_ok:'ቦታ ተረጋግጧል!',geo_err:'ቦታ ማግኘት አልተቻለም',
+    geo_allow:'📍 የቦታ ፍቃድ ፍቀድ',geo_next:'ቀጣይ →',geo_retry:'↩ እንደገና ሞክር',geo_skip:'ዝለል',
+    al1:'የፖሊስ ሳይረን',al1d:'440→1800Hz — በቀላሉ ይታወቃል',al2:'አደጋ ጊዜ ቀንድ',al2d:'1200Hz — ትኩረት ይስባል',al3:'ፈጣን ምቶች',al3d:'2800Hz — በጣም ጎርጓሪ',
+    vol:'ድምፅ ደረጃ',test:'ማንቂያ ሙከራ',finish:'✓ ወደ Shomer ግባ',back:'← ተመለስ',
+    shake:'<strong>ወዝ-ወዝ ለ SOS:</strong> 5 ጠንካራ ወዝ-ወዝ SOS ያስጀምራል።',
+    dms_ob:'<strong>Dead Man Switch:</strong> X ደቂቃ ውስጥ ካልተረጋገጠ — SOS ይላካል።',
+    nav_map:'ካርታ',nav_sos:'አደጋ',nav_upd:'ዜናዎች',
+    dd_rep:'ክስተት ሪፖርት',dd_dms:'Dead Man Switch',dd_alarm:'የማንቂያ ቅንጅቶች',dd_prof:'መገለጫ',dd_set:'ቅንጅቶች',dd_em:'አደጋ ጊዜ ቁጥሮች',
+    ss_t:'🚨 SOS ንቁ — ማንቂያ እየሰራ ነው',ss_wait:'ምላሽ በመጠበቅ ላይ...',
+    cancel:'SOS ሰርዝ',ok_all:'✓ ሁሉም ደህና ነው',
+    upd_ttl:'ዜናዎች',rep_ttl:'ክስተት ሪፖርት',dms_ttl:'⏱️ Dead Man Switch',
+    set_ttl:'ቅንጅቶች',prof_ttl:'መገለጫዬ',em_ttl:'አደጋ ጊዜ ቁጥሮች',alarm_ttl:'🚨 የማንቂያ ቅንጅቶች',
+    l1:'ወሲባዊ ጥቃት',l2:'ኃይል',l3:'መከታተል',l4:'ስርቆት',l5:'አደንዛዥ',l6:'ህክምና',l7:'ቀጥታ SOS',
+    saved:'✓ ቅንጅቶች ተቀምጠዋል',sent:'📤 ሪፖርት ተልኳል!',dms_on:'DMS ንቁ',dms_off:'DMS ዝግ',
+    rep_desc:'ምን አያችሁ? ክስተቱን፣ ሰዎቹን፣ ቦታውን ይግለጹ...',
+    share_loc:'የአሁኑ ቦታ አካፍሉ',loc_ok:'📍 ቦታ ተዘግቧል ✓',
+    send:'📤 ሪፖርት ለሁሉም ጠባቂዎች ላክ',
+    open_det:'ሙሉ ዝርዝሮች ›',respond:'🚶 በመምጣት ላይ',call100:'📞 100 ደውል',close:'ዝጋ',responded:'✅ ምላሽ ተመዘገበ',
+    dms_how:"<strong style='color:#FF7080'>እንዴት ይሰራል:</strong> ብቻዎን ከመሄድዎ በፊት ያንቁ። እያንዳንዱ X ደቂቃ — 'ሁሉም ደህና ነው?' — 60 ሰከንድ ምላሽ ከሌለ = SOS።",
+    dms_start:'▶ አንቃ',dms_stop:'⏹ አቁም',dms_next:'ቀጣይ ምርመራ',dms_min:'ደቂቃ',
+    dms_on_badge:'ንቁ',dms_off_badge:'ዝግ',
+    em_intro:'ለቀጥታ ደወል ነካ። ማውራት ካልቻሉ — መስመሩን ክፍት ያቆዩ።',
+    profile_rank:'ጠባቂ ደረጃ 2',
+    anon:'ስም አልባ ሪፖርት',anon_sub:'ስምዎ አይታይም',
+    cam_empty:'ፎቶ የለም',cam_taken:'📷 ፎቶ ተነሳ ✓',cam_added:'📷 ፎቶ ታከለ ✓',cam_denied:'📷 ፍቃድ ተከለከለ',cam_nf:'📷 ካሜራ አልተገኘም',
+    welcome:'እንኳን ደህና መጡ',
+  },
+  fr:{
+    dir:'ltr',font:"'Inter',sans-serif",
+    ob_h0:'Créer un compte Shomer',ob_d0:'Carte de sécurité · SOS + alarme instantanée · entraide',
+    ob_phone:'Numéro de téléphone *',ob_why:'* Votre téléphone sert uniquement à la vérification et à l\'envoi d\'aide.',
+    ob_h1:'📍 Accès à la localisation',ob_d1:'Nécessaire pour envoyer un SOS instantané.',
+    ob_h2:'🚨 Paramètres d\'urgence',ob_d2:'Choisissez votre alarme — déclenche immédiatement.',
+    geo_need:'Autorisation requise',geo_wait:'Localisation en cours...',geo_ok:'Localisation confirmée!',geo_err:'Impossible de vous localiser',
+    geo_allow:'📍 Autoriser la localisation',geo_next:'Continuer →',geo_retry:'↩ Réessayer',geo_skip:'Ignorer',
+    al1:'Sirène de police',al1d:'440→1800Hz — la plus reconnaissable',al2:'Klaxon d\'urgence',al2d:'1200Hz — capteur d\'attention',al3:'Impulsions rapides',al3d:'2800Hz — le plus agressif',
+    vol:'Volume',test:'Tester l\'alarme',finish:'✓ Entrer dans Shomer',back:'← Retour',
+    shake:'<strong>Secouer pour SOS:</strong> 5 secousses fortes déclenchent un SOS automatique.',
+    dms_ob:"<strong>Dead Man's Switch:</strong> Si pas de confirmation en X min — SOS automatique.",
+    nav_map:'Carte',nav_sos:'Urgence',nav_upd:'Mises à jour',
+    dd_rep:'Signaler un incident',dd_dms:"Dead Man's Switch",dd_alarm:"Paramètres d'alarme",dd_prof:'Profil',dd_set:'Paramètres',dd_em:"Numéros d'urgence",
+    ss_t:'🚨 SOS actif — alarme déclenchée',ss_wait:'En attente de réponse...',
+    cancel:'Annuler SOS',ok_all:"✓ Tout va bien",
+    upd_ttl:'Mises à jour',rep_ttl:'Signaler un incident',dms_ttl:"⏱️ Dead Man's Switch",
+    set_ttl:'Paramètres',prof_ttl:'Mon profil',em_ttl:"Numéros d'urgence",alarm_ttl:"🚨 Paramètres d'alarme",
+    l1:'Agression sexuelle',l2:'Violence',l3:'Filature',l4:'Vol',l5:'Drogues',l6:'Médical',l7:'SOS en direct',
+    saved:'✓ Paramètres sauvegardés',sent:'📤 Signalement envoyé!',dms_on:'DMS actif',dms_off:'DMS inactif',
+    rep_desc:'Que avez-vous vu? Décrivez: l\'incident, les personnes, l\'emplacement exact...',
+    share_loc:'Partager ma position',loc_ok:'📍 Position capturée ✓',
+    send:'📤 Envoyer à tous les gardiens',
+    open_det:'Ouvrir les détails →',respond:'🚶 J\'arrive',call100:'📞 Appeler le 100',close:'Fermer',responded:'✅ Réponse enregistrée',
+    dms_how:"<strong style='color:#FF7080'>Comment ça marche:</strong> Activez avant de marcher seul. Toutes les X min — 'Tout va bien?' — pas de réponse en 60s = SOS auto.",
+    dms_start:'▶ Activer',dms_stop:'⏹ Arrêter',dms_next:'Prochain contrôle dans',dms_min:'min',
+    dms_on_badge:'Actif',dms_off_badge:'Inactif',
+    em_intro:'Appuyez pour appeler directement. Si vous ne pouvez pas parler — gardez la ligne ouverte.',
+    profile_rank:'Gardien niveau 2',
+    anon:'Rapport anonyme',anon_sub:'Votre nom ne sera pas affiché',
+    cam_empty:'Pas de photos',cam_taken:'📷 Photo prise ✓',cam_added:'📷 Photo ajoutée ✓',cam_denied:'📷 Accès refusé',cam_nf:'📷 Caméra introuvable',
+    welcome:'Bienvenue',
+  }
+};
+
+/* ── State ── */
+let currentLang='he', L=LANGS.he;
+function T(k){return L[k]||LANGS.he[k]||k;}
+
+let sosActive=false, sosTimer=null;
+let alarmType='siren', alarmVol=1.0;
+let audioCtx=null, oscillators=[];
+let newUpd=0, repLock=false, menuOpen=false;
+let user={name:'',phone:'',city:''};
+let scale=1, panTX=0, panTY=0;
+let panState={on:false,sx:0,sy:0,ox:0,oy:0};
+let camStream=null, photos=[];
+let userLat=null, userLng=null;
+let obCurStep=0;
+let shakeCount=0, shakeLastT=0;
+let dmsActive=false, dmsInterval=5, dmsTimer=null, dmsCountdown=0, dmsWarning=false;
+let dmsWarningTimer=null;
+const DETAILS_DB=[];
+
+/* ── Crime data (seeded — based on real police crime hotspots in Israel) ── */
+const CRIMES=[
+  /* Tel Aviv / Gush Dan */
+  {x:167,y:292,t:'sex', d:'ינו׳–מרץ 2024',a:'שינקין, ת"א',      s:'פתוח',  n:'3 תלונות — חשוד אחד',    ph:0,det:-1},
+  {x:180,y:313,t:'viol',d:'אפר׳ 2024',   a:'פלורנטין, ת"א',    s:'הורשע', n:'18 חודשי מאסר',           ph:0,det:4},
+  {x:158,y:327,t:'theft',d:'פבר׳ 2024',  a:'נווה צדק, ת"א',    s:'חשוד',  n:'4 מקרים ב-300מ׳',        ph:0,det:-1},
+  {x:164,y:307,t:'drug', d:'מרץ 2024',   a:'תחנה מרכזית, ת"א', s:'פתוח',  n:'אזור סיכון מוגבר',        ph:0,det:-1},
+  {x:174,y:289,t:'sex',  d:'ינו׳ 2024',  a:'דיזנגוף, ת"א',     s:'פתוח',  n:'תיק בחקירה פעילה',        ph:0,det:-1},
+  {x:154,y:344,t:'viol', d:'מאי 2024',   a:'בת ים',             s:'חשוד',  n:'צו הרחקה הוצא',           ph:0,det:-1},
+  {x:187,y:344,t:'theft',d:'מרץ 2024',   a:'חולון',             s:'הורשע', n:'3 חשודים נעצרו',          ph:0,det:-1},
+  {x:199,y:249,t:'stalk',d:'אפר׳ 2024',  a:'הרצליה',            s:'פתוח',  n:'בחקירה',                  ph:1,det:-1},
+  /* Jerusalem */
+  {x:258,y:430,t:'sex',  d:'2023',       a:'ירושלים מרכז',      s:'הורשע', n:'5 שנות מאסר',             ph:0,det:-1},
+  {x:266,y:443,t:'viol', d:'אפר׳ 2024', a:'יפו, ירושלים',      s:'פתוח',  n:'תיק פתוח',                ph:0,det:0},
+  {x:250,y:437,t:'theft',d:'ינו׳ 2024',  a:'מחנה יהודה',        s:'הורשע', n:'2 חשודים נעצרו',          ph:1,det:-1},
+  {x:245,y:423,t:'drug', d:'פבר׳ 2024', a:'נחלאות, ירושלים',   s:'פתוח',  n:'תיק בחקירה',             ph:0,det:-1},
+  /* Haifa */
+  {x:210,y:126,t:'sex',  d:'ינו׳ 2024',  a:'הדר, חיפה',         s:'הורשע', n:'7 שנות מאסר',             ph:0,det:-1},
+  {x:204,y:135,t:'theft',d:'אפר׳ 2024',  a:'כרמל, חיפה',        s:'הורשע', n:'פס"ד 2024/119',           ph:0,det:-1},
+  {x:218,y:139,t:'stalk',d:'מרץ 2024',   a:'נמל, חיפה',         s:'חשוד',  n:'בחקירה פעילה',            ph:1,det:1},
+  /* Other */
+  {x:198,y:365,t:'theft',d:'2023',       a:'ראשון לציון',        s:'הורשע', n:'3 שנות מאסר',             ph:0,det:-1},
+  {x:220,y:324,t:'viol', d:'פבר׳ 2024', a:'פתח תקוה',           s:'פתוח',  n:'בחקירה',                  ph:0,det:-1},
+  {x:151,y:351,t:'drug', d:'ינו׳ 2024',  a:'חולון',              s:'הורשע', n:'3 עצורים',                ph:0,det:-1},
+  {x:254,y:523,t:'viol', d:'מרץ 2024',  a:'באר שבע',            s:'חשוד',  n:'בחקירה',                  ph:0,det:-1},
+  {x:260,y:530,t:'sex',  d:'2023',       a:'באר שבע',            s:'הורשע', n:'4 שנות מאסר',             ph:0,det:-1},
+  {x:168,y:193,t:'theft',d:'אפר׳ 2024',  a:'נתניה',              s:'פתוח',  n:'15 מקרים בחודש',         ph:0,det:-1},
+];
+
+const TYPES={
+  sex:  {label:()=>T('l1'),color:'#CC1426',cls:'t-sex'},
+  viol: {label:()=>T('l2'),color:'#EA5A00',cls:'t-viol'},
+  stalk:{label:()=>T('l3'),color:'#C07808',cls:'t-stalk'},
+  theft:{label:()=>T('l4'),color:'#1852C0',cls:'t-theft'},
+  drug: {label:()=>T('l5'),color:'#6B32D8',cls:'t-drug'},
+  med:  {label:()=>T('l6'),color:'#0E8840',cls:'t-med'},
+  sos:  {label:()=>T('l7'),color:'#CC1426',cls:'t-sos'},
+  new:  {label:()=>'',     color:'#1852C0',cls:'t-new'},
+};
+
+/* ═══════════════════════════════════
+   LANGUAGE
+═══════════════════════════════════ */
+function setLang(code){
+  currentLang=code;
+  L=LANGS[code]||LANGS.he;
+  const d=L.dir;
+  document.documentElement.lang=code;
+  document.documentElement.dir=d;
+  document.documentElement.style.fontFamily=L.font;
+  // Update all lang buttons
+  document.querySelectorAll('.lbtn,.olb').forEach(b=>{
+    const bLang=b.getAttribute('lang');
+    const match=bLang===code||(b.onclick&&b.onclick.toString().includes("'"+code+"'"));
+    b.classList.toggle('on',!!match);
+  });
+  applyTranslations();
+}
+function applyTranslations(){
+  // Onboarding
+  setText('ob-h0',T('ob_h0')); setText('ob-d0',T('ob_d0'));
+  const phone=document.getElementById('ob-phone');if(phone)phone.placeholder=T('ob_phone');
+  setText('ob-why',T('ob_why'));
+  setText('ob-h1',T('ob_h1')); setText('ob-d1',T('ob_d1'));
+  setText('ob-h2',T('ob_h2')); setText('ob-d2',T('ob_d2'));
+  setText('ob-cta0-t',currentLang==='he'?'המשך ←':'Continue →');
+  setText('ob-finish-t',T('finish'));
+  const f=document.getElementById('ob-back1');if(f)f.textContent=T('back');
+  const f2=document.getElementById('ob-back2');if(f2)f2.textContent=T('back');
+  // Geo
+  setText('geo-t',T('geo_need'));
+  const gb=document.getElementById('geo-btn-t');if(gb)gb.textContent=T('geo_allow');
+  const gs=document.getElementById('geo-skip-t');if(gs)gs.textContent=currentLang==='he'?'דלג — המשך בלי מיקום':'Skip — continue without location';
+  // Alarm names
+  setText('al1-nm',T('al1'));setText('al1-ds',T('al1d'));
+  setText('al2-nm',T('al2'));setText('al2-ds',T('al2d'));
+  setText('al3-nm',T('al3'));setText('al3-ds',T('al3d'));
+  setText('vol-lbl',T('vol'));
+  const tl=document.getElementById('test-lbl');if(tl)tl.textContent=T('test');
+  const sn=document.getElementById('shake-notice-txt');if(sn)sn.innerHTML=T('shake');
+  const dn=document.getElementById('dms-notice-ob');if(dn)dn.innerHTML=T('dms_ob');
+  // Nav
+  setText('nav-map',T('nav_map'));setText('nav-upd',T('nav_upd'));setText('nav-sos',T('nav_sos'));
+  // Dropdown
+  setText('dd-rep',T('dd_rep'));setText('dd-dms',T('dd_dms'));
+  setText('dd-alarm',T('dd_alarm'));setText('dd-prof',T('dd_prof'));
+  setText('dd-set',T('dd_set'));setText('dd-em',T('dd_em'));
+  // SOS strip
+  const sst=document.getElementById('ss-t');if(sst)sst.textContent=T('ss_t');
+  const sscan=document.getElementById('ss-cancel');if(sscan)sscan.textContent=T('cancel');
+  // Sheet titles
+  setText('upd-ttl',T('upd_ttl'));setText('rep-ttl',T('rep_ttl'));setText('dms-ttl',T('dms_ttl'));
+  setText('set-ttl',T('set_ttl'));setText('prof-ttl',T('prof_ttl'));setText('em-ttl',T('em_ttl'));
+  setText('alarm-ttl',T('alarm_ttl'));
+  // Map legend
+  setText('l1',T('l1'));setText('l2',T('l2'));setText('l3',T('l3'));
+  setText('l4',T('l4'));setText('l5',T('l5'));setText('l6',T('l6'));setText('l7',T('l7'));
+  // Report
+  const rt=document.getElementById('rep-ta');if(rt&&!rt.value)rt.placeholder=T('rep_desc');
+  const rs=document.getElementById('rep-send-btn');if(rs)rs.innerHTML='📤 '+T('send').replace('📤 ','');
+  setText('rep-send-lbl',T('send').replace('📤 ',''));
+  // Camera
+  setText('cam-empty-lbl',T('cam_empty'));
+  // DMS
+  const di=document.getElementById('dms-intro-txt');if(di)di.innerHTML=T('dms_how').replace('X',dmsInterval);
+  const ds=document.getElementById('dms-start');if(ds)ds.textContent=T('dms_active')?T('dms_stop'):T('dms_start');
+  const dt=document.getElementById('dms-toggle-btn');if(dt)dt.textContent=dmsActive?T('dms_stop'):T('dms_start');
+  // Emergency
+  setText('em-intro',T('em_intro'));
+  // Profile
+  setText('prof-rank',T('profile_rank'));
+  // Alarm intro
+  const ai=document.getElementById('alarm-intro-txt');if(ai)ai.innerHTML=`<strong style="color:#FF7080">${currentLang==='he'?'מטרה':'Purpose'}:</strong> `+(currentLang==='he'?'משיכת תשומת לב מרבית ועזרה מיידית. מופעלת בעוצמה מלאה.':'Maximum attention-getting and immediate help. Fires at full volume.');
+  // DMS badges
+  const badge=document.getElementById('dms-dd-badge');if(badge){badge.textContent=dmsActive?T('dms_on_badge'):T('dms_off_badge');badge.classList.toggle('off',!dmsActive);}
+  // DMS min labels
+  ['dms-min-lbl','dms-min-lbl2','dms-min-lbl3'].forEach(id=>setText(id,T('dms_min')));
+  // Anon
+  setText('anon-lbl',T('anon'));setText('anon-sub',T('anon_sub'));
+}
+
+/* ═══════════════════════════════════
+   ONBOARDING
+═══════════════════════════════════ */
+function obStep0(){
+  let phone=document.getElementById('ob-phone').value.replace(/\D/g,'');
+  const name=document.getElementById('ob-name').value.trim().substring(0,40);
+  // Demo mode — any input proceeds, empty gets demo number
+  if(!phone) phone='0500000000';
+  phone=phone.replace(/^0/,'972').replace(/^\+972/,'972');
+  user={name:name||'שומר', phone, city:''};
+  goStep(1);
+}
+function goStep(n){
+  document.getElementById('step'+obCurStep).classList.remove('active');
+  document.getElementById('st'+obCurStep).classList.remove('on');
+  obCurStep=Math.max(0,Math.min(2,n));
+  document.getElementById('step'+obCurStep).classList.add('active');
+  document.getElementById('st'+obCurStep).classList.add('on');
+  document.querySelector('.ob-steps').setAttribute('aria-valuenow',obCurStep+1);
+}
+function requestGeo(){
+  const btn=document.getElementById('geo-btn-t');
+  if(btn)btn.textContent=T('geo_wait');
+  document.getElementById('geo-btn').disabled=true;
+  if(!navigator.geolocation){showGeoResult(false,T('geo_err'));return;}
+  navigator.geolocation.getCurrentPosition(
+    pos=>{
+      userLat=pos.coords.latitude; userLng=pos.coords.longitude;
+      const box=document.getElementById('geo-box');
+      box.className='geo-box geo-ok';
+      box.innerHTML=`<div class="geo-ic" aria-hidden="true">✅</div><div class="geo-t">${ESC(T('geo_ok'))}</div><div class="geo-s">${pos.coords.latitude.toFixed(5)}, ${pos.coords.longitude.toFixed(5)}</div>`;
+      const btn=document.getElementById('geo-btn');
+      btn.disabled=false;
+      btn.innerHTML=`<span>${ESC(T('geo_next'))}</span>`;
+      btn.onclick=()=>goStep(2);
+      const skipBtn=document.getElementById('geo-skip-btn');
+      if(skipBtn)skipBtn.style.display='none';
+    },
+    err=>{
+      const msgs={1:T('geo_err')+' — ',2:T('geo_err'),3:T('geo_wait')};
+      showGeoResult(false,msgs[err.code]||T('geo_err'));
+    },
+    {enableHighAccuracy:true,timeout:15000,maximumAge:0}
+  );
+}
+function showGeoResult(ok,msg){
+  const box=document.getElementById('geo-box');
+  box.className='geo-box geo-err';
+  box.innerHTML=`<div class="geo-ic" aria-hidden="true">⚠️</div><div class="geo-t">${ESC(T('geo_err'))}</div><div class="geo-s">${ESC(msg)}</div>`;
+  const btn=document.getElementById('geo-btn');
+  btn.disabled=false;
+  btn.innerHTML=`<span>${ESC(T('geo_retry'))}</span>`;
+  btn.onclick=requestGeo;
+  if(!document.getElementById('geo-skip')){
+    const skip=document.createElement('button');
+    skip.id='geo-skip'; skip.className='ob-back'; skip.style.marginTop='8px';
+    skip.textContent=T('geo_skip');
+    skip.onclick=()=>goStep(2);
+    document.querySelector('#step1 .ob-card').appendChild(skip);
+  }
+}
+function obPickAlarm(el,type){
+  document.querySelectorAll('#ob-alarms .ob-alarm').forEach(a=>{a.classList.remove('sel');a.setAttribute('aria-checked','false');});
+  el.classList.add('sel'); el.setAttribute('aria-checked','true'); alarmType=type;
+}
+function obFinish(){
+  const profNm=document.getElementById('profNm');
+  if(profNm)profNm.textContent=user.name||'שומר';
+  // Start shake detection
+  startShakeDetection();
+  // Register push notifications
+  registerPush();
+  // Build map
+  buildPins();
+  buildInitialUpdates();
+  startSim();
+  // Hide lang bar on main screen
+  document.getElementById('lang-bar').classList.add('hidden');
+  document.body.classList.remove('lb-on');
+  // Hide onboarding
+  const ob=document.getElementById('ob');
+  ob.classList.add('out');
+  setTimeout(()=>{ob.style.display='none';},420);
+  document.getElementById('app').classList.add('on');
+  if(userLat!==null) moveUserDot(userLat,userLng);
+  setTimeout(()=>{
+    const nm=user.name?user.name.split(' ')[0]:T('nav_map');
+    toast(`${T('welcome')}, ${nm} 👋`,'grn');
+  },650);
+}
+
+/* ═══════════════════════════════════
+   PUSH NOTIFICATIONS (Service Worker simulation)
+   In production: needs SW + backend push server
+═══════════════════════════════════ */
+async function registerPush(){
+  if('Notification' in window && Notification.permission==='default'){
+    try{await Notification.requestPermission();}catch(e){}
+  }
+}
+function pushNotify(title,body,tag){
+  if('Notification' in window && Notification.permission==='granted'){
+    try{new Notification(title,{body,icon:'data:image/png;base64,iVBORw0KGgo=',tag:tag||'shomer',requireInteraction:false});}catch(e){}
+  }
+}
+
+/* ═══════════════════════════════════
+   SHAKE-TO-SOS
+═══════════════════════════════════ */
+function startShakeDetection(){
+  if(!window.DeviceMotionEvent) return;
+  const THRESHOLD=22, WINDOW=1500, REQUIRED=5;
+  const handler=e=>{
+    const a=e.acceleration||e.accelerationIncludingGravity;
+    if(!a) return;
+    const mag=Math.sqrt((a.x||0)**2+(a.y||0)**2+(a.z||0)**2);
+    if(mag>THRESHOLD){
+      const now=Date.now();
+      if(now-shakeLastT>300){shakeCount++;shakeLastT=now;}
+      if(shakeCount>=REQUIRED){
+        shakeCount=0;
+        if(!sosActive)triggerSOS();
+      }
+      setTimeout(()=>{shakeCount=Math.max(0,shakeCount-1);},WINDOW);
+    }
+  };
+  if(typeof DeviceMotionEvent.requestPermission==='function'){
+    // iOS 13+ requires permission
+    DeviceMotionEvent.requestPermission().then(r=>{if(r==='granted')window.addEventListener('devicemotion',handler);}).catch(()=>{});
+  } else {
+    window.addEventListener('devicemotion',handler,{passive:true});
+  }
+}
+
+/* ═══════════════════════════════════
+   DEAD MAN'S SWITCH
+═══════════════════════════════════ */
+let dmsIv=5;
+function dmsPickIv(el,mins){
+  document.querySelectorAll('.dms-iv').forEach(d=>d.classList.remove('sel'));
+  el.classList.add('sel'); dmsIv=mins;
+}
+function toggleDMS(){
+  if(dmsActive){stopDMS();}else{startDMS();}
+}
+function startDMS(){
+  dmsActive=true; dmsWarning=false;
+  dmsCountdown=dmsIv*60;
+  document.getElementById('dms-strip').classList.add('on');
+  document.getElementById('dms-status-card').style.display='block';
+  const tb=document.getElementById('dms-toggle-btn');if(tb)tb.textContent=T('dms_stop');
+  const badge=document.getElementById('dms-dd-badge');if(badge){badge.textContent=T('dms_on_badge');badge.classList.remove('off');}
+  updateDMSDisplay();
+  dmsTimer=setInterval(dmsTick,1000);
+  toast(T('dms_on'),'grn');
+  cl('sh-dms');
+}
+function stopDMS(){
+  dmsActive=false; dmsWarning=false;
+  clearInterval(dmsTimer); clearTimeout(dmsWarningTimer);
+  document.getElementById('dms-strip').classList.remove('on');
+  document.getElementById('dms-status-card').style.display='none';
+  const tb=document.getElementById('dms-toggle-btn');if(tb)tb.textContent=T('dms_start');
+  const badge=document.getElementById('dms-dd-badge');if(badge){badge.textContent=T('dms_off_badge');badge.classList.add('off');}
+  toast(T('dms_off'),'');
+}
+function dmsTick(){
+  if(!dmsActive) return;
+  dmsCountdown--;
+  const fill=document.getElementById('dms-prog-fill');
+  if(fill)fill.style.width=Math.max(0,(dmsCountdown/(dmsIv*60))*100)+'%';
+  updateDMSDisplay();
+  if(dmsCountdown<=60&&!dmsWarning){
+    dmsWarning=true;
+    document.getElementById('dms-strip').classList.add('warn');
+    pushNotify('שומר — Dead Man\'s Switch',currentLang==='he'?'האם הכל בסדר? לחץ לאישור':'Are you OK? Tap to confirm','dms');
+    toast(currentLang==='he'?'⏱️ DMS — 60 שניות לאישור!':'⏱️ DMS — 60 seconds to confirm!','amb');
+  }
+  if(dmsCountdown<=0){
+    clearInterval(dmsTimer);
+    dmsActive=false;
+    stopDMS();
+    triggerSOS();
+    toast(currentLang==='he'?'⚠️ Dead Man\'s Switch — SOS אוטומטי!':'⚠️ DMS — Auto SOS!','red');
+  }
+}
+function dmsConfirm(){
+  if(!dmsActive) return;
+  dmsWarning=false; dmsCountdown=dmsIv*60;
+  document.getElementById('dms-strip').classList.remove('warn');
+  document.getElementById('dms-strip').className='dms-strip on';
+  const fill=document.getElementById('dms-prog-fill');if(fill)fill.style.width='100%';
+  updateDMSDisplay();
+  toast(T('ok_all'),'grn');
+}
+function updateDMSDisplay(){
+  const m=Math.floor(dmsCountdown/60), s=dmsCountdown%60;
+  const str=`${m}:${String(s).padStart(2,'0')}`;
+  const disp=document.getElementById('dms-display');if(disp)disp.textContent=str;
+  const st=document.getElementById('dms-status-txt');if(st)st.textContent=T('dms_next');
+  const ss=document.getElementById('dms-strip-s');if(ss)ss.textContent=`${T('dms_next')} ${str}`;
+}
+
+/* ═══════════════════════════════════
+   ALARM ENGINE — 3 harsh tones
+═══════════════════════════════════ */
+function getACtx(){
+  if(!audioCtx||audioCtx.state==='closed') audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+  if(audioCtx.state==='suspended') audioCtx.resume();
+  return audioCtx;
+}
+function stopAlarm(){
+  oscillators.forEach(o=>{try{o.stop();}catch(e){}});
+  oscillators=[];
+  if(audioCtx){try{audioCtx.close();}catch(e){}audioCtx=null;}
+}
+function testAlarm(){playAlarm(3500);}
+function playAlarm(durMs){
+  stopAlarm();
+  const ctx=getACtx();
+  const now=ctx.currentTime;
+  const end=now+durMs/1000;
+  // Compressor for maximum perceived loudness
+  const comp=ctx.createDynamicsCompressor();
+  comp.threshold.value=-20;comp.knee.value=0;comp.ratio.value=20;
+  comp.attack.value=0.001;comp.release.value=0.01;
+  comp.connect(ctx.destination);
+  // Waveshaper distortion for harsh edge
+  const dist=ctx.createWaveShaper();
+  const curve=new Float32Array(256);
+  for(let i=0;i<256;i++){const x=i*2/256-1;curve[i]=(Math.PI+200)*x/(Math.PI+200*Math.abs(x));}
+  dist.curve=curve;dist.oversample='4x';
+  dist.connect(comp);
+  if(alarmType==='siren'){
+    // Layer 1: Primary siren sweep — aggressive sawtooth
+    const o1=ctx.createOscillator(),g1=ctx.createGain();
+    o1.type='sawtooth';g1.gain.value=alarmVol*0.7;
+    let t=now;
+    while(t<end){o1.frequency.setValueAtTime(440,t);o1.frequency.linearRampToValueAtTime(1800,t+0.3);o1.frequency.linearRampToValueAtTime(440,t+0.6);t+=0.6;}
+    o1.connect(g1);g1.connect(dist);
+    o1.start(now);o1.stop(end);oscillators.push(o1);
+    // Layer 2: Octave-up square for piercing overtone
+    const o2=ctx.createOscillator(),g2=ctx.createGain();
+    o2.type='square';g2.gain.value=alarmVol*0.35;
+    t=now;
+    while(t<end){o2.frequency.setValueAtTime(880,t);o2.frequency.linearRampToValueAtTime(3600,t+0.3);o2.frequency.linearRampToValueAtTime(880,t+0.6);t+=0.6;}
+    o2.connect(g2);g2.connect(dist);
+    o2.start(now);o2.stop(end);oscillators.push(o2);
+    // Layer 3: Sub-bass rumble for chest-thumping presence
+    const o3=ctx.createOscillator(),g3=ctx.createGain();
+    o3.type='sine';o3.frequency.value=80;g3.gain.value=alarmVol*0.5;
+    o3.connect(g3);g3.connect(comp);
+    o3.start(now);o3.stop(end);oscillators.push(o3);
+  } else if(alarmType==='horn'){
+    let t=now;
+    while(t<end){
+      const o=ctx.createOscillator(),g=ctx.createGain();
+      o.type='square';o.frequency.value=((t-now)%1.0)<0.5?1200:900;
+      g.gain.setValueAtTime(alarmVol*0.9,t);g.gain.linearRampToValueAtTime(0,t+0.2);
+      o.connect(g);g.connect(dist);
+      o.start(t);o.stop(t+0.22);oscillators.push(o);
+      // Sub hit
+      const o2=ctx.createOscillator(),g2=ctx.createGain();
+      o2.type='sawtooth';o2.frequency.value=200;
+      g2.gain.setValueAtTime(alarmVol*0.6,t);g2.gain.linearRampToValueAtTime(0,t+0.16);
+      o2.connect(g2);g2.connect(dist);
+      o2.start(t);o2.stop(t+0.18);oscillators.push(o2);
+      t+=0.26;
+    }
+  } else {
+    let t=now;
+    while(t<end){
+      const o=ctx.createOscillator(),g=ctx.createGain();
+      o.type='square';o.frequency.value=2800;
+      g.gain.setValueAtTime(alarmVol,t);g.gain.linearRampToValueAtTime(0,t+0.07);
+      o.connect(g);g.connect(dist);
+      o.start(t);o.stop(t+0.08);oscillators.push(o);
+      // Harsh harmonic
+      const o2=ctx.createOscillator(),g2=ctx.createGain();
+      o2.type='sawtooth';o2.frequency.value=4200;
+      g2.gain.setValueAtTime(alarmVol*0.45,t);g2.gain.linearRampToValueAtTime(0,t+0.05);
+      o2.connect(g2);g2.connect(dist);
+      o2.start(t);o2.stop(t+0.06);oscillators.push(o2);
+      t+=0.1;
+    }
+  }
+}
+function pickAlarm(el,type){
+  document.querySelectorAll('#alarm-list .ob-alarm').forEach(a=>{a.classList.remove('sel');a.setAttribute('aria-checked','false');});
+  el.classList.add('sel'); el.setAttribute('aria-checked','true'); alarmType=type;
+}
+
+/* ═══════════════════════════════════
+   SOS
+═══════════════════════════════════ */
+function triggerSOS(){
+  if(sosActive){cancelSOS();return;}
+  sosActive=true;
+  const btn=document.getElementById('sos-btn');
+  if(btn){btn.classList.add('active');btn.setAttribute('aria-pressed','true');}
+  document.getElementById('sos-strip').classList.add('on');
+  // Alarm — 60s continuous
+  playAlarm(60000);
+  // Push notification — visible on lock screen
+  pushNotify('🚨 שומר — SOS שלחת',currentLang==='he'?'אזעקה פועלת. עזרה בדרך.':'Alarm active. Help is coming.','sos-active');
+  // Try auto-dial (opens dial pad — cannot force call without native)
+  setTimeout(()=>{
+    if(window.confirm){
+      // In real PWA show confirm, in native would auto-call
+      const call=window.confirm(currentLang==='he'?'לחייג למשטרה 100 אוטומטית?\n(לחץ אישור לחיוג)':'Auto-call police 100?\n(Press OK to dial)');
+      if(call) window.location.href='tel:100';
+    }
+  },2000);
+  // Map pin
+  addSOSPin();
+  // Update card
+  injectSOSCard();
+  toast(currentLang==='he'?'🚨 SOS נשלח — אזעקה פועלת!':'🚨 SOS sent — alarm active!','red');
+  let r=0;
+  sosTimer=setInterval(()=>{
+    r++;
+    const ss=document.getElementById('ss-s');
+    if(ss) ss.textContent=`${r} ${currentLang==='he'?'שומר'+(r>1?'ים':'')+' בדרך':'guardian'+(r>1?'s':'')+' responding'}`;
+    if(r>=3){
+      toast(currentLang==='he'?'3 שומרים בדרך — הישאר במקומך!':'3 guardians responding — stay put!','grn');
+      clearInterval(sosTimer);
+    }
+  },5000);
+  setTimeout(()=>openUpdates(),800);
+}
+function cancelSOS(){
+  if(!sosActive) return;
+  sosActive=false; clearInterval(sosTimer); stopAlarm();
+  const btn=document.getElementById('sos-btn');
+  if(btn){btn.classList.remove('active');btn.setAttribute('aria-pressed','false');}
+  document.getElementById('sos-strip').classList.remove('on');
+  removeSOSPin();
+  toast(currentLang==='he'?'SOS בוטל — שומרים עודכנו':'SOS cancelled','');
+}
+function addSOSPin(){
+  removeSOSPin();
+  const ns='http://www.w3.org/2000/svg',g=document.getElementById('pins');
+  const cx=userLat?170:170, cy=userLat?299:299;
+  ['sos-r2','sos-r1','sos-p'].forEach(id=>{const e=document.getElementById(id);if(e)e.remove();});
+  const r2=document.createElementNS(ns,'circle');r2.id='sos-r2';r2.setAttribute('cx',cx);r2.setAttribute('cy',cy);r2.setAttribute('r','22');r2.setAttribute('fill','#CC1426');r2.setAttribute('opacity','.14');g.appendChild(r2);
+  const r1=document.createElementNS(ns,'circle');r1.id='sos-r1';r1.setAttribute('cx',cx);r1.setAttribute('cy',cy);r1.setAttribute('r','14');r1.setAttribute('fill','#CC1426');r1.setAttribute('opacity','.22');g.appendChild(r1);
+  const p=document.createElementNS(ns,'circle');p.id='sos-p';p.setAttribute('cx',cx);p.setAttribute('cy',cy);p.setAttribute('r','8');p.setAttribute('fill','#CC1426');p.setAttribute('stroke','#fff');p.setAttribute('stroke-width','2.5');p.style.filter='drop-shadow(0 0 16px #CC1426CC)';g.appendChild(p);
+}
+function removeSOSPin(){['sos-p','sos-r1','sos-r2'].forEach(id=>{const e=document.getElementById(id);if(e)e.remove();});}
+
+/* ═══════════════════════════════════
+   MAP
+═══════════════════════════════════ */
+function buildPins(){
+  const g=document.getElementById('pins');
+  const ns='http://www.w3.org/2000/svg';
+  CRIMES.forEach((c,i)=>{
+    const T2=TYPES[c.t];
+    // Glow halo
+    const gl=document.createElementNS(ns,'circle');
+    gl.setAttribute('cx',c.x);gl.setAttribute('cy',c.y);gl.setAttribute('r','9');
+    gl.setAttribute('fill',T2.color);gl.setAttribute('opacity','.12');
+    g.appendChild(gl);
+    // Pin circle
+    const el=document.createElementNS(ns,'circle');
+    el.setAttribute('cx',c.x);el.setAttribute('cy',c.y);el.setAttribute('r','6');
+    el.setAttribute('fill',T2.color);el.setAttribute('stroke','#fff');el.setAttribute('stroke-width','2');
+    el.style.cursor='pointer';
+    el.style.filter=`drop-shadow(0 1px 5px ${T2.color}99)`;
+    el.setAttribute('tabindex','0');
+    el.setAttribute('role','button');
+    el.setAttribute('aria-label',`${T2.label()} — ${c.a}`);
+    el.addEventListener('click',ev=>{ev.stopPropagation();showTip(c,i,ev);});
+    el.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.stopPropagation();showTip(c,i,ev);}});
+    g.appendChild(el);
+  });
+}
+function showTip(c,idx,ev){
+  const T2=TYPES[c.t];
+  const sBg=c.s==='הורשע'?'rgba(14,136,64,.12)':c.s==='פתוח'?'rgba(204,20,38,.12)':'rgba(192,120,8,.12)';
+  const sC=c.s==='הורשע'?'#0E8840':c.s==='פתוח'?'#CC1426':'#C07808';
+  const dot=document.getElementById('mt-dot');
+  if(dot) dot.style.cssText=`background:${T2.color};width:12px;height:12px;border-radius:50%;box-shadow:0 0 7px ${T2.color};flex-shrink:0;`;
+  setText('mt-t',T2.label());
+  setText('mt-m',`${c.d} · ${c.a}`);
+  const mb=document.getElementById('mt-badge');
+  if(mb)mb.innerHTML=`<span class="mt-badge" style="background:${sBg};color:${sC}">${ESC(c.s)}</span>`;
+  setText('mt-note',c.n);
+  const opener=document.getElementById('mt-open');
+  if(opener){
+    if(c.det>=0){opener.style.display='block';opener.textContent=T('open_det');opener.onclick=()=>{openDetail(c.det);document.getElementById('mtip').classList.remove('show');};}
+    else{opener.style.display='none';}
+  }
+  const tip=document.getElementById('mtip');
+  tip.classList.add('show','ptr');
+  const wr=document.getElementById('map-wrap').getBoundingClientRect();
+  const sr=document.getElementById('map-svg').getBoundingClientRect();
+  const sx=sr.width/400, sy=sr.height/700;
+  let lx=c.x*sx*scale+panTX*scale-tip.offsetWidth/2;
+  let ly=c.y*sy*scale+panTY*scale-tip.offsetHeight-16;
+  lx=Math.max(8,Math.min(lx,wr.width-tip.offsetWidth-8));
+  ly=Math.max(62,ly);
+  tip.style.left=lx+'px'; tip.style.top=ly+'px';
+}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('#pins')&&!e.target.closest('#mtip'))
+    document.getElementById('mtip').classList.remove('show','ptr');
+});
+function zm(f){scale=Math.min(6,Math.max(.5,scale*f));applyTransform();}
+function applyTransform(){document.getElementById('map-svg').style.transform=`scale(${scale}) translate(${panTX}px,${panTY}px)`;}
+
+/* Geo→SVG coordinate mapping (inverse-distance weighted from known Israeli cities) */
+const GEO_ANCHORS=[
+  {lat:32.07,lng:34.77,x:170,y:299},{lat:31.77,lng:35.21,x:256,y:435},
+  {lat:32.79,lng:34.99,x:213,y:132},{lat:31.25,lng:34.79,x:252,y:526},
+  {lat:32.33,lng:34.86,x:167,y:193},{lat:31.97,lng:34.77,x:197,y:368},
+  {lat:32.09,lng:34.89,x:218,y:326},{lat:32.17,lng:34.79,x:200,y:248},
+  {lat:32.02,lng:34.76,x:186,y:342},{lat:29.56,lng:34.95,x:280,y:680},
+];
+function geoToSVG(lat,lng){
+  const pts=GEO_ANCHORS.map(c=>({...c,d:Math.sqrt((lat-c.lat)**2+(lng-c.lng)**2)})).sort((a,b)=>a.d-b.d).slice(0,3);
+  let tw=0,sx=0,sy=0;
+  for(const p of pts){const w=1/(p.d+0.0001);sx+=p.x*w;sy+=p.y*w;tw+=w;}
+  return{x:Math.max(10,Math.min(390,sx/tw)),y:Math.max(10,Math.min(690,sy/tw))};
+}
+function moveUserDot(lat,lng){
+  const g=document.getElementById('me-loc');
+  if(!g)return;
+  const p=geoToSVG(lat,lng);
+  g.removeAttribute('display');
+  g.querySelectorAll('circle').forEach(c=>{c.setAttribute('cx',p.x);c.setAttribute('cy',p.y);});
+}
+
+function locMe(){
+  if(!navigator.geolocation){toast('Geolocation '+T('geo_err'),'amb');return;}
+  toast(currentLang==='he'?'📍 מאתר מיקום...':'📍 Locating...','');
+  navigator.geolocation.getCurrentPosition(
+    pos=>{
+      userLat=pos.coords.latitude; userLng=pos.coords.longitude;
+      moveUserDot(userLat,userLng);
+      const sv=geoToSVG(userLat,userLng);
+      // Center map on user
+      panTX=-(sv.x-200)/scale; panTY=-(sv.y-350)/scale;
+      scale=2.2; applyTransform();
+      toast('📍 '+T('loc_ok').replace('📍 ',''),'grn');
+    },
+    ()=>toast(T('geo_err'),'amb'),
+    {enableHighAccuracy:true,timeout:10000}
+  );
+}
+window.addEventListener('DOMContentLoaded',()=>{
+  const svg=document.getElementById('map-svg');
+  if(!svg) return;
+  svg.addEventListener('mousedown',e=>{panState={on:true,sx:e.clientX,sy:e.clientY,ox:panTX,oy:panTY};svg.classList.add('drag');});
+  document.addEventListener('mousemove',e=>{if(!panState.on)return;panTX=panState.ox+(e.clientX-panState.sx)/scale;panTY=panState.oy+(e.clientY-panState.sy)/scale;applyTransform();});
+  document.addEventListener('mouseup',()=>{panState.on=false;document.getElementById('map-svg').classList.remove('drag');});
+  svg.addEventListener('touchstart',e=>{const t=e.touches[0];panState={on:true,sx:t.clientX,sy:t.clientY,ox:panTX,oy:panTY};},{passive:true});
+  svg.addEventListener('touchmove',e=>{if(!panState.on)return;const t=e.touches[0];panTX=panState.ox+(t.clientX-panState.sx)/scale;panTY=panState.oy+(t.clientY-panState.sy)/scale;applyTransform();},{passive:true});
+  svg.addEventListener('touchend',()=>{panState.on=false;});
+  // Textarea char count
+  const ta=document.getElementById('rep-ta');
+  if(ta)ta.addEventListener('input',()=>{document.getElementById('char-c').textContent=ta.value.length+' / 1000';});
+});
+
+/* ═══════════════════════════════════
+   INCIDENT DETAIL
+═══════════════════════════════════ */
+const DETAILS=[
+  {title:'SOS פעיל — סכנה מיידית',   type:'sos',  time:'לפני 2 דק׳',  loc:'ירושלים, רחוב יפו',      cx:266,cy:443, desc:'משתמשת שלחה SOS. מיקום שותף בזמן אמת. שומרים מתבקשים.',responders:[{nm:'אורן ד.',dist:'0.8 ק"מ',st:'בדרך'},{nm:'מיטל כ.',dist:'1.4 ק"מ',st:'בדרך'}],photos:0,status:'דחוף'},
+  {title:'מעקב חשוד — שינקין',        type:'stalk',time:'לפני 9 דק׳',  loc:'ת"א, שינקין/אלנבי',      cx:170,cy:299, desc:'גבר עוקב אחרי נשים. כ-45, חולצה כחולה, ג\'ינס. 3 דיווחים.',responders:[],photos:1,status:'זהירות'},
+  {title:'נסגר — תקיפה ✓',            type:'med',  time:'לפני 34 דק׳', loc:'חיפה, הדר',               cx:211,cy:131, desc:'4 שומרים הגיעו. המטרד הסתלק. הנפגעת בטוחה.',responders:[{nm:'רועי מ.',dist:'הגיע',st:'טיפל'}],photos:0,status:'טופל'},
+  {title:'עזרה רפואית',               type:'med',  time:'לפני 16 דק׳', loc:'ראשון לציון, רחוב הרצל',  cx:198,cy:366, desc:'קשיש, כ-80, נפל ליד הסופרמרקט. מד"א הוזמן.',responders:[{nm:'ריקי א.',dist:'2.1 ק"מ',st:'בדרך'}],photos:0,status:'פעיל'},
+  {title:'תקיפה פיזית — פ"ת',         type:'viol', time:'לפני 21 דק׳', loc:'פתח תקוה, רחוב הרצל',    cx:220,cy:324, desc:'תקיפה בכניסה לחנות. המשטרה הוזמנה. 2 תמונות.',responders:[],photos:2,status:'דחוף'},
+];
+function openDetail(idx){
+  if(idx<0||!DETAILS[idx]) return;
+  const d=DETAILS[idx];
+  const T2=TYPES[d.type]||TYPES.viol;
+  setText('det-ttl',d.title);
+  const statBg=d.status==='טופל'?'rgba(14,136,64,.1)':d.status==='דחוף'?'rgba(204,20,38,.1)':'rgba(192,120,8,.1)';
+  const statBdr=d.status==='טופל'?'rgba(14,136,64,.32)':'rgba(204,20,38,.32)';
+  const statC=d.status==='טופל'?'#40C880':d.status==='דחוף'?'#FF7080':'#E09030';
+  const mx=(d.cx/400)*200,my=(d.cy/700)*120;
+  const mm=`<svg viewBox="0 0 200 120" width="100%" height="100%"><rect width="200" height="120" fill="#EDF1F8"/><path d="M0,0L44,0L39,60L34,120L0,120Z" fill="#C0D4F0" opacity=".6"/><ellipse cx="${mx}" cy="${my}" rx="16" ry="11" fill="#CDD2E4"/><circle cx="${mx}" cy="${my}" r="9" fill="${T2.color}" stroke="#fff" stroke-width="2.5"/><circle cx="${mx}" cy="${my}" r="17" fill="${T2.color}" opacity=".13"/></svg>`;
+  const pHtml=d.photos>0?`<div class="sec-cap mb12">📷 ${currentLang==='he'?'תמונות מהאירוע':'Photos from incident'}</div><div class="det-photo-grid mb16">${Array(d.photos).fill('<div class="det-ph">📷</div>').join('')}</div>`:'';
+  const rHtml=d.responders.length?`<div class="sec-cap mb12">👤 ${currentLang==='he'?'שומרים שהגיבו':'Responders'}</div>${d.responders.map(r=>`<div class="resp-row"><div class="resp-av">${ESC(r.nm[0])}</div><div><div class="resp-nm">${ESC(r.nm)}</div><div class="resp-d">${ESC(r.dist)}</div></div><span class="resp-st">${ESC(r.st)}</span></div>`).join('')}`:'';
+  let ctas='';
+  if(['sos','viol','stalk','med'].includes(d.type)){
+    ctas=`<div class="det-ctas"><button class="dcta pr" onclick="respondDet(this)" id="det-respond-btn">${T('respond')}</button><button class="dcta gd" onclick="callNum('100')">${T('call100')}</button><button class="dcta sc" onclick="cl('det-sheet')">${T('close')}</button></div>`;
+  }
+  // Use innerHTML only for trusted static HTML, user data only via textContent/ESC
+  const body=document.getElementById('det-body');
+  body.innerHTML=`
+    <div class="det-head ${T2.cls} mb16" style="border-right-color:${T2.color};background:${statBg};border-color:${statBdr}">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:8px">
+        <div style="width:14px;height:14px;border-radius:50%;background:${T2.color};box-shadow:0 0 10px ${T2.color}88;flex-shrink:0" aria-hidden="true"></div>
+        <span class="det-title"></span>
+      </div>
+      <div class="det-tags">
+        <span class="det-tag">📍 <span class="det-loc"></span></span>
+        <span class="det-tag">🕐 <span class="det-time"></span></span>
+        <span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;background:${statBg};color:${statC};border:1px solid ${statBdr}" class="det-status"></span>
+      </div>
+    </div>
+    <div class="sec-cap mb12">${currentLang==='he'?'תיאור האירוע':'Incident description'}</div>
+    <p class="det-desc mb16 det-desc-txt"></p>
+    <div class="sec-cap mb12">${currentLang==='he'?'מיקום על המפה':'Location on map'}</div>
+    <div class="det-map mb16">${mm}</div>
+    ${pHtml}${rHtml}${ctas}
+  `;
+  // Set text safely
+  body.querySelector('.det-title').textContent=d.title;
+  body.querySelector('.det-loc').textContent=d.loc;
+  body.querySelector('.det-time').textContent=d.time;
+  body.querySelector('.det-status').textContent=d.status;
+  body.querySelector('.det-desc-txt').textContent=d.desc;
+  op('det-sheet');
+}
+function respondDet(btn){
+  if(btn.disabled) return;
+  btn.disabled=true; btn.textContent=T('responded');
+  btn.style.background='var(--grn)'; btn.style.boxShadow='0 4px 14px rgba(14,136,64,.35)';
+  toast(T('responded'),'grn');
+}
+
+/* ═══════════════════════════════════
+   UPDATES
+═══════════════════════════════════ */
+function buildInitialUpdates(){
+  const cards=[
+    {cls:'t-sos',  dotC:'#CC1426',title:'🚨 SOS פעיל — סכנה מיידית',bdg:'<span class="ubdg">🚨 דחוף</span>',time:'לפני 2 דק׳',loc:'ירושלים, יפו',desc:'משתמשת שלחה SOS. שומרים מתבקשים.',detIdx:0,resp:[{a:'א'},{a:'מ'}],dist:'1.2 ק"מ'},
+    {cls:'t-stalk',dotC:'#C07808',title:'⚠️ מעקב חשוד — שינקין',     bdg:'<span class="ubdg">⚠️ זהירות</span>',time:'לפני 9 דק׳',loc:'ת"א, שינקין',desc:'גבר עוקב. 3 דיווחים מאשרים.',detIdx:1,resp:[],dist:''},
+    {cls:'t-med',  dotC:'#0E8840',title:'✅ נסגר — תקיפה מילולית',    bdg:'<span class="ubdg">✓ טופל</span>',time:'לפני 34 דק׳',loc:'חיפה, הדר',desc:'4 שומרים הגיעו. האירוע הוסדר.',detIdx:2,resp:[],dist:''},
+    {cls:'t-med',  dotC:'#0E8840',title:'🏥 עזרה רפואית דחופה',       bdg:'<span class="ubdg">🏥 פעיל</span>',time:'לפני 16 דק׳',loc:'ראשון לציון',desc:'קשיש נפל. מד"א הוזמן.',detIdx:3,resp:[{a:'ר'}],dist:'3.1 ק"מ'},
+    {cls:'t-viol', dotC:'#EA5A00',title:'💥 תקיפה פיזית + 📷 תיעוד',   bdg:'<span class="ubdg">💥 דחוף</span>',time:'לפני 21 דק׳',loc:'פתח תקוה',desc:'תקיפה בחנות. 2 תמונות.',detIdx:4,resp:[],dist:''},
+  ];
+  const l=document.getElementById('upd-list');
+  l.innerHTML='';
+  cards.forEach(c=>{
+    const div=document.createElement('div');
+    div.className=`ucard ${c.cls}`;
+    div.setAttribute('role','listitem');
+    div.setAttribute('tabindex','0');
+    if(c.detIdx>=0){div.onclick=()=>openDetail(c.detIdx);div.onkeydown=e=>{if(e.key==='Enter')openDetail(c.detIdx);};}
+    div.innerHTML=`<div class="uc-in">
+      <div class="uc-top"><div class="uc-hd"><div class="uc-dot" aria-hidden="true"></div><span class="uc-ttl"></span></div>${c.bdg}</div>
+      <div class="uc-meta"><span class="uc-time"></span>${c.dist?'<span class="uc-sep"></span><span class="uc-loc"></span>':''}</div>
+      <div class="uc-desc"></div>
+      ${c.resp.length?`<div class="uc-resp"><div class="avs">${c.resp.map(r=>`<div class="av">${ESC(r.a)}</div>`).join('')}</div><span class="uc-rcount">${c.resp.length} ${currentLang==='he'?'בדרך':'responding'}</span>${c.dist?`<span class="dtag">${ESC(c.dist)}</span>`:''}  </div>`:''}
+      <div class="uc-hint">👆 ${currentLang==='he'?'הקש לפרטים':'Tap for details'}</div>
+    </div>`;
+    // Set text safely
+    div.querySelector('.uc-ttl').textContent=c.title;
+    div.querySelector('.uc-time').textContent=c.time;
+    if(c.dist) div.querySelector('.uc-loc').textContent=c.loc;
+    div.querySelector('.uc-desc').textContent=c.desc;
+    l.appendChild(div);
+  });
+}
+function injectSOSCard(){
+  const l=document.getElementById('upd-list');
+  const div=document.createElement('div');
+  div.className='ucard t-sos';
+  div.setAttribute('role','listitem');
+  div.setAttribute('tabindex','0');
+  const inner=document.createElement('div');inner.className='uc-in';
+  const top=document.createElement('div');top.className='uc-top';
+  const hd=document.createElement('div');hd.className='uc-hd';
+  const dot=document.createElement('div');dot.className='uc-dot';dot.setAttribute('aria-hidden','true');
+  const ttl=document.createElement('span');ttl.className='uc-ttl';ttl.textContent=currentLang==='he'?'🚨 SOS פעיל שלך':'🚨 Your active SOS';
+  hd.appendChild(dot);hd.appendChild(ttl);
+  const bdg=document.createElement('span');bdg.className='ubdg';bdg.textContent='🚨';
+  top.appendChild(hd);top.appendChild(bdg);
+  const meta=document.createElement('div');meta.className='uc-meta';meta.textContent=currentLang==='he'?'עכשיו · מיקומך':'Now · your location';
+  const desc=document.createElement('div');desc.className='uc-desc';desc.textContent=currentLang==='he'?'SOS נשלח. מיקומך שותף. אזעקה פועלת.':'SOS sent. Location shared. Alarm active.';
+  inner.appendChild(top);inner.appendChild(meta);inner.appendChild(desc);
+  div.appendChild(inner);
+  l.insertBefore(div,l.firstChild);
+  newUpd++;updBdg();
+}
+function injectCard(d){
+  const l=document.getElementById('upd-list');
+  const div=document.createElement('div');
+  div.className=`ucard ${d.cls}`;
+  div.setAttribute('role','listitem');
+  div.setAttribute('tabindex','0');
+  if(d.detIdx>=0){div.onclick=()=>openDetail(d.detIdx);}
+  const inner=document.createElement('div');inner.className='uc-in';
+  const top=document.createElement('div');top.className='uc-top';
+  const hd=document.createElement('div');hd.className='uc-hd';
+  const dot=document.createElement('div');dot.className='uc-dot';dot.setAttribute('aria-hidden','true');
+  const ttl=document.createElement('span');ttl.className='uc-ttl';ttl.textContent=d.title;
+  hd.appendChild(dot);hd.appendChild(ttl);
+  const bdg=document.createElement('span');bdg.className='ubdg';bdg.innerHTML=d.bdg;
+  top.appendChild(hd);top.appendChild(bdg);
+  const meta=document.createElement('div');meta.className='uc-meta';meta.textContent=d.time+(d.loc?' · '+d.loc:'');
+  const desc=document.createElement('div');desc.className='uc-desc';desc.textContent=d.desc;
+  const hint=document.createElement('div');hint.className='uc-hint';hint.textContent='👆';
+  inner.appendChild(top);inner.appendChild(meta);inner.appendChild(desc);inner.appendChild(hint);
+  div.appendChild(inner);
+  l.insertBefore(div,l.firstChild);
+  newUpd++;updBdg();
+}
+function chipOn(btn){document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));btn.classList.add('on');}
+function updBdg(){
+  const b=document.getElementById('bell-dot');
+  if(b){b.classList.toggle('on',newUpd>0);}
+}
+
+/* ═══════════════════════════════════
+   CAMERA
+═══════════════════════════════════ */
+async function openCam(){
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment',width:{ideal:1280},height:{ideal:720}},audio:false});
+    camStream=stream;
+    const v=document.getElementById('cam-v');
+    v.srcObject=stream; v.style.display='block';
+    document.getElementById('cam-snap').style.display='flex';
+    document.getElementById('cam-ph').style.display='none';
+    toast(T('cam_taken').replace(' ✓',''),'grn');
+  }catch(err){
+    if(err.name==='NotAllowedError')toast(T('cam_denied'),'amb');
+    else if(err.name==='NotFoundError'){toast(T('cam_nf'),'amb');document.getElementById('file-in').click();}
+    else{toast(T('cam_nf'),'amb');document.getElementById('file-in').click();}
+  }
+}
+function stopCam(){
+  if(camStream){camStream.getTracks().forEach(t=>t.stop());camStream=null;}
+  const v=document.getElementById('cam-v');
+  v.style.display='none'; v.srcObject=null;
+  document.getElementById('cam-snap').style.display='none';
+  if(!photos.length)document.getElementById('cam-ph').style.display='flex';
+}
+function snapPhoto(){
+  const v=document.getElementById('cam-v');
+  const c=document.createElement('canvas');
+  c.width=v.videoWidth||640; c.height=v.videoHeight||480;
+  c.getContext('2d').drawImage(v,0,0);
+  addPhoto(c.toDataURL('image/jpeg',.82));
+  toast(T('cam_taken'),'grn');
+}
+function handleFiles(files){
+  Array.from(files).forEach(f=>{
+    if(!f.type.startsWith('image/')||f.size>10*1024*1024) return;
+    const r=new FileReader();
+    r.onload=e=>addPhoto(e.target.result);
+    r.readAsDataURL(f);
+  });
+  document.getElementById('file-in').value='';
+}
+function addPhoto(src){
+  if(photos.length>=5){toast(currentLang==='he'?'מקסימום 5 תמונות':'Max 5 photos','amb');return;}
+  photos.push(src);
+  const grid=document.getElementById('cam-grid');
+  document.getElementById('cam-ph').style.display='none';
+  grid.style.display='flex';
+  const img=document.createElement('img');
+  img.className='cam-thumb'; img.src=src; img.alt='תמונה מצורפת';
+  img.setAttribute('role','listitem');
+  img.onclick=()=>{img.remove();photos=photos.filter(p=>p!==src);if(!photos.length){grid.style.display='none';document.getElementById('cam-ph').style.display='flex';}updCamCnt();};
+  grid.appendChild(img);
+  updCamCnt(); stopCam();
+}
+function updCamCnt(){
+  const el=document.getElementById('cam-cnt');
+  if(photos.length){el.style.display='inline';el.textContent=photos.length+'📷';}
+  else el.style.display='none';
+}
+
+/* ═══════════════════════════════════
+   REPORT
+═══════════════════════════════════ */
+function rt(el){
+  document.querySelectorAll('.ropt').forEach(b=>{b.classList.remove('sel');b.setAttribute('aria-checked','false');});
+  el.classList.add('sel'); el.setAttribute('aria-checked','true');
+}
+function getRepLoc(){
+  if(!navigator.geolocation){document.getElementById('rep-loc-txt').textContent=(user.city||'ישראל')+' ✓';return;}
+  navigator.geolocation.getCurrentPosition(
+    p=>{
+      userLat=p.coords.latitude; userLng=p.coords.longitude;
+      document.getElementById('rep-loc-txt').textContent=`${p.coords.latitude.toFixed(5)}, ${p.coords.longitude.toFixed(5)} ✓`;
+      moveUserDot(userLat,userLng);
+      toast('📍 '+T('loc_ok').replace('📍 ',''),'grn');
+    },
+    ()=>{document.getElementById('rep-loc-txt').textContent=(user.city||'ישראל')+' ✓';}
+  );
+}
+function sendReport(){
+  if(repLock) return;
+  const ta=document.getElementById('rep-ta');
+  if(!ta.value.trim()){toast(currentLang==='he'?'תאר את האירוע':'Describe the incident','amb');return;}
+  const loc=document.getElementById('rep-loc-txt').textContent;
+  if(loc.includes('שתף')||loc.includes('Share')||loc.includes('Share')||loc.includes('мест')||loc.includes('位置')){toast(currentLang==='he'?'שתף מיקום תחילה':'Share your location first','amb');return;}
+  repLock=true;
+  const type=document.querySelector('.ropt.sel span')?.textContent||'אירוע';
+  const n=photos.length;
+  toast(`${T('sent')}${n>0?' +'+n+'📷':''}`, 'grn');
+  // Add to details
+  const ni=DETAILS.length;
+  DETAILS.push({title:type,type:'viol',time:currentLang==='he'?'עכשיו':'now',loc,cx:170,cy:299,desc:ta.value.substring(0,500),responders:[],photos:n,status:currentLang==='he'?'פתוח':'open'});
+  injectCard({cls:'t-new',dotC:'#1852C0',title:(n?`📷${n} `:'')+'📝 '+type,bdg:`<span class="ubdg">✨</span>`,time:currentLang==='he'?'עכשיו':'now',loc,desc:ta.value.substring(0,80)+(ta.value.length>80?'...':''),detIdx:ni});
+  // Reset
+  ta.value=''; document.getElementById('char-c').textContent='0 / 1000';
+  document.getElementById('rep-loc-txt').textContent=T('share_loc');
+  photos=[];
+  const grid=document.getElementById('cam-grid');grid.innerHTML='';grid.style.display='none';
+  document.getElementById('cam-ph').style.display='flex';
+  document.getElementById('cam-cnt').style.display='none';
+  setTimeout(()=>{repLock=false;},2200);
+  setTimeout(()=>openUpdates(),700);
+}
+
+/* ═══════════════════════════════════
+   NAV / SHEETS
+═══════════════════════════════════ */
+function navTo(id){
+  closeAll();
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
+  if(id==='map'){document.getElementById('nb-map').classList.add('on');return;}
+  const s={upd:'sh-upd',rep:'sh-rep'};
+  const nb=document.getElementById('nb-'+id);if(nb)nb.classList.add('on');
+  if(s[id]) op(s[id]);
+  if(id==='upd'){newUpd=0;updBdg();}
+}
+function openUpdates(){
+  op('sh-upd');
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
+  const nb=document.getElementById('nb-upd');if(nb)nb.classList.add('on');
+  newUpd=0;updBdg();
+}
+function op(id){closeAll();const el=document.getElementById(id);if(el)el.classList.add('open');}
+function cl(id){
+  const el=document.getElementById(id);if(el)el.classList.remove('open');
+  setTimeout(()=>{
+    if(!document.querySelector('.sheet.open')){
+      document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
+      const nm=document.getElementById('nb-map');if(nm)nm.classList.add('on');
+    }
+  },50);
+}
+function closeAll(){document.querySelectorAll('.sheet').forEach(s=>s.classList.remove('open'));}
+function toggleDD(){
+  menuOpen=!menuOpen;
+  const dd=document.getElementById('dd');
+  const btn=document.getElementById('menu-btn');
+  if(menuOpen){dd.removeAttribute('hidden');dd.classList.add('open');}
+  else{dd.setAttribute('hidden','');dd.classList.remove('open');}
+  if(btn)btn.setAttribute('aria-expanded',String(menuOpen));
+}
+function closeDD(){
+  menuOpen=false;
+  const dd=document.getElementById('dd');
+  dd.setAttribute('hidden','');dd.classList.remove('open');
+  const btn=document.getElementById('menu-btn');
+  if(btn)btn.setAttribute('aria-expanded','false');
+}
+document.addEventListener('click',e=>{if(menuOpen&&!e.target.closest('#dd')&&!e.target.closest('#menu-btn'))closeDD();});
+
+/* ═══════════════════════════════════
+   UTILS
+═══════════════════════════════════ */
+function callNum(n){
+  closeAll();
+  toast(`📞 ${currentLang==='he'?'מחייג':'Calling'} ${n}...`,'amb');
+  setTimeout(()=>{window.location.href='tel:'+n;},350);
+}
+function toast(txt,cls){
+  const c=document.getElementById('toasts');
+  const cm={red:'#CC1426',grn:'#2ECC71',amb:'#C07808','':`#E0A828`};
+  const col=cm[cls||''];
+  const d=document.createElement('div');
+  d.className='toast '+(cls||'');
+  // No innerHTML for user content — toast text is from our own code only here
+  const dot=document.createElement('div');dot.className='toast-dot';dot.style.cssText=`background:${col};box-shadow:0 0 8px ${col}88;width:10px;height:10px;border-radius:50%;flex-shrink:0;`;dot.setAttribute('aria-hidden','true');
+  const span=document.createElement('span');span.className='t-tx';span.textContent=txt;
+  const xBtn=document.createElement('button');xBtn.className='t-x';xBtn.textContent='✕';xBtn.setAttribute('aria-label','סגור');xBtn.onclick=()=>d.remove();
+  d.appendChild(dot);d.appendChild(span);d.appendChild(xBtn);
+  c.appendChild(d);
+  while(c.children.length>3)c.firstChild.remove();
+  setTimeout(()=>{if(d.parentElement)d.remove();},7000);
+}
+
+/* ═══════════════════════════════════
+   SIMULATION — live feel
+═══════════════════════════════════ */
+function startSim(){
+  const evts=[
+    {t:currentLang==='he'?'⚠️ מעקב חשוד: דיזנגוף, ת"א':'⚠️ Stalking: Dizengoff, Tel Aviv',c:'amb'},
+    {t:currentLang==='he'?'✅ שומר הגיע — נסגר, חיפה':'✅ Guardian arrived — closed, Haifa',c:'grn'},
+    {t:currentLang==='he'?'🚨 SOS חדש: ראשון לציון':'🚨 New SOS: Rishon LeZion',c:'red'},
+    {t:currentLang==='he'?'✅ אירוע טופל: ירושלים':'✅ Incident resolved: Jerusalem',c:'grn'},
+    {t:currentLang==='he'?'⚠️ אלימות: פלורנטין, ת"א':'⚠️ Violence: Florentin, Tel Aviv',c:'amb'},
+    {t:currentLang==='he'?'✅ 5 שומרים חדשים הצטרפו':'✅ 5 new guardians joined',c:'grn'},
+  ];
+  let i=0;
+  setInterval(()=>{
+    if(Math.random()>.72){
+      toast(evts[i%evts.length].t,evts[i%evts.length].c); i++;
+      const el=document.getElementById('liveN');
+      if(el){const n=parseInt(el.textContent)+(Math.random()>.5?1:-1);el.textContent=Math.max(150,n);}
+    }
+  },55000);
+}
+
+/* ═══════════════════════════════════
+   KEYBOARD SHORTCUTS
+═══════════════════════════════════ */
+document.addEventListener('keydown',e=>{
+  // Enter on onboarding step 0
+  if(e.key==='Enter'){
+    const ob=document.getElementById('ob');
+    if(ob&&!ob.classList.contains('out')&&obCurStep===0)obStep0();
+  }
+  // Escape closes open sheet
+  if(e.key==='Escape'){
+    const open=document.querySelector('.sheet.open');
+    if(open)open.classList.remove('open');
+    closeDD();
+  }
+});
+
+/* ═══════════════════════════════════
+   INIT
+═══════════════════════════════════ */
+// Apply Hebrew on load
+setLang('he');
+// Init DMS display
+updateDMSDisplay();
+
+/* ═══════════════════════════════════
+   SERVICE WORKER + PWA INSTALL
+═══════════════════════════════════ */
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').catch(()=>{});
+}
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();deferredPrompt=e;
+  setTimeout(showA2HS,3000);
+});
+function showA2HS(){
+  if(!deferredPrompt||document.querySelector('.a2hs'))return;
+  const d=document.createElement('div');d.className='a2hs';
+  d.innerHTML=`<img class="a2hs-icon" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cpath d='M60 6L112 30V68Q112 100 60 116Q8 100 8 68V30Z' fill='%230A1628' stroke='%23E0A828' stroke-width='3'/%3E%3Cg stroke='%23E0A828' stroke-width='2.5' fill='none' stroke-linejoin='round'%3E%3Cpath d='M60 32L78 62H42Z'/%3E%3Cpath d='M60 72L42 42H78Z'/%3E%3C/g%3E%3C/svg%3E" alt=""><div class="a2hs-text"><div class="a2hs-t">${currentLang==='he'?'התקן את שומר':'Install Shomer'}</div><div class="a2hs-s">${currentLang==='he'?'גישה מהירה מהמסך הראשי':'Quick access from home screen'}</div></div><button class="a2hs-btn" id="a2hs-install">${currentLang==='he'?'התקן':'Install'}</button><span class="a2hs-x" id="a2hs-close">✕</span>`;
+  document.body.appendChild(d);
+  document.getElementById('a2hs-install').onclick=async()=>{deferredPrompt.prompt();const r=await deferredPrompt.userChoice;d.remove();deferredPrompt=null;if(r.outcome==='accepted')toast(currentLang==='he'?'✓ שומר הותקן!':'✓ Shomer installed!','grn');};
+  document.getElementById('a2hs-close').onclick=()=>d.remove();
+}
+</script>
+</body>
+</html>
