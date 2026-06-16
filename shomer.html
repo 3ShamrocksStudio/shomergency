@@ -1034,6 +1034,10 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 
 </div><!-- #app -->
 
+<!-- Cloud backend: dormant (pure local PWA) until config.js holds Supabase keys. -->
+<script src="config.js"></script>
+<script src="backend.js"></script>
+
 <script>
 /* ═══════════════════════════════════════════════════
    SHOMER v12 — CORE JAVASCRIPT
@@ -1252,7 +1256,7 @@ const LANGS={
 let currentLang='he', L=LANGS.he;
 function T(k){return L[k]||LANGS.he[k]||k;}
 
-let sosActive=false, sosTimer=null;
+let sosActive=false, sosTimer=null, sosRemoteId=null;
 let alarmType='siren', alarmVol=1.0;
 let audioCtx=null, oscillators=[];
 let newUpd=0, repLock=false, menuOpen=false;
@@ -2021,6 +2025,9 @@ function triggerSOS(trigger){
     if(SS.sosHistory.length>50)SS.sosHistory=SS.sosHistory.slice(-50);
     saveStore();renderSosHistory();updateProfileStats();
   }catch(e){}
+  // Cloud: broadcast live SOS to nearby guardians (no-op in local mode).
+  sosRemoteId=null;
+  try{window.ShomerBackend&&ShomerBackend.broadcastSOS({lat:userLat,lng:userLng,trigger:trigger||'manual'}).then(id=>{sosRemoteId=id;});}catch(e){}
   const btn=document.getElementById('sos-btn');
   if(btn){btn.classList.add('active');btn.setAttribute('aria-pressed','true');}
   document.getElementById('sos-strip').classList.add('on');
@@ -2060,6 +2067,9 @@ function cancelSOS(){
   if(btn){btn.classList.remove('active');btn.setAttribute('aria-pressed','false');}
   document.getElementById('sos-strip').classList.remove('on');
   removeSOSPin();
+  // Cloud: mark the live SOS cancelled (no-op in local mode).
+  try{window.ShomerBackend&&sosRemoteId&&ShomerBackend.cancelSOS(sosRemoteId);}catch(e){}
+  sosRemoteId=null;
   toast(currentLang==='he'?'SOS בוטל — שומרים עודכנו':'SOS cancelled','');
 }
 function addSOSPin(){
@@ -2208,7 +2218,45 @@ window.addEventListener('DOMContentLoaded',()=>{
   // Textarea char count
   const ta=document.getElementById('rep-ta');
   if(ta)ta.addEventListener('input',()=>{document.getElementById('char-c').textContent=ta.value.length+' / 1000';});
+  // Cloud: register for lock-screen SOS push (no-op in local mode).
+  try{window.ShomerBackend&&ShomerBackend.registerPush();}catch(e){}
 });
+
+/* ═══════════════════════════════════
+   CLOUD — remote data handlers (called by backend.js in multi-user mode)
+═══════════════════════════════════ */
+// A community report arrived from another device — show it on the live map.
+window.onRemoteReport=function(row){
+  try{
+    if(!row||!row.id||document.getElementById('rpt-'+row.id))return; // dedupe
+    const rep={id:row.id,type:row.type,desc:row.description||'',loc:'',
+      lat:row.lat,lng:row.lng,photos:new Array(row.photo_count||0),
+      ts:row.created_at?Date.parse(row.created_at):Date.now()};
+    rep._detIdx=DETAILS.push(buildDetailFromReport(rep))-1;
+    addReportPin(rep);
+    injectReportCard(rep,true);
+  }catch(e){}
+};
+// A live SOS fired nearby — drop a pulsing red marker + alert the viewer.
+window.onRemoteSOS=function(row){
+  try{
+    if(!row||!row.id||document.getElementById('rsos-'+row.id))return; // dedupe
+    const ns='http://www.w3.org/2000/svg',g=document.getElementById('pins');
+    if(g&&row.lat!=null&&row.lng!=null){
+      const sv=geoToSVG(row.lat,row.lng);
+      const ring=document.createElementNS(ns,'circle');
+      ring.id='rsos-'+row.id;ring.setAttribute('cx',sv.x);ring.setAttribute('cy',sv.y);
+      ring.setAttribute('r','8');ring.setAttribute('fill','#CC1426');
+      ring.style.filter='drop-shadow(0 0 12px #CC1426CC)';
+      const a=document.createElementNS(ns,'animate');a.setAttribute('attributeName','opacity');
+      a.setAttribute('values','1;.3;1');a.setAttribute('dur','1s');a.setAttribute('repeatCount','indefinite');
+      ring.appendChild(a);g.appendChild(ring);
+    }
+    toast(currentLang==='he'?'🚨 SOS פעיל בקרבתך — שומר זקוק לעזרה':'🚨 SOS nearby — a guardian needs help','red');
+    pushNotify(currentLang==='he'?'🚨 שומר — SOS בקרבתך':'🚨 SHOMER — SOS nearby',
+      currentLang==='he'?'שומר בקרבתך זקוק לעזרה. פתח את המפה.':'A guardian near you needs help. Open the map.','sos-'+row.id);
+  }catch(e){}
+};
 
 /* ═══════════════════════════════════
    INCIDENT DETAIL
@@ -2460,6 +2508,8 @@ function sendReport(){
   injectReportCard(rep,false);
   renderReportsList(); updateProfileStats();
   saveStore();
+  // Cloud: publish the report to the shared safety map (no-op in local mode).
+  try{window.ShomerBackend&&ShomerBackend.syncReport(rep);}catch(e){}
   // Thumbnails are generated async (downscaled) so reports survive reload within quota.
   if(fullPhotos.length){
     Promise.all(fullPhotos.map(makeThumb)).then(th=>{
