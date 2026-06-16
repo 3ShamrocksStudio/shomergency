@@ -83,7 +83,7 @@ img{display:block;}
 .skip-link:focus{top:0;}
 
 /* ══════════ LANGUAGE BAR ══════════ */
-#lang-bar{position:fixed;top:0;left:0;right:0;z-index:9998;background:rgba(6,15,30,.92);backdrop-filter:blur(20px);height:32px;display:flex;align-items:center;justify-content:center;gap:4px;border-bottom:1px solid var(--b2);transition:height .3s,opacity .3s;}
+#lang-bar{position:fixed;top:0;left:0;right:0;z-index:9998;background:rgba(6,15,30,.92);backdrop-filter:blur(20px);height:32px;display:flex;direction:ltr;align-items:center;justify-content:center;gap:4px;border-bottom:1px solid var(--b2);transition:height .3s,opacity .3s;}
 #lang-bar.hidden{height:0;overflow:hidden;opacity:0;}
 .lbtn{padding:3px 9px;border-radius:4px;font-size:11px;font-weight:600;color:var(--tx2);cursor:pointer;transition:all .15s;border:1px solid transparent;}
 .lbtn.on{background:var(--gd);border-color:var(--b3);color:var(--g3);}
@@ -93,33 +93,35 @@ body.lb-on{--hdr-top:32px;}
 body:not(.lb-on){--hdr-top:0px;}
 
 /* ══════════ ONBOARDING ══════════ */
-#ob{position:fixed;inset:0;z-index:9999;background:radial-gradient(ellipse at 50% 18%,#1A2C50 0%,#0A1628 60%);overflow-y:auto;display:flex;flex-direction:column;align-items:center;padding-bottom:48px;}
+#ob{position:fixed;inset:0;z-index:9999;background:#070F1E;overflow-y:auto;display:flex;flex-direction:column;align-items:center;padding-bottom:14px;}
 #ob.out{opacity:0;transform:scale(.97);transition:.4s ease;pointer-events:none;}
 .ob-hero{display:flex;flex-direction:column;align-items:center;padding:48px 0 20px;position:relative;width:100%;}
 .ob-glow{position:absolute;top:44px;left:50%;transform:translateX(-50%);width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,var(--gb) 0%,transparent 70%);pointer-events:none;}
 .ob-logo{width:min(64vw,230px);height:auto;object-fit:contain;filter:drop-shadow(0 12px 34px rgba(0,0,0,.55));}
 .ob-title{font-size:40px;font-weight:900;letter-spacing:-1.5px;background:linear-gradient(135deg,#E0A828 0%,#F5C840 50%,#C09020 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-top:14px;line-height:1;}
-.ob-sub{font-size:11px;color:var(--tx2);letter-spacing:1.4px;text-transform:uppercase;margin-top:6px;margin-bottom:8px;}
-.ob-lang-pick{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;padding:0 20px;margin-bottom:28px;}
-.olb{padding:4px 11px;border:1px solid var(--b2);border-radius:20px;font-size:11px;font-weight:600;color:var(--tx2);background:var(--n3);cursor:pointer;transition:all .15s;}
-.olb.on{background:var(--gd);border-color:var(--b3);color:var(--g3);}
-.ob-steps{display:flex;gap:7px;margin-bottom:24px;}
+.ob-sub{font-size:11px;color:var(--tx2);letter-spacing:1.6px;text-transform:uppercase;margin-top:7px;margin-bottom:10px;text-shadow:0 1px 8px rgba(0,0,0,.6);}
+/* direction:ltr keeps He/En buttons in a FIXED order regardless of the active
+   language — selecting one no longer swaps their positions. */
+.ob-lang-pick{display:flex;direction:ltr;gap:7px;justify-content:center;padding:0 20px;margin-bottom:14px;}
+.olb{padding:5px 14px;border:1px solid var(--b2);border-radius:20px;font-size:12px;font-weight:600;color:var(--tx2);background:rgba(16,30,52,.7);backdrop-filter:blur(8px);cursor:pointer;transition:all .15s;}
+.olb.on{background:var(--gd);border-color:var(--b3);color:var(--g3);box-shadow:0 0 0 1px var(--b3);}
+.ob-steps{display:flex;gap:7px;margin-bottom:16px;}
 .ob-st{width:32px;height:3px;border-radius:2px;background:var(--n5);transition:background .3s;}
 .ob-st.on{background:var(--g3);}
 .ob-panel{width:100%;max-width:390px;padding:0 20px;display:none;}
 .ob-panel.active{display:block;animation:pfade .25s ease;}
 @keyframes pfade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.ob-card{background:var(--n3);border:1px solid var(--b2);border-radius:var(--r16);padding:24px;box-shadow:var(--e3);}
+.ob-card{background:linear-gradient(180deg,rgba(22,36,64,.96),rgba(16,30,52,.96));border:1px solid var(--b2);border-radius:var(--r16);padding:18px 18px 16px;box-shadow:var(--e3),inset 0 1px 0 rgba(255,255,255,.04);backdrop-filter:blur(10px);}
 .ob-card h3{font-size:17px;font-weight:800;color:var(--tx0);margin-bottom:4px;}
-.ob-card .desc{font-size:12px;color:var(--tx2);margin-bottom:20px;line-height:1.7;}
+.ob-card .desc{font-size:12px;color:var(--tx2);margin-bottom:10px;line-height:1.5;}
 .ob-f{display:block;width:100%;background:var(--n4);border:1px solid var(--b1);border-radius:var(--r12);padding:14px 15px;color:var(--tx0);font-size:16px;outline:none;transition:border-color .15s,box-shadow .15s;margin-bottom:10px;-webkit-appearance:none;}
 .ob-f:focus{border-color:var(--b3);box-shadow:0 0 0 3px rgba(224,168,40,.12);}
 .ob-f::placeholder{color:var(--tx3);}
 .ob-row{display:flex;gap:8px;}
-.ob-cta{width:100%;padding:15px;background:linear-gradient(135deg,#C09020 0%,#E0A828 60%,#F5C840 100%);border-radius:var(--r12);color:var(--n0);font-size:15px;font-weight:800;letter-spacing:.3px;box-shadow:0 4px 24px var(--gg);transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:6px;}
+.ob-cta{width:100%;padding:13px;background:linear-gradient(135deg,#C09020 0%,#E0A828 60%,#F5C840 100%);border-radius:var(--r12);color:var(--n0);font-size:15px;font-weight:800;letter-spacing:.3px;box-shadow:0 4px 24px var(--gg);transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:4px;}
 .ob-cta:hover{filter:brightness(1.08);transform:translateY(-1px);box-shadow:0 6px 28px var(--gg);}
 .ob-cta:active{transform:scale(.97);}
-.ob-back{width:100%;padding:12px;background:var(--n4);border:1px solid var(--b1);border-radius:var(--r12);color:var(--tx2);font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:6px;margin-top:8px;transition:background .15s;}
+.ob-back{width:100%;padding:9px;background:var(--n4);border:1px solid var(--b1);border-radius:var(--r12);color:var(--tx2);font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:6px;margin-top:6px;transition:background .15s;}
 .ob-back:hover{background:var(--n5);}
 /* Geo */
 .geo-box{background:var(--n4);border:1px solid var(--b2);border-radius:var(--r12);padding:18px;text-align:center;margin-bottom:16px;transition:all .3s;}
@@ -130,21 +132,31 @@ body:not(.lb-on){--hdr-top:0px;}
 .geo-ok .geo-t{color:#4CD888;}
 .geo-err{border-color:rgba(192,120,8,.4);background:rgba(192,120,8,.08);}
 .geo-err .geo-t{color:#E09030;}
-/* Alarm in OB */
-.ob-alarms{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
-.ob-alarm{background:var(--n4);border:2px solid var(--b1);border-radius:var(--r12);padding:14px 15px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .15s;}
-.ob-alarm-ic{font-size:26px;flex-shrink:0;}
-.ob-alarm-info .nm{font-size:14px;font-weight:700;color:var(--tx0);}
-.ob-alarm-info .ds{font-size:11px;color:var(--tx2);margin-top:2px;line-height:1.5;}
-.ob-alarm.sel{border-color:var(--b4);background:var(--rb);}
-.ob-alarm.sel .nm{color:#FF7080;}
+/* Alarm options — compact, vivid, tap-to-preview */
+.ob-alarms{display:flex;flex-direction:column;gap:6px;margin-bottom:9px;}
+.ob-alarm{background:rgba(28,44,78,.5);border:1.5px solid var(--b1);border-radius:var(--r12);padding:8px 11px;display:flex;align-items:center;gap:11px;cursor:pointer;transition:all .15s;}
+.ob-alarm:hover{border-color:var(--b2);background:rgba(36,52,96,.55);}
+.ob-alarm-ic{font-size:21px;flex-shrink:0;}
+.ob-alarm-info{flex:1;min-width:0;}
+.ob-alarm-info .nm{font-size:13px;font-weight:700;color:var(--tx0);}
+.ob-alarm-info .ds{font-size:10.5px;color:var(--tx2);margin-top:1px;line-height:1.4;}
+.ob-alarm.sel{border-color:#FF5466;background:linear-gradient(100deg,rgba(232,34,52,.22),rgba(232,34,52,.05));box-shadow:0 0 0 1px rgba(232,34,52,.45),0 4px 16px rgba(232,34,52,.20);}
+.ob-alarm.sel .nm{color:#FF8089;}
+.ob-alarm-play{flex-shrink:0;font-size:10px;color:var(--tx3);width:23px;height:23px;border-radius:50%;border:1px solid var(--b2);display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.ob-alarm.sel .ob-alarm-play{color:#FF8089;border-color:rgba(255,84,102,.55);background:rgba(232,34,52,.14);}
+.alarm-stop-btn{width:100%;padding:11px;background:rgba(232,34,52,.14);border:1.5px solid rgba(232,34,52,.5);border-radius:var(--r12);color:#FF8089;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px;transition:all .15s;}
+.alarm-stop-btn:hover{background:rgba(232,34,52,.22);}
+.ob-defaults-note{display:flex;align-items:flex-start;gap:8px;background:rgba(14,136,64,.10);border:1px solid rgba(14,136,64,.30);border-radius:var(--r12);padding:8px 11px;margin-bottom:10px;font-size:10.5px;color:var(--tx1);line-height:1.45;}
+.ob-defaults-note .odn-ic{font-size:15px;flex-shrink:0;line-height:1.2;}
+.ob-defaults-note strong{color:var(--g3);font-weight:700;}
 /* Dead man notice */
 .dms-notice{background:linear-gradient(135deg,rgba(204,20,38,.1),rgba(24,82,192,.1));border:1px solid var(--b4);border-radius:var(--r12);padding:14px;margin-bottom:16px;font-size:12px;color:var(--tx1);line-height:1.7;}
 .dms-notice strong{color:var(--g3);}
 .vol-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
 .vol-lbl{font-size:12px;font-weight:600;color:var(--tx1);}
 .vol-val{font-size:16px;font-weight:800;color:var(--g3);}
-.ob-vol-wrap{background:var(--n4);border:1px solid var(--b1);border-radius:var(--r12);padding:14px;margin-bottom:12px;}
+.ob-vol-wrap{background:rgba(28,44,78,.5);border:1px solid var(--b1);border-radius:var(--r12);padding:9px 13px;margin-bottom:9px;}
+.ob-vol-wrap .vol-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;}
 input[type=range]{width:100%;-webkit-appearance:none;height:6px;background:var(--n5);border-radius:3px;outline:none;}
 input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#C09020,#E0A828);border:2.5px solid var(--n1);box-shadow:0 2px 8px var(--gg);cursor:pointer;}
 input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,40,.2);}
@@ -158,7 +170,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 #app.on{display:block;}
 
 /* ══════════ MAP ══════════ */
-#map-wrap{position:absolute;inset:0;overflow:hidden;background:#0c1a30;}
+#map-wrap{position:absolute;inset:0;overflow:hidden;background:#20242b;}
 
 /* ══════════ HEADER ══════════ */
 .hdr{position:absolute;top:var(--hdr-top,0px);left:0;right:0;z-index:600;height:var(--hdr);background:rgba(8,18,36,.97);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--b3);display:flex;align-items:center;padding:0 12px;gap:0;box-shadow:0 2px 24px rgba(0,0,0,.6);}
@@ -441,9 +453,10 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 .branding{text-align:center;font-size:10px;color:var(--tx3);letter-spacing:.5px;padding:12px 0 4px;}
 .branding a{color:var(--g2);text-decoration:none;}
 /* Studio credit / copyright footer */
-.studio-credit{display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 16px 8px;}
-.studio-credit img{height:22px;width:auto;max-width:80%;opacity:.92;}
-.studio-credit .cr{font-size:10px;color:var(--tx3);letter-spacing:.3px;text-align:center;line-height:1.7;direction:ltr;}
+.studio-credit{display:flex;flex-direction:row;align-items:center;justify-content:center;gap:9px;padding:9px 16px 4px;direction:ltr;flex-wrap:wrap;}
+.studio-credit .sc-badge{display:inline-flex;align-items:center;background:#181C24;border:1px solid rgba(136,152,184,.16);border-radius:7px;padding:4px 8px;}
+.studio-credit .sc-badge img{height:15px;width:auto;display:block;opacity:.95;}
+.studio-credit .cr{font-size:10.5px;color:var(--tx3);letter-spacing:.3px;line-height:1.4;}
 .studio-credit .cr b{color:var(--g2);font-weight:700;}
 /* Unobtrusive single-line mark for operational screens */
 .mini-credit{text-align:center;font-size:9.5px;color:var(--tx3);letter-spacing:.4px;opacity:.7;padding:18px 0 4px;}
@@ -455,10 +468,10 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 ::-webkit-scrollbar-thumb{background:var(--n5);border-radius:2px;}
 
 /* ══════════ LEAFLET — real map, brand-themed ══════════ */
-#map{position:absolute;inset:0;background:#0c1a30;z-index:1;}
-/* Subtle harmonization of OSM tiles with the navy/gold brand */
-.leaflet-tile-pane{filter:saturate(.82) brightness(.99) contrast(1.02);}
-.leaflet-container{background:#0c1a30;font-family:var(--font-main);outline:none;}
+#map{position:absolute;inset:0;background:#20242b;z-index:1;}
+/* Neutral, desaturated basemap so the coloured event dots dominate. */
+.leaflet-tile-pane{filter:grayscale(.92) brightness(.96) contrast(1.04);}
+.leaflet-container{background:#20242b;font-family:var(--font-main);outline:none;}
 .leaflet-control-attribution{background:rgba(8,18,36,.78)!important;color:var(--tx3)!important;font-size:9px!important;backdrop-filter:blur(6px);border-radius:6px 0 0 0;padding:2px 6px!important;}
 .leaflet-control-attribution a{color:var(--g2)!important;}
 .leaflet-bar,.leaflet-control-zoom{display:none!important;} /* we use our own brand controls */
@@ -494,19 +507,20 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 .mk-me .dot{position:absolute;left:50%;top:50%;width:15px;height:15px;border-radius:50%;background:#2070E0;border:3px solid #fff;transform:translate(-50%,-50%);box-shadow:0 0 0 1px rgba(0,0,0,.2),0 2px 8px rgba(32,112,224,.7);z-index:2;}
 @keyframes mePulse{0%{width:15px;height:15px;opacity:.5}100%{width:46px;height:46px;opacity:0}}
 /* Statistical hotspot — soft halo ring */
-.mk-stat{width:30px;height:30px;}
-.mk-stat .halo{position:absolute;left:50%;top:50%;width:30px;height:30px;border-radius:50%;transform:translate(-50%,-50%);opacity:.18;}
-.mk-stat .core{position:absolute;left:50%;top:50%;width:16px;height:16px;border-radius:50%;border:2.5px solid #fff;transform:translate(-50%,-50%);box-shadow:0 2px 6px rgba(0,0,0,.45);z-index:2;}
-.mk-stat .core::after{content:'';position:absolute;inset:2px;border-radius:50%;border:1px solid rgba(255,255,255,.5);}
-/* Legend — premium card */
-.map-legend{position:absolute;bottom:calc(var(--nav) + 14px);right:10px;z-index:400;background:rgba(8,18,36,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--b3);border-radius:var(--r12);padding:11px 13px 10px;box-shadow:var(--e2);max-width:168px;}
-.legend-ttl{font-size:9px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--g3);margin-bottom:8px;display:flex;align-items:center;gap:5px;}
+.mk-stat{width:32px;height:32px;}
+.mk-stat .halo{position:absolute;left:50%;top:50%;width:32px;height:32px;border-radius:50%;transform:translate(-50%,-50%);opacity:.24;filter:blur(1.5px);}
+.mk-stat .core{position:absolute;left:50%;top:50%;width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,.95);transform:translate(-50%,-50%);box-shadow:0 2px 7px rgba(0,0,0,.5),0 0 0 1px rgba(0,0,0,.22);z-index:2;}
+/* Legend — compact, collapsible card */
+.map-legend{position:absolute;bottom:calc(var(--nav) + 14px);right:10px;z-index:400;background:rgba(10,16,26,.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--b3);border-radius:var(--r12);box-shadow:var(--e2);max-width:172px;overflow:hidden;}
+.legend-hd{display:flex;align-items:center;gap:6px;width:100%;padding:8px 11px;font-size:9.5px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;color:var(--g3);cursor:pointer;text-align:start;}
+.legend-chev{margin-inline-start:auto;font-size:9px;color:var(--tx2);transition:transform .2s;}
+.map-legend:not(.collapsed) .legend-chev{transform:rotate(90deg);}
+.legend-body{padding:0 11px 9px;}
+.map-legend.collapsed .legend-body{display:none;}
 .leg{display:flex;align-items:center;gap:8px;font-size:10.5px;font-weight:600;color:var(--tx1);margin-bottom:5px;}
 .leg:last-child{margin-bottom:0;}
-.ldc{width:11px;height:11px;border-radius:50%;flex-shrink:0;border:1.5px solid rgba(255,255,255,.85);box-shadow:0 1px 3px rgba(0,0,0,.4);}
+.ldc{width:10px;height:10px;border-radius:50%;flex-shrink:0;border:1.5px solid rgba(255,255,255,.85);box-shadow:0 1px 3px rgba(0,0,0,.4);}
 .legend-foot{font-size:8.5px;color:var(--tx3);margin-top:8px;padding-top:7px;border-top:1px solid var(--b1);line-height:1.5;}
-.legend-toggle{position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:6px;background:rgba(136,152,184,.12);border:1px solid var(--b1);display:none;align-items:center;justify-content:center;font-size:11px;color:var(--tx2);}
-.map-legend.collapsed .leg,.map-legend.collapsed .legend-foot,.map-legend.collapsed .legend-ttl span{display:none;}
 .map-controls{position:absolute;top:calc(var(--hdr-top,0px) + var(--hdr) + 10px);right:10px;z-index:400;display:flex;flex-direction:column;gap:6px;}
 .mc{width:38px;height:38px;border-radius:var(--r12);background:rgba(8,18,36,.92);backdrop-filter:blur(12px);border:1px solid var(--b3);box-shadow:var(--e2);display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:700;color:var(--g3);transition:all .15s;}
 .mc:hover{background:rgba(16,30,52,.96);transform:translateY(-1px);}
@@ -525,21 +539,18 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 /* ══════════ ONBOARDING — premium textured navy ══════════ */
 #ob{background:#070F1E;}
 .ob-bg{position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:url('SHOMER-bg.jpg') center center/cover no-repeat;}
+/* Dark scrim keeps text legible over the photo background. */
+.ob-bg::before{content:'';position:absolute;inset:0;
   background:
-    radial-gradient(ellipse 70% 50% at 50% 0%,rgba(224,168,40,.10) 0%,transparent 55%),
-    radial-gradient(ellipse 90% 60% at 50% 16%,#16284A 0%,#0A1628 45%,#070F1E 100%);}
-.ob-bg::before{content:'';position:absolute;inset:0;opacity:.5;
-  background-image:radial-gradient(rgba(136,152,184,.07) 1px,transparent 1px);background-size:22px 22px;
-  -webkit-mask-image:radial-gradient(ellipse 80% 70% at 50% 30%,#000 30%,transparent 75%);
-          mask-image:radial-gradient(ellipse 80% 70% at 50% 30%,#000 30%,transparent 75%);}
-.ob-hero{padding:54px 0 18px;}
-.ob-logo{width:min(64vw,230px);}
+    radial-gradient(ellipse 80% 50% at 50% 8%,rgba(224,168,40,.10) 0%,transparent 55%),
+    linear-gradient(180deg,rgba(7,15,30,.62) 0%,rgba(7,15,30,.74) 42%,rgba(7,15,30,.90) 100%);}
+.ob-hero{padding:12px 0 4px;}
+.ob-logo{width:min(34vw,120px);}
 .ob-shieldwrap{position:relative;display:flex;align-items:center;justify-content:center;}
 .ob-title{font-size:46px;letter-spacing:-2px;}
 .name-field-wrap{position:relative;}
-.name-dice{position:absolute;top:9px;inset-inline-end:9px;width:34px;height:34px;border-radius:9px;background:var(--gd);border:1px solid var(--b3);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--g3);cursor:pointer;transition:all .15s;}
-.name-dice:hover{background:var(--gg);transform:rotate(12deg);}
-.name-dice:active{transform:scale(.9) rotate(20deg);}
+.name-edit-ic{position:absolute;top:14px;inset-inline-end:14px;font-size:13px;color:var(--tx3);pointer-events:none;opacity:.8;}
 .name-hint{font-size:10px;color:var(--tx3);margin:-4px 0 12px;line-height:1.5;display:flex;align-items:center;gap:5px;}
 </style>
 </head>
@@ -584,9 +595,9 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
       <p class="desc" id="ob-d0">מפת בטיחות חיה · SOS + אזעקה מיידית · עזרה הדדית</p>
       <div class="name-field-wrap">
         <input class="ob-f" id="ob-name" type="text" autocomplete="given-name" maxlength="40" placeholder="שם פרטי" aria-label="שם פרטי" style="margin-bottom:6px">
-        <button type="button" class="name-dice" id="name-dice" onclick="randomizeName()" aria-label="שם אקראי" title="שם אקראי">🎲</button>
+        <span class="name-edit-ic" aria-hidden="true">✎</span>
       </div>
-      <p class="name-hint" id="name-hint">✦ <span id="name-hint-txt">מילאנו שם אקראי — אפשר לערוך או 🎲 להגריל</span></p>
+      <p class="name-hint" id="name-hint">✦ <span id="name-hint-txt">נוצר אוטומטית — אפשר לערוך</span></p>
       <input class="ob-f" id="ob-phone" type="tel" autocomplete="tel" maxlength="15" placeholder="050-000-0000" inputmode="tel" aria-label="מספר טלפון">
       <p style="font-size:11px;color:var(--tx3);margin:-4px 0 12px;line-height:1.6" id="ob-why">מספר הטלפון משמש לשליחת עזרה. אופציונלי במצב דמו.</p>
       <button class="ob-cta" id="ob-cta0" onclick="obStep0()"><span id="ob-cta0-t">המשך ←</span></button>
@@ -609,36 +620,37 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
     </div>
   </div>
 
-  <!-- STEP 2: Alarm + DMS + Shake -->
+  <!-- STEP 2: Alarm choice (shake/DMS use sensible defaults — configured in Settings) -->
   <div class="ob-panel" id="step2">
     <div class="ob-card">
       <h3 id="ob-h2">🚨 הגדרות חירום</h3>
-      <p class="desc" id="ob-d2">בחר אזעקה — תופעל מיד עם לחיצת SOS בעוצמה מרבית.</p>
+      <p class="desc" id="ob-d2">הקש אזעקה כדי לשמוע אותה. היא תופעל עם לחיצת SOS.</p>
       <div class="ob-alarms" id="ob-alarms" role="group" aria-label="סוג אזעקה">
         <div class="ob-alarm sel" onclick="obPickAlarm(this,'siren')" role="radio" aria-checked="true" tabindex="0">
           <div class="ob-alarm-ic" aria-hidden="true">🚨</div>
           <div class="ob-alarm-info"><div class="nm" id="al1-nm">סירנת ניידת</div><div class="ds" id="al1-ds">גלי צליל 440→1800Hz — הכי מזוהה כחירום</div></div>
+          <span class="ob-alarm-play" aria-hidden="true">▶</span>
         </div>
         <div class="ob-alarm" onclick="obPickAlarm(this,'horn')" role="radio" aria-checked="false" tabindex="0">
           <div class="ob-alarm-ic" aria-hidden="true">📢</div>
           <div class="ob-alarm-info"><div class="nm" id="al2-nm">קרן חירום</div><div class="ds" id="al2-ds">פיצוצי square 1200Hz — מנפץ ריכוז</div></div>
+          <span class="ob-alarm-play" aria-hidden="true">▶</span>
         </div>
         <div class="ob-alarm" onclick="obPickAlarm(this,'pulse')" role="radio" aria-checked="false" tabindex="0">
           <div class="ob-alarm-ic" aria-hidden="true">⚡</div>
           <div class="ob-alarm-info"><div class="nm" id="al3-nm">פולסים מהירים</div><div class="ds" id="al3-ds">2800Hz — פיזית צורם ביותר</div></div>
+          <span class="ob-alarm-play" aria-hidden="true">▶</span>
         </div>
       </div>
+      <button class="alarm-stop-btn" id="ob-alarm-stop" onclick="stopPreview()" style="display:none">⏹ <span id="ob-stop-lbl">עצור צליל</span></button>
       <div class="ob-vol-wrap">
-        <div class="vol-row"><span class="vol-lbl" id="vol-lbl">עוצמת קול</span><span class="vol-val" id="ob-vv">100%</span></div>
-        <input type="range" id="ob-vol-slider" min="10" max="100" value="100" aria-label="עוצמת קול" oninput="document.getElementById('ob-vv').textContent=this.value+'%';alarmVol=this.value/100;" onchange="SS.alarm.vol=alarmVol;saveStore();">
+        <div class="vol-row"><span class="vol-lbl" id="vol-lbl">עוצמת קול</span><span class="vol-val" id="ob-vv">60%</span></div>
+        <input type="range" id="ob-vol-slider" min="10" max="100" value="60" aria-label="עוצמת קול" oninput="document.getElementById('ob-vv').textContent=this.value+'%';alarmVol=this.value/100;" onchange="SS.alarm.vol=alarmVol;saveStore();">
       </div>
-      <button class="test-alarm-btn" onclick="testAlarm()" id="test-btn">🔊 <span id="test-lbl">בדוק אזעקה</span></button>
-      <div class="shake-notice">
-        <div class="shake-ic" aria-hidden="true">📳</div>
-        <div id="shake-notice-txt"><strong>Shake-to-SOS:</strong> 5 ניעורים חזקים מפעילים SOS אוטומטי — גם בלי לפתוח האפליקציה.</div>
+      <div class="ob-defaults-note">
+        <span class="odn-ic" aria-hidden="true">🛡️</span>
+        <span id="ob-defaults-txt"><strong>Shake-to-SOS</strong> פעיל · <strong>Dead Man's Switch</strong> כבוי. אפשר לשנות בכל עת בהגדרות.</span>
       </div>
-      <div class="dms-notice" id="dms-notice-ob">
-        <strong>Dead Man's Switch:</strong> אם לא אישרת "הכל בסדר" תוך X דקות — המערכת שולחת SOS אוטומטי. מושלם להליכות לבד.</div>
       <button class="ob-cta" onclick="obFinish()" id="ob-finish-btn">✓ <span id="ob-finish-t">כניסה לשומר</span></button>
       <button class="ob-back" onclick="goStep(1)" id="ob-back2">← חזרה</button>
     </div>
@@ -646,8 +658,8 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 
   <!-- Studio credit / copyright footer -->
   <footer class="studio-credit">
-    <img src="3shamrocks.png" alt="3Shamrocks Studio" width="160" height="24">
-    <div class="cr">SHOMER<span class="tm">™</span> (שומר) — <b>3Shamrocks Studio</b><br>© 2026 3Shamrocks Studio · כל הזכויות שמורות · All rights reserved.</div>
+    <span class="sc-badge"><img src="3shamrocks.png" alt="3Shamrocks Studio" width="100" height="15"></span>
+    <span class="cr">© 2026 <b>3Shamrocks Studio</b> · All rights reserved.</span>
   </footer>
 </div>
 
@@ -665,18 +677,19 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
       <div class="data-banner-s" id="data-banner-s">מקור: הלמ"ס · משטרת ישראל (data.gov.il)</div>
     </div>
     <!-- Legend -->
-    <div class="map-legend" id="map-legend" aria-label="מקרא מפה">
-      <div class="legend-ttl"><span aria-hidden="true">🛡️</span><span id="legend-ttl-txt">מקרא מפה</span></div>
-      <button class="legend-toggle" id="legend-toggle" onclick="document.getElementById('map-legend').classList.toggle('collapsed')" aria-label="הסתר מקרא">▾</button>
-      <div class="leg"><div class="ldc" style="background:#E8182C;box-shadow:0 0 7px #E8182C" aria-hidden="true"></div><span id="l7">SOS חי</span></div>
-      <div class="leg"><div class="ldc" style="background:#CC1426" aria-hidden="true"></div><span id="l1">עבירת מין</span></div>
-      <div class="leg"><div class="ldc" style="background:#EA5A00" aria-hidden="true"></div><span id="l2">תקיפה / אלימות</span></div>
-      <div class="leg"><div class="ldc" style="background:#C07808" aria-hidden="true"></div><span id="l3">הטרדה / מעקב</span></div>
-      <div class="leg"><div class="ldc" style="background:#1852C0" aria-hidden="true"></div><span id="l4">גנבה / רכוש</span></div>
-      <div class="leg"><div class="ldc" style="background:#6B32D8" aria-hidden="true"></div><span id="l5">סמים</span></div>
-      <div class="leg"><div class="ldc" style="background:#0E8840" aria-hidden="true"></div><span id="l6">רפואי</span></div>
-      <div class="leg"><div class="ldc" style="background:#2070E0;border-color:#fff" aria-hidden="true"></div><span id="l8">המיקום שלי</span></div>
-      <div class="legend-foot" id="legend-foot">צבעים = קטגוריה. סמני ערים = סקירה סטטיסטית מצרפית, לא אירוע ספציפי.</div>
+    <div class="map-legend collapsed" id="map-legend" aria-label="מקרא מפה">
+      <button class="legend-hd" onclick="toggleLegend()" aria-expanded="false" aria-controls="legend-body"><span aria-hidden="true">🛡️</span><span id="legend-ttl-txt">מקרא מפה</span><span class="legend-chev" id="legend-chev" aria-hidden="true">▸</span></button>
+      <div class="legend-body" id="legend-body">
+        <div class="leg"><div class="ldc" style="background:#E8182C;box-shadow:0 0 7px #E8182C" aria-hidden="true"></div><span id="l7">SOS חי</span></div>
+        <div class="leg"><div class="ldc" style="background:#CC1426" aria-hidden="true"></div><span id="l1">עבירת מין</span></div>
+        <div class="leg"><div class="ldc" style="background:#EA5A00" aria-hidden="true"></div><span id="l2">תקיפה / אלימות</span></div>
+        <div class="leg"><div class="ldc" style="background:#C07808" aria-hidden="true"></div><span id="l3">הטרדה / מעקב</span></div>
+        <div class="leg"><div class="ldc" style="background:#1852C0" aria-hidden="true"></div><span id="l4">גנבה / רכוש</span></div>
+        <div class="leg"><div class="ldc" style="background:#6B32D8" aria-hidden="true"></div><span id="l5">סמים</span></div>
+        <div class="leg"><div class="ldc" style="background:#0E8840" aria-hidden="true"></div><span id="l6">רפואי</span></div>
+        <div class="leg"><div class="ldc" style="background:#2070E0;border-color:#fff" aria-hidden="true"></div><span id="l8">המיקום שלי</span></div>
+        <div class="legend-foot" id="legend-foot">צבעים = קטגוריה. סמני ערים = סקירה סטטיסטית מצרפית, לא אירוע ספציפי.</div>
+      </div>
     </div>
     <!-- Controls -->
     <div class="map-controls" role="group" aria-label="שליטה במפה">
@@ -893,21 +906,25 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
         <div class="ob-alarm sel" onclick="pickAlarm(this,'siren')" role="radio" aria-checked="true" tabindex="0">
           <div class="ob-alarm-ic" aria-hidden="true">🚨</div>
           <div class="ob-alarm-info"><div class="nm" id="sal1-nm">סירנת ניידת</div><div class="ds" id="sal1-ds">גלי צליל 620→3500Hz</div></div>
+          <span class="ob-alarm-play" aria-hidden="true">▶</span>
         </div>
         <div class="ob-alarm" onclick="pickAlarm(this,'horn')" role="radio" aria-checked="false" tabindex="0">
           <div class="ob-alarm-ic" aria-hidden="true">📢</div>
           <div class="ob-alarm-info"><div class="nm" id="sal2-nm">צופר תקיפה</div><div class="ds" id="sal2-ds">אזעקת קרב מאיימת + תת-בס</div></div>
+          <span class="ob-alarm-play" aria-hidden="true">▶</span>
         </div>
         <div class="ob-alarm" onclick="pickAlarm(this,'pulse')" role="radio" aria-checked="false" tabindex="0">
           <div class="ob-alarm-ic" aria-hidden="true">⚡</div>
           <div class="ob-alarm-info"><div class="nm" id="sal3-nm">הדף סוני</div><div class="ds" id="sal3-ds">צרחה דו-גוונית חודרת</div></div>
+          <span class="ob-alarm-play" aria-hidden="true">▶</span>
         </div>
       </div>
       <div class="ob-vol-wrap mb12">
-        <div class="vol-row"><span class="vol-lbl">עוצמת קול</span><span class="vol-val" id="vol-val">100%</span></div>
-        <input type="range" id="vol-slider" min="10" max="100" value="100" aria-label="עוצמת קול" oninput="document.getElementById('vol-val').textContent=this.value+'%';alarmVol=this.value/100;" onchange="SS.alarm.vol=alarmVol;saveStore();">
+        <div class="vol-row"><span class="vol-lbl">עוצמת קול</span><span class="vol-val" id="vol-val">60%</span></div>
+        <input type="range" id="vol-slider" min="10" max="100" value="60" aria-label="עוצמת קול" oninput="document.getElementById('vol-val').textContent=this.value+'%';alarmVol=this.value/100;" onchange="SS.alarm.vol=alarmVol;saveStore();">
       </div>
-      <button class="test-alarm-btn mb16" onclick="testAlarm()">🔊 בדוק אזעקה עכשיו</button>
+      <p style="font-size:11px;color:var(--tx3);margin:-4px 0 12px;line-height:1.55" id="alarm-tap-hint">הקש על אזעקה למעלה כדי לשמוע אותה.</p>
+      <button class="alarm-stop-btn" id="set-alarm-stop" onclick="stopPreview()" style="display:none">⏹ עצור צליל</button>
       <button class="cta-red" onclick="saveAlarmSettings()">✓ שמור הגדרות</button>
     </div>
   </div>
@@ -953,7 +970,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
       <button class="add-c mb20" onclick="toast('בקרוב: הוספת אנשי קשר','amb')">+ הוסף איש קשר</button>
       <div class="sec-cap mb12" id="set-lang-lbl">שפה</div>
       <div class="set-grp" style="padding:10px 14px;">
-        <div style="display:flex;gap:6px;flex-wrap:wrap;" id="set-lang-btns">
+        <div style="display:flex;direction:ltr;gap:6px;flex-wrap:wrap;" id="set-lang-btns">
           <button class="olb on" onclick="setLang('he')" lang="he">🇮🇱 עברית</button>
           <button class="olb" onclick="setLang('en')" lang="en">🇬🇧 English</button>
         </div>
@@ -980,8 +997,8 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
       <div class="sr-sb" id="reset-hint" style="margin:-10px 2px 16px;line-height:1.6">מוחק פרופיל, דיווחים, היסטוריית SOS והגדרות — וחוזר להרשמה.</div>
       <button style="width:100%;padding:13px;border:1px solid var(--b1);border-radius:var(--r12);background:var(--n3);font-size:13px;font-weight:600;color:#FF7080;margin-top:8px;cursor:pointer;" onclick="toast('יציאה בוצעה','red')">יציאה מהחשבון</button>
       <footer class="studio-credit">
-        <img src="3shamrocks.png" alt="3Shamrocks Studio" width="160" height="24">
-        <div class="cr">SHOMER<span class="tm">™</span> (שומר) — a <b>3Shamrocks Studio</b> product<br>© 2026 3Shamrocks Studio · כל הזכויות שמורות · All rights reserved.</div>
+        <span class="sc-badge"><img src="3shamrocks.png" alt="3Shamrocks Studio" width="100" height="15"></span>
+        <span class="cr">© 2026 <b>3Shamrocks Studio</b> · All rights reserved.</span>
       </footer>
     </div>
   </div>
@@ -1060,7 +1077,7 @@ const LANGS={
     ob_h0:'יצירת חשבון שומר',ob_d0:'מפת בטיחות חיה · SOS + אזעקה מיידית · עזרה הדדית',
     ob_phone:'050-000-0000 *',ob_why:'* מספר הטלפון משמש לאימות ולשליחת עזרה. לא ישמש לשיווק.',
     ob_h1:'📍 אישור מיקום',ob_d1:'נדרש לשליחת SOS מיידי לשומרים בקרבתך.',
-    ob_h2:'🚨 הגדרות חירום',ob_d2:'בחר אזעקה — תופעל מיד עם לחיצת SOS.',
+    ob_h2:'🚨 הגדרות חירום',ob_d2:'הקש אזעקה כדי לשמוע אותה. היא תופעל עם לחיצת SOS.',
     geo_need:'נדרש אישור מיקום',geo_wait:'מחפש מיקום...',geo_ok:'מיקום אושר!',geo_err:'לא ניתן לאתר מיקום',
     geo_allow:'📍 אפשר גישה למיקום',geo_next:'← המשך להגדרות חירום',geo_retry:'↩ נסה שוב',geo_skip:'דלג (מוגבל)',
     al1:'סירנת ניידת',al1d:'גלי צליל 620→3500Hz — הכי מזוהה כחירום',al2:'צופר תקיפה',al2d:'אזעקת קרב מאיימת — גלי דיסוננס + תת-בס',al3:'הדף סוני',al3d:'צרחה דו-גוונית חודרת — להבריח תוקף',
@@ -1093,7 +1110,7 @@ const LANGS={
     ob_h0:'Create your Shomer account',ob_d0:'Live safety map · SOS + instant alarm · mutual aid',
     ob_phone:'Phone number *',ob_why:'* Your phone is used for verification and sending help. Never for marketing.',
     ob_h1:'📍 Location access',ob_d1:'Required to send SOS instantly to guardians nearby.',
-    ob_h2:'🚨 Emergency settings',ob_d2:'Choose your alarm — fires immediately on SOS.',
+    ob_h2:'🚨 Emergency settings',ob_d2:'Tap an alarm to hear it. It fires when you trigger SOS.',
     geo_need:'Location access needed',geo_wait:'Locating...',geo_ok:'Location confirmed!',geo_err:'Could not locate you',
     geo_allow:'📍 Allow location access',geo_next:'Continue →',geo_retry:'↩ Retry',geo_skip:'Skip (limited)',
     al1:'Police siren',al1d:'620→3500Hz sweep — most recognizable',al2:'Air-raid siren',al2d:'Menacing battle-siren wail + sub-bass',al3:'Sonic deterrent',al3d:'Piercing dual-tone scream — scares attackers',
@@ -1280,7 +1297,7 @@ let SS={
   onboarded:false,
   lang:'he',
   user:{name:'',phone:''},
-  alarm:{type:'siren',vol:1.0},
+  alarm:{type:'siren',vol:0.6},
   shake:{enabled:true,sensitivity:22},
   dms:{interval:5,active:false,deadline:0},
   settings:{radius:5,toggles:{}},
@@ -1621,7 +1638,7 @@ function applyTranslations(){
   setText('ob-h0',T('ob_h0')); setText('ob-d0',T('ob_d0'));
   const phone=document.getElementById('ob-phone');if(phone)phone.placeholder=T('ob_phone');
   const nmInp=document.getElementById('ob-name');if(nmInp)nmInp.placeholder=currentLang==='he'?'שם פרטי':currentLang==='ar'?'الاسم الأول':currentLang==='ru'?'Имя':currentLang==='fr'?'Prénom':currentLang==='am'?'የመጀመሪያ ስም':'First name';
-  setText('name-hint-txt',currentLang==='he'?'מילאנו שם אקראי — ערכו אותו או 🎲 להגרלה':currentLang==='ar'?'املأنا اسماً عشوائياً — عدّله أو 🎲 للتبديل':currentLang==='ru'?'Случайное имя — измените или 🎲':currentLang==='fr'?'Nom aléatoire — modifiez ou 🎲':currentLang==='am'?'የዘፈቀደ ስም — ያስተካክሉ ወይም 🎲':'Random name filled — edit it or 🎲 to reroll');
+  setText('name-hint-txt',currentLang==='he'?'נוצר אוטומטית — אפשר לערוך':'Auto-generated — tap to edit');
   setText('ob-why',T('ob_why'));
   setText('ob-h1',T('ob_h1')); setText('ob-d1',T('ob_d1'));
   setText('ob-h2',T('ob_h2')); setText('ob-d2',T('ob_d2'));
@@ -1642,8 +1659,9 @@ function applyTranslations(){
   setText('sal3-nm',T('al3'));setText('sal3-ds',T('al3d'));
   setText('vol-lbl',T('vol'));
   const tl=document.getElementById('test-lbl');if(tl)tl.textContent=T('test');
-  const sn=document.getElementById('shake-notice-txt');if(sn)sn.innerHTML=T('shake');
-  const dn=document.getElementById('dms-notice-ob');if(dn)dn.innerHTML=T('dms_ob');
+  const dn=document.getElementById('ob-defaults-txt');if(dn)dn.innerHTML=currentLang==='he'?'<strong>Shake-to-SOS</strong> פעיל · <strong>Dead Man\'s Switch</strong> כבוי. אפשר לשנות בכל עת בהגדרות.':'<strong>Shake-to-SOS</strong> on · <strong>Dead Man\'s Switch</strong> off. Change anytime in Settings.';
+  const stp=document.getElementById('ob-stop-lbl');if(stp)stp.textContent=currentLang==='he'?'עצור צליל':'Stop sound';
+  const ath=document.getElementById('alarm-tap-hint');if(ath)ath.textContent=currentLang==='he'?'הקש על אזעקה למעלה כדי לשמוע אותה.':'Tap an alarm above to hear it.';
   // Nav
   setText('nav-map',T('nav_map'));setText('nav-upd',T('nav_upd'));setText('nav-sos',T('nav_sos'));
   // Dropdown
@@ -1751,6 +1769,7 @@ function obStep0(){
   goStep(1);
 }
 function goStep(n){
+  try{stopPreview();}catch(e){} // stop any alarm preview when changing onboarding steps
   document.getElementById('step'+obCurStep).classList.remove('active');
   document.getElementById('st'+obCurStep).classList.remove('on');
   obCurStep=Math.max(0,Math.min(2,n));
@@ -1803,8 +1822,24 @@ function obPickAlarm(el,type){
   document.querySelectorAll('#ob-alarms .ob-alarm').forEach(a=>{a.classList.remove('sel');a.setAttribute('aria-checked','false');});
   el.classList.add('sel'); el.setAttribute('aria-checked','true'); alarmType=type;
   SS.alarm.type=type; saveStore();
+  previewAlarm(type,'ob-alarm-stop'); // tapping an option plays a short, safe-volume preview
 }
+/* Shared preview: tap-to-hear with a STOP control, capped so it never blasts at 100%. */
+function previewAlarm(type,stopId){
+  alarmType=type;
+  const saved=alarmVol;
+  alarmVol=Math.min(alarmVol,0.5); // never startle during setup/testing
+  try{ playAlarm(2200); }catch(e){}
+  alarmVol=saved;
+  hideAlarmStops();
+  const b=document.getElementById(stopId); if(b)b.style.display='flex';
+  clearTimeout(previewAlarm._t);
+  previewAlarm._t=setTimeout(hideAlarmStops,2200); // auto-hide stop when the clip ends
+}
+function hideAlarmStops(){['ob-alarm-stop','set-alarm-stop'].forEach(id=>{const b=document.getElementById(id);if(b)b.style.display='none';});}
+function stopPreview(){stopAlarm();hideAlarmStops();clearTimeout(previewAlarm._t);}
 function obFinish(){
+  try{stopPreview();}catch(e){} // ensure no preview tone leaks into the app
   user.name=user.name||pickRandomName();
   // Persist onboarding so it never loops on reload.
   SS.onboarded=true;
@@ -2084,6 +2119,7 @@ function pickAlarm(el,type){
   document.querySelectorAll('#alarm-list .ob-alarm').forEach(a=>{a.classList.remove('sel');a.setAttribute('aria-checked','false');});
   el.classList.add('sel'); el.setAttribute('aria-checked','true'); alarmType=type;
   SS.alarm.type=type; saveStore();
+  previewAlarm(type,'set-alarm-stop'); // tapping an option plays a short, safe-volume preview
 }
 
 /* ═══════════════════════════════════
@@ -2225,6 +2261,12 @@ function initMap(){
   if(userLat!=null&&userLng!=null){moveUserDot(userLat,userLng);MAP.setView([userLat,userLng],13);}
 }
 function mapZoom(d){ if(MAP)MAP.setZoom(MAP.getZoom()+d); }
+function toggleLegend(){
+  const lg=document.getElementById('map-legend');if(!lg)return;
+  const collapsed=lg.classList.toggle('collapsed');
+  const hd=lg.querySelector('.legend-hd');if(hd)hd.setAttribute('aria-expanded',String(!collapsed));
+  const chev=document.getElementById('legend-chev');if(chev)chev.textContent=collapsed?'▸':'▾';
+}
 
 /* Live user location — blue dot follows real position. */
 function moveUserDot(lat,lng){
@@ -2566,6 +2608,7 @@ function openUpdates(){
 }
 function op(id){closeAll();const el=document.getElementById(id);if(el)el.classList.add('open');}
 function cl(id){
+  try{stopPreview();}catch(e){} // never leave a preview tone playing after a sheet closes
   const el=document.getElementById(id);if(el)el.classList.remove('open');
   setTimeout(()=>{
     if(!document.querySelector('.sheet.open')){
