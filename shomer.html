@@ -579,6 +579,100 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 .data-banner-t{font-size:10px;font-weight:800;color:var(--g3);letter-spacing:.3px;}
 .data-banner-s{font-size:9px;color:var(--tx2);margin-top:2px;line-height:1.45;}
 
+/* ══════════ CIRCLES — family/friend live-location groups ══════════ */
+/* Circle member map marker: pulsing avatar dot + name label. */
+.mk-circle{position:relative;width:38px;height:38px;}
+.mk-circle .pulse{position:absolute;left:50%;top:19px;width:30px;height:30px;border-radius:50%;background:var(--cc,#2962FF);transform:translate(-50%,-50%);opacity:.5;animation:cPulse 2s ease-out infinite;}
+@keyframes cPulse{0%{width:18px;height:18px;opacity:.55}100%{width:50px;height:50px;opacity:0}}
+.mk-circle .av{position:absolute;left:50%;top:19px;width:30px;height:30px;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(circle at 36% 30%,#15294A,#0A1628);border:2.5px solid var(--cc,#2962FF);display:flex;align-items:center;justify-content:center;font-size:15px;line-height:1;z-index:2;box-shadow:0 2px 8px rgba(0,0,0,.55),0 0 0 1px rgba(0,0,0,.25);}
+.mk-circle .nm{position:absolute;left:50%;top:38px;transform:translateX(-50%);white-space:nowrap;font-size:10px;font-weight:800;color:#fff;background:rgba(8,18,36,.86);border:1px solid var(--cc,#2962FF);padding:1px 7px;border-radius:9px;z-index:3;box-shadow:0 2px 6px rgba(0,0,0,.5);}
+.mk-circle.sos .pulse{background:#FF1A40;animation:cPulse 1s ease-out infinite;}
+.mk-circle.sos .av{border-color:#FF1A40;box-shadow:0 0 14px rgba(255,26,64,.9);}
+.mk-circle.sos .nm{border-color:#FF1A40;color:#FF8089;}
+/* FIND-A-FRIEND radar / sonar ping — expanding concentric beating rings. */
+.mk-radar{position:relative;width:0;height:0;}
+.mk-radar .sonar{position:absolute;left:0;top:0;width:24px;height:24px;border-radius:50%;border:2.5px solid var(--g3);transform:translate(-50%,-50%) scale(.2);opacity:0;animation:sonar 2.2s ease-out infinite;}
+.mk-radar .sonar:nth-child(2){animation-delay:.55s;}
+.mk-radar .sonar:nth-child(3){animation-delay:1.1s;}
+.mk-radar .core{position:absolute;left:0;top:0;width:14px;height:14px;border-radius:50%;background:var(--g3);transform:translate(-50%,-50%);box-shadow:0 0 16px var(--g4),0 0 0 3px rgba(245,200,64,.4);animation:radarBeat .9s ease-in-out infinite;}
+@keyframes sonar{0%{transform:translate(-50%,-50%) scale(.2);opacity:.9}100%{transform:translate(-50%,-50%) scale(4.6);opacity:0}}
+@keyframes radarBeat{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.4)}}
+
+/* Circle-member SOS alert strip (top, like the SOS strip) */
+.circle-alert{position:absolute;top:calc(var(--hdr-top,0px) + var(--hdr));left:0;right:0;z-index:588;background:var(--r3);padding:10px 14px;display:none;align-items:center;gap:10px;animation:ssf 1.1s ease-in-out infinite;}
+.circle-alert.on{display:flex;}
+.circle-alert .ca-main{flex:1;min-width:0;}
+.circle-alert .ca-t{color:#fff;font-size:12px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.circle-alert .ca-s{color:rgba(255,255,255,.75);font-size:10px;margin-top:2px;}
+.circle-alert .ca-btn{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.34);border-radius:var(--r8);padding:6px 12px;color:#fff;font-size:11px;font-weight:800;white-space:nowrap;flex-shrink:0;}
+.circle-alert .ca-btn:hover{background:rgba(255,255,255,.3);}
+
+/* Find-a-Friend FAB (stacked above the locate FAB) */
+.ff-fab{position:absolute;bottom:calc(var(--nav) + 70px);left:12px;z-index:400;width:48px;height:48px;border-radius:50%;background:rgba(8,18,36,.92);backdrop-filter:blur(12px);border:1px solid var(--b3);box-shadow:var(--e3);display:flex;align-items:center;justify-content:center;font-size:21px;color:var(--g3);transition:all .15s;}
+.ff-fab:hover{transform:translateY(-1px);}
+.ff-fab:active{transform:scale(.9);}
+
+/* Circles sheet UI */
+.circ-tabs{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;margin-bottom:14px;}
+.circ-tabs::-webkit-scrollbar{display:none;}
+.circ-tab{flex-shrink:0;display:flex;align-items:center;gap:6px;padding:7px 14px;border:1px solid var(--b1);border-radius:20px;background:var(--n3);font-size:12px;font-weight:700;color:var(--tx2);cursor:pointer;transition:all .15s;}
+.circ-tab.on{background:var(--gd);border-color:var(--b3);color:var(--g3);}
+.circ-tab .ct-ic{font-size:14px;}
+.circ-tab.add{border-style:dashed;color:var(--tx3);}
+.ghost-row{display:flex;align-items:center;justify-content:space-between;background:var(--n3);border:1px solid var(--b2);border-radius:var(--r12);padding:11px 14px;margin-bottom:14px;}
+.ghost-row.on{border-color:rgba(107,50,216,.5);background:rgba(107,50,216,.12);}
+.ghost-l{display:flex;align-items:center;gap:11px;}
+.ghost-ic{width:34px;height:34px;border-radius:var(--r8);background:var(--n4);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.ghost-nm{font-size:13px;font-weight:700;color:var(--tx1);}
+.ghost-sb{font-size:11px;color:var(--tx3);margin-top:1px;}
+.cm-row{display:flex;align-items:center;gap:11px;background:var(--n3);border:1px solid var(--b1);border-radius:var(--r12);padding:11px 12px;margin-bottom:8px;}
+.cm-row.sos{border-color:rgba(255,26,64,.55);background:rgba(255,26,64,.08);}
+.cm-av{width:40px;height:40px;border-radius:50%;background:radial-gradient(circle at 36% 30%,#15294A,#0A1628);border:2px solid var(--cc,#2962FF);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;position:relative;}
+.cm-av .live{position:absolute;right:-1px;bottom:-1px;width:11px;height:11px;border-radius:50%;background:#2ECC71;border:2px solid var(--n3);}
+.cm-av .live.off{background:var(--tx3);}
+.cm-main{flex:1;min-width:0;}
+.cm-nm{font-size:14px;font-weight:700;color:var(--tx0);display:flex;align-items:center;gap:6px;}
+.cm-rel{font-size:11px;color:var(--tx3);margin-top:1px;}
+.cm-status{font-size:10px;font-weight:700;margin-top:3px;display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:6px;}
+.cm-status.mutual{background:rgba(14,136,64,.16);color:#40C880;}
+.cm-status.oneway{background:rgba(192,120,8,.16);color:#E0A828;}
+.cm-status.none{background:var(--n5);color:var(--tx3);}
+.cm-status.paused{background:rgba(107,50,216,.18);color:#B98CFF;}
+.cm-status.sos{background:rgba(255,26,64,.2);color:#FF8089;}
+.cm-find{flex-shrink:0;width:38px;height:38px;border-radius:50%;background:var(--gd);border:1px solid var(--b3);display:flex;align-items:center;justify-content:center;font-size:17px;color:var(--g3);transition:all .15s;}
+.cm-find:hover{background:var(--gg);}
+.cm-find:active{transform:scale(.9);}
+/* Per-member privacy controls (expandable) */
+.cm-priv{background:var(--n2);border:1px solid var(--b1);border-radius:var(--r12);padding:4px 12px;margin:-4px 0 10px;}
+.cm-priv .pv-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--b1);}
+.cm-priv .pv-row:last-child{border-bottom:none;}
+.cm-priv .pv-l{font-size:12px;color:var(--tx1);}
+.cm-priv .pv-s{font-size:10px;color:var(--tx3);margin-top:1px;}
+.cm-actions{display:flex;gap:6px;padding:2px 0 6px;}
+.cm-act{flex:1;padding:8px;border:1px solid var(--b1);border-radius:var(--r8);background:var(--n3);font-size:11px;font-weight:700;color:var(--tx2);display:flex;align-items:center;justify-content:center;gap:5px;}
+.cm-act.danger{color:#FF8089;border-color:var(--b4);}
+.cm-act:hover{background:var(--n4);}
+/* Add-member inline form */
+.cm-add-form{background:var(--n3);border:1px dashed var(--b2);border-radius:var(--r12);padding:13px;margin-bottom:12px;}
+.cm-add-form .ob-f{margin-bottom:8px;}
+.cm-add-form .row{display:flex;gap:8px;}
+.honesty-note{display:flex;align-items:flex-start;gap:9px;background:rgba(24,82,192,.10);border:1px solid rgba(40,98,255,.3);border-radius:var(--r12);padding:11px 13px;margin-bottom:14px;font-size:11px;color:var(--tx1);line-height:1.55;}
+.honesty-note .hn-ic{font-size:16px;flex-shrink:0;}
+.honesty-note strong{color:#9FD0FF;}
+/* Find-a-Friend picker overlay */
+.ff-pick{position:fixed;inset:0;z-index:9650;display:none;align-items:flex-end;background:rgba(6,15,30,.7);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);}
+.ff-pick.on{display:flex;animation:cdfade .2s ease;}
+.ff-pick-card{width:100%;max-height:72vh;background:linear-gradient(180deg,rgba(22,36,64,.99),rgba(16,30,52,.99));border-radius:22px 22px 0 0;border-top:1px solid var(--b3);box-shadow:0 -10px 60px rgba(0,0,0,.8);padding:16px 16px 30px;overflow-y:auto;}
+.ff-pick-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.ff-pick-ttl{font-size:16px;font-weight:900;background:linear-gradient(135deg,#E0A828,#F5C840);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.ff-opt{display:flex;align-items:center;gap:12px;width:100%;padding:12px;background:var(--n3);border:1px solid var(--b1);border-radius:var(--r12);margin-bottom:8px;text-align:start;transition:all .12s;}
+.ff-opt:hover{border-color:var(--b3);background:var(--n4);}
+.ff-opt:active{transform:scale(.99);}
+.ff-opt .ff-av{width:40px;height:40px;border-radius:50%;background:radial-gradient(circle at 36% 30%,#15294A,#0A1628);border:2px solid var(--cc,#2962FF);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.ff-opt .ff-nm{font-size:14px;font-weight:700;color:var(--tx0);}
+.ff-opt .ff-rel{font-size:11px;color:var(--tx3);}
+.ff-opt .ff-go{margin-inline-start:auto;font-size:18px;color:var(--g3);}
+
 /* ══════════ ONBOARDING — premium textured navy ══════════ */
 #ob{background:#070F1E;}
 .ob-bg{position:fixed;inset:0;z-index:-1;pointer-events:none;
@@ -741,6 +835,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
       <button class="mc" onclick="mapZoom(-1)" aria-label="הקטן">−</button>
     </div>
     <button class="loc-fab" id="loc-fab" onclick="locMe()" aria-label="מיקומי על המפה" title="מיקומי">📍</button>
+    <button class="ff-fab" id="ff-fab" onclick="findFriendOpen()" aria-label="מצא חבר/ה" title="מצא חבר/ה">🔍</button>
   </div>
 
   <!-- HEADER -->
@@ -776,6 +871,9 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
     </button>
     <button class="ddr" onclick="op('sh-alarm');closeDD()" role="menuitem">
       <div class="dd-ic" aria-hidden="true">🚨</div><span id="dd-alarm">הגדרות אזעקה</span>
+    </button>
+    <button class="ddr" onclick="openCircles();closeDD()" role="menuitem">
+      <div class="dd-ic" aria-hidden="true">👥</div><span id="dd-circ">מעגלים</span>
     </button>
     <div class="dd-sep"></div>
     <button class="ddr" onclick="op('sh-prof');closeDD()" role="menuitem">
@@ -823,6 +921,15 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
         <button class="sos-rs-opt" onclick="resolveAs('test')"><span class="rs-ic" aria-hidden="true">🧪</span><span class="rs-nm" id="rs-test">בדיקה — הסר</span></button>
       </div>
     </div>
+  </div>
+
+  <!-- CIRCLE MEMBER SOS ALERT STRIP -->
+  <div class="circle-alert" id="circle-alert" role="alert" aria-live="assertive">
+    <div class="ca-main">
+      <div class="ca-t" id="circle-alert-t">🆘 חבר/ת מעגל הפעיל/ה SOS</div>
+      <div class="ca-s" id="circle-alert-s">כל המעגל קיבל התראה · מיקום חי משותף</div>
+    </div>
+    <button class="ca-btn" id="circle-alert-btn" onclick="locateAlertMember()">📍 <span id="circle-alert-btn-lbl">אתר/י</span></button>
   </div>
 
   <!-- DMS STRIP -->
@@ -1154,6 +1261,57 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
     </div>
   </div>
 
+  <!-- ═══ CIRCLES — family/friend live-location groups ═══ -->
+  <div class="sheet" id="sh-circles" role="dialog" aria-modal="true" aria-labelledby="circ-ttl">
+    <div class="sh-pill" aria-hidden="true"></div>
+    <div class="sh-head"><span class="sh-ttl" id="circ-ttl">מעגלים</span><button class="sh-x" onclick="cl('sh-circles')" aria-label="סגור">✕</button></div>
+    <div class="sh-body">
+      <div class="honesty-note">
+        <span class="hn-ic" aria-hidden="true">ℹ️</span>
+        <span id="circ-honesty"><strong>הדמיה מקומית.</strong> שיתוף מיקום חי, רציף וחוצה-מכשירים ברקע דורש אפליקציה נייטיב + שרת + חשבונות. כאן ה-UX מלא והמיקומים מדומים מקומית לצורך הדגמה.</span>
+      </div>
+      <div class="ghost-row" id="ghost-row">
+        <div class="ghost-l">
+          <div class="ghost-ic" aria-hidden="true">👻</div>
+          <div><div class="ghost-nm" id="ghost-nm">מצב רפאים — השהה שיתוף</div><div class="ghost-sb" id="ghost-sb">אף אחד לא יראה את מיקומך</div></div>
+        </div>
+        <div class="tog" id="ghost-tog" onclick="toggleGhost()" role="switch" aria-label="מצב רפאים"></div>
+      </div>
+      <div class="circ-tabs" id="circ-tabs" role="tablist" aria-label="מעגלים"></div>
+      <div style="display:flex;gap:8px;margin-bottom:12px;">
+        <button class="cta-gold" style="flex:1;padding:12px;font-size:13px" onclick="findFriendOpen()">🔍 <span id="circ-find-lbl">מצא חבר/ה</span></button>
+        <button class="row-btn" style="flex:0 0 auto;width:auto;padding:12px 14px;justify-content:center" onclick="toggleAddMember()" aria-label="הוסף חבר/ה"><span style="font-size:16px">➕</span></button>
+      </div>
+      <div class="cm-add-form" id="cm-add-form" style="display:none">
+        <input class="ob-f" id="cm-add-name" type="text" maxlength="24" placeholder="שם (למשל אמא, יעקב)" aria-label="שם">
+        <div class="row">
+          <input class="ob-f" id="cm-add-rel" type="text" maxlength="20" placeholder="קשר (אמא/אח/חבר)" aria-label="קשר" style="flex:1;margin-bottom:0">
+        </div>
+        <button class="cta-gold" style="padding:11px;font-size:13px;margin-top:10px" onclick="addMember()">✓ <span id="cm-add-save">הוסף למעגל</span></button>
+      </div>
+      <div id="circ-members" role="list"></div>
+      <button class="cm-act danger" style="width:100%;padding:12px;margin-top:6px" onclick="leaveCircle()" id="circ-leave-btn">🚪 <span id="circ-leave-lbl">עזוב מעגל זה</span></button>
+      <div class="sec-cap mb12" style="margin-top:20px" id="circ-native-cap">שלב נייטיב (לבנייה עתידית)</div>
+      <div class="set-grp" style="padding:13px 14px;">
+        <p style="font-size:11px;color:var(--tx2);line-height:1.75" id="circ-native-txt">
+          כדי להפוך את זה לאמיתי דרושים: <strong style="color:var(--g3)">חשבונות + הזמנות מאומתות</strong>, שרת מיקום חי (WebSocket/push), הרשאת מיקום-רקע נייטיב (iOS/Android), הצפנה מקצה-לקצה, ואכיפת פרטיות בצד-שרת. ראה/י CIRCLES.md.
+        </p>
+      </div>
+      <div class="mini-credit" dir="ltr">SHOMER<span class="tm">™</span> · © 2026 3Shamrocks Studio</div>
+    </div>
+  </div>
+
+  <!-- FIND-A-FRIEND PICKER -->
+  <div class="ff-pick" id="ff-pick" role="dialog" aria-modal="true" aria-labelledby="ff-pick-ttl" aria-hidden="true">
+    <div class="ff-pick-card">
+      <div class="ff-pick-hd">
+        <span class="ff-pick-ttl" id="ff-pick-ttl">🔍 מצא חבר/ה</span>
+        <button class="sh-x" onclick="findFriendClose()" aria-label="סגור">✕</button>
+      </div>
+      <div id="ff-pick-list"></div>
+    </div>
+  </div>
+
 </div><!-- #app -->
 
 <script>
@@ -1413,7 +1571,12 @@ let SS={
     trust:{real:0,accidental:0,test:0,falseAlarm:0}  // reputation sim — see trustScore(). Server is authoritative.
   },
   reports:[],     // {id,type,desc,loc,lat,lng,photos:[thumbs],ts,anon}
-  sosHistory:[]   // {id,ts,lat,lng,trigger,resolution,broadcast,rateLimited}
+  sosHistory:[],  // {id,ts,lat,lng,trigger,resolution,broadcast,rateLimited}
+  /* ── Circles (family/friend live-location groups) — LOCAL SIMULATION ──
+     Real cross-device, always-on sharing needs native + backend (see CIRCLES.md). */
+  circles:[],     // {id,name,type:'family'|'friends'}
+  circleMembers:[], // {id,cid,name,rel,emoji,color,lat,lng,baseLat,baseLng,moving,shareTo,seeThem,sos,seed}
+  circleGhost:false // pause MY outgoing location sharing (ghost mode)
 };
 function deepMerge(base,o){
   const out=Array.isArray(base)?[]:{...base};
@@ -1836,6 +1999,24 @@ function applyTranslations(){
   setText('dd-rep',T('dd_rep'));setText('dd-dms',T('dd_dms'));
   setText('dd-alarm',T('dd_alarm'));setText('dd-prof',T('dd_prof'));
   setText('dd-set',T('dd_set'));setText('dd-em',T('dd_em'));
+  // Circles
+  {const he=currentLang==='he';
+   setText('dd-circ',he?'מעגלים':'Circles');
+   setText('circ-ttl',he?'מעגלים':'Circles');
+   setText('ghost-nm',he?'מצב רפאים — השהה שיתוף':'Ghost mode — pause sharing');
+   setText('ghost-sb',he?'אף אחד לא יראה את מיקומך':'No one sees your location');
+   setText('circ-find-lbl',he?'מצא חבר/ה':'Find a friend');
+   setText('cm-add-save',he?'הוסף למעגל':'Add to circle');
+   setText('circ-leave-lbl',he?'עזוב מעגל זה':'Leave this circle');
+   setText('circ-native-cap',he?'שלב נייטיב (לבנייה עתידית)':'Native phase (to build)');
+   setText('circle-alert-btn-lbl',he?'אתר/י':'Locate');
+   setText('ff-pick-ttl',he?'🔍 מצא חבר/ה':'🔍 Find a friend');
+   const nm=document.getElementById('cm-add-name');if(nm)nm.placeholder=he?'שם (למשל אמא, יעקב)':'Name (e.g. Mom, Jakob)';
+   const rl=document.getElementById('cm-add-rel');if(rl)rl.placeholder=he?'קשר (אמא/אח/חבר)':'Relationship (Mom/Brother/Friend)';
+   const hn=document.getElementById('circ-honesty');if(hn)hn.innerHTML=he?'<strong>הדמיה מקומית.</strong> שיתוף מיקום חי, רציף וחוצה-מכשירים ברקע דורש אפליקציה נייטיב + שרת + חשבונות. כאן ה-UX מלא והמיקומים מדומים מקומית לצורך הדגמה.':'<strong>Local simulation.</strong> Real always-on, background, cross-device live sharing needs a native app + backend + accounts. Here the UX is real and positions are simulated locally for demo.';
+   const nt=document.getElementById('circ-native-txt');if(nt)nt.innerHTML=he?'כדי להפוך את זה לאמיתי דרושים: <strong style="color:var(--g3)">חשבונות + הזמנות מאומתות</strong>, שרת מיקום חי (WebSocket/push), הרשאת מיקום-רקע נייטיב (iOS/Android), הצפנה מקצה-לקצה, ואכיפת פרטיות בצד-שרת. ראה/י CIRCLES.md.':'To make it real you need: <strong style="color:var(--g3)">accounts + verified invites</strong>, a live-location server (WebSocket/push), native background-location permission (iOS/Android), end-to-end encryption, and server-side privacy enforcement. See CIRCLES.md.';
+   if(document.getElementById('sh-circles')&&document.getElementById('sh-circles').classList.contains('open'))renderCircles();
+  }
   // SOS strip
   const sst=document.getElementById('ss-t');if(sst&&sosPhase!=='active')sst.textContent=T('ss_t');
   const sscl=document.getElementById('ss-cancel-lbl');if(sscl)sscl.textContent=currentLang==='he'?'אני בטוח/ה':"I'm safe";
@@ -2037,6 +2218,7 @@ function enterApp(returning){
   try{ buildPins(); }catch(e){}
   try{ buildInitialUpdates(); }catch(e){}
   try{ restorePersistedData(); }catch(e){}
+  try{ seedCirclesIfEmpty(); startCircleSim(); }catch(e){}
   try{ startSim(); }catch(e){}
   // Hide lang bar on main screen
   document.getElementById('lang-bar').classList.add('hidden');
@@ -2580,7 +2762,7 @@ function removeSOSPin(){if(mapLayers.sosMarker){MAP.removeLayer(mapLayers.sosMar
    MAP — real Leaflet + OpenStreetMap
 ═══════════════════════════════════ */
 let MAP=null;
-const mapLayers={stats:[],reports:{},sosMarker:null,meMarker:null};
+const mapLayers={stats:[],reports:{},sosMarker:null,meMarker:null,circle:{},radar:null};
 /* CARTO Voyager — clean, minimalistic basemap with crisp, legible street labels. */
 const TILE_URL='https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
 
@@ -2596,7 +2778,8 @@ function sosIcon(){return window.L.divIcon({className:'shomer-marker',
 function meIcon(){
   const pr=(SS.user&&SS.user.profession)||'';
   const p=PROFESSIONS[pr];
-  const badge=p?`<div class="mk-me-badge" title="${p.icon}">${p.icon}</div>`:'';
+  // Ghost mode (sharing paused) takes visual priority over the profession badge.
+  const badge=SS.circleGhost?`<div class="mk-me-badge" title="ghost">👻</div>`:(p?`<div class="mk-me-badge" title="${p.icon}">${p.icon}</div>`:'');
   return window.L.divIcon({className:'shomer-marker',
   html:`<div class="mk-me"><div class="acc"></div><div class="dot"></div>${badge}</div>`,iconSize:[24,24],iconAnchor:[12,12]});}
 /* Refresh the live "me" marker icon (e.g. after a profession change). */
@@ -3058,7 +3241,7 @@ function callNum(n){
 }
 function toast(txt,cls){
   const c=document.getElementById('toasts');
-  const cm={red:'#CC1426',grn:'#2ECC71',amb:'#C07808','':`#E0A828`};
+  const cm={red:'#CC1426',grn:'#2ECC71',amb:'#C07808',pur:'#8E4DFF','':`#E0A828`};
   const col=cm[cls||''];
   const d=document.createElement('div');
   d.className='toast '+(cls||'');
@@ -3070,6 +3253,329 @@ function toast(txt,cls){
   c.appendChild(d);
   while(c.children.length>3)c.firstChild.remove();
   setTimeout(()=>{if(d.parentElement)d.remove();},7000);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CIRCLES — family/friend groups with live location sharing
+   ⚠ LOCAL SIMULATION ONLY. A PWA cannot do reliable always-on,
+   background, cross-device location. The full UX is real; the live
+   positions are simulated client-side. Native+backend phase: CIRCLES.md
+═══════════════════════════════════════════════════════════════ */
+let activeCircleId=null;   // circle currently shown in the sheet
+let mapCircleId=null;      // circle currently rendered on the main map
+let circleSimTimer=null;
+let alertMemberId=null;    // member whose SOS is currently active
+let radarTimeout=null;
+const TLV=[32.0750,34.7780]; // sim anchor (central Tel Aviv)
+
+function genId(p){return (p||'id')+'_'+Math.floor(performance.now()*1000%1e9).toString(36)+'_'+(genId._n=(genId._n||0)+1);}
+
+/* Seed two demo circles + believable members on first run (only if empty). */
+function seedCirclesIfEmpty(){
+  if(SS.circles&&SS.circles.length)return;
+  const he=currentLang==='he';
+  SS.circles=[
+    {id:'fam',  name:he?'משפחה':'Family',  type:'family'},
+    {id:'frnd', name:he?'חברים':'Friends', type:'friends'},
+  ];
+  SS.circleMembers=[
+    {id:'m_mom',  cid:'fam', name:he?'אמא':'Mom',     rel:he?'אמא':'Mother',  emoji:'👩', color:'#E0A828', lat:32.0790,lng:34.7740, moving:true,  shareTo:true,  seeThem:true,  sos:false, seed:true},
+    {id:'m_jak',  cid:'fam', name:he?'יעקב':'Jakob',  rel:he?'אח':'Brother',  emoji:'🧑', color:'#2962FF', lat:32.0705,lng:34.7895, moving:true,  shareTo:true,  seeThem:true,  sos:false, seed:true},
+    {id:'m_dad',  cid:'fam', name:he?'אבא':'Dad',     rel:he?'אבא':'Father',  emoji:'👨', color:'#00C853', lat:32.0840,lng:34.7700, moving:false, shareTo:true,  seeThem:false, sos:false, seed:true},
+    {id:'m_dana', cid:'frnd',name:he?'דנה':'Dana',    rel:he?'חברה':'Friend', emoji:'👧', color:'#E91E8C', lat:32.0680,lng:34.7820, moving:true,  shareTo:false, seeThem:true,  sos:false, seed:true},
+    {id:'m_noam', cid:'frnd',name:he?'נועם':'Noam',   rel:he?'חבר':'Friend',  emoji:'🧔', color:'#9C27B0', lat:32.0720,lng:34.7965, moving:true,  shareTo:true,  seeThem:true,  sos:false, seed:true},
+  ];
+  SS.circleMembers.forEach(m=>{m.baseLat=m.lat;m.baseLng=m.lng;});
+  saveStore();
+}
+function circlesList(){return SS.circles||[];}
+function membersOf(cid){return (SS.circleMembers||[]).filter(m=>m.cid===cid);}
+function memberById(id){return (SS.circleMembers||[]).find(m=>m.id===id);}
+/* Members I can currently see on the map for a circle (privacy-aware, + always show an active SOS). */
+function visibleMembers(cid){return membersOf(cid).filter(m=>m.seeThem||m.sos);}
+
+function openCircles(){
+  seedCirclesIfEmpty();
+  if(!activeCircleId||!SS.circles.some(c=>c.id===activeCircleId)) activeCircleId=(SS.circles[0]||{}).id||null;
+  op('sh-circles');
+  renderCircles();
+}
+function switchCircle(cid){activeCircleId=cid;renderCircles();}
+
+/* Build the Circles sheet body (tabs + member list). User data via ESC(). */
+function renderCircles(){
+  const he=currentLang==='he';
+  // Tabs
+  const tabs=document.getElementById('circ-tabs');
+  if(tabs){
+    tabs.innerHTML='';
+    circlesList().forEach(c=>{
+      const b=document.createElement('button');
+      b.className='circ-tab'+(c.id===activeCircleId?' on':'');
+      b.setAttribute('role','tab'); b.onclick=()=>switchCircle(c.id);
+      b.innerHTML=`<span class="ct-ic" aria-hidden="true">${c.type==='family'?'👪':'🧑‍🤝‍🧑'}</span><span>${ESC(c.name)} · ${membersOf(c.id).length}</span>`;
+      tabs.appendChild(b);
+    });
+    const add=document.createElement('button');
+    add.className='circ-tab add'; add.onclick=()=>addCircle();
+    add.innerHTML=`<span class="ct-ic" aria-hidden="true">➕</span><span>${he?'מעגל חדש':'New circle'}</span>`;
+    tabs.appendChild(add);
+  }
+  // Members
+  const list=document.getElementById('circ-members');
+  if(list){
+    list.innerHTML='';
+    const ms=membersOf(activeCircleId);
+    if(!ms.length){
+      const e=document.createElement('div');
+      e.style.cssText='text-align:center;color:var(--tx3);font-size:12px;padding:18px 0;';
+      e.textContent=he?'אין חברים במעגל זה עדיין. הוסף/י חבר/ה.':'No members yet. Add someone.';
+      list.appendChild(e);
+    }
+    ms.forEach(m=>list.appendChild(buildMemberRow(m,he)));
+  }
+  // Leave button visibility
+  const lv=document.getElementById('circ-leave-btn');
+  if(lv)lv.style.display=circlesList().length>1?'':'none';
+  // Ghost toggle
+  const gt=document.getElementById('ghost-tog'),gr=document.getElementById('ghost-row');
+  if(gt)gt.classList.toggle('on',!!SS.circleGhost);
+  if(gr)gr.classList.toggle('on',!!SS.circleGhost);
+  // If this circle is the one on the map, keep markers fresh
+  if(mapCircleId===activeCircleId) renderCircleMarkers();
+}
+function statusOf(m,he){
+  if(m.sos)return{cls:'sos',txt:he?'🆘 SOS פעיל':'🆘 SOS active'};
+  if(SS.circleGhost&&m.shareTo)return{cls:'paused',txt:he?'👻 שיתוף מושהה':'👻 sharing paused'};
+  if(m.shareTo&&m.seeThem)return{cls:'mutual',txt:he?'הדדי':'Mutual'};
+  if(m.shareTo&&!m.seeThem)return{cls:'oneway',txt:he?'אני משתף/ת בלבד':'I share only'};
+  if(!m.shareTo&&m.seeThem)return{cls:'oneway',txt:he?'אני רואה בלבד':'I see only'};
+  return{cls:'none',txt:he?'ללא שיתוף':'No sharing'};
+}
+function buildMemberRow(m,he){
+  const wrap=document.createElement('div');
+  const st=statusOf(m,he);
+  const row=document.createElement('div');
+  row.className='cm-row'+(m.sos?' sos':''); row.setAttribute('role','listitem');
+  row.innerHTML=`
+    <div class="cm-av" style="--cc:${m.color}"><span aria-hidden="true">${m.emoji||'🙂'}</span><span class="live ${m.seeThem?'':'off'}" aria-hidden="true"></span></div>
+    <div class="cm-main">
+      <div class="cm-nm">${ESC(m.name)}</div>
+      <div class="cm-rel">${ESC(m.rel||'')}</div>
+      <span class="cm-status ${st.cls}">${st.txt}</span>
+    </div>
+    <button class="cm-find" aria-label="${he?'אתר/י':'Locate'}">🎯</button>`;
+  row.querySelector('.cm-find').onclick=()=>flyToMember(m.id);
+  // tapping the row body toggles the privacy panel
+  const priv=document.createElement('div');
+  priv.className='cm-priv'; priv.style.display='none';
+  priv.innerHTML=`
+    <div class="pv-row"><div><div class="pv-l">${he?'שתף/י את מיקומי עם '+ESC(m.name):'Share my location with '+ESC(m.name)}</div><div class="pv-s">${he?'הם יוכלו לראות אותך':'They can see you'}</div></div><div class="tog ${m.shareTo?'on':''}" data-k="shareTo" role="switch"></div></div>
+    <div class="pv-row"><div><div class="pv-l">${he?'ראה/י את המיקום של '+ESC(m.name):'See '+ESC(m.name)+"'s location"}</div><div class="pv-s">${he?'יופיע/תופיע על המפה שלך':'Shows on your map'}</div></div><div class="tog ${m.seeThem?'on':''}" data-k="seeThem" role="switch"></div></div>
+    <div class="cm-actions">
+      <button class="cm-act" data-a="sos">🆘 ${he?'הדמה SOS':'Simulate SOS'}</button>
+      <button class="cm-act danger" data-a="remove">🗑 ${he?'הסר/י':'Remove'}</button>
+    </div>`;
+  priv.querySelectorAll('.tog').forEach(t=>{
+    t.onclick=(e)=>{e.stopPropagation();const k=t.getAttribute('data-k');m[k]=!m[k];t.classList.toggle('on',m[k]);saveStore();renderCircles();};
+  });
+  priv.querySelector('[data-a="sos"]').onclick=(e)=>{e.stopPropagation();memberSOS(m.id);};
+  priv.querySelector('[data-a="remove"]').onclick=(e)=>{e.stopPropagation();removeMember(m.id);};
+  row.querySelector('.cm-main').onclick=()=>{priv.style.display=priv.style.display==='none'?'block':'none';};
+  row.querySelector('.cm-main').style.cursor='pointer';
+  wrap.appendChild(row); wrap.appendChild(priv);
+  return wrap;
+}
+function toggleAddMember(){const f=document.getElementById('cm-add-form');if(f)f.style.display=f.style.display==='none'?'block':'none';}
+function addMember(){
+  const he=currentLang==='he';
+  const nm=document.getElementById('cm-add-name'),rl=document.getElementById('cm-add-rel');
+  const name=(nm&&nm.value||'').trim(); if(!name){toast(he?'הזן/י שם':'Enter a name','amb');return;}
+  const palette=['#E0A828','#2962FF','#00C853','#E91E8C','#9C27B0','#FF6A00'];
+  const off=()=>(Math.random()-0.5)*0.02;
+  const m={id:genId('m'),cid:activeCircleId,name:name,rel:(rl&&rl.value||'').trim(),
+    emoji:'🙂',color:palette[(SS.circleMembers.length)%palette.length],
+    lat:TLV[0]+off(),lng:TLV[1]+off(),moving:true,shareTo:true,seeThem:true,sos:false};
+  m.baseLat=m.lat;m.baseLng=m.lng;
+  SS.circleMembers.push(m); saveStore();
+  if(nm)nm.value='';if(rl)rl.value='';
+  toggleAddMember(); renderCircles();
+  if(mapCircleId===activeCircleId)renderCircleMarkers();
+  toast(he?'✓ '+name+' נוסף/ה למעגל':'✓ '+name+' added','grn');
+}
+function removeMember(id){
+  const m=memberById(id);if(!m)return;
+  SS.circleMembers=SS.circleMembers.filter(x=>x.id!==id);
+  if(mapLayers.circle[id]){MAP&&MAP.removeLayer(mapLayers.circle[id]);delete mapLayers.circle[id];}
+  if(alertMemberId===id)clearCircleAlert();
+  saveStore(); renderCircles();
+}
+function addCircle(){
+  const he=currentLang==='he';
+  const n=circlesList().length;
+  const c={id:genId('c'),name:(he?'מעגל ':'Circle ')+(n+1),type:n%2?'friends':'family'};
+  SS.circles.push(c); activeCircleId=c.id; saveStore(); renderCircles();
+  toast(he?'✓ מעגל חדש נוצר':'✓ New circle created','grn');
+}
+function leaveCircle(){
+  const he=currentLang==='he';
+  if(circlesList().length<=1){toast(he?'חייב להישאר מעגל אחד':'Keep at least one circle','amb');return;}
+  const cid=activeCircleId;
+  SS.circleMembers=SS.circleMembers.filter(m=>m.cid!==cid);
+  SS.circles=SS.circles.filter(c=>c.id!==cid);
+  if(mapCircleId===cid){clearCircleMarkers();mapCircleId=null;}
+  activeCircleId=(SS.circles[0]||{}).id||null;
+  saveStore(); renderCircles();
+  toast(he?'עזבת את המעגל':'Left the circle','');
+}
+function toggleGhost(){
+  SS.circleGhost=!SS.circleGhost; saveStore();
+  const gt=document.getElementById('ghost-tog'),gr=document.getElementById('ghost-row');
+  if(gt)gt.classList.toggle('on',SS.circleGhost);
+  if(gr)gr.classList.toggle('on',SS.circleGhost);
+  refreshMeMarker();
+  toast(SS.circleGhost?(currentLang==='he'?'👻 מצב רפאים פעיל — שיתוף הושהה':'👻 Ghost mode on — sharing paused')
+                      :(currentLang==='he'?'שיתוף מיקום חודש':'Location sharing resumed'),SS.circleGhost?'pur':'grn');
+  renderCircles();
+}
+
+/* ── Circle member map markers (pulsing avatar dots) ── */
+function circleIcon(m){
+  return window.L.divIcon({className:'shomer-marker',
+    html:`<div class="mk-circle${m.sos?' sos':''}" style="--cc:${m.color}"><div class="pulse"></div><div class="av">${m.emoji||'🙂'}</div><div class="nm">${ESC(m.name)}${m.sos?' 🆘':''}</div></div>`,
+    iconSize:[38,38],iconAnchor:[19,19],popupAnchor:[0,-20]});
+}
+function clearCircleMarkers(){
+  Object.keys(mapLayers.circle).forEach(id=>{if(MAP)MAP.removeLayer(mapLayers.circle[id]);});
+  mapLayers.circle={};
+}
+function renderCircleMarkers(){
+  if(!MAP||mapCircleId==null)return;
+  const want={}; visibleMembers(mapCircleId).forEach(m=>want[m.id]=m);
+  // remove markers no longer wanted
+  Object.keys(mapLayers.circle).forEach(id=>{
+    if(!want[id]){MAP.removeLayer(mapLayers.circle[id]);delete mapLayers.circle[id];}
+  });
+  // add/update wanted
+  Object.values(want).forEach(m=>{
+    if(mapLayers.circle[m.id]){mapLayers.circle[m.id].setLatLng([m.lat,m.lng]);mapLayers.circle[m.id].setIcon(circleIcon(m));}
+    else{mapLayers.circle[m.id]=window.L.marker([m.lat,m.lng],{icon:circleIcon(m),zIndexOffset:m.sos?950:700,alt:m.name}).addTo(MAP);}
+  });
+}
+function showCircleOnMap(cid){
+  mapCircleId=cid||activeCircleId; renderCircleMarkers();
+  // fit bounds to visible members
+  const ms=visibleMembers(mapCircleId);
+  if(MAP&&ms.length){
+    try{const b=window.L.latLngBounds(ms.map(m=>[m.lat,m.lng]));MAP.fitBounds(b.pad(0.4),{maxZoom:15});}catch(e){}
+  }
+}
+
+/* ── Live-position simulation (client-side random walk) ── */
+function startCircleSim(){
+  if(circleSimTimer)return;
+  seedCirclesIfEmpty();
+  if(mapCircleId==null) mapCircleId=(SS.circles[0]||{}).id||null;
+  renderCircleMarkers();
+  circleSimTimer=setInterval(()=>{
+    (SS.circleMembers||[]).forEach(m=>{
+      if(!m.moving)return;
+      const sp=m.sos?0.0016:0.0009;
+      m.lat+= (Math.random()-0.5)*sp; m.lng+= (Math.random()-0.5)*sp;
+      // gentle pull back toward base so they roam but don't drift away
+      if(m.baseLat!=null){m.lat+=(m.baseLat-m.lat)*0.05;m.lng+=(m.baseLng-m.lng)*0.05;}
+    });
+    if(mapCircleId!=null){
+      const want=visibleMembers(mapCircleId);
+      want.forEach(m=>{const mk=mapLayers.circle[m.id];if(mk)mk.setLatLng([m.lat,m.lng]);});
+    }
+  },2500);
+}
+
+/* ── Member SOS ripple — alert the whole circle + show live position ── */
+function memberSOS(id){
+  const m=memberById(id);if(!m)return;
+  const he=currentLang==='he';
+  m.sos=true; m.moving=true; saveStore();
+  alertMemberId=id;
+  // ensure their circle is on the map and they're shown (SOS overrides privacy)
+  mapCircleId=m.cid; renderCircleMarkers();
+  // alert strip
+  const strip=document.getElementById('circle-alert');
+  setText('circle-alert-t',(he?'🆘 ':'🆘 ')+m.name+(he?' הפעיל/ה SOS':' fired SOS'));
+  setText('circle-alert-s',he?'כל המעגל קיבל התראה · מיקום חי משותף':'Whole circle alerted · live location shared');
+  if(strip)strip.classList.add('on');
+  cl('sh-circles');
+  toast((he?'🆘 SOS מ':'🆘 SOS from ')+m.name,'red');
+  try{pushNotify('🆘 SHOMER — Circle SOS',m.name+(he?' זקוק/ה לעזרה':' needs help'),'circle-sos');}catch(e){}
+  flyToMember(id);
+  // Demo auto-resolve so the simulated alert clears itself after a while.
+  if(memberSOS._t)clearTimeout(memberSOS._t);
+  memberSOS._t=setTimeout(()=>{ if(alertMemberId===id)clearCircleAlert(); },45000);
+}
+function clearCircleAlert(){
+  const m=alertMemberId&&memberById(alertMemberId);
+  if(m){m.sos=false;saveStore();}
+  alertMemberId=null;
+  const strip=document.getElementById('circle-alert');if(strip)strip.classList.remove('on');
+  renderCircleMarkers();
+}
+function locateAlertMember(){ if(alertMemberId)flyToMember(alertMemberId); }
+
+/* ── FIND A FRIEND — picker + smooth fly-to with radar ping ── */
+function findFriendOpen(){
+  seedCirclesIfEmpty();
+  const he=currentLang==='he';
+  const list=document.getElementById('ff-pick-list'); if(!list)return;
+  list.innerHTML='';
+  // everyone I can see across all circles (+ any active SOS)
+  const seen={};
+  (SS.circleMembers||[]).filter(m=>m.seeThem||m.sos).forEach(m=>{if(!seen[m.id]){seen[m.id]=1;
+    const b=document.createElement('button');
+    b.className='ff-opt'; b.onclick=()=>{findFriendClose();flyToMember(m.id);};
+    const cname=(SS.circles.find(c=>c.id===m.cid)||{}).name||'';
+    b.innerHTML=`<div class="ff-av" style="--cc:${m.color}">${m.emoji||'🙂'}</div><div><div class="ff-nm">${ESC(m.name)}${m.sos?' 🆘':''}</div><div class="ff-rel">${ESC(m.rel||'')} · ${ESC(cname)}</div></div><span class="ff-go" aria-hidden="true">🎯</span>`;
+    list.appendChild(b);
+  }});
+  if(!Object.keys(seen).length){
+    const e=document.createElement('div');e.style.cssText='text-align:center;color:var(--tx3);font-size:12px;padding:16px 0;';
+    e.textContent=he?'אין חברים גלויים לאיתור.':'No visible members to locate.';
+    list.appendChild(e);
+  }
+  const p=document.getElementById('ff-pick');if(p){p.classList.add('on');p.setAttribute('aria-hidden','false');}
+}
+function findFriendClose(){const p=document.getElementById('ff-pick');if(p){p.classList.remove('on');p.setAttribute('aria-hidden','true');}}
+/* Smoothly fly the map to a member and drop a beating radar/sonar ping. */
+function flyToMember(id){
+  const m=memberById(id);if(!m){return;}
+  const he=currentLang==='he';
+  // make sure this member is rendered (force-show even if normally hidden)
+  mapCircleId=m.cid; renderCircleMarkers();
+  if(!mapLayers.circle[m.id]&&MAP){mapLayers.circle[m.id]=window.L.marker([m.lat,m.lng],{icon:circleIcon(m),zIndexOffset:800,alt:m.name}).addTo(MAP);}
+  cl('sh-circles'); findFriendClose();
+  if(MAP){
+    // The map may have been laid out behind a sheet — remeasure before flying,
+    // otherwise flyTo can no-op on a stale (0-size) container.
+    try{MAP.invalidateSize(false);}catch(e){}
+    setTimeout(()=>{
+      // setView({animate}) glides smoothly in real browsers and always lands on
+      // the target even where rAF animation is throttled; flyTo can no-op there.
+      try{MAP.setView([m.lat,m.lng],16,{animate:true,duration:1.1,easeLinearity:.25});}
+      catch(e){try{MAP.setView([m.lat,m.lng],16);}catch(_){}}
+      setTimeout(()=>radarPing([m.lat,m.lng]),700);
+    },60);
+  }
+  toast((he?'🎯 מאתר/ת את ':'🎯 Locating ')+m.name+'…','');
+}
+function radarPing(ll){
+  if(!MAP||!window.L)return;
+  if(mapLayers.radar){MAP.removeLayer(mapLayers.radar);mapLayers.radar=null;}
+  if(radarTimeout)clearTimeout(radarTimeout);
+  const icon=window.L.divIcon({className:'shomer-marker',
+    html:`<div class="mk-radar"><span class="sonar"></span><span class="sonar"></span><span class="sonar"></span><span class="core"></span></div>`,
+    iconSize:[0,0],iconAnchor:[0,0]});
+  mapLayers.radar=window.L.marker(ll,{icon:icon,zIndexOffset:1200,interactive:false}).addTo(MAP);
+  radarTimeout=setTimeout(()=>{if(mapLayers.radar){MAP.removeLayer(mapLayers.radar);mapLayers.radar=null;}},6500);
 }
 
 /* ═══════════════════════════════════
