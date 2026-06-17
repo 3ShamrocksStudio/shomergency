@@ -1,3 +1,6 @@
+# Design sources (large; not served)
+*.psd
+
 # OS / editor cruft
 .DS_Store
 *.swp
