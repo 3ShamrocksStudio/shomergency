@@ -410,7 +410,9 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 .sr-l{display:flex;align-items:center;gap:12px;}
 .sr-ic{width:34px;height:34px;border-radius:var(--r8);background:var(--n4);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
 .sr-nm{font-size:14px;font-weight:500;color:var(--tx1);}
-.sr-sb{font-size:11px;color:var(--tx3);margin-top:1px;}
+.sr-sb{font-size:11px;color:var(--tx3);margin-top:1px;line-height:1.4;}
+/* Plain-language "what this does / why" helper under a settings section heading */
+.set-help{font-size:11.5px;color:var(--tx2);line-height:1.6;margin:-5px 2px 11px;}
 .sl-card{background:var(--n3);border:1px solid var(--b1);border-radius:var(--r12);padding:16px;margin-bottom:18px;}
 .rad-big{font-size:32px;font-weight:900;text-align:center;margin-bottom:10px;background:linear-gradient(135deg,#E0A828,#F5C840);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .rad-u{font-size:13px;font-weight:400;-webkit-text-fill-color:var(--tx2);}
@@ -659,6 +661,57 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 .honesty-note{display:flex;align-items:flex-start;gap:9px;background:rgba(24,82,192,.10);border:1px solid rgba(40,98,255,.3);border-radius:var(--r12);padding:11px 13px;margin-bottom:14px;font-size:11px;color:var(--tx1);line-height:1.55;}
 .honesty-note .hn-ic{font-size:16px;flex-shrink:0;}
 .honesty-note strong{color:#9FD0FF;}
+/* ── Guardian pairing ── */
+.gd-hero{background:linear-gradient(160deg,rgba(224,168,40,.14),rgba(24,82,192,.10));border:1px solid var(--b3);border-radius:var(--r16);padding:14px;margin-bottom:14px;}
+.gd-hero-t{font-size:15px;font-weight:900;color:var(--tx0);display:flex;align-items:center;gap:8px;}
+.gd-hero-s{font-size:11.5px;color:var(--tx2);line-height:1.6;margin:6px 0 12px;}
+.gd-btns{display:flex;gap:8px;}
+.gd-btns .cta-gold{padding:12px;font-size:13px;}
+.gd-btns .row-btn{justify-content:center;font-weight:800;font-size:13px;color:var(--tx0);}
+/* Real-vs-backend honesty matrix */
+.rb-matrix{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0 4px;}
+.rb-col{background:var(--n2);border:1px solid var(--b1);border-radius:var(--r12);padding:10px 11px;}
+.rb-col.real{border-color:rgba(14,136,64,.5);}
+.rb-col.next{border-color:rgba(192,120,8,.45);}
+.rb-h{font-size:10.5px;font-weight:900;letter-spacing:.3px;display:flex;align-items:center;gap:5px;margin-bottom:7px;}
+.rb-col.real .rb-h{color:#40C880;}
+.rb-col.next .rb-h{color:#E0A828;}
+.rb-li{font-size:10.5px;color:var(--tx1);line-height:1.5;padding:3px 0;display:flex;gap:5px;}
+.rb-li::before{content:'';flex-shrink:0;}
+/* Guardian list rows */
+.gd-row{display:flex;align-items:center;gap:11px;background:var(--n3);border:1px solid var(--b1);border-radius:var(--r12);padding:11px 12px;margin-bottom:8px;}
+.gd-row.live{border-color:rgba(14,136,64,.55);}
+.gd-av{width:42px;height:42px;flex-shrink:0;border-radius:50%;background:radial-gradient(circle at 36% 30%,#15294A,#0A1628);border:2.5px solid var(--g3);display:flex;align-items:center;justify-content:center;font-size:18px;position:relative;}
+.gd-row.live .gd-av{border-color:#40C880;box-shadow:0 0 0 0 rgba(64,200,128,.6);animation:gdLive 1.8s ease-out infinite;}
+@keyframes gdLive{0%{box-shadow:0 0 0 0 rgba(64,200,128,.55);}70%{box-shadow:0 0 0 9px rgba(64,200,128,0);}100%{box-shadow:0 0 0 0 rgba(64,200,128,0);}}
+.gd-main{flex:1;min-width:0;}
+.gd-nm{font-size:14px;font-weight:800;color:var(--tx0);}
+.gd-rel{font-size:11px;color:var(--tx2);}
+.gd-stat{font-size:10px;font-weight:700;margin-top:3px;display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:6px;}
+.gd-stat.live{background:rgba(14,136,64,.18);color:#40C880;}
+.gd-stat.sim{background:rgba(192,120,8,.16);color:#E0A828;}
+.gd-stat.pending{background:var(--n5);color:var(--tx2);}
+.gd-stat .ld{width:7px;height:7px;border-radius:50%;background:currentColor;}
+.gd-stat.live .ld{animation:gdblink 1.1s ease-in-out infinite;}
+@keyframes gdblink{0%,100%{opacity:1;}50%{opacity:.3;}}
+.gd-find{flex-shrink:0;width:38px;height:38px;border-radius:10px;background:var(--n4);border:1px solid var(--b2);font-size:16px;cursor:pointer;color:var(--g3);}
+.gd-find:hover{border-color:var(--b3);}
+.gd-priv{background:var(--n2);border:1px solid var(--b1);border-radius:var(--r12);padding:2px 12px;margin:-4px 0 10px;}
+.gd-priv .pv-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--b1);}
+.gd-priv .pv-row:last-child{border-bottom:none;}
+.gd-priv .pv-l{font-size:12px;color:var(--tx1);}
+.gd-priv .pv-s{font-size:10px;color:var(--tx3);margin-top:1px;line-height:1.4;}
+.gd-acts{display:flex;gap:8px;padding:10px 0;}
+.gd-acts button{flex:1;padding:9px;border-radius:10px;border:1px solid var(--b2);background:var(--n4);font-size:12px;font-weight:700;color:var(--tx1);cursor:pointer;}
+.gd-acts button.danger{color:#FF7080;border-color:var(--b4);}
+/* Invite / link box */
+.gd-link{display:flex;gap:6px;margin:10px 0;}
+.gd-link input{flex:1;min-width:0;background:var(--n2);border:1px solid var(--b2);border-radius:10px;padding:11px;color:var(--tx0);font-size:12px;font-family:ui-monospace,monospace;direction:ltr;}
+.gd-copy{flex-shrink:0;padding:11px 14px;border-radius:10px;border:none;background:var(--g3);color:var(--n0);font-weight:800;font-size:13px;cursor:pointer;}
+/* live marker LIVE badge on the map */
+.mk-circle.live .av{border-color:#40C880;}
+.mk-circle.live .pulse{background:#40C880;}
+.mk-circle .tag{position:absolute;left:50%;top:-12px;transform:translateX(-50%);font-size:8px;font-weight:900;letter-spacing:.5px;color:#0A1628;background:#40C880;padding:1px 5px;border-radius:6px;z-index:4;box-shadow:0 1px 4px rgba(0,0,0,.5);}
 /* Find-a-Friend picker overlay */
 .ff-pick{position:fixed;inset:0;z-index:9650;display:none;align-items:flex-end;background:rgba(6,15,30,.7);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);}
 .ff-pick.on{display:flex;animation:cdfade .2s ease;}
@@ -871,6 +924,9 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
     </button>
     <button class="ddr" onclick="op('sh-alarm');closeDD()" role="menuitem">
       <div class="dd-ic" aria-hidden="true">🚨</div><span id="dd-alarm">הגדרות אזעקה</span>
+    </button>
+    <button class="ddr" onclick="openCircles();closeDD()" role="menuitem">
+      <div class="dd-ic" aria-hidden="true">🛡️</div><span id="dd-guard">חבר/י שומר/ת</span>
     </button>
     <button class="ddr" onclick="openCircles();closeDD()" role="menuitem">
       <div class="dd-ic" aria-hidden="true">👥</div><span id="dd-circ">מעגלים</span>
@@ -1106,19 +1162,22 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
     <div class="sh-head"><span class="sh-ttl" id="set-ttl">הגדרות</span><button class="sh-x" onclick="cl('sh-set')" aria-label="סגור">✕</button></div>
     <div class="sh-body">
       <div class="sec-cap mb12" id="set-radius-lbl">רדיוס התראה</div>
+      <p class="set-help" id="set-radius-help">עד כמה רחוק ממך עדיין יקבלו ממך התראה — וכמה רחוק תקבל/י התראות של אחרים. גדול יותר = יותר עיניים, יותר התראות.</p>
       <div class="sl-card mb20">
-        <div class="rad-big"><span id="rad-v">5</span><span class="rad-u"> ק"מ</span></div>
+        <div class="rad-big"><span id="rad-v">5</span><span class="rad-u" id="rad-u"> ק"מ</span></div>
         <input type="range" id="rad-slider" min="1" max="25" value="5" aria-label="רדיוס בקילומטרים" oninput="saveRadius(this.value)">
-        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--tx3);margin-top:6px"><span>1</span><span>25 ק"מ</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--tx3);margin-top:6px"><span>1</span><span id="rad-max">25 ק"מ</span></div>
       </div>
       <div class="sec-cap mb12" id="set-notif-lbl">התראות</div>
+      <p class="set-help" id="set-notif-help">בחר/י אילו אירועים בקרבתך ידחפו אליך התראה. כבה/י את מה שלא רלוונטי כדי לא להיות מוצף/ת.</p>
       <div class="set-grp">
-        <div class="set-row"><div class="sr-l"><div class="sr-ic">🚨</div><div><div class="sr-nm">SOS חירום</div><div class="sr-sb">כל SOS באזורך</div></div></div><div class="tog on" data-skey="n_sos" onclick="this.classList.toggle('on');saveToggle(this)" role="switch"></div></div>
-        <div class="set-row"><div class="sr-l"><div class="sr-ic">👁️</div><div><div class="sr-nm">מעקב ואיומים</div></div></div><div class="tog on" data-skey="n_stalk" onclick="this.classList.toggle('on');saveToggle(this)" role="switch"></div></div>
-        <div class="set-row"><div class="sr-l"><div class="sr-ic">🏥</div><div><div class="sr-nm">עזרה רפואית</div></div></div><div class="tog" data-skey="n_med" onclick="this.classList.toggle('on');saveToggle(this)" role="switch"></div></div>
-        <div class="set-row"><div class="sr-l"><div class="sr-ic">✅</div><div><div class="sr-nm">אירועים שנסגרו</div></div></div><div class="tog" data-skey="n_closed" onclick="this.classList.toggle('on');saveToggle(this)" role="switch"></div></div>
+        <div class="set-row"><div class="sr-l"><div class="sr-ic">🚨</div><div><div class="sr-nm" id="n-sos-nm">SOS חירום</div><div class="sr-sb" id="n-sos-sb">כל SOS באזורך — הכי דחוף, מומלץ להשאיר דלוק</div></div></div><div class="tog on" data-skey="n_sos" onclick="this.classList.toggle('on');saveToggle(this)" role="switch"></div></div>
+        <div class="set-row"><div class="sr-l"><div class="sr-ic">👁️</div><div><div class="sr-nm" id="n-stalk-nm">מעקב ואיומים</div><div class="sr-sb" id="n-stalk-sb">דיווחים על הטרדה/מעקב לידך</div></div></div><div class="tog on" data-skey="n_stalk" onclick="this.classList.toggle('on');saveToggle(this)" role="switch"></div></div>
+        <div class="set-row"><div class="sr-l"><div class="sr-ic">🏥</div><div><div class="sr-nm" id="n-med-nm">עזרה רפואית</div><div class="sr-sb" id="n-med-sb">בקשות לעזרה רפואית בקרבתך</div></div></div><div class="tog" data-skey="n_med" onclick="this.classList.toggle('on');saveToggle(this)" role="switch"></div></div>
+        <div class="set-row"><div class="sr-l"><div class="sr-ic">✅</div><div><div class="sr-nm" id="n-closed-nm">אירועים שנסגרו</div><div class="sr-sb" id="n-closed-sb">עדכון כשאירוע לידך טופל ונסגר</div></div></div><div class="tog" data-skey="n_closed" onclick="this.classList.toggle('on');saveToggle(this)" role="switch"></div></div>
       </div>
       <div class="sec-cap mb12" id="shake-set-lbl">Shake-to-SOS</div>
+      <p class="set-help" id="shake-set-help">מאפשר להפעיל SOS בלי להסתכל על המסך — מנערים את הטלפון בחוזקה. שימושי כשהטלפון בכיס או כשאי אפשר להביט במסך.</p>
       <div class="set-grp">
         <div class="set-row"><div class="sr-l"><div class="sr-ic">📳</div><div><div class="sr-nm" id="shake-tog-lbl">הפעל Shake-to-SOS</div><div class="sr-sb" id="shake-tog-sub">5 ניעורים חזקים → SOS</div></div></div><div class="tog on" id="shake-tog" onclick="toggleShake(this)" role="switch"></div></div>
       </div>
@@ -1129,6 +1188,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
         <button class="test-alarm-btn" style="margin-top:12px" onclick="simulateShake()" id="sim-shake-btn">📳 <span id="sim-shake-lbl">סימולציית ניעור (בדיקה)</span></button>
       </div>
       <div class="sec-cap mb12" id="sos-safety-cap">בטיחות SOS</div>
+      <p class="set-help" id="sos-safety-help">מגן עליך מפני אזעקות שווא ושיגור בטעות. כך לא תשלח/י עזרה בלי כוונה — ולא תפגע/י באמון המערכת.</p>
       <div class="sl-card">
         <div class="vol-row"><span class="vol-lbl" id="sos-cd-lbl">חלון ביטול לפני שידור</span><span class="vol-val" id="sos-cd-val">10s</span></div>
         <div class="sr-sb" id="sos-cd-sub" style="margin:-2px 0 10px;line-height:1.5">זמן לבטל אזעקת שווא לפני שה-SOS משודר. קצר יותר = למצבי סיכון גבוה.</div>
@@ -1150,17 +1210,20 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
         <strong id="sos-safety-note-h">הערת כנות:</strong> <span id="sos-safety-note-b">שידור, הגבלת קצב ואמון מדומים מקומית בלבד באפליקציה זו (ללא שרת). מערכת אמיתית חייבת לאכוף אותם בצד-שרת.</span>
       </div>
       <div class="sec-cap mb12" id="set-priv-lbl">פרטיות</div>
+      <p class="set-help" id="set-priv-help">את/ה שולט/ת במה שמשותף. המיקום נשמר במכשירך ומשותף רק כשאת/ה מפעיל/ה SOS, DMS או שיתוף עם שומר/ת.</p>
       <div class="set-grp">
-        <div class="set-row"><div class="sr-l"><div class="sr-ic">📍</div><div><div class="sr-nm">שיתוף מיקום ברקע</div><div class="sr-sb">נדרש ל-SOS ו-DMS</div></div></div><div class="tog on" data-skey="p_bgloc" onclick="this.classList.toggle('on');saveToggle(this)" role="switch"></div></div>
-        <div class="set-row"><div class="sr-l"><div class="sr-ic">👤</div><div><div class="sr-nm">הצג שם בעדכונים</div></div></div><div class="tog on" data-skey="p_showname" onclick="this.classList.toggle('on');saveToggle(this)" role="switch"></div></div>
+        <div class="set-row"><div class="sr-l"><div class="sr-ic">📍</div><div><div class="sr-nm" id="p-bgloc-nm">שיתוף מיקום ברקע</div><div class="sr-sb" id="p-bgloc-sb">נדרש ל-SOS ו-DMS — בלעדיו אי אפשר לשלוח את מיקומך בחירום</div></div></div><div class="tog on" data-skey="p_bgloc" onclick="this.classList.toggle('on');saveToggle(this)" role="switch"></div></div>
+        <div class="set-row"><div class="sr-l"><div class="sr-ic">👤</div><div><div class="sr-nm" id="p-showname-nm">הצג שם בעדכונים</div><div class="sr-sb" id="p-showname-sb">כבוי = הדיווחים שלך מופיעים בעילום שם</div></div></div><div class="tog on" data-skey="p_showname" onclick="this.classList.toggle('on');saveToggle(this)" role="switch"></div></div>
       </div>
-      <div class="sec-cap mb12">אנשי קשר חירום</div>
+      <div class="sec-cap mb12" id="set-contacts-lbl">אנשי קשר חירום</div>
+      <p class="set-help" id="set-contacts-help">אנשים שיקבלו את מיקומך והתראה אוטומטית כשתשלח/י SOS. הוסף/י את מי שיגיב/ה הכי מהר.</p>
       <div class="set-grp" id="contacts-grp">
         <div class="c-row"><div class="c-av">א</div><div style="flex:1"><div class="c-nm">אמא</div><div class="c-ph">052-XXX-XXXX</div></div><span class="c-tag">ראשון</span></div>
         <div class="c-row"><div class="c-av">ד</div><div style="flex:1"><div class="c-nm">דני</div><div class="c-ph">054-XXX-XXXX</div></div><span class="c-tag">שני</span></div>
       </div>
       <button class="add-c mb20" onclick="toast('בקרוב: הוספת אנשי קשר','amb')">+ הוסף איש קשר</button>
       <div class="sec-cap mb12" id="set-lang-lbl">שפה</div>
+      <p class="set-help" id="set-lang-help">שפת התצוגה של האפליקציה. ניתן לשנות בכל עת — לא משפיע על דיווחים קיימים.</p>
       <div class="set-grp" style="padding:10px 14px;">
         <div style="display:flex;direction:ltr;gap:6px;flex-wrap:wrap;" id="set-lang-btns">
           <button class="olb on" onclick="setLang('he')" lang="he">🇮🇱 עברית</button>
@@ -1266,16 +1329,44 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
     <div class="sh-pill" aria-hidden="true"></div>
     <div class="sh-head"><span class="sh-ttl" id="circ-ttl">מעגלים</span><button class="sh-x" onclick="cl('sh-circles')" aria-label="סגור">✕</button></div>
     <div class="sh-body">
-      <div class="honesty-note">
-        <span class="hn-ic" aria-hidden="true">ℹ️</span>
-        <span id="circ-honesty"><strong>הדמיה מקומית.</strong> שיתוף מיקום חי, רציף וחוצה-מכשירים ברקע דורש אפליקציה נייטיב + שרת + חשבונות. כאן ה-UX מלא והמיקומים מדומים מקומית לצורך הדגמה.</span>
+      <!-- ═══ CONNECT A GUARDIAN (primary, top) ═══ -->
+      <div class="gd-hero">
+        <div class="gd-hero-t"><span aria-hidden="true">🛡️</span><span id="gd-hero-t">חבר/י שומר/ת</span></div>
+        <div class="gd-hero-s" id="gd-hero-s">צרף/י אדם שאת/ה סומך/ת עליו (הורה/בן-זוג). הם יראו את מיקומך החי ואת/ה את שלהם — בהזמנה ואישור. את/ה שולט/ת מי רואה את מי, וניתן לעצור בכל רגע.</div>
+        <div class="gd-btns">
+          <button class="cta-gold" onclick="gdCreateInvite()" id="gd-invite-btn">🔗 <span id="gd-invite-lbl">הזמן/י שומר/ת</span></button>
+          <button class="row-btn" style="flex:0 0 auto;width:auto" onclick="gdEnterCodeOpen()" id="gd-enter-btn"><span id="gd-enter-lbl">יש לי קוד</span></button>
+        </div>
       </div>
+      <!-- Honest: what is real now vs the backend phase -->
+      <div class="rb-matrix" aria-label="מה אמיתי עכשיו לעומת שלב השרת">
+        <div class="rb-col real">
+          <div class="rb-h"><span aria-hidden="true">✓</span><span id="rb-real-h">אמיתי עכשיו</span></div>
+          <div class="rb-li" id="rb-r1">איתור מיקום חי שלך (GPS)</div>
+          <div class="rb-li" id="rb-r2">קישור הזמנה לשיתוף</div>
+          <div class="rb-li" id="rb-r3">שיתוף מיקום חי בין חלונות באותו דפדפן</div>
+          <div class="rb-li" id="rb-r4">בקרת פרטיות מי-רואה-מי + עצירה</div>
+        </div>
+        <div class="rb-col next">
+          <div class="rb-h"><span aria-hidden="true">⏳</span><span id="rb-next-h">שלב שרת/נייטיב</span></div>
+          <div class="rb-li" id="rb-n1">שיתוף חי בין מכשירים שונים</div>
+          <div class="rb-li" id="rb-n2">מעקב ברקע תמידי</div>
+          <div class="rb-li" id="rb-n3">חשבונות + הזמנות מאומתות</div>
+          <div class="rb-li" id="rb-n4">הצפנה מקצה-לקצה</div>
+        </div>
+      </div>
+      <div id="gd-list" role="list" style="margin-top:10px"></div>
       <div class="ghost-row" id="ghost-row">
         <div class="ghost-l">
           <div class="ghost-ic" aria-hidden="true">👻</div>
           <div><div class="ghost-nm" id="ghost-nm">מצב רפאים — השהה שיתוף</div><div class="ghost-sb" id="ghost-sb">אף אחד לא יראה את מיקומך</div></div>
         </div>
         <div class="tog" id="ghost-tog" onclick="toggleGhost()" role="switch" aria-label="מצב רפאים"></div>
+      </div>
+      <div class="sec-cap mb12" style="margin-top:20px" id="circ-demo-cap">מעגלים (הדגמה)</div>
+      <div class="honesty-note">
+        <span class="hn-ic" aria-hidden="true">ℹ️</span>
+        <span id="circ-honesty"><strong>הדמיה מקומית.</strong> חברי המעגל הדמה זזים במיקום מדומה. שיתוף מיקום חי, רציף וחוצה-מכשירים ברקע דורש אפליקציה נייטיב + שרת + חשבונות.</span>
       </div>
       <div class="circ-tabs" id="circ-tabs" role="tablist" aria-label="מעגלים"></div>
       <div style="display:flex;gap:8px;margin-bottom:12px;">
@@ -1309,6 +1400,50 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
         <button class="sh-x" onclick="findFriendClose()" aria-label="סגור">✕</button>
       </div>
       <div id="ff-pick-list"></div>
+    </div>
+  </div>
+
+  <!-- GUARDIAN: INVITE -->
+  <div class="ff-pick" id="gd-invite" role="dialog" aria-modal="true" aria-labelledby="gd-invite-ttl" aria-hidden="true">
+    <div class="ff-pick-card">
+      <div class="ff-pick-hd">
+        <span class="ff-pick-ttl" id="gd-invite-ttl">🔗 הזמן/י שומר/ת</span>
+        <button class="sh-x" onclick="gdClose('gd-invite')" aria-label="סגור">✕</button>
+      </div>
+      <p style="font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:6px" id="gd-invite-help">שתף/י את הקישור עם מי שאת/ה סומך/ת עליו. כשהם יפתחו אותו ויאשרו — תיווצר חבירה מאובטחת, ותראו זה את מיקומו של זה.</p>
+      <div class="gd-link">
+        <input id="gd-invite-link" type="text" readonly aria-label="קישור הזמנה" onclick="this.select()">
+        <button class="gd-copy" onclick="gdCopyLink()" id="gd-copy-lbl">העתק</button>
+      </div>
+      <button class="cta-gold" onclick="gdShareLink()" id="gd-share-btn">📤 <span id="gd-share-lbl">שתף/י קישור</span></button>
+      <p style="font-size:11px;color:var(--tx3);line-height:1.6;margin-top:12px" id="gd-invite-note">💡 לבדיקה ללא מכשיר שני: פתח/י את הקישור בחלון/לשונית נוספת באותו דפדפן — המיקום החי יזרום בזמן אמת בין החלונות. שיתוף בין מכשירים שונים מצריך שרת (שלב הבא).</p>
+    </div>
+  </div>
+
+  <!-- GUARDIAN: ENTER A CODE / LINK -->
+  <div class="ff-pick" id="gd-enter" role="dialog" aria-modal="true" aria-labelledby="gd-enter-ttl" aria-hidden="true">
+    <div class="ff-pick-card">
+      <div class="ff-pick-hd">
+        <span class="ff-pick-ttl" id="gd-enter-ttl">🔑 הזן/י קוד שומר/ת</span>
+        <button class="sh-x" onclick="gdClose('gd-enter')" aria-label="סגור">✕</button>
+      </div>
+      <p style="font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:10px" id="gd-enter-help">הדבק/י קישור הזמנה או קוד שקיבלת.</p>
+      <input class="ob-f" id="gd-enter-input" type="text" placeholder="הדבק/י קישור או קוד" aria-label="קישור או קוד הזמנה" style="direction:ltr;font-family:ui-monospace,monospace">
+      <button class="cta-gold" style="margin-top:10px" onclick="gdEnterCodeSubmit()" id="gd-enter-submit">✓ <span id="gd-enter-submit-lbl">חבר/י</span></button>
+    </div>
+  </div>
+
+  <!-- GUARDIAN: ACCEPT INCOMING INVITE -->
+  <div class="ff-pick" id="gd-accept" role="dialog" aria-modal="true" aria-labelledby="gd-accept-ttl" aria-hidden="true">
+    <div class="ff-pick-card">
+      <div class="ff-pick-hd">
+        <span class="ff-pick-ttl" id="gd-accept-ttl">🛡️ הזמנה לשמירה</span>
+        <button class="sh-x" onclick="gdDeclineInvite()" aria-label="סגור">✕</button>
+      </div>
+      <p style="font-size:13px;color:var(--tx1);line-height:1.7;margin-bottom:6px" id="gd-accept-body">מישהו מזמין אותך להיות השומר/ת שלו.</p>
+      <p style="font-size:11.5px;color:var(--tx2);line-height:1.6;margin-bottom:14px" id="gd-accept-sub">באישור: תראו זה את מיקומו החי של זה. ניתן לעצור בכל רגע מתוך "מעגלים".</p>
+      <button class="cta-gold" onclick="gdAcceptInvite()" id="gd-accept-yes">✓ <span id="gd-accept-yes-lbl">אשר/י וחבר/י</span></button>
+      <button class="row-btn" style="margin-top:10px;justify-content:center;color:#FF7080" onclick="gdDeclineInvite()" id="gd-accept-no">דחה/י</button>
     </div>
   </div>
 
@@ -1576,7 +1711,19 @@ let SS={
      Real cross-device, always-on sharing needs native + backend (see CIRCLES.md). */
   circles:[],     // {id,name,type:'family'|'friends'}
   circleMembers:[], // {id,cid,name,rel,emoji,color,lat,lng,baseLat,baseLng,moving,shareTo,seeThem,sos,seed}
-  circleGhost:false // pause MY outgoing location sharing (ghost mode)
+  circleGhost:false, // pause MY outgoing location sharing (ghost mode)
+  /* ── Guardian pairing (1:1 trusted link via invite/accept) ──
+     REAL now: stable display name + code, shareable invite link, accept flow,
+     who-sees-whom toggles, and a live-location transport (BroadcastChannel +
+     storage relay) that carries the REAL device position between windows/tabs of
+     this app on the SAME browser, keyed by each pair's token.
+     BACKEND PHASE: true always-on, cross-DEVICE live exchange + verified accounts.
+     See TEST.md. */
+  guardian:{
+    myName:'',    // display name a guardian sees for me (defaults to my handle)
+    myCode:'',    // my stable id used to de-dupe my own live messages
+    pairs:[]      // {id,token,name,rel,shareToThem,seeThem,addedTs,initiator,pending,lat,lng,ts,live,simLat,simLng}
+  }
 };
 function deepMerge(base,o){
   const out=Array.isArray(base)?[]:{...base};
@@ -2013,7 +2160,7 @@ function applyTranslations(){
    setText('ff-pick-ttl',he?'🔍 מצא חבר/ה':'🔍 Find a friend');
    const nm=document.getElementById('cm-add-name');if(nm)nm.placeholder=he?'שם (למשל אמא, יעקב)':'Name (e.g. Mom, Jakob)';
    const rl=document.getElementById('cm-add-rel');if(rl)rl.placeholder=he?'קשר (אמא/אח/חבר)':'Relationship (Mom/Brother/Friend)';
-   const hn=document.getElementById('circ-honesty');if(hn)hn.innerHTML=he?'<strong>הדמיה מקומית.</strong> שיתוף מיקום חי, רציף וחוצה-מכשירים ברקע דורש אפליקציה נייטיב + שרת + חשבונות. כאן ה-UX מלא והמיקומים מדומים מקומית לצורך הדגמה.':'<strong>Local simulation.</strong> Real always-on, background, cross-device live sharing needs a native app + backend + accounts. Here the UX is real and positions are simulated locally for demo.';
+   const hn=document.getElementById('circ-honesty');if(hn)hn.innerHTML=he?'<strong>הדמיה מקומית.</strong> חברי המעגל הדמה זזים במיקום מדומה. לשיתוף חי אמיתי השתמש/י ב„חבר/י שומר/ת" למעלה. חי רציף בין-מכשירי דורש שרת + אפליקציה נייטיב.':'<strong>Local simulation.</strong> Demo circle members move on simulated positions. For real live sharing use “Connect a Guardian” above. Continuous cross-device live needs a backend + native app.';
    const nt=document.getElementById('circ-native-txt');if(nt)nt.innerHTML=he?'כדי להפוך את זה לאמיתי דרושים: <strong style="color:var(--g3)">חשבונות + הזמנות מאומתות</strong>, שרת מיקום חי (WebSocket/push), הרשאת מיקום-רקע נייטיב (iOS/Android), הצפנה מקצה-לקצה, ואכיפת פרטיות בצד-שרת. ראה/י CIRCLES.md.':'To make it real you need: <strong style="color:var(--g3)">accounts + verified invites</strong>, a live-location server (WebSocket/push), native background-location permission (iOS/Android), end-to-end encryption, and server-side privacy enforcement. See CIRCLES.md.';
    if(document.getElementById('sh-circles')&&document.getElementById('sh-circles').classList.contains('open'))renderCircles();
   }
@@ -2072,8 +2219,24 @@ function applyTranslations(){
   setText('shake-sens-lbl',he?'רגישות ניעור':'Shake sensitivity');
   setText('sim-shake-lbl',he?'סימולציית ניעור (בדיקה)':'Simulate shake (test)');
   setText('set-radius-lbl',he?'רדיוס התראה':'Alert radius');
+  setText('rad-u',he?' ק"מ':' km'); setText('rad-max',he?'25 ק"מ':'25 km');
   setText('set-notif-lbl',he?'התראות':'Notifications');
   setText('set-priv-lbl',he?'פרטיות':'Privacy');
+  // Plain-language helper lines + bilingual notification/privacy rows
+  setText('set-radius-help',he?'עד כמה רחוק ממך עדיין יקבלו ממך התראה — וכמה רחוק תקבל/י התראות של אחרים. גדול יותר = יותר עיניים, יותר התראות.':'How far around you others still get your alerts — and how far out you receive theirs. Bigger = more eyes, more alerts.');
+  setText('set-notif-help',he?'בחר/י אילו אירועים בקרבתך ידחפו אליך התראה. כבה/י את מה שלא רלוונטי כדי לא להיות מוצף/ת.':'Choose which nearby events push you a notification. Turn off what you don\'t need so you\'re not overwhelmed.');
+  setText('n-sos-nm',he?'SOS חירום':'Emergency SOS'); setText('n-sos-sb',he?'כל SOS באזורך — הכי דחוף, מומלץ להשאיר דלוק':'Every SOS near you — most urgent, best left on');
+  setText('n-stalk-nm',he?'מעקב ואיומים':'Stalking & threats'); setText('n-stalk-sb',he?'דיווחים על הטרדה/מעקב לידך':'Harassment/stalking reports near you');
+  setText('n-med-nm',he?'עזרה רפואית':'Medical help'); setText('n-med-sb',he?'בקשות לעזרה רפואית בקרבתך':'Medical-help requests nearby');
+  setText('n-closed-nm',he?'אירועים שנסגרו':'Resolved incidents'); setText('n-closed-sb',he?'עדכון כשאירוע לידך טופל ונסגר':'A heads-up when a nearby incident is closed');
+  setText('shake-set-help',he?'מאפשר להפעיל SOS בלי להסתכל על המסך — מנערים את הטלפון בחוזקה. שימושי כשהטלפון בכיס או כשאי אפשר להביט במסך.':'Lets you trigger SOS without looking at the screen — just shake the phone hard. Useful when it\'s in your pocket or you can\'t look.');
+  setText('sos-safety-help',he?'מגן עליך מפני אזעקות שווא ושיגור בטעות. כך לא תשלח/י עזרה בלי כוונה — ולא תפגע/י באמון המערכת.':'Protects you from false alarms and accidental triggers, so you never send help by mistake — or hurt the system\'s trust.');
+  setText('set-priv-help',he?'את/ה שולט/ת במה שמשותף. המיקום נשמר במכשירך ומשותף רק כשאת/ה מפעיל/ה SOS, DMS או שיתוף עם שומר/ת.':'You control what\'s shared. Your location stays on your device and is shared only when you trigger SOS, DMS, or guardian sharing.');
+  setText('p-bgloc-nm',he?'שיתוף מיקום ברקע':'Background location'); setText('p-bgloc-sb',he?'נדרש ל-SOS ו-DMS — בלעדיו אי אפשר לשלוח את מיקומך בחירום':'Needed for SOS & DMS — without it your location can\'t be sent in an emergency');
+  setText('p-showname-nm',he?'הצג שם בעדכונים':'Show name on reports'); setText('p-showname-sb',he?'כבוי = הדיווחים שלך מופיעים בעילום שם':'Off = your reports appear anonymously');
+  setText('set-contacts-lbl',he?'אנשי קשר חירום':'Emergency contacts');
+  setText('set-contacts-help',he?'אנשים שיקבלו את מיקומך והתראה אוטומטית כשתשלח/י SOS. הוסף/י את מי שיגיב/ה הכי מהר.':'People who get your location and an automatic alert when you fire SOS. Add whoever responds fastest.');
+  setText('set-lang-help',he?'שפת התצוגה של האפליקציה. ניתן לשנות בכל עת — לא משפיע על דיווחים קיימים.':'The app\'s display language. Change anytime — it doesn\'t affect existing reports.');
   setText('reset-cap',he?'בדיקה / נתוני דמו':'Testing / demo data');
   setText('reset-btn-lbl',he?'🔄 איפוס אפליקציה / נתוני דמו':'🔄 Reset app / demo data');
   setText('reset-hint',he?'מוחק פרופיל, דיווחים, היסטוריית SOS והגדרות — וחוזר להרשמה.':'Clears profile, reports, SOS history & settings — returns to onboarding.');
@@ -2088,6 +2251,7 @@ function applyTranslations(){
   setText('stat-pts-lbl',he?'נקודות':'Points');
   setText('dms-demo-lbl',he?'דמו':'demo');
   updateShakeSensLabel();
+  try{ gdApplyI18n(); gdRenderList(); gdRenderMarkers(); }catch(e){}
   renderReportsList();renderSosHistory();
 }
 
@@ -2232,7 +2396,10 @@ function enterApp(returning){
   [60,300,700,1200].forEach(ms=>setTimeout(()=>{if(MAP)MAP.invalidateSize(false);},ms));
   if(userLat!==null) moveUserDot(userLat,userLng);
   startGeoWatch();
+  try{ guardianInit(); }catch(e){}
   try{ resumeDMS(); }catch(e){}
+  // Handle an incoming guardian invite link (?g=…) once the map is ready.
+  setTimeout(()=>{ try{ gdCheckInviteParam(); }catch(e){} },900);
   if(!returning){
     setTimeout(()=>{
       const nm=user.name?user.name.split(' ')[0]:T('nav_map');
@@ -2762,7 +2929,7 @@ function removeSOSPin(){if(mapLayers.sosMarker){MAP.removeLayer(mapLayers.sosMar
    MAP — real Leaflet + OpenStreetMap
 ═══════════════════════════════════ */
 let MAP=null;
-const mapLayers={stats:[],reports:{},sosMarker:null,meMarker:null,circle:{},radar:null};
+const mapLayers={stats:[],reports:{},sosMarker:null,meMarker:null,circle:{},guardian:{},radar:null};
 /* CARTO Voyager — clean, minimalistic basemap with crisp, legible street labels. */
 const TILE_URL='https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
 
@@ -2884,6 +3051,7 @@ function startGeoWatch(){
         userLat=pos.coords.latitude; userLng=pos.coords.longitude;
         moveUserDot(userLat,userLng);
         if(sosActive) addSOSPin(); // keep the live SOS pin on the user
+        try{ gdBroadcast(); }catch(e){} // share my real position with paired guardians
       },
       ()=>{},
       {enableHighAccuracy:true,timeout:20000,maximumAge:5000}
@@ -3298,6 +3466,7 @@ function openCircles(){
   seedCirclesIfEmpty();
   if(!activeCircleId||!SS.circles.some(c=>c.id===activeCircleId)) activeCircleId=(SS.circles[0]||{}).id||null;
   op('sh-circles');
+  try{ gdApplyI18n(); gdRenderList(); }catch(e){}
   renderCircles();
 }
 function switchCircle(cid){activeCircleId=cid;renderCircles();}
@@ -3576,6 +3745,294 @@ function radarPing(ll){
     iconSize:[0,0],iconAnchor:[0,0]});
   mapLayers.radar=window.L.marker(ll,{icon:icon,zIndexOffset:1200,interactive:false}).addTo(MAP);
   radarTimeout=setTimeout(()=>{if(mapLayers.radar){MAP.removeLayer(mapLayers.radar);mapLayers.radar=null;}},6500);
+}
+
+/* ═══════════════════════════════════════════════════
+   CONNECT A GUARDIAN — invite/accept pairing + REAL live-location transport
+   ───────────────────────────────────────────────────
+   REAL now (works in this build, no server):
+     • Live device GPS via watchPosition() drives your own pulsing marker.
+     • A shareable invite LINK (Web Share / clipboard) + an accept flow.
+     • A real live-location transport: BroadcastChannel + a localStorage relay
+       carry your REAL position between WINDOWS/TABS of this app on the SAME
+       browser. Each tab has its own sender id (sessionStorage), so two windows
+       genuinely act as two people exchanging live coordinates.
+     • Per-guardian who-sees-whom toggles, ghost/pause, one-tap disconnect.
+   BACKEND/NATIVE phase (flagged in-app + TEST.md):
+     • Live exchange across DIFFERENT devices, always-on background tracking,
+       verified accounts, and end-to-end encryption need a server + native app.
+   When no live peer is broadcasting on a pair (the usual cross-device case) the
+   guardian's marker is clearly badged "simulated" so the map UX is complete.
+═══════════════════════════════════════════════════ */
+const GD_CH='shomer-live-v1';        // BroadcastChannel name
+const GD_RELAY='shomer_live_relay';  // localStorage relay key (cross-tab fallback)
+const GD_FRESH=10000;                // ms a live position stays "live"
+const GD_PALETTE=['#E0A828','#2962FF','#00C853','#E91E8C','#9C27B0','#FF6A00'];
+let gdBC=null, gdTabCode='', gdLiveTimer=null, gdSimTimer=null;
+
+function gdState(){ if(!SS.guardian)SS.guardian={myName:'',myCode:'',pairs:[]}; if(!SS.guardian.pairs)SS.guardian.pairs=[]; return SS.guardian; }
+function gdPairByToken(t){ return gdState().pairs.find(p=>p.token===t); }
+function gdPairById(id){ return gdState().pairs.find(p=>p.id===id); }
+function gdBaseUrl(){ return location.origin+location.pathname.replace(/index\.html$/,'shomer.html'); }
+function gdInviteLink(p){ return gdBaseUrl()+'?g='+encodeURIComponent(p.token)+'#n='+encodeURIComponent(gdState().myName||''); }
+
+function guardianInit(){
+  const g=gdState();
+  if(!g.myCode) g.myCode='u'+Math.random().toString(36).slice(2,10);
+  if(!g.myName) g.myName=(SS.user&&SS.user.name)||user.name||localizedGuardian();
+  try{ gdTabCode=sessionStorage.getItem('shomer_tab')||''; }catch(e){}
+  if(!gdTabCode){ gdTabCode='t'+Math.random().toString(36).slice(2,10); try{sessionStorage.setItem('shomer_tab',gdTabCode);}catch(e){} }
+  saveStore();
+  try{ gdBC=('BroadcastChannel' in window)?new BroadcastChannel(GD_CH):null; }catch(e){ gdBC=null; }
+  if(gdBC) gdBC.onmessage=ev=>gdHandle(ev.data);
+  window.addEventListener('storage',e=>{ if(e.key===GD_RELAY&&e.newValue){ try{ gdHandle(JSON.parse(e.newValue)); }catch(_){} } });
+  g.pairs.forEach((p,i)=>{ if(!p.color)p.color=GD_PALETTE[i%GD_PALETTE.length];
+    if(!p.pending&&p.simLat==null){ p.simLat=TLV[0]+(Math.random()-.5)*.02; p.simLng=TLV[1]+(Math.random()-.5)*.02; } });
+  if(!gdLiveTimer) gdLiveTimer=setInterval(gdLiveSweep,3000);
+  if(!gdSimTimer)  gdSimTimer =setInterval(gdSimWalk,2500);
+  gdRenderMarkers();
+  gdSend({type:'hello'}); gdBroadcast();
+}
+
+/* Outgoing — send a message to peers (other tabs/windows) via both channels. */
+function gdSend(msg){
+  const g=gdState();
+  msg.src=gdTabCode; msg.who=g.myName; msg.at=Date.now(); msg.n=(gdSend._n=(gdSend._n||0)+1);
+  if(gdBC){ try{ gdBC.postMessage(msg); }catch(e){} }
+  try{ localStorage.setItem(GD_RELAY, JSON.stringify(msg)); }catch(e){}
+}
+/* Broadcast MY real position on every pair I share with (one tab → all my tokens). */
+function gdBroadcast(){
+  const g=gdState();
+  if(SS.circleGhost) return;                 // ghost mode pauses outgoing sharing
+  if(userLat==null||userLng==null) return;
+  const toks=g.pairs.filter(p=>p.shareToThem).map(p=>p.token);
+  if(!toks.length) return;
+  gdSend({type:'pos',toks:toks,lat:userLat,lng:userLng});
+}
+/* Incoming — a peer announced presence or sent a live position. */
+function gdHandle(msg){
+  if(!msg||msg.src===gdTabCode) return;       // ignore our own tab's echo
+  if(msg.type==='hello'){ gdBroadcast(); return; }   // someone joined → tell them where I am
+  if(msg.type==='pos'&&Array.isArray(msg.toks)){
+    let changed=false;
+    msg.toks.forEach(tok=>{
+      const p=gdPairByToken(tok); if(!p) return;
+      if(p.pending){ p.pending=false; }
+      if(msg.who&&(!p.name||p._fromLink)){ p.name=msg.who; p._fromLink=false; }
+      p.lat=msg.lat; p.lng=msg.lng; p.ts=Date.now(); p.live=true; changed=true;
+    });
+    if(changed){ saveStore(); gdRenderMarkers(); gdRenderList(); }
+  }
+}
+/* Expire stale live status; keep my outgoing position warm; walk markers. */
+function gdLiveSweep(){
+  const now=Date.now(); let changed=false;
+  gdState().pairs.forEach(p=>{ if(p.live&&now-(p.ts||0)>GD_FRESH){ p.live=false; changed=true; } });
+  if(userLat!=null) gdBroadcast();            // keep peers seeing us as live
+  gdRenderMarkers();
+  if(changed) gdRenderList();
+}
+function gdSimWalk(){
+  let any=false;
+  gdState().pairs.forEach(p=>{
+    if(p.pending) return;
+    if(p.live&&Date.now()-(p.ts||0)<GD_FRESH) return; // real live data wins — don't simulate
+    if(p.simLat==null){ p.simLat=TLV[0]+(Math.random()-.5)*.02; p.simLng=TLV[1]+(Math.random()-.5)*.02; }
+    p.simLat+=(Math.random()-.5)*.0011; p.simLng+=(Math.random()-.5)*.0011; any=true;
+  });
+  if(any) gdRenderMarkers();
+}
+
+/* ── Pair position helpers (live coords if fresh, else simulated) ── */
+function gdIsLive(p){ return !!p.live && (Date.now()-(p.ts||0)<GD_FRESH); }
+function gdPos(p){ if(gdIsLive(p)) return [p.lat,p.lng]; if(p.simLat!=null) return [p.simLat,p.simLng]; return null; }
+
+/* ── Map markers ── */
+function guardianIcon(p,live){
+  return window.L.divIcon({className:'shomer-marker',
+    html:`<div class="mk-circle${live?' live':''}" style="--cc:${p.color||'#E0A828'}">${live?'<div class="tag">LIVE</div>':''}<div class="pulse"></div><div class="av">🛡️</div><div class="nm">${ESC(p.name||(currentLang==='he'?'שומר/ת':'Guardian'))}</div></div>`,
+    iconSize:[38,38],iconAnchor:[19,19],popupAnchor:[0,-20]});
+}
+function gdUpdateMarker(p){
+  if(!MAP||!window.L) return;
+  const show=p.seeThem&&!p.pending&&gdPos(p);
+  if(!show){ if(mapLayers.guardian[p.id]){ MAP.removeLayer(mapLayers.guardian[p.id]); delete mapLayers.guardian[p.id]; } return; }
+  const ll=gdPos(p), live=gdIsLive(p);
+  if(mapLayers.guardian[p.id]){ mapLayers.guardian[p.id].setLatLng(ll); mapLayers.guardian[p.id].setIcon(guardianIcon(p,live)); }
+  else mapLayers.guardian[p.id]=window.L.marker(ll,{icon:guardianIcon(p,live),zIndexOffset:live?760:680,alt:p.name||'Guardian'}).addTo(MAP);
+}
+function gdRenderMarkers(){ if(!MAP)return; gdState().pairs.forEach(gdUpdateMarker);
+  // drop markers for removed pairs
+  Object.keys(mapLayers.guardian).forEach(id=>{ if(!gdPairById(id)){ MAP.removeLayer(mapLayers.guardian[id]); delete mapLayers.guardian[id]; } }); }
+function gdFlyTo(id){
+  const p=gdPairById(id); const ll=p&&gdPos(p); if(!ll){ toast(currentLang==='he'?'אין מיקום זמין עדיין':'No location yet','amb'); return; }
+  gdUpdateMarker(p); cl('sh-circles');
+  if(MAP){ try{MAP.invalidateSize(false);}catch(e){}
+    setTimeout(()=>{ try{MAP.setView(ll,16,{animate:true,duration:1.0});}catch(e){try{MAP.setView(ll,16);}catch(_){}}
+      setTimeout(()=>radarPing(ll),650); },60); }
+  toast((currentLang==='he'?'🎯 מאתר/ת את ':'🎯 Locating ')+(p.name||(currentLang==='he'?'שומר/ת':'guardian'))+'…','');
+}
+
+/* ── Invite / accept / connect flows ── */
+function gdOpen(id){ const e=document.getElementById(id); if(e){ e.classList.add('on'); e.setAttribute('aria-hidden','false'); } }
+function gdClose(id){ const e=document.getElementById(id); if(e){ e.classList.remove('on'); e.setAttribute('aria-hidden','true'); } }
+
+function gdCreateInvite(){
+  const g=gdState();
+  const token='g'+Math.random().toString(36).slice(2,8)+Math.random().toString(36).slice(2,6);
+  const p={id:genId('g'),token:token,name:'',rel:'',shareToThem:true,seeThem:true,addedTs:Date.now(),
+    initiator:true,pending:true,color:GD_PALETTE[g.pairs.length%GD_PALETTE.length],lat:null,lng:null,ts:0,live:false,simLat:null,simLng:null};
+  g.pairs.push(p); saveStore();
+  const inp=document.getElementById('gd-invite-link'); if(inp) inp.value=gdInviteLink(p);
+  gdOpen('gd-invite'); gdRenderList();
+}
+function gdCopyLink(){
+  const inp=document.getElementById('gd-invite-link'); if(!inp)return; inp.select();
+  const done=()=>toast(currentLang==='he'?'✓ הקישור הועתק':'✓ Link copied','grn');
+  if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(inp.value).then(done,()=>{try{document.execCommand('copy');done();}catch(e){}}); }
+  else { try{document.execCommand('copy');done();}catch(e){} }
+}
+function gdShareLink(){
+  const inp=document.getElementById('gd-invite-link'); const link=inp?inp.value:'';
+  const txt=currentLang==='he'?'הצטרף/י אליי ב-SHOMER כשומר/ת — נראה זה את מיקומו של זה:':'Join me on SHOMER as my guardian — we\'ll see each other\'s live location:';
+  if(navigator.share){ navigator.share({title:'SHOMER',text:txt,url:link}).catch(()=>{}); }
+  else gdCopyLink();
+}
+function gdEnterCodeOpen(){ const i=document.getElementById('gd-enter-input'); if(i)i.value=''; gdOpen('gd-enter'); setTimeout(()=>{try{i&&i.focus();}catch(e){}},120); }
+function gdEnterCodeSubmit(){
+  const i=document.getElementById('gd-enter-input'); let v=(i&&i.value||'').trim(); if(!v){ return; }
+  let tok='',nm='';
+  const m=v.match(/[?#&]g=([^&\s]+)/); if(m){ try{tok=decodeURIComponent(m[1]);}catch(e){tok=m[1];} } else { tok=v.split(/[?#&\s]/)[0]; }
+  const hn=v.match(/[#&]n=([^&\s]+)/); if(hn){ try{nm=decodeURIComponent(hn[1]);}catch(e){nm=hn[1];} }
+  if(!tok){ toast(currentLang==='he'?'קוד לא תקין':'Invalid code','amb'); return; }
+  gdClose('gd-enter'); gdConnect(tok,nm,false);
+}
+/* Open with ?g=<token> — parsed at startup. Own link in another window = live demo. */
+function gdCheckInviteParam(){
+  let tok='',nm='';
+  try{ const u=new URL(location.href); tok=u.searchParams.get('g')||''; }catch(e){}
+  if(!tok){ const m=(location.hash||'').match(/[#&]g=([^&]+)/); if(m){ try{tok=decodeURIComponent(m[1]);}catch(e){tok=m[1];} } }
+  if(!tok) return;
+  const hn=(location.hash||'').match(/[#&]n=([^&]+)/); if(hn){ try{nm=decodeURIComponent(hn[1]);}catch(e){nm=hn[1];} }
+  try{ history.replaceState(null,'',gdBaseUrl()); }catch(e){}
+  const existing=gdPairByToken(tok);
+  if(existing&&existing.initiator){
+    existing.pending=false; saveStore();
+    toast(currentLang==='he'?'🔗 קישור חי פעיל בחלון זה — זוז/י ושני החלונות יתעדכנו':'🔗 Live link active here — move and both windows update','grn');
+    setTimeout(()=>{ try{locMe();}catch(e){} gdBroadcast(); gdRenderMarkers(); },500);
+    return;
+  }
+  gdAcceptInvite._tok=tok; gdAcceptInvite._nm=nm;
+  setText('gd-accept-body', currentLang==='he'?((nm||'מישהו')+' מזמין/ה אותך להיות השומר/ת שלו/ה.'):((nm||'Someone')+' invites you to be their guardian.'));
+  gdOpen('gd-accept');
+}
+function gdAcceptInvite(){ gdClose('gd-accept'); gdConnect(gdAcceptInvite._tok,gdAcceptInvite._nm,true); }
+function gdDeclineInvite(){ gdClose('gd-accept'); }
+/* Create/confirm a pairing for a token, then start exchanging live position. */
+function gdConnect(tok,nm,fromLink){
+  const g=gdState();
+  let p=gdPairByToken(tok);
+  if(!p){ p={id:genId('g'),token:tok,name:nm||'',rel:'',shareToThem:true,seeThem:true,addedTs:Date.now(),
+    initiator:false,pending:false,color:GD_PALETTE[g.pairs.length%GD_PALETTE.length],
+    lat:null,lng:null,ts:0,live:false,_fromLink:!!fromLink,
+    simLat:TLV[0]+(Math.random()-.5)*.02,simLng:TLV[1]+(Math.random()-.5)*.02}; g.pairs.push(p); }
+  else { p.pending=false; if(nm&&!p.name)p.name=nm; }
+  saveStore();
+  gdSend({type:'hello'}); gdBroadcast(); gdRenderMarkers(); gdRenderList();
+  if(document.getElementById('sh-circles')&&document.getElementById('sh-circles').classList.contains('open')){} else openCircles();
+  toast(currentLang==='he'?'✓ חוברת ל'+(p.name||'שומר/ת'):'✓ Connected to '+(p.name||'guardian'),'grn');
+  try{ pushNotify('🛡️ SHOMER',(currentLang==='he'?'חוברת לשומר/ת':'Guardian connected'),'gd-pair'); }catch(e){}
+}
+function gdDisconnect(id){
+  const g=gdState(); const p=gdPairById(id); if(!p)return;
+  g.pairs=g.pairs.filter(x=>x.id!==id);
+  if(mapLayers.guardian[id]){ MAP&&MAP.removeLayer(mapLayers.guardian[id]); delete mapLayers.guardian[id]; }
+  saveStore(); gdRenderList();
+  toast(currentLang==='he'?'החיבור נותק':'Disconnected','');
+}
+function gdToggleField(id,field,el){ const p=gdPairById(id); if(!p)return; p[field]=!p[field]; el.classList.toggle('on',p[field]);
+  saveStore(); gdRenderMarkers(); if(field==='shareToThem')gdBroadcast(); }
+function gdRename(id,val){ const p=gdPairById(id); if(!p)return; p.name=val; saveStore(); }
+function gdSetRel(id,val){ const p=gdPairById(id); if(!p)return; p.rel=val; saveStore(); }
+
+/* ── Guardian list UI (XSS-safe via ESC / textContent) ── */
+function gdStatusOf(p){
+  const he=currentLang==='he';
+  if(p.pending) return {cls:'pending',txt:he?'⏳ ממתין לאישור':'⏳ Waiting to accept'};
+  if(gdIsLive(p)) return {cls:'live',txt:he?'מיקום חי':'Live location'};
+  return {cls:'sim',txt:he?'מיקום מדומה (שלב שרת לחי בין-מכשירי)':'Simulated (live cross-device = backend phase)'};
+}
+function gdRenderList(){
+  const list=document.getElementById('gd-list'); if(!list)return;
+  const he=currentLang==='he'; const g=gdState(); list.innerHTML='';
+  if(!g.pairs.length){
+    const e=document.createElement('div'); e.style.cssText='text-align:center;color:var(--tx3);font-size:12px;padding:14px 4px;line-height:1.6';
+    e.textContent=he?'עדיין אין שומרים מחוברים. הזמן/י מישהו שאת/ה סומך/ת עליו.':'No guardians connected yet. Invite someone you trust.';
+    list.appendChild(e); return;
+  }
+  g.pairs.forEach(p=>{
+    const st=gdStatusOf(p);
+    const wrap=document.createElement('div');
+    const row=document.createElement('div'); row.className='gd-row'+(st.cls==='live'?' live':''); row.setAttribute('role','listitem');
+    row.innerHTML=`<div class="gd-av" style="border-color:${p.color||'#E0A828'}">🛡️</div>
+      <div class="gd-main">
+        <div class="gd-nm">${ESC(p.name||(he?'שומר/ת':'Guardian'))}</div>
+        <div class="gd-rel">${ESC(p.rel||(p.initiator?(he?'הזמנתי':'I invited'):(he?'מחובר/ת':'connected')))}</div>
+        <span class="gd-stat ${st.cls}"><span class="ld" aria-hidden="true"></span>${st.txt}</span>
+      </div>
+      <button class="gd-find" aria-label="${he?'אתר/י':'Locate'}">🎯</button>`;
+    row.querySelector('.gd-find').onclick=(e)=>{e.stopPropagation();gdFlyTo(p.id);};
+    const panel=document.createElement('div'); panel.className='gd-priv'; panel.style.display='none';
+    panel.innerHTML=`
+      <div class="pv-row"><div><div class="pv-l">${he?'שתף/י את מיקומי':'Share my location'}</div><div class="pv-s">${he?'הם יראו את המיקום החי שלך':'They see your live location'}</div></div><div class="tog ${p.shareToThem?'on':''}" data-f="shareToThem" role="switch"></div></div>
+      <div class="pv-row"><div><div class="pv-l">${he?'ראה/י את מיקומם':'See their location'}</div><div class="pv-s">${he?'יופיע/תופיע על המפה שלך':'Shows on your map'}</div></div><div class="tog ${p.seeThem?'on':''}" data-f="seeThem" role="switch"></div></div>
+      ${p.initiator&&p.pending?`<div class="pv-row"><div><div class="pv-l">${he?'שלח/י שוב את ההזמנה':'Re-share the invite'}</div><div class="pv-s">${he?'העתק/י את קישור ההזמנה':'Copy the invite link'}</div></div><button class="gd-copy" data-a="reshare" style="padding:8px 12px">${he?'קישור':'Link'}</button></div>`:''}
+      <div class="gd-acts">
+        <button data-a="locate">🎯 ${he?'אתר/י':'Locate'}</button>
+        <button class="danger" data-a="disc">✕ ${he?'נתק/י':'Disconnect'}</button>
+      </div>`;
+    panel.querySelectorAll('.tog').forEach(t=>{ t.onclick=(e)=>{e.stopPropagation();gdToggleField(p.id,t.getAttribute('data-f'),t);}; });
+    const re=panel.querySelector('[data-a="reshare"]'); if(re)re.onclick=(e)=>{e.stopPropagation(); const i=document.getElementById('gd-invite-link'); if(i)i.value=gdInviteLink(p); gdOpen('gd-invite');};
+    panel.querySelector('[data-a="locate"]').onclick=(e)=>{e.stopPropagation();gdFlyTo(p.id);};
+    panel.querySelector('[data-a="disc"]').onclick=(e)=>{e.stopPropagation();gdDisconnect(p.id);};
+    row.querySelector('.gd-main').style.cursor='pointer';
+    row.querySelector('.gd-main').onclick=()=>{ panel.style.display=panel.style.display==='none'?'block':'none'; };
+    wrap.appendChild(row); wrap.appendChild(panel); list.appendChild(wrap);
+  });
+}
+/* Static-label translations for the guardian UI (he/en; other locales fall back). */
+function gdApplyI18n(){
+  const he=currentLang==='he';
+  setText('dd-guard',he?'חבר/י שומר/ת':'Connect a Guardian');
+  setText('gd-hero-t',he?'חבר/י שומר/ת':'Connect a Guardian');
+  setText('gd-hero-s',he?'צרף/י אדם שאת/ה סומך/ת עליו (הורה/בן-זוג). הם יראו את מיקומך החי ואת/ה את שלהם — בהזמנה ואישור. את/ה שולט/ת מי רואה את מי, וניתן לעצור בכל רגע.':'Pair someone you trust (a parent/partner). They\'ll see your live location and you\'ll see theirs — by invite and accept. You control who sees whom, and you can stop anytime.');
+  setText('gd-invite-lbl',he?'הזמן/י שומר/ת':'Invite a guardian');
+  setText('gd-enter-lbl',he?'יש לי קוד':'I have a code');
+  setText('rb-real-h',he?'אמיתי עכשיו':'Real now');
+  setText('rb-next-h',he?'שלב שרת/נייטיב':'Backend / native phase');
+  setText('rb-r1',he?'איתור מיקום חי שלך (GPS)':'Your live GPS location');
+  setText('rb-r2',he?'קישור הזמנה לשיתוף':'Shareable invite link');
+  setText('rb-r3',he?'מיקום חי בין חלונות באותו דפדפן':'Live across windows on this browser');
+  setText('rb-r4',he?'בקרת מי-רואה-מי + עצירה':'Who-sees-whom control + stop');
+  setText('rb-n1',he?'מיקום חי בין מכשירים שונים':'Live across different devices');
+  setText('rb-n2',he?'מעקב ברקע תמידי':'Always-on background tracking');
+  setText('rb-n3',he?'חשבונות + הזמנות מאומתות':'Accounts + verified invites');
+  setText('rb-n4',he?'הצפנה מקצה-לקצה':'End-to-end encryption');
+  setText('circ-demo-cap',he?'מעגלים (הדגמה)':'Circles (demo)');
+  setText('gd-invite-ttl',he?'🔗 הזמן/י שומר/ת':'🔗 Invite a guardian');
+  setText('gd-invite-help',he?'שתף/י את הקישור עם מי שאת/ה סומך/ת עליו. כשהם יפתחו אותו ויאשרו — תיווצר חבירה, ותראו זה את מיקומו של זה.':'Share the link with someone you trust. When they open it and accept, you pair — and see each other\'s location.');
+  setText('gd-copy-lbl',he?'העתק':'Copy');
+  setText('gd-share-lbl',he?'שתף/י קישור':'Share link');
+  setText('gd-invite-note',he?'💡 לבדיקה ללא מכשיר שני: פתח/י את הקישור בחלון/לשונית נוספת באותו דפדפן — המיקום החי יזרום בזמן אמת בין החלונות. שיתוף בין מכשירים שונים מצריך שרת (שלב הבא).':'💡 To test without a second device: open the link in another window/tab of the same browser — live location flows in real time between windows. Cross-device sharing needs a server (next phase).');
+  setText('gd-enter-ttl',he?'🔑 הזן/י קוד שומר/ת':'🔑 Enter a guardian code');
+  setText('gd-enter-help',he?'הדבק/י קישור הזמנה או קוד שקיבלת.':'Paste an invite link or code you received.');
+  setText('gd-enter-submit-lbl',he?'חבר/י':'Connect');
+  setText('gd-accept-ttl',he?'🛡️ הזמנה לשמירה':'🛡️ Guardian invite');
+  setText('gd-accept-sub',he?'באישור: תראו זה את מיקומו החי של זה. ניתן לעצור בכל רגע מתוך "מעגלים".':'On accept: you\'ll see each other\'s live location. You can stop anytime from "Circles".');
+  setText('gd-accept-yes-lbl',he?'אשר/י וחבר/י':'Accept & connect');
+  setText('gd-accept-no',he?'דחה/י':'Decline');
+  const ei=document.getElementById('gd-enter-input'); if(ei)ei.placeholder=he?'הדבק/י קישור או קוד':'Paste link or code';
 }
 
 /* ═══════════════════════════════════

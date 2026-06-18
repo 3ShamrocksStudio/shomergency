@@ -46,25 +46,44 @@ explains, honestly, what this front-end-only prototype does *not* do.
 
 ---
 
-## 2. SOS (siren + pin + confirm/cancel + logged to history)
+## 2. SOS safety / anti-abuse flow (alarm-first · cancel-no-trace · resolve · rate-limit · hold-to-arm)
 
+The key rule under test: **false alarms and misuse must NEVER appear on the map.**
+
+### 2a. Press → cancel within the countdown = FALSE ALARM, no trace
 1. On the map, press the big red **SOS** button.
-   - **Expected:**
-     - A **loud aggressive siren** plays immediately (60-second loop).
-     - A **pulsing red pin** drops on the map at your real location (or Tel Aviv center if
-       location was skipped).
-     - A red **SOS strip** appears under the header with a **בטל SOS / Cancel SOS** button.
-     - After ~2 seconds a confirm dialog offers to auto-dial police 100 (OK opens the dialer).
-     - The Updates feed opens and shows **"🚨 SOS פעיל שלך / Your active SOS"**.
-2. Tap **בטל SOS / Cancel SOS** (or press SOS again).
-   - **Expected:** siren stops, strip disappears, pin is removed.
-3. Open menu → **Profile** → scroll to **היסטוריית SOS / SOS history**.
-   - **Expected:** the SOS event is listed with timestamp, coordinates, and a trigger tag
-     (manual / shake / DMS).
-4. **Reload.** Re-open Profile → SOS history.
-   - **Expected:** the SOS event is still there.
+   - **Expected:** the **loud siren fires immediately**, and a full-screen **cancel countdown**
+     appears (ring + number counting 10→0) with a big green **"I'm safe — Cancel"** button.
+   - **Expected:** at this point there is **NO map pin** and **NO feed card** yet (broadcast hasn't happened).
+2. Tap **"I'm safe — Cancel"** (or the SOS button) **before** the countdown ends.
+   - **Expected:** siren stops, overlay closes, toast says *"Cancelled — false alarm. Nothing shared, nothing on the map."*
+   - **Expected:** open Updates feed → **no SOS card**. Map → **no pin**. Profile → SOS history → **no new event** (a false alarm leaves no trace).
 
-✅ *Pass criteria:* siren fires, pin at real geo, cancel works, event logged and persists.
+### 2b. Press → let it fire = ACTIVE event (maps + pulses + broadcasts)
+1. Press **SOS**, then **let the countdown reach 0** (don't cancel).
+   - **Expected:** overlay closes; a **pulsing red pin** drops at your location; the red **SOS strip**
+     appears (now with an **"✓ I'm safe"** button); a toast says *"SOS broadcast — nearby guardians notified (simulated)"*;
+     the Updates feed gets a **"🚨 Your active SOS"** card; after ~2s the auto-dial 100 confirm appears; responder count climbs.
+
+### 2c. Resolve as accidental / test → removed from the map
+1. With an active SOS, tap **"✓ I'm safe"** on the strip.
+   - **Expected:** a prompt asks **"Real / Accidental / Test?"**
+2. Choose **Accidental** (or **Test**).
+   - **Expected:** the **pin is removed** and the **feed card disappears**; toast confirms it was *removed from the map, not shared with others.*
+3. Repeat 2b, then choose **Real**.
+   - **Expected:** the pin **stays** (confirmed-real events remain mapped).
+4. Profile → SOS history shows each event tagged **confirmed / accidental / test** (private log; accidental/test are still gone from the public map).
+
+### 2d. Rate limit (max 3 active/day)
+1. Fire-and-let-activate **3 times** (resolve each). On the **4th**, let it activate.
+   - **Expected:** alarm still sounds, strip shows **"broadcast paused (daily limit)"**, toast explains the daily limit; **no new pin/broadcast**. `Settings → SOS safety` shows **3/3**.
+   - *(Configurable via `SS.sos.maxPerDay`. This is a local sim — a real server enforces it; see README.)*
+
+### 2e. Countdown duration setting & hold-to-arm
+1. `Settings → SOS safety` → set **Cancel window** to **5s** → press SOS → countdown now starts at **5**.
+2. Toggle **Hold-to-arm** on → a single tap on SOS only shows a *"press & hold 2s"* hint; **press and hold ~2s** → the gold ring fills and SOS fires.
+
+✅ *Pass criteria:* alarm always fires first; cancel leaves zero trace (no pin/feed/history); activation maps + pulses; accidental/test scrub from the map; real stays; rate limit blocks broadcast; duration + hold-to-arm work; all settings persist across reload.
 
 ---
 
@@ -231,6 +250,12 @@ This is a **client-side-only** prototype. There is **no server / backend**. As a
 9. **DMS / timers only run while a tab is open.** A backgrounded or closed tab won't fire the
    auto-SOS in real time; on reopening, an expired DMS is reported as expired (it does not
    retroactively blast the alarm).
+10. **SOS anti-abuse is simulated locally and is bypassable.** The cancel-no-trace flow, the
+    pulsing pin, and the resolution prompt are real UX, but the **broadcast, the per-day rate
+    limit (`SS.sos.activeToday`), and the trust score (`trustScore()`) live in LocalStorage** —
+    clearing site data resets the counters. A real deployment must enforce **broadcast/fan-out,
+    rate-limiting, and reputation on the server**, keyed to an authenticated account, and must
+    never publish cancelled/accidental/test events. See README → *"What a real backend MUST enforce"*.
 
 These are inherent to a no-backend prototype and would be resolved by adding a server,
 push infrastructure, real map tiles, and a native wrapper.
