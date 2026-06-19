@@ -66,7 +66,14 @@ is complete — it never pretends to be the real person's live location.
 2. Flip **Ghost mode** → all outgoing sharing pauses.
 3. **Disconnect** → the pairing and marker are removed.
 
-### E. No regressions
+### E. Compliance — disclaimer, ToS/Privacy, consent gate
+1. **Onboarding** shows the red emergency disclaimer ("NOT a replacement for emergency services… call 100/101/102"); footer links to **Terms · Privacy · Disclaimer**.
+2. On the map, tap **ⓘ** under the SOS button → the **Disclaimer page** opens with 100/101/102 call buttons. **Settings → Safety & legal** opens the same three pages; ToS & Privacy are marked **"Draft."**
+3. Press **SOS** and watch the countdown → it shows *"Shomer does not call authorities. Dial 100/101/102 yourself."* Cancel it (false alarm, no trace).
+4. **Consent gate:** with sharing not yet consented, tap **Invite a guardian** → the **Location-sharing consent** dialog appears first; **no pairing is created** and **nothing is broadcast** until you tap **"I agree to share my location."** After agreeing, the invite proceeds and consent is recorded (revocable via ghost/disconnect/reset).
+   - **Accuracy check:** the disclaimer/ToS never claim Shomer auto-alerts authorities or works always-on/background — because it doesn't.
+
+### F. No regressions
 - SOS, the cancel-countdown, false-alarm "leaves no trace", Dead Man's Switch, and Shake-to-SOS all still work — see [TEST_AUDIT.md](TEST_AUDIT.md).
 - No console errors at any step.
 

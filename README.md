@@ -30,6 +30,7 @@ Live: https://3shamrocksstudio.github.io/shomergency/
 - **Connect a Guardian — live location** (see below) — pair a trusted person via a real shareable invite link, see each other on a live map, with who-sees-whom controls. Real cross-window live sync today; cross-device is the backend phase.
 - **6 languages** (he, en, ar, ru, am, fr) with correct RTL/LTR. The auto-filled username is **random and locale-appropriate**, and re-rolls with the chosen language (and is fully editable, incl. a 🎲 button).
 - **Plain-language Settings** — every Settings section and toggle carries a short "what this does / why" helper line written from the user's point of view (he/en).
+- **Compliance layer** (see below) — prominent emergency disclaimer (onboarding + near SOS + footer), Terms of Service + Privacy Policy pages, and an explicit opt-in consent gate before any location sharing. Bilingual; accurate to what the build actually does.
 
 ## Data & sources — honesty note
 The city markers are an **aggregate statistical safety overview — NOT specific incidents**. Individual pins on the map come **only** from user reports and live SOS.
@@ -92,6 +93,17 @@ real person's live location.
 
 The in-app **"Real now ✓ / Backend·native phase ⏳"** matrix states this verbatim,
 so the user is never misled about what the web build can and can't do.
+
+## Compliance / "legal-to-exist" layer
+
+So Shomer can be published as a consumer personal-safety / location-sharing app
+(the category Life360 / bSafe operate in) while staying **100% accurate** about
+what this build does:
+
+- **Emergency disclaimer** — *"Shomer is a personal-safety & location-sharing tool — NOT a replacement for emergency services. In a real emergency call 100 (Police) / 101 (MDA) / 102 (Fire)."* Shown **prominently at onboarding**, **in the SOS countdown** (the moment SOS fires), via a tappable **ⓘ under the SOS button**, in a dedicated **Disclaimer page** with one-tap call buttons, and **linked in the footer** (onboarding + Settings). Hebrew + English.
+- **Terms of Service** + **Privacy Policy** pages — plain-language, Hebrew + English, each marked **"Draft — legal review recommended before commercial scale."** Privacy covers: what's collected, opt-in consent, stored **on-device** (no server), user can **stop sharing + delete all data**, and **we do not sell or share data with third parties**.
+- **Explicit consent gate** — a location-sharing opt-in dialog appears **before any guardian sharing starts** (invite/accept). `gdBroadcast()` is hard-gated on `SS.consent.share`, so nothing is shared until the user agrees; consent is timestamped + versioned and revocable (ghost / disconnect / reset).
+- **Accuracy** — the disclaimer and ToS state explicitly that Shomer **does not contact authorities for you** and that this build has **no always-on/background tracking** and **no cross-device live sharing**. The honest "Real now vs backend/native phase" matrix is unchanged.
 
 ## Known limitations
 - **Map tiles need network at runtime** — Leaflet + OSM tiles are fetched by the browser from cdnjs / openstreetmap.org. Offline, the app shell loads but map tiles will be blank. (The CSP allows exactly these origins and nothing else.)

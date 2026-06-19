@@ -708,6 +708,39 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 .gd-link{display:flex;gap:6px;margin:10px 0;}
 .gd-link input{flex:1;min-width:0;background:var(--n2);border:1px solid var(--b2);border-radius:10px;padding:11px;color:var(--tx0);font-size:12px;font-family:ui-monospace,monospace;direction:ltr;}
 .gd-copy{flex-shrink:0;padding:11px 14px;border-radius:10px;border:none;background:var(--g3);color:var(--n0);font-weight:800;font-size:13px;cursor:pointer;}
+/* ── Compliance: emergency disclaimer + legal pages ── */
+.disclaimer{display:flex;align-items:flex-start;gap:9px;background:rgba(204,20,38,.12);border:1px solid var(--b4);border-right:4px solid var(--r3);border-radius:var(--r12);padding:11px 13px;margin-bottom:14px;font-size:11.5px;color:var(--tx0);line-height:1.55;text-align:start;}
+[dir=ltr] .disclaimer{border-right:1px solid var(--b4);border-left:4px solid var(--r3);}
+.disclaimer .dc-ic{font-size:16px;flex-shrink:0;line-height:1.3;}
+.disclaimer strong{color:#FF8089;}
+.disclaimer b{color:var(--g4);}
+/* tappable disclaimer under the SOS button (always visible, near SOS) */
+.sos-sub{background:none;border:none;cursor:pointer;padding:0;}
+.sos-sub .si{opacity:.8;font-weight:900;}
+/* footer legal links */
+.legal-links{display:flex;flex-wrap:wrap;justify-content:center;gap:5px 10px;padding:8px 14px 2px;direction:ltr;}
+.legal-links button{background:none;border:none;color:var(--tx2);font-size:11px;font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:2px;padding:2px;}
+.legal-links button:hover{color:var(--g3);}
+.legal-links .sep{color:var(--tx4);font-size:11px;}
+.lnk-inline{background:none;border:none;padding:0;font:inherit;color:var(--g3);text-decoration:underline;text-underline-offset:2px;cursor:pointer;}
+/* legal sheet body */
+.legal-body{font-size:12.5px;color:var(--tx1);line-height:1.75;}
+.legal-body h4{font-size:13px;color:var(--g3);font-weight:800;margin:18px 0 6px;letter-spacing:.2px;}
+.legal-body h4:first-child{margin-top:4px;}
+.legal-body p{margin:0 0 10px;}
+.legal-body ul{margin:0 0 10px;padding-inline-start:20px;}
+.legal-body li{margin-bottom:5px;}
+.legal-body strong{color:var(--tx0);}
+.legal-draft{background:var(--amb-b);border:1px solid rgba(192,120,8,.4);border-radius:var(--r12);padding:10px 12px;font-size:11.5px;color:#F2C572;line-height:1.6;margin-bottom:14px;}
+.legal-meta{font-size:10.5px;color:var(--tx3);margin-top:14px;line-height:1.6;}
+.disc-call{display:flex;gap:8px;margin:14px 0 4px;}
+.disc-call button{flex:1;padding:12px;border-radius:var(--r12);border:none;font-size:13px;font-weight:800;cursor:pointer;background:var(--rb);color:#FF7080;border:1px solid var(--b4);}
+.disc-call button.pr{background:linear-gradient(135deg,#B01220,#E8182C);color:#fff;border:none;}
+/* consent gate dialog reuses .ff-pick overlay */
+.consent-points{list-style:none;padding:0;margin:12px 0;}
+.consent-points li{display:flex;gap:9px;align-items:flex-start;font-size:12.5px;color:var(--tx1);line-height:1.55;padding:7px 0;border-bottom:1px solid var(--b1);}
+.consent-points li:last-child{border-bottom:none;}
+.consent-points .cp-ic{flex-shrink:0;font-size:15px;}
 /* live marker LIVE badge on the map */
 .mk-circle.live .av{border-color:#40C880;}
 .mk-circle.live .pulse{background:#40C880;}
@@ -784,6 +817,10 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
     <div class="ob-card">
       <h3 id="ob-h0">יצירת חשבון שומר</h3>
       <p class="desc" id="ob-d0">מפת בטיחות חיה · SOS + אזעקה מיידית · עזרה הדדית</p>
+      <div class="disclaimer" id="ob-disclaimer">
+        <span class="dc-ic" aria-hidden="true">⚠️</span>
+        <span id="ob-disclaimer-txt"><strong>שומר אינו תחליף לשירותי חירום.</strong> זהו כלי לבטיחות אישית ושיתוף מיקום. במצב חירום אמיתי חייגו <b>100</b> (משטרה) · <b>101</b> (מד״א) · <b>102</b> (כבאות). שומר אינו מתקשר לרשויות עבורך.</span>
+      </div>
       <div class="name-field-wrap">
         <input class="ob-f" id="ob-name" type="text" autocomplete="given-name" maxlength="40" placeholder="שם פרטי" aria-label="שם פרטי" style="margin-bottom:6px">
         <span class="name-edit-ic" aria-hidden="true">✎</span>
@@ -843,11 +880,17 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
         <span id="ob-defaults-txt"><strong>Shake-to-SOS</strong> פעיל · <strong>Dead Man's Switch</strong> כבוי. אפשר לשנות בכל עת בהגדרות.</span>
       </div>
       <button class="ob-cta" onclick="obFinish()" id="ob-finish-btn">✓ <span id="ob-finish-t">כניסה לשומר</span></button>
+      <p style="font-size:10.5px;color:var(--tx3);line-height:1.6;margin:10px 2px 0;text-align:center" id="ob-agree-txt">בכניסה את/ה מסכים/ה ל<button type="button" class="lnk-inline" onclick="openLegal('tos')">תנאי השימוש</button> ול<button type="button" class="lnk-inline" onclick="openLegal('privacy')">מדיניות הפרטיות</button>. שיתוף מיקום הוא בהסכמה בלבד.</p>
       <button class="ob-back" onclick="goStep(1)" id="ob-back2">← חזרה</button>
     </div>
   </div>
 
   <!-- Studio credit / copyright footer -->
+  <div class="legal-links" id="ob-legal-links">
+    <button onclick="openLegal('tos')" id="ob-ll-tos">תנאי שימוש</button><span class="sep">·</span>
+    <button onclick="openLegal('privacy')" id="ob-ll-priv">מדיניות פרטיות</button><span class="sep">·</span>
+    <button onclick="openLegal('disclaimer')" id="ob-ll-disc">כתב ויתור חירום</button>
+  </div>
   <footer class="studio-credit">
     <span class="sc-badge"><img src="3shamrocks.png" alt="3Shamrocks Studio" width="100" height="15"></span>
     <span class="cr">© 2026 <b>3Shamrocks Studio</b> · All rights reserved.</span>
@@ -963,6 +1006,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
       </div>
       <button class="sos-cd-btn" onclick="cancelCountdown()" id="sos-cd-cancel">אני בטוח/ה — בטל</button>
       <div class="sos-cd-hint" id="sos-cd-hint">ביטול עכשיו = אזעקת שווא. שום דבר לא ישודר ולא יופיע במפה.</div>
+      <div class="sos-cd-hint" id="sos-cd-legal" style="color:#FF9aa3;margin-top:8px;font-weight:700">⚠️ <span id="sos-cd-legal-txt">שומר אינו מתקשר לרשויות. במצב חירום חייגו 100 / 101 / 102 בעצמכם.</span></div>
     </div>
   </div>
 
@@ -1007,7 +1051,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
       <button class="sos-btn" id="sos-btn" onclick="onSosTap()" aria-label="שלח SOS חירום" aria-pressed="false">
         <span class="sos-txt">SOS</span>
       </button>
-      <span class="sos-sub" id="nav-sos">חירום מיידי</span>
+      <button class="sos-sub" id="nav-sos" onclick="openLegal('disclaimer')" aria-label="חירום מיידי — מידע ובטיחות">חירום מיידי <span class="si" aria-hidden="true">ⓘ</span></button>
     </div>
   </nav>
 
@@ -1238,6 +1282,13 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
         <div class="ai-row"><span class="ai-l">מוטו</span><span class="ai-v">שׁוֹמֵר אָחִי אָנֹכִי</span></div>
         <div class="ai-row"><span class="ai-l">זכויות יוצרים</span><span class="ai-v" dir="ltr">© 2026 3Shamrocks Studio</span></div>
       </div>
+      <div class="sec-cap mb12" style="margin-top:18px" id="set-legal-cap">בטיחות ומשפט</div>
+      <p class="set-help" id="set-legal-help">המידע המשפטי וכתב הוויתור. שומר הוא כלי לבטיחות אישית — לא תחליף לשירותי חירום.</p>
+      <div class="set-grp mb20">
+        <div class="set-row" onclick="openLegal('disclaimer')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic">⚠️</div><div class="sr-nm" id="set-disc-row">כתב ויתור חירום</div></div><span style="color:var(--tx3);font-size:18px">›</span></div>
+        <div class="set-row" onclick="openLegal('tos')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic">📄</div><div class="sr-nm" id="set-tos-row">תנאי שימוש</div></div><span style="color:var(--tx3);font-size:18px">›</span></div>
+        <div class="set-row" onclick="openLegal('privacy')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic">🔐</div><div class="sr-nm" id="set-priv-row">מדיניות פרטיות</div></div><span style="color:var(--tx3);font-size:18px">›</span></div>
+      </div>
       <div class="sec-cap mb12" style="margin-top:18px" id="datasrc-cap">נתונים ומקורות</div>
       <div class="set-grp" style="padding:13px 14px;">
         <p style="font-size:11.5px;color:var(--tx2);line-height:1.75" id="datasrc-txt">
@@ -1251,6 +1302,11 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
       </div>
       <div class="sr-sb" id="reset-hint" style="margin:-10px 2px 16px;line-height:1.6">מוחק פרופיל, דיווחים, היסטוריית SOS והגדרות — וחוזר להרשמה.</div>
       <button style="width:100%;padding:13px;border:1px solid var(--b1);border-radius:var(--r12);background:var(--n3);font-size:13px;font-weight:600;color:#FF7080;margin-top:8px;cursor:pointer;" onclick="toast('יציאה בוצעה','red')">יציאה מהחשבון</button>
+      <div class="legal-links" id="set-legal-links">
+        <button onclick="openLegal('tos')" id="set-ll-tos">תנאי שימוש</button><span class="sep">·</span>
+        <button onclick="openLegal('privacy')" id="set-ll-priv">מדיניות פרטיות</button><span class="sep">·</span>
+        <button onclick="openLegal('disclaimer')" id="set-ll-disc">כתב ויתור חירום</button>
+      </div>
       <footer class="studio-credit">
         <span class="sc-badge"><img src="3shamrocks.png" alt="3Shamrocks Studio" width="100" height="15"></span>
         <span class="cr">© 2026 <b>3Shamrocks Studio</b> · All rights reserved.</span>
@@ -1444,6 +1500,42 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
       <p style="font-size:11.5px;color:var(--tx2);line-height:1.6;margin-bottom:14px" id="gd-accept-sub">באישור: תראו זה את מיקומו החי של זה. ניתן לעצור בכל רגע מתוך "מעגלים".</p>
       <button class="cta-gold" onclick="gdAcceptInvite()" id="gd-accept-yes">✓ <span id="gd-accept-yes-lbl">אשר/י וחבר/י</span></button>
       <button class="row-btn" style="margin-top:10px;justify-content:center;color:#FF7080" onclick="gdDeclineInvite()" id="gd-accept-no">דחה/י</button>
+    </div>
+  </div>
+
+  <!-- ═══ EMERGENCY DISCLAIMER ═══ -->
+  <div class="sheet" id="sh-disclaimer" role="dialog" aria-modal="true" aria-labelledby="disc-ttl">
+    <div class="sh-pill" aria-hidden="true"></div>
+    <div class="sh-head"><span class="sh-ttl" id="disc-ttl">⚠️ כתב ויתור חירום</span><button class="sh-x" onclick="cl('sh-disclaimer')" aria-label="סגור">✕</button></div>
+    <div class="sh-body"><div class="legal-body" id="disc-body"></div></div>
+  </div>
+
+  <!-- ═══ TERMS OF SERVICE ═══ -->
+  <div class="sheet" id="sh-tos" role="dialog" aria-modal="true" aria-labelledby="tos-ttl">
+    <div class="sh-pill" aria-hidden="true"></div>
+    <div class="sh-head"><span class="sh-ttl" id="tos-ttl">תנאי שימוש</span><button class="sh-x" onclick="cl('sh-tos')" aria-label="סגור">✕</button></div>
+    <div class="sh-body"><div class="legal-body" id="tos-body"></div></div>
+  </div>
+
+  <!-- ═══ PRIVACY POLICY ═══ -->
+  <div class="sheet" id="sh-privacy" role="dialog" aria-modal="true" aria-labelledby="priv-ttl">
+    <div class="sh-pill" aria-hidden="true"></div>
+    <div class="sh-head"><span class="sh-ttl" id="priv-ttl">מדיניות פרטיות</span><button class="sh-x" onclick="cl('sh-privacy')" aria-label="סגור">✕</button></div>
+    <div class="sh-body"><div class="legal-body" id="priv-body"></div></div>
+  </div>
+
+  <!-- ═══ LOCATION-SHARING CONSENT GATE ═══ -->
+  <div class="ff-pick" id="gd-consent" role="dialog" aria-modal="true" aria-labelledby="consent-ttl" aria-hidden="true">
+    <div class="ff-pick-card">
+      <div class="ff-pick-hd">
+        <span class="ff-pick-ttl" id="consent-ttl">📍 הסכמה לשיתוף מיקום</span>
+        <button class="sh-x" onclick="gdConsentCancel()" aria-label="סגור">✕</button>
+      </div>
+      <p style="font-size:12.5px;color:var(--tx1);line-height:1.65;margin-bottom:4px" id="consent-intro">כדי לחבר שומר/ת, עליך להסכים לשתף את מיקומך החי. ההסכמה היא בבחירתך וניתן לבטל אותה בכל רגע.</p>
+      <ul class="consent-points" id="consent-points"></ul>
+      <p style="font-size:11px;color:var(--tx3);line-height:1.6;margin:0 0 12px" id="consent-policy">בהסכמתך את/ה מאשר/ת את <button type="button" class="lnk-inline" onclick="openLegal('tos')">תנאי השימוש</button> ו<button type="button" class="lnk-inline" onclick="openLegal('privacy')">מדיניות הפרטיות</button>.</p>
+      <button class="cta-gold" onclick="gdConsentAgree()" id="consent-agree">✓ <span id="consent-agree-lbl">אני מסכים/ה לשתף מיקום</span></button>
+      <button class="row-btn" style="margin-top:10px;justify-content:center" onclick="gdConsentCancel()" id="consent-cancel-btn">ביטול</button>
     </div>
   </div>
 
@@ -1723,8 +1815,14 @@ let SS={
     myName:'',    // display name a guardian sees for me (defaults to my handle)
     myCode:'',    // my stable id used to de-dupe my own live messages
     pairs:[]      // {id,token,name,rel,shareToThem,seeThem,addedTs,initiator,pending,lat,lng,ts,live,simLat,simLng}
-  }
+  },
+  /* ── Compliance / consent ──
+     Explicit, opt-in consent the user must grant BEFORE any location SHARING
+     (guardian pairing) begins. Recorded with a timestamp + the policy version
+     acknowledged. Revocable anytime (ghost / disconnect / reset). */
+  consent:{ share:false, tos:false, ts:0, ver:'' }
 };
+const LEGAL_VER='2026-06-19-draft';  // bump when ToS/Privacy text materially changes
 function deepMerge(base,o){
   const out=Array.isArray(base)?[]:{...base};
   if(Array.isArray(o))return o.slice();
@@ -2252,6 +2350,7 @@ function applyTranslations(){
   setText('dms-demo-lbl',he?'דמו':'demo');
   updateShakeSensLabel();
   try{ gdApplyI18n(); gdRenderList(); gdRenderMarkers(); }catch(e){}
+  try{ legalApplyI18n(); }catch(e){}
   renderReportsList();renderSosHistory();
 }
 
@@ -3804,6 +3903,7 @@ function gdSend(msg){
 /* Broadcast MY real position on every pair I share with (one tab → all my tokens). */
 function gdBroadcast(){
   const g=gdState();
+  if(!(SS.consent&&SS.consent.share)) return; // hard gate: no sharing without explicit consent
   if(SS.circleGhost) return;                 // ghost mode pauses outgoing sharing
   if(userLat==null||userLng==null) return;
   const toks=g.pairs.filter(p=>p.shareToThem).map(p=>p.token);
@@ -3879,6 +3979,7 @@ function gdOpen(id){ const e=document.getElementById(id); if(e){ e.classList.add
 function gdClose(id){ const e=document.getElementById(id); if(e){ e.classList.remove('on'); e.setAttribute('aria-hidden','true'); } }
 
 function gdCreateInvite(){
+  if(!gdRequireConsent(gdCreateInvite)) return;  // explicit opt-in before any sharing
   const g=gdState();
   const token='g'+Math.random().toString(36).slice(2,8)+Math.random().toString(36).slice(2,6);
   const p={id:genId('g'),token:token,name:'',rel:'',shareToThem:true,seeThem:true,addedTs:Date.now(),
@@ -3931,6 +4032,7 @@ function gdAcceptInvite(){ gdClose('gd-accept'); gdConnect(gdAcceptInvite._tok,g
 function gdDeclineInvite(){ gdClose('gd-accept'); }
 /* Create/confirm a pairing for a token, then start exchanging live position. */
 function gdConnect(tok,nm,fromLink){
+  if(!gdRequireConsent(()=>gdConnect(tok,nm,fromLink))) return;  // explicit opt-in before sharing
   const g=gdState();
   let p=gdPairByToken(tok);
   if(!p){ p={id:genId('g'),token:tok,name:nm||'',rel:'',shareToThem:true,seeThem:true,addedTs:Date.now(),
@@ -4033,6 +4135,235 @@ function gdApplyI18n(){
   setText('gd-accept-yes-lbl',he?'אשר/י וחבר/י':'Accept & connect');
   setText('gd-accept-no',he?'דחה/י':'Decline');
   const ei=document.getElementById('gd-enter-input'); if(ei)ei.placeholder=he?'הדבק/י קישור או קוד':'Paste link or code';
+}
+
+/* ═══════════════════════════════════════════════════
+   COMPLIANCE — emergency disclaimer, ToS, Privacy, consent gate
+   ───────────────────────────────────────────────────
+   Goal: be legal to publish as a consumer personal-safety / location-sharing
+   app, while staying 100% ACCURATE about what this build does. We never claim
+   it contacts authorities or runs always-on/background — because it doesn't.
+═══════════════════════════════════════════════════ */
+function legalUpdated(){ return currentLang==='he'?'עודכן: 19 ביוני 2026 · גרסה: '+LEGAL_VER:'Updated: 19 June 2026 · Version: '+LEGAL_VER; }
+function legalDraftBox(){ const he=currentLang==='he';
+  return `<div class="legal-draft">📝 <strong>${he?'טיוטה':'Draft'}.</strong> ${he?'מומלץ לעבור בדיקה משפטית לפני הפצה מסחרית רחבה.':'Legal review is recommended before commercial scale.'}</div>`; }
+
+/* Emergency disclaimer — the single most important compliance text. */
+function disclaimerHTML(){ const he=currentLang==='he';
+  return he?`
+    <p><strong>שומר™ הוא כלי לבטיחות אישית ולשיתוף מיקום — ולא תחליף לשירותי חירום.</strong></p>
+    <p>במצב חירום אמיתי, התקשרו מיד לשירותי החירום:</p>
+    <ul>
+      <li><strong>100</strong> — משטרת ישראל</li>
+      <li><strong>101</strong> — מד״א (חירום רפואי)</li>
+      <li><strong>102</strong> — כבאות והצלה</li>
+    </ul>
+    <h4>מה שומר עושה — ומה לא</h4>
+    <ul>
+      <li>✅ מפעיל אזעקה קולית במכשירך, מציג את מיקומך על המפה, ומאפשר לשתף מיקום חי עם שומרים שחיברת.</li>
+      <li>❌ <strong>אינו מתקשר למשטרה/מד״א/כבאות עבורך</strong> ואינו מתריע לרשויות באופן אוטומטי.</li>
+      <li>❌ אינו מבטיח שמישהו יראה את ה-SOS שלך, יגיב או יגיע.</li>
+      <li>❌ בגרסה זו אין מעקב תמידי ברקע ואין שיתוף חי בין מכשירים שונים (ראו „אמיתי עכשיו לעומת שלב שרת").</li>
+    </ul>
+    <p>הסתמכות על האפליקציה היא באחריותך בלבד. השתמשו בה כתוספת, לא כתחליף, לשירותי החירום הרשמיים.</p>
+    <p class="legal-meta">${legalUpdated()}</p>`
+  :`
+    <p><strong>SHOMER™ is a personal-safety & location-sharing tool — NOT a replacement for emergency services.</strong></p>
+    <p>In a real emergency, call emergency services immediately:</p>
+    <ul>
+      <li><strong>100</strong> — Police (Israel)</li>
+      <li><strong>101</strong> — MDA (medical emergency)</li>
+      <li><strong>102</strong> — Fire & Rescue</li>
+    </ul>
+    <h4>What Shomer does — and doesn't</h4>
+    <ul>
+      <li>✅ Sounds an alarm on your device, shows your location on your map, and lets you share live location with guardians you connect.</li>
+      <li>❌ <strong>Does NOT call the police / ambulance / fire service for you</strong> and does not alert authorities automatically.</li>
+      <li>❌ Does not guarantee anyone will see, respond to, or reach your SOS.</li>
+      <li>❌ In this build there is no always-on background tracking and no live sharing across different devices (see "Real now vs backend phase").</li>
+    </ul>
+    <p>Relying on the app is at your own risk. Use it as a supplement to — never a substitute for — official emergency services.</p>
+    <p class="legal-meta">${legalUpdated()}</p>`;
+}
+
+/* Terms of Service — plain language. */
+function tosHTML(){ const he=currentLang==='he';
+  return legalDraftBox()+(he?`
+    <h4>1. מה שומר הוא</h4>
+    <p>שומר הוא אפליקציית בטיחות אישית ושיתוף מיקום בהסכמה. הוא <strong>אינו שירות חירום</strong> ואינו מחליף משטרה, מד״א או כבאות. בחירום חייגו 100 / 101 / 102.</p>
+    <h4>2. אין הבטחת זמינות או תגובה</h4>
+    <p>השירות מסופק „כמות שהוא" (AS-IS). איננו מתחייבים שהאפליקציה תהיה זמינה, מדויקת או שתתריע למישהו, שמישהו יגיב או יגיע. השימוש באחריותך.</p>
+    <h4>3. שימוש הוגן</h4>
+    <ul>
+      <li>השתמשו ב-SOS למצבי בטיחות אמיתיים בלבד; הימנעו מאזעקות שווא מכוונות.</li>
+      <li>אל תשתפו מיקום של אדם אחר ללא הסכמתו.</li>
+      <li>פעלו על-פי החוק; אתם אחראים לתוכן שאתם מדווחים.</li>
+    </ul>
+    <h4>4. שיתוף מיקום בהסכמה</h4>
+    <p>שיתוף מיקום הוא opt-in. אתם שולטים מי רואה אתכם וניתן להפסיק בכל רגע (מצב רפאים, ניתוק שומר, או איפוס נתונים).</p>
+    <h4>5. שלב נוכחי לעומת עתידי</h4>
+    <p>זוהי גרסת web (prototype). שיתוף חי בין מכשירים, מעקב ברקע, חשבונות מאומתים והצפנה מקצה-לקצה אינם זמינים עדיין ומיועדים לשלב השרת/נייטיב.</p>
+    <h4>6. הגבלת אחריות</h4>
+    <p>ככל שמתיר הדין, 3Shamrocks Studio לא תישא באחריות לנזק הנובע משימוש או מהסתמכות על האפליקציה, לרבות כשל בקבלת עזרה.</p>
+    <h4>7. שינויים ודין</h4>
+    <p>נוכל לעדכן תנאים אלה; המשך שימוש מהווה הסכמה. כפוף לדין מדינת ישראל.</p>
+    <p class="legal-meta">${legalUpdated()}</p>`
+  :`
+    <h4>1. What Shomer is</h4>
+    <p>Shomer is a personal-safety and consent-based location-sharing app. It is <strong>not an emergency service</strong> and does not replace police, ambulance, or fire services. In an emergency, call 100 / 101 / 102.</p>
+    <h4>2. No guarantee of availability or response</h4>
+    <p>The service is provided "AS-IS". We do not guarantee the app will be available or accurate, that any alert reaches anyone, or that anyone will respond or arrive. Use is at your own risk.</p>
+    <h4>3. Acceptable use</h4>
+    <ul>
+      <li>Use SOS only for genuine safety situations; do not trigger deliberate false alarms.</li>
+      <li>Do not share another person's location without their consent.</li>
+      <li>Comply with the law; you are responsible for content you report.</li>
+    </ul>
+    <h4>4. Consent-based location sharing</h4>
+    <p>Location sharing is opt-in. You control who can see you and can stop anytime (ghost mode, disconnect a guardian, or reset your data).</p>
+    <h4>5. Current vs future phase</h4>
+    <p>This is a web prototype. Live cross-device sharing, background tracking, verified accounts, and end-to-end encryption are not yet available and are planned for the backend/native phase.</p>
+    <h4>6. Limitation of liability</h4>
+    <p>To the extent permitted by law, 3Shamrocks Studio is not liable for damages arising from use of, or reliance on, the app — including any failure to receive help.</p>
+    <h4>7. Changes & governing law</h4>
+    <p>We may update these terms; continued use is acceptance. Governed by the laws of the State of Israel.</p>
+    <p class="legal-meta">${legalUpdated()}</p>`);
+}
+
+/* Privacy Policy — what's collected, consent, storage, deletion, no selling. */
+function privacyHTML(){ const he=currentLang==='he';
+  return legalDraftBox()+(he?`
+    <h4>איזה מידע נאסף</h4>
+    <ul>
+      <li><strong>שם</strong> (אופציונלי; ברירת המחדל היא כינוי אקראי) ו<strong>טלפון</strong> (אופציונלי).</li>
+      <li><strong>מיקום המכשיר</strong> — רק לאחר שאישרת הרשאה בדפדפן.</li>
+      <li><strong>דיווחים ותמונות</strong> שאת/ה יוצר/ת, והעדפות (אזעקה, רדיוס, שפה).</li>
+    </ul>
+    <h4>איך נעשה שימוש במיקום</h4>
+    <p>המיקום משמש כדי להציג אותך על המפה שלך, לצרף אותו ל-SOS/דיווח שאת/ה שולח/ת, ולשתף מיקום חי עם שומרים <strong>שאת/ה מחבר/ת בהסכמה</strong>. שיתוף מיקום הוא opt-in.</p>
+    <h4>היכן המידע נשמר</h4>
+    <p>בגרסה זו <strong>כל המידע נשמר במכשירך</strong> (אחסון מקומי בדפדפן). אין שרת. המידע אינו עוזב את מכשירך — למעט קישור הזמנה שאת/ה בוחר/ת לשתף, וסנכרון מיקום חי בין חלונות של אותו דפדפן במכשירך.</p>
+    <h4>שיתוף ומכירה</h4>
+    <p><strong>איננו מוכרים את המידע שלך ואיננו משתפים אותו עם צדדים שלישיים.</strong> אין פרסומות ואין כלי מעקב/אנליטיקה.</p>
+    <h4>השליטה שלך</h4>
+    <ul>
+      <li><strong>להפסיק שיתוף</strong> — מצב רפאים, כיבוי „שתף מיקום", או ניתוק שומר.</li>
+      <li><strong>למחוק הכל</strong> — הגדרות → איפוס אפליקציה / נתוני דמו.</li>
+      <li>לבטל הרשאת מיקום דרך הדפדפן בכל עת.</li>
+    </ul>
+    <h4>מגבלות (כנות)</h4>
+    <p>הצפנה מקצה-לקצה, חשבונות מאומתים ושיתוף בין-מכשירי דורשים שלב שרת/נייטיב ואינם פעילים כעת.</p>
+    <h4>קטינים</h4>
+    <p>האפליקציה אינה מיועדת לקטינים מתחת לגיל 16 ללא הסכמת הורה/אפוטרופוס.</p>
+    <h4>יצירת קשר</h4>
+    <p>שאלות פרטיות: privacy@3shamrocks.example (לעדכון לפני השקה).</p>
+    <p class="legal-meta">${legalUpdated()}</p>`
+  :`
+    <h4>What we collect</h4>
+    <ul>
+      <li><strong>Name</strong> (optional; defaults to a random handle) and <strong>phone</strong> (optional).</li>
+      <li><strong>Device location</strong> — only after you grant browser permission.</li>
+      <li><strong>Reports and photos</strong> you create, and preferences (alarm, radius, language).</li>
+    </ul>
+    <h4>How location is used</h4>
+    <p>Location is used to show you on your own map, to attach to an SOS/report you send, and to share live location with guardians <strong>you connect by consent</strong>. Location sharing is opt-in.</p>
+    <h4>Where data is stored</h4>
+    <p>In this build, <strong>all data is stored on your device</strong> (browser local storage). There is no server. Data does not leave your device — except an invite link you choose to share, and live-location sync between windows of the same browser on your device.</p>
+    <h4>Sharing & selling</h4>
+    <p><strong>We do not sell your data and do not share it with third parties.</strong> There are no ads and no tracking/analytics tools.</p>
+    <h4>Your controls</h4>
+    <ul>
+      <li><strong>Stop sharing</strong> — ghost mode, turn off "Share my location", or disconnect a guardian.</li>
+      <li><strong>Delete everything</strong> — Settings → Reset app / demo data.</li>
+      <li>Revoke location permission via your browser anytime.</li>
+    </ul>
+    <h4>Limitations (honest)</h4>
+    <p>End-to-end encryption, verified accounts, and cross-device sharing require the backend/native phase and are not active now.</p>
+    <h4>Children</h4>
+    <p>The app is not directed to minors under 16 without parent/guardian consent.</p>
+    <h4>Contact</h4>
+    <p>Privacy questions: privacy@3shamrocks.example (to be updated before launch).</p>
+    <p class="legal-meta">${legalUpdated()}</p>`);
+}
+
+function renderLegal(){
+  const d=document.getElementById('disc-body'); if(d)d.innerHTML=disclaimerHTML()+(currentLang==='he'
+    ?`<div class="disc-call"><button class="pr" onclick="callNum('100')">📞 100 משטרה</button><button onclick="callNum('101')">📞 101 מד״א</button><button onclick="callNum('102')">📞 102 כבאות</button></div>`
+    :`<div class="disc-call"><button class="pr" onclick="callNum('100')">📞 100 Police</button><button onclick="callNum('101')">📞 101 MDA</button><button onclick="callNum('102')">📞 102 Fire</button></div>`);
+  const t=document.getElementById('tos-body'); if(t)t.innerHTML=tosHTML();
+  const p=document.getElementById('priv-body'); if(p)p.innerHTML=privacyHTML();
+}
+function openLegal(which){
+  renderLegal();
+  op(which==='tos'?'sh-tos':which==='privacy'?'sh-privacy':'sh-disclaimer');
+}
+
+/* ── Location-sharing consent gate (explicit opt-in BEFORE any sharing) ── */
+let _consentCb=null;
+function renderConsentPoints(){
+  const ul=document.getElementById('consent-points'); if(!ul)return; const he=currentLang==='he';
+  const pts=he?[
+    ['📍','המיקום החי שלך ישותף עם השומרים שאת/ה מחבר/ת — ורק איתם.'],
+    ['🛑','ניתן להפסיק בכל רגע: מצב רפאים, כיבוי השיתוף, או ניתוק.'],
+    ['📱','בגרסה זו המיקום נשמר במכשירך ומשותף חי רק בין חלונות באותו דפדפן. אין שיתוף בין-מכשירי ואין מעקב ברקע.'],
+    ['🔒','איננו מוכרים את המידע שלך ואיננו משתפים אותו עם צדדים שלישיים.']
+  ]:[
+    ['📍','Your live location is shared with guardians you connect — and only them.'],
+    ['🛑','You can stop anytime: ghost mode, turn off sharing, or disconnect.'],
+    ['📱','In this build, location stays on your device and is shared live only between windows of the same browser. No cross-device sharing, no background tracking.'],
+    ['🔒','We do not sell your data or share it with third parties.']
+  ];
+  ul.innerHTML=pts.map(p=>`<li><span class="cp-ic" aria-hidden="true">${p[0]}</span><span>${p[1]}</span></li>`).join('');
+}
+/* Returns true if sharing consent is already granted (caller proceeds).
+   If not, opens the consent dialog and stashes cb to replay after agreement,
+   and returns false so the caller bails out now. */
+function gdRequireConsent(cb){
+  if(SS.consent&&SS.consent.share) return true;
+  _consentCb=cb||null; renderConsentPoints(); gdOpen('gd-consent'); return false;
+}
+function gdConsentAgree(){
+  if(!SS.consent)SS.consent={share:false,tos:false,ts:0,ver:''};
+  SS.consent.share=true; SS.consent.tos=true; SS.consent.ts=Date.now(); SS.consent.ver=LEGAL_VER; saveStore();
+  gdClose('gd-consent');
+  toast(currentLang==='he'?'✓ הסכמת לשיתוף מיקום — ניתן לבטל בכל עת':'✓ Location sharing on — you can stop anytime','grn');
+  const cb=_consentCb; _consentCb=null; if(cb)cb();
+}
+function gdConsentCancel(){ gdClose('gd-consent'); _consentCb=null; }
+
+/* Static-label translations for the compliance UI (he/en). */
+function legalApplyI18n(){
+  const he=currentLang==='he';
+  setText('ob-disclaimer-txt',null); // innerHTML below
+  const obd=document.getElementById('ob-disclaimer-txt'); if(obd)obd.innerHTML=he
+    ?'<strong>שומר אינו תחליף לשירותי חירום.</strong> זהו כלי לבטיחות אישית ושיתוף מיקום. במצב חירום אמיתי חייגו <b>100</b> (משטרה) · <b>101</b> (מד״א) · <b>102</b> (כבאות). שומר אינו מתקשר לרשויות עבורך.'
+    :'<strong>Shomer is not a replacement for emergency services.</strong> It is a personal-safety & location-sharing tool. In a real emergency call <b>100</b> (Police) · <b>101</b> (MDA) · <b>102</b> (Fire). Shomer does not call authorities for you.';
+  const oba=document.getElementById('ob-agree-txt'); if(oba)oba.innerHTML=he
+    ?'בכניסה את/ה מסכים/ה ל<button type="button" class="lnk-inline" onclick="openLegal(\'tos\')">תנאי השימוש</button> ול<button type="button" class="lnk-inline" onclick="openLegal(\'privacy\')">מדיניות הפרטיות</button>. שיתוף מיקום הוא בהסכמה בלבד.'
+    :'By entering you agree to the <button type="button" class="lnk-inline" onclick="openLegal(\'tos\')">Terms of Service</button> and <button type="button" class="lnk-inline" onclick="openLegal(\'privacy\')">Privacy Policy</button>. Location sharing is consent-only.';
+  setText('nav-sos',he?'חירום מיידי':'Immediate emergency'); const ns=document.getElementById('nav-sos'); if(ns){ns.insertAdjacentHTML('beforeend',' <span class="si" aria-hidden="true">ⓘ</span>');}
+  setText('sos-cd-legal-txt',he?'שומר אינו מתקשר לרשויות. במצב חירום חייגו 100 / 101 / 102 בעצמכם.':'Shomer does not call authorities. In an emergency, dial 100 / 101 / 102 yourself.');
+  setText('disc-ttl',he?'⚠️ כתב ויתור חירום':'⚠️ Emergency disclaimer');
+  setText('tos-ttl',he?'תנאי שימוש':'Terms of Service');
+  setText('priv-ttl',he?'מדיניות פרטיות':'Privacy Policy');
+  setText('set-legal-cap',he?'בטיחות ומשפט':'Safety & legal');
+  setText('set-legal-help',he?'המידע המשפטי וכתב הוויתור. שומר הוא כלי לבטיחות אישית — לא תחליף לשירותי חירום.':'Legal info and the disclaimer. Shomer is a personal-safety tool — not a replacement for emergency services.');
+  setText('set-disc-row',he?'כתב ויתור חירום':'Emergency disclaimer');
+  setText('set-tos-row',he?'תנאי שימוש':'Terms of Service');
+  setText('set-priv-row',he?'מדיניות פרטיות':'Privacy Policy');
+  setText('consent-ttl',he?'📍 הסכמה לשיתוף מיקום':'📍 Location-sharing consent');
+  setText('consent-intro',he?'כדי לחבר שומר/ת, עליך להסכים לשתף את מיקומך החי. ההסכמה היא בבחירתך וניתן לבטל אותה בכל רגע.':'To connect a guardian, you opt in to share your live location. Consent is your choice and can be revoked anytime.');
+  setText('consent-agree-lbl',he?'אני מסכים/ה לשתף מיקום':'I agree to share my location');
+  setText('consent-cancel-btn',he?'ביטול':'Cancel');
+  const cpz=document.getElementById('consent-policy'); if(cpz)cpz.innerHTML=he
+    ?'בהסכמתך את/ה מאשר/ת את <button type="button" class="lnk-inline" onclick="openLegal(\'tos\')">תנאי השימוש</button> ו<button type="button" class="lnk-inline" onclick="openLegal(\'privacy\')">מדיניות הפרטיות</button>.'
+    :'By agreeing you accept the <button type="button" class="lnk-inline" onclick="openLegal(\'tos\')">Terms of Service</button> and <button type="button" class="lnk-inline" onclick="openLegal(\'privacy\')">Privacy Policy</button>.';
+  // footer + onboarding legal link labels
+  setText('ob-ll-tos',he?'תנאי שימוש':'Terms'); setText('ob-ll-priv',he?'מדיניות פרטיות':'Privacy'); setText('ob-ll-disc',he?'כתב ויתור חירום':'Disclaimer');
+  setText('set-ll-tos',he?'תנאי שימוש':'Terms'); setText('set-ll-priv',he?'מדיניות פרטיות':'Privacy'); setText('set-ll-disc',he?'כתב ויתור חירום':'Disclaimer');
+  if(document.getElementById('sh-disclaimer')&&document.getElementById('sh-disclaimer').classList.contains('open')) renderLegal();
+  if(document.getElementById('sh-tos')&&document.getElementById('sh-tos').classList.contains('open')) renderLegal();
+  if(document.getElementById('sh-privacy')&&document.getElementById('sh-privacy').classList.contains('open')) renderLegal();
 }
 
 /* ═══════════════════════════════════
