@@ -519,9 +519,10 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 
 /* ══════════ LEAFLET — real map, brand-themed ══════════ */
 #map{position:absolute;inset:0;background:#20242b;z-index:1;}
-/* Clean, minimalistic basemap (CARTO Voyager) — light, low-saturation tiles
-   with crisp, legible street-name labels. Light touch only so labels stay sharp. */
-.leaflet-tile-pane{filter:saturate(.82) contrast(1.04) brightness(1.01);}
+/* BRANDED basemap: recolour the dark base tiles into the SHOMER navy world,
+   keep the label tiles crisp & untinted (class-scoped, base only). */
+.tiles-base{filter:brightness(1.06) sepia(.55) hue-rotate(178deg) saturate(2.6) brightness(.78) contrast(1.06);}
+.tiles-labels{filter:brightness(1.12) saturate(.6);}
 .leaflet-container{background:#20242b;font-family:var(--font-main);outline:none;}
 .leaflet-control-attribution{background:rgba(8,18,36,.78)!important;color:var(--tx3)!important;font-size:9px!important;backdrop-filter:blur(6px);border-radius:6px 0 0 0;padding:2px 6px!important;}
 .leaflet-control-attribution a{color:var(--g2)!important;}
@@ -3051,8 +3052,10 @@ function removeSOSPin(){if(mapLayers.sosMarker){MAP.removeLayer(mapLayers.sosMar
 ═══════════════════════════════════ */
 let MAP=null;
 const mapLayers={stats:[],reports:{},sosMarker:null,meMarker:null,circle:{},guardian:{},radar:null};
-/* CARTO Voyager — clean, minimalistic basemap with crisp, legible street labels. */
-const TILE_URL='https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png';
+/* BRANDED basemap — CARTO dark base recoloured to the SHOMER navy world via a
+   class-scoped CSS filter, with crisp labels layered on top (untinted). */
+const TILE_BASE='https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png';
+const TILE_LABELS='https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png';
 
 /* ── Crafted brand markers (DivIcons, no default images) ── */
 function reportIcon(color,glyph){return window.L.divIcon({className:'shomer-marker',
@@ -3123,8 +3126,9 @@ function initMap(){
   MAP=window.L.map('map',{zoomControl:false,attributionControl:true,
     center:[31.7,34.95],zoom:8,minZoom:7,maxZoom:18,
     zoomSnap:.5,worldCopyJump:true});
-  window.L.tileLayer(TILE_URL,{maxZoom:20,subdomains:'abcd',
+  window.L.tileLayer(TILE_BASE,{maxZoom:20,subdomains:'abcd',className:'tiles-base',
     attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> · © <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>'}).addTo(MAP);
+  window.L.tileLayer(TILE_LABELS,{maxZoom:20,subdomains:'abcd',className:'tiles-labels'}).addTo(MAP);
   buildStatMarkers();
   // The container may have been laid out while hidden — recalc once visible.
   [120,400,900].forEach(ms=>setTimeout(()=>{if(MAP)MAP.invalidateSize(false);},ms));
