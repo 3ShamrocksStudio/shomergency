@@ -191,7 +191,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 .hdr-center{flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:9px;}
 /* Badge floats free — transparent PNG, no plate, just a soft halo. */
-.hdr-logo{width:44px;height:44px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 2px 6px rgba(0,0,0,.6)) drop-shadow(0 0 10px rgba(245,200,64,.22));}
+.hdr-logo{width:60px;height:60px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 2px 6px rgba(0,0,0,.6)) drop-shadow(0 0 10px rgba(245,200,64,.22));}
 /* Wordmark echoes the badge: brushed-platinum letters, gold Star of David. */
 .hdr-name{font-size:22px;font-weight:900;letter-spacing:1px;background:linear-gradient(160deg,#FFFFFF 0%,#C8D2E2 30%,#8392AB 58%,#E6ECF6 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:inline-flex;align-items:center;text-shadow:0 1px 1px rgba(0,0,0,.3);}
 .hdr-name .star{-webkit-text-fill-color:#F5C840;color:#F5C840;font-size:.98em;line-height:1;margin:0 .02em;text-shadow:0 0 12px var(--gb);}
@@ -268,8 +268,10 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 /* Map controls + legend styles live in the LEAFLET section below. */
 
 /* ══════════ NAV ══════════ */
-.nav{position:absolute;bottom:0;left:0;right:0;z-index:600;height:var(--nav);background:rgba(8,18,36,.98);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-top:1px solid var(--b3);display:flex;align-items:center;justify-content:center;padding:0 8px;padding-bottom:env(safe-area-inset-bottom,0);box-shadow:0 -4px 32px rgba(0,0,0,.7);}
-.nav::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent 5%,var(--gd) 30%,var(--gd) 70%,transparent 95%);}
+/* SOS floats over the map (no bottom bar) */
+.nav{position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + 20px);left:0;right:0;z-index:600;display:flex;align-items:center;justify-content:center;background:none;border:none;box-shadow:none;padding:0;pointer-events:none;}
+.nav::before{display:none;}
+.sos-wrap{pointer-events:auto;}
 
 /* ══════════ SOS BUTTON — sole bottom action, big & premium ══════════ */
 .sos-wrap{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:5px;position:relative;padding:0 10px;}
@@ -527,6 +529,11 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 .leaflet-control-attribution{background:rgba(8,18,36,.78)!important;color:var(--tx3)!important;font-size:9px!important;backdrop-filter:blur(6px);border-radius:6px 0 0 0;padding:2px 6px!important;}
 .leaflet-control-attribution a{color:var(--g2)!important;}
 .leaflet-bar,.leaflet-control-zoom{display:none!important;} /* we use our own brand controls */
+/* 3D marker index */
+.shomer-marker.mk3 svg{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 4px 5px rgba(0,0,0,.55));}
+.mk-me-wrap{position:relative;width:100%;height:100%;}
+.mk3-sos{animation:mk3sos 1.25s ease-out infinite;}
+@keyframes mk3sos{0%{filter:drop-shadow(0 0 0 rgba(255,26,64,.7))}70%{filter:drop-shadow(0 0 13px rgba(255,26,64,0))}100%{filter:drop-shadow(0 0 0 rgba(255,26,64,0))}}
 /* Brand-styled popups */
 .leaflet-popup-content-wrapper{background:#101e34;color:var(--tx0);border:1px solid var(--b3);border-radius:var(--r16);box-shadow:var(--e4);padding:2px;}
 .leaflet-popup-tip{background:#101e34;border:1px solid var(--b3);}
@@ -915,8 +922,8 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
     <button onclick="openLegal('disclaimer')" id="ob-ll-disc">כתב ויתור חירום</button>
   </div>
   <footer class="studio-credit">
-    <span class="sc-badge"><img src="3shamrocks.png" alt="3Shamrocks Studio" width="100" height="15"></span>
-    <span class="cr">© 2026 <b>3Shamrocks Studio</b> · All rights reserved.</span>
+    <span class="sc-badge"><img src="3shamrocks.png" alt="3Shamrocks Studio" width="92" height="14"></span>
+    <span class="cr">© 2026 · All rights reserved.</span>
   </footer>
 </div>
 
@@ -967,8 +974,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
       </div>
     </div>
     <div class="hdr-center">
-      <img class="hdr-logo" src="SHOMER_logo_big.png" alt="" width="44" height="44" aria-hidden="true">
-      <span class="hdr-name" dir="ltr">SH<span class="star" aria-hidden="true">✡</span>MER<span class="tm">™</span></span>
+      <img class="hdr-logo" src="SHOMER_logo_big.png" alt="SHOMER" width="60" height="60">
     </div>
     <div class="hdr-right">
       <button class="hdr-bell" onclick="openUpdates()" aria-label="עדכונים" title="עדכונים">
@@ -1331,8 +1337,8 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
         <button onclick="openLegal('disclaimer')" id="set-ll-disc">כתב ויתור חירום</button>
       </div>
       <footer class="studio-credit">
-        <span class="sc-badge"><img src="3shamrocks.png" alt="3Shamrocks Studio" width="100" height="15"></span>
-        <span class="cr">© 2026 <b>3Shamrocks Studio</b> · All rights reserved.</span>
+        <span class="sc-badge"><img src="3shamrocks.png" alt="3Shamrocks Studio" width="92" height="14"></span>
+        <span class="cr">© 2026 · All rights reserved.</span>
       </footer>
     </div>
   </div>
@@ -1994,7 +2000,7 @@ function addReportPin(rep){
   const ll=(rep.lat!=null&&rep.lng!=null)?[rep.lat,rep.lng]:[32.0707,34.7805];
   if(mapLayers.reports[rep.id]){MAP.removeLayer(mapLayers.reports[rep.id]);}
   const ty=TYPES[rep.type]||TYPES.new;
-  const m=window.L.marker(ll,{icon:reportIcon(ty.color,ty.glyph||'📝'),keyboard:true,
+  const m=window.L.marker(ll,{icon:catIcon(rep.type||'new'),keyboard:true,
     alt:(currentLang==='he'?'הדיווח שלי':'My report')+' — '+(rep.loc||'')});
   m.on('click',()=>{if(rep._detIdx!=null)openDetail(rep._detIdx);});
   m.addTo(MAP);
@@ -2200,15 +2206,17 @@ const CITY_STATS=[
 /* Each report type has a DISTINCT hue + glyph so categories read apart at a
    glance. Live SOS (#FF1A40 red) is deliberately unlike sexual-assault
    (#E91E8C magenta) — they must never be confused. */
+/* Each type = a DISTINCT 3D shape (see markerSVG) AND a distinct hue — no
+   shape and no colour repeats, so the map index is instantly readable. */
 const TYPES={
-  sex:  {label:()=>T('l1'),color:'#E91E8C',cls:'t-sex',  glyph:'🛑'},
-  viol: {label:()=>T('l2'),color:'#FF6A00',cls:'t-viol', glyph:'👊'},
-  stalk:{label:()=>T('l3'),color:'#F2B705',cls:'t-stalk',glyph:'👁️'},
-  theft:{label:()=>T('l4'),color:'#2962FF',cls:'t-theft',glyph:'🔓'},
-  drug: {label:()=>T('l5'),color:'#9C27B0',cls:'t-drug', glyph:'💊'},
-  med:  {label:()=>T('l6'),color:'#00C853',cls:'t-med',  glyph:'🏥'},
-  sos:  {label:()=>T('l7'),color:'#FF1A40',cls:'t-sos',  glyph:'🆘'},
-  new:  {label:()=>'',     color:'#2962FF',cls:'t-new',  glyph:'📝'},
+  sex:  {label:()=>T('l1'),color:'#E5468E',cls:'t-sex',  shape:'shield'},
+  viol: {label:()=>T('l2'),color:'#FF7A1A',cls:'t-viol', shape:'triangle'},
+  stalk:{label:()=>T('l3'),color:'#F2B705',cls:'t-stalk',shape:'eye'},
+  theft:{label:()=>T('l4'),color:'#2962FF',cls:'t-theft',shape:'diamond'},
+  drug: {label:()=>T('l5'),color:'#18C29C',cls:'t-drug', shape:'capsule'},
+  med:  {label:()=>T('l6'),color:'#16A06A',cls:'t-med',  shape:'cross'},
+  sos:  {label:()=>T('l7'),color:'#FF1A40',cls:'t-sos',  shape:'octagon'},
+  new:  {label:()=>'',     color:'#7E8CA0',cls:'t-new',  shape:'dot'},
 };
 
 /* ═══════════════════════════════════
@@ -3042,7 +3050,7 @@ function addSOSPin(){
   if(!MAP)return;
   removeSOSPin();
   const ll=(userLat!=null&&userLng!=null)?[userLat,userLng]:(MAP.getCenter()?[MAP.getCenter().lat,MAP.getCenter().lng]:[32.0707,34.7805]);
-  mapLayers.sosMarker=window.L.marker(ll,{icon:sosIcon(),zIndexOffset:1000,alt:'SOS'}).addTo(MAP);
+  mapLayers.sosMarker=window.L.marker(ll,{icon:catIcon('sos'),zIndexOffset:1000,alt:'SOS'}).addTo(MAP);
   try{MAP.setView(ll,Math.max(MAP.getZoom(),14),{animate:true});}catch(e){}
 }
 function removeSOSPin(){if(mapLayers.sosMarker){MAP.removeLayer(mapLayers.sosMarker);mapLayers.sosMarker=null;}}
@@ -3066,13 +3074,34 @@ function statIcon(color,glyph){return window.L.divIcon({className:'shomer-marker
   iconSize:[32,32],iconAnchor:[16,16],popupAnchor:[0,-14]});}
 function sosIcon(){return window.L.divIcon({className:'shomer-marker',
   html:`<div class="mk-sos"><div class="ring"></div><div class="core"></div></div>`,iconSize:[30,30],iconAnchor:[15,15]});}
+/* ── 3D map marker index — one distinct glossy SVG per type ── */
+function markerSVG(t){
+  switch(t){
+    case 'me': return '<svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="21" fill="#19A8FF" opacity=".22"/><circle cx="30" cy="30" r="14" fill="#19A8FF" stroke="#fff" stroke-width="3"/><path d="M30 21 L36 36 L30 32 L24 36 Z" fill="#fff"/><ellipse cx="25" cy="24" rx="8" ry="4.5" fill="#fff" opacity=".28"/></svg>';
+    case 'octagon': return '<svg viewBox="0 0 56 56"><polygon points="18,6 38,6 50,18 50,38 38,50 18,50 6,38 6,18" fill="#FF1A40"/><ellipse cx="22" cy="16" rx="14" ry="7" fill="#fff" opacity=".22"/><text x="28" y="35" font-size="15" font-weight="800" fill="#fff" text-anchor="middle" font-family="Arial,sans-serif">SOS</text></svg>';
+    case 'shield': return '<svg viewBox="0 0 52 56"><path d="M26 4 L46 12 V28 C46 42 37 50 26 54 C15 50 6 42 6 28 V12 Z" fill="#E5468E"/><ellipse cx="20" cy="16" rx="12" ry="6" fill="#fff" opacity=".22"/><g stroke="#fff" stroke-width="4" stroke-linecap="round" transform="rotate(45 26 30)"><path d="M26 22 v16"/><path d="M18 30 h16"/></g></svg>';
+    case 'triangle': return '<svg viewBox="0 0 56 52"><path d="M28 5 L52 47 H4 Z" fill="#FF7A1A" stroke="#fff" stroke-width="2"/><rect x="25.5" y="20" width="5" height="13" rx="2.5" fill="#fff"/><circle cx="28" cy="39" r="3" fill="#fff"/></svg>';
+    case 'eye': return '<svg viewBox="0 0 58 44"><path d="M4 22 C16 4 42 4 54 22 C42 40 16 40 4 22 Z" fill="#F2B705"/><ellipse cx="24" cy="14" rx="13" ry="5" fill="#fff" opacity=".25"/><circle cx="29" cy="22" r="9" fill="#1a1400"/><circle cx="32" cy="19" r="3" fill="#fff"/></svg>';
+    case 'diamond': return '<svg viewBox="0 0 50 56"><polygon points="25,3 47,28 25,53 3,28" fill="#2962FF"/><polygon points="25,3 36,15 25,27 14,15" fill="#fff" opacity=".18"/><path d="M20 26 v-4 a5 5 0 0 1 10 0" stroke="#fff" stroke-width="2.4" fill="none"/><rect x="17" y="26" width="16" height="9" rx="1.5" fill="#fff"/></svg>';
+    case 'capsule': return '<svg viewBox="0 0 56 40"><rect x="4" y="10" width="48" height="20" rx="10" fill="#18C29C"/><rect x="4" y="10" width="24" height="20" rx="10" fill="#0c8f73"/><ellipse cx="20" cy="15" rx="14" ry="3.5" fill="#fff" opacity=".25"/></svg>';
+    case 'cross': return '<svg viewBox="0 0 50 50"><rect x="6" y="6" width="38" height="38" rx="11" fill="#16A06A"/><ellipse cx="20" cy="15" rx="12" ry="6" fill="#fff" opacity=".22"/><path d="M25 14 v22 M14 25 h22" stroke="#fff" stroke-width="6" stroke-linecap="round"/></svg>';
+    default: return '<svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="17" fill="#7E8CA0"/><ellipse cx="17" cy="14" rx="9" ry="4.5" fill="#fff" opacity=".22"/><circle cx="22" cy="22" r="4" fill="#fff"/></svg>';
+  }
+}
+const MK_SIZE={sos:[48,48]};
+function catIcon(t){
+  const sh=(TYPES[t]&&TYPES[t].shape)||'dot';
+  const sz=MK_SIZE[t]||[38,38];
+  return window.L.divIcon({className:'shomer-marker mk3'+(t==='sos'?' mk3-sos':''),
+    html:markerSVG(sh),iconSize:sz,iconAnchor:[sz[0]/2,sz[1]/2],popupAnchor:[0,-sz[1]/2]});
+}
 function meIcon(){
   const pr=(SS.user&&SS.user.profession)||'';
   const p=PROFESSIONS[pr];
   // Ghost mode (sharing paused) takes visual priority over the profession badge.
   const badge=SS.circleGhost?`<div class="mk-me-badge" title="ghost">👻</div>`:(p?`<div class="mk-me-badge" title="${p.icon}">${p.icon}</div>`:'');
-  return window.L.divIcon({className:'shomer-marker',
-  html:`<div class="mk-me"><div class="acc"></div><div class="dot"></div>${badge}</div>`,iconSize:[24,24],iconAnchor:[12,12]});}
+  return window.L.divIcon({className:'shomer-marker mk3',
+  html:`<div class="mk-me-wrap">${markerSVG('me')}${badge}</div>`,iconSize:[42,42],iconAnchor:[21,21]});}
 /* Refresh the live "me" marker icon (e.g. after a profession change). */
 function refreshMeMarker(){if(mapLayers.meMarker)mapLayers.meMarker.setIcon(meIcon());}
 
@@ -3110,7 +3139,7 @@ function buildStatMarkers(){
     city.cats.forEach(cat=>{
       const ty=TYPES[cat.t]||TYPES.viol;
       const m=window.L.marker([city.lat+cat.off[0],city.lng+cat.off[1]],
-        {icon:statIcon(ty.color,ty.glyph),alt:ty.label()+' — '+(currentLang==='he'?city.city:city.cityEn)});
+        {icon:catIcon(cat.t),alt:ty.label()+' — '+(currentLang==='he'?city.city:city.cityEn)});
       m.bindPopup(()=>statPopup(cat,city),{maxWidth:240,closeButton:true});
       m.addTo(MAP);
       mapLayers.stats.push(m);
