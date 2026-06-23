@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0A1628">
-  <title>שומר • SH✡MER | Citizens for Citizens</title>
-  <meta name="description" content="אזרחים מגנים על אזרחים. אזעקה. מיקום. עזרה. פשוט.">
+  <title>SH✡MER</title>
+  <meta name="description" content="SH✡MER. Citizens protecting citizens. One tap. You're not alone.">
   <link rel="canonical" href="https://3shamrocksstudio.github.io/shomergency/">
   <link rel="icon" type="image/png" href="logo-192.png">
   <link rel="apple-touch-icon" href="logo-192.png">
@@ -23,35 +23,41 @@
     a { color: var(--g3); text-decoration: none; }
     .container { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
 
-    header { background: var(--n0); padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.08); position: sticky; top: 0; z-index: 10; }
+    header { background: var(--n0); padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
     .nav { display: flex; justify-content: space-between; align-items: center; }
     .logo { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 700; }
-    .logo img { width: 44px; height: 44px; }
+    .logo img { width: 48px; height: 48px; }
 
-    .hero { padding: 32px 0 40px; background: linear-gradient(rgba(6,15,30,0.65), rgba(10,22,40,0.75)), url('SHOMER-KeyVisual.jpg') center/cover no-repeat; }
-    .hero-grid { display: grid; grid-template-columns: 1fr 300px; gap: 32px; align-items: center; }
-    @media (max-width: 768px) { .hero-grid { grid-template-columns: 1fr; } }
-    .hero h1 { font-size: 32px; line-height: 1.15; margin-bottom: 8px; }
-    .hero .tag { font-size: 17px; color: var(--g4); margin-bottom: 12px; }
-    .hero p { color: var(--p3); max-width: 420px; margin-bottom: 16px; }
+    .hero {
+      min-height: 420px;
+      background: linear-gradient(rgba(6,15,30,0.75), rgba(10,22,40,0.85)), url('SHOMER-hero-alley.jpg') center/cover;
+      display: flex;
+      align-items: center;
+      padding: 40px 0;
+    }
+    .hero-content { max-width: 520px; }
+    .hero h1 { font-size: 36px; line-height: 1.1; margin-bottom: 8px; }
+    .hero .tag { font-size: 16px; color: var(--g4); margin-bottom: 12px; }
+    .hero p { color: var(--p3); max-width: 420px; margin-bottom: 20px; }
 
-    .btn { display: inline-flex; align-items: center; justify-content: center; padding: 10px 20px; border-radius: 999px; font-weight: 600; font-size: 15px; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 24px; border-radius: 999px; font-weight: 600; font-size: 15px; }
     .btn-primary { background: linear-gradient(135deg, var(--g2), var(--g4)); color: var(--n1); }
     .btn-ghost { border: 1px solid var(--p3); color: var(--tx0); }
 
-    .mockup-row { display: flex; gap: 12px; overflow-x: auto; padding: 8px 0; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
-    .mockup-row::-webkit-scrollbar { display: none; }
-    .phone { flex: 0 0 160px; background: #111; border-radius: 28px; padding: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); scroll-snap-align: start; }
-    .phone img { width: 100%; border-radius: 18px; display: block; }
-
     .section { padding: 32px 0; }
     h2 { font-size: 18px; margin-bottom: 12px; color: var(--g3); }
-    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-    @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
-    .card { background: var(--n2); padding: 14px; border-radius: 8px; font-size: 14px; }
 
-    .cta { background: var(--n2); padding: 24px; border-radius: 12px; text-align: center; margin: 20px 0; }
-    .footer { background: var(--n0); padding: 20px 0; font-size: 12px; color: var(--p3); }
+    .mockups { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 12px; scroll-snap-type: x mandatory; }
+    .mockups::-webkit-scrollbar { display: none; }
+    .phone { flex: 0 0 160px; background: #111; border-radius: 24px; padding: 8px; box-shadow: 0 6px 20px rgba(0,0,0,0.5); scroll-snap-align: start; }
+    .phone img { width: 100%; border-radius: 16px; display: block; }
+
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .card { background: var(--n2); padding: 14px; border-radius: 8px; }
+    .card strong { color: var(--g3); }
+
+    .cta { background: var(--n2); padding: 24px; border-radius: 12px; text-align: center; }
+    footer { padding: 24px 0; background: var(--n0); font-size: 12px; color: var(--p3); }
   </style>
 </head>
 <body>
@@ -59,88 +65,72 @@
     <div class="container">
       <div class="nav">
         <div class="logo">
-          <img src="SHOMER_logo_big.png" alt="שומר">
-          <span>שומר</span>
+          <img src="SHOMER_logo_big.png" alt="SH✡MER">
+          <span>SH✡MER</span>
         </div>
-        <div>
-          <a href="shomer.html" class="btn btn-ghost" style="padding:6px 14px;font-size:13px;">Open App</a>
-        </div>
+        <a href="shomer.html" class="btn btn-ghost" style="padding: 8px 16px; font-size: 14px;">Open App</a>
       </div>
     </div>
   </header>
 
-  <!-- Hero with deep branding + imagery -->
   <div class="hero">
     <div class="container">
-      <div class="hero-grid">
-        <div>
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-            <img src="SHOMER_logo_big.png" alt="" style="width:56px;height:56px;">
-            <div>
-              <span style="color:var(--g4);font-size:13px;letter-spacing:1px;">SH✡MER</span>
-            </div>
-          </div>
-          <h1>שומר.<br>אזרחים מגנים על אזרחים.</h1>
-          <p class="tag">One tap. You're not alone.</p>
-          <p style="max-width:380px;">אזעקה. מיקום. עזרה. פשוט. ללא מעקב.</p>
-          <div style="display:flex;gap:10px;flex-wrap:wrap;">
-            <a href="shomer.html" class="btn btn-primary">התקן עכשיו</a>
-            <a href="#how" class="btn btn-ghost">איך זה עוזר</a>
-          </div>
-        </div>
-        <div>
-          <div class="phone" style="width:220px;height:440px;margin:0 auto;">
-            <img src="img/map.png" alt="Live map">
-          </div>
+      <div class="hero-content">
+        <h1>SH✡MER.<br>אזרחים מגנים על אזרחים.</h1>
+        <p class="tag">One tap. You're not alone.</p>
+        <p>אזעקה חזקה. מיקום מדויק. עזרה מהירה.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+          <a href="shomer.html" class="btn btn-primary">התקן עכשיו</a>
+          <a href="#mockups" class="btn btn-ghost">ראה איך זה עובד</a>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Visual proof - mockups carousel -->
-  <div class="section container" id="how">
-    <h2>ראה את האפליקציה</h2>
-    <div class="mockup-row">
-      <div class="phone"><img src="img/onboarding.png" alt="Onboarding"></div>
-      <div class="phone"><img src="img/map.png" alt="Map"></div>
-      <div class="phone"><img src="img/alarm.png" alt="SOS"></div>
-      <div class="phone"><img src="img/report.png" alt="Report"></div>
+  <div class="section container" id="mockups">
+    <h2>האפליקציה בפועל</h2>
+    <div class="mockups">
+      <div class="phone"><img src="img/onboarding.png" alt="SH✡MER onboarding"></div>
+      <div class="phone"><img src="img/map.png" alt="Live safety map"></div>
+      <div class="phone"><img src="img/alarm.png" alt="SOS alarm"></div>
+      <div class="phone"><img src="img/report.png" alt="Quick report"></div>
     </div>
   </div>
 
-  <!-- Short benefits -->
   <div class="section container">
     <div class="grid">
       <div class="card">
-        <strong>לחץ</strong><br>
-        אזעקה חזקה יוצאת מיד.
+        <strong>אזעקה</strong><br>
+        <span class="small">לחיצה אחת. חזקה ומיידית.</span>
       </div>
       <div class="card">
-        <strong>שתף</strong><br>
-        המיקום שלך הולך לאנשים שבחרת.
+        <strong>מיקום</strong><br>
+        <span class="small">האנשים שבחרת יודעים.</span>
       </div>
       <div class="card">
-        <strong>הגן</strong><br>
-        מתג מת. דיווח. עזרה.
+        <strong>עזרה</strong><br>
+        <span class="small">דיווח מהיר. מתג חיים.</span>
       </div>
     </div>
   </div>
 
-  <!-- Primary CTA for download / lead -->
   <div class="container cta">
-    <p style="margin-bottom:12px;color:var(--p3);">מוכן? זה לוקח 10 שניות.</p>
-    <a href="shomer.html" class="btn btn-primary" style="padding:14px 36px;font-size:16px;">התקן עכשיו</a>
-    <p class="small" style="margin-top:10px;color:var(--p3);">ללא חנות אפליקציות. עובד גם בלי רשת.</p>
+    <p style="margin-bottom: 12px; color: var(--p3);">מוכן? לוקח 10 שניות.</p>
+    <a href="shomer.html" class="btn btn-primary" style="padding: 14px 32px;">התקן עכשיו</a>
+    <p class="small" style="margin-top: 10px;">ללא חנות. עובד גם בלי רשת.</p>
   </div>
 
   <footer class="container">
-    <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:12px;">
-      <span>שומר • אזרחים עוזרים לאזרחים</span>
+    <div>
+      SH✡MER • אזרחים מגנים על אזרחים
+      <span style="margin: 0 8px;">·</span>
       <a href="https://www.linkedin.com/in/davemarkovich">LinkedIn</a>
+      <span style="margin: 0 8px;">·</span>
       <a href="https://3shamrocksstudio.github.io/shomer-forest/">Forest</a>
+      <span style="margin: 0 8px;">·</span>
       <a href="https://3shamrocksstudio.github.io/shomer-beach/">Beach</a>
     </div>
-    <p style="margin-top:8px;font-size:11px;color:#5C6B82;">לא מחליף שירותי חירום. 100 / 101 / 102.</p>
+    <p style="margin-top: 8px; font-size: 11px;">SH✡MER אינו מחליף שירותי חירום. במצב חירום חייג 100 / 101 / 102.</p>
   </footer>
 </body>
 </html>
