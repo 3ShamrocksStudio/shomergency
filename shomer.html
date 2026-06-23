@@ -933,8 +933,8 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
     <div class="ob-sub" id="ob-tagline">Citizens For Citizens</div>
     <!-- Language pick in onboarding -->
     <div class="ob-lang-pick" role="group" aria-label="שפה">
-      <button class="olb on" onclick="setLang('he')">🇮🇱 עברית</button>
-      <button class="olb" onclick="setLang('en')">🇬🇧 English</button>
+      <button class="olb on" onclick="setLang('he')">עברית</button>
+      <button class="olb" onclick="setLang('en')">English</button>
     </div>
   </div>
   <div class="ob-steps" role="progressbar" aria-valuemin="1" aria-valuemax="3" aria-valuenow="1">
@@ -956,7 +956,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
         <input class="ob-f" id="ob-name" type="text" autocomplete="given-name" maxlength="40" placeholder="שם פרטי" aria-label="שם פרטי" style="margin-bottom:6px">
         <span class="name-edit-ic" aria-hidden="true"><svg class="ic"><use href="#i-edit"/></svg></span>
       </div>
-      <p class="name-hint" id="name-hint">✦ <span id="name-hint-txt">נוצר אוטומטית — אפשר לערוך</span></p>
+      <p class="name-hint" id="name-hint"><span id="name-hint-txt">נוצר אוטומטית — אפשר לערוך</span></p>
       <input class="ob-f" id="ob-phone" type="tel" autocomplete="tel" maxlength="15" placeholder="050-000-0000" inputmode="tel" dir="ltr" style="text-align:start" aria-label="מספר טלפון">
       <p style="font-size:11px;color:var(--tx3);margin:-4px 0 12px;line-height:1.6" id="ob-why">מספר הטלפון משמש לשליחת עזרה. אופציונלי במצב דמו.</p>
       <button class="ob-cta" id="ob-cta0" onclick="obStep0()"><span id="ob-cta0-t">המשך ←</span></button>
@@ -966,14 +966,14 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
   <!-- STEP 1: Geolocation -->
   <div class="ob-panel" id="step1">
     <div class="ob-card">
-      <h3 id="ob-h1">📍 אישור מיקום</h3>
+      <h3 id="ob-h1">אישור מיקום</h3>
       <p class="desc" id="ob-d1">נדרש לשליחת SOS מיידי לשומרים בקרבתך ולמיפוי אירועים.</p>
       <div class="geo-box" id="geo-box">
         <div class="geo-ic" aria-hidden="true"><svg class="ic"><use href="#i-pin"/></svg></div>
         <div class="geo-t" id="geo-t">נדרש אישור מיקום</div>
         <div class="geo-s" id="geo-s">לחץ 'אפשר' ואשר בחלון שיפתח.<br>המיקום משמש אך ורק לצורכי בטיחות.</div>
       </div>
-      <button class="ob-cta" id="geo-btn" onclick="requestGeo()"><span id="geo-btn-t">📍 אפשר גישה למיקום</span></button>
+      <button class="ob-cta" id="geo-btn" onclick="requestGeo()"><span id="geo-btn-t">אפשר גישה למיקום</span></button>
       <button class="ob-cta" style="background:var(--n4);color:var(--tx1);box-shadow:none;margin-top:8px;border:1px solid var(--b2);" onclick="goStep(2)" id="geo-skip-btn"><span id="geo-skip-t">דלג — המשך בלי מיקום</span></button>
       <button class="ob-back" onclick="goStep(0)" id="ob-back1">← חזרה</button>
     </div>
@@ -982,7 +982,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
   <!-- STEP 2: Alarm choice (shake/DMS use sensible defaults — configured in Settings) -->
   <div class="ob-panel" id="step2">
     <div class="ob-card">
-      <h3 id="ob-h2">🚨 הגדרות חירום</h3>
+      <h3 id="ob-h2">הגדרות חירום</h3>
       <p class="desc" id="ob-d2">הקש אזעקה כדי לשמוע אותה. היא תופעל עם לחיצת SOS.</p>
       <div class="ob-alarms" id="ob-alarms" role="group" aria-label="סוג אזעקה">
         <div class="ob-alarm sel" onclick="obPickAlarm(this,'siren')" role="radio" aria-checked="true" tabindex="0">
@@ -1119,7 +1119,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
   <!-- SOS STRIP -->
   <div class="sos-strip" id="sos-strip" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="ss-main">
-      <div class="ss-t" id="ss-t">🚨 SOS פעיל — אזעקה פועלת · מיקומך שותף</div>
+      <div class="ss-t" id="ss-t">SOS פעיל — אזעקה פועלת · מיקומך שותף</div>
       <div class="ss-s" id="ss-s">ממתין לתגובה...</div>
     </div>
     <button class="ss-x" onclick="resolveSOS()" id="ss-cancel">✓ <span id="ss-cancel-lbl">אני בטוח/ה</span></button>
@@ -1128,7 +1128,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
   <!-- SOS CANCEL COUNTDOWN (pre-broadcast grace window) -->
   <div class="sos-cd" id="sos-cd" role="alertdialog" aria-modal="true" aria-labelledby="sos-cd-ttl" aria-describedby="sos-cd-sub" aria-hidden="true">
     <div class="sos-cd-card">
-      <div class="sos-cd-ttl" id="sos-cd-ttl">🚨 שולח SOS…</div>
+      <div class="sos-cd-ttl" id="sos-cd-ttl">שולח SOS…</div>
       <div class="sos-cd-sub" id="sos-cd-sub">האזעקה פועלת. שידור לשומרים בקרבתך בעוד…</div>
       <div class="sos-cd-ringwrap" aria-hidden="true">
         <div class="sos-cd-ring" id="sos-cd-ring"></div>
@@ -1136,7 +1136,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
       </div>
       <button class="sos-cd-btn" onclick="cancelCountdown()" id="sos-cd-cancel">אני בטוח/ה — בטל</button>
       <div class="sos-cd-hint" id="sos-cd-hint">ביטול עכשיו = אזעקת שווא. שום דבר לא ישודר ולא יופיע במפה.</div>
-      <div class="sos-cd-hint" id="sos-cd-legal" style="color:#FF9aa3;margin-top:8px;font-weight:700">⚠️ <span id="sos-cd-legal-txt">שומר אינו מתקשר לרשויות. במצב חירום חייגו 100 / 101 / 102 בעצמכם.</span></div>
+      <div class="sos-cd-hint" id="sos-cd-legal" style="color:#FF9aa3;margin-top:8px;font-weight:700"><svg class="ic"><use href="#i-warning"/></svg> <span id="sos-cd-legal-txt">שומר אינו מתקשר לרשויות. במצב חירום חייגו 100 / 101 / 102 בעצמכם.</span></div>
     </div>
   </div>
 
@@ -1156,10 +1156,10 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
   <!-- CIRCLE MEMBER SOS ALERT STRIP -->
   <div class="circle-alert" id="circle-alert" role="alert" aria-live="assertive">
     <div class="ca-main">
-      <div class="ca-t" id="circle-alert-t">🆘 חבר/ת מעגל הפעיל/ה SOS</div>
+      <div class="ca-t" id="circle-alert-t">חבר/ת מעגל הפעיל/ה SOS</div>
       <div class="ca-s" id="circle-alert-s">כל המעגל קיבל התראה · מיקום חי משותף</div>
     </div>
-    <button class="ca-btn" id="circle-alert-btn" onclick="locateAlertMember()">📍 <span id="circle-alert-btn-lbl">אתר/י</span></button>
+    <button class="ca-btn" id="circle-alert-btn" onclick="locateAlertMember()"><svg class="ic"><use href="#i-pin"/></svg> <span id="circle-alert-btn-lbl">אתר/י</span></button>
   </div>
 
   <!-- DMS STRIP -->
@@ -1400,8 +1400,8 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
       <p class="set-help" id="set-lang-help">שפת התצוגה של האפליקציה. ניתן לשנות בכל עת — לא משפיע על דיווחים קיימים.</p>
       <div class="set-grp" style="padding:10px 14px;">
         <div style="display:flex;direction:ltr;gap:6px;flex-wrap:wrap;" id="set-lang-btns">
-          <button class="olb on" onclick="setLang('he')" lang="he">🇮🇱 עברית</button>
-          <button class="olb" onclick="setLang('en')" lang="en">🇬🇧 English</button>
+          <button class="olb on" onclick="setLang('he')" lang="he">עברית</button>
+          <button class="olb" onclick="setLang('en')" lang="en">English</button>
         </div>
       </div>
       <div class="sec-cap mb12" style="margin-top:18px" data-he="אודות שומר" data-en="About SHOMER">אודות שומר</div>
@@ -1460,7 +1460,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
       <div class="stats" role="group">
         <div class="st"><div class="st-n" id="stat-reports">0</div><div class="st-l" id="stat-reports-lbl">דיווחים</div></div>
         <div class="st"><div class="st-n" id="stat-sos">0</div><div class="st-l" id="stat-sos-lbl">אירועי SOS</div></div>
-        <div class="st"><div class="st-n">★</div><div class="st-l" id="stat-pts-lbl">נקודות</div></div>
+        <div class="st"><div class="st-n"><svg class="ic"><use href="#i-star"/></svg></div><div class="st-l" id="stat-pts-lbl">נקודות</div></div>
       </div>
       <div class="sec-cap mb12" id="prof-prof-cap">תפקיד מקצועי (מתנדב/ת מגיב/ה)</div>
       <p class="sr-sb" id="prof-prof-hint" style="margin:-4px 2px 12px;line-height:1.6">בחר/י תפקיד אם את/ה מגיב/ה מקצועי/ת — סמל יוצג בפרופיל ועל הסמן שלך במפה.</p>
@@ -1682,7 +1682,26 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 /* ── Security helpers ── */
 function ESC(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 /* Branded SVG icon helper for JS-built markup. ic('bell','ic-lg') -> <svg…><use #i-bell/></svg> */
-function ic(n,cls){return '<svg class="ic '+(cls||'')+'" aria-hidden="true"><use href="#i-'+n+'"/></svg>';}
+/* Icons are INLINED (no <use>/sprite dependency) so they render in every browser incl.
+   iOS Safari/WebKit, where <use> referencing a zero-size sprite often fails. The hidden
+   sprite is kept only as the source of the path data, read once into _ICONS. */
+const _ICONS={};
+function _glyph(n){
+  if(_ICONS[n]==null){const s=document.getElementById('i-'+n);_ICONS[n]=s?s.innerHTML:'';}
+  return _ICONS[n];
+}
+function ic(n,cls){return '<svg class="ic'+(cls?' '+cls:'')+'" viewBox="0 0 24 24" aria-hidden="true">'+_glyph(n)+'</svg>';}
+/* Convert any leftover static <svg class="ic"><use href="#i-X"/></svg> into inline SVG. */
+function hydrateIcons(root){
+  (root||document).querySelectorAll('svg.ic').forEach(function(svg){
+    const u=svg.querySelector('use'); if(!u) return;
+    let href=u.getAttribute('href')||u.getAttribute('xlink:href')||'';
+    if(href.charAt(0)!=='#') return;
+    const sym=document.getElementById(href.slice(1)); if(!sym) return;
+    svg.setAttribute('viewBox',sym.getAttribute('viewBox')||'0 0 24 24');
+    svg.innerHTML=sym.innerHTML;
+  });
+}
 function setText(id,t){const e=document.getElementById(id);if(e)e.textContent=t;}
 
 /* ── Multi-language strings ── */
@@ -1701,7 +1720,7 @@ const LANGS={
     dms_ob:'<strong>Dead Man\'s Switch:</strong> אם לא אישרת "הכל בסדר" תוך X דק׳ — SOS אוטומטי.',
     nav_map:'מפה',nav_sos:'חירום מיידי',nav_upd:'עדכונים',
     dd_rep:'דיווח אירוע',dd_dms:"Dead Man's Switch",dd_alarm:'הגדרות אזעקה',dd_prof:'פרופיל',dd_set:'הגדרות',dd_em:'מספרי חירום',
-    ss_t:'🚨 SOS פעיל — אזעקה פועלת',ss_wait:'ממתין לתגובה...',
+    ss_t:'SOS פעיל — אזעקה פועלת',ss_wait:'ממתין לתגובה...',
     cancel:'בטל SOS',ok_all:'✓ הכל בסדר',
     upd_ttl:'עדכונים',rep_ttl:'דיווח אירוע',dms_ttl:"⏱️ Dead Man's Switch",
     set_ttl:'הגדרות',prof_ttl:'הפרופיל שלי',em_ttl:'מספרי חירום',alarm_ttl:'הגדרות אזעקה',
@@ -1734,7 +1753,7 @@ const LANGS={
     dms_ob:"<strong>Dead Man's Switch:</strong> If you don't confirm 'All OK' in X min — auto SOS.",
     nav_map:'Map',nav_sos:'Emergency',nav_upd:'Updates',
     dd_rep:'Report incident',dd_dms:"Dead Man's Switch",dd_alarm:'Alarm settings',dd_prof:'Profile',dd_set:'Settings',dd_em:'Emergency numbers',
-    ss_t:'🚨 SOS active — alarm firing',ss_wait:'Waiting for response...',
+    ss_t:'SOS active — alarm firing',ss_wait:'Waiting for response...',
     cancel:'Cancel SOS',ok_all:'✓ I\'m OK',
     upd_ttl:'Updates',rep_ttl:'Report incident',dms_ttl:"⏱️ Dead Man's Switch",
     set_ttl:'Settings',prof_ttl:'My profile',em_ttl:'Emergency numbers',alarm_ttl:'🚨 Alarm settings',
@@ -1767,7 +1786,7 @@ const LANGS={
     dms_ob:'<strong>مفتاح الأمان الميت:</strong> إذا لم تؤكد خلال X دقائق — إرسال تلقائي لنداء الاستغاثة.',
     nav_map:'الخريطة',nav_sos:'طوارئ',nav_upd:'التحديثات',
     dd_rep:'الإبلاغ عن حادثة',dd_dms:'مفتاح الأمان الميت',dd_alarm:'إعدادات الإنذار',dd_prof:'الملف الشخصي',dd_set:'الإعدادات',dd_em:'أرقام الطوارئ',
-    ss_t:'🚨 نداء استغاثة نشط',ss_wait:'في انتظار الرد...',
+    ss_t:'نداء استغاثة نشط',ss_wait:'في انتظار الرد...',
     cancel:'إلغاء SOS',ok_all:'✓ كل شيء بخير',
     upd_ttl:'التحديثات',rep_ttl:'الإبلاغ عن حادثة',dms_ttl:'⏱️ مفتاح الأمان الميت',
     set_ttl:'الإعدادات',prof_ttl:'ملفي الشخصي',em_ttl:'أرقام الطوارئ',alarm_ttl:'🚨 إعدادات الإنذار',
@@ -1800,7 +1819,7 @@ const LANGS={
     dms_ob:'<strong>Мёртвая рука:</strong> Нет ответа через X мин — автоматический SOS.',
     nav_map:'Карта',nav_sos:'Тревога',nav_upd:'Обновления',
     dd_rep:'Сообщить об инциденте',dd_dms:'Мёртвая рука',dd_alarm:'Настройки сигнала',dd_prof:'Профиль',dd_set:'Настройки',dd_em:'Экстренные номера',
-    ss_t:'🚨 SOS активен — сигнал работает',ss_wait:'Ожидание ответа...',
+    ss_t:'SOS активен — сигнал работает',ss_wait:'Ожидание ответа...',
     cancel:'Отмена SOS',ok_all:'✓ Всё в порядке',
     upd_ttl:'Обновления',rep_ttl:'Сообщить об инциденте',dms_ttl:'⏱️ Мёртвая рука',
     set_ttl:'Настройки',prof_ttl:'Мой профиль',em_ttl:'Экстренные номера',alarm_ttl:'🚨 Настройки сигнала',
@@ -1833,7 +1852,7 @@ const LANGS={
     dms_ob:'<strong>Dead Man Switch:</strong> X ደቂቃ ውስጥ ካልተረጋገጠ — SOS ይላካል።',
     nav_map:'ካርታ',nav_sos:'አደጋ',nav_upd:'ዜናዎች',
     dd_rep:'ክስተት ሪፖርት',dd_dms:'Dead Man Switch',dd_alarm:'የማንቂያ ቅንጅቶች',dd_prof:'መገለጫ',dd_set:'ቅንጅቶች',dd_em:'አደጋ ጊዜ ቁጥሮች',
-    ss_t:'🚨 SOS ንቁ — ማንቂያ እየሰራ ነው',ss_wait:'ምላሽ በመጠበቅ ላይ...',
+    ss_t:'SOS ንቁ — ማንቂያ እየሰራ ነው',ss_wait:'ምላሽ በመጠበቅ ላይ...',
     cancel:'SOS ሰርዝ',ok_all:'✓ ሁሉም ደህና ነው',
     upd_ttl:'ዜናዎች',rep_ttl:'ክስተት ሪፖርት',dms_ttl:'⏱️ Dead Man Switch',
     set_ttl:'ቅንጅቶች',prof_ttl:'መገለጫዬ',em_ttl:'አደጋ ጊዜ ቁጥሮች',alarm_ttl:'🚨 የማንቂያ ቅንጅቶች',
@@ -1866,7 +1885,7 @@ const LANGS={
     dms_ob:"<strong>Dead Man's Switch:</strong> Si pas de confirmation en X min — SOS automatique.",
     nav_map:'Carte',nav_sos:'Urgence',nav_upd:'Mises à jour',
     dd_rep:'Signaler un incident',dd_dms:"Dead Man's Switch",dd_alarm:"Paramètres d'alarme",dd_prof:'Profil',dd_set:'Paramètres',dd_em:"Numéros d'urgence",
-    ss_t:'🚨 SOS actif — alarme déclenchée',ss_wait:'En attente de réponse...',
+    ss_t:'SOS actif — alarme déclenchée',ss_wait:'En attente de réponse...',
     cancel:'Annuler SOS',ok_all:"✓ Tout va bien",
     upd_ttl:'Mises à jour',rep_ttl:'Signaler un incident',dms_ttl:"⏱️ Dead Man's Switch",
     set_ttl:'Paramètres',prof_ttl:'Mon profil',em_ttl:"Numéros d'urgence",alarm_ttl:"🚨 Paramètres d'alarme",
@@ -3234,7 +3253,7 @@ function eventPinHTML(t){
   return '<svg viewBox="0 0 40 50" style="color:#fff">'
     +'<path d="M20 1.5C10.6 1.5 3 9.1 3 18.5 3 31 20 47.5 20 47.5S37 31 37 18.5C37 9.1 29.4 1.5 20 1.5Z" fill="'+o.color+'" stroke="#0A1628" stroke-width="2"/>'
     +'<circle cx="20" cy="18" r="12.5" fill="rgba(0,0,0,.16)"/>'
-    +'<use href="#i-'+o.icon+'" x="8" y="6" width="24" height="24"/>'
+    +'<g transform="translate(8,6)">'+_glyph(o.icon)+'</g>'
     +'</svg>';
 }
 function catIcon(t){
@@ -4641,6 +4660,7 @@ function injectSheetCredits(){
   });
 }
 try{ injectSheetCredits(); }catch(e){}
+try{ hydrateIcons(document); }catch(e){}
 
 /* ═══════════════════════════════════
    SERVICE WORKER + PWA INSTALL
