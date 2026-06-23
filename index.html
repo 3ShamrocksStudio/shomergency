@@ -1,38 +1,289 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0A1628">
-<title>שומר — Citizens Protecting Citizens</title>
-<link rel="canonical" href="shomer.html">
-<meta http-equiv="refresh" content="1; url=shomer.html">
-<script>
-// Self-heal: this org's GitHub Pages projects share ONE origin
-// (<org>.github.io), so a service worker left behind by a sibling project
-// can hijack navigations and serve the wrong app. Unregister any worker that
-// isn't SHOMER's, then continue to the app.
-(function () {
-  var BASE = location.pathname.replace(/index\.html$/, '');
-  // Cache-bust the app shell so a stale HTTP/SW copy can never pin an old build.
-  var go = function () {
-    var sep = location.search ? '&' : '?';
-    location.replace('shomer.html' + location.search + sep + 'v=' + Date.now() + location.hash);
-  };
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.getRegistrations().then(function (regs) {
-      var jobs = regs
-        .filter(function (r) { return r.scope.indexOf(location.origin + BASE) !== 0; })
-        .map(function (r) { return r.unregister(); });
-      return Promise.all(jobs);
-    }).catch(function () {}).then(go);
-  } else { go(); }
-  setTimeout(go, 1500); // hard fallback
-})();
-</script>
-<style>html,body{margin:0;height:100%;background:#0A1628;color:#fff;font-family:system-ui,sans-serif;display:flex;align-items:center;justify-content:center}</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" content="#0A1628">
+  <title>SH✡MER • שומר — Citizens Protecting Citizens</title>
+  <meta name="description" content="One tap and you're not alone. Real-time safety map, loud SOS alarm, Dead Man's Switch. Hebrew-first PWA. Citizens protecting citizens, nature, and coast.">
+  <link rel="canonical" href="https://3shamrocksstudio.github.io/shomergency/">
+  <link rel="icon" type="image/png" href="logo-192.png">
+  <link rel="apple-touch-icon" href="logo-192.png">
+  <link rel="manifest" href="manifest.json">
+  <style>
+    :root {
+      --n0:#060F1E; --n1:#0A1628; --n2:#101E34; --n3:#162440; --n4:#1C2C4E; --n5:#243460; --n6:#2E4070;
+      --g1:#9A6C1A; --g2:#C09020; --g3:#E0A828; --g4:#F5C840;
+      --p1:#5C6B82; --p2:#8392AB; --p3:#B6C2D6; --p4:#E6ECF6;
+      --r3:#CC1426; --r4:#E8182C;
+      --tx0:#F0F4FF; --tx1:#C8D4E8; --tx2:#8898B8;
+      --font-main:'Inter','Heebo',system-ui,sans-serif;
+      --font-heb:'Heebo','Inter',system-ui,sans-serif;
+    }
+    * { box-sizing: border-box; margin:0; padding:0; }
+    html, body { background: var(--n1); color: var(--tx0); font-family: var(--font-main); line-height:1.5; }
+    body { font-size: 16px; }
+    a { color: var(--g3); text-decoration: none; }
+    a:hover { color: var(--g4); }
+    .container { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+    header { position: sticky; top:0; z-index: 100; background: rgba(10,22,40,.95); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(182,194,214,.1); }
+    .nav { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 20px; letter-spacing: -.3px; }
+    .logo img { width: 28px; height: 28px; }
+    .nav-actions { display: flex; gap: 12px; align-items: center; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; padding: 10px 20px; border-radius: 999px; font-weight: 600; font-size: 15px; transition: all .15s ease; border: none; cursor: pointer; }
+    .btn-primary { background: linear-gradient(135deg, var(--g2), var(--g4)); color: var(--n0); }
+    .btn-primary:hover { filter: brightness(1.05); }
+    .btn-secondary { background: transparent; color: var(--tx0); border: 1px solid var(--p2); }
+    .btn-secondary:hover { background: rgba(255,255,255,.04); }
+    .hero { padding: 72px 0 56px; text-align: center; }
+    .hero .badge { display: inline-block; margin-bottom: 16px; }
+    .hero .badge img { width: 92px; height: auto; }
+    .hero h1 { font-size: clamp(42px, 7vw, 64px); font-weight: 800; line-height: 1.05; margin-bottom: 12px; }
+    .hero .tagline { font-size: clamp(18px, 3.2vw, 24px); color: var(--p3); max-width: 620px; margin: 0 auto 28px; }
+    .hero-ctas { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .hero-note { margin-top: 20px; font-size: 13px; color: var(--tx2); }
+    .trust-strip { background: var(--n2); padding: 14px 0; border-top: 1px solid rgba(182,194,214,.08); border-bottom: 1px solid rgba(182,194,214,.08); }
+    .trust-strip .row { display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; font-size: 13px; color: var(--p3); }
+    .trust-strip .row span { white-space: nowrap; }
+    .section { padding: 56px 0; }
+    .section h2 { font-size: 26px; font-weight: 700; margin-bottom: 24px; text-align: center; }
+    .verticals { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .vertical { background: var(--n2); border-radius: 16px; padding: 24px; border: 1px solid rgba(182,194,214,.08); }
+    .vertical h3 { font-size: 20px; margin-bottom: 8px; }
+    .vertical .sub { color: var(--p3); font-size: 14px; margin-bottom: 14px; }
+    .vertical .link { font-size: 14px; display: inline-flex; align-items: center; gap: 6px; }
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+    .feature { background: var(--n2); border-radius: 14px; padding: 20px; }
+    .feature h4 { font-size: 15px; margin-bottom: 6px; color: var(--g3); }
+    .feature p { font-size: 14px; color: var(--tx2); }
+    .honest { background: var(--n2); border-radius: 16px; padding: 28px; border-left: 5px solid var(--g3); }
+    .honest h3 { color: var(--g3); margin-bottom: 12px; }
+    .matrix { width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 14px; }
+    .matrix td, .matrix th { padding: 10px 12px; border-bottom: 1px solid rgba(182,194,214,.1); text-align: start; vertical-align: top; }
+    .matrix th { color: var(--p3); font-weight: 500; }
+    .matrix .yes { color: #7ee17e; }
+    .matrix .sim { color: var(--g4); }
+    .screenshots { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; }
+    .screenshots img { width: 100%; border-radius: 10px; border: 1px solid rgba(182,194,214,.12); }
+    .install { background: var(--n2); border-radius: 16px; padding: 32px; text-align: center; }
+    .install h3 { margin-bottom: 8px; }
+    .disclaimer { font-size: 13px; color: var(--tx2); max-width: 720px; margin: 32px auto 0; text-align: center; border-top: 1px solid rgba(182,194,214,.1); padding-top: 20px; }
+    footer { background: var(--n0); padding: 32px 0; font-size: 13px; color: var(--tx2); text-align: center; }
+    .footer-links { margin-top: 8px; display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; }
+    @media (max-width: 640px) {
+      .hero { padding: 52px 0 40px; }
+      .nav { padding: 0 4px; }
+    }
+  </style>
 </head>
 <body>
-<p>Loading SH✡MER… <a href="shomer.html" style="color:#6db3ff">tap to continue</a></p>
+  <!-- NAV -->
+  <header>
+    <div class="container">
+      <div class="nav">
+        <div class="logo">
+          <img src="SHOMER_logo_big.png" alt="SH✡MER" style="height:32px; width:auto;">
+          <span>SH✡MER</span>
+        </div>
+        <div class="nav-actions">
+          <a href="shomer.html" class="btn btn-secondary">Open the app</a>
+          <a href="#install" class="btn btn-primary">Install free</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <div class="hero container">
+    <div class="badge">
+      <img src="SHOMER_logo_big.png" alt="SH✡MER badge">
+    </div>
+    <h1>One tap,<br>and you're not alone.</h1>
+    <p class="tagline">Real-time safety map. Loud SOS alarm. Dead Man's Switch.<br>Hebrew-first. Works on any phone. No app store required.</p>
+    
+    <div class="hero-ctas">
+      <a href="shomer.html" class="btn btn-primary" style="padding:14px 32px; font-size:17px;">Open SH✡MER now</a>
+      <a href="#install" class="btn btn-secondary" style="padding:14px 28px; font-size:17px;">How to install</a>
+    </div>
+    <div class="hero-note">Citizens Protecting Citizens • Built in Israel by 3Shamrocks Studio</div>
+  </div>
+
+  <!-- TRUST STRIP -->
+  <div class="trust-strip">
+    <div class="container">
+      <div class="row">
+        <span>✓ No tracking</span>
+        <span>✓ No accounts to sell</span>
+        <span>✓ Works offline</span>
+        <span>✓ Hebrew + English + 4 languages</span>
+        <span>✓ Real WebAudio alarm</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- THREE VERTICALS -->
+  <div class="section container">
+    <h2>One platform. Three missions.</h2>
+    <div class="verticals">
+      <div class="vertical">
+        <h3>SH✡MER • שומר</h3>
+        <div class="sub">Citizens Protecting Citizens</div>
+        <p style="margin-bottom:16px; color:var(--tx2); font-size:14.5px;">Personal safety on the street, at night, or when you feel vulnerable. Live map, SOS with real alarm, guardians, Dead Man's Switch.</p>
+        <a href="shomer.html" class="link">Open Urban →</a>
+      </div>
+      <div class="vertical">
+        <h3>Shomer Forest • שומר יער</h3>
+        <div class="sub">Citizens For Nature</div>
+        <p style="margin-bottom:16px; color:var(--tx2); font-size:14.5px;">Wildfire, dumping, injured wildlife, poaching. Report with photo + GPS. Direct links to Nature &amp; Parks and Fire &amp; Rescue.</p>
+        <a href="https://3shamrocksstudio.github.io/shomer-forest/" class="link" target="_blank" rel="noopener">Open Forest →</a>
+      </div>
+      <div class="vertical">
+        <h3>Shomer Beach • שומר חוף</h3>
+        <div class="sub">Citizens For the Coast</div>
+        <p style="margin-bottom:16px; color:var(--tx2); font-size:14.5px;">Dangerous currents, jellyfish, marine distress, pollution. The same guardian engine pointed at Israel's beaches and sea.</p>
+        <a href="https://3shamrocksstudio.github.io/shomer-beach/" class="link" target="_blank" rel="noopener">Open Beach →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- KEY FEATURES -->
+  <div class="section container" style="padding-top:24px;">
+    <h2>What actually works today</h2>
+    <div class="features">
+      <div class="feature">
+        <h4>Real loud alarm</h4>
+        <p>Three distinct WebAudio sirens — police, air-raid, deterrent. Fires instantly on your device. Designed to be frightening.</p>
+      </div>
+      <div class="feature">
+        <h4>Live interactive map</h4>
+        <p>Leaflet + real OpenStreetMap. Your location + category-coded safety data (public CBS &amp; Police sources, cited).</p>
+      </div>
+      <div class="feature">
+        <h4>Dead Man's Switch</h4>
+        <p>Set an interval. Confirm you're OK or an SOS fires automatically. Perfect for hiking or swimming alone.</p>
+      </div>
+      <div class="feature">
+        <h4>Guardian pairing</h4>
+        <p>Invite a parent or partner. Real live location sharing between browser tabs today. Cross-device coming with backend.</p>
+      </div>
+      <div class="feature">
+        <h4>Shake + photo reports</h4>
+        <p>Hard shake triggers SOS. Take a photo + precise GPS for incidents. Everything stays on your device.</p>
+      </div>
+      <div class="feature">
+        <h4>6 languages, full RTL</h4>
+        <p>Hebrew, English, العربية, Русский, አማርኛ, Français. The entire interface localizes correctly.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- HONESTY MATRIX - THIS IS THE TRUST ASSET -->
+  <div class="section container">
+    <div class="honest">
+      <h3>What's real right now. What needs a backend.</h3>
+      <p style="color:var(--tx2); margin-bottom:12px;">We believe the most credible safety tool is the one that tells you exactly what it can and cannot do.</p>
+      
+      <table class="matrix">
+        <tr>
+          <th>Feature</th>
+          <th>Today (PWA)</th>
+          <th>With backend</th>
+        </tr>
+        <tr>
+          <td>Personal SOS alarm on your phone</td>
+          <td class="yes">✓ Real, loud, instant</td>
+          <td>Same + lock-screen</td>
+        </tr>
+        <tr>
+          <td>Live map + your location</td>
+          <td class="yes">✓ Real Leaflet + GPS</td>
+          <td>Same</td>
+        </tr>
+        <tr>
+          <td>Guardian live location share</td>
+          <td class="sim">✓ Real between tabs on same device</td>
+          <td>Real across phones</td>
+        </tr>
+        <tr>
+          <td>SOS broadcast to nearby people</td>
+          <td class="sim">Simulated locally</td>
+          <td>Real geo-fanout + push</td>
+        </tr>
+        <tr>
+          <td>Dead Man's Switch &amp; shake</td>
+          <td class="yes">✓ Fully working</td>
+          <td>Same</td>
+        </tr>
+        <tr>
+          <td>Photo reports on map</td>
+          <td class="yes">✓ Real on your device</td>
+          <td>Shared + routed to authorities</td>
+        </tr>
+        <tr>
+          <td>Rate limits &amp; anti-abuse</td>
+          <td class="sim">Local only</td>
+          <td>Server-enforced</td>
+        </tr>
+      </table>
+      <p style="margin-top:16px; font-size:13px; color:var(--p3);">Until the backend ships, anything involving other people seeing your alert is clearly marked simulated in the app.</p>
+    </div>
+  </div>
+
+  <!-- SCREENSHOTS -->
+  <div class="section container">
+    <h2>Real screens from the app</h2>
+    <div class="screenshots">
+      <img src="_redesign/proof-final/1-onboarding.png" alt="Onboarding with SH✡MER badge">
+      <img src="_redesign/proof-final/2-map-legend.png" alt="Live safety map with legend">
+      <img src="_redesign/proof-final/4-alarm.png" alt="SOS alarm screen">
+      <img src="_redesign/proof-final/3-report.png" alt="Report incident flow">
+    </div>
+    <p style="text-align:center; margin-top:12px; font-size:13px; color:var(--tx2);">More in the app. Capture on your phone for the sharpest shots.</p>
+  </div>
+
+  <!-- INSTALL -->
+  <div id="install" class="section container">
+    <div class="install">
+      <h3>Install SH✡MER in 10 seconds. No app store.</h3>
+      <p style="max-width:520px; margin:0 auto 20px; color:var(--tx2);">Open in Safari (iOS) or Chrome (Android). Tap the share button → “Add to Home Screen”.</p>
+      <a href="shomer.html" class="btn btn-primary" style="padding:14px 36px;">Open the app and install</a>
+      <div style="margin-top:18px; font-size:13px; color:var(--p3);">
+        Works completely offline after first load • Updates automatically
+      </div>
+    </div>
+  </div>
+
+  <!-- DISCLAIMER -->
+  <div class="container">
+    <div class="disclaimer">
+      <strong>SH✡MER augments personal safety — it is NOT a replacement for emergency services.</strong><br>
+      In a real emergency, call <strong>100</strong> (Police) / <strong>101</strong> (MDA) / <strong>102</strong> (Fire &amp; Rescue).<br>
+      This is a working prototype. Cross-device broadcasting and authority routing require the backend phase (in progress).
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      Built by <a href="https://3shamrocksstudio.github.io/" target="_blank" rel="noopener">3Shamrocks Studio</a> • Israel<br>
+      <div class="footer-links">
+        <a href="shomer.html">Open the app</a>
+        <a href="https://3shamrocksstudio.github.io/shomer-forest/" target="_blank">Forest</a>
+        <a href="https://3shamrocksstudio.github.io/shomer-beach/" target="_blank">Beach</a>
+        <a href="TEST.md">Test &amp; honesty matrix</a>
+        <a href="SHOMER-MASTER-SPEC.md">Master spec</a>
+      </div>
+      <div style="margin-top:10px; font-size:11px;">© 2026 3Shamrocks Studio. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    // Light service worker self-heal on the landing too (for consistency)
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(regs => {
+        regs.filter(r => !r.scope.includes('shomergency')).forEach(r => r.unregister());
+      }).catch(() => {});
+    }
+  </script>
 </body>
 </html>

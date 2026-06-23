@@ -345,6 +345,12 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 .sh-body{overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1;padding:14px 16px 36px;}
 /* section label */
 .sec-cap{font-size:10px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;color:var(--g2);margin-bottom:9px;display:flex;align-items:center;gap:7px;}
+/* Settings category band — groups sub-sections into clear, scannable categories */
+.set-cat{display:flex;align-items:center;gap:10px;margin:26px 0 14px;padding-bottom:10px;border-bottom:1px solid var(--b2);}
+.set-cat:first-child{margin-top:2px;}
+.set-cat-ic{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,var(--n4),var(--n3));border:1px solid var(--b2);color:var(--g3);flex:0 0 auto;}
+.set-cat-ic .ic{width:17px;height:17px;}
+.set-cat-t{font-size:15px;font-weight:800;color:var(--tx0);letter-spacing:.2px;}
 .sec-cap::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--gd),transparent);}
 .mb12{margin-bottom:12px;} .mb16{margin-bottom:16px;} .mb20{margin-bottom:20px;}
 
@@ -1052,7 +1058,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  <div class="leg"><div class="ldc" style="background:#2962FF" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 7.5-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><span id="l4">גנבה / רכוש</span></div>
  <div class="leg"><div class="ldc" style="background:#18C29C" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="8" width="18" height="8" rx="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 8v8" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><span id="l5">סמים</span></div>
  <div class="leg"><div class="ldc" style="background:#16A06A" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 8v8M8 12h8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></div><span id="l6">רפואי</span></div>
- <div class="leg"><div class="ldc" style="background:#19A8FF;border-color:#fff" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.4" fill="currentColor"/><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><span id="l8">המיקום שלי</span></div>
+ <div class="leg"><div class="ldc" style="background:#19A8FF;border-color:#fff" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4 L17 18.5 L12 15.2 L7 18.5 Z" fill="#fff"/></svg></div><span id="l8">המיקום שלי</span></div>
  <div class="legend-foot" id="legend-foot">צבעים = קטגוריה. סמני ערים = סקירה סטטיסטית מצרפית, לא אירוע ספציפי.</div>
  </div>
  </div>
@@ -1090,14 +1096,6 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  <button class="ddr" onclick="navTo('rep');closeDD()" role="menuitem">
  <div class="dd-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2 2 0 0 0-3-3L5 17Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 7l3 3" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><span id="dd-rep">דיווח אירוע</span>
  </button>
- <button class="ddr" onclick="op('sh-dms');closeDD()" role="menuitem">
- <div class="dd-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
- <span id="dd-dms">Dead Man's Switch</span>
- <span class="dms-badge off" id="dms-dd-badge">כבוי</span>
- </button>
- <button class="ddr" onclick="op('sh-alarm');closeDD()" role="menuitem">
- <div class="dd-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18v-5a5 5 0 0 1 10 0v5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><rect x="5" y="18" width="14" height="3" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3v2M4.5 7l1.5 1.3M19.5 7L18 8.3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><span id="dd-alarm">הגדרות אזעקה</span>
- </button>
  <button class="ddr" onclick="openCircles();closeDD()" role="menuitem">
  <div class="dd-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div><span id="dd-guard">חבר/י שומר/ת</span>
  </button>
@@ -1106,7 +1104,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  </button>
  <div class="dd-sep"></div>
  <button class="ddr" onclick="op('sh-prof');closeDD()" role="menuitem">
- <div class="dd-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16 5.2a3.2 3.2 0 0 1 0 6M17 13.5a5.5 5.5 0 0 1 3.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><span id="dd-prof">פרופיל</span>
+ <div class="dd-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><span id="dd-prof">פרופיל</span>
  </button>
  <button class="ddr" onclick="op('sh-set');closeDD()" role="menuitem">
  <div class="dd-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2.5l1.3 2.3 2.6-.4.5 2.6 2.3 1.3-1 2.4 1 2.4-2.3 1.3-.5 2.6-2.6-.4L12 21.5l-1.3-2.3-2.6.4-.5-2.6L5.3 15.7l1-2.4-1-2.4 2.3-1.3.5-2.6 2.6.4Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div><span id="dd-set">הגדרות</span>
@@ -1335,6 +1333,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  <div class="sh-pill" aria-hidden="true"></div>
  <div class="sh-head"><span class="sh-ttl" id="set-ttl">הגדרות</span><button class="sh-x" onclick="cl('sh-set')" aria-label="סגור"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button></div>
  <div class="sh-body">
+ <div class="set-cat"><div class="set-cat-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M13.7 21a2 2 0 0 1-3.4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div class="set-cat-t" data-he="התראות" data-en="Alerts &amp; Notifications">התראות</div></div>
  <div class="sec-cap mb12" id="set-radius-lbl">רדיוס התראה</div>
  <p class="set-help" id="set-radius-help">עד כמה רחוק ממך עדיין יקבלו ממך התראה — וכמה רחוק תקבל/י התראות של אחרים. גדול יותר = יותר עיניים, יותר התראות.</p>
  <div class="sl-card mb20">
@@ -1350,6 +1349,8 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  <div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 8v8M8 12h8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></div><div><div class="sr-nm" id="n-med-nm">עזרה רפואית</div><div class="sr-sb" id="n-med-sb">בקשות לעזרה רפואית בקרבתך</div></div></div><div class="tog" data-skey="n_med" onclick="this.classList.toggle('on');saveToggle(this)" role="switch"></div></div>
  <div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="sr-nm" id="n-closed-nm">אירועים שנסגרו</div><div class="sr-sb" id="n-closed-sb">עדכון כשאירוע לידך טופל ונסגר</div></div></div><div class="tog" data-skey="n_closed" onclick="this.classList.toggle('on');saveToggle(this)" role="switch"></div></div>
  </div>
+ <div class="set-cat"><div class="set-cat-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div><div class="set-cat-t" data-he="בטיחות" data-en="Safety features">בטיחות</div></div>
+ <div class="set-grp"><div class="set-row" onclick="op('sh-dms');cl('sh-set')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="sr-nm">Dead Man's Switch</div></div><span style="color:var(--tx3);font-size:18px">›</span></div><div class="set-row" onclick="op('sh-alarm');cl('sh-set')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18v-5a5 5 0 0 1 10 0v5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><rect x="5" y="18" width="14" height="3" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3v2M4.5 7l1.5 1.3M19.5 7L18 8.3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div class="sr-nm" data-he="הגדרות אזעקה" data-en="Alarm settings">הגדרות אזעקה</div></div><span style="color:var(--tx3);font-size:18px">›</span></div></div>
  <div class="sec-cap mb12" id="shake-set-lbl">Shake-to-SOS</div>
  <p class="set-help" id="shake-set-help">מאפשר להפעיל SOS בלי להסתכל על המסך — מנערים את הטלפון בחוזקה. שימושי כשהטלפון בכיס או כשאי אפשר להביט במסך.</p>
  <div class="set-grp">
@@ -1383,20 +1384,21 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  <div class="dms-notice" id="sos-safety-note" style="margin-bottom:18px">
  <strong id="sos-safety-note-h">הערת כנות:</strong> <span id="sos-safety-note-b">שידור, הגבלת קצב ואמון מדומים מקומית בלבד באפליקציה זו (ללא שרת). מערכת אמיתית חייבת לאכוף אותם בצד-שרת.</span>
  </div>
+ <div class="set-cat"><div class="set-cat-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><div class="set-cat-t" data-he="מיקום ופרטיות" data-en="Location &amp; Privacy">מיקום ופרטיות</div></div>
  <div class="sec-cap mb12" id="set-priv-lbl">פרטיות</div>
  <p class="set-help" id="set-priv-help">את/ה שולט/ת במה שמשותף. המיקום נשמר במכשירך ומשותף רק כשאת/ה מפעיל/ה SOS, DMS או שיתוף עם שומר/ת.</p>
  <div class="set-grp">
  <div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.4 7-12a7 7 0 1 0-14 0c0 5.6 7 12 7 12Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.6" fill="currentColor"/></svg></div><div><div class="sr-nm" id="p-bgloc-nm">שיתוף מיקום ברקע</div><div class="sr-sb" id="p-bgloc-sb">נדרש ל-SOS ו-DMS — בלעדיו אי אפשר לשלוח את מיקומך בחירום</div></div></div><div class="tog on" data-skey="p_bgloc" onclick="this.classList.toggle('on');saveToggle(this)" role="switch"></div></div>
- <div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16 5.2a3.2 3.2 0 0 1 0 6M17 13.5a5.5 5.5 0 0 1 3.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div><div class="sr-nm" id="p-showname-nm">הצג שם בעדכונים</div><div class="sr-sb" id="p-showname-sb">כבוי = הדיווחים שלך מופיעים בעילום שם</div></div></div><div class="tog on" data-skey="p_showname" onclick="this.classList.toggle('on');saveToggle(this)" role="switch"></div></div>
+ <div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div><div class="sr-nm" id="p-showname-nm">הצג שם בעדכונים</div><div class="sr-sb" id="p-showname-sb">כבוי = הדיווחים שלך מופיעים בעילום שם</div></div></div><div class="tog on" data-skey="p_showname" onclick="this.classList.toggle('on');saveToggle(this)" role="switch"></div></div>
  </div>
- <div class="sec-cap mb12" id="set-contacts-lbl">אנשי קשר חירום</div>
+ <div class="set-cat"><div class="set-cat-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h3.5l1.5 4-2 1.5a11 11 0 0 0 5 5l1.5-2 4 1.5V19a2 2 0 0 1-2.2 2A16 16 0 0 1 4 6.2 2 2 0 0 1 5 4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div><div class="set-cat-t" id="set-contacts-lbl" data-he="אנשי קשר חירום" data-en="Emergency contacts">אנשי קשר חירום</div></div>
  <p class="set-help" id="set-contacts-help">אנשים שיקבלו את מיקומך והתראה אוטומטית כשתשלח/י SOS. הוסף/י את מי שיגיב/ה הכי מהר.</p>
  <div class="set-grp" id="contacts-grp">
  <div class="c-row"><div class="c-av">א</div><div style="flex:1"><div class="c-nm" data-he="אמא" data-en="Mom">אמא</div><div class="c-ph">052-XXX-XXXX</div></div><span class="c-tag" data-he="ראשון" data-en="Primary">ראשון</span></div>
  <div class="c-row"><div class="c-av">ד</div><div style="flex:1"><div class="c-nm" data-he="דני" data-en="Danny">דני</div><div class="c-ph">054-XXX-XXXX</div></div><span class="c-tag" data-he="שני" data-en="Secondary">שני</span></div>
  </div>
  <button class="add-c mb20" onclick="toast(currentLang==='he'?'בקרוב: הוספת אנשי קשר':'Coming soon: add contacts','amb')" data-he="+ הוסף איש קשר" data-en="+ Add contact">+ הוסף איש קשר</button>
- <div class="sec-cap mb12" id="set-lang-lbl" data-he="שפה" data-en="Language">שפה</div>
+ <div class="set-cat"><div class="set-cat-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 12h18" stroke="currentColor" stroke-width="2"/><path d="M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><div class="set-cat-t" id="set-lang-lbl" data-he="שפה" data-en="Language">שפה</div></div>
  <p class="set-help" id="set-lang-help">שפת התצוגה של האפליקציה. ניתן לשנות בכל עת — לא משפיע על דיווחים קיימים.</p>
  <div class="set-grp" style="padding:10px 14px;">
  <div style="display:flex;direction:ltr;gap:6px;flex-wrap:wrap;" id="set-lang-btns">
@@ -1404,7 +1406,8 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  <button class="olb" onclick="setLang('en')" lang="en">English</button>
  </div>
  </div>
- <div class="sec-cap mb12" style="margin-top:18px" data-he="אודות שומר" data-en="About SHOMER">אודות שומר</div>
+ <div class="set-cat"><div class="set-cat-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2.5l1.3 2.3 2.6-.4.5 2.6 2.3 1.3-1 2.4 1 2.4-2.3 1.3-.5 2.6-2.6-.4L12 21.5l-1.3-2.3-2.6.4-.5-2.6L5.3 15.7l1-2.4-1-2.4 2.3-1.3.5-2.6 2.6.4Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div><div class="set-cat-t" data-he="חשבון ומידע" data-en="Account &amp; About">חשבון ומידע</div></div>
+ <div class="sec-cap mb12" data-he="אודות שומר" data-en="About SHOMER">אודות שומר</div>
  <div class="set-grp">
  <div class="ai-row"><span class="ai-l">מוצר / Product</span><span class="ai-v" dir="ltr">SHOMER<span class="tm"></span> (שומר)</span></div>
  <div class="ai-row"><span class="ai-l">גרסה</span><span class="ai-v">1.0.0</span></div>
@@ -1471,12 +1474,6 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  <div class="prof-opt" data-prof="para" onclick="selectProfession('para')" role="button" tabindex="0"><span class="pic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17V9a2 2 0 0 1 2-2h7l4 3.5V17" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="8" cy="18" r="2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="16" cy="18" r="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10.5 11v3M9 12.5h3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span class="pl" data-pl="para">פרמדיק/ית</span></div>
  <div class="prof-opt" data-prof="security" onclick="selectProfession('security')" role="button" tabindex="0"><span class="pic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span><span class="pl" data-pl="security">אבטחה</span></div>
  <div class="prof-opt sel" data-prof="" onclick="selectProfession('')" role="button" tabindex="0"><span class="pic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6.3 6.3l11.4 11.4" fill="none" stroke="currentColor" stroke-width="2"/></svg></span><span class="pl" data-pl="none">ללא</span></div>
- </div>
- <div class="sec-cap mb12" data-he="פעולות מהירות" data-en="Quick actions">פעולות מהירות</div>
- <div class="set-grp mb20">
- <div class="set-row" onclick="op('sh-dms');cl('sh-prof')"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="sr-nm">Dead Man's Switch</div></div><span style="color:var(--tx3);font-size:18px">›</span></div>
- <div class="set-row" onclick="op('sh-alarm');cl('sh-prof')"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18v-5a5 5 0 0 1 10 0v5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><rect x="5" y="18" width="14" height="3" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3v2M4.5 7l1.5 1.3M19.5 7L18 8.3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div class="sr-nm" data-he="הגדרות אזעקה" data-en="Alarm settings">הגדרות אזעקה</div></div><span style="color:var(--tx3);font-size:18px">›</span></div>
- <div class="set-row" onclick="op('sh-em');cl('sh-prof')"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h3.5l1.5 4-2 1.5a11 11 0 0 0 5 5l1.5-2 4 1.5V19a2 2 0 0 1-2.2 2A16 16 0 0 1 4 6.2 2 2 0 0 1 5 4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div><div class="sr-nm" data-he="מספרי חירום" data-en="Emergency numbers">מספרי חירום</div></div><span style="color:var(--tx3);font-size:18px">›</span></div>
  </div>
  <div class="sec-cap mb12" id="myrep-cap">הדיווחים שלי</div>
  <div id="my-reports-list" class="mb20" role="list"></div>
