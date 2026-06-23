@@ -5,161 +5,95 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0A1628">
   <title>שומר • SH✡MER</title>
-  <meta name="description" content="אזרחים עוזרים לאזרחים. אזעקה, מיקום, עזרה. פשוט.">
+  <meta name="description" content="אזרחים עוזרים לאזרחים. אזעקה. מיקום. עזרה.">
   <link rel="canonical" href="https://3shamrocksstudio.github.io/shomergency/">
   <link rel="icon" type="image/png" href="logo-192.png">
   <link rel="apple-touch-icon" href="logo-192.png">
   <link rel="manifest" href="manifest.json">
   <style>
     :root {
-      --n0: #060F1E;
-      --n1: #0A1628;
-      --n2: #101E34;
-      --g2: #C09020;
-      --g3: #E0A828;
-      --g4: #F5C840;
-      --p2: #8392AB;
-      --p3: #B6C2D6;
-      --tx0: #F0F4FF;
-      --tx1: #C8D4E8;
+      --n0:#060F1E; --n1:#0A1628; --n2:#101E34;
+      --g3:#E0A828; --g4:#F5C840; --p3:#B6C2D6; --tx0:#F0F4FF; --tx1:#C8D4E8;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { background: var(--n1); color: var(--tx0); font-family: 'Inter', 'Heebo', system-ui, sans-serif; line-height: 1.5; }
-    body { font-size: 15px; }
-    a { color: var(--g3); text-decoration: none; }
-    a:hover { color: var(--g4); }
-    .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
-    
-    header { background: var(--n0); padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
-    .nav { display: flex; align-items: center; justify-content: space-between; }
-    .logo { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 20px; }
-    .logo img { width: 48px; height: 48px; }
-    
-    .hero {
-      min-height: 520px;
-      background: linear-gradient(rgba(6,15,30,0.75), rgba(10,22,40,0.85)), url('SHOMER-bg.jpg') center/cover;
-      display: flex;
-      align-items: center;
-      padding: 60px 0;
-    }
-    .hero-inner { display: grid; grid-template-columns: 1fr 320px; gap: 40px; align-items: center; }
-    @media (max-width: 800px) { .hero-inner { grid-template-columns: 1fr; } }
-    .hero h1 { font-size: 42px; line-height: 1.1; margin-bottom: 12px; }
-    .hero p { font-size: 17px; color: var(--p3); max-width: 420px; margin-bottom: 24px; }
-    .btn { display: inline-block; padding: 12px 24px; border-radius: 999px; font-weight: 600; font-size: 15px; }
-    .btn-primary { background: var(--g3); color: var(--n1); }
-    .btn-secondary { border: 1px solid var(--p3); color: var(--tx0); }
-    
-    .mockups { display: flex; gap: 16px; overflow-x: auto; padding-bottom: 20px; scroll-snap-type: x mandatory; }
-    .mockups::-webkit-scrollbar { display: none; }
-    .phone { flex: 0 0 220px; background: #111; border-radius: 36px; padding: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); scroll-snap-align: start; }
-    .phone::before { content: ''; display: block; height: 20px; background: #222; border-radius: 10px; margin: 0 auto 8px; width: 80px; }
-    .phone img { width: 100%; border-radius: 24px; display: block; }
-    
-    section { padding: 48px 0; }
-    h2 { font-size: 22px; margin-bottom: 16px; color: var(--g4); }
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
-    .card { background: var(--n2); padding: 20px; border-radius: 12px; }
-    .card h3 { font-size: 16px; margin-bottom: 8px; color: var(--g3); }
-    
-    .cta-bar { background: var(--n2); padding: 32px; border-radius: 16px; text-align: center; }
-    
-    footer { background: var(--n0); padding: 32px 0; font-size: 13px; color: var(--p3); }
-    footer a { color: var(--p3); }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    html,body { background:var(--n1); color:var(--tx0); font-family:'Inter','Heebo',system-ui,sans-serif; }
+    body { font-size:15px; }
+    a { color:var(--g3); text-decoration:none; }
+    .container { max-width:1100px; margin:0 auto; padding:0 20px; }
+    header { padding:16px 0; background:var(--n0); border-bottom:1px solid rgba(255,255,255,.08); }
+    .nav { display:flex; justify-content:space-between; align-items:center; }
+    .logo img { width:52px; height:52px; }
+    .hero { min-height:420px; background:linear-gradient(rgba(6,15,30,.7),rgba(10,22,40,.8)), url('SHOMER-KeyVisual.jpg') center/cover; display:flex; align-items:center; padding:40px 0; }
+    .hero h1 { font-size:36px; line-height:1.1; margin-bottom:8px; }
+    .hero p { font-size:16px; color:var(--p3); max-width:420px; margin-bottom:20px; }
+    .btn { display:inline-block; padding:12px 22px; border-radius:999px; font-weight:600; }
+    .btn-main { background:var(--g3); color:var(--n1); }
+    .section { padding:40px 0; }
+    .mockups { display:flex; gap:12px; overflow-x:auto; padding:10px 0; }
+    .phone { width:180px; background:#111; border-radius:28px; padding:8px; flex-shrink:0; box-shadow:0 8px 20px rgba(0,0,0,.4); }
+    .phone img { width:100%; border-radius:18px; display:block; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:16px; }
+    .card { background:var(--n2); padding:16px; border-radius:10px; }
+    footer { padding:24px 0; background:var(--n0); font-size:13px; color:var(--p3); }
+    .small { font-size:13px; }
   </style>
 </head>
 <body>
   <header>
     <div class="container">
       <div class="nav">
-        <div class="logo">
-          <img src="SHOMER_logo_big.png" alt="שומר">
-          <span>שומר</span>
-        </div>
-        <div>
-          <a href="shomer.html" class="btn btn-secondary" style="padding: 8px 18px; font-size: 14px;">פתח</a>
-        </div>
+        <div class="logo"><img src="SHOMER_logo_big.png" alt="שומר"></div>
+        <a href="shomer.html" class="btn btn-main small">פתח</a>
       </div>
     </div>
   </header>
 
   <div class="hero">
     <div class="container">
-      <div class="hero-inner">
-        <div>
-          <h1>שומר.<br>אזרחים עוזרים לאזרחים.</h1>
-          <p>אזעקה. מיקום. עזרה. פשוט. ללא מעקב.</p>
-          <a href="shomer.html" class="btn btn-primary">התקן עכשיו</a>
-          <a href="#mockups" class="btn btn-secondary" style="margin-right: 12px;">ראה איך זה עובד</a>
-        </div>
-        <div>
-          <!-- Simple prominent mockup in hero -->
-          <div class="phone" style="width: 260px; height: 520px; margin: 0 auto;">
-            <div style="background:#000; border-radius: 28px; overflow:hidden; height:100%;">
-              <img src="_redesign/proof-final/2-map-legend.png" alt="מפה" style="width:100%; height:100%; object-fit:cover;">
-            </div>
-          </div>
-        </div>
+      <h1>שומר.<br>אזרחים עוזרים לאזרחים.</h1>
+      <p>אזעקה. מיקום. עזרה. פשוט.</p>
+      <a href="shomer.html" class="btn btn-main">התקן עכשיו</a>
+    </div>
+  </div>
+
+  <div class="section container">
+    <h2 style="margin-bottom:12px;">איך זה עובד</h2>
+    <div class="mockups">
+      <div class="phone"><img src="_redesign/proof-final/1-onboarding.png" alt=""></div>
+      <div class="phone"><img src="_redesign/proof-final/2-map-legend.png" alt=""></div>
+      <div class="phone"><img src="_redesign/proof-final/4-alarm.png" alt=""></div>
+      <div class="phone"><img src="_redesign/proof-final/3-report.png" alt=""></div>
+    </div>
+  </div>
+
+  <div class="section container">
+    <div class="grid">
+      <div class="card">
+        <h3>לחץ</h3>
+        <p class="small">אזעקה יוצאת מיד.</p>
+      </div>
+      <div class="card">
+        <h3>שתף</h3>
+        <p class="small">האנשים שלך רואים.</p>
+      </div>
+      <div class="card">
+        <h3>עזור</h3>
+        <p class="small">דווח. הגן.</p>
       </div>
     </div>
   </div>
 
-  <section id="mockups">
-    <div class="container">
-      <h2>איך זה נראה</h2>
-      <div class="mockups">
-        <div class="phone">
-          <img src="_redesign/proof-final/1-onboarding.png" alt="פתיחה">
-        </div>
-        <div class="phone">
-          <img src="_redesign/proof-final/2-map-legend.png" alt="מפה">
-        </div>
-        <div class="phone">
-          <img src="_redesign/proof-final/4-alarm.png" alt="אזעקה">
-        </div>
-        <div class="phone">
-          <img src="_redesign/proof-final/3-report.png" alt="דיווח">
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <div class="container">
-      <div class="grid">
-        <div class="card">
-          <h3>למה שומר</h3>
-          <p>לחץ. האנשים שלך יודעים. אזעקה יוצאת.</p>
-        </div>
-        <div class="card">
-          <h3>למי</h3>
-          <p>להורים. לנשים. לטיילים. לכולם.</p>
-        </div>
-        <div class="card">
-          <h3>איך זה עוזר</h3>
-          <p>אזעקה חזקה. מיקום מדויק. דיווח מהיר.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <div class="container cta-bar">
-      <h2 style="margin-bottom:8px; color:var(--tx0);">מוכן?</h2>
-      <p style="margin-bottom:20px; color:var(--p3);">התקן. הזמן מישהו. זה לוקח רגע.</p>
-      <a href="shomer.html" class="btn btn-primary" style="padding:14px 32px;">התקן עכשיו</a>
-    </div>
-  </section>
+  <div class="section container" style="text-align:center;">
+    <a href="shomer.html" class="btn btn-main">התקן עכשיו</a>
+    <p class="small" style="margin-top:12px;">ללא חנות. עובד בלי רשת.</p>
+  </div>
 
   <footer>
     <div class="container">
-      <p>שומר. אזרחים עוזרים לאזרחים.</p>
-      <p style="margin-top:8px;">
-        <a href="https://www.linkedin.com/in/davemarkovich">לינקדאין</a> · 
-        <a href="https://3shamrocksstudio.github.io/shomer-forest/">יער</a> · 
-        <a href="https://3shamrocksstudio.github.io/shomer-beach/">חוף</a>
-      </p>
-      <p style="margin-top:8px; font-size:12px;">לא מחליף שירותי חירום. 100 / 101 / 102.</p>
+      שומר. אזרחים עוזרים לאזרחים.<br>
+      <a href="https://www.linkedin.com/in/davemarkovich" style="margin-right:8px;">לינקדאין</a>
+      <a href="https://3shamrocksstudio.github.io/shomer-forest/">יער</a>
+      <p class="small" style="margin-top:8px;">לא מחליף 100 / 101 / 102.</p>
     </div>
   </footer>
 </body>
