@@ -16,3 +16,4 @@ Thumbs.db
 
 # Note: .claude/ is intentionally not committed (local agent state)
 .claude/
+_redesign/
