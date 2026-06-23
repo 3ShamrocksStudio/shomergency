@@ -285,6 +285,26 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 .sos-cd.on{display:flex;animation:cdfade .2s ease;}
 @keyframes cdfade{from{opacity:0}to{opacity:1}}
 .sos-cd-card{width:100%;max-width:360px;background:linear-gradient(180deg,rgba(30,16,22,.98),rgba(16,30,52,.98));border:1px solid var(--b4);border-radius:var(--r24);padding:26px 22px 22px;box-shadow:var(--e4),inset 0 1px 0 rgba(255,255,255,.05);text-align:center;}
+/* SOS max-attention full-screen strobe */
+.sos-strobe{position:fixed;inset:0;z-index:1400;display:none;align-items:center;justify-content:center;}
+.sos-strobe.on{display:flex;animation:strobeflash .42s steps(1,end) infinite;}
+@keyframes strobeflash{0%{background:#E8182C}33%{background:#1852C0}66%{background:#FFFFFF}100%{background:#E8182C}}
+@media(prefers-reduced-motion:reduce){.sos-strobe.on{animation-duration:1.1s;}}
+.strobe-panel{text-align:center;background:rgba(6,12,24,.82);border:2px solid rgba(255,255,255,.9);border-radius:var(--r24);padding:30px 28px;box-shadow:0 0 40px rgba(0,0,0,.6);}
+.strobe-sos{font-size:74px;font-weight:900;color:#fff;letter-spacing:6px;line-height:1;text-shadow:0 2px 12px rgba(0,0,0,.7);}
+.strobe-sub{font-size:16px;font-weight:800;color:#fff;margin-top:10px;letter-spacing:.5px;}
+.strobe-note{font-size:11px;color:rgba(255,255,255,.8);margin-top:10px;line-height:1.5;max-width:260px;}
+.strobe-stop{margin-top:18px;background:#fff;color:#0A1628;border:none;border-radius:999px;padding:11px 26px;font-size:14px;font-weight:800;cursor:pointer;}
+.strobe-min{display:block;margin:11px auto 0;background:none;border:none;color:rgba(255,255,255,.85);font-size:12px;font-weight:700;text-decoration:underline;cursor:pointer;}
+/* SOS cancel PIN keypad */
+.pin-dots{display:flex;justify-content:center;gap:14px;margin:18px 0 6px;}
+.pin-dots span{width:14px;height:14px;border-radius:50%;border:2px solid var(--g3);transition:background .12s,transform .12s;}
+.pin-dots span.on{background:var(--g3);transform:scale(1.12);}
+.pin-err{min-height:16px;color:#FF7080;font-size:12px;font-weight:700;margin-bottom:6px;}
+.pin-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;max-width:264px;margin:6px auto 0;}
+.pin-key{height:58px;border-radius:var(--r16);background:var(--n3);border:1px solid var(--b2);color:var(--tx0);font-size:23px;font-weight:700;cursor:pointer;transition:background .1s,transform .08s;display:flex;align-items:center;justify-content:center;}
+.pin-key:active{transform:scale(.94);background:var(--n4);}
+.pin-key.empty{background:none;border:none;pointer-events:none;}
 .sos-cd-ttl{font-size:22px;font-weight:900;color:#FF8089;letter-spacing:-.3px;line-height:1.15;}
 .sos-cd-sub{font-size:12.5px;color:var(--tx1);line-height:1.55;margin-top:8px;}
 .sos-cd-ringwrap{position:relative;width:150px;height:150px;margin:18px auto 16px;}
@@ -1045,6 +1065,11 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  <span class="odn-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
  <span id="ob-defaults-txt"><strong>Shake-to-SOS</strong> פעיל · <strong>Dead Man's Switch</strong> כבוי. אפשר לשנות בכל עת בהגדרות.</span>
  </div>
+ <div style="margin-top:12px">
+ <div class="sec-cap" id="ob-pin-lbl" data-he="קוד לביטול SOS (4 ספרות)" data-en="SOS cancel code (4 digits)">קוד לביטול SOS (4 ספרות)</div>
+ <input class="ob-f" id="ob-pin" type="password" inputmode="numeric" maxlength="4" pattern="[0-9]*" dir="ltr" style="text-align:center;letter-spacing:10px;font-size:20px" placeholder="••••" autocomplete="off" aria-label="SOS cancel code">
+ <p class="ob-pin-hint" id="ob-pin-hint" style="font-size:10.5px;color:var(--tx3);line-height:1.5;margin:5px 2px 0" data-he="נדרש כדי לבטל SOS פעיל — מונע ביטול בכפייה. לעולם לא טביעת אצבע." data-en="Required to cancel an active SOS — prevents forced cancellation. Never biometric.">נדרש כדי לבטל SOS פעיל — מונע ביטול בכפייה. לעולם לא טביעת אצבע.</p>
+ </div>
  <button class="ob-cta" onclick="obFinish()" id="ob-finish-btn">✓ <span id="ob-finish-t">כניסה לשומר</span></button>
  <p style="font-size:10.5px;color:var(--tx3);line-height:1.6;margin:10px 2px 0;text-align:center" id="ob-agree-txt">בכניסה את/ה מסכים/ה ל<button type="button" class="lnk-inline" onclick="openLegal('tos')">תנאי השימוש</button> ול<button type="button" class="lnk-inline" onclick="openLegal('privacy')">מדיניות הפרטיות</button>. שיתוף מיקום הוא בהסכמה בלבד.</p>
  <button class="ob-back" onclick="goStep(1)" id="ob-back2">← חזרה</button>
@@ -1061,6 +1086,23 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  <span class="sc-badge"><img src="3shamrocks.png" alt="3Shamrocks Studio" width="92" height="14"></span>
  <span class="cr"> 2026 · All rights reserved.</span>
  </footer>
+
+ <!-- PHONE VERIFICATION (identity for My SHOMER / live location) -->
+ <div class="resp-consent" id="ob-verify" style="z-index:10000" role="alertdialog" aria-modal="true" aria-labelledby="obv-ttl" aria-hidden="true">
+ <div class="rc-card">
+ <div class="rc-ic" style="background:linear-gradient(160deg,rgba(224,168,40,.2),rgba(224,168,40,.05));border-color:var(--b3);color:var(--g3)"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h3.5l1.5 4-2 1.5a11 11 0 0 0 5 5l1.5-2 4 1.5V19a2 2 0 0 1-2.2 2A16 16 0 0 1 4 6.2 2 2 0 0 1 5 4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div>
+ <div class="rc-t" id="obv-ttl" data-he="אימות מספר טלפון" data-en="Verify your phone">אימות מספר טלפון</div>
+ <div class="rc-b" id="obv-sub"></div>
+ <div id="obv-demo" style="background:rgba(33,230,255,.10);border:1px dashed rgba(33,230,255,.5);border-radius:var(--r12);padding:9px 11px;font-size:12px;color:#bfeefb;line-height:1.5;margin-bottom:12px"></div>
+ <input class="ob-f" id="obv-code" type="text" inputmode="numeric" maxlength="4" pattern="[0-9]*" dir="ltr" style="text-align:center;letter-spacing:12px;font-size:24px" placeholder="••••" autocomplete="one-time-code" aria-label="verification code">
+ <div class="pin-err" id="obv-err" role="alert" style="text-align:center"></div>
+ <div class="rc-actions">
+ <button class="cta-gold" onclick="obvVerify()" data-he="אמת/י והמשך" data-en="Verify & continue">אמת/י והמשך</button>
+ <button class="ob-back" onclick="obvResend()" data-he="שלח/י קוד שוב" data-en="Resend code">שלח/י קוד שוב</button>
+ <button class="ob-back" onclick="obvCancel()" data-he="חזרה" data-en="Back">חזרה</button>
+ </div>
+ </div>
+ </div>
 </div>
 
 <!-- ═══════════════════════════════
@@ -1173,6 +1215,30 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  </div>
  </div>
 
+ <!-- SOS MAX-ATTENTION — full-screen red/blue/white strobe + bold SOS message -->
+ <div class="sos-strobe" id="sos-strobe" aria-hidden="true">
+ <div class="strobe-panel">
+ <div class="strobe-sos">SOS</div>
+ <div class="strobe-sub" id="strobe-sub" data-he="חירום — קוראים לעזרה" data-en="EMERGENCY — calling for help">חירום — קוראים לעזרה</div>
+ <div class="strobe-note" id="strobe-note"></div>
+ <button class="strobe-stop" onclick="resolveSOS()" id="strobe-stop" data-he="עצור (דרוש קוד)" data-en="Stop (code required)">עצור (דרוש קוד)</button>
+ <button class="strobe-min" onclick="minimizeStrobe()" id="strobe-min" data-he="הצג מפה / סיווג סוג" data-en="Show map / set type">הצג מפה / סיווג סוג</button>
+ </div>
+ </div>
+
+ <!-- SOS CANCEL PIN — code/pattern only, never biometric -->
+ <div class="sos-cd" id="sos-pin" role="alertdialog" aria-modal="true" aria-labelledby="pin-ttl" aria-hidden="true">
+ <div class="sos-cd-card">
+ <div class="rc-ic" style="margin:0 auto 14px"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg></div>
+ <div class="sos-cd-ttl" id="pin-ttl" data-he="קוד לביטול SOS" data-en="SOS cancel code">קוד לביטול SOS</div>
+ <div class="sos-cd-sub" id="pin-sub" data-he="ביטול SOS פעיל מחייב את הקוד האישי שלך — לעולם לא טביעת אצבע." data-en="Cancelling an active SOS requires your personal code — never a fingerprint.">ביטול SOS פעיל מחייב את הקוד האישי שלך — לעולם לא טביעת אצבע.</div>
+ <div class="pin-dots" id="pin-dots" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+ <div class="pin-err" id="pin-err" role="alert"></div>
+ <div class="pin-pad" id="pin-pad"></div>
+ <button class="ob-back" style="margin-top:14px" onclick="closeSosPin()" data-he="חזרה" data-en="Back">חזרה</button>
+ </div>
+ </div>
+
  <!-- SOS RESOLUTION — Real / Accidental / Test -->
  <div class="sos-cd" id="sos-resolve" role="alertdialog" aria-modal="true" aria-labelledby="sos-rs-ttl" aria-hidden="true">
  <div class="sos-cd-card">
@@ -1213,6 +1279,52 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  <button class="cta-gold" onclick="respondConsentAccept()" data-he="הבנתי — הפעל/י ניווט" data-en="I understand — start navigation">הבנתי — הפעל/י ניווט</button>
  <button class="ob-back" onclick="respondConsentDecline()" data-he="לא עכשיו" data-en="Not now">לא עכשיו</button>
  </div>
+ </div>
+ </div>
+
+ <!-- MUTUAL CHECK-IN — setup -->
+ <div class="sheet" id="sh-checkin" role="dialog" aria-modal="true" aria-labelledby="ci-ttl">
+ <div class="sh-pill" aria-hidden="true"></div>
+ <div class="sh-head"><span class="sh-ttl" id="ci-ttl" data-he="צ׳ק-אין הדדי" data-en="Mutual check-in">צ׳ק-אין הדדי</span><button class="sh-x" onclick="cl('sh-checkin')" aria-label="close"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button></div>
+ <div class="sh-body">
+ <p class="set-help" data-he="מתג-מת חברתי דו-כיווני: האפליקציה תשאל אותך מדי פעם „הכל בסדר?”. אם לא תאשר/י בזמן — השומר/ת המקושר/ת מקבל/ת אזעקה ויכול/ה לשלוח SOS בשמך." data-en="A two-way social Dead Man's Switch: the app periodically asks 'Are you OK?'. If you don't confirm in time, your paired guardian is alerted and can send an SOS on your behalf.">מתג-מת חברתי דו-כיווני.</p>
+ <div class="sec-cap mb12" data-he="שומר/ת מקושר/ת" data-en="Paired guardian">שומר/ת מקושר/ת</div>
+ <input class="ob-f" id="ci-guardian" type="text" maxlength="40" placeholder="שם השומר/ת" aria-label="guardian">
+ <div class="sec-cap mb12" style="margin-top:6px" data-he="תדירות" data-en="Frequency">תדירות</div>
+ <div class="dms-intervals" id="ci-freq" role="group">
+ <div class="dms-iv" data-min="15" onclick="ciPick('freq',15,this)" tabindex="0"><div class="dms-iv-n">15</div><div class="dms-iv-l" data-he="דק׳" data-en="min">דק׳</div></div>
+ <div class="dms-iv sel" data-min="30" onclick="ciPick('freq',30,this)" tabindex="0"><div class="dms-iv-n">30</div><div class="dms-iv-l" data-he="דק׳" data-en="min">דק׳</div></div>
+ <div class="dms-iv" data-min="60" onclick="ciPick('freq',60,this)" tabindex="0"><div class="dms-iv-n">60</div><div class="dms-iv-l" data-he="דק׳" data-en="min">דק׳</div></div>
+ </div>
+ <div class="sec-cap mb12" style="margin-top:14px" data-he="חלון תגובה" data-en="Response window">חלון תגובה</div>
+ <div class="dms-intervals" id="ci-win" role="group">
+ <div class="dms-iv" data-sec="60" onclick="ciPick('win',60,this)" tabindex="0"><div class="dms-iv-n">1</div><div class="dms-iv-l" data-he="דק׳" data-en="min">דק׳</div></div>
+ <div class="dms-iv sel" data-sec="120" onclick="ciPick('win',120,this)" tabindex="0"><div class="dms-iv-n">2</div><div class="dms-iv-l" data-he="דק׳" data-en="min">דק׳</div></div>
+ <div class="dms-iv" data-sec="300" onclick="ciPick('win',300,this)" tabindex="0"><div class="dms-iv-n">5</div><div class="dms-iv-l" data-he="דק׳" data-en="min">דק׳</div></div>
+ </div>
+ <button class="cta-gold mb16" style="margin-top:16px" id="ci-toggle-btn" onclick="checkinToggle()" data-he="הפעל צ׳ק-אין" data-en="Start check-in">הפעל צ׳ק-אין</button>
+ <div class="dms-notice" data-he="הדגמה במכשיר זה. אזעקה חוצת-מכשירים לשומר/ת דורשת את שרת הזמן-אמת (Firebase) — ראה/י FIREBASE-SETUP.md." data-en="Demonstrated on this device. The cross-device alarm to your guardian needs the realtime backend (Firebase) — see FIREBASE-SETUP.md.">הדגמה במכשיר זה — חוצה-מכשירים דורש שרת.</div>
+ </div>
+ </div>
+
+ <!-- MUTUAL CHECK-IN — "Are you OK?" prompt -->
+ <div class="sos-cd" id="checkin-prompt" role="alertdialog" aria-modal="true" aria-hidden="true">
+ <div class="sos-cd-card">
+ <div class="rc-ic" style="margin:0 auto 13px;background:linear-gradient(160deg,rgba(14,136,64,.2),rgba(14,136,64,.05));border-color:rgba(14,136,64,.4);color:#3FD27E"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+ <div class="sos-cd-ttl" data-he="הכל בסדר?" data-en="Are you OK?">הכל בסדר?</div>
+ <div class="sos-cd-sub" id="ci-prompt-sub"></div>
+ <button class="cta-gold" style="margin-top:8px;background:linear-gradient(135deg,#0E8840,#16A06A)" onclick="checkinOk()" data-he="✓ כן, אני בסדר" data-en="✓ Yes, I'm OK">✓ כן, אני בסדר</button>
+ </div>
+ </div>
+
+ <!-- MUTUAL CHECK-IN — guardian alerted (miss) -->
+ <div class="sos-cd" id="checkin-miss" role="alertdialog" aria-modal="true" aria-hidden="true">
+ <div class="sos-cd-card">
+ <div class="rc-ic" style="margin:0 auto 13px;background:var(--rb);border-color:var(--b4);color:#FF6173"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l9 16H3Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17" r="1.2" fill="currentColor"/></svg></div>
+ <div class="sos-cd-ttl" data-he="לא התקבל אישור" data-en="No check-in response">לא התקבל אישור</div>
+ <div class="sos-cd-sub" id="ci-miss-sub"></div>
+ <button class="cta-red" style="margin-top:6px" onclick="guardianActivateForUser()" data-he="כשומר/ת: שלח/י SOS עבורם" data-en="As guardian: send SOS for them">כשומר/ת: שלח/י SOS עבורם</button>
+ <button class="ob-back" style="margin-top:9px" onclick="cl2('checkin-miss')" data-he="סגור" data-en="Dismiss">סגור</button>
  </div>
  </div>
 
@@ -1408,6 +1520,8 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  <div class="set-cat"><div class="set-cat-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div><div class="set-cat-t" data-he="בטיחות" data-en="Safety features">בטיחות</div></div>
  <div class="set-grp"><div class="set-row" onclick="op('sh-dms');cl('sh-set')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="sr-nm">Dead Man's Switch</div></div><span style="color:var(--tx3);font-size:18px">›</span></div><div class="set-row" onclick="op('sh-alarm');cl('sh-set')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18v-5a5 5 0 0 1 10 0v5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><rect x="5" y="18" width="14" height="3" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3v2M4.5 7l1.5 1.3M19.5 7L18 8.3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div class="sr-nm" data-he="הגדרות אזעקה" data-en="Alarm settings">הגדרות אזעקה</div></div><span style="color:var(--tx3);font-size:18px">›</span></div></div>
  <div class="set-grp"><div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4 L17 18.5 L12 15.2 L7 18.5 Z" fill="currentColor"/></svg></div><div><div class="sr-nm" id="resp-tog-lbl" data-he="ניווט מגיב/ה (הצטרפות)" data-en="Responder navigation (opt-in)">ניווט מגיב/ה (הצטרפות)</div><div class="sr-sb" id="resp-tog-sub" data-he="הצג מסלול חי ומרחק כשמגיבים ל-SOS. מיועד למגיבים מאומתים ולשומרים — לא תחליף לחיוג 100/101/102." data-en="Show a live route + distance when responding to an SOS. For verified responders/guardians — not a replacement for 100/101/102.">הצג מסלול חי ומרחק כשמגיבים ל-SOS.</div></div></div><div class="tog" id="resp-tog" onclick="toggleRespond(this)" role="switch"></div></div></div>
+ <div class="set-grp"><div class="set-row" onclick="openSetPin()" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><div><div class="sr-nm" data-he="קוד לביטול SOS (PIN)" data-en="SOS cancel code (PIN)">קוד לביטול SOS (PIN)</div><div class="sr-sb" data-he="נדרש לביטול SOS פעיל — לעולם לא טביעת אצבע." data-en="Required to cancel an active SOS — never a fingerprint.">נדרש לביטול SOS פעיל — לעולם לא טביעת אצבע.</div></div></div><span id="pin-set-state" style="font-size:12px;font-weight:700;color:var(--amb);white-space:nowrap">לא הוגדר</span></div></div>
+ <div class="set-grp"><div class="set-row" onclick="op('sh-checkin')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="sr-nm" data-he="צ׳ק-אין הדדי (עם שומר/ת)" data-en="Mutual check-in (with a guardian)">צ׳ק-אין הדדי</div><div class="sr-sb" data-he="„הכל בסדר?” תקופתי — אם לא תאשר/י, השומר/ת מקבל/ה אזעקה." data-en="Periodic 'Are you OK?' — if you don't confirm, your guardian is alerted.">„הכל בסדר?” תקופתי.</div></div></div><span id="ci-set-state" style="font-size:12px;font-weight:700;color:var(--tx3);white-space:nowrap">כבוי</span></div></div>
  <div class="sec-cap mb12" id="shake-set-lbl">Shake-to-SOS</div>
  <p class="set-help" id="shake-set-help">מאפשר להפעיל SOS בלי להסתכל על המסך — מנערים את הטלפון בחוזקה. שימושי כשהטלפון בכיס או כשאי אפשר להביט במסך.</p>
  <div class="set-grp">
@@ -2062,6 +2176,13 @@ let SS={
  shake:{enabled:true,sensitivity:22},
  dms:{interval:5,active:false,deadline:0},
  settings:{radius:5,toggles:{}},
+ /* Safety PIN: required to cancel an ACTIVE SOS. NEVER biometric (an unconscious user must
+    not have their alert force-cancelled with their own finger). + phone-verification flag. */
+ security:{pin:'',phoneVerified:false},
+ geoReminders:[], // {id,memberId,memberName,label,lat,lng,radius,done} — My SHOMER arrival reminders
+ /* Mutual "Are you OK?" check-in — two-way social Dead Man's Switch with a paired guardian.
+    Cross-DEVICE alarm to the guardian needs the realtime backend (Firebase) — flagged. */
+ checkin:{enabled:false,guardian:'',freqMin:30,windowSec:120,due:0,awaiting:false},
  /* ── SOS anti-abuse / safety config (front-end sim — server must enforce for real) ── */
  sos:{
  countdown:10, // cancel-window seconds before broadcast. Default 10; user may lower (5/7) for high-risk.
@@ -2141,7 +2262,7 @@ function applyStoredSettings(){
  alarmType=SS.alarm.type||'siren';
  alarmVol=(SS.alarm.vol!=null?SS.alarm.vol:1);
  dmsIv=SS.dms.interval||5; dmsInterval=dmsIv;
- try{ reflectUnits(); reflectRespondToggle(); }catch(e){}
+ try{ reflectUnits(); reflectRespondToggle(); reflectPinSetState(); reflectCheckin(); if(SS.checkin&&SS.checkin.enabled)checkinSchedule(); }catch(e){}
  if(SS.user){user.name=SS.user.name||'';user.phone=SS.user.phone||'';}
  reflectAlarmSelection();
  reflectDmsSelection();
@@ -2669,16 +2790,47 @@ function refreshAutoName(){
  const inp=document.getElementById('ob-name');
  if(inp && (inp.value==='' || !inp.dataset.edited)) inp.value=pickRandomName();
 }
+/* Valid Israeli mobile: 05X-XXXXXXX (10 digits, 05 prefix) or +972-5X-XXXXXXX. */
+function isValidILMobile(d){ d=String(d).replace(/\D/g,''); return /^05\d{8}$/.test(d) || /^9725\d{8}$/.test(d); }
+function ilNormalize(d){ d=String(d).replace(/\D/g,''); return d.replace(/^0/,'972'); }
+let _obvCode='', _obvName='';
+function genVerifyCode(){ return String(Math.floor(1000+Math.random()*9000)); }
 function obStep0(){
- let phone=document.getElementById('ob-phone').value.replace(/\D/g,'');
- let name=document.getElementById('ob-name').value.trim().substring(0,40);
- // Demo mode — any input proceeds, empty gets demo number
- if(!phone) phone='0500000000';
- phone=phone.replace(/^0/,'972').replace(/^\+972/,'972');
- if(!name) name=pickRandomName(); // never fall back to a fixed-language default
- user={name, phone, city:''};
- goStep(1);
+ const he=currentLang==='he';
+ let raw=document.getElementById('ob-phone').value;
+ let digits=raw.replace(/\D/g,'');
+ let name=document.getElementById('ob-name').value.trim().substring(0,40)||pickRandomName();
+ _obvName=name;
+ if(!digits){ // demo skip — no phone, proceed unverified
+   user={name, phone:'', city:''}; goStep(1); return;
+ }
+ if(!isValidILMobile(digits)){ toast(he?'מספר נייד ישראלי לא תקין — 05X-XXXXXXX':'Invalid Israeli mobile — 05X-XXXXXXX','amb'); return; }
+ user={name, phone: ilNormalize(digits), city:''};
+ openObVerify();
 }
+function openObVerify(){
+ const he=currentLang==='he';
+ _obvCode=genVerifyCode();
+ setText('obv-sub',(he?'שלחנו קוד בן 4 ספרות אל ':'We sent a 4-digit code to ')+'+'+user.phone);
+ // No SMS backend yet → show the code transparently (honest demo). Real SMS = Firebase/Twilio.
+ setText('obv-demo',(he?'מצב דמו — אין שרת SMS עדיין. הקוד שלך: ':'Demo — no SMS backend yet. Your code: ')+_obvCode);
+ const inp=document.getElementById('obv-code'); if(inp)inp.value='';
+ setText('obv-err','');
+ const ov=document.getElementById('ob-verify'); if(ov){ov.classList.add('on');ov.setAttribute('aria-hidden','false');}
+ setTimeout(()=>{const i=document.getElementById('obv-code');if(i)i.focus();},120);
+}
+function obvVerify(){
+ const he=currentLang==='he';
+ const v=(document.getElementById('obv-code').value||'').replace(/\D/g,'');
+ if(v===_obvCode){
+  if(!SS.security)SS.security={}; SS.security.phoneVerified=true; saveStore();
+  const ov=document.getElementById('ob-verify'); if(ov){ov.classList.remove('on');ov.setAttribute('aria-hidden','true');}
+  toast(he?'✓ הטלפון אומת':'✓ Phone verified','grn');
+  goStep(1);
+ } else { setText('obv-err', he?'קוד שגוי — נסה/י שוב':'Wrong code — try again'); }
+}
+function obvResend(){ const he=currentLang==='he'; _obvCode=genVerifyCode(); setText('obv-demo',(he?'קוד חדש (דמו): ':'New code (demo): ')+_obvCode); setText('obv-err',''); const i=document.getElementById('obv-code'); if(i)i.value=''; }
+function obvCancel(){ const ov=document.getElementById('ob-verify'); if(ov){ov.classList.remove('on');ov.setAttribute('aria-hidden','true');} }
 function goStep(n){
  try{stopPreview();}catch(e){} // stop any alarm preview when changing onboarding steps
  document.getElementById('step'+obCurStep).classList.remove('active');
@@ -2757,6 +2909,8 @@ function obFinish(){
  SS.user={name:user.name,phone:user.phone||''};
  SS.alarm.type=alarmType;
  SS.lang=currentLang;
+ const pin=(document.getElementById('ob-pin')||{}).value||'';
+ if(/^\d{4}$/.test(pin)){ if(!SS.security)SS.security={}; SS.security.pin=pin; }
  saveStore();
  enterApp(false);
 }
@@ -3195,6 +3349,9 @@ function activateSOS(){
  }catch(e){}
  // Strip + lock-screen push
  document.getElementById('sos-strip').classList.add('on');
+ acquireWake(); // keep the screen awake so the alarm/strobe survive idle (web maximum)
+ try{ if('serviceWorker' in navigator && navigator.serviceWorker.ready)navigator.serviceWorker.ready.then(function(reg){ if(reg.sync)reg.sync.register('sos-sync').catch(function(){}); }); }catch(e){}
+ startMaxAttention(); // full-screen strobe + flashlight morse (degrades gracefully on iOS)
  pushNotify(' שומר — SOS',he?'אזעקה פועלת. עזרה בדרך.':'Alarm active. Help is coming.','sos-active');
  if(overLimit){
  // RATE-LIMITED: personal alarm keeps sounding, but NO broadcast and NO map pin.
@@ -3229,15 +3386,131 @@ function activateSOS(){
 }
 
 /* End an ACTIVE event → ask whether it was Real / Accidental / Test. */
+/* Cancelling an ACTIVE SOS requires the user's PIN (never biometric) — so an unconscious
+   user can't have their alert force-cancelled with their own finger. The pre-broadcast
+   countdown cancel stays PIN-free (it's the fast false-alarm escape, nothing was shared). */
+let _pinBuf='', _pinCb=null, _pinMode='verify';
+function buildPinPad(){
+ const pad=document.getElementById('pin-pad'); if(!pad||pad.dataset.built)return; pad.dataset.built='1';
+ const keys=['1','2','3','4','5','6','7','8','9','','0','del'];
+ pad.innerHTML=keys.map(function(k){return k===''?'<span class="pin-key empty"></span>':k==='del'?'<button class="pin-key" onclick="pinDel()" aria-label="delete">⌫</button>':'<button class="pin-key" onclick="pinDigit(\''+k+'\')">'+k+'</button>';}).join('');
+}
+function reflectPinDots(){ document.querySelectorAll('#pin-dots span').forEach(function(s,i){s.classList.toggle('on',i<_pinBuf.length);}); }
+function pinDigit(d){ if(_pinBuf.length>=4)return; _pinBuf+=d; reflectPinDots(); if(_pinBuf.length===4)setTimeout(pinSubmit,130); }
+function pinDel(){ _pinBuf=_pinBuf.slice(0,-1); reflectPinDots(); var e=document.getElementById('pin-err'); if(e)e.textContent=''; }
+function pinSubmit(){
+ var he=currentLang==='he';
+ if(_pinMode==='set'){ if(!SS.security)SS.security={}; SS.security.pin=_pinBuf; saveStore(); closeSosPin(); reflectPinSetState(); toast(he?'✓ קוד הביטול נשמר':'✓ Cancel code saved','grn'); return; }
+ if(_pinBuf===((SS.security&&SS.security.pin)||'')){ var cb=_pinCb; closeSosPin(); if(cb)cb(); }
+ else { var e=document.getElementById('pin-err'); if(e)e.textContent=he?'קוד שגוי':'Wrong code'; _pinBuf=''; reflectPinDots(); try{navigator.vibrate&&navigator.vibrate(180);}catch(x){} }
+}
+function openSosPin(cb){ _pinMode='verify';_pinBuf='';_pinCb=cb; buildPinPad(); reflectPinDots(); _pinSetTexts(); var e=document.getElementById('pin-err'); if(e)e.textContent=''; var ov=document.getElementById('sos-pin'); if(ov){ov.classList.add('on');ov.setAttribute('aria-hidden','false');} }
+function openSetPin(){ _pinMode='set';_pinBuf='';_pinCb=null; buildPinPad(); reflectPinDots(); _pinSetTexts(); var e=document.getElementById('pin-err'); if(e)e.textContent=''; var ov=document.getElementById('sos-pin'); if(ov){ov.classList.add('on');ov.setAttribute('aria-hidden','false');} }
+function _pinSetTexts(){ var he=currentLang==='he', set=_pinMode==='set';
+ setText('pin-ttl',set?(he?'בחר/י קוד ביטול':'Choose a cancel code'):(he?'קוד לביטול SOS':'SOS cancel code'));
+ setText('pin-sub',set?(he?'4 ספרות. יידרש כדי לבטל SOS פעיל. לעולם לא טביעת אצבע.':'4 digits. Required to cancel an active SOS. Never a fingerprint.'):(he?'ביטול SOS פעיל מחייב את הקוד האישי שלך — לעולם לא טביעת אצבע.':'Cancelling an active SOS requires your personal code — never a fingerprint.')); }
+function reflectPinSetState(){ var el=document.getElementById('pin-set-state'); if(el){var he=currentLang==='he', has=SS.security&&/^\d{4}$/.test(SS.security.pin||''); el.textContent=has?(he?'מוגדר ✓':'Set ✓'):(he?'לא הוגדר':'Not set'); el.style.color=has?'var(--grn)':'var(--amb)';} }
+function closeSosPin(){ var ov=document.getElementById('sos-pin'); if(ov){ov.classList.remove('on');ov.setAttribute('aria-hidden','true');} _pinBuf='';_pinCb=null; }
+
+/* ── SOS MAX-ATTENTION: full-screen red/blue/white strobe (all devices) + flashlight morse
+   SOS (Android Chrome torch via MediaStream/applyConstraints). iOS Safari does NOT allow
+   torch control from a PWA — we degrade gracefully (strobe still fires) and say so. ── */
+/* Screen Wake Lock — keep the device awake during an active SOS (re-acquired on visibility
+   regain). Web maximum: a PWA can't run when force-closed/locked — that needs the native build. */
+let _wakeLock=null;
+async function acquireWake(){ try{ if('wakeLock' in navigator){ _wakeLock=await navigator.wakeLock.request('screen'); _wakeLock.addEventListener&&_wakeLock.addEventListener('release',function(){_wakeLock=null;}); } }catch(e){} }
+function releaseWake(){ try{ if(_wakeLock){ _wakeLock.release(); _wakeLock=null; } }catch(e){} }
+document.addEventListener&&document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='visible'&&sosActive&&!_wakeLock)acquireWake(); });
+let _torchTrack=null, _morseTimeouts=[];
+function startMaxAttention(){
+ var he=currentLang==='he';
+ var known=curSosType&&curSosType!=='unknown';
+ setText('strobe-sub',(he?'חירום — קוראים לעזרה':'EMERGENCY — calling for help')+(known?' · '+sosTypeLabel(curSosType):''));
+ setText('strobe-note','');
+ var ov=document.getElementById('sos-strobe'); if(ov){ov.classList.add('on');ov.setAttribute('aria-hidden','false');}
+ startMorse();
+}
+function stopMaxAttention(){
+ var ov=document.getElementById('sos-strobe'); if(ov){ov.classList.remove('on');ov.setAttribute('aria-hidden','true');}
+ stopMorse();
+}
+/* Hide the strobe visual to reach the map / type picker — SOS stays ACTIVE (alarm + morse
+   continue). Fully stopping requires the cancel code (never biometric). */
+function minimizeStrobe(){ var ov=document.getElementById('sos-strobe'); if(ov){ov.classList.remove('on');ov.setAttribute('aria-hidden','true');} }
+
+/* ── MUTUAL "ARE YOU OK?" CHECK-IN — two-way social Dead Man's Switch with a paired guardian.
+   On-device demo works now; the cross-DEVICE alarm to the guardian needs the realtime backend
+   (Firebase). Stopping/answering is consent-paired and configurable. ── */
+let _ciTimer=null, _ciCountdown=null;
+function cl2(id){ var ov=document.getElementById(id); if(ov){ov.classList.remove('on');ov.setAttribute('aria-hidden','true');} }
+function ciPick(kind,val,el){ el.parentNode.querySelectorAll('.dms-iv').forEach(function(b){b.classList.remove('sel');}); el.classList.add('sel'); if(kind==='freq')SS.checkin.freqMin=val; else SS.checkin.windowSec=val; saveStore(); }
+function reflectCheckin(){ var c=SS.checkin,he=currentLang==='he'; setText('ci-toggle-btn', c.enabled?(he?'עצור צ׳ק-אין':'Stop check-in'):(he?'הפעל צ׳ק-אין':'Start check-in')); var g=document.getElementById('ci-guardian'); if(g&&c.guardian&&!g.value)g.value=c.guardian; var st=document.getElementById('ci-set-state'); if(st){st.textContent=c.enabled?(he?'פעיל ✓':'On ✓'):(he?'כבוי':'Off'); st.style.color=c.enabled?'var(--grn)':'var(--tx3)';} }
+function checkinToggle(){ var c=SS.checkin,he=currentLang==='he';
+ if(c.enabled){ c.enabled=false; saveStore(); checkinStop(); reflectCheckin(); toast(he?'צ׳ק-אין הופסק':'Check-in stopped',''); return; }
+ c.guardian=(document.getElementById('ci-guardian').value||'').trim()||(he?'השומר/ת שלי':'My guardian');
+ c.enabled=true; saveStore(); reflectCheckin(); checkinSchedule();
+ toast(he?'✓ צ׳ק-אין הדדי פעיל — נשאל כל '+c.freqMin+' דק׳':'✓ Mutual check-in on — every '+c.freqMin+' min','grn'); cl('sh-checkin');
+}
+function checkinSchedule(){ checkinStop(); if(!SS.checkin.enabled)return; _ciTimer=setTimeout(checkinPrompt,(SS.checkin.freqMin||30)*60000); }
+function checkinStop(){ if(_ciTimer){clearTimeout(_ciTimer);_ciTimer=null;} if(_ciCountdown){clearInterval(_ciCountdown);_ciCountdown=null;} }
+function checkinPrompt(){ if(!SS.checkin.enabled)return; var he=currentLang==='he';
+ SS.checkin.awaiting=true; saveStore();
+ var ov=document.getElementById('checkin-prompt'); if(ov){ov.classList.add('on');ov.setAttribute('aria-hidden','false');}
+ try{pushNotify(he?'שומר — הכל בסדר?':'SHOMER — Are you OK?',he?'אשר/י אחרת תישלח התראה לשומר/ת':'Confirm, or your guardian is alerted','checkin');}catch(e){}
+ var left=SS.checkin.windowSec||120;
+ var upd=function(){ setText('ci-prompt-sub',(he?'אשר/י תוך ':'Confirm within ')+Math.max(0,left)+(he?' שנ׳ — אחרת '+SS.checkin.guardian+' יקבל/ה אזעקה':'s — or '+SS.checkin.guardian+' is alerted')); };
+ upd(); if(_ciCountdown)clearInterval(_ciCountdown);
+ _ciCountdown=setInterval(function(){ left--; upd(); if(left<=0){ clearInterval(_ciCountdown); checkinMiss(); } },1000);
+}
+function checkinOk(){ var he=currentLang==='he'; SS.checkin.awaiting=false; saveStore(); if(_ciCountdown){clearInterval(_ciCountdown);_ciCountdown=null;} cl2('checkin-prompt'); toast(he?'✓ נרשם — הכל בסדר':'✓ Logged — you are OK','grn'); checkinSchedule(); }
+function checkinMiss(){ var he=currentLang==='he'; SS.checkin.awaiting=false; saveStore(); cl2('checkin-prompt');
+ setText('ci-miss-sub',(he?'לא אישרת „הכל בסדר”. '+SS.checkin.guardian+' קיבל/ה אזעקה (סימולציה חוצת-מכשירים — דורש שרת).':'You didn\'t confirm. '+SS.checkin.guardian+' was alerted (cross-device simulated — needs backend).'));
+ var ov=document.getElementById('checkin-miss'); if(ov){ov.classList.add('on');ov.setAttribute('aria-hidden','false');}
+ try{pushNotify(he?'שומר — '+SS.checkin.guardian+' לא הגיב/ה':'SHOMER — '+SS.checkin.guardian+' missed check-in',he?'אפשר לשלוח SOS עבורם':'You can send an SOS on their behalf','checkin-miss');}catch(e){}
+}
+/* Guardian-side: send an SOS on the user's behalf after a missed check-in. */
+function guardianActivateForUser(){ cl2('checkin-miss'); try{ beginSOS('checkin'); activateSOS(); }catch(e){} }
+function _torch(on){ try{ if(_torchTrack)_torchTrack.applyConstraints({advanced:[{torch:!!on}]}); }catch(e){} }
+async function startMorse(){
+ var he=currentLang==='he';
+ try{
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){ setText('strobe-note',he?'פנס מורס לא נתמך כאן — הסטרוב פעיל.':'Torch morse not supported here — strobe is active.'); return; }
+  var stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});
+  var track=stream.getVideoTracks()[0];
+  var caps=track.getCapabilities?track.getCapabilities():{};
+  if(!caps||!('torch' in caps)){ try{track.stop();}catch(e){} setText('strobe-note',he?'מכשיר זה (כנראה iOS) חוסם שליטה בפנס מהדפדפן — הסטרוב פעיל.':'This device (likely iOS) blocks browser torch control — strobe is active.'); return; }
+  _torchTrack=track;
+  setText('strobe-note',he?'הפנס מהבהב SOS במורס.':'Torch flashing SOS in morse.');
+  _runMorse();
+ }catch(e){ setText('strobe-note',he?'אין גישה לפנס — הסטרוב פעיל.':'No torch access — strobe is active.'); }
+}
+function _runMorse(){
+ var DOT=180,DASH=540,G=180,LG=540,WG=1100;
+ var seq=[['.','.','.'],['-','-','-'],['.','.','.']]; // S O S
+ function at(ms,fn){ _morseTimeouts.push(setTimeout(fn,ms)); }
+ function cycle(){
+  var cur=0;
+  seq.forEach(function(letter){ letter.forEach(function(sym){ var d=sym==='.'?DOT:DASH; at(cur,function(){_torch(true);}); at(cur+d,function(){_torch(false);}); cur+=d+G; }); cur+=LG-G; });
+  cur+=WG;
+  at(cur,function(){ if(_torchTrack){ _morseTimeouts=[]; cycle(); } });
+ }
+ cycle();
+}
+function stopMorse(){ _morseTimeouts.forEach(clearTimeout); _morseTimeouts=[]; _torch(false); if(_torchTrack){ try{_torchTrack.stop();}catch(e){} _torchTrack=null; } }
 function resolveSOS(){
  if(sosPhase!=='active')return;
- clearInterval(sosTimer); stopAlarm();
- sosPhase='idle'; sosActive=false;
- const btn=document.getElementById('sos-btn');
- if(btn){btn.classList.remove('active');btn.setAttribute('aria-pressed','false');}
- document.getElementById('sos-strip').classList.remove('on');
- const ov=document.getElementById('sos-resolve');
- if(ov){ov.classList.add('on');ov.setAttribute('aria-hidden','false');}
+ var proceed=function(){
+  clearInterval(sosTimer); stopAlarm(); stopMaxAttention(); releaseWake();
+  sosPhase='idle'; sosActive=false;
+  var btn=document.getElementById('sos-btn');
+  if(btn){btn.classList.remove('active');btn.setAttribute('aria-pressed','false');}
+  document.getElementById('sos-strip').classList.remove('on');
+  var ov=document.getElementById('sos-resolve');
+  if(ov){ov.classList.add('on');ov.setAttribute('aria-hidden','false');}
+ };
+ var hasPin=SS.security&&/^\d{4}$/.test(SS.security.pin||'');
+ if(hasPin){ openSosPin(proceed); }
+ else { toast(currentLang==='he'?'טיפ: הגדר/י קוד ביטול ב"הגדרות → בטיחות" להגנה מפני ביטול בכפייה':'Tip: set a cancel code in Settings → Safety to guard against forced cancellation','amb'); proceed(); }
 }
 /* Resolution choice. accidental/test are scrubbed from the map + feed and never shown
  to others; only confirmed-real events remain mapped. */
