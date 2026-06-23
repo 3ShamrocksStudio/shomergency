@@ -867,7 +867,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
         <span class="name-edit-ic" aria-hidden="true">✎</span>
       </div>
       <p class="name-hint" id="name-hint">✦ <span id="name-hint-txt">נוצר אוטומטית — אפשר לערוך</span></p>
-      <input class="ob-f" id="ob-phone" type="tel" autocomplete="tel" maxlength="15" placeholder="050-000-0000" inputmode="tel" aria-label="מספר טלפון">
+      <input class="ob-f" id="ob-phone" type="tel" autocomplete="tel" maxlength="15" placeholder="050-000-0000" inputmode="tel" dir="ltr" style="text-align:start" aria-label="מספר טלפון">
       <p style="font-size:11px;color:var(--tx3);margin:-4px 0 12px;line-height:1.6" id="ob-why">מספר הטלפון משמש לשליחת עזרה. אופציונלי במצב דמו.</p>
       <button class="ob-cta" id="ob-cta0" onclick="obStep0()"><span id="ob-cta0-t">המשך ←</span></button>
     </div>
@@ -1075,10 +1075,10 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
   <!-- DMS STRIP -->
   <div class="dms-strip" id="dms-strip" role="alert" aria-live="assertive">
     <div class="dms-bar">
-      <div class="dms-t" id="dms-strip-t">⏱️ Dead Man's Switch פעיל</div>
+      <div class="dms-t" id="dms-strip-t" data-he="⏱️ Dead Man's Switch פעיל" data-en="⏱️ Dead Man's Switch active">⏱️ Dead Man's Switch פעיל</div>
       <div class="dms-s" id="dms-strip-s">בדיקה הבאה בעוד 5:00</div>
     </div>
-    <button class="dms-ok" onclick="dmsConfirm()" id="dms-ok-btn">✓ הכל בסדר</button>
+    <button class="dms-ok" onclick="dmsConfirm()" id="dms-ok-btn" data-he="✓ הכל בסדר" data-en="✓ I'm OK">✓ הכל בסדר</button>
     <div class="dms-prog"><div class="dms-prog-fill" id="dms-prog-fill" style="width:100%"></div></div>
   </div>
 
@@ -1127,29 +1127,29 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
     <div class="sh-pill" aria-hidden="true"></div>
     <div class="sh-head"><span class="sh-ttl" id="rep-ttl">דיווח אירוע</span><button class="sh-x" onclick="cl('sh-rep')" aria-label="סגור">✕</button></div>
     <div class="sh-body">
-      <div class="rep-intro mb16" id="rep-intro"><strong>דיווח</strong> — לתיעוד מפורט. לחירום מיידי — כפתור SOS.</div>
+      <div class="rep-intro mb16" id="rep-intro" data-i18n-html="1" data-he="<strong>דיווח</strong> — לתיעוד מפורט. לחירום מיידי — כפתור SOS." data-en="<strong>Report</strong> — for detailed documentation. For an immediate emergency, use the SOS button."><strong>דיווח</strong> — לתיעוד מפורט. לחירום מיידי — כפתור SOS.</div>
       <div class="mb16">
-        <div class="sec-cap" id="rep-type-lbl">סוג האירוע</div>
+        <div class="sec-cap" id="rep-type-lbl" data-he="סוג האירוע" data-en="Incident type">סוג האירוע</div>
         <div class="type-grid">
-          <div class="ropt sel" onclick="rt(this)" role="radio" aria-checked="true"><div class="ropt-ic">🆘</div><span id="rt1">תקיפה / סכנה</span></div>
-          <div class="ropt" onclick="rt(this)" role="radio" aria-checked="false"><div class="ropt-ic">👁️</div><span id="rt2">מעקב חשוד</span></div>
-          <div class="ropt" onclick="rt(this)" role="radio" aria-checked="false"><div class="ropt-ic">⚠️</div><span id="rt3">הטרדה מינית</span></div>
-          <div class="ropt" onclick="rt(this)" role="radio" aria-checked="false"><div class="ropt-ic">🏥</div><span id="rt4">עזרה רפואית</span></div>
-          <div class="ropt" onclick="rt(this)" role="radio" aria-checked="false"><div class="ropt-ic">💊</div><span id="rt5">סמים / עבירות</span></div>
-          <div class="ropt" onclick="rt(this)" role="radio" aria-checked="false"><div class="ropt-ic">📋</div><span id="rt6">אחר</span></div>
+          <div class="ropt sel" onclick="rt(this)" role="radio" aria-checked="true"><div class="ropt-ic">🆘</div><span id="rt1" data-he="תקיפה / סכנה" data-en="Assault / danger">תקיפה / סכנה</span></div>
+          <div class="ropt" onclick="rt(this)" role="radio" aria-checked="false"><div class="ropt-ic">👁️</div><span id="rt2" data-he="מעקב חשוד" data-en="Suspicious stalking">מעקב חשוד</span></div>
+          <div class="ropt" onclick="rt(this)" role="radio" aria-checked="false"><div class="ropt-ic">⚠️</div><span id="rt3" data-he="הטרדה מינית" data-en="Sexual harassment">הטרדה מינית</span></div>
+          <div class="ropt" onclick="rt(this)" role="radio" aria-checked="false"><div class="ropt-ic">🏥</div><span id="rt4" data-he="עזרה רפואית" data-en="Medical help">עזרה רפואית</span></div>
+          <div class="ropt" onclick="rt(this)" role="radio" aria-checked="false"><div class="ropt-ic">💊</div><span id="rt5" data-he="סמים / עבירות" data-en="Drugs / offences">סמים / עבירות</span></div>
+          <div class="ropt" onclick="rt(this)" role="radio" aria-checked="false"><div class="ropt-ic">📋</div><span id="rt6" data-he="אחר" data-en="Other">אחר</span></div>
         </div>
       </div>
       <div class="mb16">
-        <div class="sec-cap" id="rep-desc-lbl">תיאור מפורט</div>
+        <div class="sec-cap" id="rep-desc-lbl" data-he="תיאור מפורט" data-en="Detailed description">תיאור מפורט</div>
         <textarea class="rep-ta" id="rep-ta" maxlength="1000" aria-label="תיאור האירוע" aria-required="true"></textarea>
         <div style="text-align:left;font-size:10px;color:var(--tx3);margin-top:3px" id="char-c" aria-live="polite">0 / 1000</div>
       </div>
       <div class="mb16">
-        <div class="sec-cap" id="rep-photo-lbl">תיעוד תמונות</div>
+        <div class="sec-cap" id="rep-photo-lbl" data-he="תיעוד תמונות" data-en="Photo documentation">תיעוד תמונות</div>
         <div class="cam-card">
           <div class="cam-bar">
             <span aria-hidden="true">📷</span>
-            <span class="cam-lbl" id="cam-lbl">צרף תמונות</span>
+            <span class="cam-lbl" id="cam-lbl" data-he="צרף תמונות" data-en="Attach photos">צרף תמונות</span>
             <span class="cam-cnt" id="cam-cnt" style="display:none" aria-live="polite">0</span>
             <button class="cam-btn d" onclick="openCam()" id="cam-cam-btn">📷</button>
             <button class="cam-btn l" onclick="document.getElementById('file-in').click()" id="cam-gal-btn">🖼️</button>
@@ -1164,10 +1164,10 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
         </div>
       </div>
       <div class="mb16">
-        <div class="sec-cap" id="rep-loc-lbl">מיקום</div>
+        <div class="sec-cap" id="rep-loc-lbl" data-he="מיקום" data-en="Location">מיקום</div>
         <button class="row-btn" onclick="getRepLoc()" aria-label="שתף מיקום">
           <span aria-hidden="true">📍</span>
-          <span class="row-txt" id="rep-loc-txt">שתף מיקום נוכחי</span>
+          <span class="row-txt" id="rep-loc-txt" data-he="שתף מיקום נוכחי" data-en="Share current location">שתף מיקום נוכחי</span>
           <span aria-hidden="true" style="color:var(--tx3);font-size:18px">›</span>
         </button>
       </div>
@@ -1186,7 +1186,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
       <div style="background:var(--rb);border:1px solid var(--b4);border-radius:var(--r12);padding:14px;margin-bottom:16px;font-size:13px;color:var(--tx1);line-height:1.7" id="dms-intro-txt">
         <strong style="color:#FF7080">כיצד זה עובד:</strong> הפעל לפני הליכה לבד בלילה. כל X דקות תקבל שאלה "הכל בסדר?" — אם לא ענית תוך 60 שניות, המערכת שולחת SOS אוטומטי עם מיקומך האחרון.
       </div>
-      <div class="sec-cap mb12" id="dms-interval-lbl">בחר מרווח זמן</div>
+      <div class="sec-cap mb12" id="dms-interval-lbl" data-he="בחר מרווח זמן" data-en="Choose interval">בחר מרווח זמן</div>
       <div class="dms-intervals" id="dms-intervals" role="group">
         <div class="dms-iv" data-min="1" onclick="dmsPickIv(this,1)" tabindex="0"><div class="dms-iv-n">1</div><div class="dms-iv-l" id="dms-demo-lbl">דמו</div></div>
         <div class="dms-iv sel" data-min="5" onclick="dmsPickIv(this,5)" tabindex="0"><div class="dms-iv-n">5</div><div class="dms-iv-l" id="dms-min-lbl2">דק׳</div></div>
@@ -1194,11 +1194,11 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
       </div>
       <div id="dms-status-card" style="display:none;background:var(--n3);border:1px solid var(--b1);border-radius:var(--r12);padding:20px;text-align:center;margin-bottom:14px">
         <div class="dms-timer-display" id="dms-display" aria-live="polite">5:00</div>
-        <div class="dms-status" id="dms-status-txt">עד הבדיקה הבאה</div>
-        <button class="dms-ok" style="margin-top:12px;padding:10px 28px;border-radius:var(--r12);font-size:14px;cursor:pointer;border:none" onclick="dmsConfirm()" id="dms-ok-big">✓ הכל בסדר</button>
+        <div class="dms-status" id="dms-status-txt" data-he="עד הבדיקה הבאה" data-en="Until next check">עד הבדיקה הבאה</div>
+        <button class="dms-ok" style="margin-top:12px;padding:10px 28px;border-radius:var(--r12);font-size:14px;cursor:pointer;border:none" onclick="dmsConfirm()" id="dms-ok-big" data-he="✓ הכל בסדר" data-en="✓ I'm OK">✓ הכל בסדר</button>
       </div>
       <button class="cta-gold mb16" id="dms-toggle-btn" onclick="toggleDMS()">▶ הפעל Dead Man's Switch</button>
-      <div style="background:var(--n3);border:1px solid var(--b1);border-radius:var(--r12);padding:13px;font-size:12px;color:var(--tx2);line-height:1.75" id="dms-tips-txt">
+      <div style="background:var(--n3);border:1px solid var(--b1);border-radius:var(--r12);padding:13px;font-size:12px;color:var(--tx2);line-height:1.75" id="dms-tips-txt" data-i18n-html="1" data-he="💡 <strong>מומלץ לשימוש:</strong> הליכות לבד בלילה · כניסה לחניון מבודד · מפגש עם זר · ריצה בשעות חשוכות" data-en="💡 <strong>Best used for:</strong> walking alone at night · entering an isolated car park · meeting a stranger · running after dark">
         💡 <strong>מומלץ לשימוש:</strong> הליכות לבד בלילה · כניסה לחניון מבודד · מפגש עם זר · ריצה בשעות חשוכות
       </div>
     </div>
@@ -1212,7 +1212,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
       <div style="background:var(--rb);border:1px solid var(--b4);border-right:4px solid var(--r3);border-radius:var(--r12);padding:13px;margin-bottom:16px;font-size:13px;color:var(--tx1);line-height:1.65" id="alarm-intro-txt">
         <strong style="color:#FF7080">מטרה:</strong> משיכת תשומת לב מרבית ועזרה מיידית. מופעלת בעוצמה מלאה.
       </div>
-      <div class="sec-cap mb12" id="alarm-type-lbl">סוג אזעקה</div>
+      <div class="sec-cap mb12" id="alarm-type-lbl" data-he="סוג אזעקה" data-en="Alarm type">סוג אזעקה</div>
       <div id="alarm-list" role="group" style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
         <div class="ob-alarm sel" onclick="pickAlarm(this,'siren')" role="radio" aria-checked="true" tabindex="0">
           <div class="ob-alarm-ic" aria-hidden="true">🚨</div>
@@ -1231,7 +1231,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
         </div>
       </div>
       <div class="ob-vol-wrap mb12">
-        <div class="vol-row"><span class="vol-lbl">עוצמת קול</span><span class="vol-val" id="vol-val">60%</span></div>
+        <div class="vol-row"><span class="vol-lbl" data-he="עוצמת קול" data-en="Volume">עוצמת קול</span><span class="vol-val" id="vol-val">60%</span></div>
         <input type="range" id="vol-slider" min="10" max="100" value="60" aria-label="עוצמת קול" oninput="document.getElementById('vol-val').textContent=this.value+'%';alarmVol=this.value/100;" onchange="SS.alarm.vol=alarmVol;saveStore();">
       </div>
       <p style="font-size:11px;color:var(--tx3);margin:-4px 0 12px;line-height:1.55" id="alarm-tap-hint">הקש על אזעקה למעלה כדי לשמוע אותה.</p>
@@ -1302,11 +1302,11 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
       <div class="sec-cap mb12" id="set-contacts-lbl">אנשי קשר חירום</div>
       <p class="set-help" id="set-contacts-help">אנשים שיקבלו את מיקומך והתראה אוטומטית כשתשלח/י SOS. הוסף/י את מי שיגיב/ה הכי מהר.</p>
       <div class="set-grp" id="contacts-grp">
-        <div class="c-row"><div class="c-av">א</div><div style="flex:1"><div class="c-nm">אמא</div><div class="c-ph">052-XXX-XXXX</div></div><span class="c-tag">ראשון</span></div>
-        <div class="c-row"><div class="c-av">ד</div><div style="flex:1"><div class="c-nm">דני</div><div class="c-ph">054-XXX-XXXX</div></div><span class="c-tag">שני</span></div>
+        <div class="c-row"><div class="c-av">א</div><div style="flex:1"><div class="c-nm" data-he="אמא" data-en="Mom">אמא</div><div class="c-ph">052-XXX-XXXX</div></div><span class="c-tag" data-he="ראשון" data-en="Primary">ראשון</span></div>
+        <div class="c-row"><div class="c-av">ד</div><div style="flex:1"><div class="c-nm" data-he="דני" data-en="Danny">דני</div><div class="c-ph">054-XXX-XXXX</div></div><span class="c-tag" data-he="שני" data-en="Secondary">שני</span></div>
       </div>
-      <button class="add-c mb20" onclick="toast('בקרוב: הוספת אנשי קשר','amb')">+ הוסף איש קשר</button>
-      <div class="sec-cap mb12" id="set-lang-lbl">שפה</div>
+      <button class="add-c mb20" onclick="toast(currentLang==='he'?'בקרוב: הוספת אנשי קשר':'Coming soon: add contacts','amb')" data-he="+ הוסף איש קשר" data-en="+ Add contact">+ הוסף איש קשר</button>
+      <div class="sec-cap mb12" id="set-lang-lbl" data-he="שפה" data-en="Language">שפה</div>
       <p class="set-help" id="set-lang-help">שפת התצוגה של האפליקציה. ניתן לשנות בכל עת — לא משפיע על דיווחים קיימים.</p>
       <div class="set-grp" style="padding:10px 14px;">
         <div style="display:flex;direction:ltr;gap:6px;flex-wrap:wrap;" id="set-lang-btns">
@@ -1314,7 +1314,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
           <button class="olb" onclick="setLang('en')" lang="en">🇬🇧 English</button>
         </div>
       </div>
-      <div class="sec-cap mb12" style="margin-top:18px">אודות שומר</div>
+      <div class="sec-cap mb12" style="margin-top:18px" data-he="אודות שומר" data-en="About SHOMER">אודות שומר</div>
       <div class="set-grp">
         <div class="ai-row"><span class="ai-l">מוצר / Product</span><span class="ai-v" dir="ltr">SHOMER<span class="tm">™</span> (שומר)</span></div>
         <div class="ai-row"><span class="ai-l">גרסה</span><span class="ai-v">1.0.0</span></div>
@@ -1341,7 +1341,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
         <button style="width:100%;padding:14px;background:var(--rb);border:none;font-size:14px;font-weight:800;color:#FF7080;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;" onclick="resetApp()" id="reset-btn"><span id="reset-btn-lbl">🔄 איפוס אפליקציה / נתוני דמו</span></button>
       </div>
       <div class="sr-sb" id="reset-hint" style="margin:-10px 2px 16px;line-height:1.6">מוחק פרופיל, דיווחים, היסטוריית SOS והגדרות — וחוזר להרשמה.</div>
-      <button style="width:100%;padding:13px;border:1px solid var(--b1);border-radius:var(--r12);background:var(--n3);font-size:13px;font-weight:600;color:#FF7080;margin-top:8px;cursor:pointer;" onclick="toast('יציאה בוצעה','red')">יציאה מהחשבון</button>
+      <button style="width:100%;padding:13px;border:1px solid var(--b1);border-radius:var(--r12);background:var(--n3);font-size:13px;font-weight:600;color:#FF7080;margin-top:8px;cursor:pointer;" onclick="toast(currentLang==='he'?'יציאה בוצעה':'Signed out','red')" data-he="יציאה מהחשבון" data-en="Sign out">יציאה מהחשבון</button>
       <div class="legal-links" id="set-legal-links">
         <button onclick="openLegal('tos')" id="set-ll-tos">תנאי שימוש</button><span class="sep">·</span>
         <button onclick="openLegal('privacy')" id="set-ll-priv">מדיניות פרטיות</button><span class="sep">·</span>
@@ -1382,11 +1382,11 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
         <div class="prof-opt" data-prof="security" onclick="selectProfession('security')" role="button" tabindex="0"><span class="pic" aria-hidden="true">🛡️</span><span class="pl" data-pl="security">אבטחה</span></div>
         <div class="prof-opt sel" data-prof="" onclick="selectProfession('')" role="button" tabindex="0"><span class="pic" aria-hidden="true">🚫</span><span class="pl" data-pl="none">ללא</span></div>
       </div>
-      <div class="sec-cap mb12">פעולות מהירות</div>
+      <div class="sec-cap mb12" data-he="פעולות מהירות" data-en="Quick actions">פעולות מהירות</div>
       <div class="set-grp mb20">
         <div class="set-row" onclick="op('sh-dms');cl('sh-prof')"><div class="sr-l"><div class="sr-ic">⏱️</div><div class="sr-nm">Dead Man's Switch</div></div><span style="color:var(--tx3);font-size:18px">›</span></div>
-        <div class="set-row" onclick="op('sh-alarm');cl('sh-prof')"><div class="sr-l"><div class="sr-ic">🚨</div><div class="sr-nm">הגדרות אזעקה</div></div><span style="color:var(--tx3);font-size:18px">›</span></div>
-        <div class="set-row" onclick="op('sh-em');cl('sh-prof')"><div class="sr-l"><div class="sr-ic">📞</div><div class="sr-nm">מספרי חירום</div></div><span style="color:var(--tx3);font-size:18px">›</span></div>
+        <div class="set-row" onclick="op('sh-alarm');cl('sh-prof')"><div class="sr-l"><div class="sr-ic">🚨</div><div class="sr-nm" data-he="הגדרות אזעקה" data-en="Alarm settings">הגדרות אזעקה</div></div><span style="color:var(--tx3);font-size:18px">›</span></div>
+        <div class="set-row" onclick="op('sh-em');cl('sh-prof')"><div class="sr-l"><div class="sr-ic">📞</div><div class="sr-nm" data-he="מספרי חירום" data-en="Emergency numbers">מספרי חירום</div></div><span style="color:var(--tx3);font-size:18px">›</span></div>
       </div>
       <div class="sec-cap mb12" id="myrep-cap">הדיווחים שלי</div>
       <div id="my-reports-list" class="mb20" role="list"></div>
@@ -1402,15 +1402,15 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
     <div class="sh-body">
       <p style="font-size:12px;color:var(--tx2);margin-bottom:14px;line-height:1.7" id="em-intro">הקש לחיוג ישיר. אם אינך מסוגל לדבר — השאר הקו פתוח.</p>
       <button class="call-btn pr" onclick="callNum('100')" aria-label="התקשר למשטרה 100">
-        <div class="cc-ic">🚔</div><div><div class="cc-nm">100 — משטרת ישראל</div><div class="cc-sb">חיוג ישיר ברמקול</div></div>
+        <div class="cc-ic">🚔</div><div><div class="cc-nm" data-he="100 — משטרת ישראל" data-en="100 — Israel Police">100 — משטרת ישראל</div><div class="cc-sb" data-he="חיוג ישיר ברמקול" data-en="Direct call on speaker">חיוג ישיר ברמקול</div></div>
       </button>
-      <button class="call-btn" onclick="callNum('101')"><div class="cc-ic">🚑</div><div><div class="cc-nm">101 — מד"א</div><div class="cc-sb">דחיפות רפואית</div></div></button>
-      <button class="call-btn" onclick="callNum('102')"><div class="cc-ic">🚒</div><div><div class="cc-nm">102 — כבאות</div><div class="cc-sb">שריפה / חילוץ</div></div></button>
-      <button class="call-btn" onclick="callNum('1201')"><div class="cc-ic">⭐</div><div><div class="cc-nm">1201 — ZAKA</div><div class="cc-sb">תאונות ואסונות</div></div></button>
-      <button class="call-btn" onclick="callNum('1202')"><div class="cc-ic">🛡️</div><div><div class="cc-nm">1202 — שב"כ</div><div class="cc-sb">אירוע ביטחוני</div></div></button>
+      <button class="call-btn" onclick="callNum('101')"><div class="cc-ic">🚑</div><div><div class="cc-nm" data-he="101 — מד&quot;א" data-en="101 — Magen David Adom">101 — מד"א</div><div class="cc-sb" data-he="דחיפות רפואית" data-en="Medical emergency">דחיפות רפואית</div></div></button>
+      <button class="call-btn" onclick="callNum('102')"><div class="cc-ic">🚒</div><div><div class="cc-nm" data-he="102 — כבאות" data-en="102 — Fire & Rescue">102 — כבאות</div><div class="cc-sb" data-he="שריפה / חילוץ" data-en="Fire / rescue">שריפה / חילוץ</div></div></button>
+      <button class="call-btn" onclick="callNum('1201')"><div class="cc-ic">⭐</div><div><div class="cc-nm">1201 — ZAKA</div><div class="cc-sb" data-he="תאונות ואסונות" data-en="Accidents & disasters">תאונות ואסונות</div></div></button>
+      <button class="call-btn" onclick="callNum('1202')"><div class="cc-ic">🛡️</div><div><div class="cc-nm" data-he="1202 — שב&quot;כ" data-en="1202 — Shin Bet">1202 — שב"כ</div><div class="cc-sb" data-he="אירוע ביטחוני" data-en="Security incident">אירוע ביטחוני</div></div></button>
       <div class="lock-card">
-        <div class="lc-t">🔒 SOS מנעילת מסך — ללא פתיחת אפליקציה</div>
-        <div class="lc-b">
+        <div class="lc-t" data-he="🔒 SOS מנעילת מסך — ללא פתיחת אפליקציה" data-en="🔒 SOS from the lock screen — no need to open the app">🔒 SOS מנעילת מסך — ללא פתיחת אפליקציה</div>
+        <div class="lc-b" data-i18n-html="1" data-he="<strong>iPhone:</strong> לחץ 3× על כפתור הצד → Emergency SOS.<br><strong>Android:</strong> לחץ 5× על כפתור ההפעלה → Emergency SOS.<br><strong>שומר Shake:</strong> ניעור 5× חזק מפעיל SOS אוטומטי.<br>הגדר 100 כאיש קשר חירום ראשון בטלפון." data-en="<strong>iPhone:</strong> press the side button 3× → Emergency SOS.<br><strong>Android:</strong> press the power button 5× → Emergency SOS.<br><strong>SHOMER Shake:</strong> 5 hard shakes triggers an automatic SOS.<br>Set 100 as your phone's primary emergency contact.">
           <strong>iPhone:</strong> לחץ 3× על כפתור הצד → Emergency SOS.<br>
           <strong>Android:</strong> לחץ 5× על כפתור ההפעלה → Emergency SOS.<br>
           <strong>שומר Shake:</strong> ניעור 5× חזק מפעיל SOS אוטומטי.<br>
@@ -2336,7 +2336,6 @@ function applyTranslations(){
   setText('cam-empty-lbl',T('cam_empty'));
   // DMS
   const di=document.getElementById('dms-intro-txt');if(di)di.innerHTML=T('dms_how').replace('X',dmsInterval);
-  const ds=document.getElementById('dms-start');if(ds)ds.textContent=T('dms_active')?T('dms_stop'):T('dms_start');
   const dt=document.getElementById('dms-toggle-btn');if(dt)dt.textContent=dmsActive?T('dms_stop'):T('dms_start');
   // Emergency
   setText('em-intro',T('em_intro'));
@@ -2391,6 +2390,15 @@ function applyTranslations(){
   setText('stat-pts-lbl',he?'נקודות':'Points');
   setText('dms-demo-lbl',he?'דמו':'demo');
   updateShakeSensLabel();
+  // Generic sweep: any element tagged data-he/data-en localizes here (covers every
+  // sheet string that isn't individually wired above). Hebrew is the default content.
+  try{
+    const en=currentLang==='en';
+    document.querySelectorAll('[data-he]').forEach(el=>{
+      const v=en?(el.getAttribute('data-en')!=null?el.getAttribute('data-en'):el.getAttribute('data-he')):el.getAttribute('data-he');
+      if(el.dataset.i18nHtml!=null) el.innerHTML=v; else el.textContent=v;
+    });
+  }catch(e){}
   try{ gdApplyI18n(); gdRenderList(); gdRenderMarkers(); }catch(e){}
   try{ legalApplyI18n(); }catch(e){}
   renderReportsList();renderSosHistory();
@@ -2877,7 +2885,7 @@ function beginSOS(trigger){
   sosPhase='countdown'; sosActive=true; curSosTrigger=trigger||'manual';
   const btn=document.getElementById('sos-btn');
   if(btn){btn.classList.add('active');btn.setAttribute('aria-pressed','true');}
-  playAlarm(60000);                       // loud alarm on the user's OWN phone, right now
+  try{ playAlarm(60000); }catch(e){}       // loud alarm on the user's OWN phone, right now (audio failure must never block the countdown/broadcast)
   startCountdown();
 }
 let curSosTrigger='manual';
@@ -4524,6 +4532,19 @@ if(SS.onboarded){
     nmInp.addEventListener('input',()=>{nameAuto=false;nmInp.dataset.edited='1';});
   }
 }
+
+/* Studio credit on EVERY full screen: inject a tasteful mini-credit at the bottom of any
+   sheet body that doesn't already carry one. Appended last so it never sits over controls. */
+function injectSheetCredits(){
+  document.querySelectorAll('.sheet .sh-body').forEach(b=>{
+    if(b.querySelector('.mini-credit')||b.querySelector('.studio-credit'))return;
+    const f=document.createElement('div');
+    f.className='mini-credit'; f.setAttribute('dir','ltr');
+    f.innerHTML='SHOMER<span class="tm">™</span> · © 2026 3Shamrocks Studio · All rights reserved.';
+    b.appendChild(f);
+  });
+}
+try{ injectSheetCredits(); }catch(e){}
 
 /* ═══════════════════════════════════
    SERVICE WORKER + PWA INSTALL
