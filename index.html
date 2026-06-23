@@ -29,16 +29,83 @@
     .logo img { width: 48px; height: 48px; }
 
     .hero {
-      min-height: 420px;
-      background: linear-gradient(rgba(6,15,30,0.75), rgba(10,22,40,0.85)), url('SHOMER-hero-alley.jpg') center/cover;
-      display: flex;
-      align-items: center;
-      padding: 40px 0;
+      position: relative;
+      padding: 20px 0 40px;
+      overflow: hidden;
     }
-    .hero-content { max-width: 520px; }
+    .hero-content {
+      max-width: 520px;
+      margin-bottom: 20px;
+    }
     .hero h1 { font-size: 36px; line-height: 1.1; margin-bottom: 8px; }
     .hero .tag { font-size: 16px; color: var(--g4); margin-bottom: 12px; }
     .hero p { color: var(--p3); max-width: 420px; margin-bottom: 20px; }
+
+    /* Header Carousel */
+    .header-carousel {
+      position: relative;
+      width: 100%;
+      max-width: 100%;
+      height: 320px;
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+    .carousel-track {
+      display: flex;
+      transition: transform 0.5s ease;
+      height: 100%;
+    }
+    .carousel-slide {
+      min-width: 100%;
+      height: 100%;
+      position: relative;
+    }
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .carousel-slide::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60%;
+      background: linear-gradient(to top, rgba(6,15,30,0.85), transparent);
+    }
+    .carousel-caption {
+      position: absolute;
+      bottom: 15px;
+      left: 15px;
+      right: 15px;
+      color: var(--tx0);
+      font-size: 14px;
+      z-index: 2;
+    }
+    .carousel-nav {
+      position: absolute;
+      bottom: 10px;
+      right: 15px;
+      display: flex;
+      gap: 6px;
+      z-index: 3;
+    }
+    .carousel-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--p3);
+      cursor: pointer;
+      border: 1px solid var(--p4);
+      padding: 0;
+    }
+    .carousel-dot.active {
+      background: var(--g4);
+      border-color: var(--g4);
+    }
 
     .btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 24px; border-radius: 999px; font-weight: 600; font-size: 15px; }
     .btn-primary { background: linear-gradient(135deg, var(--g2), var(--g4)); color: var(--n1); }
@@ -82,6 +149,29 @@
         <div style="display: flex; gap: 12px; flex-wrap: wrap;">
           <a href="shomer.html" class="btn btn-primary">התקן עכשיו</a>
           <a href="#mockups" class="btn btn-ghost">ראה איך זה עובד</a>
+        </div>
+      </div>
+
+      <!-- Header Carousel -->
+      <div class="header-carousel" id="header-carousel">
+        <div class="carousel-track" id="carousel-track">
+          <div class="carousel-slide">
+            <img src="hero-alley.jpg" alt="Woman in dark alley activating SH✡MER SOS">
+            <div class="carousel-caption">סמטה חשוכה – SH✡MER מביא עזרה מהירה.<br><span style="font-size:12px;opacity:0.8;">Dark alley – help arrives fast.</span></div>
+          </div>
+          <div class="carousel-slide">
+            <img src="hero-bullying.jpg" alt="Kid outside school being bullied activating SOS">
+            <div class="carousel-caption">הצקות ליד בית הספר – התרעה מיידית.<br><span style="font-size:12px;opacity:0.8;">School bullying – instant alert.</span></div>
+          </div>
+          <div class="carousel-slide">
+            <img src="hero-following.jpg" alt="Creep following girls, they activate SH✡MER">
+            <div class="carousel-caption">עוקב חשוד – SH✡MER מחבר לביטחון.<br><span style="font-size:12px;opacity:0.8;">Being followed – connects to safety.</span></div>
+          </div>
+        </div>
+        <div class="carousel-nav">
+          <button class="carousel-dot active" data-slide="0"></button>
+          <button class="carousel-dot" data-slide="1"></button>
+          <button class="carousel-dot" data-slide="2"></button>
         </div>
       </div>
     </div>
@@ -132,5 +222,43 @@
     </div>
     <p style="margin-top: 8px; font-size: 11px;">SH✡MER אינו מחליף שירותי חירום. במצב חירום חייג 100 / 101 / 102.</p>
   </footer>
+
+  <script>
+    // Simple header image carousel
+    let currentSlide = 0;
+    const track = document.getElementById('carousel-track');
+    const dots = document.querySelectorAll('.carousel-dot');
+    const slides = document.querySelectorAll('.carousel-slide');
+    const totalSlides = slides.length;
+
+    function goToSlide(slideIndex) {
+      if (!track) return;
+      currentSlide = slideIndex;
+      const offset = -currentSlide * 100;
+      track.style.transform = `translateX(${offset}%)`;
+      
+      dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentSlide);
+      });
+    }
+
+    dots.forEach((dot, index) => {
+      dot.addEventListener('click', () => {
+        goToSlide(index);
+      });
+    });
+
+    // Auto rotate every 5 seconds
+    setInterval(() => {
+      if (!track) return;
+      currentSlide = (currentSlide + 1) % totalSlides;
+      goToSlide(currentSlide);
+    }, 5000);
+
+    // Initialize
+    if (track) {
+      goToSlide(0);
+    }
+  </script>
 </body>
 </html>
