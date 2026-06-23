@@ -236,7 +236,8 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 .hdr-center{flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:9px;}
 /* Badge floats free — transparent PNG, no plate, just a soft halo. */
-.hdr-logo{width:60px;height:60px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 2px 6px rgba(0,0,0,.6)) drop-shadow(0 0 10px rgba(245,200,64,.22));}
+.hdr-logo{width:88px;height:88px;object-fit:contain;flex-shrink:0;position:relative;z-index:2;margin-bottom:-30px;filter:drop-shadow(0 3px 9px rgba(0,0,0,.7)) drop-shadow(0 0 16px rgba(245,200,64,.32));}
+@media(max-width:360px){.hdr-logo{width:76px;height:76px;margin-bottom:-24px;}}
 /* Wordmark echoes the badge: brushed-platinum letters, gold Star of David. */
 .hdr-name{font-size:22px;font-weight:900;letter-spacing:1px;background:linear-gradient(160deg,#FFFFFF 0%,#C8D2E2 30%,#8392AB 58%,#E6ECF6 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:inline-flex;align-items:center;text-shadow:0 1px 1px rgba(0,0,0,.3);}
 .hdr-name .star{-webkit-text-fill-color:#F5C840;color:#F5C840;font-size:.98em;line-height:1;margin:0 .02em;text-shadow:0 0 12px var(--gb);}
@@ -1152,7 +1153,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  </div>
  </div>
  <div class="hdr-center">
- <img class="hdr-logo" src="SHOMER_logo_big.png" alt="SHOMER" width="60" height="60">
+ <img class="hdr-logo" src="SHOMER_logo_big.png" alt="SHOMER" width="88" height="88">
  </div>
  <div class="hdr-right">
  <button class="hdr-bell" onclick="openUpdates()" aria-label="עדכונים" title="עדכונים">
@@ -1304,6 +1305,29 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  </div>
  <button class="cta-gold mb16" style="margin-top:16px" id="ci-toggle-btn" onclick="checkinToggle()" data-he="הפעל צ׳ק-אין" data-en="Start check-in">הפעל צ׳ק-אין</button>
  <div class="dms-notice" data-he="הדגמה במכשיר זה. אזעקה חוצת-מכשירים לשומר/ת דורשת את שרת הזמן-אמת (Firebase) — ראה/י FIREBASE-SETUP.md." data-en="Demonstrated on this device. The cross-device alarm to your guardian needs the realtime backend (Firebase) — see FIREBASE-SETUP.md.">הדגמה במכשיר זה — חוצה-מכשירים דורש שרת.</div>
+ </div>
+ </div>
+
+ <!-- MY SHOMER: geofence ARRIVAL REMINDER -->
+ <div class="sheet" id="sh-georemind" role="dialog" aria-modal="true" aria-labelledby="gr-ttl">
+ <div class="sh-pill" aria-hidden="true"></div>
+ <div class="sh-head"><span class="sh-ttl" id="gr-ttl" data-he="תזכורת הגעה" data-en="Arrival reminder">תזכורת הגעה</span><button class="sh-x" onclick="cl('sh-georemind')" aria-label="close"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button></div>
+ <div class="sh-body">
+ <p class="set-help" data-he="קבל/י התראה כשאיש קשר „My SHOMER” (ששיתף איתך מיקום) מגיע למקום. הזז/י את המפה למיקום הרצוי, בחר/י את האדם והרדיוס, והוסף/י." data-en="Get notified when a My SHOMER contact (who shares location with you) reaches a place. Pan the map to the spot, pick the person + radius, then add.">קבל/י התראה כשאיש קשר מגיע למקום.</p>
+ <div class="sec-cap mb12" data-he="איש קשר (משתף מיקום)" data-en="Contact (shares location)">איש קשר</div>
+ <select class="ob-f" id="gr-member" aria-label="contact"></select>
+ <div class="sec-cap mb12" style="margin-top:6px" data-he="תווית מקום" data-en="Place label">תווית מקום</div>
+ <input class="ob-f" id="gr-label" type="text" maxlength="40" placeholder="בית · עבודה · בית ספר" aria-label="place">
+ <div class="sec-cap mb12" style="margin-top:6px" data-he="רדיוס גדר וירטואלית" data-en="Geofence radius">רדיוס</div>
+ <div class="dms-intervals" id="gr-rad" role="group">
+ <div class="dms-iv" data-r="100" onclick="geoPickRad(100,this)" tabindex="0"><div class="dms-iv-n">100</div><div class="dms-iv-l">m</div></div>
+ <div class="dms-iv sel" data-r="300" onclick="geoPickRad(300,this)" tabindex="0"><div class="dms-iv-n">300</div><div class="dms-iv-l">m</div></div>
+ <div class="dms-iv" data-r="500" onclick="geoPickRad(500,this)" tabindex="0"><div class="dms-iv-n">500</div><div class="dms-iv-l">m</div></div>
+ </div>
+ <button class="cta-gold mb16" style="margin-top:16px" onclick="geoAddReminder()" data-he="הוסף תזכורת (מרכז המפה)" data-en="Add reminder (map center)">הוסף תזכורת</button>
+ <div class="sec-cap mb12" data-he="תזכורות פעילות" data-en="Active reminders">תזכורות פעילות</div>
+ <div id="gr-list" role="list"></div>
+ <div class="dms-notice" style="margin-top:14px" data-he="הדגמה במכשיר זה (כשהאפליקציה פתוחה). התראה ברקע וחוצת-מכשירים דורשת את שרת הזמן-אמת / FCM — ראה/י FIREBASE-SETUP.md." data-en="Demonstrated on this device (app open). Background + cross-device delivery needs the realtime backend / FCM — see FIREBASE-SETUP.md.">הדגמה במכשיר זה — רקע/חוצה-מכשירים דורש שרת.</div>
  </div>
  </div>
 
@@ -1735,6 +1759,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  <button class="cta-gold" style="flex:1;padding:12px;font-size:13px" onclick="findFriendOpen()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16.5 16.5L21 21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> <span id="circ-find-lbl">מצא חבר/ה</span></button>
  <button class="row-btn" style="flex:0 0 auto;width:auto;padding:12px 14px;justify-content:center" onclick="toggleAddMember()" aria-label="הוסף חבר/ה"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
  </div>
+ <button class="row-btn" style="width:100%;margin-bottom:12px;justify-content:flex-start;gap:9px" onclick="cl('sh-circles');openGeoRemind()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="color:var(--g3)"><path d="M12 22s7-6.4 7-12a7 7 0 1 0-14 0c0 5.6 7 12 7 12Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.6" fill="currentColor"/></svg> <span data-he="תזכורת הגעה (כשמישהו מגיע למקום)" data-en="Arrival reminder (when someone reaches a place)">תזכורת הגעה</span></button>
  <div class="cm-add-form" id="cm-add-form" style="display:none">
  <input class="ob-f" id="cm-add-name" type="text" maxlength="24" placeholder="שם (למשל אמא, יעקב)" aria-label="שם">
  <div class="row">
@@ -4382,7 +4407,49 @@ function startCircleSim(){
  const want=visibleMembers(mapCircleId);
  want.forEach(m=>{const mk=mapLayers.circle[m.id];if(mk)mk.setLatLng([m.lat,m.lng]);});
  }
+ try{ checkGeoReminders(); }catch(e){}
  },2500);
+}
+
+/* ── MY SHOMER: geofence ARRIVAL REMINDER — "tell me when X reaches a place". Consent-paired
+   (only contacts who share their location). On-device trigger works now; true background +
+   cross-device delivery needs the realtime backend / FCM (see FIREBASE-SETUP.md). ── */
+let geoRad=300;
+function geoPickRad(v,el){ el.parentNode.querySelectorAll('.dms-iv').forEach(function(b){b.classList.remove('sel');}); el.classList.add('sel'); geoRad=v; }
+function openGeoRemind(){ seedCirclesIfEmpty&&seedCirclesIfEmpty(); op('sh-georemind'); renderGeoReminders(); }
+function geoAddReminder(){
+ var he=currentLang==='he';
+ var sel=document.getElementById('gr-member'); var mid=sel&&sel.value; var m=mid&&memberById(mid);
+ if(!m){ toast(he?'בחר/י איש קשר ששיתף מיקום':'Pick a contact who shares location','amb'); return; }
+ var label=(document.getElementById('gr-label').value||'').trim()||(he?'יעד':'Destination');
+ var c=MAP?MAP.getCenter():{lat:m.baseLat||m.lat,lng:m.baseLng||m.lng};
+ SS.geoReminders.push({id:'g'+Date.now(),memberId:mid,memberName:m.name,label:label,lat:c.lat,lng:c.lng,radius:geoRad,done:false});
+ saveStore(); renderGeoReminders();
+ try{ var circ=window.L.circle([c.lat,c.lng],{radius:geoRad,color:'#E0A828',weight:2,fillColor:'#E0A828',fillOpacity:.08}); circ.addTo(MAP); setTimeout(function(){try{MAP.removeLayer(circ);}catch(e){}},4500); }catch(e){}
+ document.getElementById('gr-label').value='';
+ toast(he?'✓ תזכורת הגעה נוספה (מרכז המפה)':'✓ Arrival reminder added (map center)','grn');
+}
+function geoCancel(id){ SS.geoReminders=(SS.geoReminders||[]).filter(function(r){return r.id!==id;}); saveStore(); renderGeoReminders(); }
+function renderGeoReminders(){
+ var he=currentLang==='he';
+ var sel=document.getElementById('gr-member');
+ if(sel){ var cur=sel.value; var ms=(SS.circleMembers||[]).filter(function(m){return m.seeThem||m.sos;});
+  sel.innerHTML=ms.length?ms.map(function(m){return '<option value="'+m.id+'">'+ESC(m.name)+'</option>';}).join(''):'<option value="">'+(he?'— אין אנשי קשר המשתפים מיקום —':'— no contacts sharing location —')+'</option>';
+  if(cur)sel.value=cur; }
+ var wrap=document.getElementById('gr-list'); if(!wrap)return;
+ var list=SS.geoReminders||[];
+ if(!list.length){ wrap.innerHTML='<p class="sr-sb" style="padding:8px 2px">'+(he?'אין תזכורות פעילות.':'No active reminders.')+'</p>'; return; }
+ wrap.innerHTML=list.map(function(r){ return '<div class="set-row"><div class="sr-l"><div class="sr-ic">'+ic('pin')+'</div><div><div class="sr-nm">'+ESC(r.memberName)+' → '+ESC(r.label)+'</div><div class="sr-sb">'+(r.done?(he?'הופעלה ✓':'Triggered ✓'):(he?'ממתינה · רדיוס ':'Waiting · radius ')+fmtDistance(r.radius))+'</div></div></div><button class="row-btn" style="width:auto;padding:6px 11px" onclick="geoCancel(\''+r.id+'\')">'+(he?'בטל':'Cancel')+'</button></div>'; }).join('');
+}
+function checkGeoReminders(){
+ var list=SS.geoReminders||[]; if(!list.length)return; var he=currentLang==='he', changed=false;
+ list.forEach(function(r){ if(r.done)return; var m=memberById(r.memberId); if(!m)return;
+  if(distMeters(m.lat,m.lng,r.lat,r.lng)<=r.radius){ r.done=true; changed=true;
+   toast(r.memberName+(he?' הגיע/ה ל':' arrived at ')+(r.label||(he?'היעד':'destination')),'grn');
+   try{pushNotify(he?'שומר — הגעה':'SHOMER — Arrival', r.memberName+(he?' הגיע/ה ל':' arrived at ')+(r.label||''),'geo-'+r.id);}catch(e){}
+  }
+ });
+ if(changed){ saveStore(); try{renderGeoReminders();}catch(e){} }
 }
 
 /* ── Member SOS ripple — alert the whole circle + show live position ── */
