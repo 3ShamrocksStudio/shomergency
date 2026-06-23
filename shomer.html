@@ -576,6 +576,11 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 .leaflet-bar,.leaflet-control-zoom{display:none!important;} /* we use our own brand controls */
 /* 3D marker index */
 .shomer-marker.mk3 svg{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 4px 5px rgba(0,0,0,.55));}
+/* Canonical event pin (colour-coded teardrop + indexed glyph) */
+.shomer-marker.evpin svg{display:block;width:40px;height:50px;overflow:visible;filter:drop-shadow(0 3px 4px rgba(0,0,0,.5));}
+.shomer-marker.evpin .ic,.shomer-marker.evpin use{color:#fff;}
+.shomer-marker.evpin-sos{animation:evpulse 1.2s ease-in-out infinite;}
+@keyframes evpulse{0%,100%{filter:drop-shadow(0 0 1px rgba(255,26,64,.5)) drop-shadow(0 3px 4px rgba(0,0,0,.5));}50%{filter:drop-shadow(0 0 11px rgba(255,26,64,1)) drop-shadow(0 3px 4px rgba(0,0,0,.5));}}
 .mk-me-wrap{position:relative;width:100%;height:100%;}
 .mk3-sos{animation:mk3sos 1.25s ease-out infinite;}
 @keyframes mk3sos{0%{filter:drop-shadow(0 0 0 rgba(255,26,64,.7))}70%{filter:drop-shadow(0 0 13px rgba(255,26,64,0))}100%{filter:drop-shadow(0 0 0 rgba(255,26,64,0))}}
@@ -904,6 +909,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
   <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16 5.2a3.2 3.2 0 0 1 0 6M17 13.5a5.5 5.5 0 0 1 3.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
   <symbol id="i-doc" viewBox="0 0 24 24"><path d="M7 3h7l4 4v14H7Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 3v4h4M9 13h6M9 16.5h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
   <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2.5l1.3 2.3 2.6-.4.5 2.6 2.3 1.3-1 2.4 1 2.4-2.3 1.3-.5 2.6-2.6-.4L12 21.5l-1.3-2.3-2.6.4-.5-2.6L5.3 15.7l1-2.4-1-2.4 2.3-1.3.5-2.6 2.6.4Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+  <symbol id="i-fist" viewBox="0 0 24 24"><path d="M7 11V9a1.6 1.6 0 0 1 3.2 0v1.6m0-.6V7.5a1.6 1.6 0 0 1 3.2 0V11m0-1V8a1.6 1.6 0 0 1 3.2 0v5a6 6 0 0 1-6 6h-1.1a5 5 0 0 1-3.6-1.5L4 16a1.6 1.6 0 0 1 2.3-2.2L7 14.5Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 </defs></svg>
 
 <!-- LANGUAGE BAR -->
@@ -1040,8 +1046,8 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
       <button class="legend-hd" onclick="toggleLegend()" aria-expanded="false" aria-controls="legend-body"><span aria-hidden="true"><svg class="ic"><use href="#i-shield"/></svg></span><span id="legend-ttl-txt">מקרא מפה</span><span class="legend-chev" id="legend-chev" aria-hidden="true">▸</span></button>
       <div class="legend-body" id="legend-body">
         <div class="leg"><div class="ldc" style="background:#FF1A40;box-shadow:0 0 8px #FF1A40" aria-hidden="true"><svg class="ic"><use href="#i-sos"/></svg></div><span id="l7">SOS חי</span></div>
-        <div class="leg"><div class="ldc" style="background:#E5468E" aria-hidden="true"><svg class="ic"><use href="#i-shield"/></svg></div><span id="l1">עבירת מין</span></div>
-        <div class="leg"><div class="ldc" style="background:#FF7A1A" aria-hidden="true"><svg class="ic"><use href="#i-warning"/></svg></div><span id="l2">תקיפה / אלימות</span></div>
+        <div class="leg"><div class="ldc" style="background:#E5468E" aria-hidden="true"><svg class="ic"><use href="#i-hand"/></svg></div><span id="l1">עבירת מין</span></div>
+        <div class="leg"><div class="ldc" style="background:#FF7A1A" aria-hidden="true"><svg class="ic"><use href="#i-fist"/></svg></div><span id="l2">תקיפה / אלימות</span></div>
         <div class="leg"><div class="ldc" style="background:#F2B705" aria-hidden="true"><svg class="ic"><use href="#i-eye"/></svg></div><span id="l3">הטרדה / מעקב</span></div>
         <div class="leg"><div class="ldc" style="background:#2962FF" aria-hidden="true"><svg class="ic"><use href="#i-unlock"/></svg></div><span id="l4">גנבה / רכוש</span></div>
         <div class="leg"><div class="ldc" style="background:#18C29C" aria-hidden="true"><svg class="ic"><use href="#i-pill"/></svg></div><span id="l5">סמים</span></div>
@@ -1215,9 +1221,9 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
       <div class="mb16">
         <div class="sec-cap" id="rep-type-lbl" data-he="סוג האירוע" data-en="Incident type">סוג האירוע</div>
         <div class="type-grid">
-          <div class="ropt sel" onclick="rt(this)" role="radio" aria-checked="true"><div class="ropt-ic"><svg class="ic"><use href="#i-sos"/></svg></div><span id="rt1" data-he="תקיפה / סכנה" data-en="Assault / danger">תקיפה / סכנה</span></div>
+          <div class="ropt sel" onclick="rt(this)" role="radio" aria-checked="true"><div class="ropt-ic"><svg class="ic"><use href="#i-fist"/></svg></div><span id="rt1" data-he="תקיפה / סכנה" data-en="Assault / danger">תקיפה / סכנה</span></div>
           <div class="ropt" onclick="rt(this)" role="radio" aria-checked="false"><div class="ropt-ic"><svg class="ic"><use href="#i-eye"/></svg></div><span id="rt2" data-he="מעקב חשוד" data-en="Suspicious stalking">מעקב חשוד</span></div>
-          <div class="ropt" onclick="rt(this)" role="radio" aria-checked="false"><div class="ropt-ic"><svg class="ic"><use href="#i-shield"/></svg></div><span id="rt3" data-he="הטרדה מינית" data-en="Sexual harassment">הטרדה מינית</span></div>
+          <div class="ropt" onclick="rt(this)" role="radio" aria-checked="false"><div class="ropt-ic"><svg class="ic"><use href="#i-hand"/></svg></div><span id="rt3" data-he="הטרדה מינית" data-en="Sexual harassment">הטרדה מינית</span></div>
           <div class="ropt" onclick="rt(this)" role="radio" aria-checked="false"><div class="ropt-ic"><svg class="ic"><use href="#i-medcross"/></svg></div><span id="rt4" data-he="עזרה רפואית" data-en="Medical help">עזרה רפואית</span></div>
           <div class="ropt" onclick="rt(this)" role="radio" aria-checked="false"><div class="ropt-ic"><svg class="ic"><use href="#i-pill"/></svg></div><span id="rt5" data-he="סמים / עבירות" data-en="Drugs / offences">סמים / עבירות</span></div>
           <div class="ropt" onclick="rt(this)" role="radio" aria-checked="false"><div class="ropt-ic"><svg class="ic"><use href="#i-clipboard"/></svg></div><span id="rt6" data-he="אחר" data-en="Other">אחר</span></div>
@@ -2306,16 +2312,20 @@ const CITY_STATS=[
    (#E91E8C magenta) — they must never be confused. */
 /* Each type = a DISTINCT 3D shape (see markerSVG) AND a distinct hue — no
    shape and no colour repeats, so the map index is instantly readable. */
+/* ONE canonical icon + colour per event type — used IDENTICALLY on the map markers,
+   the legend, and the report sheet. `icon` is a sprite symbol id (#i-<icon>). */
 const TYPES={
-  sex:  {label:()=>T('l1'),color:'#E5468E',cls:'t-sex',  shape:'shield'},
-  viol: {label:()=>T('l2'),color:'#FF7A1A',cls:'t-viol', shape:'triangle'},
-  stalk:{label:()=>T('l3'),color:'#F2B705',cls:'t-stalk',shape:'eye'},
-  theft:{label:()=>T('l4'),color:'#2962FF',cls:'t-theft',shape:'diamond'},
-  drug: {label:()=>T('l5'),color:'#18C29C',cls:'t-drug', shape:'capsule'},
-  med:  {label:()=>T('l6'),color:'#16A06A',cls:'t-med',  shape:'cross'},
-  sos:  {label:()=>T('l7'),color:'#FF1A40',cls:'t-sos',  shape:'octagon'},
-  new:  {label:()=>'',     color:'#7E8CA0',cls:'t-new',  shape:'dot'},
+  sex:  {label:()=>T('l1'),color:'#E5468E',cls:'t-sex',  icon:'hand'},
+  viol: {label:()=>T('l2'),color:'#FF7A1A',cls:'t-viol', icon:'fist'},
+  stalk:{label:()=>T('l3'),color:'#F2B705',cls:'t-stalk',icon:'eye'},
+  theft:{label:()=>T('l4'),color:'#2962FF',cls:'t-theft',icon:'unlock'},
+  drug: {label:()=>T('l5'),color:'#18C29C',cls:'t-drug', icon:'pill'},
+  med:  {label:()=>T('l6'),color:'#16A06A',cls:'t-med',  icon:'medcross'},
+  sos:  {label:()=>T('l7'),color:'#FF1A40',cls:'t-sos',  icon:'sos'},
+  new:  {label:()=>'',     color:'#7E8CA0',cls:'t-new',  icon:'clipboard'},
 };
+/* Single source of truth for an event glyph anywhere off-map (legend, report, popups). */
+function eventIcon(t,cls){const o=TYPES[t]||TYPES.viol;return ic(o.icon,cls);}
 
 /* ═══════════════════════════════════
    LANGUAGE
@@ -3214,24 +3224,23 @@ function sosIcon(){return window.L.divIcon({className:'shomer-marker',
   html:`<div class="mk-sos"><div class="ring"></div><div class="core"></div></div>`,iconSize:[30,30],iconAnchor:[15,15]});}
 /* ── 3D map marker index — one distinct glossy SVG per type ── */
 function markerSVG(t){
-  switch(t){
-    case 'me': return '<svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="21" fill="#19A8FF" opacity=".22"/><circle cx="30" cy="30" r="14" fill="#19A8FF" stroke="#fff" stroke-width="3"/><path d="M30 21 L36 36 L30 32 L24 36 Z" fill="#fff"/><ellipse cx="25" cy="24" rx="8" ry="4.5" fill="#fff" opacity=".28"/></svg>';
-    case 'octagon': return '<svg viewBox="0 0 56 56"><polygon points="18,6 38,6 50,18 50,38 38,50 18,50 6,38 6,18" fill="#FF1A40"/><ellipse cx="22" cy="16" rx="14" ry="7" fill="#fff" opacity=".22"/><text x="28" y="35" font-size="15" font-weight="800" fill="#fff" text-anchor="middle" font-family="Arial,sans-serif">SOS</text></svg>';
-    case 'shield': return '<svg viewBox="0 0 52 56"><path d="M26 4 L46 12 V28 C46 42 37 50 26 54 C15 50 6 42 6 28 V12 Z" fill="#E5468E"/><ellipse cx="20" cy="16" rx="12" ry="6" fill="#fff" opacity=".22"/><g stroke="#fff" stroke-width="4" stroke-linecap="round" transform="rotate(45 26 30)"><path d="M26 22 v16"/><path d="M18 30 h16"/></g></svg>';
-    case 'triangle': return '<svg viewBox="0 0 56 52"><path d="M28 5 L52 47 H4 Z" fill="#FF7A1A" stroke="#fff" stroke-width="2"/><rect x="25.5" y="20" width="5" height="13" rx="2.5" fill="#fff"/><circle cx="28" cy="39" r="3" fill="#fff"/></svg>';
-    case 'eye': return '<svg viewBox="0 0 58 44"><path d="M4 22 C16 4 42 4 54 22 C42 40 16 40 4 22 Z" fill="#F2B705"/><ellipse cx="24" cy="14" rx="13" ry="5" fill="#fff" opacity=".25"/><circle cx="29" cy="22" r="9" fill="#1a1400"/><circle cx="32" cy="19" r="3" fill="#fff"/></svg>';
-    case 'diamond': return '<svg viewBox="0 0 50 56"><polygon points="25,3 47,28 25,53 3,28" fill="#2962FF"/><polygon points="25,3 36,15 25,27 14,15" fill="#fff" opacity=".18"/><path d="M20 26 v-4 a5 5 0 0 1 10 0" stroke="#fff" stroke-width="2.4" fill="none"/><rect x="17" y="26" width="16" height="9" rx="1.5" fill="#fff"/></svg>';
-    case 'capsule': return '<svg viewBox="0 0 56 40"><rect x="4" y="10" width="48" height="20" rx="10" fill="#18C29C"/><rect x="4" y="10" width="24" height="20" rx="10" fill="#0c8f73"/><ellipse cx="20" cy="15" rx="14" ry="3.5" fill="#fff" opacity=".25"/></svg>';
-    case 'cross': return '<svg viewBox="0 0 50 50"><rect x="6" y="6" width="38" height="38" rx="11" fill="#16A06A"/><ellipse cx="20" cy="15" rx="12" ry="6" fill="#fff" opacity=".22"/><path d="M25 14 v22 M14 25 h22" stroke="#fff" stroke-width="6" stroke-linecap="round"/></svg>';
-    default: return '<svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="17" fill="#7E8CA0"/><ellipse cx="17" cy="14" rx="9" ry="4.5" fill="#fff" opacity=".22"/><circle cx="22" cy="22" r="4" fill="#fff"/></svg>';
-  }
+  // The live "me" location marker (blue locating dot). Event pins use eventPinHTML().
+  return '<svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="21" fill="#19A8FF" opacity=".22"/><circle cx="30" cy="30" r="14" fill="#19A8FF" stroke="#fff" stroke-width="3"/><path d="M30 21 L36 36 L30 32 L24 36 Z" fill="#fff"/><ellipse cx="25" cy="24" rx="8" ry="4.5" fill="#fff" opacity=".28"/></svg>';
 }
-const MK_SIZE={sos:[48,48]};
+/* Canonical map pin: a clean colour-coded teardrop carrying the SAME glyph the legend +
+   report use for this event type. Function over flair — flat, high-contrast, legible. */
+function eventPinHTML(t){
+  const o=TYPES[t]||TYPES.viol;
+  return '<svg viewBox="0 0 40 50" style="color:#fff">'
+    +'<path d="M20 1.5C10.6 1.5 3 9.1 3 18.5 3 31 20 47.5 20 47.5S37 31 37 18.5C37 9.1 29.4 1.5 20 1.5Z" fill="'+o.color+'" stroke="#0A1628" stroke-width="2"/>'
+    +'<circle cx="20" cy="18" r="12.5" fill="rgba(0,0,0,.16)"/>'
+    +'<use href="#i-'+o.icon+'" x="8" y="6" width="24" height="24"/>'
+    +'</svg>';
+}
 function catIcon(t){
-  const sh=(TYPES[t]&&TYPES[t].shape)||'dot';
-  const sz=MK_SIZE[t]||[38,38];
-  return window.L.divIcon({className:'shomer-marker mk3'+(t==='sos'?' mk3-sos':''),
-    html:markerSVG(sh),iconSize:sz,iconAnchor:[sz[0]/2,sz[1]/2],popupAnchor:[0,-sz[1]/2]});
+  const sos=(t==='sos');
+  return window.L.divIcon({className:'shomer-marker evpin'+(sos?' evpin-sos':''),
+    html:eventPinHTML(t),iconSize:[40,50],iconAnchor:[20,48],popupAnchor:[0,-46]});
 }
 function meIcon(){
   const pr=(SS.user&&SS.user.profession)||'';
@@ -3611,7 +3620,7 @@ function sendReport(){
   // Map the selected report option to a type key.
   const opts=[...document.querySelectorAll('.ropt')];
   const selIdx=opts.findIndex(o=>o.classList.contains('sel'));
-  const typeKeys=['viol','stalk','sex','med','drug','viol'];
+  const typeKeys=['viol','stalk','sex','med','drug','new'];
   const typeKey=typeKeys[selIdx>=0?selIdx:0];
   toast(`${T('sent')}${n>0?' +'+n+'📷':''}`, 'grn');
   // Build + persist the report.
