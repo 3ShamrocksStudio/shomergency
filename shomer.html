@@ -11,7 +11,7 @@
 <meta http-equiv="X-Frame-Options" content="DENY">
 <meta http-equiv="Referrer-Policy" content="no-referrer">
 <!-- CSP: no eval. Allows Leaflet (cdnjs) + OpenStreetMap tiles at runtime; everything else self-hosted. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://cdnjs.cloudflare.com https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com; connect-src 'self' https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://*.googleapis.com https://fcmregistrations.googleapis.com https://firebaseinstallations.googleapis.com; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://www.gstatic.com; manifest-src 'self'; worker-src 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://cdnjs.cloudflare.com https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com; connect-src 'self' https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://*.googleapis.com https://fcmregistrations.googleapis.com https://firebaseinstallations.googleapis.com https://router.project-osrm.org; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://www.gstatic.com; manifest-src 'self'; worker-src 'self';">
 <title>SHOMER · שומר — Citizens Protecting Citizens</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" href="logo-192.png">
@@ -261,9 +261,19 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 .dms-badge.off{background:var(--n5);color:var(--tx3);border-color:var(--b1);}
 
 /* ══════════ SOS STRIP ══════════ */
-.sos-strip{position:absolute;top:calc(var(--hdr-top,0px) + var(--hdr));left:0;right:0;z-index:590;background:var(--r3);padding:10px 14px;display:none;align-items:center;gap:10px;animation:ssf 1.1s ease-in-out infinite;}
+.sos-strip{position:absolute;top:calc(var(--hdr-top,0px) + var(--hdr));left:0;right:0;z-index:590;background:var(--r3);padding:8px 14px 10px;display:none;flex-direction:column;gap:8px;animation:ssf 1.1s ease-in-out infinite;}
 .sos-strip.on{display:flex;}
 @keyframes ssf{0%,100%{background:var(--r3)}50%{background:var(--r2)}}
+.ss-row{display:flex;align-items:center;gap:10px;}
+/* SOS fast event-type picker — classify in one tap, never blocks the SOS */
+.ss-typebar{display:flex;align-items:center;gap:9px;}
+.ss-typebar-lbl{font-size:10px;font-weight:700;color:rgba(255,255,255,.82);white-space:nowrap;flex:0 0 auto;}
+.ss-typebar-opts{display:flex;gap:6px;flex:1;overflow-x:auto;padding-bottom:1px;justify-content:flex-end;}
+.ss-type{width:36px;height:36px;border-radius:9px;background:rgba(0,0,0,.22);border:1.5px solid rgba(255,255,255,.22);color:#fff;display:flex;align-items:center;justify-content:center;flex:0 0 auto;cursor:pointer;transition:transform .1s,border-color .12s,background .12s;}
+.ss-type .ic{width:20px;height:20px;color:#fff;}
+.ss-type:active{transform:scale(.92);}
+.ss-type.sel{background:#fff;border-color:#fff;}
+.ss-type.sel .ic{color:var(--tc,#CC1426);}
 .ss-main{flex:1;min-width:0;}
 .ss-t{color:#fff;font-size:12px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .ss-s{color:rgba(255,255,255,.72);font-size:10px;margin-top:2px;}
@@ -681,6 +691,25 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 .circle-alert .ca-s{color:rgba(255,255,255,.75);font-size:10px;margin-top:2px;}
 .circle-alert .ca-btn{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.34);border-radius:var(--r8);padding:6px 12px;color:#fff;font-size:11px;font-weight:800;white-space:nowrap;flex-shrink:0;}
 .circle-alert .ca-btn:hover{background:rgba(255,255,255,.3);}
+/* ── Responder navigation: glowing route + live-distance pill + opt-in consent ── */
+.resp-glow{filter:drop-shadow(0 0 6px #21E6FF) drop-shadow(0 0 13px #21E6FF);}
+.resp-core{filter:drop-shadow(0 0 3px #EAFEFF);stroke-dasharray:2 11;animation:respflow .9s linear infinite;}
+@keyframes respflow{to{stroke-dashoffset:-26;}}
+.resp-pill{position:absolute;top:calc(var(--hdr-top,0px) + var(--hdr) + 12px);left:50%;transform:translateX(-50%);z-index:600;background:rgba(8,18,36,.94);border:1px solid #21E6FF;border-radius:999px;padding:8px 8px 8px 15px;display:none;align-items:center;gap:9px;box-shadow:0 0 20px rgba(33,230,255,.55),var(--e2);backdrop-filter:blur(8px);}
+.resp-pill.on{display:flex;}
+.resp-pill .rp-ic{width:18px;height:18px;color:#5CF0FF;flex:0 0 auto;}
+.resp-pill .rp-txt{color:#EAFEFF;font-size:13px;font-weight:800;white-space:nowrap;letter-spacing:.2px;}
+.resp-pill .rp-x{background:rgba(255,255,255,.14);border:none;color:#dff;border-radius:50%;width:22px;height:22px;cursor:pointer;font-size:12px;line-height:1;flex:0 0 auto;}
+.resp-consent{position:fixed;inset:0;z-index:1200;background:rgba(4,10,22,.86);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:22px;}
+.resp-consent.on{display:flex;}
+.rc-card{background:var(--n2);border:1px solid var(--b3);border-radius:var(--r16);max-width:382px;width:100%;padding:22px;box-shadow:var(--e4);}
+.rc-ic{width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,rgba(33,230,255,.18),rgba(33,230,255,.04));border:1px solid rgba(33,230,255,.4);color:#5CF0FF;margin-bottom:13px;}
+.rc-ic .ic{width:25px;height:25px;}
+.rc-t{font-size:18px;font-weight:900;color:var(--tx0);margin-bottom:9px;}
+.rc-b{font-size:12.5px;color:var(--tx1);line-height:1.7;margin-bottom:8px;}
+.rc-warn{background:var(--rb);border:1px solid var(--b4);border-radius:var(--r12);padding:11px 13px;font-size:12px;color:var(--tx1);line-height:1.6;margin:12px 0 16px;}
+.rc-actions{display:flex;flex-direction:column;gap:9px;}
+.units-seg{display:flex;gap:6px;direction:ltr;}.units-seg .olb{flex:1;}
 
 /* Find-a-Friend FAB (stacked above the locate FAB) */
 .ff-fab{position:absolute;bottom:calc(var(--nav) + 70px);left:12px;z-index:400;width:48px;height:48px;border-radius:50%;background:rgba(8,18,36,.92);backdrop-filter:blur(12px);border:1px solid var(--b3);box-shadow:var(--e3);display:flex;align-items:center;justify-content:center;font-size:21px;color:var(--g3);transition:all .15s;}
@@ -1116,11 +1145,17 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 
  <!-- SOS STRIP -->
  <div class="sos-strip" id="sos-strip" role="alert" aria-live="assertive" aria-atomic="true">
+ <div class="ss-typebar" role="group" aria-label="סוג האירוע">
+ <span class="ss-typebar-lbl" id="ss-typebar-lbl">סוג האירוע — הקש/י לסיווג</span>
+ <div class="ss-typebar-opts" id="ss-type-opts"></div>
+ </div>
+ <div class="ss-row">
  <div class="ss-main">
  <div class="ss-t" id="ss-t">SOS פעיל — אזעקה פועלת · מיקומך שותף</div>
  <div class="ss-s" id="ss-s">ממתין לתגובה...</div>
  </div>
  <button class="ss-x" onclick="resolveSOS()" id="ss-cancel">✓ <span id="ss-cancel-lbl">אני בטוח/ה</span></button>
+ </div>
  </div>
 
  <!-- SOS CANCEL COUNTDOWN (pre-broadcast grace window) -->
@@ -1157,7 +1192,28 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  <div class="ca-t" id="circle-alert-t">חבר/ת מעגל הפעיל/ה SOS</div>
  <div class="ca-s" id="circle-alert-s">כל המעגל קיבל התראה · מיקום חי משותף</div>
  </div>
- <button class="ca-btn" id="circle-alert-btn" onclick="locateAlertMember()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.4 7-12a7 7 0 1 0-14 0c0 5.6 7 12 7 12Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.6" fill="currentColor"/></svg> <span id="circle-alert-btn-lbl">אתר/י</span></button>
+ <button class="ca-btn" id="circle-alert-btn" onclick="respondToAlertMember()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4 L17 18.5 L12 15.2 L7 18.5 Z" fill="currentColor"/></svg> <span id="circle-alert-btn-lbl">הגב/י ונווט/י</span></button>
+ </div>
+
+ <!-- RESPONDER NAV — live distance pill -->
+ <div class="resp-pill" id="resp-pill" role="status" aria-live="polite">
+ <svg class="ic rp-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.4 7-12a7 7 0 1 0-14 0c0 5.6 7 12 7 12Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.6" fill="currentColor"/></svg>
+ <span class="rp-txt" id="resp-pill-txt">—</span>
+ <button class="rp-x" onclick="stopResponderNav()" aria-label="עצור ניווט">✕</button>
+ </div>
+
+ <!-- RESPONDER NAV — opt-in safety consent -->
+ <div class="resp-consent" id="resp-consent" role="alertdialog" aria-modal="true" aria-labelledby="rc-t" aria-hidden="true">
+ <div class="rc-card">
+ <div class="rc-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div>
+ <div class="rc-t" id="rc-t" data-he="להגיב כשומר/ת?" data-en="Respond as a guardian?">להגיב כשומר/ת?</div>
+ <div class="rc-b" data-he="ניווט מגיבים מיועד בעיקר למגיבים מאומתים (כבאות/משטרה/מד״א) ולשומרים מוגדרים. הוא יציג מסלול חי ומרחק אל מי שזקוק/ה לעזרה." data-en="Responder navigation is intended primarily for verified responders (fire/police/medic) and designated guardians. It shows a live route and distance to the person in need.">ניווט מגיבים מיועד בעיקר למגיבים מאומתים (כבאות/משטרה/מד״א) ולשומרים מוגדרים. הוא יציג מסלול חי ומרחק אל מי שזקוק/ה לעזרה.</div>
+ <div class="rc-warn" data-he="⚠ אל תסכן/י את עצמך. שומר מחזק עזרה הדדית ואינו תחליף לשירותי חירום. בכל מצב חירום חייגו 100 / 101 / 102. אם אינך מגיב/ה מיומן/ת — התרעה וחיוג הם התרומה הטובה ביותר." data-en="⚠ Do not put yourself in danger. SH✡MER augments mutual aid and is not a replacement for emergency services. In any emergency call 100 / 101 / 102. If you are not a trained responder, alerting and calling is the best help.">⚠ אל תסכן/י את עצמך. שומר מחזק עזרה הדדית ואינו תחליף לשירותי חירום. בכל מצב חירום חייגו 100 / 101 / 102. אם אינך מגיב/ה מיומן/ת — התרעה וחיוג הם התרומה הטובה ביותר.</div>
+ <div class="rc-actions">
+ <button class="cta-gold" onclick="respondConsentAccept()" data-he="הבנתי — הפעל/י ניווט" data-en="I understand — start navigation">הבנתי — הפעל/י ניווט</button>
+ <button class="ob-back" onclick="respondConsentDecline()" data-he="לא עכשיו" data-en="Not now">לא עכשיו</button>
+ </div>
+ </div>
  </div>
 
  <!-- DMS STRIP -->
@@ -1351,6 +1407,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  </div>
  <div class="set-cat"><div class="set-cat-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div><div class="set-cat-t" data-he="בטיחות" data-en="Safety features">בטיחות</div></div>
  <div class="set-grp"><div class="set-row" onclick="op('sh-dms');cl('sh-set')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="sr-nm">Dead Man's Switch</div></div><span style="color:var(--tx3);font-size:18px">›</span></div><div class="set-row" onclick="op('sh-alarm');cl('sh-set')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18v-5a5 5 0 0 1 10 0v5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><rect x="5" y="18" width="14" height="3" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3v2M4.5 7l1.5 1.3M19.5 7L18 8.3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div class="sr-nm" data-he="הגדרות אזעקה" data-en="Alarm settings">הגדרות אזעקה</div></div><span style="color:var(--tx3);font-size:18px">›</span></div></div>
+ <div class="set-grp"><div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4 L17 18.5 L12 15.2 L7 18.5 Z" fill="currentColor"/></svg></div><div><div class="sr-nm" id="resp-tog-lbl" data-he="ניווט מגיב/ה (הצטרפות)" data-en="Responder navigation (opt-in)">ניווט מגיב/ה (הצטרפות)</div><div class="sr-sb" id="resp-tog-sub" data-he="הצג מסלול חי ומרחק כשמגיבים ל-SOS. מיועד למגיבים מאומתים ולשומרים — לא תחליף לחיוג 100/101/102." data-en="Show a live route + distance when responding to an SOS. For verified responders/guardians — not a replacement for 100/101/102.">הצג מסלול חי ומרחק כשמגיבים ל-SOS.</div></div></div><div class="tog" id="resp-tog" onclick="toggleRespond(this)" role="switch"></div></div></div>
  <div class="sec-cap mb12" id="shake-set-lbl">Shake-to-SOS</div>
  <p class="set-help" id="shake-set-help">מאפשר להפעיל SOS בלי להסתכל על המסך — מנערים את הטלפון בחוזקה. שימושי כשהטלפון בכיס או כשאי אפשר להביט במסך.</p>
  <div class="set-grp">
@@ -1390,6 +1447,14 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  <div class="set-grp">
  <div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.4 7-12a7 7 0 1 0-14 0c0 5.6 7 12 7 12Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.6" fill="currentColor"/></svg></div><div><div class="sr-nm" id="p-bgloc-nm">שיתוף מיקום ברקע</div><div class="sr-sb" id="p-bgloc-sb">נדרש ל-SOS ו-DMS — בלעדיו אי אפשר לשלוח את מיקומך בחירום</div></div></div><div class="tog on" data-skey="p_bgloc" onclick="this.classList.toggle('on');saveToggle(this)" role="switch"></div></div>
  <div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div><div class="sr-nm" id="p-showname-nm">הצג שם בעדכונים</div><div class="sr-sb" id="p-showname-sb">כבוי = הדיווחים שלך מופיעים בעילום שם</div></div></div><div class="tog on" data-skey="p_showname" onclick="this.classList.toggle('on');saveToggle(this)" role="switch"></div></div>
+ </div>
+ <div class="sec-cap mb12" id="units-lbl" data-he="יחידות מרחק" data-en="Distance units">יחידות מרחק</div>
+ <p class="set-help" id="units-help" data-he="באילו יחידות יוצג המרחק לאירועים ולמסלולי ניווט. ברירת מחדל: מטרי." data-en="Units used for distance to incidents and navigation routes. Default: metric.">באילו יחידות יוצג המרחק לאירועים ולמסלולי ניווט. ברירת מחדל: מטרי.</p>
+ <div class="set-grp" style="padding:10px 14px;margin-bottom:18px;">
+ <div class="units-seg">
+ <button class="olb on" id="units-metric" onclick="setUnits('metric')" data-he="מטרי · מ׳ / ק״מ" data-en="Metric · m / km">מטרי · מ׳ / ק״מ</button>
+ <button class="olb" id="units-imperial" onclick="setUnits('imperial')" data-he="אימפריאלי · ft / mi" data-en="Imperial · ft / mi">אימפריאלי · ft / mi</button>
+ </div>
  </div>
  <div class="set-cat"><div class="set-cat-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h3.5l1.5 4-2 1.5a11 11 0 0 0 5 5l1.5-2 4 1.5V19a2 2 0 0 1-2.2 2A16 16 0 0 1 4 6.2 2 2 0 0 1 5 4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div><div class="set-cat-t" id="set-contacts-lbl" data-he="אנשי קשר חירום" data-en="Emergency contacts">אנשי קשר חירום</div></div>
  <p class="set-help" id="set-contacts-help">אנשים שיקבלו את מיקומך והתראה אוטומטית כשתשלח/י SOS. הוסף/י את מי שיגיב/ה הכי מהר.</p>
@@ -1911,6 +1976,67 @@ let sosActive=false, sosTimer=null;
 /* SOS state machine: 'idle' → 'countdown' (alarm on, NOT yet broadcast) → 'active' (broadcast+mapped).
  sosActive stays true through countdown+active so shake/DMS guards (if(!sosActive)) keep working. */
 let sosPhase='idle', sosCdTimer=null, sosCdLeft=0, curSosId=null;
+/* ── SOS emergency-TYPE classification (see SOS-TYPE-SOLUTION.md) ──
+   The SOS always fires first; type is async metadata layered on top. Default = unknown. */
+let curSosType='unknown', sosFallbackTimer=null;
+const SOS_TYPES=[['viol','fist'],['med','medcross'],['sex','hand'],['stalk','eye'],['theft','unlock'],['new','clipboard']];
+function sosTypeLabel(t){const he=currentLang==='he';if(!t||t==='unknown')return he?'לא ידוע':'Unknown';return (TYPES[t]&&TYPES[t].label())||(he?'אחר':'Other');}
+function sosTypeColor(t){return (TYPES[t]&&TYPES[t].color)||'#FF1A40';}
+function buildSosTypeBar(){
+  const w=document.getElementById('ss-type-opts'); if(!w||w.dataset.built)return; w.dataset.built='1';
+  w.innerHTML=SOS_TYPES.map(function(p){return '<button class="ss-type" data-t="'+p[0]+'" style="--tc:'+sosTypeColor(p[0])+'" onclick="classifySOS(\''+p[0]+'\')" aria-label="'+sosTypeLabel(p[0])+'" title="'+sosTypeLabel(p[0])+'">'+ic(p[1])+'</button>';}).join('');
+}
+function reflectSosType(){
+  document.querySelectorAll('#ss-type-opts .ss-type').forEach(function(b){b.classList.toggle('sel',b.getAttribute('data-t')===curSosType);});
+  const he=currentLang==='he';
+  const known=curSosType&&curSosType!=='unknown';
+  const tt=document.getElementById('ss-t');
+  if(tt)tt.textContent=(he?'SOS פעיל — ':'SOS active — ')+(known?sosTypeLabel(curSosType):(he?'סוג לא ידוע':'type unknown'));
+  const lb=document.getElementById('ss-typebar-lbl');
+  if(lb)lb.textContent=known?(he?'סוג: '+sosTypeLabel(curSosType)+' — אפשר לשנות':'Type: '+sosTypeLabel(curSosType)+' — tap to change')
+                            :(he?'סוג האירוע — הקש/י לסיווג':'Emergency type — tap to classify');
+}
+/* Red urgent pulsing pin carrying the classified type glyph (or the SOS alert glyph if unknown). */
+function sosPinIcon(t){
+  const glyph=(t&&t!=='unknown'&&TYPES[t])?_glyph(TYPES[t].icon):_glyph('sos');
+  const html='<svg viewBox="0 0 40 50" style="color:#fff">'
+    +'<path d="M20 1.5C10.6 1.5 3 9.1 3 18.5 3 31 20 47.5 20 47.5S37 31 37 18.5C37 9.1 29.4 1.5 20 1.5Z" fill="#FF1A40" stroke="#0A1628" stroke-width="2"/>'
+    +'<circle cx="20" cy="18" r="12.5" fill="rgba(0,0,0,.20)"/>'
+    +'<g transform="translate(8,6)">'+glyph+'</g></svg>';
+  return window.L.divIcon({className:'shomer-marker evpin evpin-sos',html:html,iconSize:[40,50],iconAnchor:[20,48],popupAnchor:[0,-46]});
+}
+/* Classify (or reclassify) the active SOS. by: 'owner' (authoritative) | 'community' | 'responder'. */
+function classifySOS(t,by){
+  if(sosPhase!=='active')return; by=by||'owner';
+  curSosType=t;
+  const ev=SS.sosHistory.find(function(e){return e.id===curSosId;});
+  if(ev){ev.type=t;ev.typeState=(by==='owner'?'self':by==='responder'?'verified':'community');ev.classifiedBy=by;try{saveStore();}catch(e){}}
+  if(mapLayers.sosMarker)mapLayers.sosMarker.setIcon(sosPinIcon(t));
+  reflectSosType();
+  try{updateSosCardType();}catch(e){} try{renderSosHistory();}catch(e){}
+  if(sosFallbackTimer){clearTimeout(sosFallbackTimer);sosFallbackTimer=null;}
+  const he=currentLang==='he';
+  if(by==='owner')toast((he?'סוג עודכן: ':'Type set: ')+sosTypeLabel(t)+(he?' — שודר לשומרים בקרבתך (סימולציה)':' — shared with nearby guardians (simulated)'),'red');
+  else toast((he?'שומר/ת בקרבת מקום סיווג/ה: ':'A nearby guardian classified this: ')+sosTypeLabel(t)+(he?' (סימולציה — דורש שרת)':' (simulated — needs backend)'),'amb');
+}
+/* Incapacitated-user fallback (SIMULATED). If the event stays unclassified, a nearby
+   responder classifies it — demonstrating community typing + real-time update. Real
+   cross-device version needs the backend (Firestore/RTDB + FCM). */
+function scheduleSosFallback(){
+  if(sosFallbackTimer)clearTimeout(sosFallbackTimer);
+  sosFallbackTimer=setTimeout(function(){
+    if(sosPhase==='active'&&curSosType==='unknown'){ classifySOS('med','responder'); }
+  },14000);
+}
+function updateSosCardType(){
+  if(!curSosId)return;
+  const card=document.querySelector('[data-sos-id="'+curSosId+'"]'); if(!card)return;
+  let tag=card.querySelector('.sos-type-tag');
+  const he=currentLang==='he', known=curSosType&&curSosType!=='unknown';
+  if(!tag){tag=document.createElement('span');tag.className='sos-type-tag';const h=card.querySelector('.uc-ttl')||card;h.appendChild(tag);}
+  tag.textContent=known?sosTypeLabel(curSosType):(he?'סוג לא ידוע':'Unknown type');
+  tag.style.color=known?sosTypeColor(curSosType):'#FF9aa3';
+}
 let sosHoldConsumed=false, sosHoldTimer=null, sosHoldRAF=null;
 let alarmType='siren', alarmVol=1.0;
 let audioCtx=null, oscillators=[];
@@ -2015,6 +2141,7 @@ function applyStoredSettings(){
  alarmType=SS.alarm.type||'siren';
  alarmVol=(SS.alarm.vol!=null?SS.alarm.vol:1);
  dmsIv=SS.dms.interval||5; dmsInterval=dmsIv;
+ try{ reflectUnits(); reflectRespondToggle(); }catch(e){}
  if(SS.user){user.name=SS.user.name||'';user.phone=SS.user.phone||'';}
  reflectAlarmSelection();
  reflectDmsSelection();
@@ -3055,11 +3182,13 @@ function activateSOS(){
  sosRollDay();
  const overLimit=sosRemainingToday()<=0;
  curSosId='s'+Date.now();
+ curSosType='unknown'; // SOS fires now; type is classified after, never blocking it
  // Log to persistent history. broadcast=false when rate-limited (alarm still helps the
  // user locally, but nothing is shared/mapped — exactly what a server would refuse to fan out).
  try{
  SS.sosHistory.push({id:curSosId,ts:Date.now(),lat:userLat,lng:userLng,
- trigger:curSosTrigger,resolution:'pending',broadcast:!overLimit,rateLimited:overLimit});
+ trigger:curSosTrigger,resolution:'pending',broadcast:!overLimit,rateLimited:overLimit,
+ type:'unknown',typeState:'unclassified',classifiedBy:null});
  if(SS.sosHistory.length>50)SS.sosHistory=SS.sosHistory.slice(-50);
  if(!overLimit)SS.sos.activeToday=(SS.sos.activeToday||0)+1;
  saveStore();renderSosHistory();updateProfileStats();refreshSosSafetyUI();
@@ -3080,6 +3209,7 @@ function activateSOS(){
  setText('ss-s',he?'ממתין לתגובה...':'Waiting for response...');
  addSOSPin();
  injectSOSCard();
+ buildSosTypeBar(); reflectSosType(); scheduleSosFallback();
  toast(he?' SOS שודר — שומרים בקרבתך עודכנו (סימולציה)':' SOS broadcast — nearby guardians notified (simulated)','red');
  // Auto-dial prompt (opens dialer; a native app could place the call directly).
  setTimeout(()=>{
@@ -3129,7 +3259,8 @@ function resolveAs(kind){
  saveStore();renderSosHistory();updateProfileStats();refreshSosSafetyUI();
  const ov=document.getElementById('sos-resolve');
  if(ov){ov.classList.remove('on');ov.setAttribute('aria-hidden','true');}
- curSosId=null;
+ curSosId=null; curSosType='unknown';
+ if(sosFallbackTimer){clearTimeout(sosFallbackTimer);sosFallbackTimer=null;}
 }
 
 /* ── SOS button interaction: tap vs. hold-to-arm (anti pocket-dial) ── */
@@ -3214,7 +3345,7 @@ function addSOSPin(){
  if(!MAP)return;
  removeSOSPin();
  const ll=(userLat!=null&&userLng!=null)?[userLat,userLng]:(MAP.getCenter()?[MAP.getCenter().lat,MAP.getCenter().lng]:[32.0707,34.7805]);
- mapLayers.sosMarker=window.L.marker(ll,{icon:catIcon('sos'),zIndexOffset:1000,alt:'SOS'}).addTo(MAP);
+ mapLayers.sosMarker=window.L.marker(ll,{icon:sosPinIcon(curSosType),zIndexOffset:1000,alt:'SOS'}).addTo(MAP);
  try{MAP.setView(ll,Math.max(MAP.getZoom(),14),{animate:true});}catch(e){}
 }
 function removeSOSPin(){if(mapLayers.sosMarker){MAP.removeLayer(mapLayers.sosMarker);mapLayers.sosMarker=null;}}
@@ -3335,11 +3466,14 @@ function toggleLegend(){
 }
 
 /* Live user location — blue dot follows real position. */
+let _respRedrawTs=0;
 function moveUserDot(lat,lng){
  if(!MAP)return;
  if(mapLayers.meMarker){mapLayers.meMarker.setLatLng([lat,lng]);}
  else{mapLayers.meMarker=window.L.marker([lat,lng],{icon:meIcon(),zIndexOffset:900,
  alt:currentLang==='he'?'המיקום שלי':'My location'}).addTo(MAP);}
+ // Responder navigation: distance updates every tick; route redraw throttled (OSRM-friendly).
+ if(respTarget){ updateResponderDistance(); const now=Date.now(); if(now-_respRedrawTs>4000){_respRedrawTs=now;drawResponderRoute();} }
 }
 function locMe(){
  if(!navigator.geolocation){toast('Geolocation '+T('geo_err'),'amb');return;}
@@ -4007,6 +4141,88 @@ function clearCircleAlert(){
  renderCircleMarkers();
 }
 function locateAlertMember(){ if(alertMemberId)flyToMember(alertMemberId); }
+
+/* ═══════════════════════════════════
+   RESPONDER NAVIGATION — opt-in glowing route + live distance to an active SOS
+   Safety: OPT-IN, disclaimer shown, verified responders (fire/police/medic) + guardians
+   prioritised; general users are steered to ALERT + call 100/101/102. Augments, never
+   replaces emergency services. Cross-device responder positions need the backend (FIREBASE-SETUP).
+═══════════════════════════════════ */
+let respTarget=null, respRouteLayers=[];
+function toRad(d){return d*Math.PI/180;}
+function distMeters(aLat,aLng,bLat,bLng){
+  const R=6371000, dLat=toRad(bLat-aLat), dLng=toRad(bLng-aLng);
+  const s=Math.sin(dLat/2)**2+Math.cos(toRad(aLat))*Math.cos(toRad(bLat))*Math.sin(dLng/2)**2;
+  return 2*R*Math.atan2(Math.sqrt(s),Math.sqrt(1-s));
+}
+function fmtDistance(m){
+  const imp=(SS.settings&&SS.settings.units)==='imperial';
+  if(imp){const ft=m*3.28084; return ft<1000?Math.round(ft)+' ft':(m/1609.344).toFixed((m/1609.344)<5?2:1)+' mi';}
+  return m<1000?Math.round(m)+' m':(m/1000).toFixed((m/1000)<5?2:1)+' km';
+}
+/* Entry point — opt-in gated. by responders/guardians for active response. */
+function respondToSOS(lat,lng,label){
+  if(!(SS.settings&&SS.settings.respond)){ openRespondConsent(lat,lng,label); return; }
+  respTarget={lat:lat,lng:lng,label:label||''};
+  drawResponderRoute(); startGeoWatch();
+  const pill=document.getElementById('resp-pill'); if(pill)pill.classList.add('on');
+  updateResponderDistance();
+  const he=currentLang==='he';
+  toast(he?'ניווט מגיב/ה פעיל — מסלול חי. מיקומי מגיבים בין-מכשירי דורשים שרת (סימולציה).':'Responder nav active — live route. Cross-device responder positions need a backend (simulated).','amb');
+}
+function stopResponderNav(){
+  respTarget=null;
+  respRouteLayers.forEach(l=>{try{MAP.removeLayer(l);}catch(e){}}); respRouteLayers=[];
+  const pill=document.getElementById('resp-pill'); if(pill)pill.classList.remove('on');
+}
+/* Real shortest-path via OSRM (foot profile); bright glowing 3-layer polyline; straight-line fallback. */
+function drawResponderRoute(){
+  if(!MAP||!respTarget||userLat==null||userLng==null)return;
+  respRouteLayers.forEach(l=>{try{MAP.removeLayer(l);}catch(e){}}); respRouteLayers=[];
+  const draw=(latlngs)=>{
+    const glow=window.L.polyline(latlngs,{color:'#21E6FF',weight:15,opacity:.28,lineCap:'round',lineJoin:'round',className:'resp-glow',interactive:false}).addTo(MAP);
+    const mid=window.L.polyline(latlngs,{color:'#5CF0FF',weight:8,opacity:.55,lineCap:'round',lineJoin:'round',interactive:false}).addTo(MAP);
+    const core=window.L.polyline(latlngs,{color:'#EAFEFF',weight:3.5,opacity:.98,lineCap:'round',className:'resp-core',interactive:false}).addTo(MAP);
+    respRouteLayers=[glow,mid,core];
+    try{MAP.fitBounds(window.L.latLngBounds(latlngs).pad(0.28),{maxZoom:16});}catch(e){}
+  };
+  const url='https://router.project-osrm.org/route/v1/foot/'+userLng+','+userLat+';'+respTarget.lng+','+respTarget.lat+'?overview=full&geometries=geojson';
+  fetch(url).then(r=>r.json()).then(j=>{
+    if(j&&j.routes&&j.routes[0]&&j.routes[0].geometry){ draw(j.routes[0].geometry.coordinates.map(c=>[c[1],c[0]])); }
+    else draw([[userLat,userLng],[respTarget.lat,respTarget.lng]]);
+  }).catch(()=>draw([[userLat,userLng],[respTarget.lat,respTarget.lng]]));
+}
+function updateResponderDistance(){
+  if(!respTarget||userLat==null)return;
+  const m=distMeters(userLat,userLng,respTarget.lat,respTarget.lng), he=currentLang==='he';
+  const el=document.getElementById('resp-pill-txt');
+  if(el)el.textContent=(respTarget.label?respTarget.label+' · ':'')+(he?'מרחק ':'')+fmtDistance(m)+(he?'':' away');
+}
+/* First-time opt-in: safety disclaimer (modelled on opt-in bystander-responder programs). */
+function openRespondConsent(lat,lng,label){
+  respTarget={lat:lat,lng:lng,label:label||''}; // remembered for after consent
+  const ov=document.getElementById('resp-consent'); if(ov){ov.classList.add('on');ov.setAttribute('aria-hidden','false');}
+}
+function respondConsentAccept(){
+  if(!SS.settings)SS.settings={}; SS.settings.respond=true; saveStore();
+  const ov=document.getElementById('resp-consent'); if(ov){ov.classList.remove('on');ov.setAttribute('aria-hidden','true');}
+  if(respTarget)respondToSOS(respTarget.lat,respTarget.lng,respTarget.label);
+}
+function respondConsentDecline(){
+  respTarget=null;
+  const ov=document.getElementById('resp-consent'); if(ov){ov.classList.remove('on');ov.setAttribute('aria-hidden','true');}
+  const he=currentLang==='he';
+  toast(he?'אין בעיה — התרעה נשלחה. בחירום חייגו 100 / 101 / 102.':'No problem — the alert stands. In an emergency call 100 / 101 / 102.','');
+}
+/* Respond to the circle member whose SOS is active (the alert strip CTA). */
+function respondToAlertMember(){ const m=alertMemberId&&memberById(alertMemberId); if(m)respondToSOS(m.lat,m.lng,m.name); }
+function setUnits(u){ if(!SS.settings)SS.settings={}; SS.settings.units=u; saveStore(); reflectUnits(); if(respTarget)updateResponderDistance(); }
+function reflectUnits(){
+  const u=(SS.settings&&SS.settings.units)||'metric';
+  ['metric','imperial'].forEach(k=>{const b=document.getElementById('units-'+k); if(b)b.classList.toggle('on',k===u);});
+}
+function toggleRespond(el){ if(!SS.settings)SS.settings={}; SS.settings.respond=el.classList.toggle('on'); saveStore(); }
+function reflectRespondToggle(){ const t=document.getElementById('resp-tog'); if(t)t.classList.toggle('on',!!(SS.settings&&SS.settings.respond)); }
 
 /* ── FIND A FRIEND — picker + smooth fly-to with radar ping ── */
 function findFriendOpen(){
