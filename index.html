@@ -143,10 +143,14 @@
   <div class="hero">
     <div class="container">
       <div class="hero-content">
-        <h1>SH✡MER.<br>אזרחים מגנים על אזרחים.</h1>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+          <img src="SHOMER_logo_big.png" alt="SH✡MER" style="width: 64px; height: auto;">
+          <span style="font-size: 28px; font-weight: 700; color: var(--g4);">SH✡MER</span>
+        </div>
+        <h1 style="font-size: 32px;">אזרחים מגנים על אזרחים.</h1>
         <p class="tag">One tap. You're not alone.</p>
-        <p>אזעקה חזקה. מיקום מדויק. עזרה מהירה.</p>
-        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <p style="font-size: 15px;">אזעקה חזקה. מיקום מדויק. עזרה מהירה.</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 12px;">
           <a href="shomer.html" class="btn btn-primary">התקן עכשיו</a>
           <a href="#mockups" class="btn btn-ghost">ראה איך זה עובד</a>
         </div>
@@ -225,6 +229,13 @@
   </footer>
 
   <script>
+    // Unregister any old service workers from previous app version to prevent caching issues
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(regs => {
+        regs.forEach(reg => reg.unregister());
+      });
+    }
+
     // Simple header image carousel
     let currentSlide = 0;
     const track = document.getElementById('carousel-track');
