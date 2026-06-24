@@ -136,7 +136,8 @@
 .cam-bar .ic{width:18px;height:18px;color:var(--g3);}
 .cam-btn .ic{width:18px;height:18px;}
 .sr-ic .ic,.dms-iv .ic{width:20px;height:20px;color:var(--g3);}
-.dd-item .ic,.dd-ic .ic{width:19px;height:19px;color:var(--g3);}
+.dd-item .ic{width:19px;height:19px;color:var(--g3);}
+.dd-ic .ic{width:26px;height:26px;stroke-width:2.1;}
 .cta-gold .ic{width:18px;height:18px;}
 .row-btn .ic{width:20px;height:20px;color:var(--g3);}
 .lc-t .ic{width:16px;height:16px;}
@@ -284,7 +285,16 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 .ddr{display:flex;align-items:center;gap:12px;padding:13px 15px;font-size:13px;font-weight:500;color:var(--tx1);border-bottom:1px solid var(--b1);width:100%;text-align:right;transition:background .12s;cursor:pointer;}
 .ddr:last-child{border-bottom:none;}
 .ddr:hover{background:var(--n4);}
-.dd-ic{width:32px;height:32px;border-radius:var(--r8);background:var(--n4);border:1px solid var(--b1);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.dd-ic{width:34px;height:34px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.dd-ic.c-rep{color:#FF7A1A;}
+.dd-ic.c-guard{color:#16A06A;}
+.dd-ic.c-circ{color:#18C29C;}
+.dd-ic.c-prof{color:#4DA3FF;}
+.dd-ic.c-set{color:#A98BFF;}
+.ddr-em{background:linear-gradient(135deg,rgba(204,20,38,.95),rgba(150,16,30,.95));border-bottom:none;}
+.ddr-em:hover{background:linear-gradient(135deg,rgba(224,32,50,1),rgba(168,20,36,1));}
+.ddr-em .dd-ic{color:#fff;}
+.ddr-em span{color:#fff;font-weight:800;}
 .dd-sep{height:1px;background:var(--b2);margin:4px 0;}
 /* DMS badge in menu */
 .dms-badge{margin-right:auto;background:rgba(14,136,64,.15);color:#40C880;border:1px solid rgba(14,136,64,.3);border-radius:4px;padding:1px 7px;font-size:10px;font-weight:700;}
@@ -1216,22 +1226,22 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  <!-- DROPDOWN -->
  <nav id="dd" role="menu" aria-label="תפריט ניווט" hidden>
  <button class="ddr" onclick="navTo('rep');closeDD()" role="menuitem">
- <div class="dd-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2 2 0 0 0-3-3L5 17Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 7l3 3" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><span id="dd-rep">דיווח אירוע</span>
+ <div class="dd-ic c-rep" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2 2 0 0 0-3-3L5 17Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 7l3 3" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><span id="dd-rep">דיווח אירוע</span>
  </button>
  <button class="ddr" onclick="openCircles();closeDD()" role="menuitem">
- <div class="dd-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div><span id="dd-guard">חבר/י שומר/ת</span>
+ <div class="dd-ic c-guard" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div><span id="dd-guard">חבר/י שומר/ת</span>
  </button>
  <button class="ddr" onclick="openCircles();closeDD()" role="menuitem">
- <div class="dd-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16 5.2a3.2 3.2 0 0 1 0 6M17 13.5a5.5 5.5 0 0 1 3.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><span id="dd-circ">מעגלים</span>
+ <div class="dd-ic c-circ" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16 5.2a3.2 3.2 0 0 1 0 6M17 13.5a5.5 5.5 0 0 1 3.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><span id="dd-circ">מעגלים</span>
  </button>
  <div class="dd-sep"></div>
  <button class="ddr" onclick="op('sh-prof');closeDD()" role="menuitem">
- <div class="dd-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><span id="dd-prof">פרופיל</span>
+ <div class="dd-ic c-prof" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><span id="dd-prof">פרופיל</span>
  </button>
  <button class="ddr" onclick="op('sh-set');closeDD()" role="menuitem">
- <div class="dd-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2.5l1.3 2.3 2.6-.4.5 2.6 2.3 1.3-1 2.4 1 2.4-2.3 1.3-.5 2.6-2.6-.4L12 21.5l-1.3-2.3-2.6.4-.5-2.6L5.3 15.7l1-2.4-1-2.4 2.3-1.3.5-2.6 2.6.4Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div><span id="dd-set">הגדרות</span>
+ <div class="dd-ic c-set" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2.5l1.3 2.3 2.6-.4.5 2.6 2.3 1.3-1 2.4 1 2.4-2.3 1.3-.5 2.6-2.6-.4L12 21.5l-1.3-2.3-2.6.4-.5-2.6L5.3 15.7l1-2.4-1-2.4 2.3-1.3.5-2.6 2.6.4Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div><span id="dd-set">הגדרות</span>
  </button>
- <button class="ddr" onclick="op('sh-em');closeDD()" role="menuitem">
+ <button class="ddr ddr-em" onclick="op('sh-em');closeDD()" role="menuitem">
  <div class="dd-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h3.5l1.5 4-2 1.5a11 11 0 0 0 5 5l1.5-2 4 1.5V19a2 2 0 0 1-2.2 2A16 16 0 0 1 4 6.2 2 2 0 0 1 5 4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div><span id="dd-em">מספרי חירום</span>
  </button>
  </nav>
