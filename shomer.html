@@ -1614,7 +1614,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <!-- ═══ DEAD MAN'S SWITCH ═══ -->
  <div class="sheet" id="sh-dms" role="dialog" aria-modal="true" aria-labelledby="dms-ttl">
  <div class="sh-pill" aria-hidden="true"></div>
- <div class="sh-head"><span class="sh-ttl" id="dms-ttl">Dead Man's Switch</span><button class="sh-x" onclick="cl('sh-dms')" aria-label="סגור"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button></div>
+ <div class="sh-head"><span class="sh-ttl" id="dms-ttl" data-he="Dead Man's Switch" data-en="Dead Man's Switch" data-ar="مفتاح الأمان الميت">Dead Man's Switch</span><button class="sh-x" onclick="cl('sh-dms')" aria-label="סגור"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button></div>
  <div class="sh-body">
  <div style="background:var(--rb);border:1px solid var(--b4);border-radius:var(--r12);padding:14px;margin-bottom:16px;font-size:13px;color:var(--tx1);line-height:1.7" id="dms-intro-txt">
  <strong style="color:#FF7080">כיצד זה עובד:</strong> הפעל לפני הליכה לבד בלילה. כל X דקות תקבל שאלה "הכל בסדר?" — אם לא ענית תוך 60 שניות, המערכת שולחת SOS אוטומטי עם מיקומך האחרון.
@@ -1694,7 +1694,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 6a8 8 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div><div class="sr-nm" id="n-snd-nm">צלילי אירועים חיים</div><div class="sr-sb" id="n-snd-sb">צליל עדין כששומר/ת מצטרף/ת, באירוע חדש או בעדכון</div></div></div><div class="tog on" data-skey="snd_cues" onclick="this.classList.toggle('on');saveToggle(this);if(this.classList.contains('on'))playCue('join')" role="switch"></div></div>
  </div>
  <div class="set-cat"><div class="set-cat-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div><div class="set-cat-t" data-he="בטיחות" data-en="Safety features">בטיחות</div></div>
- <div class="set-grp"><div class="set-row" onclick="op('sh-dms');cl('sh-set')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="sr-nm">Dead Man's Switch</div></div><span style="color:var(--tx3);font-size:18px">›</span></div><div class="set-row" onclick="op('sh-alarm');cl('sh-set')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18v-5a5 5 0 0 1 10 0v5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><rect x="5" y="18" width="14" height="3" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3v2M4.5 7l1.5 1.3M19.5 7L18 8.3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div class="sr-nm" data-he="הגדרות אזעקה" data-en="Alarm settings">הגדרות אזעקה</div></div><span style="color:var(--tx3);font-size:18px">›</span></div></div>
+ <div class="set-grp"><div class="set-row" onclick="op('sh-dms');cl('sh-set')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="sr-nm" data-he="Dead Man's Switch" data-en="Dead Man's Switch" data-ar="مفتاح الأمان الميت">Dead Man's Switch</div></div><span style="color:var(--tx3);font-size:18px">›</span></div><div class="set-row" onclick="op('sh-alarm');cl('sh-set')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18v-5a5 5 0 0 1 10 0v5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><rect x="5" y="18" width="14" height="3" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3v2M4.5 7l1.5 1.3M19.5 7L18 8.3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div class="sr-nm" data-he="הגדרות אזעקה" data-en="Alarm settings">הגדרות אזעקה</div></div><span style="color:var(--tx3);font-size:18px">›</span></div></div>
  <div class="set-grp"><div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4 L17 18.5 L12 15.2 L7 18.5 Z" fill="currentColor"/></svg></div><div><div class="sr-nm" id="resp-tog-lbl" data-he="ניווט מגיב/ה (הצטרפות)" data-en="Responder navigation (opt-in)">ניווט מגיב/ה (הצטרפות)</div><div class="sr-sb" id="resp-tog-sub" data-he="הצג מסלול חי ומרחק כשמגיבים ל-SOS. מיועד למגיבים מאומתים ולשומרים — לא תחליף לחיוג 100/101/102." data-en="Show a live route + distance when responding to an SOS. For verified responders/guardians — not a replacement for 100/101/102.">הצג מסלול חי ומרחק כשמגיבים ל-SOS.</div></div></div><div class="tog" id="resp-tog" onclick="toggleRespond(this)" role="switch"></div></div></div>
  <div class="set-grp"><div class="set-row" onclick="openSetPin()" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><div><div class="sr-nm" data-he="קוד לביטול SOS (PIN)" data-en="SOS cancel code (PIN)">קוד לביטול SOS (PIN)</div><div class="sr-sb" data-he="נדרש לביטול SOS פעיל — לעולם לא טביעת אצבע." data-en="Required to cancel an active SOS — never a fingerprint.">נדרש לביטול SOS פעיל — לעולם לא טביעת אצבע.</div></div></div><span id="pin-set-state" style="font-size:12px;font-weight:700;color:var(--amb);white-space:nowrap">לא הוגדר</span></div></div>
  <div class="set-grp"><div class="set-row" onclick="op('sh-checkin')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="sr-nm" data-he="צ׳ק-אין הדדי (עם שומר/ת)" data-en="Mutual check-in (with a guardian)">צ׳ק-אין הדדי</div><div class="sr-sb" data-he="„הכל בסדר?” תקופתי — אם לא תאשר/י, השומר/ת מקבל/ה אזעקה." data-en="Periodic 'Are you OK?' — if you don't confirm, your guardian is alerted.">„הכל בסדר?” תקופתי.</div></div></div><span id="ci-set-state" style="font-size:12px;font-weight:700;color:var(--tx3);white-space:nowrap">כבוי</span></div></div>
@@ -1711,7 +1711,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="sec-cap mb12" id="sos-safety-cap">בטיחות SOS</div>
  <div class="sl-card">
  <div class="vol-row"><span class="vol-lbl" id="sos-cd-lbl">חלון ביטול לפני שידור</span><span class="vol-val" id="sos-cd-val">10s</span></div>
- <div class="sr-sb" id="sos-cd-sub" style="margin:-2px 0 10px;line-height:1.5">זמן לבטל אזעקת שווא לפני שה-SOS משודר. קצר יותר = למצבי סיכון גבוה.</div>
+ <div class="sr-sb" style="margin:-2px 0 10px;line-height:1.5" data-he="זמן לבטל אזעקת שווא לפני שה-SOS משודר. קצר יותר = למצבי סיכון גבוה." data-en="Time to cancel a false alarm before the SOS is broadcast. Shorter = for high-risk situations." data-ar="الوقت المتاح لإلغاء إنذار كاذب قبل بثّ نداء الاستغاثة. أقصر = لحالات الخطر العالي.">זמן לבטל אזעקת שווא לפני שה-SOS משודר. קצר יותר = למצבי סיכון גבוה.</div>
  <div class="dms-intervals" id="sos-cd-presets" role="group" aria-label="SOS cancel window">
  <div class="dms-iv" data-sec="5" onclick="setSosCountdown(this,5)" role="button" tabindex="0"><div class="dms-iv-n">5</div><div class="dms-iv-l">שניות</div></div>
  <div class="dms-iv" data-sec="7" onclick="setSosCountdown(this,7)" role="button" tabindex="0"><div class="dms-iv-n">7</div><div class="dms-iv-l">שניות</div></div>
@@ -1751,9 +1751,9 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="set-cat"><div class="set-cat-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2.5l1.3 2.3 2.6-.4.5 2.6 2.3 1.3-1 2.4 1 2.4-2.3 1.3-.5 2.6-2.6-.4L12 21.5l-1.3-2.3-2.6.4-.5-2.6L5.3 15.7l1-2.4-1-2.4 2.3-1.3.5-2.6 2.6.4Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div><div class="set-cat-t" data-he="חשבון ומידע" data-en="Account &amp; About">חשבון ומידע</div></div>
  <div class="sec-cap mb12" data-he="אודות שומר" data-en="About SHOMER">אודות שומר</div>
  <div class="set-grp surf-light">
- <div class="ai-row"><span class="ai-l">מוצר / Product</span><span class="ai-v" dir="ltr">SHOMER<span class="tm"></span> (שומר)</span></div>
- <div class="ai-row"><span class="ai-l">גרסה</span><span class="ai-v">1.0.0</span></div>
- <div class="ai-row"><span class="ai-l">מוטו</span><span class="ai-v">שׁוֹמֵר אָחִי אָנֹכִי</span></div>
+ <div class="ai-row"><span class="ai-l" data-he="מוצר" data-en="Product" data-ar="المنتج">מוצר / Product</span><span class="ai-v" dir="ltr">SHOMER<span class="tm"></span> (שומר)</span></div>
+ <div class="ai-row"><span class="ai-l" data-he="גרסה" data-en="Version" data-ar="الإصدار">גרסה</span><span class="ai-v">1.0.0</span></div>
+ <div class="ai-row"><span class="ai-l" data-he="מוטו" data-en="Motto" data-ar="الشعار">מוטו</span><span class="ai-v">שׁוֹמֵר אָחִי אָנֹכִי</span></div>
  </div>
  <div class="sec-cap mb12" style="margin-top:18px" id="set-legal-cap">בטיחות ומשפט</div>
  <div class="set-grp mb20">
@@ -2282,7 +2282,24 @@ const AR={
  '102 — Fire & Rescue':'102 — الإطفاء والإنقاذ'/*SAFETY*/,'Fire / rescue':'حريق / إنقاذ'/*SAFETY*/,
  '1201 — ZAKA':'1201 — زاكا'/*SAFETY*/,'Accidents & disasters':'حوادث وكوارث'/*SAFETY*/,'1202 — Shin Bet':'1202 — الشاباك'/*SAFETY*/,'Security incident':'حادث أمني'/*SAFETY*/,
  'SOS from the lock screen — no need to open the app':'استغاثة من شاشة القفل — دون فتح التطبيق'/*SAFETY*/,
- '<strong>iPhone:</strong> press the side button 3× → Emergency SOS.<br><strong>Android:</strong> press the power button 5× → Emergency SOS.<br><strong>SHOMER Shake:</strong> 5 hard shakes triggers an automatic SOS.<br>Set 100 as your phone\'s primary emergency contact.':'<strong>آيفون:</strong> اضغط الزر الجانبي 3 مرات ← استغاثة طارئة.<br><strong>أندرويد:</strong> اضغط زر التشغيل 5 مرات ← استغاثة طارئة.<br><strong>هزّة شومير:</strong> 5 هزّات قوية تُفعّل استغاثة تلقائية.<br>اجعل 100 جهة الطوارئ الأساسية في هاتفك.'/*SAFETY*/
+ '<strong>iPhone:</strong> press the side button 3× → Emergency SOS.<br><strong>Android:</strong> press the power button 5× → Emergency SOS.<br><strong>SHOMER Shake:</strong> 5 hard shakes triggers an automatic SOS.<br>Set 100 as your phone\'s primary emergency contact.':'<strong>آيفون:</strong> اضغط الزر الجانبي 3 مرات ← استغاثة طارئة.<br><strong>أندرويد:</strong> اضغط زر التشغيل 5 مرات ← استغاثة طارئة.<br><strong>هزّة شومير:</strong> 5 هزّات قوية تُفعّل استغاثة تلقائية.<br>اجعل 100 جهة الطوارئ الأساسية في هاتفك.'/*SAFETY*/,
+ // ── Settings long-tail (deep labels) ──
+ 'Dead Man\'s Switch':'مفتاح الأمان الميت',
+ 'Show a live route + distance when responding to an SOS. For verified responders/guardians — not a replacement for 100/101/102.':'أظهر مساراً مباشراً + المسافة عند الاستجابة لنداء استغاثة. للمستجيبين/الحُرّاس المُوثَّقين — وليس بديلاً عن 100/101/102.'/*SAFETY*/,
+ 'Required to cancel an active SOS — never a fingerprint.':'مطلوب لإلغاء نداء استغاثة نشط — وليس بصمة إصبع أبداً.'/*SAFETY*/,
+ 'Mutual check-in (with a guardian)':'تفقّد متبادل (مع حارس)','Periodic \'Are you OK?\' — if you don\'t confirm, your guardian is alerted.':'تفقّد دوري „هل أنت بخير؟" — إن لم تؤكّد، يُنبَّه حارسك.'/*SAFETY*/,
+ 'Enable Shake-to-SOS':'تفعيل الهزّ للاستغاثة','5 hard shakes → SOS':'5 هزّات قوية ← استغاثة','Shake sensitivity':'حساسية الهزّ','Medium':'متوسطة','Simulate shake (test)':'محاكاة هزّة (اختبار)',
+ 'Press & hold 2s — prevents pocket-dials':'اضغط مع الاستمرار ثانيتين — يمنع الاتصال العَرَضي من الجيب',
+ 'Background location':'موقع الخلفية','Needed for SOS & DMS — without it your location can\'t be sent in an emergency':'ضروري لنداء الاستغاثة ومفتاح الأمان — بدونه لا يمكن إرسال موقعك في حالة الطوارئ'/*SAFETY*/,
+ 'Show name on reports':'إظهار الاسم في البلاغات','Off = your reports appear anonymously':'إيقاف = تظهر بلاغاتك دون اسم',
+ 'Emergency contacts':'جهات اتصال الطوارئ','Primary':'أساسي','Secondary':'ثانوي','+ Connect a SHOMER':'+ ربط حارس','Language':'اللغة','Terms of Service':'شروط الخدمة','Terms':'الشروط','Disclaimer':'إخلاء المسؤولية',
+ 'Time to cancel a false alarm before the SOS is broadcast. Shorter = for high-risk situations.':'الوقت المتاح لإلغاء إنذار كاذب قبل بثّ نداء الاستغاثة. أقصر = لحالات الخطر العالي.'/*SAFETY*/,
+ 'Cancel window before broadcast':'مهلة الإلغاء قبل البثّ',
+ 'Clears profile, reports, SOS history & settings — returns to onboarding.':'يمسح الملف الشخصي والبلاغات وسجل الاستغاثة والإعدادات — ويعود إلى الإعداد الأولي.',
+ 'City markers are an':'علامات المدن هي',' aggregate statistical overview':' نظرة إحصائية إجمالية','aggregate statistical overview':'نظرة إحصائية إجمالية',
+ 'About SHOMER':'حول شومير','Data & sources':'البيانات والمصادر',
+ // ── Profile extras ──
+ 'Points':'نقاط','Guardian level':'مستوى الحارس'
 };
 /* ── State ── */
 let currentLang='he', L=LANGS.he;
@@ -2918,7 +2935,7 @@ function applyTranslations(){
  // Anon
  setText('anon-lbl',T('anon'));setText('anon-sub',T('anon_sub'));
  // New controls (bilingual inline — fall back to he/en for all locales)
- const he=currentLang==='he';
+ const he=currentLang==='he', ar=currentLang==='ar';
  setText('shake-set-lbl',he?'Shake-to-SOS':'Shake-to-SOS');
  setText('shake-tog-lbl',he?'הפעל Shake-to-SOS':'Enable Shake-to-SOS');
  setText('shake-tog-sub',he?'5 ניעורים חזקים → SOS':'5 hard shakes → SOS');
@@ -2950,6 +2967,7 @@ function applyTranslations(){
  setText('datasrc-cap',he?'נתונים ומקורות':'Data & sources');
  {const dt=document.getElementById('datasrc-txt');if(dt)dt.innerHTML=he
  ?'סמני הערים הם <strong style="color:var(--g3)">סקירה סטטיסטית מצרפית</strong>, לא אירועים ספציפיים. פינים אישיים מגיעים רק מדיווחי משתמשים ומ-SOS חי.<br><span style="color:var(--tx3)">מקורות: הלמ"ס · משטרת ישראל (data.gov.il) · מרכז טאוב.</span>'
+ :ar?'علامات المدن هي <strong style="color:var(--g3)">نظرة إحصائية إجمالية</strong>، وليست حوادث محددة. تأتي الدبابيس الشخصية فقط من بلاغات المستخدمين ونداءات الاستغاثة المباشرة.<br><span style="color:var(--tx3)">المصادر: دائرة الإحصاء المركزية الإسرائيلية · الشرطة الإسرائيلية (data.gov.il) · مركز طاوب.</span>'
  :'City markers are an <strong style="color:var(--g3)">aggregate statistical overview</strong>, not specific incidents. Personal pins come only from user reports and live SOS.<br><span style="color:var(--tx3)">Sources: Israel CBS · Israel Police (data.gov.il) · Taub Center.</span>';}
  setText('myrep-cap',he?'הדיווחים שלי':'My reports');
  setText('soshist-cap',he?'היסטוריית SOS':'SOS history');
@@ -5167,11 +5185,28 @@ function gdApplyI18n(){
  app, while staying 100% ACCURATE about what this build does. We never claim
  it contacts authorities or runs always-on/background — because it doesn't.
 ═══════════════════════════════════════════════════ */
-function legalUpdated(){ return currentLang==='he'?'עודכן: 19 ביוני 2026':'Updated: 19 June 2026'; }
-function legalDraftBox(){ if(currentLang==='ar'){ return '<div class="legal-draft" dir="rtl">النص القانوني الكامل متوفر حالياً بالعبرية والإنجليزية؛ الترجمة العربية الرسمية قيد المراجعة القانونية. <strong>للطوارئ اتصل بـ 100 (الشرطة) / 101 (الإسعاف) / 102 (الإطفاء).</strong></div>'; } return ''; }
+function legalUpdated(){ return currentLang==='he'?'עודכן: 19 ביוני 2026':currentLang==='ar'?'آخر تحديث: 19 يونيو 2026':'Updated: 19 June 2026'; }
+function legalDraftBox(){ return ''; }
 
 /* Emergency disclaimer — the single most important compliance text. */
-function disclaimerHTML(){ const he=currentLang==='he';
+function disclaimerHTML(){ const he=currentLang==='he', ar=currentLang==='ar';
+ if(ar) return `
+ <p><strong>شومير أداة للسلامة الشخصية ومشاركة الموقع — وليس بديلاً عن خدمات الطوارئ.</strong></p>
+ <p>في حالة طوارئ حقيقية، اتصل بخدمات الطوارئ فوراً:</p>
+ <ul>
+ <li><strong>100</strong> — الشرطة (إسرائيل)</li>
+ <li><strong>101</strong> — نجمة داوود الحمراء (طوارئ طبية / إسعاف)</li>
+ <li><strong>102</strong> — الإطفاء والإنقاذ</li>
+ </ul>
+ <h4>ماذا يفعل شومير — وماذا لا يفعل</h4>
+ <ul>
+ <li> يُطلق إنذاراً صوتياً على جهازك، ويعرض موقعك على خريطتك، ويتيح لك مشاركة موقعك المباشر مع الحُرّاس الذين تربطهم.</li>
+ <li> <strong>لا يتصل بالشرطة / الإسعاف / الإطفاء نيابةً عنك</strong> ولا يُبلّغ السلطات تلقائياً.</li>
+ <li> لا يضمن أن يرى أحدٌ نداء استغاثتك أو يستجيب له أو يصل إليك.</li>
+ <li> التنبيهات في الخلفية وعلى الشاشة المقفلة محدودة في نسخة الويب — أبقِ التطبيق مفتوحاً للحصول على حماية كاملة.</li>
+ </ul>
+ <p>الاعتماد على التطبيق يقع على مسؤوليتك وحدك. استخدمه كأداة مكمّلة — وليس بديلاً أبداً — لخدمات الطوارئ الرسمية.</p>
+ <p class="legal-meta">${legalUpdated()}</p>`;
  return he?`
  <p><strong>שומר הוא כלי לבטיחות אישית ולשיתוף מיקום — ולא תחליף לשירותי חירום.</strong></p>
  <p>במצב חירום אמיתי, התקשרו מיד לשירותי החירום:</p>
@@ -5210,6 +5245,26 @@ function disclaimerHTML(){ const he=currentLang==='he';
 
 /* Terms of Service — plain language. */
 function tosHTML(){ const he=currentLang==='he';
+ if(currentLang==='ar') return legalDraftBox()+`
+ <h4>1. ما هو شومير</h4>
+ <p>شومير تطبيق للسلامة الشخصية ولمشاركة الموقع بالموافقة. هو <strong>ليس خدمة طوارئ</strong> ولا يحلّ محلّ الشرطة أو الإسعاف أو الإطفاء. في حالة الطوارئ اتصل بـ 100 / 101 / 102.</p>
+ <h4>2. لا ضمان للتوفّر أو الاستجابة</h4>
+ <p>تُقدَّم الخدمة „كما هي" (AS-IS). لا نضمن أن يكون التطبيق متوفراً أو دقيقاً، ولا أن يصل أي تنبيه إلى أحد، ولا أن يستجيب أحد أو يصل. الاستخدام على مسؤوليتك.</p>
+ <h4>3. الاستخدام المقبول</h4>
+ <ul>
+ <li>استخدم نداء الاستغاثة لحالات السلامة الحقيقية فقط؛ لا تُطلق إنذارات كاذبة متعمَّدة.</li>
+ <li>لا تُشارك موقع شخص آخر دون موافقته.</li>
+ <li>التزم بالقانون؛ أنت مسؤول عن المحتوى الذي تُبلّغ عنه.</li>
+ </ul>
+ <h4>4. مشاركة الموقع بالموافقة</h4>
+ <p>مشاركة الموقع اختيارية (opt-in). أنت تتحكّم بمن يراك ويمكنك الإيقاف في أي لحظة (وضع التخفّي، فصل حارس، أو إعادة ضبط بياناتك).</p>
+ <h4>5. توفّر الميزات</h4>
+ <p>بعض الميزات — التنبيهات في الخلفية وعلى الشاشة المقفلة والتشفير من الطرف إلى الطرف — محدودة في نسخة الويب. للحصول على الحماية الكاملة، أبقِ التطبيق مفتوحاً.</p>
+ <h4>6. تحديد المسؤولية</h4>
+ <p>إلى الحدّ الذي يسمح به القانون، لا تتحمّل 3Shamrocks Studio المسؤولية عن أي ضرر ناتج عن استخدام التطبيق أو الاعتماد عليه، بما في ذلك أيّ إخفاق في تلقّي المساعدة.</p>
+ <h4>7. التغييرات والقانون الحاكم</h4>
+ <p>قد نُحدّث هذه الشروط؛ ويُعدّ استمرار الاستخدام موافقةً عليها. تخضع لقوانين دولة إسرائيل.</p>
+ <p class="legal-meta">${legalUpdated()}</p>`;
  return legalDraftBox()+(he?`
  <h4>1. מה שומר הוא</h4>
  <p>שומר הוא אפליקציית בטיחות אישית ושיתוף מיקום בהסכמה. הוא <strong>אינו שירות חירום</strong> ואינו מחליף משטרה, מד״א או כבאות. בחירום חייגו 100 / 101 / 102.</p>
@@ -5254,6 +5309,32 @@ function tosHTML(){ const he=currentLang==='he';
 
 /* Privacy Policy — what's collected, consent, storage, deletion, no selling. */
 function privacyHTML(){ const he=currentLang==='he';
+ if(currentLang==='ar') return legalDraftBox()+`
+ <h4>ما الذي نجمعه</h4>
+ <ul>
+ <li><strong>الاسم</strong> (اختياري؛ القيمة الافتراضية كنية عشوائية) و<strong>الهاتف</strong> (اختياري).</li>
+ <li><strong>موقع الجهاز</strong> — فقط بعد منحك الإذن في المتصفّح.</li>
+ <li><strong>البلاغات والصور</strong> التي تُنشئها، والتفضيلات (الإنذار، النطاق، اللغة).</li>
+ </ul>
+ <h4>كيف يُستخدم الموقع</h4>
+ <p>يُستخدم الموقع لإظهارك على خريطتك الخاصة، ولإرفاقه بنداء استغاثة/بلاغ ترسله، ولمشاركة موقعك المباشر مع الحُرّاس <strong>الذين تربطهم بموافقتك</strong>. مشاركة الموقع اختيارية.</p>
+ <h4>أين تُخزَّن البيانات</h4>
+ <p><strong>معظم البيانات تُخزَّن على جهازك</strong> (تخزين محلي في المتصفّح). لإظهار الحُرّاس القريبين وبثّ نداء استغاثة، يُزامَن موقع تقريبي فقط عبر خدمة آنية مؤمَّنة. ولا تغادر بقية البيانات جهازك، باستثناء رابط دعوة تختار مشاركته.</p>
+ <h4>المشاركة والبيع</h4>
+ <p><strong>لا نبيع بياناتك ولا نشاركها مع أطراف ثالثة.</strong> لا توجد إعلانات ولا أدوات تتبّع/تحليلات.</p>
+ <h4>أدوات تحكّمك</h4>
+ <ul>
+ <li><strong>إيقاف المشاركة</strong> — وضع التخفّي، أو إيقاف „شارك موقعي"، أو فصل حارس.</li>
+ <li><strong>حذف كل شيء</strong> — الإعدادات ← إعادة ضبط التطبيق.</li>
+ <li>إلغاء إذن الموقع عبر متصفّحك في أي وقت.</li>
+ </ul>
+ <h4>القيود</h4>
+ <p>التشفير من الطرف إلى الطرف والتنبيهات في الخلفية/الشاشة المقفلة محدودة في نسخة الويب.</p>
+ <h4>القاصرون</h4>
+ <p>التطبيق غير موجَّه للقاصرين دون سنّ 16 دون موافقة أحد الوالدين/الوصيّ.</p>
+ <h4>التواصل</h4>
+ <p>للأسئلة المتعلقة بالخصوصية، تواصل معنا عبر 3Shamrocks Studio.</p>
+ <p class="legal-meta">${legalUpdated()}</p>`;
  return legalDraftBox()+(he?`
  <h4>איזה מידע נאסף</h4>
  <ul>
@@ -5311,6 +5392,8 @@ function privacyHTML(){ const he=currentLang==='he';
 function renderLegal(){
  const d=document.getElementById('disc-body'); if(d)d.innerHTML=disclaimerHTML()+(currentLang==='he'
  ?`<div class="disc-call"><button class="pr" onclick="callNum('100')"> 100 משטרה</button><button onclick="callNum('101')"> 101 מד״א</button><button onclick="callNum('102')"> 102 כבאות</button></div>`
+ :currentLang==='ar'
+ ?`<div class="disc-call"><button class="pr" onclick="callNum('100')"> 100 شرطة</button><button onclick="callNum('101')"> 101 إسعاف</button><button onclick="callNum('102')"> 102 إطفاء</button></div>`
  :`<div class="disc-call"><button class="pr" onclick="callNum('100')"> 100 Police</button><button onclick="callNum('101')"> 101 MDA</button><button onclick="callNum('102')"> 102 Fire</button></div>`);
  const t=document.getElementById('tos-body'); if(t)t.innerHTML=tosHTML();
  const p=document.getElementById('priv-body'); if(p)p.innerHTML=privacyHTML();
