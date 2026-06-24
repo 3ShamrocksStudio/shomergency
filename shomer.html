@@ -333,6 +333,7 @@ body.sheet-open .fb-status{opacity:0;pointer-events:none;}
 .diag-k{color:var(--tx2);}
 .diag-v{color:var(--tx0);font-weight:700;direction:ltr;text-align:left;font-variant-numeric:tabular-nums;}
 .diag-push-btn{margin-top:10px;width:100%;padding:10px;border:none;border-radius:10px;background:linear-gradient(135deg,var(--g2),var(--g4));color:var(--n0);font-size:13px;font-weight:800;cursor:pointer;}
+.diag-refresh-btn{margin-top:7px;width:100%;padding:9px;border:1px solid var(--b3);border-radius:10px;background:var(--n3);color:var(--amb);font-size:12.5px;font-weight:700;cursor:pointer;}
 .diag-close{margin-top:7px;width:100%;padding:8px;border:1px solid var(--b2);border-radius:10px;background:var(--n3);color:var(--tx2);font-size:12.5px;font-weight:600;cursor:pointer;}
 body.sheet-open .diag-panel{display:none;}
 .sos-strip{position:absolute;top:calc(var(--hdr-top,0px) + var(--hdr));left:0;right:0;z-index:590;background:var(--r3);padding:8px 14px 10px;display:none;flex-direction:column;gap:8px;animation:ssf 1.1s ease-in-out infinite;}
@@ -450,8 +451,12 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
 .sos-sub{font-size:10px;font-weight:800;letter-spacing:.6px;color:#FF9aa3;text-transform:uppercase;}
 
 /* ══════════ SHEETS ══════════ */
-/* z-index 620 keeps an open sheet ABOVE the bottom nav/SOS (z-600) so the SOS
- button can never overlap or cover sheet content. */
+/* SAFETY: the .nav (z-650) holds the floating SOS button and sits ABOVE a sheet
+ (z-620). To stop a tap meant for sheet content (e.g. the Sign-out button at the
+ bottom of Settings) from ever landing on the SOS dock, an open sheet sets
+ `body.sheet-open .nav{opacity:0;pointer-events:none}` (below) AND onSosTap/
+ sosHoldStart bail when `sheet-open` is set. Belt-and-suspenders — a wrong SOS is
+ dangerous. */
 .sheet{position:absolute;left:0;right:0;bottom:0;z-index:620;background:var(--n2);border-radius:22px 22px 0 0;border-top:1px solid var(--b3);box-shadow:0 -10px 60px rgba(0,0,0,.8);transform:translateY(100%);transition:transform .35s cubic-bezier(.25,1,.35,1);max-height:calc(100vh - var(--hdr-top,0px) - var(--hdr) - 14px);display:flex;flex-direction:column;overflow:hidden;}
 .sheet.open{transform:translateY(0);}
 .sheet::before{content:'';position:absolute;top:0;left:25%;right:25%;height:1px;background:linear-gradient(90deg,transparent,var(--gd),transparent);}
@@ -1307,7 +1312,9 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="diag-row"><span class="diag-k" data-he="שומרים שנראו" data-en="SHOMERs seen" data-ar="حُرّاس ظهروا">שומרים שנראו</span><span class="diag-v" id="diag-seen">0</span></div>
  <div class="diag-row"><span class="diag-k" data-he="SOS אחרון שהתקבל" data-en="Last SOS received" data-ar="آخر نداء استغاثة">SOS אחרון שהתקבל</span><span class="diag-v" id="diag-lastsos">אין</span></div>
  <div class="diag-row"><span class="diag-k" data-he="דחיפת רקע" data-en="Background push" data-ar="إشعارات الخلفية">דחיפת רקע</span><span class="diag-v" id="diag-push">—</span></div>
+ <div class="diag-row"><span class="diag-k" data-he="גרסה (אפליקציה · SW)" data-en="Build (app · SW)" data-ar="الإصدار (تطبيق · SW)">גרסה (אפליקציה · SW)</span><span class="diag-v" id="diag-build">—</span></div>
  <button class="diag-push-btn" id="diag-push-btn" onclick="enablePush()" data-he="הפעל התראות רקע" data-en="Enable background alerts" data-ar="تفعيل تنبيهات الخلفية">הפעל התראות רקע</button>
+ <button class="diag-refresh-btn" id="diag-refresh-btn" onclick="forceFreshReload()" data-he="טען מחדש גרסה עדכנית" data-en="Force-update to latest" data-ar="فرض التحديث لأحدث إصدار">טען מחדש גרסה עדכנית</button>
  <button class="diag-close" onclick="toggleDiagPanel(false)" data-he="סגור" data-en="Close" data-ar="إغلاق">סגור</button>
  </div>
 
@@ -1775,7 +1782,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <button style="width:100%;padding:14px;background:var(--rb);border:none;font-size:14px;font-weight:800;color:#FF7080;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;" onclick="resetApp()" id="reset-btn"><span id="reset-btn-lbl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-.6 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 4v5h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> <span data-he="איפוס האפליקציה" data-en="Reset app">איפוס האפליקציה</span></span></button>
  </div>
  <div class="sr-sb" id="reset-hint" style="margin:-10px 2px 16px;line-height:1.6">מוחק פרופיל, דיווחים, היסטוריית SOS והגדרות — וחוזר להרשמה.</div>
- <button style="width:100%;padding:13px;border:1px solid var(--b1);border-radius:var(--r12);background:var(--n3);font-size:13px;font-weight:600;color:#FF7080;margin-top:8px;cursor:pointer;" onclick="toast(currentLang==='he'?'יציאה בוצעה':'Signed out','red')" data-he="יציאה מהחשבון" data-en="Sign out">יציאה מהחשבון</button>
+ <button style="width:100%;padding:13px;border:1px solid var(--b1);border-radius:var(--r12);background:var(--n3);font-size:13px;font-weight:600;color:#FF7080;margin-top:8px;cursor:pointer;" onclick="logoutAccount()" id="logout-btn" data-he="יציאה מהחשבון" data-en="Sign out" data-ar="تسجيل الخروج">יציאה מהחשבון</button>
  <div class="legal-links" id="set-legal-links">
  <button onclick="openLegal('tos')" id="set-ll-tos">תנאי שימוש</button><span class="sep">·</span>
  <button onclick="openLegal('privacy')" id="set-ll-priv">מדיניות פרטיות</button><span class="sep">·</span>
@@ -2583,6 +2590,19 @@ function resetApp(){
  :'Reset ALL data (profile, reports, SOS history, settings) and restart from onboarding?';
  if(!window.confirm(msg))return;
  try{localStorage.removeItem(SKEY);}catch(e){}
+ location.reload();
+}
+/* Sign out — ends the session and returns to onboarding. This button must NEVER
+   touch the SOS flow. We sign out of Firebase anonymous auth, drop presence, and
+   clear the local profile so the next open starts clean. */
+function logoutAccount(){
+ const he=currentLang==='he', ar=currentLang==='ar';
+ const msg=he?'לצאת מהחשבון ולחזור למסך הפתיחה?':ar?'تسجيل الخروج والعودة لشاشة البداية؟':'Sign out and return to the start screen?';
+ if(!window.confirm(msg))return;
+ // Best-effort teardown — none of this may throw or fall through to SOS.
+ try{ if(FB&&FB.ready&&FB.uid&&FB.db){ FB.db.ref('presence/'+FB.uid).remove(); } }catch(e){}
+ try{ if(window.firebase&&window.firebase.apps&&window.firebase.apps.length){ window.firebase.auth().signOut(); } }catch(e){}
+ try{ localStorage.removeItem(SKEY); }catch(e){}
  location.reload();
 }
 
@@ -3835,6 +3855,10 @@ function resolveAs(kind){
 /* ── SOS button interaction: tap vs. hold-to-arm (anti pocket-dial) ── */
 const SOS_HOLD_MS=2000;
 function onSosTap(){
+ // SAFETY: never let a tap fire SOS while a bottom-sheet/modal is open. The SOS
+ // dock floats over the map; if any overlay (settings, profile, legal) is open,
+ // a tap landing on the dock area must be ignored — a wrong SOS is dangerous.
+ if(document.body.classList.contains('sheet-open')){ return; }
  // A hold that already fired consumes the trailing click.
  if(sosHoldConsumed){sosHoldConsumed=false;return;}
  if(sosPhase==='countdown'){cancelCountdown();return;}
@@ -3847,6 +3871,8 @@ function onSosTap(){
  beginSOS('manual');
 }
 function sosHoldStart(){
+ // SAFETY: same guard as onSosTap — no hold-to-arm while an overlay is open.
+ if(document.body.classList.contains('sheet-open')){ return; }
  if(!SS.sos.holdToArm||sosPhase!=='idle')return;
  const ring=document.getElementById('sos-hold-ring');
  const t0=Date.now();
@@ -5561,7 +5587,11 @@ try{ hydrateIcons(document); }catch(e){}
    cross-DEVICE SOS events + type fan-out. Needs the deployed auth-scoped rules
    (database.rules.json). Fully-closed push + SMS verification need Blaze (flagged).
 ═══════════════════════════════════════════════════════════════════════ */
-var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,
+/* Loaded-build version — shown in the diagnostic panel so a phone can prove
+   whether it's on the latest build or a STALE cached one. Keep in lock-step
+   with sw.js SW_VERSION on every deploy. */
+var APP_VER='v44';
+var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
 function fbLog(){ try{ console.log.apply(console,['[SHOMER/FB]'].concat([].slice.call(arguments))); }catch(e){} }
@@ -5629,6 +5659,11 @@ function updateDiagPanel(){
   var ps=FB.pushState||fbPushState(); var pe=document.getElementById('diag-push');
   if(pe){ var pmap={granted:'on ✓','default':'off',denied:'denied','install-required':'add to home screen','unsupported':'unsupported'}; pe.textContent=pmap[ps]||ps; pe.style.color=(ps==='granted')?'var(--grn)':'var(--amb)'; }
   var pb=document.getElementById('diag-push-btn'); if(pb)pb.style.display=(ps==='granted'||ps==='unsupported')?'none':'block';
+  // BUILD — app (loaded HTML) vs SW (controlling cache). Mismatch or an old number
+  // tells Dave at a glance that the phone is running a STALE cached build.
+  var bd=document.getElementById('diag-build');
+  if(bd){ var sw=FB.swVer||'?'; var stale=(sw!=='?'&&sw!=='no-controller'&&sw!==APP_VER);
+    bd.textContent='app '+APP_VER+' · SW '+sw; bd.style.color=stale?'var(--amb)':(sw===APP_VER?'var(--grn)':'var(--tx2)'); }
 }
 function explainStatus(){
   var he=currentLang==='he';
@@ -5896,7 +5931,35 @@ function fbAlertPairedSos(){
 /* ═══════════════════════════════════
  SERVICE WORKER + PWA INSTALL
 ═══════════════════════════════════ */
-if('serviceWorker' in navigator){
+/* Ask the controlling SW its version so the diag 'Build' row can flag a stale
+   cached build (app number ≠ SW number, or an old SW number). */
+function querySwVersion(){
+ try{
+ if(!('serviceWorker' in navigator)||!navigator.serviceWorker.controller){ FB.swVer='no-controller'; try{updateDiagPanel();}catch(e){} return; }
+ var ch=new MessageChannel();
+ ch.port1.onmessage=function(ev){ FB.swVer=ev.data||'?'; fbLog('controlling SW version =', FB.swVer, '· app =', APP_VER); try{updateDiagPanel();}catch(e){} };
+ navigator.serviceWorker.controller.postMessage('version',[ch.port2]);
+ }catch(e){ FB.swVer='err'; }
+}
+/* Guaranteed escape from a stale cached build: drop EVERY SW + cache on this
+   origin, then reload a clean URL so a fresh sw.js + shomer.html come straight
+   from the network. Bound to the diag panel button AND triggered automatically
+   when the URL is opened with ?fresh / ?nosw (Dave can just add that in a browser). */
+function forceFreshReload(){
+ try{ toast(currentLang==='he'?'מאחזר גרסה עדכנית…':currentLang==='ar'?'جارٍ جلب أحدث إصدار…':'Fetching the latest build…',''); }catch(e){}
+ var clean=location.origin+location.pathname; // no query → no reload loop with the ?fresh handler
+ var go=function(){ location.replace(clean); };
+ if(!('serviceWorker' in navigator)){ go(); return; }
+ navigator.serviceWorker.getRegistrations().then(function(rs){ return Promise.all(rs.map(function(r){return r.unregister();})); })
+ .catch(function(){}).then(function(){ if(window.caches&&caches.keys) return caches.keys().then(function(ks){ return Promise.all(ks.map(function(k){return caches.delete(k);})); }); })
+ .catch(function(){}).then(go, go);
+}
+var _swFresh=/[?&](nosw|fresh)\b/i.test(location.search);
+if(_swFresh && 'serviceWorker' in navigator){
+ // User opened the cache-buster URL — nuke SW + caches and bounce to a clean URL.
+ forceFreshReload();
+}
+else if('serviceWorker' in navigator){
  // Self-heal: unregister any service worker on this shared github.io origin
  // that isn't SHOMER's own (e.g. left behind by a sibling org project), then
  // register ours. SHOMER's scope is this folder, so once registered it wins
@@ -5907,6 +5970,7 @@ if('serviceWorker' in navigator){
  const hadController=!!navigator.serviceWorker.controller;
  let reloadedForUpdate=false;
  navigator.serviceWorker.addEventListener('controllerchange',()=>{
+ querySwVersion();
  if(reloadedForUpdate||!hadController)return;
  reloadedForUpdate=true; location.reload();
  });
@@ -5914,6 +5978,13 @@ if('serviceWorker' in navigator){
  regs.forEach(r=>{ if(r.scope.indexOf(SHOMER_SCOPE)!==0) r.unregister(); });
  }).catch(()=>{}).then(()=>{
  navigator.serviceWorker.register('sw.js').then(reg=>{
+ // Force an update check now, on focus/visibility, and every 30 min — so a new
+ // deploy is picked up promptly instead of on the browser's own slow cadence.
+ const checkUpdate=()=>{ try{reg.update();}catch(e){} };
+ checkUpdate();
+ document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible')checkUpdate(); });
+ window.addEventListener('focus',checkUpdate);
+ setInterval(checkUpdate, 30*60*1000);
  reg.addEventListener('updatefound',()=>{
  const nw=reg.installing; if(!nw)return;
  nw.addEventListener('statechange',()=>{
@@ -5923,7 +5994,11 @@ if('serviceWorker' in navigator){
  });
  }).catch(()=>{});
  });
+ // Report which SW controls us right now, and again once fully ready.
+ querySwVersion();
+ navigator.serviceWorker.ready.then(querySwVersion).catch(()=>{});
 }
+else { FB.swVer='no-sw-support'; }
 let deferredPrompt=null;
 window.addEventListener('beforeinstallprompt',e=>{
  e.preventDefault();deferredPrompt=e;

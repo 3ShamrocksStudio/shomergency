@@ -8,7 +8,8 @@
 // (a) uses network-first for navigations so a stale shell can never trap the
 // user, and (b) deletes every cache it does not own on activate.
 
-const CACHE_NAME = 'shomer-v43-cache';
+const CACHE_NAME = 'shomer-v44-cache';
+const SW_VERSION = 'v44';
 const urlsToCache = [
   './',
   'index.html',
@@ -77,9 +78,14 @@ self.addEventListener('fetch', event => {
   );
 });
 
-// Allow the page to tell the SW to activate immediately after an update.
+// Allow the page to tell the SW to activate immediately after an update,
+// and to ASK which version is actually controlling the page (so the diagnostic
+// panel can show "are we on the latest build, or a stale cached SW?").
 self.addEventListener('message', event => {
   if (event.data === 'skipWaiting') self.skipWaiting();
+  if (event.data === 'version' && event.ports && event.ports[0]) {
+    event.ports[0].postMessage(SW_VERSION);
+  }
 });
 
 // Push notification handler (for SOS / emergency alerts)
