@@ -11,7 +11,7 @@
 <meta http-equiv="X-Frame-Options" content="DENY">
 <meta http-equiv="Referrer-Policy" content="no-referrer">
 <!-- CSP: no eval. Allows Leaflet (cdnjs) + OpenStreetMap tiles at runtime; everything else self-hosted. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://cdnjs.cloudflare.com https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com; connect-src 'self' https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://*.googleapis.com https://fcmregistrations.googleapis.com https://firebaseinstallations.googleapis.com https://router.project-osrm.org; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://www.gstatic.com; manifest-src 'self'; worker-src 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://cdnjs.cloudflare.com https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com; connect-src 'self' https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://*.googleapis.com https://fcmregistrations.googleapis.com https://firebaseinstallations.googleapis.com https://router.project-osrm.org https://*.firebaseio.com wss://*.firebaseio.com https://shomergency-default-rtdb.firebaseio.com; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://www.gstatic.com; manifest-src 'self'; worker-src 'self';">
 <title>SHOMER · שומר — Citizens Protecting Citizens</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" href="logo-192.png">
@@ -23,16 +23,22 @@
 <!-- Leaflet — real interactive map (loaded by the browser at runtime, CSP-pinned to cdnjs) -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<!-- Firebase Cloud Messaging config (real cross-device SOS push). DORMANT until filled in.
- Replace null with Dave's Firebase WEB config + VAPID key. NEVER paste a server/admin key.
- Step-by-step: see FIREBASE-SETUP.md. Until configured, the app runs exactly as today. -->
+<!-- Firebase (Spark plan): Realtime Database + Auth + FCM. Web apiKey/VAPID are client-public
+ by design. RTDB reads/writes need the deployed auth-scoped rules (database.rules.json). -->
 <script>
- window.SHOMER_FCM = null;
- /* window.SHOMER_FCM = {
- apiKey: "…", authDomain: "shomer-xxxx.firebaseapp.com",
- projectId: "shomer-xxxx", messagingSenderId: "…", appId: "…",
- vapidKey: "…" // Cloud Messaging → Web Push certificates → key pair
- }; */
+ window.SHOMER_FB = {
+   apiKey: 'AIzaSyAfevYysNLWMtXluY5lZSM_VY0eyDwZ6KQ',
+   authDomain: 'shomergency.firebaseapp.com',
+   databaseURL: 'https://shomergency-default-rtdb.firebaseio.com',
+   projectId: 'shomergency',
+   storageBucket: 'shomergency.firebasestorage.app',
+   messagingSenderId: '745767303099',
+   appId: '1:745767303099:web:6c9605fbba940430b7769e',
+   measurementId: 'G-DE5NM1H0P6'
+ };
+ window.SHOMER_VAPID = 'BP2EPokgerOWyvuZyE2zQj-l4xfkQ1Yu1C-omNOmwgjjtOoIZQuiQzOWW0CZ4VY5OJq-8ZBWWIhi2GZYh1Lqugc';
+ // Back-compat for the earlier gated FCM client (initFCM reads window.SHOMER_FCM):
+ window.SHOMER_FCM = { apiKey: window.SHOMER_FB.apiKey, authDomain: window.SHOMER_FB.authDomain, projectId: window.SHOMER_FB.projectId, messagingSenderId: window.SHOMER_FB.messagingSenderId, appId: window.SHOMER_FB.appId, vapidKey: window.SHOMER_VAPID };
 </script>
 <style>
 /* ═══════════════════════════════════════
@@ -243,6 +249,9 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 .hdr-name .star{-webkit-text-fill-color:#F5C840;color:#F5C840;font-size:.98em;line-height:1;margin:0 .02em;text-shadow:0 0 12px var(--gb);}
 .hdr-right{display:flex;align-items:center;gap:6px;flex:1;justify-content:flex-end;}
 .hdr-live{display:flex;align-items:center;gap:5px;background:var(--n3);border:1px solid var(--b1);border-radius:20px;padding:4px 10px;font-size:10px;font-weight:700;color:var(--tx2);}
+.hdr-near{display:flex;align-items:center;gap:5px;background:var(--n3);border:1px solid var(--grn-b);border-radius:20px;padding:4px 10px;font-size:11px;font-weight:800;color:var(--tx1);cursor:pointer;}
+.hdr-near #gnear-n{color:var(--grn);}
+.hdr-near .gnear-lbl{font-size:10px;font-weight:600;color:var(--tx2);}
 .ldot{width:5px;height:5px;border-radius:50%;background:#2ECC71;flex-shrink:0;animation:ld 1.8s ease-in-out infinite;}
 @keyframes ld{0%,100%{opacity:1}50%{opacity:.15}}
 .hdr-menu{width:40px;height:40px;border-radius:var(--r8);background:var(--n3);border:1px solid var(--b1);display:flex;align-items:center;justify-content:center;font-size:17px;transition:all .15s;flex-shrink:0;}
@@ -1147,8 +1156,12 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  <header class="hdr" role="banner" id="main-content">
  <div class="hdr-left">
  <button class="hdr-menu" id="menu-btn" onclick="toggleDD()" aria-label="תפריט" aria-expanded="false" aria-haspopup="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
- <!-- "active guardians" counter removed: a real count needs the realtime backend (Firebase).
-      Reintroduce as a true "guardians nearby" metric once that is live. -->
+ <!-- REAL "guardians nearby" — live count from RTDB presence (shown only when connected). -->
+ <button class="hdr-near" id="hdr-near" style="display:none" onclick="explainNearby()" aria-live="polite">
+ <div class="ldot" aria-hidden="true"></div>
+ <span id="gnear-n">0</span>
+ <span class="gnear-lbl" id="gnear-lbl">שומרים</span>
+ </button>
  </div>
  <div class="hdr-center">
  <img class="hdr-logo" src="SHOMER_logo_big.png" alt="SHOMER" width="88" height="88">
@@ -2150,7 +2163,7 @@ function classifySOS(t,by){
   if(ev){ev.type=t;ev.typeState=(by==='owner'?'self':by==='responder'?'verified':'community');ev.classifiedBy=by;try{saveStore();}catch(e){}}
   if(mapLayers.sosMarker)mapLayers.sosMarker.setIcon(sosPinIcon(t));
   reflectSosType();
-  try{updateSosCardType();}catch(e){} try{renderSosHistory();}catch(e){}
+  try{updateSosCardType();}catch(e){} try{renderSosHistory();}catch(e){} try{fbUpdateSOSType();}catch(e){}
   if(sosFallbackTimer){clearTimeout(sosFallbackTimer);sosFallbackTimer=null;}
   const he=currentLang==='he';
   if(by==='owner')toast((he?'סוג עודכן: ':'Type set: ')+sosTypeLabel(t)+(he?' — שודר לשומרים בקרבתך (סימולציה)':' — shared with nearby guardians (simulated)'),'red');
@@ -2962,6 +2975,7 @@ function enterApp(returning){
  [60,300,700,1200].forEach(ms=>setTimeout(()=>{if(MAP)MAP.invalidateSize(false);},ms));
  if(userLat!==null) moveUserDot(userLat,userLng);
  startGeoWatch();
+ try{ fbInit(); }catch(e){} // connect to Firebase RTDB (presence + cross-device SOS) once in-app
  try{ guardianInit(); }catch(e){}
  try{ resumeDMS(); }catch(e){}
  // Handle an incoming guardian invite link (?g=…) once the map is ready.
@@ -3390,6 +3404,7 @@ function activateSOS(){
  addSOSPin();
  injectSOSCard();
  buildSosTypeBar(); reflectSosType(); scheduleSosFallback();
+ try{ fbPublishSOS(); }catch(e){} // cross-device: broadcast this SOS over RTDB
  toast(he?' SOS שודר — שומרים בקרבתך עודכנו (סימולציה)':' SOS broadcast — nearby guardians notified (simulated)','red');
  // Auto-dial prompt (opens dialer; a native app could place the call directly).
  setTimeout(()=>{
@@ -3539,6 +3554,7 @@ function resolveSOS(){
  to others; only confirmed-real events remain mapped. */
 function resolveAs(kind){
  const he=currentLang==='he';
+ try{ fbResolveSOS(curSosId); }catch(e){} // clear the live cross-device alert for others
  const ev=SS.sosHistory.find(e=>e.id===curSosId);
  if(ev)ev.resolution=kind;
  try{if(SS.sos.trust[kind]!=null)SS.sos.trust[kind]++;}catch(e){}
@@ -5212,6 +5228,70 @@ function injectSheetCredits(){
 }
 try{ injectSheetCredits(); }catch(e){}
 try{ hydrateIcons(document); }catch(e){}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   FIREBASE REALTIME BACKEND (Spark plan: RTDB + Auth + FCM)
+   Real now (app open): anonymous auth, PRESENCE -> live "guardians nearby" count,
+   cross-DEVICE SOS events + type fan-out. Needs the deployed auth-scoped rules
+   (database.rules.json). Fully-closed push + SMS verification need Blaze (flagged).
+═══════════════════════════════════════════════════════════════════════ */
+var FB={ready:false,uid:null,db:null,_presTimer:null};
+var fbSosMarkers={};
+function fbLoad(src){return new Promise(function(res,rej){var s=document.createElement('script');s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s);});}
+async function fbInit(){
+  if(FB.ready||!window.SHOMER_FB)return;
+  try{
+    if(!window.firebase||!window.firebase.database){
+      await fbLoad('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js');
+      await fbLoad('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js');
+      await fbLoad('https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js');
+    }
+    if(!window.firebase.apps.length)window.firebase.initializeApp(window.SHOMER_FB);
+    var cred=await window.firebase.auth().signInAnonymously();
+    FB.uid=cred.user.uid; FB.db=window.firebase.database(); FB.ready=true;
+    fbSetupPresence(); fbListenSOS();
+    try{ registerPush(); }catch(e){}
+  }catch(e){ /* offline / blocked — app keeps working locally */ }
+}
+function fbSetupPresence(){
+  if(!FB.ready)return;
+  var meRef=FB.db.ref('presence/'+FB.uid);
+  FB.db.ref('.info/connected').on('value',function(snap){ if(snap.val()===true){ meRef.onDisconnect().remove(); fbPublishPresence(); } });
+  if(!FB._presTimer)FB._presTimer=setInterval(fbPublishPresence,25000);
+  FB.db.ref('presence').on('value',function(snap){
+    var all=snap.val()||{}, n=0, mlat=userLat, mlng=userLng, radM=((SS.settings&&SS.settings.radius)||5)*1000;
+    Object.keys(all).forEach(function(k){ if(k===FB.uid)return; var p=all[k]; if(!p||p.lat==null)return;
+      if(mlat==null){n++;return;} if(distMeters(mlat,mlng,p.lat,p.lng)<=radM)n++; });
+    updateGuardiansNearby(n);
+  }, function(){ /* permission denied until rules deployed */ });
+}
+function fbPublishPresence(){
+  if(!FB.ready)return;
+  // coarse (~1km) location for privacy; precise location only for SOS / opt-in responder positions
+  var lat=userLat!=null?Math.round(userLat*100)/100:32.07, lng=userLng!=null?Math.round(userLng*100)/100:34.78;
+  try{ FB.db.ref('presence/'+FB.uid).set({lat:lat,lng:lng,ts:Date.now()}); }catch(e){}
+}
+function updateGuardiansNearby(n){
+  var el=document.getElementById('gnear-n'); if(el)el.textContent=n;
+  var box=document.getElementById('hdr-near'); if(box)box.style.display=(FB.ready&&n>0)?'flex':'none';
+}
+function explainNearby(){ var n=(document.getElementById('gnear-n')||{}).textContent||'0'; var he=currentLang==='he'; toast(he?n+' שומרים פעילים בקרבתך (נתון חי)':n+' active SHOMERs near you (live)',''); }
+/* Cross-device SOS over RTDB */
+function fbPublishSOS(){ if(!FB.ready||!curSosId)return; try{ FB.db.ref('sos/'+curSosId).set({uid:FB.uid,lat:(userLat!=null?userLat:32.07),lng:(userLng!=null?userLng:34.78),type:curSosType||'unknown',typeState:'self',ts:Date.now(),resolved:false,name:(SS.user&&SS.user.name)||'Shomer'}); }catch(e){} }
+function fbUpdateSOSType(){ if(FB.ready&&curSosId){ try{ FB.db.ref('sos/'+curSosId).update({type:curSosType,typeState:'self'}); }catch(e){} } }
+function fbResolveSOS(id){ if(FB.ready&&id){ try{ FB.db.ref('sos/'+id).update({resolved:true,resolvedTs:Date.now()}); }catch(e){} } }
+function fbListenSOS(){
+  if(!FB.ready)return;
+  FB.db.ref('sos').on('value',function(snap){
+    var all=snap.val()||{};
+    Object.keys(fbSosMarkers).forEach(function(id){ if(!all[id]||all[id].resolved){ try{MAP.removeLayer(fbSosMarkers[id]);}catch(e){} delete fbSosMarkers[id]; } });
+    if(!MAP)return;
+    Object.keys(all).forEach(function(id){ var s=all[id]; if(!s||s.resolved||s.uid===FB.uid||s.lat==null)return;
+      if(fbSosMarkers[id]){ fbSosMarkers[id].setLatLng([s.lat,s.lng]); fbSosMarkers[id].setIcon(sosPinIcon(s.type)); }
+      else { fbSosMarkers[id]=window.L.marker([s.lat,s.lng],{icon:sosPinIcon(s.type),zIndexOffset:1000,alt:'SOS '+(s.name||'')}).addTo(MAP); }
+    });
+  }, function(){ /* permission denied until rules deployed */ });
+}
 
 /* ═══════════════════════════════════
  SERVICE WORKER + PWA INSTALL
