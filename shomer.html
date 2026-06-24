@@ -674,7 +674,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 .mc{width:38px;height:38px;border-radius:var(--r12);background:rgba(8,18,36,.92);backdrop-filter:blur(12px);border:1px solid var(--b3);box-shadow:var(--e2);display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:700;color:var(--g3);transition:all .15s;}
 .mc:hover{background:rgba(16,30,52,.96);transform:translateY(-1px);}
 .mc:active{transform:scale(.92);}
-.loc-fab{position:absolute;bottom:calc(var(--nav) + 14px);left:12px;z-index:400;width:48px;height:48px;border-radius:50%;background:rgba(8,18,36,.92);backdrop-filter:blur(12px);border:1px solid var(--b3);box-shadow:var(--e3);display:flex;align-items:center;justify-content:center;font-size:21px;color:var(--g3);transition:all .15s;}
+.loc-fab{position:absolute;bottom:calc(var(--nav) + 72px);right:12px;z-index:400;width:48px;height:48px;border-radius:50%;background:rgba(8,18,36,.92);backdrop-filter:blur(12px);border:1px solid var(--b3);box-shadow:var(--e3);display:flex;align-items:center;justify-content:center;font-size:21px;color:var(--g3);transition:all .15s;}
 .loc-fab:hover{transform:translateY(-1px);}
 .loc-fab:active{transform:scale(.9);}
 .loc-fab.locating{animation:locSpin 1s linear infinite;}
@@ -733,7 +733,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 .units-seg{display:flex;gap:6px;direction:ltr;}.units-seg .olb{flex:1;}
 
 /* Find-a-Friend FAB (stacked above the locate FAB) */
-.ff-fab{position:absolute;bottom:calc(var(--nav) + 70px);left:12px;z-index:400;width:48px;height:48px;border-radius:50%;background:rgba(8,18,36,.92);backdrop-filter:blur(12px);border:1px solid var(--b3);box-shadow:var(--e3);display:flex;align-items:center;justify-content:center;font-size:21px;color:var(--g3);transition:all .15s;}
+.ff-fab{position:absolute;bottom:calc(var(--nav) + 128px);right:12px;z-index:400;width:48px;height:48px;border-radius:50%;background:rgba(8,18,36,.92);backdrop-filter:blur(12px);border:1px solid var(--b3);box-shadow:var(--e3);display:flex;align-items:center;justify-content:center;font-size:21px;color:var(--g3);transition:all .15s;}
 .ff-fab:hover{transform:translateY(-1px);}
 .ff-fab:active{transform:scale(.9);}
 
@@ -1147,10 +1147,8 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  <header class="hdr" role="banner" id="main-content">
  <div class="hdr-left">
  <button class="hdr-menu" id="menu-btn" onclick="toggleDD()" aria-label="תפריט" aria-expanded="false" aria-haspopup="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
- <div class="hdr-live" aria-label="שומרים פעילים" aria-live="polite">
- <div class="ldot" aria-hidden="true"></div>
- <span id="liveN">247</span>
- </div>
+ <!-- "active guardians" counter removed: a real count needs the realtime backend (Firebase).
+      Reintroduce as a true "guardians nearby" metric once that is live. -->
  </div>
  <div class="hdr-center">
  <img class="hdr-logo" src="SHOMER_logo_big.png" alt="SHOMER" width="88" height="88">
