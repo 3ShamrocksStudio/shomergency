@@ -1111,6 +1111,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  <button class="ob-back" onclick="obvResend()" data-he="שלח/י קוד שוב" data-en="Resend code">שלח/י קוד שוב</button>
  <button class="ob-back" onclick="obvCancel()" data-he="חזרה" data-en="Back">חזרה</button>
  </div>
+ <div id="recaptcha-container"></div>
  </div>
  </div>
 </div>
@@ -2844,28 +2845,54 @@ function obStep0(){
  user={name, phone: ilNormalize(digits), city:''};
  openObVerify();
 }
-function openObVerify(){
- const he=currentLang==='he';
- _obvCode=genVerifyCode();
- setText('obv-sub',(he?'שלחנו קוד בן 4 ספרות אל ':'We sent a 4-digit code to ')+'+'+user.phone);
- // No SMS backend yet → show the code transparently (honest demo). Real SMS = Firebase/Twilio.
- setText('obv-demo',(he?'מצב דמו — אין שרת SMS עדיין. הקוד שלך: ':'Demo — no SMS backend yet. Your code: ')+_obvCode);
- const inp=document.getElementById('obv-code'); if(inp)inp.value='';
- setText('obv-err','');
- const ov=document.getElementById('ob-verify'); if(ov){ov.classList.add('on');ov.setAttribute('aria-hidden','false');}
- setTimeout(()=>{const i=document.getElementById('obv-code');if(i)i.focus();},120);
+/* Real Firebase Phone Auth (SMS). Falls back to a labelled demo code if the Phone provider
+   isn't enabled / unavailable — so no real SMS is sent (and no cost) until it's configured.
+   COST DISCIPLINE: one SMS per attempt; resend is rate-limited (30s). */
+let _obvConfirm=null, _obvRecaptcha=null, _obvDemo=false, _obvLastSend=0;
+async function fbEnsureAuthSdk(){
+  if(window.firebase&&window.firebase.auth)return;
+  await fbLoad('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js');
+  await fbLoad('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js');
+  if(!window.firebase.apps.length)window.firebase.initializeApp(window.SHOMER_FB);
 }
-function obvVerify(){
+async function openObVerify(){
+ const he=currentLang==='he';
+ const ov=document.getElementById('ob-verify'); if(ov){ov.classList.add('on');ov.setAttribute('aria-hidden','false');}
+ setText('obv-err',''); const inp=document.getElementById('obv-code'); if(inp){inp.value='';}
+ setText('obv-sub',(he?'שולחים קוד אל ':'Sending a code to ')+'+'+user.phone);
+ setText('obv-demo',he?'…':'…');
+ _obvDemo=false; _obvConfirm=null; _obvLastSend=Date.now();
+ try{
+  await fbEnsureAuthSdk();
+  if(!_obvRecaptcha){ _obvRecaptcha=new window.firebase.auth.RecaptchaVerifier('recaptcha-container',{size:'invisible'}); }
+  _obvConfirm=await window.firebase.auth().signInWithPhoneNumber('+'+user.phone,_obvRecaptcha);
+  setText('obv-demo',he?'נשלח קוד SMS אמיתי למספר שלך — הזן/י אותו כאן.':'A real SMS code was sent to your phone — enter it here.');
+ }catch(e){
+  // Provider not enabled / unavailable → safe demo fallback (NO SMS sent, no cost).
+  _obvDemo=true; _obvCode=genVerifyCode();
+  setText('obv-demo',(he?'מצב דמו (SMS אמיתי דורש הפעלת Phone provider ב-Firebase). הקוד: ':'Demo (real SMS needs the Phone provider enabled in Firebase). Code: ')+_obvCode);
+ }
+ setTimeout(function(){var i=document.getElementById('obv-code');if(i)i.focus();},120);
+}
+async function obvVerify(){
  const he=currentLang==='he';
  const v=(document.getElementById('obv-code').value||'').replace(/\D/g,'');
- if(v===_obvCode){
-  if(!SS.security)SS.security={}; SS.security.phoneVerified=true; saveStore();
-  const ov=document.getElementById('ob-verify'); if(ov){ov.classList.remove('on');ov.setAttribute('aria-hidden','true');}
-  toast(he?'✓ הטלפון אומת':'✓ Phone verified','grn');
-  goStep(1);
- } else { setText('obv-err', he?'קוד שגוי — נסה/י שוב':'Wrong code — try again'); }
+ if(_obvDemo){ if(v===_obvCode){ obvSuccess(); } else { setText('obv-err',he?'קוד שגוי — נסה/י שוב':'Wrong code — try again'); } return; }
+ if(_obvConfirm){ try{ await _obvConfirm.confirm(v); obvSuccess(); }catch(e){ setText('obv-err',he?'קוד שגוי — נסה/י שוב':'Wrong code — try again'); } return; }
+ setText('obv-err',he?'נסה/י לשלוח קוד שוב':'Try resending the code');
 }
-function obvResend(){ const he=currentLang==='he'; _obvCode=genVerifyCode(); setText('obv-demo',(he?'קוד חדש (דמו): ':'New code (demo): ')+_obvCode); setText('obv-err',''); const i=document.getElementById('obv-code'); if(i)i.value=''; }
+function obvSuccess(){
+ const he=currentLang==='he';
+ if(!SS.security)SS.security={}; SS.security.phoneVerified=true; SS.user&&(SS.user.phone=user.phone); saveStore();
+ const ov=document.getElementById('ob-verify'); if(ov){ov.classList.remove('on');ov.setAttribute('aria-hidden','true');}
+ toast(he?'✓ הטלפון אומת':'✓ Phone verified','grn');
+ goStep(1);
+}
+function obvResend(){
+ const he=currentLang==='he';
+ if(Date.now()-_obvLastSend < 30000){ setText('obv-err',he?'המתן/י 30 שניות לפני שליחה חוזרת':'Wait 30s before resending'); return; } // rate-limit (cost)
+ openObVerify();
+}
 function obvCancel(){ const ov=document.getElementById('ob-verify'); if(ov){ov.classList.remove('on');ov.setAttribute('aria-hidden','true');} }
 function goStep(n){
  try{stopPreview();}catch(e){} // stop any alarm preview when changing onboarding steps
@@ -3017,11 +3044,13 @@ async function initFCM(){
  await load('https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging-compat.js');
  }
  if(!window.firebase.apps.length) window.firebase.initializeApp(cfg);
- const reg=await navigator.serviceWorker.ready;
+ // Dedicated FCM background SW (handles closed/backgrounded push); fall back to the app SW.
+ let reg; try{ reg=await navigator.serviceWorker.register('firebase-messaging-sw.js'); }catch(e){ reg=await navigator.serviceWorker.ready; }
  const messaging=window.firebase.messaging();
  fcmToken=await messaging.getToken({vapidKey:cfg.vapidKey, serviceWorkerRegistration:reg});
  if(!fcmToken) return;
  try{ SS.fcmToken=fcmToken; saveStore(); }catch(e){}
+ try{ fbRegisterToken(fcmToken); }catch(e){} // register device token + location for fan-out targeting
  // Foreground messages → in-app notification + brand toast.
  messaging.onMessage(payload=>{
  const n=(payload&&payload.notification)||{};
@@ -4459,8 +4488,10 @@ function checkGeoReminders(){
  var list=SS.geoReminders||[]; if(!list.length)return; var he=currentLang==='he', changed=false;
  list.forEach(function(r){ if(r.done)return; var m=memberById(r.memberId); if(!m)return;
   if(distMeters(m.lat,m.lng,r.lat,r.lng)<=r.radius){ r.done=true; changed=true;
+   var body=r.memberName+(he?' הגיע/ה ל':' arrived at ')+(r.label||'');
    toast(r.memberName+(he?' הגיע/ה ל':' arrived at ')+(r.label||(he?'היעד':'destination')),'grn');
-   try{pushNotify(he?'שומר — הגעה':'SHOMER — Arrival', r.memberName+(he?' הגיע/ה ל':' arrived at ')+(r.label||''),'geo-'+r.id);}catch(e){}
+   try{pushNotify(he?'שומר — הגעה':'SHOMER — Arrival', body,'geo-'+r.id);}catch(e){}
+   try{ fbQueueAlarm(FB.uid, he?'שומר — הגעה':'SHOMER — Arrival', body, 'geo-'+r.id); }catch(e){} // closed-app push via Cloud Function
   }
  });
  if(changed){ saveStore(); try{renderGeoReminders();}catch(e){} }
@@ -5292,6 +5323,11 @@ function fbListenSOS(){
     });
   }, function(){ /* permission denied until rules deployed */ });
 }
+/* Register this device's FCM token + location so the Cloud Function can target it for push. */
+function fbRegisterToken(token){ if(!FB.ready||!token)return; var lat=userLat!=null?userLat:32.07, lng=userLng!=null?userLng:34.78; try{ FB.db.ref('tokens/'+FB.uid).set({token:token,lat:lat,lng:lng,ts:Date.now()}); }catch(e){} }
+/* Queue a targeted alarm — alarmFanout Cloud Function pushes it to the recipient even when their
+   app is CLOSED (used by geofence arrival; check-in cross-device needs guardian-uid pairing). */
+function fbQueueAlarm(toUid,title,body,tag){ if(!FB.ready||!toUid)return; try{ FB.db.ref('alarms').push({fromUid:FB.uid,toUid:toUid,title:title,body:body,tag:tag||'shomer',ts:Date.now()}); }catch(e){} }
 
 /* ═══════════════════════════════════
  SERVICE WORKER + PWA INSTALL

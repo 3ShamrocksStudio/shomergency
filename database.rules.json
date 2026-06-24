@@ -45,6 +45,14 @@
         ".read": "auth != null && auth.uid === $uid",
         ".write": "auth != null && auth.uid === $uid"
       }
+    },
+
+    "alarms": {
+      ".read": false,
+      "$id": {
+        ".write": "auth != null && newData.child('fromUid').val() === auth.uid",
+        ".validate": "newData.hasChildren(['toUid','fromUid'])"
+      }
     }
   }
 }
