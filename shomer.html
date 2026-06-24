@@ -909,6 +909,26 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
 .legal-body strong{color:var(--tx0);}
 .legal-draft{background:var(--amb-b);border:1px solid rgba(192,120,8,.4);border-radius:var(--r12);padding:10px 12px;font-size:11.5px;color:#F2C572;line-height:1.6;margin-bottom:14px;}
 .legal-meta{font-size:10.5px;color:var(--tx3);margin-top:14px;line-height:1.6;}
+/* ══ Light surface system (item 8) — break the monotone navy with warm platinum "paper" panels ══ */
+.surf-light{background:linear-gradient(180deg,#F4F2EC 0%,#E8E4D8 100%)!important;border:1px solid rgba(154,108,26,.32)!important;color:#1B2640!important;}
+.surf-light .sec-cap,.surf-light h4{color:#8A6212!important;}
+.surf-light strong,.surf-light b{color:#11192C!important;}
+.surf-light p,.surf-light span,.surf-light li{color:#3A4660!important;}
+.surf-light .ai-row{border-bottom:1px solid rgba(27,38,64,.12)!important;}
+.surf-light .ai-l{color:#55617E!important;}
+.surf-light .ai-v{color:#11192C!important;}
+.surf-light [style*="--g3"]{color:#8A6212!important;-webkit-text-fill-color:#8A6212!important;}
+/* Light reading sheet — legal / about pages flip to a parchment document surface */
+.sheet.light-sheet{background:linear-gradient(180deg,#F4F2EC 0%,#E6E1D3 100%);border-top:1px solid rgba(154,108,26,.45);}
+.light-sheet .sh-pill{background:rgba(27,38,64,.24);}
+.light-sheet .sh-head{border-bottom:1px solid rgba(27,38,64,.14);}
+.light-sheet .sh-ttl{background:none;-webkit-text-fill-color:#1B2640;color:#1B2640;}
+.light-sheet .sh-x{color:#2A3858;background:rgba(27,38,64,.07);}
+.light-sheet .legal-body{color:#26324A;}
+.light-sheet .legal-body h4{color:#8A6212;}
+.light-sheet .legal-body strong,.light-sheet .legal-body b{color:#11192C;}
+.light-sheet .legal-body span[style*="--g3"],.light-sheet .legal-body strong[style*="--g3"]{color:#8A6212!important;-webkit-text-fill-color:#8A6212!important;}
+.light-sheet .legal-meta{color:#6A7488;}
 .disc-call{display:flex;gap:8px;margin:14px 0 4px;}
 .disc-call button{flex:1;padding:12px;border-radius:var(--r12);border:none;font-size:13px;font-weight:800;cursor:pointer;background:var(--rb);color:#FF7080;border:1px solid var(--b4);}
 .disc-call button.pr{background:linear-gradient(135deg,#B01220,#E8182C);color:#fff;border:none;}
@@ -1661,7 +1681,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </div>
  <div class="set-cat"><div class="set-cat-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2.5l1.3 2.3 2.6-.4.5 2.6 2.3 1.3-1 2.4 1 2.4-2.3 1.3-.5 2.6-2.6-.4L12 21.5l-1.3-2.3-2.6.4-.5-2.6L5.3 15.7l1-2.4-1-2.4 2.3-1.3.5-2.6 2.6.4Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div><div class="set-cat-t" data-he="חשבון ומידע" data-en="Account &amp; About">חשבון ומידע</div></div>
  <div class="sec-cap mb12" data-he="אודות שומר" data-en="About SHOMER">אודות שומר</div>
- <div class="set-grp">
+ <div class="set-grp surf-light">
  <div class="ai-row"><span class="ai-l">מוצר / Product</span><span class="ai-v" dir="ltr">SHOMER<span class="tm"></span> (שומר)</span></div>
  <div class="ai-row"><span class="ai-l">גרסה</span><span class="ai-v">1.0.0</span></div>
  <div class="ai-row"><span class="ai-l">מוטו</span><span class="ai-v">שׁוֹמֵר אָחִי אָנֹכִי</span></div>
@@ -1673,7 +1693,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="set-row" onclick="openLegal('privacy')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><div class="sr-nm" id="set-priv-row">מדיניות פרטיות</div></div><span style="color:var(--tx3);font-size:18px">›</span></div>
  </div>
  <div class="sec-cap mb12" style="margin-top:18px" id="datasrc-cap">נתונים ומקורות</div>
- <div class="set-grp" style="padding:13px 14px;">
+ <div class="set-grp surf-light" style="padding:13px 14px;">
  <p style="font-size:11.5px;color:var(--tx2);line-height:1.75" id="datasrc-txt">
  סמני הערים הם <strong style="color:var(--g3)">סקירה סטטיסטית מצרפית</strong>, לא אירועים ספציפיים. פינים אישיים מגיעים רק מדיווחי משתמשים ומ-SOS חי.<br>
  <span style="color:var(--tx3)">מקורות: הלמ"ס · משטרת ישראל (data.gov.il) · מרכז טאוב.</span>
@@ -1856,21 +1876,21 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </div>
 
  <!-- ═══ EMERGENCY DISCLAIMER ═══ -->
- <div class="sheet" id="sh-disclaimer" role="dialog" aria-modal="true" aria-labelledby="disc-ttl">
+ <div class="sheet light-sheet" id="sh-disclaimer" role="dialog" aria-modal="true" aria-labelledby="disc-ttl">
  <div class="sh-pill" aria-hidden="true"></div>
  <div class="sh-head"><span class="sh-ttl" id="disc-ttl">כתב ויתור חירום</span><button class="sh-x" onclick="cl('sh-disclaimer')" aria-label="סגור"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button></div>
  <div class="sh-body"><div class="legal-body" id="disc-body"></div></div>
  </div>
 
  <!-- ═══ TERMS OF SERVICE ═══ -->
- <div class="sheet" id="sh-tos" role="dialog" aria-modal="true" aria-labelledby="tos-ttl">
+ <div class="sheet light-sheet" id="sh-tos" role="dialog" aria-modal="true" aria-labelledby="tos-ttl">
  <div class="sh-pill" aria-hidden="true"></div>
  <div class="sh-head"><span class="sh-ttl" id="tos-ttl">תנאי שימוש</span><button class="sh-x" onclick="cl('sh-tos')" aria-label="סגור"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button></div>
  <div class="sh-body"><div class="legal-body" id="tos-body"></div></div>
  </div>
 
  <!-- ═══ PRIVACY POLICY ═══ -->
- <div class="sheet" id="sh-privacy" role="dialog" aria-modal="true" aria-labelledby="priv-ttl">
+ <div class="sheet light-sheet" id="sh-privacy" role="dialog" aria-modal="true" aria-labelledby="priv-ttl">
  <div class="sh-pill" aria-hidden="true"></div>
  <div class="sh-head"><span class="sh-ttl" id="priv-ttl">מדיניות פרטיות</span><button class="sh-x" onclick="cl('sh-privacy')" aria-label="סגור"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button></div>
  <div class="sh-body"><div class="legal-body" id="priv-body"></div></div>
