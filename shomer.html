@@ -100,8 +100,10 @@
 .ichip.gold{background:linear-gradient(160deg,rgba(224,168,40,.20),rgba(224,168,40,.05));border-color:var(--b3);color:var(--g3);}
 .ichip.sm{width:34px;height:34px;border-radius:10px;}.ichip.sm .ic{width:18px;height:18px;}
 /* Icon sizing/colour per context (replacing former emoji) */
-.hdr-menu .ic,.hdr-bell .ic{width:22px;height:22px;color:var(--p4);}
-.loc-fab .ic,.ff-fab .ic{width:22px;height:22px;color:var(--g3);}
+.hdr-menu .ic{width:22px;height:22px;color:var(--p4);}
+.hdr-bell .ic{width:22px;height:22px;color:var(--g3);}
+.loc-fab .ic{width:22px;height:22px;color:#19A8FF;}
+.ff-fab .ic{width:22px;height:22px;color:#16A06A;}
 .ropt-ic .ic{width:26px;height:26px;color:var(--g3);}
 /* Semantic event colours (the crime-type / map-icon palette) brought into the UI, not just markers */
 .ropt:has(#rt1) .ropt-ic .ic{color:#FF7A1A;} .ropt:has(#rt1).sel{border-color:#FF7A1A;background:linear-gradient(180deg,rgba(255,122,26,.16),rgba(255,122,26,.04));}
@@ -253,15 +255,15 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 .hdr{position:absolute;top:var(--hdr-top,0px);left:0;right:0;z-index:600;height:var(--hdr);direction:ltr;background:rgba(8,18,36,.97);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--b3);display:flex;align-items:center;padding:0 12px;gap:8px;box-shadow:0 2px 24px rgba(0,0,0,.6);}
 .hdr::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent 5%,var(--gd) 35%,var(--gd) 65%,transparent 95%);}
 .hdr-left{display:flex;align-items:center;gap:7px;flex:1;justify-content:flex-start;}
-.hdr-bell{position:relative;width:40px;height:40px;border-radius:var(--r8);background:var(--n3);border:1px solid var(--b1);display:flex;align-items:center;justify-content:center;font-size:18px;transition:all .15s;flex-shrink:0;}
+.hdr-bell{position:relative;width:42px;height:42px;border-radius:50%;background:var(--n3);border:1px solid var(--b2);display:flex;align-items:center;justify-content:center;font-size:18px;transition:all .15s;flex-shrink:0;}
 .hdr-bell:hover{background:var(--n4);}
 .bell-dot{position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:var(--r3);border:2px solid rgba(8,18,36,.97);display:none;}
 .bell-dot.on{display:block;animation:blink 1.2s ease-in-out infinite;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 .hdr-center{flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:9px;}
 /* Badge floats free — transparent PNG, no plate, just a soft halo. */
-.hdr-logo{width:80px;height:80px;object-fit:contain;flex-shrink:0;position:relative;z-index:2;margin-bottom:-16px;filter:drop-shadow(0 3px 9px rgba(0,0,0,.7)) drop-shadow(0 0 16px rgba(245,200,64,.32));}
-@media(max-width:360px){.hdr-logo{width:70px;height:70px;margin-bottom:-12px;}}
+.hdr-logo-svg{height:30px;width:auto;max-width:60vw;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 2px 6px rgba(0,0,0,.6));}
+@media(max-width:360px){.hdr-logo-svg{height:26px;}}
 /* Wordmark echoes the badge: brushed-platinum letters, gold Star of David. */
 .hdr-name{font-size:22px;font-weight:900;letter-spacing:1px;background:linear-gradient(160deg,#FFFFFF 0%,#C8D2E2 30%,#8392AB 58%,#E6ECF6 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:inline-flex;align-items:center;text-shadow:0 1px 1px rgba(0,0,0,.3);}
 .hdr-name .star{-webkit-text-fill-color:#F5C840;color:#F5C840;font-size:.98em;line-height:1;margin:0 .02em;text-shadow:0 0 12px var(--gb);}
@@ -272,7 +274,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 .hdr-near .gnear-lbl{font-size:10px;font-weight:600;color:var(--tx2);}
 .ldot{width:5px;height:5px;border-radius:50%;background:#2ECC71;flex-shrink:0;animation:ld 1.8s ease-in-out infinite;}
 @keyframes ld{0%,100%{opacity:1}50%{opacity:.15}}
-.hdr-menu{width:40px;height:40px;border-radius:var(--r8);background:var(--n3);border:1px solid var(--b1);display:flex;align-items:center;justify-content:center;font-size:17px;transition:all .15s;flex-shrink:0;}
+.hdr-menu{width:42px;height:42px;border-radius:50%;background:var(--n3);border:1px solid var(--b2);display:flex;align-items:center;justify-content:center;font-size:17px;transition:all .15s;flex-shrink:0;}
 .hdr-menu:hover{background:var(--n4);}
 
 /* ══════════ DROPDOWN ══════════ */
@@ -372,7 +374,9 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 
 /* ══════════ NAV ══════════ */
 /* SOS floats over the map (no bottom bar) */
-.nav{position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + 20px);left:0;right:0;z-index:600;display:flex;align-items:center;justify-content:center;background:none;border:none;box-shadow:none;padding:0;pointer-events:none;}
+.nav{position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + 34px);left:0;right:0;z-index:650;display:flex;align-items:center;justify-content:center;background:none;border:none;box-shadow:none;padding:0;pointer-events:none;}
+/* Clear, framed backdrop so the SOS reads prominently on any map background (no dark wash over it) */
+.sos-wrap::before{content:'';position:absolute;left:50%;top:42%;width:150px;height:150px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(8,14,26,.72) 0%,rgba(8,14,26,.34) 52%,transparent 72%);z-index:-1;pointer-events:none;}
 .nav::before{display:none;}
 .sos-wrap{pointer-events:auto;}
 
@@ -620,7 +624,13 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 .studio-credit .cr{font-size:10.5px;color:var(--tx3);letter-spacing:.3px;line-height:1.4;}
 .studio-credit .cr b{color:var(--g2);font-weight:700;}
 /* Unobtrusive single-line mark for operational screens */
-.mini-credit{text-align:center;font-size:9.5px;color:var(--tx3);letter-spacing:.4px;opacity:.7;padding:18px 0 4px;}
+.mini-credit{text-align:center;font-size:9.5px;color:var(--tx3);letter-spacing:.4px;opacity:.7;padding:16px 0 4px;}
+.footer-3s{height:13px;width:auto;display:inline-block;opacity:.6;}
+/* Footer = the 3S logo image (very small) — no studio text */
+.studio-credit .cr{display:none;}
+.studio-credit .sc-badge{background:none!important;border:none!important;padding:0!important;}
+.studio-credit .sc-badge img{height:13px!important;width:auto!important;opacity:.62;}
+.studio-credit{padding:8px 0 4px!important;}
 .mini-credit .tm{-webkit-text-fill-color:var(--tx3);color:var(--tx3);}
 .tm{font-size:.52em;vertical-align:super;font-weight:800;letter-spacing:0;-webkit-text-fill-color:var(--g3);color:var(--g3);}
 /* scrollbar */
@@ -687,7 +697,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 /* Responder profession badge on the live "me" marker */
 .mk-me-badge{position:absolute;left:60%;top:-4px;width:16px;height:16px;border-radius:50%;background:#0A1628;border:1.5px solid #F5C840;display:flex;align-items:center;justify-content:center;font-size:9px;line-height:1;z-index:3;box-shadow:0 1px 4px rgba(0,0,0,.6);}
 /* Legend — compact, collapsible card */
-.map-legend{position:absolute;bottom:calc(var(--nav) + 14px);right:10px;z-index:400;background:rgba(10,16,26,.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--b3);border-radius:var(--r12);box-shadow:var(--e2);max-width:172px;overflow:hidden;}
+.map-legend{position:absolute;top:calc(var(--hdr-top,0px) + var(--hdr) + 10px);left:10px;z-index:400;background:rgba(10,16,26,.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--b3);border-radius:var(--r12);box-shadow:var(--e2);max-width:172px;overflow:hidden;}
 .legend-hd{display:flex;align-items:center;gap:6px;width:100%;padding:8px 11px;font-size:9.5px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;color:var(--g3);cursor:pointer;text-align:start;}
 .legend-chev{margin-inline-start:auto;font-size:9px;color:var(--tx2);transition:transform .2s;}
 .map-legend:not(.collapsed) .legend-chev{transform:rotate(90deg);}
@@ -698,7 +708,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 .ldc{width:18px;height:18px;border-radius:50%;flex-shrink:0;border:1.5px solid rgba(255,255,255,.85);box-shadow:0 1px 3px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;font-size:9px;line-height:1;}
 .legend-foot{font-size:8.5px;color:var(--tx3);margin-top:8px;padding-top:7px;border-top:1px solid var(--b1);line-height:1.5;}
 .map-controls{position:absolute;top:calc(var(--hdr-top,0px) + var(--hdr) + 10px);right:10px;z-index:400;display:flex;flex-direction:column;gap:6px;}
-.mc{width:38px;height:38px;border-radius:var(--r12);background:rgba(8,18,36,.92);backdrop-filter:blur(12px);border:1px solid var(--b3);box-shadow:var(--e2);display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:700;color:var(--g3);transition:all .15s;}
+.mc{width:42px;height:42px;border-radius:50%;background:rgba(8,18,36,.92);backdrop-filter:blur(12px);border:1px solid var(--b2);box-shadow:var(--e2);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:var(--p3);transition:all .15s;}
 .mc:hover{background:rgba(16,30,52,.96);transform:translateY(-1px);}
 .mc:active{transform:scale(.92);}
 .loc-fab{position:absolute;bottom:calc(var(--nav) + 14px);left:12px;z-index:400;width:48px;height:48px;border-radius:50%;background:rgba(8,18,36,.92);backdrop-filter:blur(12px);border:1px solid var(--b3);box-shadow:var(--e3);display:flex;align-items:center;justify-content:center;font-size:21px;color:var(--g3);transition:all .15s;}
@@ -1156,10 +1166,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  <div id="map-wrap" role="region" aria-label="מפת בטיחות חיה">
  <div id="map" role="application" aria-label="מפה אינטראקטיבית"></div>
  <!-- Data-source banner -->
- <div class="data-banner" id="data-banner">
- <div class="data-banner-t" id="data-banner-t">סקירת בטיחות סטטיסטית</div>
- <div class="data-banner-s" id="data-banner-s">מקור: הלמ"ס · משטרת ישראל (data.gov.il)</div>
- </div>
+ <!-- statistical-overview banner removed; the legend now occupies the top-left. Sources remain cited in marker popups + Settings > Data & sources. -->
  <!-- Legend -->
  <div class="map-legend collapsed" id="map-legend" aria-label="מקרא מפה">
  <button class="legend-hd" onclick="toggleLegend()" aria-expanded="false" aria-controls="legend-body"><span aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span><span id="legend-ttl-txt">מקרא מפה</span><span class="legend-chev" id="legend-chev" aria-hidden="true">▸</span></button>
@@ -1196,7 +1203,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  </button>
  </div>
  <div class="hdr-center">
- <img class="hdr-logo" src="SHOMER_logo_big.png" alt="SHOMER" width="88" height="88">
+ <img class="hdr-logo-svg" src="BRAND/SVG/SHOMER.APP_WHITE.svg" alt="SHOMER" width="150" height="35">
  </div>
  <div class="hdr-right">
  <button class="hdr-bell" onclick="openUpdates()" aria-label="עדכונים" title="עדכונים">
@@ -1702,7 +1709,8 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  <img class="p-logo" src="SHOMER_logo_big.png" alt="לוגו שומר" width="122" height="122">
  <div class="p-nm" id="profNm">שומר</div>
  <div class="p-badges">
- <div class="p-rk" id="prof-rank">שומר מדרגה ב׳</div>
+ <!-- "guardian level" removed (vanity gamification trivialises a safety app). Only a real
+      trust/anti-abuse reputation mechanic would justify a status indicator here. -->
  <span class="p-prof-badge" id="prof-prof-badge"><span class="ic" id="prof-prof-ic"></span><span id="prof-prof-nm"></span></span>
  </div>
  </div>
@@ -5284,7 +5292,7 @@ function injectSheetCredits(){
  if(b.querySelector('.mini-credit')||b.querySelector('.studio-credit'))return;
  const f=document.createElement('div');
  f.className='mini-credit'; f.setAttribute('dir','ltr');
- f.innerHTML='SHOMER<span class="tm"></span> · 2026 3Shamrocks Studio · All rights reserved.';
+ f.innerHTML='<img class="footer-3s" src="3shamrocks.png" alt="3Shamrocks Studio">';
  b.appendChild(f);
  });
 }
