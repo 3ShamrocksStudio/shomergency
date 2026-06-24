@@ -1278,7 +1278,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <button class="hdr-near" id="hdr-near" style="display:none" onclick="explainNearby()" aria-live="polite">
  <div class="ldot" aria-hidden="true"></div>
  <span id="gnear-n">0</span>
- <span class="gnear-lbl" id="gnear-lbl">שומרים</span>
+ <span class="gnear-lbl" id="gnear-lbl" data-he="שומרים" data-en="SHOMERs" data-ar="حُرّاس">שומרים</span>
  </button>
  </div>
  <div class="hdr-center">
@@ -1736,8 +1736,8 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </div>
  <div class="set-cat"><div class="set-cat-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h3.5l1.5 4-2 1.5a11 11 0 0 0 5 5l1.5-2 4 1.5V19a2 2 0 0 1-2.2 2A16 16 0 0 1 4 6.2 2 2 0 0 1 5 4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div><div class="set-cat-t" id="set-contacts-lbl" data-he="אנשי קשר חירום" data-en="Emergency contacts">אנשי קשר חירום</div></div>
  <div class="set-grp" id="contacts-grp">
- <div class="c-row"><div class="c-av">א</div><div style="flex:1"><div class="c-nm" data-he="אמא" data-en="Mom">אמא</div><div class="c-ph">052-XXX-XXXX</div></div><span class="c-tag" data-he="ראשון" data-en="Primary">ראשון</span></div>
- <div class="c-row"><div class="c-av">ד</div><div style="flex:1"><div class="c-nm" data-he="דני" data-en="Danny">דני</div><div class="c-ph">054-XXX-XXXX</div></div><span class="c-tag" data-he="שני" data-en="Secondary">שני</span></div>
+ <div class="c-row"><div class="c-av" data-he="א" data-en="M" data-ar="أ">א</div><div style="flex:1"><div class="c-nm" data-he="אמא" data-en="Mom" data-ar="أمي">אמא</div><div class="c-ph">052-XXX-XXXX</div></div><span class="c-tag" data-he="ראשון" data-en="Primary" data-ar="أساسي">ראשון</span></div>
+ <div class="c-row"><div class="c-av" data-he="ד" data-en="D" data-ar="س">ד</div><div style="flex:1"><div class="c-nm" data-he="דני" data-en="Danny" data-ar="سامي">דני</div><div class="c-ph">054-XXX-XXXX</div></div><span class="c-tag" data-he="שני" data-en="Secondary" data-ar="ثانوي">שני</span></div>
  </div>
  <button class="add-c mb20" onclick="cl('sh-set');openCircles()" data-he="+ חבר/י שומר/ת" data-en="+ Connect a SHOMER">+ חבר/י שומר/ת</button>
  <div class="set-cat"><div class="set-cat-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 12h18" stroke="currentColor" stroke-width="2"/><path d="M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><div class="set-cat-t" id="set-lang-lbl" data-he="שפה" data-en="Language">שפה</div></div>
@@ -2299,7 +2299,11 @@ const AR={
  'City markers are an':'علامات المدن هي',' aggregate statistical overview':' نظرة إحصائية إجمالية','aggregate statistical overview':'نظرة إحصائية إجمالية',
  'About SHOMER':'حول شومير','Data & sources':'البيانات والمصادر',
  // ── Profile extras ──
- 'Points':'نقاط','Guardian level':'مستوى الحارس'
+ 'Points':'نقاط','Guardian level':'مستوى الحارس',
+ // ── My SHOMERs / circles sheet ──
+ 'No one sees your location':'لا أحد يرى موقعك','Find a friend':'ابحث عن صديق','✓ New circle created':'✓ تم إنشاء دائرة جديدة',
+ 'Add someone you trust to your "My SHOMERs". They\'ll see your live location and you\'ll see theirs — by invite and mutual accept. You can stop anytime.':'أضِف شخصاً تثق به إلى قائمة „حُرّاسي". سيرى موقعك المباشر وسترى موقعه — عبر دعوة وقبول متبادل. يمكنك الإيقاف في أي وقت.',
+ 'Ghost mode — pause sharing':'وضع التخفّي — إيقاف المشاركة مؤقتاً','Pair invite':'دعوة ربط','Connected':'مُرتبط','Pending':'قيد الانتظار'
 };
 /* ── State ── */
 let currentLang='he', L=LANGS.he;
@@ -2884,8 +2888,8 @@ function applyTranslations(){
  setText('circ-leave-lbl',he?'עזוב מעגל זה':'Leave this circle');
  setText('circle-alert-btn-lbl',he?'אתר/י':'Locate');
  setText('ff-pick-ttl',he?'מצא שומר/ת':'Find a SHOMER');
- const nm=document.getElementById('cm-add-name');if(nm)nm.placeholder=he?'שם (למשל אמא, יעקב)':'Name (e.g. Mom, Jakob)';
- const rl=document.getElementById('cm-add-rel');if(rl)rl.placeholder=he?'קשר (אמא/אח/חבר)':'Relationship (Mom/Brother/Friend)';
+ const nm=document.getElementById('cm-add-name');if(nm)nm.placeholder=he?'שם (למשל אמא, יעקב)':currentLang==='ar'?'الاسم (مثل أمي، سامي)':'Name (e.g. Mom, Jakob)';
+ const rl=document.getElementById('cm-add-rel');if(rl)rl.placeholder=he?'קשר (אמא/אח/חבר)':currentLang==='ar'?'صلة القرابة (أم/أخ/صديق)':'Relationship (Mom/Brother/Friend)';
  if(document.getElementById('sh-circles')&&document.getElementById('sh-circles').classList.contains('open'))renderCircles();
  }
  // SOS strip
@@ -4460,17 +4464,17 @@ function genId(p){return (p||'id')+'_'+Math.floor(performance.now()*1000%1e9).to
 /* Seed two demo circles + believable members on first run (only if empty). */
 function seedCirclesIfEmpty(){
  if(SS.circles&&SS.circles.length)return;
- const he=currentLang==='he';
+ const he=currentLang==='he', ar=currentLang==='ar';
  SS.circles=[
- {id:'fam', name:he?'משפחה':'Family', type:'family'},
- {id:'frnd', name:he?'חברים':'Friends', type:'friends'},
+ {id:'fam', name:he?'משפחה':ar?'عائلة':'Family', type:'family'},
+ {id:'frnd', name:he?'חברים':ar?'أصدقاء':'Friends', type:'friends'},
  ];
  SS.circleMembers=[
- {id:'m_mom', cid:'fam', name:he?'אמא':'Mom', rel:he?'אמא':'Mother', emoji:'', color:'#E0A828', lat:32.0790,lng:34.7740, moving:true, shareTo:true, seeThem:true, sos:false, seed:true},
- {id:'m_jak', cid:'fam', name:he?'יעקב':'Jakob', rel:he?'אח':'Brother', emoji:'', color:'#2962FF', lat:32.0705,lng:34.7895, moving:true, shareTo:true, seeThem:true, sos:false, seed:true},
- {id:'m_dad', cid:'fam', name:he?'אבא':'Dad', rel:he?'אבא':'Father', emoji:'', color:'#00C853', lat:32.0840,lng:34.7700, moving:false, shareTo:true, seeThem:false, sos:false, seed:true},
- {id:'m_dana', cid:'frnd',name:he?'דנה':'Dana', rel:he?'חברה':'Friend', emoji:'', color:'#E91E8C', lat:32.0680,lng:34.7820, moving:true, shareTo:false, seeThem:true, sos:false, seed:true},
- {id:'m_noam', cid:'frnd',name:he?'נועם':'Noam', rel:he?'חבר':'Friend', emoji:'', color:'#9C27B0', lat:32.0720,lng:34.7965, moving:true, shareTo:true, seeThem:true, sos:false, seed:true},
+ {id:'m_mom', cid:'fam', name:he?'אמא':ar?'أمي':'Mom', rel:he?'אמא':ar?'الأم':'Mother', emoji:'', color:'#E0A828', lat:32.0790,lng:34.7740, moving:true, shareTo:true, seeThem:true, sos:false, seed:true},
+ {id:'m_jak', cid:'fam', name:he?'יעקב':ar?'سامي':'Jakob', rel:he?'אח':ar?'الأخ':'Brother', emoji:'', color:'#2962FF', lat:32.0705,lng:34.7895, moving:true, shareTo:true, seeThem:true, sos:false, seed:true},
+ {id:'m_dad', cid:'fam', name:he?'אבא':ar?'أبي':'Dad', rel:he?'אבא':ar?'الأب':'Father', emoji:'', color:'#00C853', lat:32.0840,lng:34.7700, moving:false, shareTo:true, seeThem:false, sos:false, seed:true},
+ {id:'m_dana', cid:'frnd',name:he?'דנה':ar?'دانة':'Dana', rel:he?'חברה':ar?'صديقة':'Friend', emoji:'', color:'#E91E8C', lat:32.0680,lng:34.7820, moving:true, shareTo:false, seeThem:true, sos:false, seed:true},
+ {id:'m_noam', cid:'frnd',name:he?'נועם':ar?'نور':'Noam', rel:he?'חבר':ar?'صديق':'Friend', emoji:'', color:'#9C27B0', lat:32.0720,lng:34.7965, moving:true, shareTo:true, seeThem:true, sos:false, seed:true},
  ];
  SS.circleMembers.forEach(m=>{m.baseLat=m.lat;m.baseLng=m.lng;});
  saveStore();
@@ -4506,7 +4510,7 @@ function renderCircles(){
  });
  const add=document.createElement('button');
  add.className='circ-tab add'; add.onclick=()=>addCircle();
- add.innerHTML=`<span class="ct-ic" aria-hidden="true"></span><span>${he?'מעגל חדש':'New circle'}</span>`;
+ add.innerHTML=`<span class="ct-ic" aria-hidden="true"></span><span>${he?'מעגל חדש':currentLang==='ar'?'دائرة جديدة':'New circle'}</span>`;
  tabs.appendChild(add);
  }
  // Members
@@ -4535,9 +4539,9 @@ function renderCircles(){
 function statusOf(m,he){
  if(m.sos)return{cls:'sos',txt:he?' SOS פעיל':' SOS active'};
  if(SS.circleGhost&&m.shareTo)return{cls:'paused',txt:he?' שיתוף מושהה':' sharing paused'};
- if(m.shareTo&&m.seeThem)return{cls:'mutual',txt:he?'הדדי':'Mutual'};
- if(m.shareTo&&!m.seeThem)return{cls:'oneway',txt:he?'אני משתף/ת בלבד':'I share only'};
- if(!m.shareTo&&m.seeThem)return{cls:'oneway',txt:he?'אני רואה בלבד':'I see only'};
+ if(m.shareTo&&m.seeThem)return{cls:'mutual',txt:he?'הדדי':currentLang==='ar'?'متبادل':'Mutual'};
+ if(m.shareTo&&!m.seeThem)return{cls:'oneway',txt:he?'אני משתף/ת בלבד':currentLang==='ar'?'أنا أشارك فقط':'I share only'};
+ if(!m.shareTo&&m.seeThem)return{cls:'oneway',txt:he?'אני רואה בלבד':currentLang==='ar'?'أنا أرى فقط':'I see only'};
  return{cls:'none',txt:he?'ללא שיתוף':'No sharing'};
 }
 function buildMemberRow(m,he){
@@ -5111,17 +5115,17 @@ function gdSetRel(id,val){ const p=gdPairById(id); if(!p)return; p.rel=val; save
 
 /* ── Guardian list UI (XSS-safe via ESC / textContent) ── */
 function gdStatusOf(p){
- const he=currentLang==='he';
- if(p.pending) return {cls:'pending',txt:he?' ממתין לאישור':' Waiting to accept'};
- if(gdIsLive(p)) return {cls:'live',txt:he?'מיקום חי':'Live location'};
- return {cls:'sim',txt:he?'ממתין למיקום חי':'Waiting for live location'};
+ const he=currentLang==='he', ar=currentLang==='ar';
+ if(p.pending) return {cls:'pending',txt:he?' ממתין לאישור':ar?' بانتظار القبول':' Waiting to accept'};
+ if(gdIsLive(p)) return {cls:'live',txt:he?'מיקום חי':ar?'موقع مباشر':'Live location'};
+ return {cls:'sim',txt:he?'ממתין למיקום חי':ar?'بانتظار الموقع المباشر':'Waiting for live location'};
 }
 function gdRenderList(){
  const list=document.getElementById('gd-list'); if(!list)return;
  const he=currentLang==='he'; const g=gdState(); list.innerHTML='';
  if(!g.pairs.length){
  const e=document.createElement('div'); e.style.cssText='text-align:center;color:var(--tx3);font-size:12px;padding:14px 4px;line-height:1.6';
- e.textContent=he?'עדיין אין שומרים מחוברים. הזמן/י מישהו שאת/ה סומך/ת עליו.':'No guardians connected yet. Invite someone you trust.';
+ e.textContent=he?'עדיין אין שומרים מחוברים. הזמן/י מישהו שאת/ה סומך/ת עליו.':currentLang==='ar'?'لا يوجد حُرّاس مرتبطون بعد. ادعُ شخصاً تثق به.':'No guardians connected yet. Invite someone you trust.';
  list.appendChild(e); return;
  }
  g.pairs.forEach(p=>{
