@@ -330,7 +330,9 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 .sos-strobe.on{display:flex;animation:strobeflash .42s steps(1,end) infinite;}
 @keyframes strobeflash{0%{background:#E8182C}33%{background:#1852C0}66%{background:#FFFFFF}100%{background:#E8182C}}
 @media(prefers-reduced-motion:reduce){.sos-strobe.on{animation-duration:1.1s;}}
-.strobe-panel{text-align:center;background:rgba(6,12,24,.82);border:2px solid rgba(255,255,255,.9);border-radius:var(--r24);padding:30px 28px;box-shadow:0 0 40px rgba(0,0,0,.6);}
+.strobe-panel{text-align:center;background:rgba(6,12,24,.82);border:2px solid rgba(255,255,255,.9);border-radius:var(--r24);padding:26px 28px 30px;box-shadow:0 0 40px rgba(0,0,0,.6);display:flex;flex-direction:column;align-items:center;}
+.strobe-shield{width:118px;height:118px;object-fit:contain;margin-bottom:12px;filter:drop-shadow(0 6px 18px rgba(0,0,0,.6));}
+@media(max-height:640px){.strobe-shield{width:88px;height:88px;margin-bottom:8px;}}
 .strobe-sos{font-size:74px;font-weight:900;color:#fff;letter-spacing:6px;line-height:1;text-shadow:0 2px 12px rgba(0,0,0,.7);}
 .strobe-sub{font-size:16px;font-weight:800;color:#fff;margin-top:10px;letter-spacing:.5px;}
 .strobe-note{font-size:11px;color:rgba(255,255,255,.8);margin-top:10px;line-height:1.5;max-width:260px;}
@@ -1305,6 +1307,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <!-- SOS MAX-ATTENTION — full-screen red/blue/white strobe + bold SOS message -->
  <div class="sos-strobe" id="sos-strobe" aria-hidden="true">
  <div class="strobe-panel">
+ <img class="strobe-shield" src="SHOMER_logo_big.png" alt="SHOMER" width="200" height="200">
  <div class="strobe-sos">SOS</div>
  <div class="strobe-sub" id="strobe-sub" data-he="חירום — קוראים לעזרה" data-en="EMERGENCY — calling for help">חירום — קוראים לעזרה</div>
  <div class="strobe-note" id="strobe-note"></div>
@@ -3550,7 +3553,7 @@ function startMaxAttention(){
  var he=currentLang==='he';
  var known=curSosType&&curSosType!=='unknown';
  setText('strobe-sub',(he?'חירום — קוראים לעזרה':'EMERGENCY — calling for help')+(known?' · '+sosTypeLabel(curSosType):''));
- setText('strobe-note','');
+ setText('strobe-note',he?'הבהוב המסך, הצליל והפנס פועלים כל עוד האפליקציה פתוחה. הבהוב במסך נעול יתווסף בגרסה המותקנת.':'Screen flash, sound and flashlight run while the app is open. Locked-screen flashing arrives in the installed app.');
  var ov=document.getElementById('sos-strobe'); if(ov){ov.classList.add('on');ov.setAttribute('aria-hidden','false');}
  startMorse();
 }
@@ -3914,11 +3917,11 @@ window.addEventListener('resize',()=>{if(MAP)MAP.invalidateSize(false);});
  INCIDENT DETAIL
 ═══════════════════════════════════ */
 const DETAILS=[
- {title:'SOS פעיל — סכנה מיידית', type:'sos', time:'לפני 2 דק׳', loc:'ירושלים, רחוב יפו', cx:266,cy:443, desc:'משתמשת שלחה SOS. מיקום שותף בזמן אמת. שומרים מתבקשים.',responders:[{nm:'אורן ד.',dist:'0.8 ק"מ',st:'בדרך'},{nm:'מיטל כ.',dist:'1.4 ק"מ',st:'בדרך'}],photos:0,status:'דחוף'},
- {title:'מעקב חשוד — שינקין', type:'stalk',time:'לפני 9 דק׳', loc:'ת"א, שינקין/אלנבי', cx:170,cy:299, desc:'גבר עוקב אחרי נשים. כ-45, חולצה כחולה, ג\'ינס. 3 דיווחים.',responders:[],photos:1,status:'זהירות'},
- {title:'נסגר — תקיפה ✓', type:'med', time:'לפני 34 דק׳', loc:'חיפה, הדר', cx:211,cy:131, desc:'4 שומרים הגיעו. המטרד הסתלק. הנפגעת בטוחה.',responders:[{nm:'רועי מ.',dist:'הגיע',st:'טיפל'}],photos:0,status:'טופל'},
- {title:'עזרה רפואית', type:'med', time:'לפני 16 דק׳', loc:'ראשון לציון, רחוב הרצל', cx:198,cy:366, desc:'קשיש, כ-80, נפל ליד הסופרמרקט. מד"א הוזמן.',responders:[{nm:'ריקי א.',dist:'2.1 ק"מ',st:'בדרך'}],photos:0,status:'פעיל'},
- {title:'תקיפה פיזית — פ"ת', type:'viol', time:'לפני 21 דק׳', loc:'פתח תקוה, רחוב הרצל', cx:220,cy:324, desc:'תקיפה בכניסה לחנות. המשטרה הוזמנה. 2 תמונות.',responders:[],photos:2,status:'דחוף'},
+ {title:'SOS פעיל — סכנה מיידית', type:'sos', time:'לפני 2 דק׳', loc:'ירושלים, רחוב יפו', cx:266,cy:443, lat:31.7836,lng:35.2167, desc:'משתמשת שלחה SOS. מיקום שותף בזמן אמת. שומרים מתבקשים.',responders:[{nm:'אורן ד.',dist:'0.8 ק"מ',st:'בדרך'},{nm:'מיטל כ.',dist:'1.4 ק"מ',st:'בדרך'}],photos:0,status:'דחוף'},
+ {title:'מעקב חשוד — שינקין', type:'stalk',time:'לפני 9 דק׳', loc:'ת"א, שינקין/אלנבי', cx:170,cy:299, lat:32.0667,lng:34.7747, desc:'גבר עוקב אחרי נשים. כ-45, חולצה כחולה, ג\'ינס. 3 דיווחים.',responders:[],photos:1,status:'זהירות'},
+ {title:'נסגר — תקיפה ✓', type:'med', time:'לפני 34 דק׳', loc:'חיפה, הדר', cx:211,cy:131, lat:32.8120,lng:34.9982, desc:'4 שומרים הגיעו. המטרד הסתלק. הנפגעת בטוחה.',responders:[{nm:'רועי מ.',dist:'הגיע',st:'טיפל'}],photos:0,status:'טופל'},
+ {title:'עזרה רפואית', type:'med', time:'לפני 16 דק׳', loc:'ראשון לציון, רחוב הרצל', cx:198,cy:366, lat:31.9640,lng:34.8044, desc:'קשיש, כ-80, נפל ליד הסופרמרקט. מד"א הוזמן.',responders:[{nm:'ריקי א.',dist:'2.1 ק"מ',st:'בדרך'}],photos:0,status:'פעיל'},
+ {title:'תקיפה פיזית — פ"ת', type:'viol', time:'לפני 21 דק׳', loc:'פתח תקוה, רחוב הרצל', cx:220,cy:324, lat:32.0840,lng:34.8870, desc:'תקיפה בכניסה לחנות. המשטרה הוזמנה. 2 תמונות.',responders:[],photos:2,status:'דחוף'},
 ];
 function openDetail(idx){
  if(idx<0||!DETAILS[idx]) return;
@@ -3935,10 +3938,13 @@ function openDetail(idx){
  </div>`;
  const pHtml=d.photos>0?`<div class="sec-cap mb12"> ${currentLang==='he'?'תמונות מהאירוע':'Photos from incident'}</div><div class="det-photo-grid mb16">${Array(d.photos).fill('<div class="det-ph"></div>').join('')}</div>`:'';
  const rHtml=d.responders.length?`<div class="sec-cap mb12"> ${currentLang==='he'?'שומרים שהגיבו':'Responders'}</div>${d.responders.map(r=>`<div class="resp-row"><div class="resp-av">${ESC(r.nm[0])}</div><div><div class="resp-nm">${ESC(r.nm)}</div><div class="resp-d">${ESC(r.dist)}</div></div><span class="resp-st">${ESC(r.st)}</span></div>`).join('')}`:'';
+ _curDetail=d;
  let ctas='';
+ const canNav=(d.lat!=null&&d.lng!=null&&d.status!=='טופל');
+ const navBtn=canNav?`<button class="dcta pr" style="width:100%;margin-bottom:8px;background:linear-gradient(135deg,#0E8840,#14A857)" onclick="navigateToEvent()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:18px;height:18px;vertical-align:-3px;margin-inline-end:6px"><path d="M3 11l18-8-8 18-2-8-8-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>${currentLang==='he'?'נווט לאירוע · מסלול חי':'Navigate to event · live route'}</button>`:'';
  if(['sos','viol','stalk','med'].includes(d.type)){
- ctas=`<div class="det-ctas"><button class="dcta pr" onclick="respondDet(this)" id="det-respond-btn">${T('respond')}</button><button class="dcta gd" onclick="callNum('100')">${T('call100')}</button><button class="dcta sc" onclick="cl('det-sheet')">${T('close')}</button></div>`;
- }
+ ctas=navBtn+`<div class="det-ctas"><button class="dcta pr" onclick="respondDet(this)" id="det-respond-btn">${T('respond')}</button><button class="dcta gd" onclick="callNum('100')">${T('call100')}</button><button class="dcta sc" onclick="cl('det-sheet')">${T('close')}</button></div>`;
+ } else { ctas=navBtn; }
  // Use innerHTML only for trusted static HTML, user data only via textContent/ESC
  const body=document.getElementById('det-body');
  body.innerHTML=`
@@ -3972,6 +3978,15 @@ function respondDet(btn){
  btn.disabled=true; btn.textContent=T('responded');
  btn.style.background='var(--grn)'; btn.style.boxShadow='0 4px 14px rgba(14,136,64,.35)';
  toast(T('responded'),'grn');
+}
+var _curDetail=null;
+/* Item 10 — Google-Maps-style shortest path to an EVENT (not just SOS).
+   Closes the sheet, drops a pulsing red dot on the event + draws the live glowing route. */
+function navigateToEvent(){
+ var d=_curDetail;
+ if(!d||d.lat==null||d.lng==null){ toast(currentLang==='he'?'אין מיקום מדויק לאירוע זה':'No precise location for this event',''); return; }
+ cl('det-sheet');
+ respondToSOS(d.lat,d.lng,d.title||(currentLang==='he'?'אירוע':'Event'));
 }
 
 /* ═══════════════════════════════════
@@ -4617,7 +4632,9 @@ function drawResponderRoute(){
     const glow=window.L.polyline(latlngs,{color:'#21E6FF',weight:15,opacity:.28,lineCap:'round',lineJoin:'round',className:'resp-glow',interactive:false}).addTo(MAP);
     const mid=window.L.polyline(latlngs,{color:'#5CF0FF',weight:8,opacity:.55,lineCap:'round',lineJoin:'round',interactive:false}).addTo(MAP);
     const core=window.L.polyline(latlngs,{color:'#EAFEFF',weight:3.5,opacity:.98,lineCap:'round',className:'resp-core',interactive:false}).addTo(MAP);
-    respRouteLayers=[glow,mid,core];
+    // pulsing red dot at the event/destination — the responder's target
+    const target=window.L.marker([respTarget.lat,respTarget.lng],{icon:sosIcon(),interactive:false,zIndexOffset:1100}).addTo(MAP);
+    respRouteLayers=[glow,mid,core,target];
     try{MAP.fitBounds(window.L.latLngBounds(latlngs).pad(0.28),{maxZoom:16});}catch(e){}
   };
   const url='https://router.project-osrm.org/route/v1/foot/'+userLng+','+userLat+';'+respTarget.lng+','+respTarget.lat+'?overview=full&geometries=geojson';
@@ -5362,7 +5379,10 @@ function fbListenSOS(){
     Object.keys(all).forEach(function(id){ var s=all[id]; if(!s||s.resolved||s.uid===FB.uid||s.lat==null)return;
       cur[id]=s.type||'unknown';
       if(fbSosMarkers[id]){ fbSosMarkers[id].setLatLng([s.lat,s.lng]); fbSosMarkers[id].setIcon(sosPinIcon(s.type)); }
-      else { fbSosMarkers[id]=window.L.marker([s.lat,s.lng],{icon:sosPinIcon(s.type),zIndexOffset:1000,alt:'SOS '+(s.name||'')}).addTo(MAP); }
+      else {
+        fbSosMarkers[id]=window.L.marker([s.lat,s.lng],{icon:sosPinIcon(s.type),zIndexOffset:1000,alt:'SOS '+(s.name||'')}).addTo(MAP);
+        (function(mid){ fbSosMarkers[mid].on('click',function(){ var ll=fbSosMarkers[mid].getLatLng(); respondToSOS(ll.lat,ll.lng,(currentLang==='he'?'אירוע חי':'Live event')); }); })(id);
+      }
       // cue: a new live event vs an updated one (skip the first/baseline sync)
       if(FB._sosInit){ if(prev[id]===undefined)newCount++; else if(prev[id]!==cur[id])updCount++; }
     });
