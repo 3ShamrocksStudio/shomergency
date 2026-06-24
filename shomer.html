@@ -1624,6 +1624,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg></div><div><div class="sr-nm" id="n-stalk-nm">מעקב ואיומים</div><div class="sr-sb" id="n-stalk-sb">דיווחים על הטרדה/מעקב לידך</div></div></div><div class="tog on" data-skey="n_stalk" onclick="this.classList.toggle('on');saveToggle(this)" role="switch"></div></div>
  <div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 8v8M8 12h8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></div><div><div class="sr-nm" id="n-med-nm">עזרה רפואית</div><div class="sr-sb" id="n-med-sb">בקשות לעזרה רפואית בקרבתך</div></div></div><div class="tog" data-skey="n_med" onclick="this.classList.toggle('on');saveToggle(this)" role="switch"></div></div>
  <div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="sr-nm" id="n-closed-nm">אירועים שנסגרו</div><div class="sr-sb" id="n-closed-sb">עדכון כשאירוע לידך טופל ונסגר</div></div></div><div class="tog" data-skey="n_closed" onclick="this.classList.toggle('on');saveToggle(this)" role="switch"></div></div>
+ <div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 6a8 8 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div><div class="sr-nm" id="n-snd-nm">צלילי אירועים חיים</div><div class="sr-sb" id="n-snd-sb">צליל עדין כששומר/ת מצטרף/ת, באירוע חדש או בעדכון</div></div></div><div class="tog on" data-skey="snd_cues" onclick="this.classList.toggle('on');saveToggle(this);if(this.classList.contains('on'))playCue('join')" role="switch"></div></div>
  </div>
  <div class="set-cat"><div class="set-cat-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div><div class="set-cat-t" data-he="בטיחות" data-en="Safety features">בטיחות</div></div>
  <div class="set-grp"><div class="set-row" onclick="op('sh-dms');cl('sh-set')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="sr-nm">Dead Man's Switch</div></div><span style="color:var(--tx3);font-size:18px">›</span></div><div class="set-row" onclick="op('sh-alarm');cl('sh-set')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18v-5a5 5 0 0 1 10 0v5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><rect x="5" y="18" width="14" height="3" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3v2M4.5 7l1.5 1.3M19.5 7L18 8.3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div class="sr-nm" data-he="הגדרות אזעקה" data-en="Alarm settings">הגדרות אזעקה</div></div><span style="color:var(--tx3);font-size:18px">›</span></div></div>
@@ -2792,6 +2793,7 @@ function applyTranslations(){
  setText('n-stalk-nm',he?'מעקב ואיומים':'Stalking & threats'); setText('n-stalk-sb',he?'דיווחים על הטרדה/מעקב לידך':'Harassment/stalking reports near you');
  setText('n-med-nm',he?'עזרה רפואית':'Medical help'); setText('n-med-sb',he?'בקשות לעזרה רפואית בקרבתך':'Medical-help requests nearby');
  setText('n-closed-nm',he?'אירועים שנסגרו':'Resolved incidents'); setText('n-closed-sb',he?'עדכון כשאירוע לידך טופל ונסגר':'A heads-up when a nearby incident is closed');
+ setText('n-snd-nm',he?'צלילי אירועים חיים':'Live event sounds'); setText('n-snd-sb',he?'צליל עדין כששומר/ת מצטרף/ת, באירוע חדש או בעדכון':'A soft chime when a SHOMER joins, on a new event or an update');
  setText('shake-set-help',he?'מאפשר להפעיל SOS בלי להסתכל על המסך — מנערים את הטלפון בחוזקה. שימושי כשהטלפון בכיס או כשאי אפשר להביט במסך.':'Lets you trigger SOS without looking at the screen — just shake the phone hard. Useful when it\'s in your pocket or you can\'t look.');
  setText('sos-safety-help',he?'מגן עליך מפני אזעקות שווא ושיגור בטעות. כך לא תשלח/י עזרה בלי כוונה — ולא תפגע/י באמון המערכת.':'Protects you from false alarms and accidental triggers, so you never send help by mistake — or hurt the system\'s trust.');
  setText('set-priv-help',he?'את/ה שולט/ת במה שמשותף. המיקום נשמר במכשירך ומשותף רק כשאת/ה מפעיל/ה SOS, DMS או שיתוף עם שומר/ת.':'You control what\'s shared. Your location stays on your device and is shared only when you trigger SOS, DMS, or guardian sharing.');
@@ -3209,6 +3211,35 @@ function stopAlarm(){
  oscillators.forEach(o=>{try{o.stop();}catch(e){}});
  oscillators=[];
  if(audioCtx){try{audioCtx.close();}catch(e){}audioCtx=null;}
+}
+/* ── Realtime event cues (item 9): subtle, distinct chimes tied to live events.
+   Dedicated lightweight context so they never collide with the alarm engine. */
+var _cueCtx=null;
+function cuesOn(){ return !(SS.settings&&SS.settings.toggles&&SS.settings.toggles.snd_cues===false); }
+function playCue(kind){
+ if(!cuesOn())return;
+ try{
+  if(!_cueCtx||_cueCtx.state==='closed')_cueCtx=new(window.AudioContext||window.webkitAudioContext)();
+  if(_cueCtx.state==='suspended')_cueCtx.resume();
+  var ctx=_cueCtx,t0=ctx.currentTime;
+  // join = gentle rising (someone has your back) · event = brighter triad (pay attention) · update = soft two-note
+  var seq = kind==='join' ? [[659.3,0,.13],[880,.10,.18]]
+          : kind==='event'? [[880,0,.12],[1174.7,.11,.13],[1568,.22,.20]]
+          : /*update*/       [[740,0,.13],[987.8,.09,.15]];
+  var peak = kind==='event'?.17:.11;
+  var master=ctx.createGain(); master.connect(ctx.destination);
+  master.gain.setValueAtTime(.0001,t0);
+  master.gain.exponentialRampToValueAtTime(peak,t0+.02);
+  master.gain.exponentialRampToValueAtTime(.0001,t0+.55);
+  seq.forEach(function(n){ var f=n[0],d=n[1],len=n[2];
+   var o=ctx.createOscillator(),g=ctx.createGain();
+   o.type=kind==='event'?'triangle':'sine'; o.frequency.value=f;
+   g.gain.setValueAtTime(.0001,t0+d);
+   g.gain.exponentialRampToValueAtTime(.6,t0+d+.015);
+   g.gain.exponentialRampToValueAtTime(.0001,t0+d+len);
+   o.connect(g); g.connect(master); o.start(t0+d); o.stop(t0+d+len+.03);
+  });
+ }catch(e){}
 }
 function testAlarm(){playAlarm(3500);}
 function playAlarm(durMs){
@@ -5312,6 +5343,9 @@ function fbPublishPresence(){
 function updateGuardiansNearby(n){
   var el=document.getElementById('gnear-n'); if(el)el.textContent=n;
   var box=document.getElementById('hdr-near'); if(box)box.style.display=(FB.ready&&n>0)?'flex':'none';
+  // cue when a new SHOMER joins nearby (skip the first/baseline sync)
+  if(FB._prevNear!=null && n>FB._prevNear) playCue('join');
+  FB._prevNear=n;
 }
 function explainNearby(){ var n=(document.getElementById('gnear-n')||{}).textContent||'0'; var he=currentLang==='he'; toast(he?n+' שומרים פעילים בקרבתך (נתון חי)':n+' active SHOMERs near you (live)',''); }
 /* Cross-device SOS over RTDB */
@@ -5324,10 +5358,16 @@ function fbListenSOS(){
     var all=snap.val()||{};
     Object.keys(fbSosMarkers).forEach(function(id){ if(!all[id]||all[id].resolved){ try{MAP.removeLayer(fbSosMarkers[id]);}catch(e){} delete fbSosMarkers[id]; } });
     if(!MAP)return;
+    var prev=FB._sosState||{}, cur={}, newCount=0, updCount=0;
     Object.keys(all).forEach(function(id){ var s=all[id]; if(!s||s.resolved||s.uid===FB.uid||s.lat==null)return;
+      cur[id]=s.type||'unknown';
       if(fbSosMarkers[id]){ fbSosMarkers[id].setLatLng([s.lat,s.lng]); fbSosMarkers[id].setIcon(sosPinIcon(s.type)); }
       else { fbSosMarkers[id]=window.L.marker([s.lat,s.lng],{icon:sosPinIcon(s.type),zIndexOffset:1000,alt:'SOS '+(s.name||'')}).addTo(MAP); }
+      // cue: a new live event vs an updated one (skip the first/baseline sync)
+      if(FB._sosInit){ if(prev[id]===undefined)newCount++; else if(prev[id]!==cur[id])updCount++; }
     });
+    if(newCount)playCue('event'); else if(updCount)playCue('update');
+    FB._sosState=cur; FB._sosInit=true;
   }, function(){ /* permission denied until rules deployed */ });
 }
 /* Register this device's FCM token + location so the Cloud Function can target it for push. */
