@@ -5666,6 +5666,13 @@ async function fbInit(){
   if(!window.SHOMER_FB){ FB.authState='no-config'; FB.err='no-config'; fbLog('NO Firebase config on this build'); renderFbStatus(); return; }
   if(FB._initing)return; FB._initing=true;
   fbLog('init start · dbURL =', window.SHOMER_FB.databaseURL);
+  // WATCHDOG: any step (SDK load, persistence, sign-in, socket) can HANG on a
+  // flaky mobile network without ever rejecting → endless "connecting". If we're
+  // still not ready after 20s, NAME it as a timeout so the panel stops lying.
+  if(FB._watchdog)clearTimeout(FB._watchdog);
+  FB._watchdog=setTimeout(function(){
+    if(!FB.ready){ if(!FB.err||FB.authState==='connecting'){ FB.authState=(FB.authState&&FB.authState!=='connecting')?FB.authState:(FB.sdkLoaded?'auth-timeout (no response 20s)':'sdk-timeout (no response 20s)'); FB.err=FB.authState; } fbLog('WATCHDOG fired · still not ready ·', FB.authState, '· sdkLoaded =', FB.sdkLoaded); try{renderFbStatus();}catch(e){} }
+  },20000);
   try{
     // 1) Load the SDK (CSP/network failures named here)
     try{
@@ -5688,16 +5695,21 @@ async function fbInit(){
     FB.persist=persistUsed; fbLog('persistence =', persistUsed);
 
     // 3) Anonymous auth — retry once on a flaky mobile network. Name the exact error.
+    //    A signInAnonymously() that HANGS (never resolves/rejects) is the classic
+    //    iOS "connecting forever" — race it against a timeout so a stuck call
+    //    surfaces as 'auth-timeout' instead of blocking init indefinitely.
+    function signInTO(ms){ return Promise.race([ auth.signInAnonymously(), new Promise(function(_,rej){ setTimeout(function(){ var e=new Error('sign-in timed out'); e.code='auth-timeout'; rej(e); }, ms); }) ]); }
     var user=auth.currentUser;
     if(!user){
-      try{ user=(await auth.signInAnonymously()).user; }
+      try{ user=(await signInTO(12000)).user; }
       catch(e1){
         FB.authState='auth-err:'+((e1&&e1.code)||e1); FB.err=FB.authState; fbLog('anonymous auth attempt 1 FAILED:', (e1&&e1.code)||e1, e1); renderFbStatus();
         await new Promise(r=>setTimeout(r,1800));
-        try{ user=(await auth.signInAnonymously()).user; }
+        try{ user=(await signInTO(15000)).user; }
         catch(e2){ FB.authState='auth-err:'+((e2&&e2.code)||e2); FB.err=FB.authState; fbLog('anonymous auth attempt 2 FAILED:', (e2&&e2.code)||e2, e2); throw e2; }
       }
     }
+    if(FB._watchdog){ clearTimeout(FB._watchdog); FB._watchdog=null; }
     FB.uid=user.uid; FB.authState='ok'; FB.err=null; FB.db=window.firebase.database(); FB.ready=true;
     fbLog('AUTH OK · uid =', user.uid, '· persistence =', persistUsed);
     try{ FB.db.goOnline&&FB.db.goOnline(); }catch(e){}
@@ -5705,7 +5717,7 @@ async function fbInit(){
     FB.listening=true; renderFbStatus();
     try{ auth.onAuthStateChanged(function(u){ if(u&&u.uid){ FB.uid=u.uid; } }); }catch(e){}
     // NOTE: FCM/registerPush is opt-in via the status panel (a 2nd SW on load can churn the socket).
-  }catch(e){ FB.err=FB.err||('init:'+((e&&e.code)||(e&&e.message)||e)); fbLog('INIT FAILED ·', FB.err, e); renderFbStatus(); }
+  }catch(e){ if(FB._watchdog){ clearTimeout(FB._watchdog); FB._watchdog=null; } FB.err=FB.err||('init:'+((e&&e.code)||(e&&e.message)||e)); fbLog('INIT FAILED ·', FB.err, e); renderFbStatus(); }
   FB._initing=false;
 }
 function fbSetupPresence(){
