@@ -53,6 +53,22 @@
         ".write": "auth != null && newData.child('fromUid').val() === auth.uid",
         ".validate": "newData.hasChildren(['toUid','fromUid'])"
       }
+    },
+
+    "invites": {
+      "$token": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      }
+    },
+
+    "pairs": {
+      "$uid": {
+        ".read": "auth != null",
+        "$other": {
+          ".write": "auth != null && auth.uid === $uid"
+        }
+      }
     }
   }
 }

@@ -663,8 +663,8 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
 /* Unobtrusive single-line mark for operational screens */
 .mini-credit{text-align:center;font-size:9.5px;color:var(--tx3);letter-spacing:.4px;opacity:.7;padding:16px 0 4px;}
 .footer-3s{height:13px;width:auto;display:inline-block;opacity:.6;}
-/* Footer = the 3S logo image (very small) — no studio text */
-.studio-credit .cr{display:none;}
+/* Footer = the 3S logo image (very small) + a small © line */
+.studio-credit .cr{display:inline-block;font-size:10px;color:var(--tx3);opacity:.75;letter-spacing:.2px;}
 .studio-credit .sc-badge{background:none!important;border:none!important;padding:0!important;}
 .studio-credit .sc-badge img{height:13px!important;width:auto!important;opacity:.62;}
 .studio-credit{padding:8px 0 4px!important;}
@@ -997,10 +997,10 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
 .ob-hero{padding:14px 0 2px;}
 /* The badge IS the wordmark — sized to keep onboarding above the fold (no scroll). */
-.ob-shieldwrap{position:relative;display:flex;align-items:center;justify-content:center;width:min(42vw,168px);height:min(42vw,168px);}
+.ob-shieldwrap{position:relative;display:flex;align-items:center;justify-content:center;width:min(56vw,224px);height:min(56vw,224px);}
 @media(max-height:700px){
  .ob-hero{padding:6px 0 0;}
- .ob-shieldwrap{width:min(30vw,114px);height:min(30vw,114px);}
+ .ob-shieldwrap{width:min(40vw,152px);height:min(40vw,152px);}
  .ob-sub{margin-top:7px;margin-bottom:6px;letter-spacing:2.2px;font-size:10px;}
  .ob-lang-pick{margin-bottom:7px;}
  .ob-steps{margin-bottom:7px;}
@@ -1111,10 +1111,6 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="ob-card">
  <h3 id="ob-h0">יצירת חשבון שומר</h3>
  <p class="desc" id="ob-d0">מפת בטיחות חיה · SOS + אזעקה מיידית · עזרה הדדית</p>
- <div class="disclaimer" id="ob-disclaimer">
- <span class="dc-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l9 16H3Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17" r="1.2" fill="currentColor"/></svg></span>
- <span id="ob-disclaimer-txt"><strong>שומר אינו תחליף לשירותי חירום.</strong> זהו כלי לבטיחות אישית ושיתוף מיקום. במצב חירום אמיתי חייגו <b>100</b> (משטרה) · <b>101</b> (מד״א) · <b>102</b> (כבאות). שומר אינו מתקשר לרשויות עבורך.</span>
- </div>
  <div class="name-field-wrap">
  <input class="ob-f" id="ob-name" type="text" autocomplete="given-name" maxlength="40" placeholder="שם פרטי" aria-label="שם פרטי" style="margin-bottom:6px">
  <span class="name-edit-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2 2 0 0 0-3-3L5 17Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 7l3 3" fill="none" stroke="currentColor" stroke-width="2"/></svg></span>
@@ -1122,6 +1118,10 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <p class="name-hint" id="name-hint"><span id="name-hint-txt">נוצר אוטומטית — אפשר לערוך</span></p>
  <input class="ob-f" id="ob-phone" type="tel" autocomplete="tel" maxlength="15" placeholder="050-000-0000" inputmode="tel" dir="ltr" style="text-align:start" aria-label="מספר טלפון">
  <p style="font-size:11px;color:var(--tx3);margin:-4px 0 12px;line-height:1.6" id="ob-why">מספר הטלפון משמש לשליחת עזרה בעת חירום.</p>
+ <div class="disclaimer" id="ob-disclaimer" style="margin-bottom:12px">
+ <span class="dc-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l9 16H3Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17" r="1.2" fill="currentColor"/></svg></span>
+ <span id="ob-disclaimer-txt"><strong>שומר אינו תחליף לשירותי חירום.</strong> זהו כלי לבטיחות אישית ושיתוף מיקום. במצב חירום אמיתי חייגו <b>100</b> (משטרה) · <b>101</b> (מד״א) · <b>102</b> (כבאות). שומר אינו מתקשר לרשויות עבורך.</span>
+ </div>
  <button class="ob-cta" id="ob-cta0" onclick="obStep0()"><span id="ob-cta0-t">המשך ←</span></button>
  </div>
  </div>
@@ -1136,8 +1136,8 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="geo-t" id="geo-t">נדרש אישור מיקום</div>
  <div class="geo-s" id="geo-s">לחץ 'אפשר' ואשר בחלון שיפתח.<br>המיקום משמש אך ורק לצורכי בטיחות.</div>
  </div>
- <button class="ob-cta" id="geo-btn" onclick="requestGeo()"><span id="geo-btn-t">אפשר גישה למיקום</span></button>
- <button class="ob-cta" style="background:var(--n4);color:var(--tx1);box-shadow:none;margin-top:8px;border:1px solid var(--b2);" onclick="goStep(2)" id="geo-skip-btn"><span id="geo-skip-t">דלג — המשך בלי מיקום</span></button>
+ <button class="ob-cta" id="geo-btn" onclick="requestGeo()"><span id="geo-btn-t">שתף מיקום</span></button>
+ <button class="ob-cta" style="background:var(--n4);color:var(--tx1);box-shadow:none;margin-top:8px;border:1px solid var(--b2);" onclick="goStep(2)" id="geo-skip-btn"><span id="geo-skip-t">דלג – המשך בלי שיתוף מיקום</span></button>
  <button class="ob-back" onclick="goStep(0)" id="ob-back1">← חזרה</button>
  </div>
  </div>
@@ -1192,7 +1192,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </div>
  <footer class="studio-credit">
  <span class="sc-badge"><img src="3shamrocks.png" alt="3Shamrocks Studio" width="92" height="14"></span>
- <span class="cr"> 2026 · All rights reserved.</span>
+ <span class="cr">© 2026 3Shamrocks Studio</span>
  </footer>
 
  <!-- PHONE VERIFICATION (identity for My SHOMER / live location) -->
@@ -1741,7 +1741,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </div>
  <footer class="studio-credit">
  <span class="sc-badge"><img src="3shamrocks.png" alt="3Shamrocks Studio" width="92" height="14"></span>
- <span class="cr"> 2026 · All rights reserved.</span>
+ <span class="cr">© 2026 3Shamrocks Studio</span>
  </footer>
  </div>
  </div>
@@ -1983,7 +1983,7 @@ const LANGS={
  ob_h1:'אישור מיקום',ob_d1:'נדרש לשליחת SOS מיידי לשומרים בקרבתך.',
  ob_h2:'הגדרות חירום',ob_d2:'הקש אזעקה כדי לשמוע אותה. היא תופעל עם לחיצת SOS.',
  geo_need:'נדרש אישור מיקום',geo_wait:'מחפש מיקום...',geo_ok:'מיקום אושר!',geo_err:'לא ניתן לאתר מיקום',
- geo_allow:'אפשר גישה למיקום',geo_next:'← המשך להגדרות חירום',geo_retry:' נסה שוב',geo_skip:'דלג (מוגבל)',
+ geo_allow:'שתף מיקום',geo_next:'← המשך להגדרות חירום',geo_retry:' נסה שוב',geo_skip:'דלג – המשך בלי שיתוף מיקום',
  al1:'סירנת ניידת',al1d:'גלי צליל 620→3500Hz — הכי מזוהה כחירום',al2:'צופר תקיפה',al2d:'אזעקת קרב מאיימת — גלי דיסוננס + תת-בס',al3:'הדף סוני',al3d:'צרחה דו-גוונית חודרת — להבריח תוקף',
  vol:'עוצמת קול',test:'בדוק אזעקה',finish:'✓ כניסה לשומר',back:'← חזרה',
  shake:'<strong>Shake-to-SOS:</strong> 5 ניעורים חזקים מפעילים SOS אוטומטי.',
@@ -2016,7 +2016,7 @@ const LANGS={
  ob_h1:'Location access',ob_d1:'Required to send SOS instantly to guardians nearby.',
  ob_h2:'Emergency settings',ob_d2:'Tap an alarm to hear it. It fires when you trigger SOS.',
  geo_need:'Location access needed',geo_wait:'Locating...',geo_ok:'Location confirmed!',geo_err:'Could not locate you',
- geo_allow:'Allow location access',geo_next:'Continue →',geo_retry:' Retry',geo_skip:'Skip (limited)',
+ geo_allow:'Share location',geo_next:'Continue →',geo_retry:' Retry',geo_skip:'Skip – continue without sharing',
  al1:'Police siren',al1d:'620→3500Hz sweep — most recognizable',al2:'Air-raid siren',al2d:'Menacing battle-siren wail + sub-bass',al3:'Sonic deterrent',al3d:'Piercing dual-tone scream — scares attackers',
  vol:'Volume',test:'Test alarm',finish:'✓ Enter Shomer',back:'← Back',
  shake:'<strong>Shake-to-SOS:</strong> 5 hard shakes trigger automatic SOS.',
@@ -3516,6 +3516,7 @@ function activateSOS(){
  injectSOSCard();
  buildSosTypeBar(); reflectSosType(); scheduleSosFallback();
  try{ fbPublishSOS(); }catch(e){} // cross-device: broadcast this SOS over RTDB
+ try{ fbAlertPairedSos(); }catch(e){} // targeted closed-app push to paired SHOMERs
  toast(he?' SOS שודר — שומרים בקרבתך עודכנו':' SOS broadcast — nearby SHOMERs notified','red');
  // Auto-dial prompt (opens dialer; a native app could place the call directly).
  setTimeout(()=>{
@@ -4892,6 +4893,7 @@ function gdCreateInvite(){
  const p={id:genId('g'),token:token,name:'',rel:'',shareToThem:true,seeThem:true,addedTs:Date.now(),
  initiator:true,pending:true,color:GD_PALETTE[g.pairs.length%GD_PALETTE.length],lat:null,lng:null,ts:0,live:false,simLat:null,simLng:null};
  g.pairs.push(p); saveStore();
+ try{ fbRegisterInvite(p.token, g.myName||(SS.user&&SS.user.name)||''); }catch(e){} // real backend link
  const inp=document.getElementById('gd-invite-link'); if(inp) inp.value=gdInviteLink(p);
  gdOpen('gd-invite'); gdRenderList();
 }
@@ -4947,6 +4949,8 @@ function gdConnect(tok,nm,fromLink){
  lat:null,lng:null,ts:0,live:false,_fromLink:!!fromLink,
  simLat:TLV[0]+(Math.random()-.5)*.02,simLng:TLV[1]+(Math.random()-.5)*.02}; g.pairs.push(p); }
  else { p.pending=false; if(nm&&!p.name)p.name=nm; }
+ // real backend link: record the mutual pairing in RTDB (binds the two accounts)
+ try{ fbAcceptInvite(tok,(gdState().myName||(SS.user&&SS.user.name)||'')).then(function(fromUid){ if(fromUid){ p.partnerUid=fromUid; p.linked=true; saveStore(); gdRenderList(); } }); }catch(e){}
  saveStore();
  gdSend({type:'hello'}); gdBroadcast(); gdRenderMarkers(); gdRenderList();
  if(document.getElementById('sh-circles')&&document.getElementById('sh-circles').classList.contains('open')){} else openCircles();
@@ -5364,7 +5368,7 @@ async function fbInit(){
     if(!window.firebase.apps.length)window.firebase.initializeApp(window.SHOMER_FB);
     var cred=await window.firebase.auth().signInAnonymously();
     FB.uid=cred.user.uid; FB.db=window.firebase.database(); FB.ready=true;
-    fbSetupPresence(); fbListenSOS();
+    fbSetupPresence(); fbListenSOS(); fbListenPairs();
     try{ registerPush(); }catch(e){}
   }catch(e){ /* offline / blocked — app keeps working locally */ }
 }
@@ -5489,6 +5493,53 @@ function fbRegisterToken(token){ if(!FB.ready||!token)return; var lat=userLat!=n
 /* Queue a targeted alarm — alarmFanout Cloud Function pushes it to the recipient even when their
    app is CLOSED (used by geofence arrival; check-in cross-device needs guardian-uid pairing). */
 function fbQueueAlarm(toUid,title,body,tag){ if(!FB.ready||!toUid)return; try{ FB.db.ref('alarms').push({fromUid:FB.uid,toUid:toUid,title:title,body:body,tag:tag||'shomer',ts:Date.now()}); }catch(e){} }
+
+/* ══ REAL backend pairing (item 3): a mutual account link in RTDB so SOS + location
+   flow between paired SHOMERs. Each side writes only its OWN pairs node; the shared
+   invite code carries the inviter's uid. Needs the /invites + /pairs rules deployed
+   (database.rules.json) — falls back to local-only pairing until then. ══ */
+function fbRegisterInvite(token,name){
+  if(!FB.ready||!token)return;
+  try{ FB.db.ref('invites/'+token).set({fromUid:FB.uid,name:name||'',ts:Date.now()}); }catch(e){}
+  // inviter watches for the acceptance, then completes the mutual link from its own node
+  try{ FB.db.ref('invites/'+token+'/acceptedBy').on('value',function(snap){
+    var other=snap.val(); if(!other||other===FB.uid)return;
+    FB.db.ref('invites/'+token+'/acceptedName').once('value').then(function(s2){
+      try{ FB.db.ref('pairs/'+FB.uid+'/'+other).set({name:(s2.val()||''),token:token,ts:Date.now()}); }catch(e){}
+    });
+  }); }catch(e){}
+}
+function fbAcceptInvite(token,myName){
+  if(!FB.ready||!token)return Promise.resolve(null);
+  return FB.db.ref('invites/'+token).once('value').then(function(snap){
+    var inv=snap.val(); if(!inv||!inv.fromUid)return null;
+    try{ FB.db.ref('pairs/'+FB.uid+'/'+inv.fromUid).set({name:(inv.name||''),token:token,ts:Date.now()}); }catch(e){}
+    try{ FB.db.ref('invites/'+token).update({acceptedBy:FB.uid,acceptedName:myName||'',acceptedTs:Date.now()}); }catch(e){}
+    return inv.fromUid;
+  }).catch(function(){return null;});
+}
+function fbListenPairs(){
+  if(!FB.ready)return;
+  FB.db.ref('pairs/'+FB.uid).on('value',function(snap){
+    var all=snap.val()||{}; FB._pairedUids=all;
+    try{ var g=gdState(), changed=false;
+      Object.keys(all).forEach(function(uid){ var info=all[uid]||{};
+        var ex=g.pairs.find(function(p){return p.partnerUid===uid;});
+        if(ex){ if(!ex.linked){ex.linked=true;changed=true;} }
+        else { g.pairs.push({id:genId('g'),token:info.token||('p'+uid.slice(0,8)),name:info.name||'',rel:'',shareToThem:true,seeThem:true,addedTs:Date.now(),initiator:false,pending:false,partnerUid:uid,linked:true,color:GD_PALETTE[g.pairs.length%GD_PALETTE.length],lat:null,lng:null,ts:0,live:false}); changed=true; }
+      });
+      if(changed){ saveStore(); if(document.getElementById('sh-circles')&&document.getElementById('sh-circles').classList.contains('open'))gdRenderList(); }
+    }catch(e){}
+  }, function(){ /* denied until /pairs rules deployed */ });
+}
+/* Targeted closed-app push to every paired SHOMER (alarmFanout Cloud Function delivers it). */
+function fbAlertPairedSos(){
+  if(!FB.ready||!FB._pairedUids)return;
+  var he=currentLang==='he', nm=(SS.user&&SS.user.name)||(he?'שומר/ת':'a SHOMER');
+  Object.keys(FB._pairedUids).forEach(function(uid){
+    fbQueueAlarm(uid, (he?'🆘 SOS מ'+nm:'🆘 SOS from '+nm), (he?'הפעיל/ה SOS — פתח/י את האפליקציה':'sent an SOS — open the app'), 'sos');
+  });
+}
 
 /* ═══════════════════════════════════
  SERVICE WORKER + PWA INSTALL
