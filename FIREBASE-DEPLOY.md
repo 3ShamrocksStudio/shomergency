@@ -1,8 +1,30 @@
 # SH✡MER — Firebase go-live checklist (Blaze)
 
-Everything client-side is wired + deployed. To make it fully real-time/closed-app, these
-remaining steps need the Firebase **console** or the **CLI** (I have no CLI/login on this
-machine, so I can't run the deploys — see "Let me deploy it" at the bottom).
+## ⛔ REQUIRED for real-world SOS (answer to "is the deploy optional?")
+**A backgrounded / screen-locked phone CANNOT receive an SOS without this deploy.** A web PWA's
+JavaScript (including the live RTDB listener) is **frozen** when the app isn't in the foreground.
+The only thing that can wake it is an **FCM push**, and the push **sender** is the `sosFanout`
+Cloud Function — which is **not deployed**. So:
+
+- Receiver app **open / foreground** → alert fires live (banner + sound + vibrate). ✅ works now.
+- Receiver app **backgrounded, then reopened** by the user → alert fires on resume (SOS < 25 min). ✅ works now.
+- Receiver app **backgrounded / locked, user does NOT reopen** → **NOTHING until the deploy.** ❌
+- iPhone: web push needs the PWA **Added to Home Screen** (iOS limitation) — a plain Safari tab
+  gets no background push even after the deploy.
+
+**Run this once (from `Shomer/Core/`) to enable background/closed-app push + real pairing:**
+```bash
+firebase login
+firebase deploy --only database,functions
+```
+This deploys the updated `database.rules.json` (adds `/invites` + `/pairs` for real pairing) and
+the `sosFanout` + `alarmFanout` functions. Client already registers each device's FCM token, so
+push works the moment this lands. CLI on the build machine is **not logged in**, so I can't run it.
+
+---
+
+Everything else client-side is wired + deployed. The remaining steps need the Firebase
+**console** or the **CLI** (see "Let me deploy it" at the bottom).
 
 ## A) Console toggles (2 min, free)
 1. **Authentication → Sign-in method → Anonymous → Enable.** (RTDB auth — currently
