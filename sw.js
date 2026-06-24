@@ -8,7 +8,7 @@
 // (a) uses network-first for navigations so a stale shell can never trap the
 // user, and (b) deletes every cache it does not own on activate.
 
-const CACHE_NAME = 'shomer-v41-cache';
+const CACHE_NAME = 'shomer-v42-cache';
 const urlsToCache = [
   './',
   'index.html',
@@ -44,9 +44,16 @@ self.addEventListener('fetch', event => {
   const req = event.request;
   if (req.method !== 'GET') return;
 
+  // CRITICAL: only ever handle SAME-ORIGIN requests. Cross-origin requests
+  // (Firebase RTDB long-poll + auth on firebaseio.com / googleapis.com / gstatic,
+  // map tiles, OSRM, fonts) must go straight to the network, untouched by the SW.
+  // Intercepting Firebase's HTTP fallback transport breaks the realtime connection
+  // on mobile networks that block WebSockets — the app then hangs on "connecting".
+  let url;
+  try { url = new URL(req.url); } catch (e) { return; }
+  if (url.origin !== self.location.origin) return;
+
   // Navigation requests: network-first, fall back to cached app shell.
-  // This guarantees a fresh page load and prevents a stale cache from
-  // pinning the user to an old (or wrong) version of the app.
   if (req.mode === 'navigate') {
     event.respondWith(
       fetch(req)
@@ -60,7 +67,7 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // Other assets: cache-first, then network (offline-friendly).
+  // Same-origin assets: cache-first, then network (offline-friendly).
   event.respondWith(
     caches.match(req).then(cached => cached || fetch(req).then(res => {
       const copy = res.clone();

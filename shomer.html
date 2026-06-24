@@ -1300,8 +1300,10 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <!-- DIAGNOSTIC PANEL — read on each phone to pinpoint where SOS breaks -->
  <div class="diag-panel" id="diag-panel" aria-hidden="true">
  <div class="diag-ttl" data-he="מצב חיבור · SHOMER" data-en="Connection status · SHOMER" data-ar="حالة الاتصال · شومير">מצב חיבור · SHOMER</div>
+ <div class="diag-row"><span class="diag-k" data-he="זיהוי (Auth)" data-en="Sign-in (Auth)" data-ar="تسجيل الدخول (Auth)">זיהוי (Auth)</span><span class="diag-v" id="diag-auth">—</span></div>
  <div class="diag-row"><span class="diag-k" data-he="מזהה (UID)" data-en="ID (UID)" data-ar="المُعرّف (UID)">מזהה (UID)</span><span class="diag-v" id="diag-uid">—</span></div>
- <div class="diag-row"><span class="diag-k" data-he="חיבור RTDB" data-en="RTDB" data-ar="اتصال RTDB">חיבור RTDB</span><span class="diag-v" id="diag-rtdb">—</span></div>
+ <div class="diag-row"><span class="diag-k" data-he="סוקט RTDB (WebSocket)" data-en="RTDB socket (WebSocket)" data-ar="اتصال RTDB (WebSocket)">סוקט RTDB</span><span class="diag-v" id="diag-rtdb">—</span></div>
+ <div class="diag-row"><span class="diag-k" data-he="הרשאות (קריאה/כתיבה)" data-en="Permission (read/write)" data-ar="الصلاحيات (قراءة/كتابة)">הרשאות</span><span class="diag-v" id="diag-perm">—</span></div>
  <div class="diag-row"><span class="diag-k" data-he="שומרים שנראו" data-en="SHOMERs seen" data-ar="حُرّاس ظهروا">שומרים שנראו</span><span class="diag-v" id="diag-seen">0</span></div>
  <div class="diag-row"><span class="diag-k" data-he="SOS אחרון שהתקבל" data-en="Last SOS received" data-ar="آخر نداء استغاثة">SOS אחרון שהתקבל</span><span class="diag-v" id="diag-lastsos">אין</span></div>
  <div class="diag-row"><span class="diag-k" data-he="דחיפת רקע" data-en="Background push" data-ar="إشعارات الخلفية">דחיפת רקע</span><span class="diag-v" id="diag-push">—</span></div>
@@ -5559,7 +5561,10 @@ try{ hydrateIcons(document); }catch(e){}
    cross-DEVICE SOS events + type fan-out. Needs the deployed auth-scoped rules
    (database.rules.json). Fully-closed push + SMS verification need Blaze (flagged).
 ═══════════════════════════════════════════════════════════════════════ */
-var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0};
+var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,
+  authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null};
+/* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
+function fbLog(){ try{ console.log.apply(console,['[SHOMER/FB]'].concat([].slice.call(arguments))); }catch(e){} }
 var fbSosMarkers={};
 /* Push capability on THIS device (so the status pill can tell the truth). */
 function fbPushState(){
@@ -5576,8 +5581,11 @@ function renderFbStatus(){
   var txt=document.getElementById('fb-status-txt'); var he=currentLang==='he', ar=currentLang==='ar';
   FB.pushState=fbPushState();
   var state, msg;
-  if(!FB.ready){ state='connecting'; msg=he?'מתחבר…':ar?'جارٍ الاتصال…':'Connecting…'; }
-  else if(!FB.connected){ state='offline'; msg=he?'לא מחובר — אופליין':ar?'غير متصل':'Offline — not connected'; }
+  // A failed sign-in/SDK load must surface as an ERROR, not an endless "connecting".
+  var failed=FB.err && !FB.ready && FB.authState && FB.authState!=='connecting';
+  if(failed){ state='offline'; msg=(he?'תקלת חיבור · ':ar?'خطأ في الاتصال · ':'Connection error · ')+FB.authState+(he?' — הקש/י לפרטים':ar?' — اضغط للتفاصيل':' — tap for details'); }
+  else if(!FB.ready){ state='connecting'; msg=he?'מתחבר…':ar?'جارٍ الاتصال…':'Connecting…'; }
+  else if(!FB.connected){ state='offline'; msg=he?'מחובר (זיהוי) · הסוקט מתחבר…':ar?'مُسجّل · يتصل بالسوكِت…':'Signed in · socket connecting…'; }
   else {
     state='connected';
     var n=FB.near||0;
@@ -5593,13 +5601,28 @@ function fmtClock(ts){ try{ var d=new Date(ts), p=function(x){return(x<10?'0':''
 function toggleDiagPanel(force){ var p=document.getElementById('diag-panel'); if(!p)return; var open=(force===undefined)?!p.classList.contains('on'):!!force; p.classList.toggle('on',open); p.setAttribute('aria-hidden',String(!open)); if(open)updateDiagPanel(); }
 function updateDiagPanel(){
   var p=document.getElementById('diag-panel'); if(!p)return; var he=currentLang==='he', ar=currentLang==='ar';
-  setText('diag-uid', FB.uid?(FB.uid.slice(0,10)):'—');
+  // AUTH (anonymous sign-in) — success or the NAMED error code
+  var au=document.getElementById('diag-auth');
+  if(au){ var atxt, acol;
+    if(FB.authState==='ok'){ atxt='ok ✓'; acol='var(--grn)'; }
+    else if(FB.authState==='connecting'){ atxt=(he?'מתחבר…':ar?'جارٍ…':'signing in…'); acol='var(--amb)'; }
+    else { atxt=FB.authState||'—'; acol='#FF7080'; } // e.g. auth-err:auth/network-request-failed, sdk-load-failed, no-config
+    au.textContent=atxt; au.style.color=acol; }
+  setText('diag-uid', FB.uid?(FB.uid.slice(0,12)):'—');
+  // RTDB SOCKET (.info/connected) — shown SEPARATELY from auth so we know socket vs auth
   var rt=document.getElementById('diag-rtdb');
   if(rt){ var rtxt, rcol;
-    if(!FB.ready){ rtxt=FB.err?('error · '+FB.err):(he?'מתחבר…':ar?'جارٍ الاتصال…':'connecting…'); rcol=FB.err?'#FF7080':'var(--amb)'; }
-    else if(FB.connected){ rtxt=(ar?'متصل ✓':'connected ✓'); rcol='var(--grn)'; }
-    else { rtxt=(ar?'إعادة الاتصال ✗':'reconnecting ✗'); rcol='var(--amb)'; }
+    if(!FB.ready){ rtxt=(he?'—':ar?'—':'(awaiting auth)'); rcol='var(--tx3)'; }
+    else if(FB.connected){ rtxt='connected ✓'; rcol='var(--grn)'; }
+    else { rtxt='disconnected ✗'; rcol='#FF7080'; }
     rt.textContent=rtxt; rt.style.color=rcol; }
+  // PERMISSION (first read/write) — denied = rules problem
+  var pm=document.getElementById('diag-perm');
+  if(pm){ var ptxt, pcol;
+    if(!FB.ready){ ptxt='—'; pcol='var(--tx3)'; }
+    else if(FB.permErr){ ptxt='denied · '+FB.permErr; pcol='#FF7080'; }
+    else { ptxt='ok ✓'; pcol='var(--grn)'; }
+    pm.textContent=ptxt; pm.style.color=pcol; }
   setText('diag-seen', String(FB.near||0));
   var ls=document.getElementById('diag-lastsos');
   if(ls){ ls.textContent=FB.lastSos?(fmtClock(FB.lastSos.ts)+(FB.lastSos.type&&FB.lastSos.type!=='unknown'&&window.sosTypeLabel?(' · '+sosTypeLabel(FB.lastSos.type)):'')):(he?'אין':ar?'لا يوجد':'none'); ls.style.color=FB.lastSos?'var(--grn)':'var(--tx3)'; }
@@ -5639,37 +5662,56 @@ function presenceIcon(){
 }
 function fbLoad(src){return new Promise(function(res,rej){var s=document.createElement('script');s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s);});}
 async function fbInit(){
-  if(FB.ready||!window.SHOMER_FB)return;
+  if(FB.ready)return;
+  if(!window.SHOMER_FB){ FB.authState='no-config'; FB.err='no-config'; fbLog('NO Firebase config on this build'); renderFbStatus(); return; }
   if(FB._initing)return; FB._initing=true;
+  fbLog('init start · dbURL =', window.SHOMER_FB.databaseURL);
   try{
-    if(!window.firebase||!window.firebase.database){
-      await fbLoad('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js');
-      await fbLoad('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js');
-      await fbLoad('https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js');
-    }
+    // 1) Load the SDK (CSP/network failures named here)
+    try{
+      if(!window.firebase||!window.firebase.database){
+        await fbLoad('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js');
+        await fbLoad('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js');
+        await fbLoad('https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js');
+      }
+      FB.sdkLoaded=true; fbLog('SDK loaded');
+    }catch(e){ FB.sdkLoaded=false; FB.authState='sdk-load-failed'; FB.err='sdk-load:'+(e&&e.message||e); fbLog('SDK LOAD FAILED (CSP/network?):', e); throw e; }
+
     if(!window.firebase.apps.length)window.firebase.initializeApp(window.SHOMER_FB);
     var auth=window.firebase.auth();
-    // LOCAL persistence so the anonymous identity HOLDS across reloads/backgrounding on mobile
-    try{ await auth.setPersistence(window.firebase.auth.Auth.Persistence.LOCAL); }catch(e){ FB.err='persist:'+(e&&e.code||e); }
-    // Use a persisted session if present, else sign in anonymously (with one retry for flaky mobile networks)
+
+    // 2) Persistence cascade — a blocked-storage throw must NEVER stop auth.
+    //    LOCAL (survives restart) → SESSION → NONE (in-memory). Whichever works.
+    var P=window.firebase.auth.Auth.Persistence, persistUsed='memory';
+    async function tryPersist(mode,name){ try{ await auth.setPersistence(mode); persistUsed=name; return true; }catch(e){ fbLog('persistence "'+name+'" blocked:', (e&&e.code)||e); return false; } }
+    if(!(await tryPersist(P.LOCAL,'local'))){ if(!(await tryPersist(P.SESSION,'session'))){ await tryPersist(P.NONE,'memory'); } }
+    FB.persist=persistUsed; fbLog('persistence =', persistUsed);
+
+    // 3) Anonymous auth — retry once on a flaky mobile network. Name the exact error.
     var user=auth.currentUser;
-    if(!user){ try{ user=(await auth.signInAnonymously()).user; }catch(e1){ FB.err='auth:'+(e1&&e1.code||e1); renderFbStatus(); await new Promise(r=>setTimeout(r,1500)); try{ user=(await auth.signInAnonymously()).user; FB.err=null; }catch(e2){ FB.err='auth:'+(e2&&e2.code||e2); throw e2; } } }
-    FB.uid=user.uid; FB.db=window.firebase.database(); FB.ready=true;
+    if(!user){
+      try{ user=(await auth.signInAnonymously()).user; }
+      catch(e1){
+        FB.authState='auth-err:'+((e1&&e1.code)||e1); FB.err=FB.authState; fbLog('anonymous auth attempt 1 FAILED:', (e1&&e1.code)||e1, e1); renderFbStatus();
+        await new Promise(r=>setTimeout(r,1800));
+        try{ user=(await auth.signInAnonymously()).user; }
+        catch(e2){ FB.authState='auth-err:'+((e2&&e2.code)||e2); FB.err=FB.authState; fbLog('anonymous auth attempt 2 FAILED:', (e2&&e2.code)||e2, e2); throw e2; }
+      }
+    }
+    FB.uid=user.uid; FB.authState='ok'; FB.err=null; FB.db=window.firebase.database(); FB.ready=true;
+    fbLog('AUTH OK · uid =', user.uid, '· persistence =', persistUsed);
     try{ FB.db.goOnline&&FB.db.goOnline(); }catch(e){}
     fbSetupPresence(); fbListenSOS(); fbListenPairs();
     FB.listening=true; renderFbStatus();
-    // keep working even if the token is refreshed/rotated mid-session
     try{ auth.onAuthStateChanged(function(u){ if(u&&u.uid){ FB.uid=u.uid; } }); }catch(e){}
-    // NOTE: FCM/registerPush is NOT auto-called here — registering a 2nd service worker on load
-    // can churn the controller and disrupt the realtime socket on mobile. Push is opt-in via the
-    // status panel ("enable background alerts"), which is also the user-gesture iOS requires.
-  }catch(e){ FB.err=FB.err||('init:'+(e&&e.code||e)); FB._initing=false; renderFbStatus(); /* app keeps working locally */ }
+    // NOTE: FCM/registerPush is opt-in via the status panel (a 2nd SW on load can churn the socket).
+  }catch(e){ FB.err=FB.err||('init:'+((e&&e.code)||(e&&e.message)||e)); fbLog('INIT FAILED ·', FB.err, e); renderFbStatus(); }
   FB._initing=false;
 }
 function fbSetupPresence(){
   if(!FB.ready)return;
   var meRef=FB.db.ref('presence/'+FB.uid);
-  FB.db.ref('.info/connected').on('value',function(snap){ FB.connected=(snap.val()===true); if(FB.connected){ meRef.onDisconnect().remove(); fbPublishPresence(); } renderFbStatus(); });
+  FB.db.ref('.info/connected').on('value',function(snap){ FB.connected=(snap.val()===true); fbLog('RTDB socket (.info/connected) =', FB.connected); if(FB.connected){ meRef.onDisconnect().remove(); fbPublishPresence(); } renderFbStatus(); });
   if(!FB._presTimer)FB._presTimer=setInterval(fbPublishPresence,25000);
   FB.db.ref('presence').on('value',function(snap){
     var all=snap.val()||{}, n=0, mlat=userLat, mlng=userLng, radM=((SS.settings&&SS.settings.radius)||5)*1000;
@@ -5688,14 +5730,14 @@ function fbSetupPresence(){
     });
     // drop markers for SHOMERs who went offline
     Object.keys(fbPresenceMarkers).forEach(function(k){ if(!seen[k]){ try{MAP&&MAP.removeLayer(fbPresenceMarkers[k]);}catch(e){} delete fbPresenceMarkers[k]; } });
-    updateGuardiansNearby(n);
-  }, function(){ /* permission denied until rules deployed */ });
+    FB.permErr=null; updateGuardiansNearby(n);
+  }, function(e){ FB.permErr=(e&&e.code)||'denied'; fbLog('presence READ denied:', FB.permErr, e); renderFbStatus(); });
 }
 function fbPublishPresence(){
   if(!FB.ready)return;
   // coarse (~1km) location for privacy; precise location only for SOS / opt-in responder positions
   var lat=userLat!=null?Math.round(userLat*100)/100:32.07, lng=userLng!=null?Math.round(userLng*100)/100:34.78;
-  try{ FB.db.ref('presence/'+FB.uid).set({lat:lat,lng:lng,ts:Date.now()}); }catch(e){}
+  FB.db.ref('presence/'+FB.uid).set({lat:lat,lng:lng,ts:Date.now()}).then(function(){ if(FB.permErr){FB.permErr=null;renderFbStatus();} }).catch(function(e){ FB.permErr=(e&&e.code)||'write-denied'; fbLog('presence WRITE denied:', FB.permErr, e); renderFbStatus(); });
 }
 function updateGuardiansNearby(n){
   var el=document.getElementById('gnear-n'); if(el)el.textContent=n;
