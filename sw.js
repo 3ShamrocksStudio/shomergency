@@ -8,8 +8,8 @@
 // (a) uses network-first for navigations so a stale shell can never trap the
 // user, and (b) deletes every cache it does not own on activate.
 
-const CACHE_NAME = 'shomer-v44-cache';
-const SW_VERSION = 'v44';
+const CACHE_NAME = 'shomer-v45-cache';
+const SW_VERSION = 'v45';
 const urlsToCache = [
   './',
   'index.html',
@@ -28,7 +28,12 @@ self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache)).catch(() => {})
   );
-  self.skipWaiting();
+  // NOTE: deliberately NO skipWaiting() here. On a first-ever install (no active
+  // worker) the SW activates immediately anyway; on an UPDATE it must WAIT so it
+  // can't take over mid-session and trigger a controllerchange reload that kills
+  // the in-progress Firebase sign-in / RTDB socket. The new worker applies on the
+  // next cold launch. (A user-initiated force-update still works via the message
+  // handler + the page's "Force-update to latest" button.)
 });
 
 self.addEventListener('activate', event => {
