@@ -1098,6 +1098,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
 <!-- LANGUAGE BAR -->
 <div id="lang-bar" role="navigation" aria-label="בחירת שפה">
  <button class="lbtn on" onclick="setLang('he')" lang="he">עברית</button>
+ <button class="lbtn" onclick="setLang('ar')" lang="ar">العربية</button>
  <button class="lbtn" onclick="setLang('en')" lang="en">English</button>
 </div>
 
@@ -1116,8 +1117,9 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="ob-sub" id="ob-tagline">Citizens For Citizens</div>
  <!-- Language pick in onboarding -->
  <div class="ob-lang-pick" role="group" aria-label="שפה">
- <button class="olb on" onclick="setLang('he')">עברית</button>
- <button class="olb" onclick="setLang('en')">English</button>
+ <button class="olb on" onclick="setLang('he')" lang="he">עברית</button>
+ <button class="olb" onclick="setLang('ar')" lang="ar">العربية</button>
+ <button class="olb" onclick="setLang('en')" lang="en">English</button>
  </div>
  </div>
  <div class="ob-steps" role="progressbar" aria-valuemin="1" aria-valuemax="3" aria-valuenow="1">
@@ -1297,14 +1299,14 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  <!-- DIAGNOSTIC PANEL — read on each phone to pinpoint where SOS breaks -->
  <div class="diag-panel" id="diag-panel" aria-hidden="true">
- <div class="diag-ttl">מצב חיבור · SHOMER</div>
- <div class="diag-row"><span class="diag-k">מזהה (UID)</span><span class="diag-v" id="diag-uid">—</span></div>
- <div class="diag-row"><span class="diag-k">RTDB</span><span class="diag-v" id="diag-rtdb">—</span></div>
- <div class="diag-row"><span class="diag-k">שומרים שנראו</span><span class="diag-v" id="diag-seen">0</span></div>
- <div class="diag-row"><span class="diag-k">SOS אחרון שהתקבל</span><span class="diag-v" id="diag-lastsos">אין</span></div>
- <div class="diag-row"><span class="diag-k">דחיפת רקע</span><span class="diag-v" id="diag-push">—</span></div>
- <button class="diag-push-btn" id="diag-push-btn" onclick="enablePush()">הפעל התראות רקע</button>
- <button class="diag-close" onclick="toggleDiagPanel(false)">סגור</button>
+ <div class="diag-ttl" data-he="מצב חיבור · SHOMER" data-en="Connection status · SHOMER" data-ar="حالة الاتصال · شومير">מצב חיבור · SHOMER</div>
+ <div class="diag-row"><span class="diag-k" data-he="מזהה (UID)" data-en="ID (UID)" data-ar="المُعرّف (UID)">מזהה (UID)</span><span class="diag-v" id="diag-uid">—</span></div>
+ <div class="diag-row"><span class="diag-k" data-he="חיבור RTDB" data-en="RTDB" data-ar="اتصال RTDB">חיבור RTDB</span><span class="diag-v" id="diag-rtdb">—</span></div>
+ <div class="diag-row"><span class="diag-k" data-he="שומרים שנראו" data-en="SHOMERs seen" data-ar="حُرّاس ظهروا">שומרים שנראו</span><span class="diag-v" id="diag-seen">0</span></div>
+ <div class="diag-row"><span class="diag-k" data-he="SOS אחרון שהתקבל" data-en="Last SOS received" data-ar="آخر نداء استغاثة">SOS אחרון שהתקבל</span><span class="diag-v" id="diag-lastsos">אין</span></div>
+ <div class="diag-row"><span class="diag-k" data-he="דחיפת רקע" data-en="Background push" data-ar="إشعارات الخلفية">דחיפת רקע</span><span class="diag-v" id="diag-push">—</span></div>
+ <button class="diag-push-btn" id="diag-push-btn" onclick="enablePush()" data-he="הפעל התראות רקע" data-en="Enable background alerts" data-ar="تفعيل تنبيهات الخلفية">הפעל התראות רקע</button>
+ <button class="diag-close" onclick="toggleDiagPanel(false)" data-he="סגור" data-en="Close" data-ar="إغلاق">סגור</button>
  </div>
 
  <!-- DROPDOWN -->
@@ -1334,7 +1336,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="sos-inc-ttl" id="sos-inc-ttl">🆘 SOS בקרבת מקום</div>
  <div class="sos-inc-sub" id="sos-inc-sub"></div>
  </div>
- <button class="sos-inc-go" id="sos-inc-go" onclick="respondToIncomingSos()">נווט</button>
+ <button class="sos-inc-go" id="sos-inc-go" onclick="respondToIncomingSos()" data-he="נווט" data-en="Navigate" data-ar="توجيه">נווט</button>
  <button class="sos-inc-x" onclick="dismissSosBanner()" aria-label="סגור"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
  </div>
 
@@ -1742,6 +1744,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="set-grp" style="padding:10px 14px;">
  <div style="display:flex;direction:ltr;gap:6px;flex-wrap:wrap;" id="set-lang-btns">
  <button class="olb on" onclick="setLang('he')" lang="he">עברית</button>
+ <button class="olb" onclick="setLang('ar')" lang="ar">العربية</button>
  <button class="olb" onclick="setLang('en')" lang="en">English</button>
  </div>
  </div>
@@ -2009,7 +2012,7 @@ function hydrateIcons(root){
  svg.innerHTML=sym.innerHTML;
  });
 }
-function setText(id,t){const e=document.getElementById(id);if(e)e.textContent=t;}
+function setText(id,t){const e=document.getElementById(id);if(e)e.textContent=(typeof arTr==='function'?arTr(t):t);}
 
 /* ── Multi-language strings ── */
 const LANGS={
@@ -2086,7 +2089,7 @@ const LANGS={
  ob_h1:'تحديد الموقع',ob_d1:'مطلوب لإرسال نداء الاستغاثة فوراً للحراس القريبين منك.',
  ob_h2:'إعدادات الطوارئ',ob_d2:'اختر الإنذار — يُفعَّل فوراً عند الضغط على SOS.',
  geo_need:'مطلوب إذن الموقع',geo_wait:'جارٍ التحديد...',geo_ok:'تم تأكيد الموقع!',geo_err:'لا يمكن تحديد موقعك',
- geo_allow:'السماح بالوصول للموقع',geo_next:'التالي ←',geo_retry:' أعد المحاولة',geo_skip:'تخطي (محدود)',
+ geo_allow:'شارك الموقع',geo_next:'التالي ←',geo_retry:' أعد المحاولة',geo_skip:'تخطّي — المتابعة بدون مشاركة الموقع',
  al1:'صفارة الإنذار',al1d:'440→1800Hz — الأكثر تعرفاً',al2:'بوق الطوارئ',al2d:'1200Hz — يستقطب الانتباه',al3:'نبضات سريعة',al3d:'2800Hz — الأكثر إزعاجاً',
  vol:'مستوى الصوت',test:'اختبار الإنذار',finish:'✓ الدخول لشومير',back:'← رجوع',
  shake:'<strong>هز للاستغاثة:</strong> 5 هزات قوية تُفعّل نداء الاستغاثة تلقائياً.',
@@ -2213,9 +2216,78 @@ const LANGS={
  }
 };
 
+/* ══════════════════════════════════════════════════════════════════════════
+   ARABIC (العربية) — central English→Arabic dictionary. Most of the app emits
+   the English string for non-he/en languages (binary ternaries), so we translate
+   at the render layer (setText / toast / the data-* sweep) when Arabic is active.
+   ⚠ SAFETY-CRITICAL entries are tagged with a trailing SAFETY comment — emergency /
+   SOS / disclaimer strings that MUST get a native-Arabic human review before launch.
+   ══════════════════════════════════════════════════════════════════════════ */
+const AR={
+ // ── Onboarding ──
+ 'First name':'الاسم الأول','Continue →':'متابعة ←','Auto-generated — tap to edit':'يُنشأ تلقائياً — اضغط للتعديل',
+ 'Skip — continue without location':'تخطّي — المتابعة بدون مشاركة الموقع','Skip – continue without sharing':'تخطّي — المتابعة بدون مشاركة الموقع',
+ 'Citizens For Citizens':'مواطنون من أجل مواطنين',
+ // ── Map / header / status ──
+ 'Map':'الخريطة','SHOMERs':'حُرّاس','SHOMER':'حارس','guardian':'حارس','Live event':'حدث مباشر',
+ 'active SHOMERs near you (live)':'حُرّاس نشطون بقربك (مباشر)','An active SHOMER nearby (approximate, anonymous)':'حارس نشط في الجوار (موقع تقريبي، مجهول الهوية)',
+ // ── Status / connection panel ──
+ 'Connecting…':'جارٍ الاتصال…','Offline — not connected':'غير متصل','Connecting to the live service…':'جارٍ الاتصال بالخدمة المباشرة…',
+ 'No network right now. We\'ll reconnect automatically.':'لا يوجد اتصال بالشبكة حالياً. سنعيد الاتصال تلقائياً.',
+ // ── SOS flow (⚠ SAFETY) ──
+ 'SOS nearby':'نداء استغاثة قريب'/*SAFETY*/,'Distress':'استغاثة'/*SAFETY*/,'Navigate':'توجيه'/*SAFETY*/,
+ 'Shake detected':'تم رصد هزّة','Responder nav active — live route':'توجيه المُستجيب نشط — مسار مباشر',
+ 'SOS broadcast — nearby SHOMERs notified':'تم بثّ نداء الاستغاثة — تم إبلاغ الحُرّاس القريبين'/*SAFETY*/,
+ 'A nearby SHOMER classified this:':'صنّف حارس قريب هذا الحدث:','Type set:':'تم تحديد النوع:',
+ ' shared with nearby SHOMERs':' تمّت مشاركته مع الحُرّاس القريبين','I\'m on my way':'أنا في الطريق'/*SAFETY*/,
+ // ── Emergency / disclaimer (⚠ SAFETY) ──
+ 'Immediate emergency':'طوارئ فورية'/*SAFETY*/,
+ // ── My SHOMERs / pairing ──
+ 'My SHOMERs':'حُرّاسي','Add a SHOMER':'إضافة حارس','Invite a SHOMER':'دعوة حارس','I have a code':'لديّ رمز','Connect':'ربط',
+ 'Find a SHOMER':'ابحث عن حارس','Copy':'نسخ','Share link':'مشاركة الرابط','Locate':'تحديد الموقع','Leave this circle':'مغادرة هذه الدائرة',
+ '✓ Link copied':'✓ تم نسخ الرابط','Invalid code':'رمز غير صالح','Waiting to accept':'بانتظار القبول','Live location':'موقع مباشر','Waiting for live location':'بانتظار الموقع المباشر',
+ // ── Settings ──
+ 'Settings':'الإعدادات','Reset':'إعادة تعيين','Reset app':'إعادة ضبط التطبيق','Sign out':'تسجيل الخروج','Signed out':'تم تسجيل الخروج',
+ 'Emergency SOS':'نداء استغاثة طارئ'/*SAFETY*/,'Stalking & threats':'مطاردة وتهديدات','Medical help':'مساعدة طبية','Resolved incidents':'حوادث مُنتهية',
+ 'Live event sounds':'أصوات الأحداث المباشرة','Distance units':'وحدات المسافة','Data & sources':'البيانات والمصادر','About SHOMER':'حول شومير',
+ // ── Profile ──
+ 'My profile':'ملفي الشخصي','Reports':'البلاغات','SOS events':'أحداث الاستغاثة',
+ // ── Generic actions ──
+ 'Close':'إغلاق','Cancel':'إلغاء','Save':'حفظ','Stop sound':'إيقاف الصوت','Retry':'إعادة المحاولة',
+ 'Terms of Use':'شروط الاستخدام','Privacy Policy':'سياسة الخصوصية','Emergency disclaimer':'إخلاء مسؤولية الطوارئ'/*SAFETY*/,
+ // ── Settings section headers & labels ──
+ 'Alerts & Notifications':'التنبيهات والإشعارات','Alert radius':'نطاق التنبيه','Notifications':'الإشعارات','Safety features':'ميزات السلامة',
+ 'Location & Privacy':'الموقع والخصوصية','Account & About':'الحساب والمعلومات','Privacy':'الخصوصية','Safety & legal':'السلامة والشؤون القانونية',
+ 'Every SOS near you — most urgent, best left on':'كل نداء استغاثة قربك — الأكثر إلحاحاً، يُفضّل إبقاؤه مُفعّلاً'/*SAFETY*/,
+ 'Harassment/stalking reports near you':'بلاغات تحرّش/مطاردة قربك','Medical-help requests nearby':'طلبات مساعدة طبية في الجوار',
+ 'A heads-up when a nearby incident is closed':'تنبيه عند إغلاق حادثة قريبة','A soft chime when a SHOMER joins, on a new event or an update':'نغمة خفيفة عند انضمام حارس أو عند حدث جديد أو تحديث',
+ 'Background location sharing':'مشاركة الموقع في الخلفية','Show name on updates':'إظهار الاسم في التحديثات','Hold-to-arm':'الضغط المطوّل للتفعيل',
+ 'SOS cancel code (PIN)':'رمز إلغاء الاستغاثة (PIN)','Mutual check-in':'تفقّد متبادل','Responder navigation (opt-in)':'توجيه المُستجيب (اختياري)',
+ 'Reset app':'إعادة ضبط التطبيق','Reset':'إعادة تعيين','Sign out':'تسجيل الخروج','Metric · m / km':'متري · م / كم','Imperial · ft / mi':'إمبراطوري · قدم / ميل',
+ 'Shake-to-SOS':'الهزّ للاستغاثة','SOS safety':'سلامة الاستغاثة','Cancel window before broadcast':'مهلة الإلغاء قبل البثّ','Alarm settings':'إعدادات الإنذار',
+ // ── Profile ──
+ 'Professional role (volunteer responder)':'دور مهني (مستجيب متطوّع)','Firefighter':'إطفائي','Doctor (MD)':'طبيب','Police':'شرطة','Paramedic':'مسعف','Security':'أمن','None':'لا شيء',
+ 'My reports':'بلاغاتي','SOS history':'سجل الاستغاثة','No reports yet. Send your first from the menu.':'لا توجد بلاغات بعد. أرسل أول بلاغ من القائمة.','No SOS events in history.':'لا توجد أحداث استغاثة في السجل.',
+ // ── Report / SOS flow (⚠ SAFETY) ──
+ 'Report incident':'الإبلاغ عن حادثة','Report':'بلاغ','Send report':'إرسال البلاغ','What type?':'ما النوع؟','Add photo':'إضافة صورة',
+ 'I\'m OK':'أنا بخير'/*SAFETY*/,'Cancel SOS':'إلغاء الاستغاثة'/*SAFETY*/,'SOS active — alarm firing · location shared':'نداء استغاثة نشط — الإنذار يعمل · تتم مشاركة الموقع'/*SAFETY*/,
+ 'Waiting for response...':'في انتظار الاستجابة...','Real — keep on map':'حقيقي — أبقِه على الخريطة','Accidental — remove':'عن طريق الخطأ — إزالة',
+ 'Are you OK?':'هل أنت بخير؟'/*SAFETY*/,'Call 100':'اتصل بـ 100'/*SAFETY*/,'Call 101':'اتصل بـ 101'/*SAFETY*/,'Call 102':'اتصل بـ 102'/*SAFETY*/,
+ // ── Common toasts / actions ──
+ 'Welcome':'مرحباً','Saved':'تم الحفظ','Done':'تم','Copied':'تم النسخ','Settings saved':'تم حفظ الإعدادات','Ghost mode — pause sharing':'وضع التخفّي — إيقاف المشاركة مؤقتاً',
+ 'No one will see your location':'لن يرى أحد موقعك','You are OK':'أنت بخير','Logged — you are OK':'تم التسجيل — أنت بخير','Arrival reminder (when someone reaches a place)':'تذكير الوصول (عند بلوغ شخص مكاناً)'
+};
 /* ── State ── */
 let currentLang='he', L=LANGS.he;
-function T(k){return L[k]||LANGS.he[k]||k;}
+/* Translate an English (or already-Arabic) display string to Arabic when AR is active. */
+function arTr(s){
+ if(currentLang!=='ar'||typeof s!=='string'||!s) return s;
+ if(AR[s]!=null) return AR[s];
+ var t=s.replace(/^\s+|\s+$/g,'');
+ if(t!==s && AR[t]!=null){ var lead=(s.match(/^\s*/)||[''])[0], trail=(s.match(/\s*$/)||[''])[0]; return lead+AR[t]+trail; }
+ return s;
+}
+function T(k){ if(currentLang==='ar'){ return (LANGS.ar&&LANGS.ar[k]!=null)?LANGS.ar[k]:arTr(LANGS.en[k]!=null?LANGS.en[k]:k); } return L[k]||LANGS.he[k]||k; }
 
 let sosActive=false, sosTimer=null;
 /* SOS state machine: 'idle' → 'countdown' (alarm on, NOT yet broadcast) → 'active' (broadcast+mapped).
@@ -2225,7 +2297,7 @@ let sosPhase='idle', sosCdTimer=null, sosCdLeft=0, curSosId=null;
    The SOS always fires first; type is async metadata layered on top. Default = unknown. */
 let curSosType='unknown', sosFallbackTimer=null;
 const SOS_TYPES=[['viol','fist'],['med','medcross'],['sex','hand'],['stalk','eye'],['theft','unlock'],['new','clipboard']];
-function sosTypeLabel(t){const he=currentLang==='he';if(!t||t==='unknown')return he?'לא ידוע':'Unknown';return (TYPES[t]&&TYPES[t].label())||(he?'אחר':'Other');}
+function sosTypeLabel(t){const he=currentLang==='he',ar=currentLang==='ar';if(!t||t==='unknown')return he?'לא ידוע':ar?'غير معروف':'Unknown';return (TYPES[t]&&TYPES[t].label())||(he?'אחר':ar?'أخرى':'Other');}
 function sosTypeColor(t){return (TYPES[t]&&TYPES[t].color)||'#FF1A40';}
 function buildSosTypeBar(){
   const w=document.getElementById('ss-type-opts'); if(!w||w.dataset.built)return; w.dataset.built='1';
@@ -2726,7 +2798,7 @@ function eventIcon(t,cls){const o=TYPES[t]||TYPES.viol;return ic(o.icon,cls);}
  LANGUAGE
 ═══════════════════════════════════ */
 function setLang(code){
- if(code!=='he'&&code!=='en')code='he'; // only Hebrew + English supported
+ if(!LANGS[code])code='he'; // supported: he · en · ar (+ ru/am/fr partial)
  currentLang=code;
  L=LANGS[code]||LANGS.he;
  SS.lang=code; saveStore();
@@ -2881,9 +2953,13 @@ function applyTranslations(){
  // Generic sweep: any element tagged data-he/data-en localizes here (covers every
  // sheet string that isn't individually wired above). Hebrew is the default content.
  try{
- const en=currentLang==='en';
+ const en=currentLang==='en', ar=currentLang==='ar';
  document.querySelectorAll('[data-he]').forEach(el=>{
- const v=en?(el.getAttribute('data-en')!=null?el.getAttribute('data-en'):el.getAttribute('data-he')):el.getAttribute('data-he');
+ const he=el.getAttribute('data-he'), enV=el.getAttribute('data-en');
+ let v;
+ if(ar){ const arV=el.getAttribute('data-ar'); v=(arV!=null)?arV:arTr(enV!=null?enV:he); }
+ else if(en){ v=(enV!=null)?enV:he; }
+ else { v=he; }
  if(el.dataset.i18nHtml!=null) el.innerHTML=v; else el.textContent=v;
  });
  }catch(e){}
@@ -3610,10 +3686,11 @@ function releaseWake(){ try{ if(_wakeLock){ _wakeLock.release(); _wakeLock=null;
 document.addEventListener&&document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='visible'&&sosActive&&!_wakeLock)acquireWake(); });
 let _torchTrack=null, _morseTimeouts=[];
 function startMaxAttention(){
- var he=currentLang==='he';
+ var he=currentLang==='he', ar=currentLang==='ar';
  var known=curSosType&&curSosType!=='unknown';
- setText('strobe-sub',(he?'חירום — קוראים לעזרה':'EMERGENCY — calling for help')+(known?' · '+sosTypeLabel(curSosType):''));
- setText('strobe-note',he?'הבהוב המסך, הצליל והפנס פועלים כל עוד האפליקציה פתוחה. הבהוב במסך נעול יתווסף בגרסה המותקנת.':'Screen flash, sound and flashlight run while the app is open. Locked-screen flashing arrives in the installed app.');
+ /* SAFETY-CRITICAL — emergency banner; native-Arabic review required */
+ setText('strobe-sub',(he?'חירום — קוראים לעזרה':ar?'طوارئ — نطلب المساعدة':'EMERGENCY — calling for help')+(known?' · '+sosTypeLabel(curSosType):''));
+ setText('strobe-note',he?'הבהוב המסך, הצליל והפנס פועלים כל עוד האפליקציה פתוחה. הבהוב במסך נעול יתווסף בגרסה המותקנת.':ar?'وميض الشاشة والصوت والمصباح يعمل طالما التطبيق مفتوح. وميض الشاشة المقفلة سيُضاف في النسخة المُثبَّتة.':'Screen flash, sound and flashlight run while the app is open. Locked-screen flashing arrives in the installed app.');
  var ov=document.getElementById('sos-strobe'); if(ov){ov.classList.add('on');ov.setAttribute('aria-hidden','false');}
  startMorse();
 }
@@ -4324,6 +4401,7 @@ function callNum(n){
  setTimeout(()=>{window.location.href='tel:'+n;},350);
 }
 function toast(txt,cls){
+ if(typeof arTr==='function')txt=arTr(txt);
  const c=document.getElementById('toasts');
  const cm={red:'#CC1426',grn:'#2ECC71',amb:'#C07808',pur:'#8E4DFF','':`#E0A828`};
  const col=cm[cls||''];
@@ -5083,7 +5161,7 @@ function gdApplyI18n(){
  it contacts authorities or runs always-on/background — because it doesn't.
 ═══════════════════════════════════════════════════ */
 function legalUpdated(){ return currentLang==='he'?'עודכן: 19 ביוני 2026':'Updated: 19 June 2026'; }
-function legalDraftBox(){ return ''; }
+function legalDraftBox(){ if(currentLang==='ar'){ return '<div class="legal-draft" dir="rtl">النص القانوني الكامل متوفر حالياً بالعبرية والإنجليزية؛ الترجمة العربية الرسمية قيد المراجعة القانونية. <strong>للطوارئ اتصل بـ 100 (الشرطة) / 101 (الإسعاف) / 102 (الإطفاء).</strong></div>'; } return ''; }
 
 /* Emergency disclaimer — the single most important compliance text. */
 function disclaimerHTML(){ const he=currentLang==='he';
@@ -5270,16 +5348,19 @@ function gdConsentCancel(){ gdClose('gd-consent'); _consentCb=null; }
 
 /* Static-label translations for the compliance UI (he/en). */
 function legalApplyI18n(){
- const he=currentLang==='he';
+ const he=currentLang==='he', ar=currentLang==='ar';
  setText('ob-disclaimer-txt',null); // innerHTML below
+ /* SAFETY-CRITICAL — needs native-Arabic human review before public launch */
  const obd=document.getElementById('ob-disclaimer-txt'); if(obd)obd.innerHTML=he
  ?'<strong>שומר אינו תחליף לשירותי חירום.</strong> זהו כלי לבטיחות אישית ושיתוף מיקום. במצב חירום אמיתי חייגו <b>100</b> (משטרה) · <b>101</b> (מד״א) · <b>102</b> (כבאות). שומר אינו מתקשר לרשויות עבורך.'
+ :ar?'<strong>شومير ليس بديلاً عن خدمات الطوارئ.</strong> هو أداة للسلامة الشخصية ومشاركة الموقع. في حالة طوارئ حقيقية اتصل بـ <b>100</b> (الشرطة) · <b>101</b> (نجمة داوود الحمراء) · <b>102</b> (الإطفاء). شومير لا يتصل بالسلطات نيابةً عنك.'
  :'<strong>Shomer is not a replacement for emergency services.</strong> It is a personal-safety & location-sharing tool. In a real emergency call <b>100</b> (Police) · <b>101</b> (MDA) · <b>102</b> (Fire). Shomer does not call authorities for you.';
  const oba=document.getElementById('ob-agree-txt'); if(oba)oba.innerHTML=he
  ?'בכניסה את/ה מסכים/ה ל<button type="button" class="lnk-inline" onclick="openLegal(\'tos\')">תנאי השימוש</button> ול<button type="button" class="lnk-inline" onclick="openLegal(\'privacy\')">מדיניות הפרטיות</button>. שיתוף מיקום הוא בהסכמה בלבד.'
+ :ar?'بالدخول فإنك توافق على <button type="button" class="lnk-inline" onclick="openLegal(\'tos\')">شروط الاستخدام</button> و<button type="button" class="lnk-inline" onclick="openLegal(\'privacy\')">سياسة الخصوصية</button>. مشاركة الموقع تتم بالموافقة فقط.'
  :'By entering you agree to the <button type="button" class="lnk-inline" onclick="openLegal(\'tos\')">Terms of Service</button> and <button type="button" class="lnk-inline" onclick="openLegal(\'privacy\')">Privacy Policy</button>. Location sharing is consent-only.';
- setText('nav-sos',he?'חירום מיידי':'Immediate emergency'); const ns=document.getElementById('nav-sos'); if(ns){ns.insertAdjacentHTML('beforeend',' <span class="si" aria-hidden="true">ⓘ</span>');}
- setText('sos-cd-legal-txt',he?'שומר אינו מתקשר לרשויות. במצב חירום חייגו 100 / 101 / 102 בעצמכם.':'Shomer does not call authorities. In an emergency, dial 100 / 101 / 102 yourself.');
+ /* SAFETY-CRITICAL — emergency dialing instruction; native-Arabic review required */
+ setText('sos-cd-legal-txt',he?'שומר אינו מתקשר לרשויות. במצב חירום חייגו 100 / 101 / 102 בעצמכם.':ar?'شومير لا يتصل بالسلطات. في حالة الطوارئ اتصل بـ 100 / 101 / 102 بنفسك.':'Shomer does not call authorities. In an emergency, dial 100 / 101 / 102 yourself.');
  setText('disc-ttl',he?' כתב ויתור חירום':' Emergency disclaimer');
  setText('tos-ttl',he?'תנאי שימוש':'Terms of Service');
  setText('priv-ttl',he?'מדיניות פרטיות':'Privacy Policy');
@@ -5398,17 +5479,17 @@ function fbPushState(){
 /* Render the visible connection/listening status so each phone SHOWS its real state. */
 function renderFbStatus(){
   var el=document.getElementById('fb-status'); if(!el)return;
-  var txt=document.getElementById('fb-status-txt'); var he=currentLang==='he';
+  var txt=document.getElementById('fb-status-txt'); var he=currentLang==='he', ar=currentLang==='ar';
   FB.pushState=fbPushState();
   var state, msg;
-  if(!FB.ready){ state='connecting'; msg=he?'מתחבר…':'Connecting…'; }
-  else if(!FB.connected){ state='offline'; msg=he?'לא מחובר — אופליין':'Offline — not connected'; }
+  if(!FB.ready){ state='connecting'; msg=he?'מתחבר…':ar?'جارٍ الاتصال…':'Connecting…'; }
+  else if(!FB.connected){ state='offline'; msg=he?'לא מחובר — אופליין':ar?'غير متصل':'Offline — not connected'; }
   else {
     state='connected';
     var n=FB.near||0;
-    var nearTxt=he?(n+' שומרים בקרבת מקום'):(n+' SHOMERs nearby');
-    var listen=he?'מאזין ל-SOS ✓':'listening for SOS ✓';
-    msg=(he?'מחובר · ':'Connected · ')+nearTxt+' · '+listen;
+    var nearTxt=he?(n+' שומרים בקרבת מקום'):ar?(n+' حُرّاس بالقرب منك'):(n+' SHOMERs nearby');
+    var listen=he?'מאזין ל-SOS ✓':ar?'يستمع لنداءات الاستغاثة ✓':'listening for SOS ✓';
+    msg=(he?'מחובר · ':ar?'متصل · ':'Connected · ')+nearTxt+' · '+listen;
   }
   el.classList.remove('connected','connecting','offline'); el.classList.add(state);
   if(txt)txt.textContent=msg;
@@ -5417,17 +5498,17 @@ function renderFbStatus(){
 function fmtClock(ts){ try{ var d=new Date(ts), p=function(x){return(x<10?'0':'')+x;}; return p(d.getHours())+':'+p(d.getMinutes())+':'+p(d.getSeconds()); }catch(e){ return '—'; } }
 function toggleDiagPanel(force){ var p=document.getElementById('diag-panel'); if(!p)return; var open=(force===undefined)?!p.classList.contains('on'):!!force; p.classList.toggle('on',open); p.setAttribute('aria-hidden',String(!open)); if(open)updateDiagPanel(); }
 function updateDiagPanel(){
-  var p=document.getElementById('diag-panel'); if(!p)return; var he=currentLang==='he';
-  setText('diag-uid', FB.uid?(FB.uid.slice(0,10)):(he?'—':'—'));
+  var p=document.getElementById('diag-panel'); if(!p)return; var he=currentLang==='he', ar=currentLang==='ar';
+  setText('diag-uid', FB.uid?(FB.uid.slice(0,10)):'—');
   var rt=document.getElementById('diag-rtdb');
   if(rt){ var rtxt, rcol;
-    if(!FB.ready){ rtxt=FB.err?('error · '+FB.err):(he?'מתחבר…':'connecting…'); rcol=FB.err?'#FF7080':'var(--amb)'; }
-    else if(FB.connected){ rtxt='connected ✓'; rcol='var(--grn)'; }
-    else { rtxt='reconnecting ✗'; rcol='var(--amb)'; }
+    if(!FB.ready){ rtxt=FB.err?('error · '+FB.err):(he?'מתחבר…':ar?'جارٍ الاتصال…':'connecting…'); rcol=FB.err?'#FF7080':'var(--amb)'; }
+    else if(FB.connected){ rtxt=(ar?'متصل ✓':'connected ✓'); rcol='var(--grn)'; }
+    else { rtxt=(ar?'إعادة الاتصال ✗':'reconnecting ✗'); rcol='var(--amb)'; }
     rt.textContent=rtxt; rt.style.color=rcol; }
   setText('diag-seen', String(FB.near||0));
   var ls=document.getElementById('diag-lastsos');
-  if(ls){ ls.textContent=FB.lastSos?(fmtClock(FB.lastSos.ts)+(FB.lastSos.type&&FB.lastSos.type!=='unknown'&&window.sosTypeLabel?(' · '+sosTypeLabel(FB.lastSos.type)):'')):(he?'אין':'none'); ls.style.color=FB.lastSos?'var(--grn)':'var(--tx3)'; }
+  if(ls){ ls.textContent=FB.lastSos?(fmtClock(FB.lastSos.ts)+(FB.lastSos.type&&FB.lastSos.type!=='unknown'&&window.sosTypeLabel?(' · '+sosTypeLabel(FB.lastSos.type)):'')):(he?'אין':ar?'لا يوجد':'none'); ls.style.color=FB.lastSos?'var(--grn)':'var(--tx3)'; }
   var ps=FB.pushState||fbPushState(); var pe=document.getElementById('diag-push');
   if(pe){ var pmap={granted:'on ✓','default':'off',denied:'denied','install-required':'add to home screen','unsupported':'unsupported'}; pe.textContent=pmap[ps]||ps; pe.style.color=(ps==='granted')?'var(--grn)':'var(--amb)'; }
   var pb=document.getElementById('diag-push-btn'); if(pb)pb.style.display=(ps==='granted'||ps==='unsupported')?'none':'block';
@@ -5565,8 +5646,8 @@ function fbListenSOS(){
 }
 /* ── Incoming SOS from another SHOMER: make it impossible to miss ── */
 function incomingSosAlert(s){
-  var he=currentLang==='he';
-  var label=(s.type&&s.type!=='unknown'&&window.sosTypeLabel)?sosTypeLabel(s.type):(he?'מצוקה':'Distress');
+  var he=currentLang==='he', ar=currentLang==='ar';
+  var label=(s.type&&s.type!=='unknown'&&window.sosTypeLabel)?sosTypeLabel(s.type):(he?'מצוקה':ar?'استغاثة':'Distress');
   var dist=(userLat!=null&&s.lat!=null)?fmtDistance(distMeters(userLat,userLng,s.lat,s.lng)):'';
   playSosAlertSound();
   try{ if(navigator.vibrate)navigator.vibrate([240,90,240,90,360]); }catch(e){}
@@ -5595,9 +5676,9 @@ function playSosAlertSound(){
 }
 var _sosBannerTimer=null;
 function showSosBanner(label,dist,s){
-  var he=currentLang==='he';
+  var he=currentLang==='he', ar=currentLang==='ar';
   var bar=document.getElementById('sos-incoming'); if(!bar)return;
-  setText('sos-inc-ttl', he?'🆘 SOS בקרבת מקום':'🆘 SOS nearby');
+  setText('sos-inc-ttl', he?'🆘 SOS בקרבת מקום':ar?'🆘 نداء استغاثة قريب':'🆘 SOS nearby');
   setText('sos-inc-sub', label+(dist?' · '+dist:''));
   bar.classList.add('on'); bar.setAttribute('aria-hidden','false');
   bar.dataset.lat=s.lat; bar.dataset.lng=s.lng; bar.dataset.label=label;
