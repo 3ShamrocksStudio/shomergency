@@ -389,6 +389,11 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 .sos-wrap::before{content:'';position:absolute;left:50%;top:42%;width:150px;height:150px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(8,14,26,.72) 0%,rgba(8,14,26,.34) 52%,transparent 72%);z-index:-1;pointer-events:none;}
 .nav::before{display:none;}
 .sos-wrap{pointer-events:auto;}
+/* Hide the floating SOS + map FABs while a full panel is open — keeps sheets clean & professional */
+.nav,.loc-fab,.ff-fab{transition:opacity .18s ease;}
+body.sheet-open .nav,
+body.sheet-open .loc-fab,
+body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
 
 /* ══════════ SOS BUTTON — sole bottom action, big & premium ══════════ */
 .sos-wrap{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:5px;position:relative;padding:0 10px;}
@@ -420,7 +425,8 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 /* Settings category band — groups sub-sections into clear, scannable categories */
 .set-cat{display:flex;align-items:center;gap:10px;margin:26px 0 14px;padding-bottom:10px;border-bottom:1px solid var(--b2);}
 .set-cat:first-child{margin-top:2px;}
-.set-cat-ic{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,var(--n4),var(--n3));border:1px solid var(--b2);color:var(--g3);flex:0 0 auto;}
+.set-cat-ic{width:26px;height:26px;display:flex;align-items:center;justify-content:center;color:var(--g3);flex:0 0 auto;}
+.set-cat-ic .ic{width:23px;height:23px;}
 .set-cat-ic .ic{width:17px;height:17px;}
 .set-cat-t{font-size:15px;font-weight:800;color:var(--tx0);letter-spacing:.2px;}
 .sec-cap::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--gd),transparent);}
@@ -1587,14 +1593,12 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  <div class="sh-body">
  <div class="set-cat"><div class="set-cat-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M13.7 21a2 2 0 0 1-3.4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div class="set-cat-t" data-he="התראות" data-en="Alerts &amp; Notifications">התראות</div></div>
  <div class="sec-cap mb12" id="set-radius-lbl">רדיוס התראה</div>
- <p class="set-help" id="set-radius-help">עד כמה רחוק ממך עדיין יקבלו ממך התראה — וכמה רחוק תקבל/י התראות של אחרים. גדול יותר = יותר עיניים, יותר התראות.</p>
  <div class="sl-card mb20">
  <div class="rad-big"><span id="rad-v">5</span><span class="rad-u" id="rad-u"> ק"מ</span></div>
  <input type="range" id="rad-slider" min="1" max="25" value="5" aria-label="רדיוס בקילומטרים" oninput="saveRadius(this.value)">
  <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--tx3);margin-top:6px"><span>1</span><span id="rad-max">25 ק"מ</span></div>
  </div>
  <div class="sec-cap mb12" id="set-notif-lbl">התראות</div>
- <p class="set-help" id="set-notif-help">בחר/י אילו אירועים בקרבתך ידחפו אליך התראה. כבה/י את מה שלא רלוונטי כדי לא להיות מוצף/ת.</p>
  <div class="set-grp">
  <div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18v-5a5 5 0 0 1 10 0v5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><rect x="5" y="18" width="14" height="3" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3v2M4.5 7l1.5 1.3M19.5 7L18 8.3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div><div class="sr-nm" id="n-sos-nm">SOS חירום</div><div class="sr-sb" id="n-sos-sb">כל SOS באזורך — הכי דחוף, מומלץ להשאיר דלוק</div></div></div><div class="tog on" data-skey="n_sos" onclick="this.classList.toggle('on');saveToggle(this)" role="switch"></div></div>
  <div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg></div><div><div class="sr-nm" id="n-stalk-nm">מעקב ואיומים</div><div class="sr-sb" id="n-stalk-sb">דיווחים על הטרדה/מעקב לידך</div></div></div><div class="tog on" data-skey="n_stalk" onclick="this.classList.toggle('on');saveToggle(this)" role="switch"></div></div>
@@ -1607,7 +1611,6 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  <div class="set-grp"><div class="set-row" onclick="openSetPin()" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><div><div class="sr-nm" data-he="קוד לביטול SOS (PIN)" data-en="SOS cancel code (PIN)">קוד לביטול SOS (PIN)</div><div class="sr-sb" data-he="נדרש לביטול SOS פעיל — לעולם לא טביעת אצבע." data-en="Required to cancel an active SOS — never a fingerprint.">נדרש לביטול SOS פעיל — לעולם לא טביעת אצבע.</div></div></div><span id="pin-set-state" style="font-size:12px;font-weight:700;color:var(--amb);white-space:nowrap">לא הוגדר</span></div></div>
  <div class="set-grp"><div class="set-row" onclick="op('sh-checkin')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="sr-nm" data-he="צ׳ק-אין הדדי (עם שומר/ת)" data-en="Mutual check-in (with a guardian)">צ׳ק-אין הדדי</div><div class="sr-sb" data-he="„הכל בסדר?” תקופתי — אם לא תאשר/י, השומר/ת מקבל/ה אזעקה." data-en="Periodic 'Are you OK?' — if you don't confirm, your guardian is alerted.">„הכל בסדר?” תקופתי.</div></div></div><span id="ci-set-state" style="font-size:12px;font-weight:700;color:var(--tx3);white-space:nowrap">כבוי</span></div></div>
  <div class="sec-cap mb12" id="shake-set-lbl">Shake-to-SOS</div>
- <p class="set-help" id="shake-set-help">מאפשר להפעיל SOS בלי להסתכל על המסך — מנערים את הטלפון בחוזקה. שימושי כשהטלפון בכיס או כשאי אפשר להביט במסך.</p>
  <div class="set-grp">
  <div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 14h6l-1 8 9-12h-6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div><div><div class="sr-nm" id="shake-tog-lbl">הפעל Shake-to-SOS</div><div class="sr-sb" id="shake-tog-sub">5 ניעורים חזקים → SOS</div></div></div><div class="tog on" id="shake-tog" onclick="toggleShake(this)" role="switch"></div></div>
  </div>
@@ -1618,7 +1621,6 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  <button class="test-alarm-btn" style="margin-top:12px" onclick="simulateShake()" id="sim-shake-btn"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 14h6l-1 8 9-12h-6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg> <span id="sim-shake-lbl">סימולציית ניעור (בדיקה)</span></button>
  </div>
  <div class="sec-cap mb12" id="sos-safety-cap">בטיחות SOS</div>
- <p class="set-help" id="sos-safety-help">מגן עליך מפני אזעקות שווא ושיגור בטעות. כך לא תשלח/י עזרה בלי כוונה — ולא תפגע/י באמון המערכת.</p>
  <div class="sl-card">
  <div class="vol-row"><span class="vol-lbl" id="sos-cd-lbl">חלון ביטול לפני שידור</span><span class="vol-val" id="sos-cd-val">10s</span></div>
  <div class="sr-sb" id="sos-cd-sub" style="margin:-2px 0 10px;line-height:1.5">זמן לבטל אזעקת שווא לפני שה-SOS משודר. קצר יותר = למצבי סיכון גבוה.</div>
@@ -1633,13 +1635,11 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  </div>
  <div class="set-cat"><div class="set-cat-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><div class="set-cat-t" data-he="מיקום ופרטיות" data-en="Location &amp; Privacy">מיקום ופרטיות</div></div>
  <div class="sec-cap mb12" id="set-priv-lbl">פרטיות</div>
- <p class="set-help" id="set-priv-help">את/ה שולט/ת במה שמשותף. המיקום נשמר במכשירך ומשותף רק כשאת/ה מפעיל/ה SOS, DMS או שיתוף עם שומר/ת.</p>
  <div class="set-grp">
  <div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.4 7-12a7 7 0 1 0-14 0c0 5.6 7 12 7 12Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.6" fill="currentColor"/></svg></div><div><div class="sr-nm" id="p-bgloc-nm">שיתוף מיקום ברקע</div><div class="sr-sb" id="p-bgloc-sb">נדרש ל-SOS ו-DMS — בלעדיו אי אפשר לשלוח את מיקומך בחירום</div></div></div><div class="tog on" data-skey="p_bgloc" onclick="this.classList.toggle('on');saveToggle(this)" role="switch"></div></div>
  <div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div><div class="sr-nm" id="p-showname-nm">הצג שם בעדכונים</div><div class="sr-sb" id="p-showname-sb">כבוי = הדיווחים שלך מופיעים בעילום שם</div></div></div><div class="tog on" data-skey="p_showname" onclick="this.classList.toggle('on');saveToggle(this)" role="switch"></div></div>
  </div>
  <div class="sec-cap mb12" id="units-lbl" data-he="יחידות מרחק" data-en="Distance units">יחידות מרחק</div>
- <p class="set-help" id="units-help" data-he="באילו יחידות יוצג המרחק לאירועים ולמסלולי ניווט. ברירת מחדל: מטרי." data-en="Units used for distance to incidents and navigation routes. Default: metric.">באילו יחידות יוצג המרחק לאירועים ולמסלולי ניווט. ברירת מחדל: מטרי.</p>
  <div class="set-grp" style="padding:10px 14px;margin-bottom:18px;">
  <div class="units-seg">
  <button class="olb on" id="units-metric" onclick="setUnits('metric')" data-he="מטרי · מ׳ / ק״מ" data-en="Metric · m / km">מטרי · מ׳ / ק״מ</button>
@@ -1647,14 +1647,12 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  </div>
  </div>
  <div class="set-cat"><div class="set-cat-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h3.5l1.5 4-2 1.5a11 11 0 0 0 5 5l1.5-2 4 1.5V19a2 2 0 0 1-2.2 2A16 16 0 0 1 4 6.2 2 2 0 0 1 5 4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div><div class="set-cat-t" id="set-contacts-lbl" data-he="אנשי קשר חירום" data-en="Emergency contacts">אנשי קשר חירום</div></div>
- <p class="set-help" id="set-contacts-help">אנשים שיקבלו את מיקומך והתראה אוטומטית כשתשלח/י SOS. הוסף/י את מי שיגיב/ה הכי מהר.</p>
  <div class="set-grp" id="contacts-grp">
  <div class="c-row"><div class="c-av">א</div><div style="flex:1"><div class="c-nm" data-he="אמא" data-en="Mom">אמא</div><div class="c-ph">052-XXX-XXXX</div></div><span class="c-tag" data-he="ראשון" data-en="Primary">ראשון</span></div>
  <div class="c-row"><div class="c-av">ד</div><div style="flex:1"><div class="c-nm" data-he="דני" data-en="Danny">דני</div><div class="c-ph">054-XXX-XXXX</div></div><span class="c-tag" data-he="שני" data-en="Secondary">שני</span></div>
  </div>
  <button class="add-c mb20" onclick="cl('sh-set');openCircles()" data-he="+ חבר/י שומר/ת" data-en="+ Connect a SHOMER">+ חבר/י שומר/ת</button>
  <div class="set-cat"><div class="set-cat-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 12h18" stroke="currentColor" stroke-width="2"/><path d="M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><div class="set-cat-t" id="set-lang-lbl" data-he="שפה" data-en="Language">שפה</div></div>
- <p class="set-help" id="set-lang-help">שפת התצוגה של האפליקציה. ניתן לשנות בכל עת — לא משפיע על דיווחים קיימים.</p>
  <div class="set-grp" style="padding:10px 14px;">
  <div style="display:flex;direction:ltr;gap:6px;flex-wrap:wrap;" id="set-lang-btns">
  <button class="olb on" onclick="setLang('he')" lang="he">עברית</button>
@@ -1666,12 +1664,9 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  <div class="set-grp">
  <div class="ai-row"><span class="ai-l">מוצר / Product</span><span class="ai-v" dir="ltr">SHOMER<span class="tm"></span> (שומר)</span></div>
  <div class="ai-row"><span class="ai-l">גרסה</span><span class="ai-v">1.0.0</span></div>
- <div class="ai-row"><span class="ai-l">על שם</span><span class="ai-v">תנועת השומר, 1909</span></div>
  <div class="ai-row"><span class="ai-l">מוטו</span><span class="ai-v">שׁוֹמֵר אָחִי אָנֹכִי</span></div>
- <div class="ai-row"><span class="ai-l">זכויות יוצרים</span><span class="ai-v" dir="ltr"> 2026 3Shamrocks Studio</span></div>
  </div>
  <div class="sec-cap mb12" style="margin-top:18px" id="set-legal-cap">בטיחות ומשפט</div>
- <p class="set-help" id="set-legal-help">המידע המשפטי וכתב הוויתור. שומר הוא כלי לבטיחות אישית — לא תחליף לשירותי חירום.</p>
  <div class="set-grp mb20">
  <div class="set-row" onclick="openLegal('disclaimer')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l9 16H3Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17" r="1.2" fill="currentColor"/></svg></div><div class="sr-nm" id="set-disc-row">כתב ויתור חירום</div></div><span style="color:var(--tx3);font-size:18px">›</span></div>
  <div class="set-row" onclick="openLegal('tos')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l4 4v14H7Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 3v4h4M9 13h6M9 16.5h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div class="sr-nm" id="set-tos-row">תנאי שימוש</div></div><span style="color:var(--tx3);font-size:18px">›</span></div>
@@ -1680,8 +1675,8 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  <div class="sec-cap mb12" style="margin-top:18px" id="datasrc-cap">נתונים ומקורות</div>
  <div class="set-grp" style="padding:13px 14px;">
  <p style="font-size:11.5px;color:var(--tx2);line-height:1.75" id="datasrc-txt">
- סמני הערים על המפה הם <strong style="color:var(--g3)">סקירה סטטיסטית מצרפית</strong> — לא אירועים ספציפיים. נתונים אישיים (פינים) מגיעים אך ורק מדיווחי משתמשים ו-SOS חי.<br><br>
- מקורות: הלשכה המרכזית לסטטיסטיקה (הלמ"ס) — סקר ביטחון אישי 2024; משטרת ישראל — נתונים פתוחים (data.gov.il); מרכז טאוב 2024.
+ סמני הערים הם <strong style="color:var(--g3)">סקירה סטטיסטית מצרפית</strong>, לא אירועים ספציפיים. פינים אישיים מגיעים רק מדיווחי משתמשים ומ-SOS חי.<br>
+ <span style="color:var(--tx3)">מקורות: הלמ"ס · משטרת ישראל (data.gov.il) · מרכז טאוב.</span>
  </p>
  </div>
  <div class="sec-cap mb12" style="margin-top:18px" id="reset-cap">איפוס</div>
@@ -2790,8 +2785,8 @@ function applyTranslations(){
  setText('reset-hint',he?'מוחק פרופיל, דיווחים, היסטוריית SOS והגדרות — וחוזר להרשמה.':'Clears profile, reports, SOS history & settings — returns to onboarding.');
  setText('datasrc-cap',he?'נתונים ומקורות':'Data & sources');
  {const dt=document.getElementById('datasrc-txt');if(dt)dt.innerHTML=he
- ?'סמני הערים על המפה הם <strong style="color:var(--g3)">סקירה סטטיסטית מצרפית</strong> — לא אירועים ספציפיים. נתונים אישיים (פינים) מגיעים אך ורק מדיווחי משתמשים ו-SOS חי.<br><br>מקורות: הלשכה המרכזית לסטטיסטיקה (הלמ"ס) — סקר ביטחון אישי 2024; משטרת ישראל — נתונים פתוחים (data.gov.il); מרכז טאוב 2024.'
- :'City markers are an <strong style="color:var(--g3)">aggregate statistical overview</strong> — not specific incidents. Personal pins come only from user reports and live SOS.<br><br>Sources: Israel Central Bureau of Statistics (CBS) — Personal Security Survey 2024; Israel Police open data (data.gov.il); Taub Center 2024.';}
+ ?'סמני הערים הם <strong style="color:var(--g3)">סקירה סטטיסטית מצרפית</strong>, לא אירועים ספציפיים. פינים אישיים מגיעים רק מדיווחי משתמשים ומ-SOS חי.<br><span style="color:var(--tx3)">מקורות: הלמ"ס · משטרת ישראל (data.gov.il) · מרכז טאוב.</span>'
+ :'City markers are an <strong style="color:var(--g3)">aggregate statistical overview</strong>, not specific incidents. Personal pins come only from user reports and live SOS.<br><span style="color:var(--tx3)">Sources: Israel CBS · Israel Police (data.gov.il) · Taub Center.</span>';}
  setText('myrep-cap',he?'הדיווחים שלי':'My reports');
  setText('soshist-cap',he?'היסטוריית SOS':'SOS history');
  setText('stat-reports-lbl',he?'דיווחים':'Reports');
@@ -4162,10 +4157,13 @@ function openUpdates(){
  const nb=document.getElementById('nb-upd');if(nb)nb.classList.add('on');
  newUpd=0;updBdg();
 }
-function op(id){closeAll();const el=document.getElementById(id);if(el)el.classList.add('open');}
+/* Mirror "any full sheet open" onto <body> so CSS can hide the floating SOS/FABs reliably (no :has dependency). */
+function syncSheetState(){ document.body.classList.toggle('sheet-open', !!document.querySelector('.sheet.open')); }
+function op(id){closeAll();const el=document.getElementById(id);if(el)el.classList.add('open');syncSheetState();}
 function cl(id){
  try{stopPreview();}catch(e){} // never leave a preview tone playing after a sheet closes
  const el=document.getElementById(id);if(el)el.classList.remove('open');
+ syncSheetState();
  setTimeout(()=>{
  if(!document.querySelector('.sheet.open')){
  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
@@ -4173,7 +4171,7 @@ function cl(id){
  }
  },50);
 }
-function closeAll(){document.querySelectorAll('.sheet').forEach(s=>s.classList.remove('open'));}
+function closeAll(){document.querySelectorAll('.sheet').forEach(s=>s.classList.remove('open'));syncSheetState();}
 function toggleDD(){
  menuOpen=!menuOpen;
  const dd=document.getElementById('dd');
