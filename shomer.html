@@ -103,7 +103,23 @@
 .hdr-menu .ic,.hdr-bell .ic{width:22px;height:22px;color:var(--p4);}
 .loc-fab .ic,.ff-fab .ic{width:22px;height:22px;color:var(--g3);}
 .ropt-ic .ic{width:26px;height:26px;color:var(--g3);}
-.ropt.sel .ropt-ic .ic{color:var(--g4);}
+/* Semantic event colours (the crime-type / map-icon palette) brought into the UI, not just markers */
+.ropt:has(#rt1) .ropt-ic .ic{color:#FF7A1A;} .ropt:has(#rt1).sel{border-color:#FF7A1A;background:linear-gradient(180deg,rgba(255,122,26,.16),rgba(255,122,26,.04));}
+.ropt:has(#rt2) .ropt-ic .ic{color:#F2B705;} .ropt:has(#rt2).sel{border-color:#F2B705;background:linear-gradient(180deg,rgba(242,183,5,.16),rgba(242,183,5,.04));}
+.ropt:has(#rt3) .ropt-ic .ic{color:#E5468E;} .ropt:has(#rt3).sel{border-color:#E5468E;background:linear-gradient(180deg,rgba(229,70,142,.16),rgba(229,70,142,.04));}
+.ropt:has(#rt4) .ropt-ic .ic{color:#16A06A;} .ropt:has(#rt4).sel{border-color:#16A06A;background:linear-gradient(180deg,rgba(22,160,106,.16),rgba(22,160,106,.04));}
+.ropt:has(#rt5) .ropt-ic .ic{color:#18C29C;} .ropt:has(#rt5).sel{border-color:#18C29C;background:linear-gradient(180deg,rgba(24,194,156,.16),rgba(24,194,156,.04));}
+.ropt:has(#rt6) .ropt-ic .ic{color:#8898B8;}
+/* Notification rows tinted by event type */
+.set-row:has(#n-sos-nm) .sr-ic .ic{color:#FF1A40;}
+.set-row:has(#n-stalk-nm) .sr-ic .ic{color:#F2B705;}
+.set-row:has(#n-med-nm) .sr-ic .ic{color:#16A06A;}
+.set-row:has(#n-closed-nm) .sr-ic .ic{color:#16A06A;}
+/* Emergency call buttons by service */
+.call-btn:has(.cc-nm[data-en*="Police"]) .cc-ic .ic{color:#fff;}
+.call-btn:has(.cc-nm[data-en*="Magen"]) .cc-ic .ic{color:#FF1A40;}
+.call-btn:has(.cc-nm[data-en*="Fire"]) .cc-ic .ic{color:#FF7A1A;}
+.call-btn:has(.cc-nm[data-en*="Shin"]) .cc-ic .ic{color:#6B32D8;}
 .cc-ic .ic{width:26px;height:26px;color:var(--g3);}
 .call-btn.pr .cc-ic .ic{color:#fff;}
 .pic .ic{width:26px;height:26px;color:var(--g3);}
@@ -168,12 +184,14 @@ body:not(.lb-on){--hdr-top:0px;}
 .ob-panel{width:100%;max-width:390px;padding:0 20px;display:none;}
 .ob-panel.active{display:block;animation:pfade .25s ease;}
 @keyframes pfade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.ob-card{position:relative;background:linear-gradient(180deg,rgba(24,38,66,.94),rgba(13,24,44,.96));border:1px solid var(--b2);border-radius:var(--r16);padding:19px 18px 17px;box-shadow:var(--e3),inset 0 1px 0 var(--sg);backdrop-filter:blur(12px);overflow:hidden;}
+.ob-card{position:relative;background:linear-gradient(180deg,rgba(24,38,66,.94),rgba(13,24,44,.96));border:1px solid var(--b2);border-radius:var(--r16);padding:14px 16px 13px;box-shadow:var(--e3),inset 0 1px 0 var(--sg);backdrop-filter:blur(12px);overflow:hidden;}
 /* Crafted platinum top-edge — a quiet nod to the badge's brushed metal. */
 .ob-card::before{content:'';position:absolute;top:0;left:14%;right:14%;height:1px;background:linear-gradient(90deg,transparent,var(--ss) 38%,var(--sb) 62%,transparent);pointer-events:none;}
 .ob-card h3{font-size:17px;font-weight:800;color:var(--tx0);margin-bottom:4px;}
 .ob-card .desc{font-size:12px;color:var(--tx2);margin-bottom:10px;line-height:1.5;}
-.ob-f{display:block;width:100%;background:var(--n4);border:1px solid var(--b1);border-radius:var(--r12);padding:14px 15px;color:var(--tx0);font-size:16px;outline:none;transition:border-color .15s,box-shadow .15s;margin-bottom:10px;-webkit-appearance:none;}
+.ob-f{display:block;width:100%;background:var(--n4);border:1px solid var(--b1);border-radius:var(--r12);padding:11px 14px;color:var(--tx0);font-size:16px;outline:none;transition:border-color .15s,box-shadow .15s;margin-bottom:7px;-webkit-appearance:none;}
+.ob-f.shake{animation:obshake .42s cubic-bezier(.36,.07,.19,.97);border-color:#FF7080!important;box-shadow:0 0 0 3px rgba(204,20,38,.18);}
+@keyframes obshake{10%,90%{transform:translateX(-2px)}20%,80%{transform:translateX(4px)}30%,50%,70%{transform:translateX(-7px)}40%,60%{transform:translateX(7px)}}
 .ob-f:focus{border-color:var(--b3);box-shadow:0 0 0 3px rgba(224,168,40,.12);}
 .ob-f::placeholder{color:var(--tx3);}
 .ob-row{display:flex;gap:8px;}
@@ -242,8 +260,8 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 .hdr-center{flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:9px;}
 /* Badge floats free — transparent PNG, no plate, just a soft halo. */
-.hdr-logo{width:88px;height:88px;object-fit:contain;flex-shrink:0;position:relative;z-index:2;margin-bottom:-30px;filter:drop-shadow(0 3px 9px rgba(0,0,0,.7)) drop-shadow(0 0 16px rgba(245,200,64,.32));}
-@media(max-width:360px){.hdr-logo{width:76px;height:76px;margin-bottom:-24px;}}
+.hdr-logo{width:80px;height:80px;object-fit:contain;flex-shrink:0;position:relative;z-index:2;margin-bottom:-16px;filter:drop-shadow(0 3px 9px rgba(0,0,0,.7)) drop-shadow(0 0 16px rgba(245,200,64,.32));}
+@media(max-width:360px){.hdr-logo{width:70px;height:70px;margin-bottom:-12px;}}
 /* Wordmark echoes the badge: brushed-platinum letters, gold Star of David. */
 .hdr-name{font-size:22px;font-weight:900;letter-spacing:1px;background:linear-gradient(160deg,#FFFFFF 0%,#C8D2E2 30%,#8392AB 58%,#E6ECF6 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:inline-flex;align-items:center;text-shadow:0 1px 1px rgba(0,0,0,.3);}
 .hdr-name .star{-webkit-text-fill-color:#F5C840;color:#F5C840;font-size:.98em;line-height:1;margin:0 .02em;text-shadow:0 0 12px var(--gb);}
@@ -683,13 +701,13 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 .mc{width:38px;height:38px;border-radius:var(--r12);background:rgba(8,18,36,.92);backdrop-filter:blur(12px);border:1px solid var(--b3);box-shadow:var(--e2);display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:700;color:var(--g3);transition:all .15s;}
 .mc:hover{background:rgba(16,30,52,.96);transform:translateY(-1px);}
 .mc:active{transform:scale(.92);}
-.loc-fab{position:absolute;bottom:calc(var(--nav) + 72px);right:12px;z-index:400;width:48px;height:48px;border-radius:50%;background:rgba(8,18,36,.92);backdrop-filter:blur(12px);border:1px solid var(--b3);box-shadow:var(--e3);display:flex;align-items:center;justify-content:center;font-size:21px;color:var(--g3);transition:all .15s;}
+.loc-fab{position:absolute;bottom:calc(var(--nav) + 14px);left:12px;z-index:400;width:48px;height:48px;border-radius:50%;background:rgba(8,18,36,.92);backdrop-filter:blur(12px);border:1px solid var(--b3);box-shadow:var(--e3);display:flex;align-items:center;justify-content:center;font-size:21px;color:var(--g3);transition:all .15s;}
 .loc-fab:hover{transform:translateY(-1px);}
 .loc-fab:active{transform:scale(.9);}
 .loc-fab.locating{animation:locSpin 1s linear infinite;}
 @keyframes locSpin{to{transform:rotate(360deg);}}
 /* Data-source banner on the map */
-.data-banner{position:absolute;top:calc(var(--hdr-top,0px) + var(--hdr) + 10px);left:10px;z-index:400;background:rgba(8,18,36,.9);backdrop-filter:blur(12px);border:1px solid var(--b2);border-left:3px solid var(--g3);border-radius:8px;padding:7px 11px;max-width:200px;box-shadow:var(--e1);}
+.data-banner{position:absolute;top:calc(var(--hdr-top,0px) + var(--hdr) + 30px);left:10px;z-index:400;background:rgba(8,18,36,.92);backdrop-filter:blur(12px);border:1px solid var(--b2);border-left:3px solid var(--g3);border-radius:8px;padding:7px 11px;max-width:188px;box-shadow:var(--e1);}
 [dir=rtl] .data-banner{border-left:none;border-right:3px solid var(--g3);}
 .data-banner-t{font-size:10px;font-weight:800;color:var(--g3);letter-spacing:.3px;}
 .data-banner-s{font-size:9px;color:var(--tx2);margin-top:2px;line-height:1.45;}
@@ -742,7 +760,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 .units-seg{display:flex;gap:6px;direction:ltr;}.units-seg .olb{flex:1;}
 
 /* Find-a-Friend FAB (stacked above the locate FAB) */
-.ff-fab{position:absolute;bottom:calc(var(--nav) + 128px);right:12px;z-index:400;width:48px;height:48px;border-radius:50%;background:rgba(8,18,36,.92);backdrop-filter:blur(12px);border:1px solid var(--b3);box-shadow:var(--e3);display:flex;align-items:center;justify-content:center;font-size:21px;color:var(--g3);transition:all .15s;}
+.ff-fab{position:absolute;bottom:calc(var(--nav) + 70px);left:12px;z-index:400;width:48px;height:48px;border-radius:50%;background:rgba(8,18,36,.92);backdrop-filter:blur(12px);border:1px solid var(--b3);box-shadow:var(--e3);display:flex;align-items:center;justify-content:center;font-size:21px;color:var(--g3);transition:all .15s;}
 .ff-fab:hover{transform:translateY(-1px);}
 .ff-fab:active{transform:scale(.9);}
 
@@ -895,9 +913,11 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 /* Hand-built in CSS (no raster) so the warm glow sits precisely behind the
  badge's gold star, stays crisp at any density, and is fully reproducible. */
 #ob{background:#05080F;}
-.ob-bg{position:fixed;inset:0;z-index:-1;pointer-events:none;
- background:
- radial-gradient(ellipse 135% 78% at 50% -12%, #1A2236 0%, #0D1524 36%, #080D18 66%, #05080F 100%);}
+.ob-bg{position:fixed;inset:0;z-index:-1;pointer-events:none;background-color:#05080F;
+ background-image:
+ radial-gradient(ellipse 135% 78% at 50% -12%, rgba(26,34,54,.74) 0%, rgba(13,21,36,.8) 36%, rgba(8,13,24,.9) 66%, rgba(5,8,15,.96) 100%),
+ url("SHOMER-bg.jpg");
+ background-size:cover, cover; background-position:center, center; background-repeat:no-repeat, no-repeat;}
 /* Layer 1: a tight warm halo behind the badge's Star of David + a cool
  platinum lift, both quiet. Layer 2: bottom deepen so cards read crisp. */
 .ob-bg::before{content:'';position:absolute;inset:0;
@@ -908,10 +928,21 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 /* Ultra-fine reproducible grain — premium tooth, no banding, no raster file. */
 .ob-bg::after{content:'';position:absolute;inset:0;opacity:.04;mix-blend-mode:overlay;
  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
-.ob-hero{padding:30px 0 6px;}
-/* The badge IS the wordmark — it floats free, large, never boxed.
- Transparent PNG, so only a soft ambient halo + grounded shadow. */
-.ob-shieldwrap{position:relative;display:flex;align-items:center;justify-content:center;width:min(72vw,320px);height:min(72vw,320px);}
+.ob-hero{padding:14px 0 2px;}
+/* The badge IS the wordmark — sized to keep onboarding above the fold (no scroll). */
+.ob-shieldwrap{position:relative;display:flex;align-items:center;justify-content:center;width:min(42vw,168px);height:min(42vw,168px);}
+@media(max-height:700px){
+ .ob-hero{padding:6px 0 0;}
+ .ob-shieldwrap{width:min(30vw,114px);height:min(30vw,114px);}
+ .ob-sub{margin-top:7px;margin-bottom:6px;letter-spacing:2.2px;font-size:10px;}
+ .ob-lang-pick{margin-bottom:7px;}
+ .ob-steps{margin-bottom:7px;}
+ .ob-card{padding:11px 14px 10px;}
+ .disclaimer{font-size:10px;padding:8px 10px;margin-bottom:8px;line-height:1.38;}
+ .ob-f{padding:9px 13px;margin-bottom:6px;}
+ #ob-legal-links{display:none;} /* legal still reachable in Settings — keep onboarding above the fold */
+ .studio-credit{padding:5px 0 2px;}
+}
 .ob-shieldwrap::before{content:'';position:absolute;top:47%;left:50%;width:72%;height:72%;transform:translate(-50%,-50%);border-radius:50%;
  background:radial-gradient(circle,rgba(245,200,64,.15) 0%,rgba(182,194,214,.05) 40%,transparent 68%);
  filter:blur(10px);pointer-events:none;z-index:0;}
@@ -2830,6 +2861,7 @@ function refreshAutoName(){
 /* Valid Israeli mobile: 05X-XXXXXXX (10 digits, 05 prefix) or +972-5X-XXXXXXX. */
 function isValidILMobile(d){ d=String(d).replace(/\D/g,''); return /^05\d{8}$/.test(d) || /^9725\d{8}$/.test(d); }
 function ilNormalize(d){ d=String(d).replace(/\D/g,''); return d.replace(/^0/,'972'); }
+function shakeField(id){ var el=document.getElementById(id); if(!el)return; el.classList.add('shake'); try{el.focus();}catch(e){} setTimeout(function(){el.classList.remove('shake');},480); }
 let _obvCode='', _obvName='';
 function genVerifyCode(){ return String(Math.floor(1000+Math.random()*9000)); }
 function obStep0(){
@@ -2838,10 +2870,9 @@ function obStep0(){
  let digits=raw.replace(/\D/g,'');
  let name=document.getElementById('ob-name').value.trim().substring(0,40)||pickRandomName();
  _obvName=name;
- if(!digits){ // demo skip — no phone, proceed unverified
-   user={name, phone:'', city:''}; goStep(1); return;
- }
- if(!isValidILMobile(digits)){ toast(he?'מספר נייד ישראלי לא תקין — 05X-XXXXXXX':'Invalid Israeli mobile — 05X-XXXXXXX','amb'); return; }
+ // REQUIRE a valid Israeli mobile — no bypass. Onboarding cannot proceed unverified.
+ if(!digits){ toast(he?'נא להזין מספר טלפון נייד':'Please enter a mobile number','amb'); shakeField('ob-phone'); return; }
+ if(!isValidILMobile(digits)){ toast(he?'מספר נייד ישראלי לא תקין — 05X-XXXXXXX':'Invalid Israeli mobile — 05X-XXXXXXX','amb'); shakeField('ob-phone'); return; }
  user={name, phone: ilNormalize(digits), city:''};
  openObVerify();
 }
