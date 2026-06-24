@@ -315,6 +315,15 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 .sos-inc-go:active{transform:scale(.95);}
 .sos-inc-x{flex-shrink:0;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.18);border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;}
 .sos-inc-x .ic{width:16px;height:16px;}
+/* Live connection-status pill (top-center) — shows connected · N nearby · listening ✓ */
+.fb-status{position:absolute;top:calc(var(--hdr-top,0px) + var(--hdr) + 8px);left:50%;transform:translateX(-50%);z-index:560;display:flex;align-items:center;gap:7px;padding:5px 13px;border-radius:999px;background:rgba(8,18,36,.92);backdrop-filter:blur(10px);border:1px solid var(--b2);box-shadow:0 4px 16px rgba(0,0,0,.4);font-size:11.5px;font-weight:600;color:var(--tx1);max-width:93vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;transition:opacity .3s;}
+.fb-dot{width:8px;height:8px;border-radius:50%;background:var(--amb);flex-shrink:0;}
+.fb-status.connected{color:var(--tx0);}
+.fb-status.connected .fb-dot{background:var(--grn);animation:fbpulse 2s ease-out infinite;}
+.fb-status.connecting .fb-dot{background:var(--amb);}
+.fb-status.offline .fb-dot{background:var(--r3);}
+@keyframes fbpulse{0%{box-shadow:0 0 0 0 rgba(14,136,64,.5)}100%{box-shadow:0 0 0 7px rgba(14,136,64,0)}}
+body.sheet-open .fb-status{opacity:0;pointer-events:none;}
 .sos-strip{position:absolute;top:calc(var(--hdr-top,0px) + var(--hdr));left:0;right:0;z-index:590;background:var(--r3);padding:8px 14px 10px;display:none;flex-direction:column;gap:8px;animation:ssf 1.1s ease-in-out infinite;}
 .sos-strip.on{display:flex;}
 /* Anonymized SHOMER presence marker (other active SHOMERs nearby) */
@@ -1269,6 +1278,12 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
+
+ <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
+ <button class="fb-status connecting" id="fb-status" onclick="explainStatus()" aria-live="polite" aria-label="מצב חיבור">
+ <span class="fb-dot" id="fb-dot" aria-hidden="true"></span>
+ <span class="fb-status-txt" id="fb-status-txt">מתחבר…</span>
+ </button>
 
  <!-- DROPDOWN -->
  <nav id="dd" role="menu" aria-label="תפריט ניווט" hidden>
@@ -5347,8 +5362,56 @@ try{ hydrateIcons(document); }catch(e){}
    cross-DEVICE SOS events + type fan-out. Needs the deployed auth-scoped rules
    (database.rules.json). Fully-closed push + SMS verification need Blaze (flagged).
 ═══════════════════════════════════════════════════════════════════════ */
-var FB={ready:false,uid:null,db:null,_presTimer:null};
+var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0};
 var fbSosMarkers={};
+/* Push capability on THIS device (so the status pill can tell the truth). */
+function fbPushState(){
+  if(!('Notification' in window)||!('serviceWorker' in navigator)||!('PushManager' in window)) return 'unsupported';
+  // iOS only delivers web push to an INSTALLED PWA (Add to Home Screen), never a plain Safari tab.
+  var iOS=/iP(hone|ad|od)/.test(navigator.platform||navigator.userAgent);
+  var standalone=window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches || navigator.standalone===true;
+  if(iOS&&!standalone) return 'install-required';
+  try{ return Notification.permission; }catch(e){ return 'default'; }
+}
+/* Render the visible connection/listening status so each phone SHOWS its real state. */
+function renderFbStatus(){
+  var el=document.getElementById('fb-status'); if(!el)return;
+  var txt=document.getElementById('fb-status-txt'); var he=currentLang==='he';
+  FB.pushState=fbPushState();
+  var state, msg;
+  if(!FB.ready){ state='connecting'; msg=he?'מתחבר…':'Connecting…'; }
+  else if(!FB.connected){ state='offline'; msg=he?'לא מחובר — אופליין':'Offline — not connected'; }
+  else {
+    state='connected';
+    var n=FB.near||0;
+    var nearTxt=he?(n+' שומרים בקרבת מקום'):(n+' SHOMERs nearby');
+    var listen=he?'מאזין ל-SOS ✓':'listening for SOS ✓';
+    msg=(he?'מחובר · ':'Connected · ')+nearTxt+' · '+listen;
+  }
+  el.classList.remove('connected','connecting','offline'); el.classList.add(state);
+  if(txt)txt.textContent=msg;
+}
+function explainStatus(){
+  var he=currentLang==='he';
+  if(!FB.ready){ toast(he?'מתחבר לשירות החי…':'Connecting to the live service…',''); return; }
+  if(!FB.connected){ toast(he?'אין חיבור לרשת כרגע. כשהחיבור יחזור, נתחבר אוטומטית.':'No network right now. We\'ll reconnect automatically.','amb'); return; }
+  var lines=[];
+  lines.push(he?('✓ מחובר ומאזין ל-SOS — '+(FB.near||0)+' שומרים פעילים בקרבת מקום'):('✓ Connected & listening — '+(FB.near||0)+' active SHOMERs nearby'));
+  var ps=FB.pushState;
+  if(ps==='granted') lines.push(he?'✓ התראות דחיפה פעילות — תקבל/י SOS גם כשהאפליקציה ברקע':'✓ Push on — you\'ll get SOS even when the app is in the background');
+  else if(ps==='install-required') lines.push(he?'⚠ באייפון: הוסף/י לבית כדי לקבל התראות כשהאפליקציה סגורה (Safari → שתף → הוסף למסך הבית)':'⚠ iPhone: Add to Home Screen to get alerts when the app is closed (Safari → Share → Add to Home Screen)');
+  else if(ps==='unsupported') lines.push(he?'⚠ הדפדפן לא תומך בהתראות דחיפה':'⚠ This browser doesn\'t support push notifications');
+  else lines.push(he?'⚠ אפשר/י התראות כדי לקבל SOS כשהאפליקציה ברקע':'⚠ Enable notifications to get SOS when the app is backgrounded — tap to allow');
+  toast(lines.join('  ·  '),'');
+  if(ps==='default'){ try{ enablePush(); }catch(e){} }
+}
+/* User-gesture push opt-in (iOS requires a tap; safe to call repeatedly). */
+function enablePush(){ try{ if('Notification' in window && Notification.permission==='default'){ Notification.requestPermission().then(function(){ try{registerPush();}catch(e){} renderFbStatus(); }); } else { try{registerPush();}catch(e){} } }catch(e){} }
+/* Resume-from-background: the RTDB websocket + listeners auto-reconnect, but we re-publish presence
+   and refresh the status so each device immediately shows it's live + listening again. */
+document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='visible'){ if(FB.ready){ try{fbPublishPresence();}catch(e){} } renderFbStatus(); } });
+window.addEventListener('focus',function(){ if(FB.ready){ try{fbPublishPresence();}catch(e){} } renderFbStatus(); });
+try{ renderFbStatus(); }catch(e){}
 var fbPresenceMarkers={};
 /* Anonymized "a SHOMER is here" marker — coarse location, no name, no identity. */
 function presenceIcon(){
@@ -5369,13 +5432,14 @@ async function fbInit(){
     var cred=await window.firebase.auth().signInAnonymously();
     FB.uid=cred.user.uid; FB.db=window.firebase.database(); FB.ready=true;
     fbSetupPresence(); fbListenSOS(); fbListenPairs();
+    FB.listening=true; renderFbStatus();
     try{ registerPush(); }catch(e){}
   }catch(e){ /* offline / blocked — app keeps working locally */ }
 }
 function fbSetupPresence(){
   if(!FB.ready)return;
   var meRef=FB.db.ref('presence/'+FB.uid);
-  FB.db.ref('.info/connected').on('value',function(snap){ if(snap.val()===true){ meRef.onDisconnect().remove(); fbPublishPresence(); } });
+  FB.db.ref('.info/connected').on('value',function(snap){ FB.connected=(snap.val()===true); if(FB.connected){ meRef.onDisconnect().remove(); fbPublishPresence(); } renderFbStatus(); });
   if(!FB._presTimer)FB._presTimer=setInterval(fbPublishPresence,25000);
   FB.db.ref('presence').on('value',function(snap){
     var all=snap.val()||{}, n=0, mlat=userLat, mlng=userLng, radM=((SS.settings&&SS.settings.radius)||5)*1000;
@@ -5406,6 +5470,7 @@ function fbPublishPresence(){
 function updateGuardiansNearby(n){
   var el=document.getElementById('gnear-n'); if(el)el.textContent=n;
   var box=document.getElementById('hdr-near'); if(box)box.style.display=(FB.ready&&n>0)?'flex':'none';
+  FB.near=n; renderFbStatus();
   // cue when a new SHOMER joins nearby (skip the first/baseline sync)
   if(FB._prevNear!=null && n>FB._prevNear) playCue('join');
   FB._prevNear=n;
