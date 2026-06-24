@@ -301,8 +301,27 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 .dms-badge.off{background:var(--n5);color:var(--tx3);border-color:var(--b1);}
 
 /* ══════════ SOS STRIP ══════════ */
+/* Incoming-SOS banner — top, loud, impossible to miss */
+.sos-incoming{position:fixed;top:calc(var(--hdr-top,0px) + var(--hdr) + 8px);left:10px;right:10px;z-index:1300;display:none;align-items:center;gap:11px;padding:12px 12px 12px 14px;border-radius:14px;background:linear-gradient(135deg,#CC1426,#E8182C);box-shadow:0 12px 34px rgba(204,20,38,.5),0 0 0 1px rgba(255,255,255,.14) inset;animation:sosIncIn .3s ease,sosIncPulse 1.15s ease-in-out .3s infinite;}
+.sos-incoming.on{display:flex;}
+@keyframes sosIncIn{from{transform:translateY(-16px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes sosIncPulse{0%,100%{box-shadow:0 12px 34px rgba(204,20,38,.5),0 0 0 1px rgba(255,255,255,.14) inset}50%{box-shadow:0 12px 44px rgba(232,24,44,.85),0 0 0 1px rgba(255,255,255,.3) inset}}
+.sos-inc-pulse{width:12px;height:12px;border-radius:50%;background:#fff;flex-shrink:0;box-shadow:0 0 0 0 rgba(255,255,255,.7);animation:sosIncDot 1s ease-out infinite;}
+@keyframes sosIncDot{0%{box-shadow:0 0 0 0 rgba(255,255,255,.7)}100%{box-shadow:0 0 0 12px rgba(255,255,255,0)}}
+.sos-inc-txt{flex:1;min-width:0;}
+.sos-inc-ttl{font-size:14px;font-weight:900;color:#fff;line-height:1.2;}
+.sos-inc-sub{font-size:12px;font-weight:600;color:rgba(255,255,255,.92);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sos-inc-go{flex-shrink:0;background:#fff;color:#B01220;border:none;border-radius:999px;padding:9px 18px;font-size:13.5px;font-weight:800;cursor:pointer;}
+.sos-inc-go:active{transform:scale(.95);}
+.sos-inc-x{flex-shrink:0;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.18);border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.sos-inc-x .ic{width:16px;height:16px;}
 .sos-strip{position:absolute;top:calc(var(--hdr-top,0px) + var(--hdr));left:0;right:0;z-index:590;background:var(--r3);padding:8px 14px 10px;display:none;flex-direction:column;gap:8px;animation:ssf 1.1s ease-in-out infinite;}
 .sos-strip.on{display:flex;}
+/* Anonymized SHOMER presence marker (other active SHOMERs nearby) */
+.pres-mk{background:none!important;border:none!important;}
+.pres-dot{position:relative;width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:radial-gradient(circle,#3f6ac4 0%,#2350a8 70%);box-shadow:0 2px 7px rgba(0,0,0,.5);}
+.pres-ring{position:absolute;inset:0;border-radius:50%;background:rgba(63,106,196,.45);animation:presPulse 2.4s ease-out infinite;}
+@keyframes presPulse{0%{transform:scale(.7);opacity:.7}100%{transform:scale(2.2);opacity:0}}
 @keyframes ssf{0%,100%{background:var(--r3)}50%{background:var(--r2)}}
 .ss-row{display:flex;align-items:center;gap:10px;}
 /* SOS fast event-type picker — classify in one tap, never blocks the SOS */
@@ -1257,10 +1276,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="dd-ic c-rep" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2 2 0 0 0-3-3L5 17Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 7l3 3" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><span id="dd-rep">דיווח אירוע</span>
  </button>
  <button class="ddr" onclick="openCircles();closeDD()" role="menuitem">
- <div class="dd-ic c-guard" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div><span id="dd-guard">חבר/י שומר/ת</span>
- </button>
- <button class="ddr" onclick="openCircles();closeDD()" role="menuitem">
- <div class="dd-ic c-circ" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16 5.2a3.2 3.2 0 0 1 0 6M17 13.5a5.5 5.5 0 0 1 3.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><span id="dd-circ">מעגלים</span>
+ <div class="dd-ic c-guard" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M17 7.2a3 3 0 0 1 0 5.6M18.5 20a6 6 0 0 0-3-5.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><span id="dd-guard">השומרים שלי</span>
  </button>
  <div class="dd-sep"></div>
  <button class="ddr" onclick="op('sh-prof');closeDD()" role="menuitem">
@@ -1273,6 +1289,17 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="dd-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h3.5l1.5 4-2 1.5a11 11 0 0 0 5 5l1.5-2 4 1.5V19a2 2 0 0 1-2.2 2A16 16 0 0 1 4 6.2 2 2 0 0 1 5 4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div><span id="dd-em">מספרי חירום</span>
  </button>
  </nav>
+
+ <!-- INCOMING SOS BANNER (another SHOMER nearby needs help) -->
+ <div class="sos-incoming" id="sos-incoming" role="alert" aria-live="assertive" aria-hidden="true">
+ <div class="sos-inc-pulse" aria-hidden="true"></div>
+ <div class="sos-inc-txt">
+ <div class="sos-inc-ttl" id="sos-inc-ttl">🆘 SOS בקרבת מקום</div>
+ <div class="sos-inc-sub" id="sos-inc-sub"></div>
+ </div>
+ <button class="sos-inc-go" id="sos-inc-go" onclick="respondToIncomingSos()">נווט</button>
+ <button class="sos-inc-x" onclick="dismissSosBanner()" aria-label="סגור"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+ </div>
 
  <!-- SOS STRIP -->
  <div class="sos-strip" id="sos-strip" role="alert" aria-live="assertive" aria-atomic="true">
@@ -1333,11 +1360,10 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="sos-cd" id="sos-resolve" role="alertdialog" aria-modal="true" aria-labelledby="sos-rs-ttl" aria-hidden="true">
  <div class="sos-cd-card">
  <div class="sos-cd-ttl" id="sos-rs-ttl" style="background:linear-gradient(135deg,#E0A828,#F5C840);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">✓ ה-SOS הסתיים</div>
- <div class="sos-cd-sub" id="sos-rs-sub">מה היה זה? נתון לבדיקות ובטעות יוסר מהמפה ולא ייראה לאחרים.</div>
+ <div class="sos-cd-sub" id="sos-rs-sub">מה היה זה? אירוע שסומן „בטעות” יוסר מהמפה ולא ייראה לאחרים.</div>
  <div class="sos-rs-opts">
  <button class="sos-rs-opt real" onclick="resolveAs('real')"><span class="rs-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3h8l5 5v8l-5 5H8l-5-5V8Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 7.5v5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="16" r="1.2" fill="currentColor"/></svg></span><span class="rs-nm" id="rs-real">אמיתי — שמור על המפה</span></button>
  <button class="sos-rs-opt" onclick="resolveAs('accidental')"><span class="rs-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4l16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9.5 9.6A3 3 0 0 0 14.4 14M6.3 6.7C3.7 8.3 2 12 2 12s3.6 6.5 10 6.5c1.6 0 3-.4 4.3-1M10 5.6c.6-.1 1.3-.1 2-.1 6.4 0 10 6.5 10 6.5a18 18 0 0 1-2.4 3.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="rs-nm" id="rs-acc">בטעות — הסר</span></button>
- <button class="sos-rs-opt" onclick="resolveAs('test')"><span class="rs-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="16" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><rect x="9" y="3" width="6" height="4" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 12h6M9 16h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span class="rs-nm" id="rs-test">בדיקה — הסר</span></button>
  </div>
  </div>
  </div>
@@ -1460,7 +1486,6 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <button class="sos-btn" id="sos-btn" onclick="onSosTap()" aria-label="שלח SOS חירום" aria-pressed="false">
  <span class="sos-txt">SOS</span>
  </button>
- <button class="sos-sub" id="nav-sos" onclick="openLegal('disclaimer')" aria-label="חירום מיידי — מידע ובטיחות">חירום מיידי <span class="si" aria-hidden="true">ⓘ</span></button>
  </div>
  </nav>
 
@@ -1738,7 +1763,6 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="stats" role="group">
  <div class="st"><div class="st-n" id="stat-reports">0</div><div class="st-l" id="stat-reports-lbl">דיווחים</div></div>
  <div class="st"><div class="st-n" id="stat-sos">0</div><div class="st-l" id="stat-sos-lbl">אירועי SOS</div></div>
- <div class="st"><div class="st-n"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.6 6.7 19.5l1.2-6L3.4 9.3l6-.7Z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg></div><div class="st-l" id="stat-pts-lbl">נקודות</div></div>
  </div>
  <div class="sec-cap mb12" id="prof-prof-cap">תפקיד מקצועי (מתנדב/ת מגיב/ה)</div>
  <p class="sr-sb" id="prof-prof-hint" style="margin:-4px 2px 12px;line-height:1.6">בחר/י תפקיד אם את/ה מגיב/ה מקצועי/ת — סמל יוצג בפרופיל ועל הסמן שלך במפה.</p>
@@ -1785,7 +1809,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <!-- ═══ CIRCLES — family/friend live-location groups ═══ -->
  <div class="sheet" id="sh-circles" role="dialog" aria-modal="true" aria-labelledby="circ-ttl">
  <div class="sh-pill" aria-hidden="true"></div>
- <div class="sh-head"><span class="sh-ttl" id="circ-ttl">מעגלים</span><button class="sh-x" onclick="cl('sh-circles')" aria-label="סגור"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button></div>
+ <div class="sh-head"><span class="sh-ttl" id="circ-ttl">השומרים שלי</span><button class="sh-x" onclick="cl('sh-circles')" aria-label="סגור"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button></div>
  <div class="sh-body">
  <!-- ═══ CONNECT A GUARDIAN (primary, top) ═══ -->
  <div class="gd-hero">
@@ -1804,7 +1828,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </div>
  <div class="tog" id="ghost-tog" onclick="toggleGhost()" role="switch" aria-label="מצב רפאים"></div>
  </div>
- <div class="sec-cap mb12" style="margin-top:20px" id="circ-demo-cap">מעגלים</div>
+ <div class="sec-cap mb12" style="margin-top:20px" id="circ-demo-cap">השומרים שלי</div>
  <div class="circ-tabs" id="circ-tabs" role="tablist" aria-label="מעגלים"></div>
  <div style="display:flex;gap:8px;margin-bottom:12px;">
  <button class="cta-gold" style="flex:1;padding:12px;font-size:13px" onclick="findFriendOpen()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16.5 16.5L21 21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> <span id="circ-find-lbl">מצא חבר/ה</span></button>
@@ -2719,8 +2743,7 @@ function applyTranslations(){
  setText('dd-set',T('dd_set'));setText('dd-em',T('dd_em'));
  // Circles
  {const he=currentLang==='he';
- setText('dd-circ',he?'מעגלים':'Circles');
- setText('circ-ttl',he?'מעגלים':'Circles');
+ setText('circ-ttl',he?'השומרים שלי':'My SHOMERs');
  setText('ghost-nm',he?'מצב רפאים — השהה שיתוף':'Ghost mode — pause sharing');
  setText('ghost-sb',he?'אף אחד לא יראה את מיקומך':'No one sees your location');
  setText('circ-find-lbl',he?'מצא חבר/ה':'Find a friend');
@@ -2816,7 +2839,6 @@ function applyTranslations(){
  setText('soshist-cap',he?'היסטוריית SOS':'SOS history');
  setText('stat-reports-lbl',he?'דיווחים':'Reports');
  setText('stat-sos-lbl',he?'אירועי SOS':'SOS events');
- setText('stat-pts-lbl',he?'נקודות':'Points');
  setText('dms-demo-lbl',he?'דק׳':'min');
  updateShakeSensLabel();
  // Generic sweep: any element tagged data-he/data-en localizes here (covers every
@@ -4991,12 +5013,12 @@ function gdRenderList(){
 /* Static-label translations for the guardian UI (he/en; other locales fall back). */
 function gdApplyI18n(){
  const he=currentLang==='he';
- setText('dd-guard',he?'חבר/י שומר/ת':'Connect a SHOMER');
- setText('gd-hero-t',he?'חבר/י שומר/ת':'Connect a SHOMER');
- setText('gd-hero-s',he?'צרף/י אדם שאת/ה סומך/ת עליו. הם יראו את מיקומך החי ואת/ה את שלהם — בהזמנה ואישור. אפשר להפסיק בכל רגע.':'Add someone you trust. They\'ll see your live location and you\'ll see theirs — by invite and accept. You can stop anytime.');
+ setText('dd-guard',he?'השומרים שלי':'My SHOMERs');
+ setText('gd-hero-t',he?'הוסף/י שומר/ת':'Add a SHOMER');
+ setText('gd-hero-s',he?'צרף/י אדם שאת/ה סומך/ת עליו לרשימת „השומרים שלי”. הם יראו את מיקומך החי ואת/ה את שלהם — בהזמנה ואישור הדדי. אפשר להפסיק בכל רגע.':'Add someone you trust to your "My SHOMERs". They\'ll see your live location and you\'ll see theirs — by invite and mutual accept. You can stop anytime.');
  setText('gd-invite-lbl',he?'הזמן/י שומר/ת':'Invite a SHOMER');
  setText('gd-enter-lbl',he?'יש לי קוד':'I have a code');
- setText('circ-demo-cap',he?'מעגלים':'Circles');
+ setText('circ-demo-cap',he?'השומרים שלי':'My SHOMERs');
  setText('gd-invite-ttl',he?' הזמן/י שומר/ת':' Invite a SHOMER');
  setText('gd-invite-help',he?'שתף/י את הקישור עם מי שאת/ה סומך/ת עליו. כשהם יפתחו אותו ויאשרו — תיווצר חבירה ותראו זה את מיקומו של זה.':'Share the link with someone you trust. When they open it and accept, you pair — and see each other\'s location.');
  setText('gd-copy-lbl',he?'העתק':'Copy');
@@ -5323,6 +5345,13 @@ try{ hydrateIcons(document); }catch(e){}
 ═══════════════════════════════════════════════════════════════════════ */
 var FB={ready:false,uid:null,db:null,_presTimer:null};
 var fbSosMarkers={};
+var fbPresenceMarkers={};
+/* Anonymized "a SHOMER is here" marker — coarse location, no name, no identity. */
+function presenceIcon(){
+  return window.L.divIcon({className:'shomer-marker pres-mk',
+    html:'<div class="pres-dot"><span class="pres-ring"></span><svg viewBox="0 0 24 24" width="13" height="13" style="position:relative"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="#0A1628" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg></div>',
+    iconSize:[26,26],iconAnchor:[13,13]});
+}
 function fbLoad(src){return new Promise(function(res,rej){var s=document.createElement('script');s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s);});}
 async function fbInit(){
   if(FB.ready||!window.SHOMER_FB)return;
@@ -5346,8 +5375,20 @@ function fbSetupPresence(){
   if(!FB._presTimer)FB._presTimer=setInterval(fbPublishPresence,25000);
   FB.db.ref('presence').on('value',function(snap){
     var all=snap.val()||{}, n=0, mlat=userLat, mlng=userLng, radM=((SS.settings&&SS.settings.radius)||5)*1000;
+    var seen={};
     Object.keys(all).forEach(function(k){ if(k===FB.uid)return; var p=all[k]; if(!p||p.lat==null)return;
-      if(mlat==null){n++;return;} if(distMeters(mlat,mlng,p.lat,p.lng)<=radM)n++; });
+      var within=(mlat==null)||distMeters(mlat,mlng,p.lat,p.lng)<=radM;
+      if(within)n++;
+      seen[k]=1;
+      // anonymized presence marker — coarse location only, NO identity
+      if(MAP){
+        if(fbPresenceMarkers[k]){ fbPresenceMarkers[k].setLatLng([p.lat,p.lng]); }
+        else { fbPresenceMarkers[k]=window.L.marker([p.lat,p.lng],{icon:presenceIcon(),zIndexOffset:200,interactive:true,keyboard:false,alt:(currentLang==='he'?'שומר/ת פעיל/ה':'Active SHOMER')}).addTo(MAP);
+          fbPresenceMarkers[k].on('click',function(){ toast(currentLang==='he'?'שומר/ת פעיל/ה בקרבת מקום (מיקום מקורב, אנונימי)':'An active SHOMER nearby (approximate, anonymous)',''); }); }
+      }
+    });
+    // drop markers for SHOMERs who went offline
+    Object.keys(fbPresenceMarkers).forEach(function(k){ if(!seen[k]){ try{MAP&&MAP.removeLayer(fbPresenceMarkers[k]);}catch(e){} delete fbPresenceMarkers[k]; } });
     updateGuardiansNearby(n);
   }, function(){ /* permission denied until rules deployed */ });
 }
@@ -5373,22 +5414,75 @@ function fbListenSOS(){
   if(!FB.ready)return;
   FB.db.ref('sos').on('value',function(snap){
     var all=snap.val()||{};
-    Object.keys(fbSosMarkers).forEach(function(id){ if(!all[id]||all[id].resolved){ try{MAP.removeLayer(fbSosMarkers[id]);}catch(e){} delete fbSosMarkers[id]; } });
-    if(!MAP)return;
-    var prev=FB._sosState||{}, cur={}, newCount=0, updCount=0;
+    // marker cleanup (only when the map exists)
+    if(MAP) Object.keys(fbSosMarkers).forEach(function(id){ if(!all[id]||all[id].resolved){ try{MAP.removeLayer(fbSosMarkers[id]);}catch(e){} delete fbSosMarkers[id]; } });
+    var prev=FB._sosState||{}, cur={}, fresh=[], updated=false;
     Object.keys(all).forEach(function(id){ var s=all[id]; if(!s||s.resolved||s.uid===FB.uid||s.lat==null)return;
       cur[id]=s.type||'unknown';
-      if(fbSosMarkers[id]){ fbSosMarkers[id].setLatLng([s.lat,s.lng]); fbSosMarkers[id].setIcon(sosPinIcon(s.type)); }
-      else {
-        fbSosMarkers[id]=window.L.marker([s.lat,s.lng],{icon:sosPinIcon(s.type),zIndexOffset:1000,alt:'SOS '+(s.name||'')}).addTo(MAP);
-        (function(mid){ fbSosMarkers[mid].on('click',function(){ var ll=fbSosMarkers[mid].getLatLng(); respondToSOS(ll.lat,ll.lng,(currentLang==='he'?'אירוע חי':'Live event')); }); })(id);
+      // render/refresh the pulsing pin if the map is ready
+      if(MAP){
+        if(fbSosMarkers[id]){ fbSosMarkers[id].setLatLng([s.lat,s.lng]); fbSosMarkers[id].setIcon(sosPinIcon(s.type)); }
+        else {
+          fbSosMarkers[id]=window.L.marker([s.lat,s.lng],{icon:sosPinIcon(s.type),zIndexOffset:1000,alt:'SOS '+(s.name||'')}).addTo(MAP);
+          (function(mid){ fbSosMarkers[mid].on('click',function(){ var ll=fbSosMarkers[mid].getLatLng(); respondToSOS(ll.lat,ll.lng,(currentLang==='he'?'אירוע חי':'Live event')); }); })(id);
+        }
       }
-      // cue: a new live event vs an updated one (skip the first/baseline sync)
-      if(FB._sosInit){ if(prev[id]===undefined)newCount++; else if(prev[id]!==cur[id])updCount++; }
+      // classify new vs updated (skip the very first/baseline sync so we don't alert on load)
+      if(FB._sosInit){ if(prev[id]===undefined) fresh.push(Object.assign({id:id},s)); else if(prev[id]!==cur[id]) updated=true; }
     });
-    if(newCount)playCue('event'); else if(updCount)playCue('update');
     FB._sosState=cur; FB._sosInit=true;
-  }, function(){ /* permission denied until rules deployed */ });
+    // PROMINENT alert for a genuinely new nearby SOS — sound + vibrate + banner, even off the map screen.
+    if(fresh.length){ incomingSosAlert(fresh[0]); }
+    else if(updated){ playCue('update'); }
+  }, function(){ /* read denied until rules deployed — verified deployed (presence/sos ok) */ });
+}
+/* ── Incoming SOS from another SHOMER: make it impossible to miss ── */
+function incomingSosAlert(s){
+  var he=currentLang==='he';
+  var label=(s.type&&s.type!=='unknown'&&window.sosTypeLabel)?sosTypeLabel(s.type):(he?'מצוקה':'Distress');
+  var dist=(userLat!=null&&s.lat!=null)?fmtDistance(distMeters(userLat,userLng,s.lat,s.lng)):'';
+  playSosAlertSound();
+  try{ if(navigator.vibrate)navigator.vibrate([240,90,240,90,360]); }catch(e){}
+  showSosBanner(label,dist,s);
+  // bring the event into view immediately so the responder can act
+  if(MAP&&s.lat!=null){ try{ MAP.setView([s.lat,s.lng],14,{animate:true}); }catch(e){} }
+}
+/* Urgent attention tone for an incoming SOS (louder + more insistent than the soft event cue). */
+function playSosAlertSound(){
+  if(!cuesOn())return;
+  try{
+    if(!_cueCtx||_cueCtx.state==='closed')_cueCtx=new(window.AudioContext||window.webkitAudioContext)();
+    if(_cueCtx.state==='suspended')_cueCtx.resume();
+    var ctx=_cueCtx,t0=ctx.currentTime;
+    // three rising two-tone "claxon" pulses
+    for(var k=0;k<3;k++){ var base=t0+k*0.34;
+      [[1245,0,.16],[1660,.12,.18]].forEach(function(n){ var o=ctx.createOscillator(),g=ctx.createGain();
+        o.type='square'; o.frequency.value=n[0];
+        g.gain.setValueAtTime(.0001,base+n[1]);
+        g.gain.exponentialRampToValueAtTime(.22,base+n[1]+.01);
+        g.gain.exponentialRampToValueAtTime(.0001,base+n[1]+n[2]);
+        o.connect(g); g.connect(ctx.destination); o.start(base+n[1]); o.stop(base+n[1]+n[2]+.03);
+      });
+    }
+  }catch(e){}
+}
+var _sosBannerTimer=null;
+function showSosBanner(label,dist,s){
+  var he=currentLang==='he';
+  var bar=document.getElementById('sos-incoming'); if(!bar)return;
+  setText('sos-inc-ttl', he?'🆘 SOS בקרבת מקום':'🆘 SOS nearby');
+  setText('sos-inc-sub', label+(dist?' · '+dist:''));
+  bar.classList.add('on'); bar.setAttribute('aria-hidden','false');
+  bar.dataset.lat=s.lat; bar.dataset.lng=s.lng; bar.dataset.label=label;
+  if(_sosBannerTimer)clearTimeout(_sosBannerTimer);
+  _sosBannerTimer=setTimeout(dismissSosBanner,15000);
+}
+function dismissSosBanner(){ var bar=document.getElementById('sos-incoming'); if(bar){bar.classList.remove('on');bar.setAttribute('aria-hidden','true');} }
+function respondToIncomingSos(){
+  var bar=document.getElementById('sos-incoming'); if(!bar)return;
+  var lat=parseFloat(bar.dataset.lat), lng=parseFloat(bar.dataset.lng), label=bar.dataset.label||'';
+  dismissSosBanner();
+  if(!isNaN(lat)&&!isNaN(lng)) respondToSOS(lat,lng,label);
 }
 /* Register this device's FCM token + location so the Cloud Function can target it for push. */
 function fbRegisterToken(token){ if(!FB.ready||!token)return; var lat=userLat!=null?userLat:32.07, lng=userLng!=null?userLng:34.78; try{ FB.db.ref('tokens/'+FB.uid).set({token:token,lat:lat,lng:lng,ts:Date.now()}); }catch(e){} }
