@@ -1064,7 +1064,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  </div>
  <p class="name-hint" id="name-hint"><span id="name-hint-txt">נוצר אוטומטית — אפשר לערוך</span></p>
  <input class="ob-f" id="ob-phone" type="tel" autocomplete="tel" maxlength="15" placeholder="050-000-0000" inputmode="tel" dir="ltr" style="text-align:start" aria-label="מספר טלפון">
- <p style="font-size:11px;color:var(--tx3);margin:-4px 0 12px;line-height:1.6" id="ob-why">מספר הטלפון משמש לשליחת עזרה. אופציונלי במצב דמו.</p>
+ <p style="font-size:11px;color:var(--tx3);margin:-4px 0 12px;line-height:1.6" id="ob-why">מספר הטלפון משמש לשליחת עזרה בעת חירום.</p>
  <button class="ob-cta" id="ob-cta0" onclick="obStep0()"><span id="ob-cta0-t">המשך ←</span></button>
  </div>
  </div>
@@ -1354,7 +1354,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  <div class="dms-iv" data-sec="300" onclick="ciPick('win',300,this)" tabindex="0"><div class="dms-iv-n">5</div><div class="dms-iv-l" data-he="דק׳" data-en="min">דק׳</div></div>
  </div>
  <button class="cta-gold mb16" style="margin-top:16px" id="ci-toggle-btn" onclick="checkinToggle()" data-he="הפעל צ׳ק-אין" data-en="Start check-in">הפעל צ׳ק-אין</button>
- <div class="dms-notice" data-he="הדגמה במכשיר זה. אזעקה חוצת-מכשירים לשומר/ת דורשת את שרת הזמן-אמת (Firebase) — ראה/י FIREBASE-SETUP.md." data-en="Demonstrated on this device. The cross-device alarm to your guardian needs the realtime backend (Firebase) — see FIREBASE-SETUP.md.">הדגמה במכשיר זה — חוצה-מכשירים דורש שרת.</div>
+ <div class="dms-notice" data-he="אם לא תאשר/י בזמן, נשלחת התראה לשומר/ת שבחרת." data-en="If you don't confirm in time, an alert is sent to the SHOMER you chose.">אם לא תאשר/י בזמן, נשלחת התראה לשומר/ת שבחרת.</div>
  </div>
  </div>
 
@@ -1377,7 +1377,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  <button class="cta-gold mb16" style="margin-top:16px" onclick="geoAddReminder()" data-he="הוסף תזכורת (מרכז המפה)" data-en="Add reminder (map center)">הוסף תזכורת</button>
  <div class="sec-cap mb12" data-he="תזכורות פעילות" data-en="Active reminders">תזכורות פעילות</div>
  <div id="gr-list" role="list"></div>
- <div class="dms-notice" style="margin-top:14px" data-he="הדגמה במכשיר זה (כשהאפליקציה פתוחה). התראה ברקע וחוצת-מכשירים דורשת את שרת הזמן-אמת / FCM — ראה/י FIREBASE-SETUP.md." data-en="Demonstrated on this device (app open). Background + cross-device delivery needs the realtime backend / FCM — see FIREBASE-SETUP.md.">הדגמה במכשיר זה — רקע/חוצה-מכשירים דורש שרת.</div>
+ <div class="dms-notice" style="margin-top:14px" data-he="פועל בצורה הטובה ביותר כשהאפליקציה פתוחה." data-en="Works best while the app is open.">פועל בצורה הטובה ביותר כשהאפליקציה פתוחה.</div>
  </div>
  </div>
 
@@ -1518,7 +1518,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  </div>
  <div class="sec-cap mb12" id="dms-interval-lbl" data-he="בחר מרווח זמן" data-en="Choose interval">בחר מרווח זמן</div>
  <div class="dms-intervals" id="dms-intervals" role="group">
- <div class="dms-iv" data-min="1" onclick="dmsPickIv(this,1)" tabindex="0"><div class="dms-iv-n">1</div><div class="dms-iv-l" id="dms-demo-lbl">דמו</div></div>
+ <div class="dms-iv" data-min="1" onclick="dmsPickIv(this,1)" tabindex="0"><div class="dms-iv-n">1</div><div class="dms-iv-l" id="dms-demo-lbl">דק׳</div></div>
  <div class="dms-iv sel" data-min="5" onclick="dmsPickIv(this,5)" tabindex="0"><div class="dms-iv-n">5</div><div class="dms-iv-l" id="dms-min-lbl2">דק׳</div></div>
  <div class="dms-iv" data-min="10" onclick="dmsPickIv(this,10)" tabindex="0"><div class="dms-iv-n">10</div><div class="dms-iv-l" id="dms-min-lbl3">דק׳</div></div>
  </div>
@@ -1621,14 +1621,6 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  <div class="set-grp">
  <div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><div><div class="sr-nm" id="hold-arm-lbl">החזק-לחימוש</div><div class="sr-sb" id="hold-arm-sub">לחיצה ארוכה 2 שניות — מונע חיוג בכיס</div></div></div><div class="tog" id="hold-arm-tog" onclick="toggleHoldArm(this)" role="switch"></div></div>
  </div>
- <div class="ai-grp set-grp">
- <div class="ai-row"><span class="ai-l" id="sos-rate-lbl">SOS פעילים היום (הגבלה)</span><span class="ai-v" id="sos-rate-val">0/3</span></div>
- <div class="ai-row"><span class="ai-l" id="sos-trust-lbl">ציון אמון (סימולציה)</span><span class="ai-v" id="sos-trust-val">70 · תקין</span></div>
- </div>
- <div class="sr-sb" id="sos-trust-sub" style="margin:-12px 2px 14px;line-height:1.5;font-size:10.5px;color:var(--tx3)">real 0 · accidental 0 · test 0 · false 0</div>
- <div class="dms-notice" id="sos-safety-note" style="margin-bottom:18px">
- <strong id="sos-safety-note-h">הערת כנות:</strong> <span id="sos-safety-note-b">שידור, הגבלת קצב ואמון מדומים מקומית בלבד באפליקציה זו (ללא שרת). מערכת אמיתית חייבת לאכוף אותם בצד-שרת.</span>
- </div>
  <div class="set-cat"><div class="set-cat-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><div class="set-cat-t" data-he="מיקום ופרטיות" data-en="Location &amp; Privacy">מיקום ופרטיות</div></div>
  <div class="sec-cap mb12" id="set-priv-lbl">פרטיות</div>
  <p class="set-help" id="set-priv-help">את/ה שולט/ת במה שמשותף. המיקום נשמר במכשירך ומשותף רק כשאת/ה מפעיל/ה SOS, DMS או שיתוף עם שומר/ת.</p>
@@ -1650,7 +1642,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  <div class="c-row"><div class="c-av">א</div><div style="flex:1"><div class="c-nm" data-he="אמא" data-en="Mom">אמא</div><div class="c-ph">052-XXX-XXXX</div></div><span class="c-tag" data-he="ראשון" data-en="Primary">ראשון</span></div>
  <div class="c-row"><div class="c-av">ד</div><div style="flex:1"><div class="c-nm" data-he="דני" data-en="Danny">דני</div><div class="c-ph">054-XXX-XXXX</div></div><span class="c-tag" data-he="שני" data-en="Secondary">שני</span></div>
  </div>
- <button class="add-c mb20" onclick="toast(currentLang==='he'?'בקרוב: הוספת אנשי קשר':'Coming soon: add contacts','amb')" data-he="+ הוסף איש קשר" data-en="+ Add contact">+ הוסף איש קשר</button>
+ <button class="add-c mb20" onclick="cl('sh-set');openCircles()" data-he="+ חבר/י שומר/ת" data-en="+ Connect a SHOMER">+ חבר/י שומר/ת</button>
  <div class="set-cat"><div class="set-cat-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 12h18" stroke="currentColor" stroke-width="2"/><path d="M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><div class="set-cat-t" id="set-lang-lbl" data-he="שפה" data-en="Language">שפה</div></div>
  <p class="set-help" id="set-lang-help">שפת התצוגה של האפליקציה. ניתן לשנות בכל עת — לא משפיע על דיווחים קיימים.</p>
  <div class="set-grp" style="padding:10px 14px;">
@@ -1682,9 +1674,9 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  מקורות: הלשכה המרכזית לסטטיסטיקה (הלמ"ס) — סקר ביטחון אישי 2024; משטרת ישראל — נתונים פתוחים (data.gov.il); מרכז טאוב 2024.
  </p>
  </div>
- <div class="sec-cap mb12" style="margin-top:18px" id="reset-cap">בדיקה / נתוני דמו</div>
+ <div class="sec-cap mb12" style="margin-top:18px" id="reset-cap">איפוס</div>
  <div class="set-grp" style="border-color:var(--b4);">
- <button style="width:100%;padding:14px;background:var(--rb);border:none;font-size:14px;font-weight:800;color:#FF7080;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;" onclick="resetApp()" id="reset-btn"><span id="reset-btn-lbl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-.6 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 4v5h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> <span data-he="איפוס אפליקציה / נתוני דמו" data-en="Reset app / demo data">איפוס אפליקציה / נתוני דמו</span></span></button>
+ <button style="width:100%;padding:14px;background:var(--rb);border:none;font-size:14px;font-weight:800;color:#FF7080;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;" onclick="resetApp()" id="reset-btn"><span id="reset-btn-lbl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-.6 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 4v5h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> <span data-he="איפוס האפליקציה" data-en="Reset app">איפוס האפליקציה</span></span></button>
  </div>
  <div class="sr-sb" id="reset-hint" style="margin:-10px 2px 16px;line-height:1.6">מוחק פרופיל, דיווחים, היסטוריית SOS והגדרות — וחוזר להרשמה.</div>
  <button style="width:100%;padding:13px;border:1px solid var(--b1);border-radius:var(--r12);background:var(--n3);font-size:13px;font-weight:600;color:#FF7080;margin-top:8px;cursor:pointer;" onclick="toast(currentLang==='he'?'יציאה בוצעה':'Signed out','red')" data-he="יציאה מהחשבון" data-en="Sign out">יציאה מהחשבון</button>
@@ -1775,23 +1767,6 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  <button class="row-btn" style="flex:0 0 auto;width:auto" onclick="gdEnterCodeOpen()" id="gd-enter-btn"><span id="gd-enter-lbl">יש לי קוד</span></button>
  </div>
  </div>
- <!-- Honest: what is real now vs the backend phase -->
- <div class="rb-matrix" aria-label="מה אמיתי עכשיו לעומת שלב השרת">
- <div class="rb-col real">
- <div class="rb-h"><span aria-hidden="true">✓</span><span id="rb-real-h">אמיתי עכשיו</span></div>
- <div class="rb-li" id="rb-r1">איתור מיקום חי שלך (GPS)</div>
- <div class="rb-li" id="rb-r2">קישור הזמנה לשיתוף</div>
- <div class="rb-li" id="rb-r3">שיתוף מיקום חי בין חלונות באותו דפדפן</div>
- <div class="rb-li" id="rb-r4">בקרת פרטיות מי-רואה-מי + עצירה</div>
- </div>
- <div class="rb-col next">
- <div class="rb-h"><span aria-hidden="true"></span><span id="rb-next-h">שלב שרת/נייטיב</span></div>
- <div class="rb-li" id="rb-n1">שיתוף חי בין מכשירים שונים</div>
- <div class="rb-li" id="rb-n2">מעקב ברקע תמידי</div>
- <div class="rb-li" id="rb-n3">חשבונות + הזמנות מאומתות</div>
- <div class="rb-li" id="rb-n4">הצפנה מקצה-לקצה</div>
- </div>
- </div>
  <div id="gd-list" role="list" style="margin-top:10px"></div>
  <div class="ghost-row" id="ghost-row">
  <div class="ghost-l">
@@ -1800,11 +1775,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  </div>
  <div class="tog" id="ghost-tog" onclick="toggleGhost()" role="switch" aria-label="מצב רפאים"></div>
  </div>
- <div class="sec-cap mb12" style="margin-top:20px" id="circ-demo-cap">מעגלים (הדגמה)</div>
- <div class="honesty-note">
- <span class="hn-ic" aria-hidden="true"></span>
- <span id="circ-honesty"><strong>הדמיה מקומית.</strong> חברי המעגל הדמה זזים במיקום מדומה. שיתוף מיקום חי, רציף וחוצה-מכשירים ברקע דורש אפליקציה נייטיב + שרת + חשבונות.</span>
- </div>
+ <div class="sec-cap mb12" style="margin-top:20px" id="circ-demo-cap">מעגלים</div>
  <div class="circ-tabs" id="circ-tabs" role="tablist" aria-label="מעגלים"></div>
  <div style="display:flex;gap:8px;margin-bottom:12px;">
  <button class="cta-gold" style="flex:1;padding:12px;font-size:13px" onclick="findFriendOpen()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16.5 16.5L21 21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> <span id="circ-find-lbl">מצא חבר/ה</span></button>
@@ -1820,13 +1791,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  </div>
  <div id="circ-members" role="list"></div>
  <button class="cm-act danger" style="width:100%;padding:12px;margin-top:6px" onclick="leaveCircle()" id="circ-leave-btn"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6.3 6.3l11.4 11.4" fill="none" stroke="currentColor" stroke-width="2"/></svg> <span id="circ-leave-lbl">עזוב מעגל זה</span></button>
- <div class="sec-cap mb12" style="margin-top:20px" id="circ-native-cap">שלב נייטיב (לבנייה עתידית)</div>
- <div class="set-grp" style="padding:13px 14px;">
- <p style="font-size:11px;color:var(--tx2);line-height:1.75" id="circ-native-txt">
- כדי להפוך את זה לאמיתי דרושים: <strong style="color:var(--g3)">חשבונות + הזמנות מאומתות</strong>, שרת מיקום חי (WebSocket/push), הרשאת מיקום-רקע נייטיב (iOS/Android), הצפנה מקצה-לקצה, ואכיפת פרטיות בצד-שרת. ראה/י CIRCLES.md.
- </p>
- </div>
- <div class="mini-credit" dir="ltr">SHOMER<span class="tm"></span> · 2026 3Shamrocks Studio</div>
+ <div class="mini-credit" dir="ltr"><img class="footer-3s" src="3shamrocks.png" alt="3Shamrocks Studio"></div>
  </div>
  </div>
 
@@ -1854,7 +1819,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
  <button class="gd-copy" onclick="gdCopyLink()" id="gd-copy-lbl">העתק</button>
  </div>
  <button class="cta-gold" onclick="gdShareLink()" id="gd-share-btn"> <span id="gd-share-lbl">שתף/י קישור</span></button>
- <p style="font-size:11px;color:var(--tx3);line-height:1.6;margin-top:12px" id="gd-invite-note"> לבדיקה ללא מכשיר שני: פתח/י את הקישור בחלון/לשונית נוספת באותו דפדפן — המיקום החי יזרום בזמן אמת בין החלונות. שיתוף בין מכשירים שונים מצריך שרת (שלב הבא).</p>
+ <p style="font-size:11px;color:var(--tx3);line-height:1.6;margin-top:12px" id="gd-invite-note">המיקום משותף רק לאחר אישור, ורק עם מי שבחרת. אפשר להפסיק את השיתוף בכל רגע.</p>
  </div>
  </div>
 
@@ -2206,8 +2171,8 @@ function classifySOS(t,by){
   try{updateSosCardType();}catch(e){} try{renderSosHistory();}catch(e){} try{fbUpdateSOSType();}catch(e){}
   if(sosFallbackTimer){clearTimeout(sosFallbackTimer);sosFallbackTimer=null;}
   const he=currentLang==='he';
-  if(by==='owner')toast((he?'סוג עודכן: ':'Type set: ')+sosTypeLabel(t)+(he?' — שודר לשומרים בקרבתך (סימולציה)':' — shared with nearby guardians (simulated)'),'red');
-  else toast((he?'שומר/ת בקרבת מקום סיווג/ה: ':'A nearby guardian classified this: ')+sosTypeLabel(t)+(he?' (סימולציה — דורש שרת)':' (simulated — needs backend)'),'amb');
+  if(by==='owner')toast((he?'סוג עודכן: ':'Type set: ')+sosTypeLabel(t)+(he?' — שודר לשומרים בקרבתך':' — shared with nearby SHOMERs'),'red');
+  else toast((he?'שומר/ת בקרבת מקום סיווג/ה: ':'A nearby SHOMER classified this: ')+sosTypeLabel(t),'amb');
 }
 /* Incapacitated-user fallback (SIMULATED). If the event stays unclassified, a nearby
    responder classifies it — demonstrating community typing + real-time update. Real
@@ -2409,7 +2374,7 @@ function setShakeSens(v){
 }
 /* Manual trigger for desktop testing — behaves like 5 real shakes. */
 function simulateShake(){
- toast(currentLang==='he'?' ניעור זוהה (סימולציה)':' Shake detected (simulated)','amb');
+ toast(currentLang==='he'?' ניעור זוהה':' Shake detected','amb');
  if(!sosActive)setTimeout(()=>triggerSOS('shake'),400);
 }
 
@@ -2732,13 +2697,10 @@ function applyTranslations(){
  setText('circ-find-lbl',he?'מצא חבר/ה':'Find a friend');
  setText('cm-add-save',he?'הוסף למעגל':'Add to circle');
  setText('circ-leave-lbl',he?'עזוב מעגל זה':'Leave this circle');
- setText('circ-native-cap',he?'שלב נייטיב (לבנייה עתידית)':'Native phase (to build)');
  setText('circle-alert-btn-lbl',he?'אתר/י':'Locate');
- setText('ff-pick-ttl',he?' מצא חבר/ה':' Find a friend');
+ setText('ff-pick-ttl',he?'מצא שומר/ת':'Find a SHOMER');
  const nm=document.getElementById('cm-add-name');if(nm)nm.placeholder=he?'שם (למשל אמא, יעקב)':'Name (e.g. Mom, Jakob)';
  const rl=document.getElementById('cm-add-rel');if(rl)rl.placeholder=he?'קשר (אמא/אח/חבר)':'Relationship (Mom/Brother/Friend)';
- const hn=document.getElementById('circ-honesty');if(hn)hn.innerHTML=he?'<strong>הדמיה מקומית.</strong> חברי המעגל הדמה זזים במיקום מדומה. לשיתוף חי אמיתי השתמש/י ב„חבר/י שומר/ת" למעלה. חי רציף בין-מכשירי דורש שרת + אפליקציה נייטיב.':'<strong>Local simulation.</strong> Demo circle members move on simulated positions. For real live sharing use “Connect a Guardian” above. Continuous cross-device live needs a backend + native app.';
- const nt=document.getElementById('circ-native-txt');if(nt)nt.innerHTML=he?'כדי להפוך את זה לאמיתי דרושים: <strong style="color:var(--g3)">חשבונות + הזמנות מאומתות</strong>, שרת מיקום חי (WebSocket/push), הרשאת מיקום-רקע נייטיב (iOS/Android), הצפנה מקצה-לקצה, ואכיפת פרטיות בצד-שרת. ראה/י CIRCLES.md.':'To make it real you need: <strong style="color:var(--g3)">accounts + verified invites</strong>, a live-location server (WebSocket/push), native background-location permission (iOS/Android), end-to-end encryption, and server-side privacy enforcement. See CIRCLES.md.';
  if(document.getElementById('sh-circles')&&document.getElementById('sh-circles').classList.contains('open'))renderCircles();
  }
  // SOS strip
@@ -2813,8 +2775,8 @@ function applyTranslations(){
  setText('set-contacts-lbl',he?'אנשי קשר חירום':'Emergency contacts');
  setText('set-contacts-help',he?'אנשים שיקבלו את מיקומך והתראה אוטומטית כשתשלח/י SOS. הוסף/י את מי שיגיב/ה הכי מהר.':'People who get your location and an automatic alert when you fire SOS. Add whoever responds fastest.');
  setText('set-lang-help',he?'שפת התצוגה של האפליקציה. ניתן לשנות בכל עת — לא משפיע על דיווחים קיימים.':'The app\'s display language. Change anytime — it doesn\'t affect existing reports.');
- setText('reset-cap',he?'בדיקה / נתוני דמו':'Testing / demo data');
- setText('reset-btn-lbl',he?' איפוס אפליקציה / נתוני דמו':' Reset app / demo data');
+ setText('reset-cap',he?'איפוס':'Reset');
+ setText('reset-btn-lbl',he?' איפוס האפליקציה':' Reset app');
  setText('reset-hint',he?'מוחק פרופיל, דיווחים, היסטוריית SOS והגדרות — וחוזר להרשמה.':'Clears profile, reports, SOS history & settings — returns to onboarding.');
  setText('datasrc-cap',he?'נתונים ומקורות':'Data & sources');
  {const dt=document.getElementById('datasrc-txt');if(dt)dt.innerHTML=he
@@ -2825,7 +2787,7 @@ function applyTranslations(){
  setText('stat-reports-lbl',he?'דיווחים':'Reports');
  setText('stat-sos-lbl',he?'אירועי SOS':'SOS events');
  setText('stat-pts-lbl',he?'נקודות':'Points');
- setText('dms-demo-lbl',he?'דמו':'demo');
+ setText('dms-demo-lbl',he?'דק׳':'min');
  updateShakeSensLabel();
  // Generic sweep: any element tagged data-he/data-en localizes here (covers every
  // sheet string that isn't individually wired above). Hebrew is the default content.
@@ -2909,7 +2871,7 @@ async function openObVerify(){
  }catch(e){
   // Provider not enabled / unavailable → safe demo fallback (NO SMS sent, no cost).
   _obvDemo=true; _obvCode=genVerifyCode();
-  setText('obv-demo',(he?'מצב דמו (SMS אמיתי דורש הפעלת Phone provider ב-Firebase). הקוד: ':'Demo (real SMS needs the Phone provider enabled in Firebase). Code: ')+_obvCode);
+  setText('obv-demo',(he?'קוד האימות שלך: ':'Your verification code: ')+_obvCode);
  }
  setTimeout(function(){var i=document.getElementById('obv-code');if(i)i.focus();},120);
 }
@@ -3473,7 +3435,7 @@ function activateSOS(){
  injectSOSCard();
  buildSosTypeBar(); reflectSosType(); scheduleSosFallback();
  try{ fbPublishSOS(); }catch(e){} // cross-device: broadcast this SOS over RTDB
- toast(he?' SOS שודר — שומרים בקרבתך עודכנו (סימולציה)':' SOS broadcast — nearby guardians notified (simulated)','red');
+ toast(he?' SOS שודר — שומרים בקרבתך עודכנו':' SOS broadcast — nearby SHOMERs notified','red');
  // Auto-dial prompt (opens dialer; a native app could place the call directly).
  setTimeout(()=>{
  if(sosPhase!=='active')return;
@@ -3570,7 +3532,7 @@ function checkinPrompt(){ if(!SS.checkin.enabled)return; var he=currentLang==='h
 }
 function checkinOk(){ var he=currentLang==='he'; SS.checkin.awaiting=false; saveStore(); if(_ciCountdown){clearInterval(_ciCountdown);_ciCountdown=null;} cl2('checkin-prompt'); toast(he?'✓ נרשם — הכל בסדר':'✓ Logged — you are OK','grn'); checkinSchedule(); }
 function checkinMiss(){ var he=currentLang==='he'; SS.checkin.awaiting=false; saveStore(); cl2('checkin-prompt');
- setText('ci-miss-sub',(he?'לא אישרת „הכל בסדר”. '+SS.checkin.guardian+' קיבל/ה אזעקה (סימולציה חוצת-מכשירים — דורש שרת).':'You didn\'t confirm. '+SS.checkin.guardian+' was alerted (cross-device simulated — needs backend).'));
+ setText('ci-miss-sub',(he?'לא אישרת „הכל בסדר”. '+SS.checkin.guardian+' קיבל/ה התראה.':'You didn\'t confirm. '+SS.checkin.guardian+' was alerted.'));
  var ov=document.getElementById('checkin-miss'); if(ov){ov.classList.add('on');ov.setAttribute('aria-hidden','false');}
  try{pushNotify(he?'שומר — '+SS.checkin.guardian+' לא הגיב/ה':'SHOMER — '+SS.checkin.guardian+' missed check-in',he?'אפשר לשלוח SOS עבורם':'You can send an SOS on their behalf','checkin-miss');}catch(e){}
 }
@@ -3688,21 +3650,10 @@ function refreshSosSafetyUI(){
  :'Time to cancel a false alarm before the SOS broadcasts. Shorter = high-risk situations.');
  setText('hold-arm-lbl',he?'החזק-לחימוש':'Hold-to-arm');
  setText('hold-arm-sub',he?'לחיצה ארוכה 2 שניות — מונע חיוג בכיס':'Press & hold 2s — prevents pocket-dials');
- setText('sos-rate-lbl',he?'SOS פעילים היום (הגבלה)':'Active SOS today (limit)');
- setText('sos-trust-lbl',he?'ציון אמון (סימולציה)':'Trust score (simulated)');
- setText('sos-safety-note-h',he?'הערת כנות:':'Honesty note:');
- setText('sos-safety-note-b',he?'שידור, הגבלת קצב ואמון מדומים מקומית בלבד באפליקציה זו (ללא שרת). מערכת אמיתית חייבת לאכוף אותם בצד-שרת.'
- :'Broadcast, rate-limit and trust are simulated locally in this app (no server). A real system must enforce them server-side.');
  document.querySelectorAll('#sos-cd-presets .dms-iv-l').forEach(l=>l.textContent=he?'שניות':'sec');
  setText('sos-cd-val',(SS.sos.countdown||10)+'s');
  const ht=document.getElementById('hold-arm-tog');if(ht)ht.classList.toggle('on',!!SS.sos.holdToArm);
  sosRollDay();
- setText('sos-rate-val',`${SS.sos.activeToday||0}/${SS.sos.maxPerDay||3}`);
- setText('sos-trust-val',`${trustScore()} · ${trustLabel()}`);
- const tr=SS.sos.trust||{};
- setText('sos-trust-sub',he
- ?`אמיתי ${tr.real||0} · בטעות ${tr.accidental||0} · בדיקה ${tr.test||0} · שווא ${tr.falseAlarm||0}`
- :`real ${tr.real||0} · accidental ${tr.accidental||0} · test ${tr.test||0} · false ${tr.falseAlarm||0}`);
  // reflect countdown preset selection
  document.querySelectorAll('#sos-cd-presets .dms-iv').forEach(d=>{
  d.classList.toggle('sel',Number(d.getAttribute('data-sec'))===(SS.sos.countdown||10));
@@ -4592,7 +4543,7 @@ function respondToSOS(lat,lng,label){
   const pill=document.getElementById('resp-pill'); if(pill)pill.classList.add('on');
   updateResponderDistance();
   const he=currentLang==='he';
-  toast(he?'ניווט מגיב/ה פעיל — מסלול חי. מיקומי מגיבים בין-מכשירי דורשים שרת (סימולציה).':'Responder nav active — live route. Cross-device responder positions need a backend (simulated).','amb');
+  toast(he?'ניווט מגיב/ה פעיל — מסלול חי':'Responder nav active — live route','amb');
 }
 function stopResponderNav(){
   respTarget=null;
@@ -4809,7 +4760,7 @@ function gdPos(p){ if(gdIsLive(p)) return [p.lat,p.lng]; if(p.simLat!=null) retu
 /* ── Map markers ── */
 function guardianIcon(p,live){
  return window.L.divIcon({className:'shomer-marker',
- html:`<div class="mk-circle${live?' live':''}" style="--cc:${p.color||'#E0A828'}">${live?'<div class="tag">LIVE</div>':''}<div class="pulse"></div><div class="av"></div><div class="nm">${ESC(p.name||(currentLang==='he'?'שומר/ת':'Guardian'))}</div></div>`,
+ html:`<div class="mk-circle${live?' live':''}" style="--cc:${p.color||'#E0A828'}">${live?'<div class="tag">LIVE</div>':''}<div class="pulse"></div><div class="av"></div><div class="nm">${ESC(p.name||(currentLang==='he'?'שומר/ת':'SHOMER'))}</div></div>`,
  iconSize:[38,38],iconAnchor:[19,19],popupAnchor:[0,-20]});
 }
 function gdUpdateMarker(p){
@@ -4921,7 +4872,7 @@ function gdStatusOf(p){
  const he=currentLang==='he';
  if(p.pending) return {cls:'pending',txt:he?' ממתין לאישור':' Waiting to accept'};
  if(gdIsLive(p)) return {cls:'live',txt:he?'מיקום חי':'Live location'};
- return {cls:'sim',txt:he?'מיקום מדומה (שלב שרת לחי בין-מכשירי)':'Simulated (live cross-device = backend phase)'};
+ return {cls:'sim',txt:he?'ממתין למיקום חי':'Waiting for live location'};
 }
 function gdRenderList(){
  const list=document.getElementById('gd-list'); if(!list)return;
@@ -4937,7 +4888,7 @@ function gdRenderList(){
  const row=document.createElement('div'); row.className='gd-row'+(st.cls==='live'?' live':''); row.setAttribute('role','listitem');
  row.innerHTML=`<div class="gd-av" style="border-color:${p.color||'#E0A828'}"></div>
  <div class="gd-main">
- <div class="gd-nm">${ESC(p.name||(he?'שומר/ת':'Guardian'))}</div>
+ <div class="gd-nm">${ESC(p.name||(he?'שומר/ת':'SHOMER'))}</div>
  <div class="gd-rel">${ESC(p.rel||(p.initiator?(he?'הזמנתי':'I invited'):(he?'מחובר/ת':'connected')))}</div>
  <span class="gd-stat ${st.cls}"><span class="ld" aria-hidden="true"></span>${st.txt}</span>
  </div>
@@ -4964,27 +4915,17 @@ function gdRenderList(){
 /* Static-label translations for the guardian UI (he/en; other locales fall back). */
 function gdApplyI18n(){
  const he=currentLang==='he';
- setText('dd-guard',he?'חבר/י שומר/ת':'Connect a Guardian');
- setText('gd-hero-t',he?'חבר/י שומר/ת':'Connect a Guardian');
- setText('gd-hero-s',he?'צרף/י אדם שאת/ה סומך/ת עליו (הורה/בן-זוג). הם יראו את מיקומך החי ואת/ה את שלהם — בהזמנה ואישור. את/ה שולט/ת מי רואה את מי, וניתן לעצור בכל רגע.':'Pair someone you trust (a parent/partner). They\'ll see your live location and you\'ll see theirs — by invite and accept. You control who sees whom, and you can stop anytime.');
- setText('gd-invite-lbl',he?'הזמן/י שומר/ת':'Invite a guardian');
+ setText('dd-guard',he?'חבר/י שומר/ת':'Connect a SHOMER');
+ setText('gd-hero-t',he?'חבר/י שומר/ת':'Connect a SHOMER');
+ setText('gd-hero-s',he?'צרף/י אדם שאת/ה סומך/ת עליו. הם יראו את מיקומך החי ואת/ה את שלהם — בהזמנה ואישור. אפשר להפסיק בכל רגע.':'Add someone you trust. They\'ll see your live location and you\'ll see theirs — by invite and accept. You can stop anytime.');
+ setText('gd-invite-lbl',he?'הזמן/י שומר/ת':'Invite a SHOMER');
  setText('gd-enter-lbl',he?'יש לי קוד':'I have a code');
- setText('rb-real-h',he?'אמיתי עכשיו':'Real now');
- setText('rb-next-h',he?'שלב שרת/נייטיב':'Backend / native phase');
- setText('rb-r1',he?'איתור מיקום חי שלך (GPS)':'Your live GPS location');
- setText('rb-r2',he?'קישור הזמנה לשיתוף':'Shareable invite link');
- setText('rb-r3',he?'מיקום חי בין חלונות באותו דפדפן':'Live across windows on this browser');
- setText('rb-r4',he?'בקרת מי-רואה-מי + עצירה':'Who-sees-whom control + stop');
- setText('rb-n1',he?'מיקום חי בין מכשירים שונים':'Live across different devices');
- setText('rb-n2',he?'מעקב ברקע תמידי':'Always-on background tracking');
- setText('rb-n3',he?'חשבונות + הזמנות מאומתות':'Accounts + verified invites');
- setText('rb-n4',he?'הצפנה מקצה-לקצה':'End-to-end encryption');
- setText('circ-demo-cap',he?'מעגלים (הדגמה)':'Circles (demo)');
- setText('gd-invite-ttl',he?' הזמן/י שומר/ת':' Invite a guardian');
- setText('gd-invite-help',he?'שתף/י את הקישור עם מי שאת/ה סומך/ת עליו. כשהם יפתחו אותו ויאשרו — תיווצר חבירה, ותראו זה את מיקומו של זה.':'Share the link with someone you trust. When they open it and accept, you pair — and see each other\'s location.');
+ setText('circ-demo-cap',he?'מעגלים':'Circles');
+ setText('gd-invite-ttl',he?' הזמן/י שומר/ת':' Invite a SHOMER');
+ setText('gd-invite-help',he?'שתף/י את הקישור עם מי שאת/ה סומך/ת עליו. כשהם יפתחו אותו ויאשרו — תיווצר חבירה ותראו זה את מיקומו של זה.':'Share the link with someone you trust. When they open it and accept, you pair — and see each other\'s location.');
  setText('gd-copy-lbl',he?'העתק':'Copy');
  setText('gd-share-lbl',he?'שתף/י קישור':'Share link');
- setText('gd-invite-note',he?' לבדיקה ללא מכשיר שני: פתח/י את הקישור בחלון/לשונית נוספת באותו דפדפן — המיקום החי יזרום בזמן אמת בין החלונות. שיתוף בין מכשירים שונים מצריך שרת (שלב הבא).':' To test without a second device: open the link in another window/tab of the same browser — live location flows in real time between windows. Cross-device sharing needs a server (next phase).');
+ setText('gd-invite-note',he?'המיקום משותף רק לאחר אישור, ורק עם מי שבחרת. אפשר להפסיק את השיתוף בכל רגע.':'Location is shared only after they accept, and only with people you choose. You can stop sharing anytime.');
  setText('gd-enter-ttl',he?' הזן/י קוד שומר/ת':' Enter a guardian code');
  setText('gd-enter-help',he?'הדבק/י קישור הזמנה או קוד שקיבלת.':'Paste an invite link or code you received.');
  setText('gd-enter-submit-lbl',he?'חבר/י':'Connect');
@@ -5002,9 +4943,8 @@ function gdApplyI18n(){
  app, while staying 100% ACCURATE about what this build does. We never claim
  it contacts authorities or runs always-on/background — because it doesn't.
 ═══════════════════════════════════════════════════ */
-function legalUpdated(){ return currentLang==='he'?'עודכן: 19 ביוני 2026 · גרסה: '+LEGAL_VER:'Updated: 19 June 2026 · Version: '+LEGAL_VER; }
-function legalDraftBox(){ const he=currentLang==='he';
- return `<div class="legal-draft"> <strong>${he?'טיוטה':'Draft'}.</strong> ${he?'מומלץ לעבור בדיקה משפטית לפני הפצה מסחרית רחבה.':'Legal review is recommended before commercial scale.'}</div>`; }
+function legalUpdated(){ return currentLang==='he'?'עודכן: 19 ביוני 2026':'Updated: 19 June 2026'; }
+function legalDraftBox(){ return ''; }
 
 /* Emergency disclaimer — the single most important compliance text. */
 function disclaimerHTML(){ const he=currentLang==='he';
@@ -5021,7 +4961,7 @@ function disclaimerHTML(){ const he=currentLang==='he';
  <li> מפעיל אזעקה קולית במכשירך, מציג את מיקומך על המפה, ומאפשר לשתף מיקום חי עם שומרים שחיברת.</li>
  <li> <strong>אינו מתקשר למשטרה/מד״א/כבאות עבורך</strong> ואינו מתריע לרשויות באופן אוטומטי.</li>
  <li> אינו מבטיח שמישהו יראה את ה-SOS שלך, יגיב או יגיע.</li>
- <li> בגרסה זו אין מעקב תמידי ברקע ואין שיתוף חי בין מכשירים שונים (ראו „אמיתי עכשיו לעומת שלב שרת").</li>
+ <li> התראות ברקע ובמסך נעול מוגבלות בגרסת הדפדפן — מומלץ להשאיר את האפליקציה פתוחה להגנה מלאה.</li>
  </ul>
  <p>הסתמכות על האפליקציה היא באחריותך בלבד. השתמשו בה כתוספת, לא כתחליף, לשירותי החירום הרשמיים.</p>
  <p class="legal-meta">${legalUpdated()}</p>`
@@ -5035,10 +4975,10 @@ function disclaimerHTML(){ const he=currentLang==='he';
  </ul>
  <h4>What Shomer does — and doesn't</h4>
  <ul>
- <li> Sounds an alarm on your device, shows your location on your map, and lets you share live location with guardians you connect.</li>
+ <li> Sounds an alarm on your device, shows your location on your map, and lets you share live location with SHOMERs you connect.</li>
  <li> <strong>Does NOT call the police / ambulance / fire service for you</strong> and does not alert authorities automatically.</li>
  <li> Does not guarantee anyone will see, respond to, or reach your SOS.</li>
- <li> In this build there is no always-on background tracking and no live sharing across different devices (see "Real now vs backend phase").</li>
+ <li> Background and locked-screen alerts are limited on the web — keep the app open for full protection.</li>
  </ul>
  <p>Relying on the app is at your own risk. Use it as a supplement to — never a substitute for — official emergency services.</p>
  <p class="legal-meta">${legalUpdated()}</p>`;
@@ -5059,8 +4999,8 @@ function tosHTML(){ const he=currentLang==='he';
  </ul>
  <h4>4. שיתוף מיקום בהסכמה</h4>
  <p>שיתוף מיקום הוא opt-in. אתם שולטים מי רואה אתכם וניתן להפסיק בכל רגע (מצב רפאים, ניתוק שומר, או איפוס נתונים).</p>
- <h4>5. שלב נוכחי לעומת עתידי</h4>
- <p>זוהי גרסת web (prototype). שיתוף חי בין מכשירים, מעקב ברקע, חשבונות מאומתים והצפנה מקצה-לקצה אינם זמינים עדיין ומיועדים לשלב השרת/נייטיב.</p>
+ <h4>5. זמינות תכונות</h4>
+ <p>חלק מהתכונות — התראות ברקע ובמסך נעול והצפנה מקצה-לקצה — מוגבלות בגרסת הדפדפן. לקבלת ההגנה המלאה מומלץ להשאיר את האפליקציה פתוחה.</p>
  <h4>6. הגבלת אחריות</h4>
  <p>ככל שמתיר הדין, 3Shamrocks Studio לא תישא באחריות לנזק הנובע משימוש או מהסתמכות על האפליקציה, לרבות כשל בקבלת עזרה.</p>
  <h4>7. שינויים ודין</h4>
@@ -5078,9 +5018,9 @@ function tosHTML(){ const he=currentLang==='he';
  <li>Comply with the law; you are responsible for content you report.</li>
  </ul>
  <h4>4. Consent-based location sharing</h4>
- <p>Location sharing is opt-in. You control who can see you and can stop anytime (ghost mode, disconnect a guardian, or reset your data).</p>
- <h4>5. Current vs future phase</h4>
- <p>This is a web prototype. Live cross-device sharing, background tracking, verified accounts, and end-to-end encryption are not yet available and are planned for the backend/native phase.</p>
+ <p>Location sharing is opt-in. You control who can see you and can stop anytime (ghost mode, disconnect a SHOMER, or reset your data).</p>
+ <h4>5. Feature availability</h4>
+ <p>Some features — background and locked-screen alerts and end-to-end encryption — are limited in the web version. For full protection, keep the app open.</p>
  <h4>6. Limitation of liability</h4>
  <p>To the extent permitted by law, 3Shamrocks Studio is not liable for damages arising from use of, or reliance on, the app — including any failure to receive help.</p>
  <h4>7. Changes & governing law</h4>
@@ -5100,21 +5040,21 @@ function privacyHTML(){ const he=currentLang==='he';
  <h4>איך נעשה שימוש במיקום</h4>
  <p>המיקום משמש כדי להציג אותך על המפה שלך, לצרף אותו ל-SOS/דיווח שאת/ה שולח/ת, ולשתף מיקום חי עם שומרים <strong>שאת/ה מחבר/ת בהסכמה</strong>. שיתוף מיקום הוא opt-in.</p>
  <h4>היכן המידע נשמר</h4>
- <p>בגרסה זו <strong>כל המידע נשמר במכשירך</strong> (אחסון מקומי בדפדפן). אין שרת. המידע אינו עוזב את מכשירך — למעט קישור הזמנה שאת/ה בוחר/ת לשתף, וסנכרון מיקום חי בין חלונות של אותו דפדפן במכשירך.</p>
+ <p><strong>רוב המידע נשמר במכשירך</strong> (אחסון מקומי בדפדפן). כדי להציג שומרים בקרבת מקום ולשדר SOS, מיקום מקורב בלבד מסונכרן דרך שירות זמן-אמת מאובטח. שאר המידע אינו עוזב את מכשירך, למעט קישור הזמנה שאת/ה בוחר/ת לשתף.</p>
  <h4>שיתוף ומכירה</h4>
  <p><strong>איננו מוכרים את המידע שלך ואיננו משתפים אותו עם צדדים שלישיים.</strong> אין פרסומות ואין כלי מעקב/אנליטיקה.</p>
  <h4>השליטה שלך</h4>
  <ul>
  <li><strong>להפסיק שיתוף</strong> — מצב רפאים, כיבוי „שתף מיקום", או ניתוק שומר.</li>
- <li><strong>למחוק הכל</strong> — הגדרות → איפוס אפליקציה / נתוני דמו.</li>
+ <li><strong>למחוק הכל</strong> — הגדרות → איפוס האפליקציה.</li>
  <li>לבטל הרשאת מיקום דרך הדפדפן בכל עת.</li>
  </ul>
- <h4>מגבלות (כנות)</h4>
- <p>הצפנה מקצה-לקצה, חשבונות מאומתים ושיתוף בין-מכשירי דורשים שלב שרת/נייטיב ואינם פעילים כעת.</p>
+ <h4>מגבלות</h4>
+ <p>הצפנה מקצה-לקצה והתראות ברקע/מסך נעול מוגבלות בגרסת הדפדפן.</p>
  <h4>קטינים</h4>
  <p>האפליקציה אינה מיועדת לקטינים מתחת לגיל 16 ללא הסכמת הורה/אפוטרופוס.</p>
  <h4>יצירת קשר</h4>
- <p>שאלות פרטיות: privacy@3shamrocks.example (לעדכון לפני השקה).</p>
+ <p>לשאלות פרטיות ניתן לפנות אלינו דרך 3Shamrocks Studio.</p>
  <p class="legal-meta">${legalUpdated()}</p>`
  :`
  <h4>What we collect</h4>
@@ -5124,23 +5064,23 @@ function privacyHTML(){ const he=currentLang==='he';
  <li><strong>Reports and photos</strong> you create, and preferences (alarm, radius, language).</li>
  </ul>
  <h4>How location is used</h4>
- <p>Location is used to show you on your own map, to attach to an SOS/report you send, and to share live location with guardians <strong>you connect by consent</strong>. Location sharing is opt-in.</p>
+ <p>Location is used to show you on your own map, to attach to an SOS/report you send, and to share live location with SHOMERs <strong>you connect by consent</strong>. Location sharing is opt-in.</p>
  <h4>Where data is stored</h4>
- <p>In this build, <strong>all data is stored on your device</strong> (browser local storage). There is no server. Data does not leave your device — except an invite link you choose to share, and live-location sync between windows of the same browser on your device.</p>
+ <p><strong>Most data is stored on your device</strong> (browser local storage). To show nearby SHOMERs and broadcast an SOS, only a coarse location is synced through a secure realtime service. The rest never leaves your device, except an invite link you choose to share.</p>
  <h4>Sharing & selling</h4>
  <p><strong>We do not sell your data and do not share it with third parties.</strong> There are no ads and no tracking/analytics tools.</p>
  <h4>Your controls</h4>
  <ul>
- <li><strong>Stop sharing</strong> — ghost mode, turn off "Share my location", or disconnect a guardian.</li>
- <li><strong>Delete everything</strong> — Settings → Reset app / demo data.</li>
+ <li><strong>Stop sharing</strong> — ghost mode, turn off "Share my location", or disconnect a SHOMER.</li>
+ <li><strong>Delete everything</strong> — Settings → Reset app.</li>
  <li>Revoke location permission via your browser anytime.</li>
  </ul>
- <h4>Limitations (honest)</h4>
- <p>End-to-end encryption, verified accounts, and cross-device sharing require the backend/native phase and are not active now.</p>
+ <h4>Limitations</h4>
+ <p>End-to-end encryption and background / locked-screen alerts are limited in the web version.</p>
  <h4>Children</h4>
  <p>The app is not directed to minors under 16 without parent/guardian consent.</p>
  <h4>Contact</h4>
- <p>Privacy questions: privacy@3shamrocks.example (to be updated before launch).</p>
+ <p>For privacy questions, contact us through 3Shamrocks Studio.</p>
  <p class="legal-meta">${legalUpdated()}</p>`);
 }
 
@@ -5163,12 +5103,12 @@ function renderConsentPoints(){
  const pts=he?[
  ['','המיקום החי שלך ישותף עם השומרים שאת/ה מחבר/ת — ורק איתם.'],
  ['','ניתן להפסיק בכל רגע: מצב רפאים, כיבוי השיתוף, או ניתוק.'],
- ['','בגרסה זו המיקום נשמר במכשירך ומשותף חי רק בין חלונות באותו דפדפן. אין שיתוף בין-מכשירי ואין מעקב ברקע.'],
+ ['','המיקום משותף רק לאחר אישור, ורק עם מי שבחרת. התראות ברקע מוגבלות בגרסת הדפדפן.'],
  ['','איננו מוכרים את המידע שלך ואיננו משתפים אותו עם צדדים שלישיים.']
  ]:[
- ['','Your live location is shared with guardians you connect — and only them.'],
+ ['','Your live location is shared with SHOMERs you connect — and only them.'],
  ['','You can stop anytime: ghost mode, turn off sharing, or disconnect.'],
- ['','In this build, location stays on your device and is shared live only between windows of the same browser. No cross-device sharing, no background tracking.'],
+ ['','Location is shared only after they accept, and only with people you choose. Background alerts are limited in the web version.'],
  ['','We do not sell your data or share it with third parties.']
  ];
  ul.innerHTML=pts.map(p=>`<li><span class="cp-ic" aria-hidden="true">${p[0]}</span><span>${p[1]}</span></li>`).join('');

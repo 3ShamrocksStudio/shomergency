@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SH✡MER • שומר — Guardian Overview</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Heebo:wght@400;500;600;700&amp;display=swap');
+
+    :root {
+      --n0:#060F1E; --n1:#0A1628; --n2:#101E34; --n3:#162440; --n4:#1C2C4E;
+      --g2:#C09020; --g3:#E0A828; --g4:#F5C840;
+      --p1:#5C6B82; --p2:#8392AB; --p3:#B6C2D6; --p4:#E6ECF6;
+      --r3:#CC1426;
+      --tx0:#F0F4FF; --tx1:#C8D4E8; --tx2:#8898B8;
+    }
+
+    * { box-sizing: border-box; margin:0; padding:0; }
+    html, body { background: var(--n1); color: var(--tx0); font-family: 'Inter','Heebo',system-ui,sans-serif; }
+    .he { font-family: 'Heebo','Inter',system-ui,sans-serif; }
+
+    .page {
+      max-width: 900px;
+      margin: 40px auto;
+      background: var(--n2);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      border: 1px solid rgba(182,194,214,0.1);
+    }
+
+    .hero {
+      background: linear-gradient(180deg, var(--n1) 0%, var(--n2) 100%);
+      padding: 48px 48px 36px;
+      text-align: center;
+      position: relative;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--g3), transparent);
+    }
+
+    .logo {
+      width: 112px;
+      height: auto;
+      margin: 0 auto 16px;
+      display: block;
+      filter: drop-shadow(0 8px 20px rgba(0,0,0,0.4));
+    }
+
+    .title {
+      font-size: 42px;
+      font-weight: 800;
+      letter-spacing: -1.2px;
+      line-height: 1.0;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      font-size: 21px;
+      color: var(--g4);
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .tagline {
+      font-size: 19px;
+      color: var(--p3);
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.35;
+    }
+
+    .section {
+      padding: 36px 48px;
+    }
+    .section + .section {
+      border-top: 1px solid rgba(182,194,214,0.08);
+    }
+
+    h2 {
+      font-size: 15px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--g3);
+      margin-bottom: 14px;
+      font-weight: 600;
+    }
+
+    .pitch {
+      font-size: 17px;
+      line-height: 1.55;
+      color: var(--tx1);
+      max-width: 620px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    @media (max-width: 640px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    .feature {
+      background: var(--n3);
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid rgba(182,194,214,0.06);
+    }
+    .feature h3 {
+      font-size: 15px;
+      color: var(--g4);
+      margin-bottom: 6px;
+    }
+    .feature p {
+      font-size: 14.2px;
+      color: var(--tx2);
+      line-height: 1.4;
+    }
+
+    .honesty {
+      background: var(--n1);
+      border-radius: 12px;
+      padding: 22px 24px;
+      border-left: 5px solid var(--g3);
+    }
+    .honesty strong {
+      color: var(--g4);
+    }
+
+    .verticals {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 720px) {
+      .verticals { grid-template-columns: 1fr; }
+    }
+    .vert {
+      background: var(--n3);
+      border-radius: 10px;
+      padding: 16px;
+      font-size: 14px;
+    }
+    .vert .name {
+      font-weight: 700;
+      color: var(--g3);
+      margin-bottom: 4px;
+    }
+    .vert .tag {
+      font-size: 13px;
+      color: var(--p3);
+      margin-bottom: 8px;
+    }
+
+    .cta-bar {
+      background: var(--n1);
+      padding: 28px 48px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 28px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 15px;
+      text-decoration: none;
+      transition: transform .1s ease;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--g2), var(--g4));
+      color: var(--n0);
+    }
+    .btn-secondary {
+      background: transparent;
+      color: var(--tx0);
+      border: 1px solid var(--p2);
+    }
+
+    .disclaimer {
+      font-size: 12.5px;
+      line-height: 1.45;
+      color: var(--p3);
+      max-width: 640px;
+    }
+
+    .footer {
+      padding: 20px 48px 32px;
+      font-size: 12px;
+      color: var(--p2);
+      text-align: center;
+      border-top: 1px solid rgba(182,194,214,0.08);
+    }
+    .footer a { color: var(--p3); }
+
+    .screenshots {
+      display: flex;
+      gap: 12px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+    .screenshots img {
+      width: 100%;
+      max-width: 210px;
+      border-radius: 8px;
+      border: 1px solid rgba(182,194,214,0.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .print-note {
+      font-size: 11px;
+      text-align: center;
+      color: var(--p2);
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero">
+    <img src="../SHOMER_logo_big.png" alt="SH✡MER" class="logo">
+    <div class="title he">שומר</div>
+    <div class="title" style="font-size:32px; margin-top:-8px;">SH✡MER</div>
+    <div class="subtitle">One tap, and you're not alone.</div>
+    <p class="tagline">Citizens protecting citizens.<br>
+    A calm, credible guardian for real life in Israel.</p>
+  </div>
+
+  <!-- PURPOSE -->
+  <div class="section">
+    <h2>Purpose</h2>
+    <p class="pitch">
+      In an emergency, the most valuable resource is often the person already standing next to you.<br>
+      SH✡MER turns that instinct into simple, reliable infrastructure: one tap fires a loud alarm, shares your live location with people you trust, and gives you direct access to the right Israeli emergency number.
+    </p>
+  </div>
+
+  <!-- VOICE &amp; VALUES -->
+  <div class="section">
+    <h2>Tone &amp; Values</h2>
+    <div class="grid">
+      <div class="feature">
+        <h3>Calm. Credible. Protective.</h3>
+        <p>Plain-spoken. Never alarmist. We earn trust by under-promising and being scrupulously honest about what the tool can and cannot do today.</p>
+      </div>
+      <div class="feature">
+        <h3>Honesty as a feature</h3>
+        <p>We clearly show what is real right now (alarm, map, Dead Man’s Switch, same-device guardian) versus what requires the backend phase. No fear-selling.</p>
+      </div>
+      <div class="feature">
+        <h3>Locally rooted</h3>
+        <p>Hebrew-first with full RTL. Correct Israeli authorities (100 / 101 / 102). 6 languages. Built for the realities of life here.</p>
+      </div>
+      <div class="feature">
+        <h3>Accessible guardianship</h3>
+        <p>Free core protection. Works as a PWA on any phone. No app store. No tracking. Your data stays on your device. Privacy-first by design.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHAT IT IS -->
+  <div class="section">
+    <h2>What SH✡MER actually does today</h2>
+    <div class="grid">
+      <div class="feature">
+        <h3>Instant loud SOS alarm</h3>
+        <p>Three real WebAudio sirens that fire on your device immediately. Engineered to deter and call for help around you.</p>
+      </div>
+      <div class="feature">
+        <h3>Live safety map + GPS</h3>
+        <p>Real Leaflet map with your location. Honest aggregate data from CBS and Israel Police (cited, never fabricated incidents).</p>
+      </div>
+      <div class="feature">
+        <h3>Guardians you choose</h3>
+        <p>Share live location with parents or partners. Real between browser tabs today. Cross-device in the backend phase.</p>
+      </div>
+      <div class="feature">
+        <h3>Dead Man’s Switch + Shake</h3>
+        <p>Set a timer while hiking or swimming alone. Confirm you’re OK or an SOS fires. Hard shake also triggers.</p>
+      </div>
+    </div>
+
+    <div style="margin-top:22px;">
+      <h2 style="margin-bottom:10px;">The three missions (one platform)</h2>
+      <div class="verticals">
+        <div class="vert">
+          <div class="name">SH✡MER / שומר</div>
+          <div class="tag">Citizens Protecting Citizens</div>
+          <div style="font-size:13px;color:var(--tx2);">Personal safety for walking alone, at night, or feeling vulnerable.</div>
+        </div>
+        <div class="vert">
+          <div class="name">Shomer Forest</div>
+          <div class="tag">Citizens For Nature</div>
+          <div style="font-size:13px;color:var(--tx2);">Wildfire, dumping, injured wildlife, poaching — reported with photo + GPS.</div>
+        </div>
+        <div class="vert">
+          <div class="name">Shomer Beach</div>
+          <div class="tag">Citizens For the Coast</div>
+          <div style="font-size:13px;color:var(--tx2);">Dangerous currents, marine distress, pollution, strandings.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HONESTY (core value) -->
+  <div class="section">
+    <div class="honesty">
+      <strong>What is real right now</strong><br>
+      Personal alarm • Live map on your device • Dead Man’s Switch • Shake-to-SOS • Photo reports • Guardian location (same browser)<br><br>
+      <strong>What still needs the backend</strong><br>
+      Cross-device guardian alerts • Real broadcast to nearby people • Server-enforced rate limits • Reports routed to authorities
+    </div>
+    <p style="margin-top:14px; font-size:13.5px; color:var(--p3);">
+      We are explicit about this because a safety tool earns trust by being honest, not by over-promising.
+    </p>
+  </div>
+
+  <!-- FOR WHO -->
+  <div class="section">
+    <h2>Who it’s for</h2>
+    <p style="color:var(--tx1); margin-bottom:12px;">Ordinary people who want to feel less alone in vulnerable moments — and the people who care about them.</p>
+    <div style="display:flex; flex-wrap:wrap; gap:10px 18px; font-size:14px; color:var(--p3);">
+      <div>• Women walking alone</div>
+      <div>• Hikers and lone workers</div>
+      <div>• Swimmers and beachgoers</div>
+      <div>• Parents protecting teens</div>
+      <div>• Nature volunteers</div>
+      <div>• Anyone who wants a calm, reliable guardian on their phone</div>
+    </div>
+  </div>
+
+  <!-- SCREENSHOTS -->
+  <div class="section">
+    <h2>Real interface (not mockups)</h2>
+    <div class="screenshots">
+      <img src="../_redesign/proof-final/1-onboarding.png" alt="Onboarding with SH✡MER badge">
+      <img src="../_redesign/proof-final/2-map-legend.png" alt="Live map and legend">
+      <img src="../_redesign/proof-final/4-alarm.png" alt="SOS armed with alarm">
+    </div>
+    <div class="print-note">Screenshots from the actual working PWA</div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-bar">
+    <div>
+      <a href="https://3shamrocksstudio.github.io/shomergency/" class="btn btn-primary">Install SH✡MER now (free)</a>
+    </div>
+    <div>
+      <a href="https://3shamrocksstudio.github.io/shomergency/" class="btn btn-secondary">Open the app</a>
+      <span style="margin-left:12px; color:var(--p3); font-size:13px;">No app store • Works on any phone</span>
+    </div>
+  </div>
+
+  <div class="section" style="padding-top:10px; padding-bottom:10px;">
+    <div class="disclaimer">
+      <strong>SH✡MER augments personal safety — it is not a replacement for emergency services.</strong><br>
+      In a real emergency call <strong>100</strong> (Police) / <strong>101</strong> (MDA) / <strong>102</strong> (Fire &amp; Rescue).<br>
+      This is a working front-end prototype. Cross-device features and authority routing are part of the upcoming backend phase.
+    </div>
+  </div>
+
+  <div class="footer">
+    Built by 3Shamrocks Studio • Israel<br>
+    <a href="https://3shamrocksstudio.github.io/shomergency/">shomergency</a> • 
+    <a href="https://3shamrocksstudio.github.io/shomer-forest/">Forest</a> • 
+    <a href="https://3shamrocksstudio.github.io/shomer-beach/">Beach</a>
+  </div>
+
+</div>
+
+<div style="text-align:center; margin: 20px 0 40px; font-size:11px; color:#5C6B82;">
+  Open in browser → Print to PDF or take high-res screenshot for social / outreach. Use the real logo file only.
+</div>
+
+</body>
+</html>
