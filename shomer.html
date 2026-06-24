@@ -5379,8 +5379,9 @@ function fbSetupPresence(){
   if(!FB._presTimer)FB._presTimer=setInterval(fbPublishPresence,25000);
   FB.db.ref('presence').on('value',function(snap){
     var all=snap.val()||{}, n=0, mlat=userLat, mlng=userLng, radM=((SS.settings&&SS.settings.radius)||5)*1000;
-    var seen={};
+    var seen={}, PSTALE=90*1000;
     Object.keys(all).forEach(function(k){ if(k===FB.uid)return; var p=all[k]; if(!p||p.lat==null)return;
+      if(p.ts && (Date.now()-p.ts)>PSTALE)return; // skip dead sessions (presence refreshes every 25s)
       var within=(mlat==null)||distMeters(mlat,mlng,p.lat,p.lng)<=radM;
       if(within)n++;
       seen[k]=1;
@@ -5420,8 +5421,10 @@ function fbListenSOS(){
     var all=snap.val()||{};
     // marker cleanup (only when the map exists)
     if(MAP) Object.keys(fbSosMarkers).forEach(function(id){ if(!all[id]||all[id].resolved){ try{MAP.removeLayer(fbSosMarkers[id]);}catch(e){} delete fbSosMarkers[id]; } });
-    var prev=FB._sosState||{}, cur={}, fresh=[], updated=false;
+    var prev=FB._sosState||{}, cur={}, fresh=[], updated=false, STALE=25*60*1000;
     Object.keys(all).forEach(function(id){ var s=all[id]; if(!s||s.resolved||s.uid===FB.uid||s.lat==null)return;
+      // ignore stale/abandoned SOS (never resolved) so old events don't linger on the map
+      if(s.ts && (Date.now()-s.ts)>STALE){ if(fbSosMarkers[id]){ try{MAP&&MAP.removeLayer(fbSosMarkers[id]);}catch(e){} delete fbSosMarkers[id]; } return; }
       cur[id]=s.type||'unknown';
       // render/refresh the pulsing pin if the map is ready
       if(MAP){
