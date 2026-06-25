@@ -36,6 +36,14 @@
       }
     },
 
+    "registry": {
+      ".read": true,
+      "$phoneHash": {
+        ".write": true,
+        ".validate": "newData.hasChild('uid')"
+      }
+    },
+
     "checkin": {
       "$uid": {
         ".read": "auth != null",

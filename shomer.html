@@ -1867,8 +1867,9 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="gd-hero">
  <div class="gd-hero-t"><span aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span><span id="gd-hero-t">חבר/י שומר/ת</span></div>
  <div class="gd-hero-s" id="gd-hero-s">צרף/י אדם שאת/ה סומך/ת עליו (הורה/בן-זוג). הם יראו את מיקומך החי ואת/ה את שלהם — בהזמנה ואישור. את/ה שולט/ת מי רואה את מי, וניתן לעצור בכל רגע.</div>
+ <button class="cta-gold" onclick="gdAddPhoneOpen()" id="gd-addph-btn" style="width:100%;margin-bottom:8px"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg> <span id="gd-addph-lbl" data-he="הוסף/י שומר/ת לפי טלפון" data-en="Add My SHOMER by phone" data-ar="أضف حارسي عبر الهاتف">הוסף/י שומר/ת לפי טלפון</span></button>
  <div class="gd-btns">
- <button class="cta-gold" onclick="gdCreateInvite()" id="gd-invite-btn"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 15l6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M11 7l1.5-1.5a4 4 0 0 1 5.7 5.7L16.7 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M13 17l-1.5 1.5a4 4 0 0 1-5.7-5.7L7.3 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> <span id="gd-invite-lbl">הזמן/י שומר/ת</span></button>
+ <button class="row-btn" onclick="gdCreateInvite()" id="gd-invite-btn"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 15l6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M11 7l1.5-1.5a4 4 0 0 1 5.7 5.7L16.7 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M13 17l-1.5 1.5a4 4 0 0 1-5.7-5.7L7.3 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> <span id="gd-invite-lbl">הזמן/י שומר/ת</span></button>
  <button class="row-btn" style="flex:0 0 auto;width:auto" onclick="gdEnterCodeOpen()" id="gd-enter-btn"><span id="gd-enter-lbl">יש לי קוד</span></button>
  </div>
  </div>
@@ -1938,6 +1939,36 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <p style="font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:10px" id="gd-enter-help">הדבק/י קישור הזמנה או קוד שקיבלת.</p>
  <input class="ob-f" id="gd-enter-input" type="text" placeholder="הדבק/י קישור או קוד" aria-label="קישור או קוד הזמנה" style="direction:ltr;font-family:ui-monospace,monospace">
  <button class="cta-gold" style="margin-top:10px" onclick="gdEnterCodeSubmit()" id="gd-enter-submit">✓ <span id="gd-enter-submit-lbl">חבר/י</span></button>
+ </div>
+ </div>
+
+ <!-- GUARDIAN: ADD MY SHOMER BY PHONE (verify they're a SHOMER user, then pair — else invite) -->
+ <div class="ff-pick" id="gd-addphone" role="dialog" aria-modal="true" aria-labelledby="gd-addph-ttl" aria-hidden="true">
+ <div class="ff-pick-card">
+ <div class="ff-pick-hd">
+ <span class="ff-pick-ttl" id="gd-addph-ttl" data-he="הוסף/י שומר/ת" data-en="Add My SHOMER" data-ar="أضف حارسي">הוסף/י שומר/ת</span>
+ <button class="sh-x" onclick="gdClose('gd-addphone')" aria-label="סגור"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+ </div>
+ <!-- FIND mode: enter a phone, verify it's a registered SHOMER -->
+ <div id="gd-ph-find">
+ <p style="font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:10px" data-he="אפשר להוסיף רק אנשי קשר שכבר משתמשים ב-SHOMER. הזן/י מספר נייד — נבדוק בצורה מאובטחת (המספר אף פעם לא נחשף)." data-en="You can only add contacts who already use SHOMER. Enter a mobile number — we check securely (the number is never exposed)." data-ar="يمكنك إضافة جهات تستخدم SHOMER فقط. أدخل رقم جوال — نتحقق بأمان (لا يُكشف الرقم).">אפשר להוסיף רק אנשי קשר שכבר משתמשים ב-SHOMER. הזן/י מספר נייד — נבדוק בצורה מאובטחת (המספר אף פעם לא נחשף).</p>
+ <input class="ob-f" id="gd-ph-input" type="tel" inputmode="tel" autocomplete="tel" maxlength="15" placeholder="050-000-0000" dir="ltr" aria-label="מספר נייד">
+ <input class="ob-f" id="gd-ph-name" type="text" maxlength="24" placeholder="שם (לא חובה)" data-he-ph="שם (לא חובה)" aria-label="שם" style="margin-top:8px">
+ <button class="cta-gold" id="gd-ph-go" style="margin-top:10px" onclick="gdAddPhoneSubmit()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16.5 16.5L21 21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> <span data-he="בדוק/י והוסף/י" data-en="Check & add" data-ar="تحقّق وأضف">בדוק/י והוסף/י</span></button>
+ </div>
+ <!-- INVITE mode: contact is NOT a SHOMER yet -->
+ <div id="gd-ph-invite" style="display:none">
+ <p style="font-size:13px;color:var(--tx1);line-height:1.7;margin-bottom:4px" data-he="איש הקשר עדיין לא משתמש ב-SHOMER. הזמן/י אותו/ה להתקין — אחרי שיצטרפו ויאשרו, תיווצר חבירה." data-en="This contact isn't on SHOMER yet. Invite them to install — once they join and accept, you'll be paired." data-ar="جهة الاتصال ليست على SHOMER بعد. ادعُها للتثبيت — بعد الانضمام والموافقة ستتم المزاوجة.">איש הקשר עדיין לא משתמש ב-SHOMER. הזמן/י אותו/ה להתקין — אחרי שיצטרפו ויאשרו, תיווצר חבירה.</p>
+ <div style="display:flex;gap:8px;margin-top:10px">
+ <button class="cta-gold" style="flex:1;background:#25D366;color:#062b14" onclick="gdInviteWhatsApp()"><span data-he="הזמנה ב-WhatsApp" data-en="Invite on WhatsApp" data-ar="دعوة عبر واتساب">הזמנה ב-WhatsApp</span></button>
+ <button class="row-btn" style="flex:0 0 auto;width:auto" onclick="gdInviteSMS()"><span data-he="SMS" data-en="SMS" data-ar="SMS">SMS</span></button>
+ </div>
+ <div class="gd-link" style="margin-top:10px">
+ <input id="gd-ph-invite-link" type="text" readonly aria-label="קישור הזמנה" onclick="this.select()">
+ <button class="gd-copy" onclick="gdInviteShareLink()"><span data-he="שתף/י" data-en="Share" data-ar="مشاركة">שתף/י</span></button>
+ </div>
+ <button class="row-btn" style="width:100%;margin-top:10px;justify-content:center" onclick="gdAddPhoneMode('find')"><span data-he="‹ חזרה" data-en="‹ Back" data-ar="‹ رجوع">‹ חזרה</span></button>
+ </div>
  </div>
  </div>
 
@@ -2615,6 +2646,8 @@ function deleteAccount(){
    if(FB&&FB.db&&uid){
      var db=FB.db;
      ['presence/','positions/','tokens/','geo/','checkin/'].forEach(function(p){ try{ db.ref(p+uid).remove(); }catch(e){} });
+     // remove my hashed-phone registry entry (so I'm no longer discoverable as a SHOMER)
+     try{ if(FB._myPhoneHash) db.ref('registry/'+FB._myPhoneHash).remove(); }catch(e){}
      // TOMBSTONE — a durable "deleted" marker keyed on MY uid (a node I'm allowed to
      // write). Paired partners read it on load and prune the dead link reliably, with
      // NO need for the loosened rules or a Cloud Function. Kept tiny + PII-free.
@@ -4988,6 +5021,13 @@ function gdState(){ if(!SS.guardian)SS.guardian={myName:'',myCode:'',pairs:[]}; 
 function gdPairByToken(t){ return gdState().pairs.find(p=>p.token===t); }
 function gdPairById(id){ return gdState().pairs.find(p=>p.id===id); }
 function gdBaseUrl(){ return location.origin+location.pathname.replace(/index\.html$/,'shomer.html'); }
+/* Canonical IL mobile form for matching (same on both sides of a lookup): digits
+   only, leading 0 → 972, bare 5xxxxxxxx → 972 prefix. Yields e.g. 972541234567. */
+function phoneCanon(raw){ var d=String(raw||'').replace(/\D/g,''); if(!d)return ''; d=d.replace(/^0/,'972'); if(/^5\d{8}$/.test(d))d='972'+d; return d; }
+function phoneIsValidIL(canon){ return /^9725\d{8}$/.test(canon||''); }
+/* SHA-256 → hex. Used to store a PRIVACY-SAFE registry (hashed phone → uid): the
+   raw number is NEVER stored or exposed; matching a contact = hash + lookup. */
+async function sha256Hex(s){ try{ var b=await crypto.subtle.digest('SHA-256', new TextEncoder().encode(String(s))); return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0');}).join(''); }catch(e){ fbLog&&fbLog('sha256 unavailable:',(e&&e.message)||e); return ''; } }
 function gdInviteLink(p){ return gdBaseUrl()+'?g='+encodeURIComponent(p.token)+'#n='+encodeURIComponent(gdState().myName||''); }
 
 function guardianInit(){
@@ -5163,6 +5203,95 @@ function gdConnect(tok,nm,fromLink){
  if(document.getElementById('sh-circles')&&document.getElementById('sh-circles').classList.contains('open')){} else openCircles();
  toast(currentLang==='he'?'✓ חוברת ל'+(p.name||'שומר/ת'):'✓ Connected to '+(p.name||'guardian'),'grn');
  try{ pushNotify(' SHOMER',(currentLang==='he'?'חוברת לשומר/ת':'Guardian connected'),'gd-pair'); }catch(e){}
+}
+/* ══ ADD MY SHOMER BY PHONE ══
+   Only a real, registered SHOMER user can be added (verified via the hashed-phone
+   registry). Match → real mutual backend pairing. No match → offer an install invite.
+   Never pairs a non-user. */
+function gdAddPhoneOpen(){
+ var i=document.getElementById('gd-ph-input'); if(i)i.value='';
+ var n=document.getElementById('gd-ph-name'); if(n)n.value='';
+ FB._lastInvite=null; gdAddPhoneMode('find');
+ gdOpen('gd-addphone'); setTimeout(function(){ try{i&&i.focus();}catch(e){} },140);
+}
+/* Toggle the dialog between the lookup form ('find') and the invite panel ('invite'). */
+function gdAddPhoneMode(mode){
+ var find=document.getElementById('gd-ph-find'), inv=document.getElementById('gd-ph-invite');
+ if(find)find.style.display=(mode==='invite')?'none':'block';
+ if(inv)inv.style.display=(mode==='invite')?'block':'none';
+}
+async function gdAddPhoneSubmit(){
+ var he=currentLang==='he', ar=currentLang==='ar';
+ var raw=(document.getElementById('gd-ph-input')||{}).value||'';
+ var canon=phoneCanon(raw);
+ if(!phoneIsValidIL(canon)){ toast(he?'מספר נייד ישראלי לא תקין':ar?'رقم جوال إسرائيلي غير صالح':'Invalid Israeli mobile number','amb'); shakeField('gd-ph-input'); return; }
+ if(!gdRequireConsent(gdAddPhoneSubmit)) return; // explicit opt-in before any pairing/sharing
+ if(!FB.ready||!FB.db){ toast(he?'מתחבר… נסה/י שוב בעוד רגע':ar?'جارٍ الاتصال… حاول لاحقًا':'Connecting… try again in a moment','amb'); return; }
+ var btn=document.getElementById('gd-ph-go'); if(btn)btn.disabled=true;
+ try{
+   var h=await sha256Hex(canon);
+   if(!h){ toast(he?'הדפדפן לא תומך בבדיקה מאובטחת':'Secure check unsupported here','amb'); if(btn)btn.disabled=false; return; }
+   if(h===FB._myPhoneHash){ toast(he?'זה המספר שלך 🙂':ar?'هذا رقمك 🙂':'That\'s your own number 🙂','amb'); if(btn)btn.disabled=false; return; }
+   var snap=await FB.db.ref('registry/'+h).once('value');
+   var rec=snap.val();
+   var label=((document.getElementById('gd-ph-name')||{}).value||'').trim().substring(0,24);
+   if(rec && rec.uid && rec.uid!==FB.uid){
+     // Contact IS a registered SHOMER → real mutual pairing.
+     gdPairWithUid(rec.uid, (rec.name||label||''), label);
+     gdClose('gd-addphone');
+   } else {
+     // Contact is NOT a SHOMER → do NOT pair; offer an install invite.
+     gdAddPhonePrepInvite(canon, label);
+   }
+ }catch(e){ toast(he?'שגיאה בבדיקה — נסה/י שוב':'Lookup error — try again','amb'); fbLog('addphone lookup error:',(e&&e.message)||e); }
+ if(btn)btn.disabled=false;
+}
+/* Real mutual backend pairing (rules are open, so we write BOTH sides authoritatively).
+   The partner's fbListenPairs picks up pairs/<their>/<mine> and adds us to their circle. */
+function gdPairWithUid(theirUid, theirName, label){
+ var he=currentLang==='he';
+ var g=gdState();
+ if(g.pairs.some(function(p){return p.partnerUid===theirUid;})){ toast(he?'כבר במעגל שלך':'Already in your circle','amb'); gdClose('gd-addphone'); return; }
+ var myName=g.myName||(SS.user&&SS.user.name)||'';
+ var token='ph'+Math.random().toString(36).slice(2,10);
+ try{
+   FB.db.ref('pairs/'+FB.uid+'/'+theirUid).set({name:(theirName||''),token:token,ts:Date.now(),via:'phone'});
+   FB.db.ref('pairs/'+theirUid+'/'+FB.uid).set({name:myName,token:token,ts:Date.now(),via:'phone'});
+ }catch(e){ fbLog('pairWithUid write error:',(e&&e.message)||e); }
+ g.pairs.push({id:genId('g'),token:token,name:(theirName||label||''),rel:'',shareToThem:true,seeThem:true,addedTs:Date.now(),initiator:true,pending:false,partnerUid:theirUid,linked:true,color:GD_PALETTE[g.pairs.length%GD_PALETTE.length],lat:null,lng:null,ts:0,live:false,via:'phone',simLat:TLV[0]+(Math.random()-.5)*.02,simLng:TLV[1]+(Math.random()-.5)*.02});
+ saveStore(); try{gdRenderList();gdRenderMarkers();}catch(e){}
+ toast(he?('✓ חוברת ל'+(theirName||'שומר/ת')):'✓ Paired with '+(theirName||'SHOMER'),'grn');
+ try{ pushNotify('SHOMER',(he?'חוברת לשומר/ת':'SHOMER paired'),'gd-pair'); }catch(e){}
+}
+/* Contact isn't a SHOMER yet → create a pending invite + show install-link share. */
+function gdAddPhonePrepInvite(canon, label){
+ var g=gdState();
+ var token='g'+Math.random().toString(36).slice(2,8)+Math.random().toString(36).slice(2,6);
+ g.pairs.push({id:genId('g'),token:token,name:(label||''),rel:'',shareToThem:true,seeThem:true,addedTs:Date.now(),initiator:true,pending:true,color:GD_PALETTE[g.pairs.length%GD_PALETTE.length],lat:null,lng:null,ts:0,live:false,via:'invite',simLat:null,simLng:null});
+ saveStore();
+ try{ fbRegisterInvite(token, g.myName||(SS.user&&SS.user.name)||''); }catch(e){}
+ var link=gdBaseUrl()+'?g='+encodeURIComponent(token)+'#n='+encodeURIComponent(g.myName||(SS.user&&SS.user.name)||'');
+ FB._lastInvite={ link:link, phone:canon };
+ var lk=document.getElementById('gd-ph-invite-link'); if(lk)lk.value=link;
+ gdAddPhoneMode('invite');
+ try{gdRenderList();}catch(e){}
+}
+function gdInviteWhatsApp(){
+ var inv=FB._lastInvite||{}; var he=currentLang==='he';
+ var txt=(he?'הצטרף/י אליי באפליקציית SHOMER כדי שנשמור זה על זה. הורד/י ואשר/י: ':'Join me on the SHOMER app so we can watch over each other. Install & accept: ')+(inv.link||'');
+ var ph=(inv.phone||'').replace(/\D/g,'');
+ window.open('https://wa.me/'+ph+'?text='+encodeURIComponent(txt),'_blank');
+}
+function gdInviteSMS(){
+ var inv=FB._lastInvite||{}; var he=currentLang==='he';
+ var body=(he?'הצטרף/י אליי ב-SHOMER: ':'Join me on SHOMER: ')+(inv.link||'');
+ var ph=(inv.phone||'').replace(/\D/g,'');
+ window.location.href='sms:'+(ph?('+'+ph):'')+'?&body='+encodeURIComponent(body);
+}
+function gdInviteShareLink(){
+ var inv=FB._lastInvite||{}; var he=currentLang==='he';
+ if(navigator.share){ navigator.share({title:'SHOMER',text:(he?'הצטרף/י אליי ב-SHOMER':'Join me on SHOMER'),url:inv.link||''}).catch(function(){}); return; }
+ var lk=document.getElementById('gd-ph-invite-link'); if(lk){ lk.select(); var done=function(){toast(he?'✓ הקישור הועתק':'✓ Link copied','grn');}; if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(lk.value).then(done,done);}else{try{document.execCommand('copy');done();}catch(e){}} }
 }
 function gdDisconnect(id){
  const g=gdState(); const p=gdPairById(id); if(!p)return;
@@ -5625,7 +5754,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v52';
+var APP_VER='v53';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -5818,6 +5947,8 @@ async function fbInit(){
     fbSetupPresence(); fbListenSOS(); fbListenPairs();
     FB.listening=true; fbLog('DATA LAYER READY · clientId =', FB.uid, '· (auth pending, best-effort)');
     renderFbStatus();
+    // Publish my hashed-phone → uid registry entry so others can add me as My SHOMER.
+    try{ fbRegisterMe(); }catch(e){}
     // Prune any pair whose partner has deleted their account (tombstone check).
     setTimeout(function(){ try{ fbPrunePairsByTombstone(); }catch(e){} },3000);
 
@@ -5844,6 +5975,21 @@ async function fbInit(){
 function fbClientId(){
   try{ var k='shomerCID', v=localStorage.getItem(k); if(!v){ v='cid-'+Math.random().toString(36).slice(2,10)+Math.random().toString(36).slice(2,6); localStorage.setItem(k,v); } return v; }
   catch(e){ if(!FB._memCid)FB._memCid='cid-'+Math.random().toString(36).slice(2,10); return FB._memCid; }
+}
+/* Publish a PRIVACY-SAFE registry entry so other SHOMERs can verify this person has
+   the app: registry/<sha256(canonical phone)> = {uid, name}. Only the HASH is stored
+   — never the raw number. Lets "Add My SHOMER" match a contact to a real SHOMER uid.
+   Idempotent; runs on every launch once the data layer + profile are ready. */
+async function fbRegisterMe(){
+  try{
+    if(!FB.ready||!FB.db) return;
+    var phone=(SS.user&&SS.user.phone)||''; if(!phone) return;
+    var canon=phoneCanon(phone); if(!phoneIsValidIL(canon)) return;
+    var h=await sha256Hex(canon); if(!h) return;
+    FB._myPhoneHash=h;
+    FB.db.ref('registry/'+h).set({ uid:FB.uid, name:(SS.user&&SS.user.name)||'', ts:Date.now() });
+    fbLog('registry published (hashed phone → uid)');
+  }catch(e){ fbLog('registry write failed (non-fatal):',(e&&e.message)||e); }
 }
 /* Anonymous auth is fully OPTIONAL — the rules are open, so the socket + presence +
    SOS already work without it. It runs in the BACKGROUND only, AFTER the data layer
@@ -6041,8 +6187,12 @@ function fbListenPairs(){
     var all=snap.val()||{}; FB._pairedUids=all;
     try{ var g=gdState(), changed=false;
       Object.keys(all).forEach(function(uid){ var info=all[uid]||{};
-        var ex=g.pairs.find(function(p){return p.partnerUid===uid;});
-        if(ex){ if(!ex.linked){ex.linked=true;changed=true;} }
+        // Match an existing pair by partnerUid, OR reconcile a still-pending invite by
+        // its token (so an accepted invite UPGRADES that pending pair instead of
+        // creating a duplicate — covers both the link-invite and phone-invite flows).
+        var ex=g.pairs.find(function(p){return p.partnerUid===uid;})
+            || g.pairs.find(function(p){return !p.partnerUid && info.token && p.token===info.token;});
+        if(ex){ var ch=false; if(ex.partnerUid!==uid){ex.partnerUid=uid;ch=true;} if(!ex.linked){ex.linked=true;ch=true;} if(ex.pending){ex.pending=false;ch=true;} if(info.name&&!ex.name){ex.name=info.name;ch=true;} if(ch)changed=true; }
         else { g.pairs.push({id:genId('g'),token:info.token||('p'+uid.slice(0,8)),name:info.name||'',rel:'',shareToThem:true,seeThem:true,addedTs:Date.now(),initiator:false,pending:false,partnerUid:uid,linked:true,color:GD_PALETTE[g.pairs.length%GD_PALETTE.length],lat:null,lng:null,ts:0,live:false}); changed=true; }
       });
       if(changed){ saveStore(); if(document.getElementById('sh-circles')&&document.getElementById('sh-circles').classList.contains('open'))gdRenderList(); }
