@@ -11,7 +11,7 @@
 <meta http-equiv="X-Frame-Options" content="DENY">
 <meta http-equiv="Referrer-Policy" content="no-referrer">
 <!-- CSP: no eval. Allows Leaflet (cdnjs) + OpenStreetMap tiles at runtime; everything else self-hosted. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://cdnjs.cloudflare.com https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com; connect-src 'self' https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://*.googleapis.com https://fcmregistrations.googleapis.com https://firebaseinstallations.googleapis.com https://router.project-osrm.org https://*.firebaseio.com wss://*.firebaseio.com https://shomergency-default-rtdb.firebaseio.com; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://www.gstatic.com; manifest-src 'self'; worker-src 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://cdnjs.cloudflare.com https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com; connect-src 'self' https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://*.googleapis.com https://fcmregistrations.googleapis.com https://firebaseinstallations.googleapis.com https://router.project-osrm.org https://*.firebaseio.com wss://*.firebaseio.com https://shomergency-default-rtdb.firebaseio.com wss://shomergency-default-rtdb.firebaseio.com https://*.firebasedatabase.app wss://*.firebasedatabase.app https://*.firebaseapp.com; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://www.gstatic.com; manifest-src 'self'; worker-src 'self';">
 <title>SHOMER · שומר — Citizens Protecting Citizens</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" href="logo-192.png">
@@ -1309,6 +1309,8 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="diag-row"><span class="diag-k" data-he="מזהה (UID)" data-en="ID (UID)" data-ar="المُعرّف (UID)">מזהה (UID)</span><span class="diag-v" id="diag-uid">—</span></div>
  <div class="diag-row"><span class="diag-k" data-he="סוקט RTDB (WebSocket)" data-en="RTDB socket (WebSocket)" data-ar="اتصال RTDB (WebSocket)">סוקט RTDB</span><span class="diag-v" id="diag-rtdb">—</span></div>
  <div class="diag-row"><span class="diag-k" data-he="הרשאות (קריאה/כתיבה)" data-en="Permission (read/write)" data-ar="الصلاحيات (قراءة/كتابة)">הרשאות</span><span class="diag-v" id="diag-perm">—</span></div>
+ <div class="diag-row"><span class="diag-k" data-he="בדיקת סוקט (WS)" data-en="Socket probe (WS)" data-ar="فحص السوكِت (WS)">בדיקת סוקט</span><span class="diag-v" id="diag-wsprobe" style="font-size:10px;max-width:62%;text-align:left;word-break:break-word">—</span></div>
+ <div class="diag-row"><span class="diag-k" data-he="חסימת CSP" data-en="CSP block" data-ar="حظر CSP">חסימת CSP</span><span class="diag-v" id="diag-csp" style="font-size:10px;max-width:62%;text-align:left;word-break:break-word">—</span></div>
  <div class="diag-row"><span class="diag-k" data-he="שומרים שנראו" data-en="SHOMERs seen" data-ar="حُرّاس ظهروا">שומרים שנראו</span><span class="diag-v" id="diag-seen">0</span></div>
  <div class="diag-row"><span class="diag-k" data-he="SOS אחרון שהתקבל" data-en="Last SOS received" data-ar="آخر نداء استغاثة">SOS אחרון שהתקבל</span><span class="diag-v" id="diag-lastsos">אין</span></div>
  <div class="diag-row"><span class="diag-k" data-he="דחיפת רקע" data-en="Background push" data-ar="إشعارات الخلفية">דחיפת רקע</span><span class="diag-v" id="diag-push">—</span></div>
@@ -5590,11 +5592,49 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v47';
+var APP_VER='v48';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
-  authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null};
+  authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
 function fbLog(){ try{ console.log.apply(console,['[SHOMER/FB]'].concat([].slice.call(arguments))); }catch(e){} }
+/* CSP VIOLATION CAPTURE — if the Content-Security-Policy blocks the RTDB socket
+   (wss://…firebaseio.com) the browser fires a securitypolicyviolation event. We
+   record the blocked URI + directive and surface them in the diag panel + console
+   so a real phone NAMES "CSP blocked wss://…" instead of a silent "connecting". */
+window.addEventListener('securitypolicyviolation',function(ev){
+  try{
+    var info=(ev.violatedDirective||'?')+' ⟂ '+(ev.blockedURI||'?');
+    fbLog('CSP VIOLATION:', info, '· policy:', ev.originalPolicy?'(meta)':'');
+    // Only keep the connection-relevant ones front-and-centre.
+    if(/connect-src|default-src/.test(ev.violatedDirective||'') || /firebase|wss|googleapis/.test(ev.blockedURI||'')){
+      FB.csp=info; try{updateDiagPanel();}catch(e){}
+    }
+  }catch(e){}
+});
+/* RAW WEBSOCKET PROBE — bypass the Firebase SDK and try to open the RTDB socket
+   directly, so we capture the EXACT reason it won't open on a real phone:
+   - throws SecurityError  → CSP is blocking it (names the directive via the
+     violation listener above)
+   - onopen fired          → the socket layer works; the problem is app/SDK
+   - onclose code 1006     → network/region blocked the WebSocket (env, not us)
+   This is best-effort and self-cleaning; it never affects the real connection. */
+function fbProbeSocket(){
+  try{
+    var host=(window.SHOMER_FB&&window.SHOMER_FB.databaseURL||'').replace(/^https?:\/\//,'').replace(/\/$/,'');
+    var ns=host.split('.')[0];
+    if(!host){ FB.wsProbe='no-dburl'; return; }
+    var url='wss://'+host+'/.ws?v=5&ns='+ns;
+    FB.wsProbe='opening…'; fbLog('WS probe →', url);
+    var ws, settled=false;
+    var finish=function(s){ if(settled)return; settled=true; FB.wsProbe=s; fbLog('WS probe result:', s); try{updateDiagPanel();}catch(e){} try{ws&&ws.close();}catch(e){} };
+    try{ ws=new WebSocket(url); }
+    catch(e){ finish('blocked (CSP/SecurityError): '+((e&&e.message)||e)); return; }
+    ws.onopen=function(){ finish('open ✓ (socket layer OK — issue is app/SDK)'); };
+    ws.onerror=function(){ if(!settled){ FB.wsProbe='error (CSP or network — see console/CSP row)'; try{updateDiagPanel();}catch(e){} } };
+    ws.onclose=function(ev){ finish('closed code '+ (ev&&ev.code) + (ev&&ev.code===1006?' (1006 = network/region blocked WS)': (ev&&ev.reason?(' '+ev.reason):''))); };
+    setTimeout(function(){ finish('timeout (no open/close in 12s — likely network/region block)'); }, 12000);
+  }catch(e){ FB.wsProbe='probe-err:'+((e&&e.message)||e); }
+}
 var fbSosMarkers={};
 /* Push capability on THIS device (so the status pill can tell the truth). */
 function fbPushState(){
@@ -5656,6 +5696,12 @@ function updateDiagPanel(){
     else if(FB.permErr){ ptxt='denied · '+FB.permErr; pcol='#FF7080'; }
     else { ptxt='ok ✓'; pcol='var(--grn)'; }
     pm.textContent=ptxt; pm.style.color=pcol; }
+  // SOCKET PROBE — raw WebSocket result (only runs when the real socket is down)
+  var wp=document.getElementById('diag-wsprobe');
+  if(wp){ var wtxt=FB.wsProbe||(FB.connected?'not needed ✓':'—'); wp.textContent=wtxt; wp.style.color=(/open ✓|not needed/.test(wtxt))?'var(--grn)':(/blocked|closed|error|timeout|network/.test(wtxt)?'#FF7080':'var(--tx3)'); }
+  // CSP BLOCK — any Content-Security-Policy violation that hit a connection
+  var cs=document.getElementById('diag-csp');
+  if(cs){ cs.textContent=FB.csp||'none ✓'; cs.style.color=FB.csp?'#FF7080':'var(--grn)'; }
   setText('diag-seen', String(FB.near||0));
   var ls=document.getElementById('diag-lastsos');
   if(ls){ ls.textContent=FB.lastSos?(fmtClock(FB.lastSos.ts)+(FB.lastSos.type&&FB.lastSos.type!=='unknown'&&window.sosTypeLabel?(' · '+sosTypeLabel(FB.lastSos.type)):'')):(he?'אין':ar?'لا يوجد':'none'); ls.style.color=FB.lastSos?'var(--grn)':'var(--tx3)'; }
@@ -5741,6 +5787,12 @@ async function fbInit(){
 
     // 3) ── ANON AUTH — BEST-EFFORT, BACKGROUND, NEVER BLOCKS THE DATA LAYER ─────
     fbTryAuthBestEffort();
+
+    // 4) ── SOCKET SELF-DIAGNOSIS ──────────────────────────────────────────────
+    //    If the RTDB socket hasn't come up within 6s, run a raw WebSocket probe
+    //    to capture WHY (CSP block vs network/region vs app/SDK) and show it in
+    //    the panel. Skipped entirely when the real socket connects normally.
+    setTimeout(function(){ if(!FB.connected && !FB.wsProbe){ fbLog('socket still down after 6s → probing'); fbProbeSocket(); } },6000);
   }catch(e){ if(FB._watchdog){ clearTimeout(FB._watchdog); FB._watchdog=null; } FB.err=FB.err||('init:'+((e&&e.code)||(e&&e.message)||e)); fbLog('INIT FAILED ·', FB.err, e); renderFbStatus(); }
   FB._initing=false;
 }
