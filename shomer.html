@@ -1783,8 +1783,9 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="set-grp" style="border-color:var(--b4);">
  <button style="width:100%;padding:14px;background:var(--rb);border:none;font-size:14px;font-weight:800;color:#FF7080;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;" onclick="resetApp()" id="reset-btn"><span id="reset-btn-lbl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-.6 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 4v5h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> <span data-he="איפוס האפליקציה" data-en="Reset app">איפוס האפליקציה</span></span></button>
  </div>
- <div class="sr-sb" id="reset-hint" style="margin:-10px 2px 16px;line-height:1.6">מוחק פרופיל, דיווחים, היסטוריית SOS והגדרות — וחוזר להרשמה.</div>
- <button style="width:100%;padding:13px;border:1px solid var(--b1);border-radius:var(--r12);background:var(--n3);font-size:13px;font-weight:600;color:#FF7080;margin-top:8px;cursor:pointer;" onclick="logoutAccount()" id="logout-btn" data-he="יציאה מהחשבון" data-en="Sign out" data-ar="تسجيل الخروج">יציאה מהחשבון</button>
+ <div class="sr-sb" id="reset-hint" style="margin:-10px 2px 16px;line-height:1.6" data-he="מאפס את האפליקציה במכשיר הזה (פרופיל, דיווחים, היסטוריית SOS, הגדרות) וחוזר להרשמה. לא מוחק את החשבון מהשרת." data-en="Resets the app on THIS device (profile, reports, SOS history, settings) and returns to signup. Does not delete your account from the server.">מאפס את האפליקציה במכשיר הזה (פרופיל, דיווחים, היסטוריית SOS, הגדרות) וחוזר להרשמה. לא מוחק את החשבון מהשרת.</div>
+ <button style="width:100%;padding:13px;border:1px solid var(--b1);border-radius:var(--r12);background:var(--n3);font-size:13px;font-weight:600;color:#FF7080;margin-top:8px;cursor:pointer;" onclick="deleteAccount()" id="delete-account-btn" data-he="מחיקת חשבון" data-en="Delete account" data-ar="حذف الحساب">מחיקת חשבון</button>
+ <div class="sr-sb" id="delete-hint" style="margin:8px 2px 16px;line-height:1.6" data-he="מחיקה מלאה וסופית: מוחק את כל הנתונים מהשרת (נוכחות, SOS, פרופיל, הגדרות), מסיר אותך ממעגלי השומרים המשויכים, ומבטל את שם המשתמש שנוצר אוטומטית. פתיחה מחדש יוצרת זהות חדשה לגמרי." data-en="Full, permanent erase: removes all your data from the server (presence, SOS, profile, settings), removes you from any paired SHOMERs' circles, and discards your auto-generated username. Reopening creates a brand-new identity.">מחיקה מלאה וסופית: מוחק את כל הנתונים מהשרת (נוכחות, SOS, פרופיל, הגדרות), מסיר אותך ממעגלי השומרים המשויכים, ומבטל את שם המשתמש שנוצר אוטומטית. פתיחה מחדש יוצרת זהות חדשה לגמרי.</div>
  <div class="legal-links" id="set-legal-links">
  <button onclick="openLegal('tos')" id="set-ll-tos">תנאי שימוש</button><span class="sep">·</span>
  <button onclick="openLegal('privacy')" id="set-ll-priv">מדיניות פרטיות</button><span class="sep">·</span>
@@ -2594,18 +2595,46 @@ function resetApp(){
  try{localStorage.removeItem(SKEY);}catch(e){}
  location.reload();
 }
-/* Sign out — ends the session and returns to onboarding. This button must NEVER
-   touch the SOS flow. We sign out of Firebase anonymous auth, drop presence, and
-   clear the local profile so the next open starts clean. */
-function logoutAccount(){
+/* DELETE ACCOUNT — full, privacy-compliant erasure (right-to-deletion / Amendment 13),
+   DISTINCT from "Reset app". SHOMER usernames are AUTO-GENERATED (SHOMER####), not
+   user-claimed handles, so deletion discards the identity entirely and a fresh open
+   generates a brand-new one. It must NEVER touch the SOS flow.
+   Wipes: presence · live position · own SOS events · push token · check-in/geo ·
+   profile + settings (local) · and removes this SHOMER from every paired guardian's
+   circle (no dangling dead links). Then clears ALL local SHOMER storage INCLUDING the
+   device id (shomerCID) and signs out — so reopening is a clean, new identity. */
+function deleteAccount(){
  const he=currentLang==='he', ar=currentLang==='ar';
- const msg=he?'לצאת מהחשבון ולחזור למסך הפתיחה?':ar?'تسجيل الخروج والعودة لشاشة البداية؟':'Sign out and return to the start screen?';
+ const msg=he?'למחוק לצמיתות את החשבון? כל הנתונים יימחקו (פרופיל, דיווחים, היסטוריית SOS, הגדרות, נוכחות) ותוסר/י ממעגלי השומרים המשויכים. פעולה בלתי הפיכה.'
+   :ar?'حذف الحساب نهائيًا؟ ستُمحى كل البيانات (الملف، البلاغات، سجل الاستغاثة، الإعدادات، التواجد) وستتم إزالتك من دوائر الحُرّاس المرتبطين. لا يمكن التراجع.'
+   :'Permanently delete your account? All data will be erased (profile, reports, SOS history, settings, presence) and you\'ll be removed from any paired SHOMERs\' circles. This cannot be undone.';
  if(!window.confirm(msg))return;
- // Best-effort teardown — none of this may throw or fall through to SOS.
- try{ if(FB&&FB.ready&&FB.uid&&FB.db){ FB.db.ref('presence/'+FB.uid).remove(); } }catch(e){}
- try{ if(window.firebase&&window.firebase.apps&&window.firebase.apps.length){ window.firebase.auth().signOut(); } }catch(e){}
- try{ localStorage.removeItem(SKEY); }catch(e){}
- location.reload();
+ var uid=(FB&&FB.uid)||null;
+ // 1) REMOTE erasure — best-effort, fired while still authenticated. Nothing may throw.
+ try{
+   if(FB&&FB.db&&uid){
+     var db=FB.db;
+     ['presence/','positions/','tokens/','geo/','checkin/'].forEach(function(p){ try{ db.ref(p+uid).remove(); }catch(e){} });
+     // my own live SOS events
+     try{ db.ref('sos').once('value').then(function(snap){ var all=snap.val()||{}; Object.keys(all).forEach(function(id){ if(all[id]&&all[id].uid===uid){ try{db.ref('sos/'+id).remove();}catch(e){} } }); }).catch(function(){}); }catch(e){}
+     // UNPAIR — drop my node AND my entry inside each partner's node, so no guardian
+     // is left with a dead link to a deleted SHOMER.
+     try{ var partners=FB._pairedUids?Object.keys(FB._pairedUids):[];
+       partners.forEach(function(pu){ try{ db.ref('pairs/'+pu+'/'+uid).remove(); }catch(e){} });
+       db.ref('pairs/'+uid).remove();
+     }catch(e){}
+   }
+ }catch(e){}
+ // 2) After a short flush window (lets the remote removes commit while still authed),
+ //    sign out, wipe ALL local SHOMER storage incl. the device id, and reload fresh.
+ setTimeout(function(){
+   try{ if(window.firebase&&window.firebase.apps&&window.firebase.apps.length){ window.firebase.auth().signOut(); } }catch(e){}
+   try{ Object.keys(localStorage).forEach(function(k){ if(/^shomer/i.test(k)||k===SKEY){ try{localStorage.removeItem(k);}catch(e){} } }); }catch(e){}
+   try{ localStorage.removeItem(SKEY); localStorage.removeItem('shomerCID'); }catch(e){}
+   try{ sessionStorage.clear(); }catch(e){}
+   location.reload();
+ }, 800);
+ try{ toast(he?'מוחק את החשבון…':ar?'جارٍ حذف الحساب…':'Deleting account…','grn'); }catch(e){}
 }
 
 /* ── Reports: map pins, cards, list ── */
@@ -5592,7 +5621,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v49';
+var APP_VER='v50';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -5790,6 +5819,12 @@ async function fbInit(){
     //    to capture WHY (CSP block vs network/region vs app/SDK) and show it in
     //    the panel. Skipped entirely when the real socket connects normally.
     setTimeout(function(){ if(!FB.connected && !FB.wsProbe){ fbLog('socket still down after 6s → probing'); fbProbeSocket(); } },6000);
+
+    // 5) ── RETURNING-SESSION SELF-HEAL ─────────────────────────────────────────
+    //    If the socket is STILL down at 10s, auto-heal (signOut + bounce + fresh
+    //    anon) — fixes the "reopen won't reconnect, only reset works" bug WITHOUT
+    //    wiping data. Skipped entirely when the socket connects normally.
+    setTimeout(function(){ if(!FB.connected){ fbHealConnection(); } },10000);
   }catch(e){ if(FB._watchdog){ clearTimeout(FB._watchdog); FB._watchdog=null; } FB.err=FB.err||('init:'+((e&&e.code)||(e&&e.message)||e)); fbLog('INIT FAILED ·', FB.err, e); renderFbStatus(); }
   FB._initing=false;
 }
@@ -5811,12 +5846,43 @@ async function fbTryAuthBestEffort(){
     async function tryPersist(mode,name){ try{ await auth.setPersistence(mode); FB.persist=name; return true; }catch(e){ fbLog('persistence "'+name+'" blocked:', (e&&e.code)||e); return false; } }
     if(!(await tryPersist(P.LOCAL,'local'))){ if(!(await tryPersist(P.SESSION,'session'))){ await tryPersist(P.NONE,'memory'); } }
     function signInTO(ms){ return Promise.race([ auth.signInAnonymously(), new Promise(function(_,rej){ setTimeout(function(){ var e=new Error('sign-in timed out'); e.code='auth-timeout'; rej(e); }, ms); }) ]); }
-    var user=auth.currentUser;
+    // Wait for any PERSISTED session to finish restoring (it's async) before deciding,
+    // with a timeout so a hung/ITP-blocked restore can't stall us.
+    var user=await new Promise(function(res){ var done=false,unsub; try{ unsub=auth.onAuthStateChanged(function(u){ if(!done){ done=true; try{unsub();}catch(e){} res(u||null); } }); }catch(e){ res(auth.currentUser||null); } setTimeout(function(){ if(!done){ done=true; try{unsub&&unsub();}catch(e){} res(auth.currentUser||null); } },4000); });
+    if(user){
+      // RETURNING SESSION: validate the restored token. A stale/expired token that
+      // can't refresh (iOS ITP) blocks the RTDB connection on reopen — this is the
+      // "first launch connects, reopen doesn't, reset fixes it" bug. Force-refresh;
+      // if it fails, discard the dead session and sign in fresh (NO data wipe).
+      try{ await user.getIdToken(true); fbLog('restored session valid · token refreshed · uid', user.uid); }
+      catch(reErr){ fbLog('restored token refresh FAILED → fresh sign-in:', (reErr&&reErr.code)||reErr); try{ await auth.signOut(); }catch(e){} user=null; }
+    }
     if(!user){ try{ user=(await signInTO(12000)).user; }catch(e1){ fbLog('anon auth attempt 1 failed (non-fatal):',(e1&&e1.code)||e1); await new Promise(r=>setTimeout(r,1800)); user=(await signInTO(15000)).user; } }
-    FB.authUid=user.uid; FB.authState='ok'; fbLog('anon auth OK (best-effort) · authUid =', user.uid);
+    FB.authUid=user.uid; FB.authState='ok'; fbLog('auth ready (best-effort) · authUid =', user.uid);
     try{ auth.onAuthStateChanged(function(u){ if(u&&u.uid)FB.authUid=u.uid; }); }catch(e){}
+    // Auth is valid now → clear any stale permission denial and (re)publish presence
+    // so a returning session re-establishes its full data flow, not just the socket.
+    try{ FB.permErr=null; if(FB.ready){ FB.db&&FB.db.goOnline&&FB.db.goOnline(); fbPublishPresence(); } }catch(e){}
   }catch(e){ FB.authState='auth-err:'+((e&&e.code)||e); fbLog('anon auth FAILED (best-effort — data still flows):',(e&&e.code)||e); }
   try{renderFbStatus();}catch(e){}
+}
+/* CONNECTION SELF-HEAL — if the RTDB socket is STILL down a few seconds after init,
+   the usual culprit on reopen is a stale persisted auth token wedging the connection
+   (exactly what "reset account" cleared). Do that automatically — drop the token,
+   bounce the socket, sign in fresh — WITHOUT wiping any user data. Runs once. */
+async function fbHealConnection(){
+  if(FB._healed)return; FB._healed=true;
+  try{
+    if(!window.firebase||!window.firebase.auth)return;
+    var auth=window.firebase.auth();
+    fbLog('SELF-HEAL: socket down → signOut + bounce + fresh anon (no data reset)');
+    try{ await auth.signOut(); }catch(e){}                                  // drop any stale token
+    try{ FB.db&&FB.db.goOffline&&FB.db.goOffline(); }catch(e){}
+    try{ FB.db&&FB.db.goOnline&&FB.db.goOnline(); }catch(e){}               // bounce the connection clean
+    try{ var u=(await auth.signInAnonymously()).user; FB.authUid=u.uid; FB.authState='ok'; fbLog('SELF-HEAL: fresh anon OK', u.uid); }
+    catch(e){ fbLog('SELF-HEAL anon failed (socket still retries unauth):',(e&&e.code)||e); }
+    try{ FB.permErr=null; if(FB.ready)fbPublishPresence(); renderFbStatus(); }catch(e){}
+  }catch(e){ fbLog('SELF-HEAL error:', (e&&e.message)||e); }
 }
 function fbSetupPresence(){
   if(!FB.ready)return;
