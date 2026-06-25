@@ -1,28 +1,30 @@
 {
+  "//WARNING": "TEMPORARY PRE-LAUNCH RULES — presence/sos/positions are OPEN (no auth) so the realtime layer works on mobile browsers where Firebase anonymous auth (IndexedDB) is blocked by iOS Safari ITP / storage partitioning. BEFORE PUBLIC LAUNCH: re-require auth and add Firebase App Check. Tracking: re-tighten presence/sos/positions to 'auth != null' once mobile auth is reliable. Other nodes (checkin/geo/tokens/alarms/invites/pairs) remain auth-gated.",
+
   "rules": {
     ".read": false,
     ".write": false,
 
     "presence": {
-      ".read": "auth != null",
+      ".read": true,
       "$uid": {
-        ".write": "auth != null && auth.uid === $uid",
+        ".write": true,
         ".validate": "newData.hasChildren(['lat','lng','ts'])"
       }
     },
 
     "sos": {
-      ".read": "auth != null",
+      ".read": true,
       "$id": {
-        ".write": "auth != null && (!data.exists() || data.child('uid').val() === auth.uid)",
+        ".write": true,
         ".validate": "newData.hasChildren(['uid','lat','lng','ts'])"
       }
     },
 
     "positions": {
-      ".read": "auth != null",
+      ".read": true,
       "$uid": {
-        ".write": "auth != null && auth.uid === $uid"
+        ".write": true
       }
     },
 

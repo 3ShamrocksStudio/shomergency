@@ -5590,7 +5590,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v46';
+var APP_VER='v47';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -5611,11 +5611,12 @@ function renderFbStatus(){
   var txt=document.getElementById('fb-status-txt'); var he=currentLang==='he', ar=currentLang==='ar';
   FB.pushState=fbPushState();
   var state, msg;
-  // A failed sign-in/SDK load must surface as an ERROR, not an endless "connecting".
-  var failed=FB.err && !FB.ready && FB.authState && FB.authState!=='connecting';
-  if(failed){ state='offline'; msg=(he?'תקלת חיבור · ':ar?'خطأ في الاتصال · ':'Connection error · ')+FB.authState+(he?' — הקש/י לפרטים':ar?' — اضغط للتفاصيل':' — tap for details'); }
+  // Status is driven by the SOCKET (data layer), NOT by auth — auth is best-effort.
+  // Only a DATA-layer failure (SDK load / socket) is an error; an auth error never is.
+  var failed=FB.err && !FB.ready;
+  if(failed){ state='offline'; msg=(he?'תקלת חיבור · ':ar?'خطأ في الاتصال · ':'Connection error · ')+FB.err+(he?' — הקש/י לפרטים':ar?' — اضغط للتفاصيل':' — tap for details'); }
   else if(!FB.ready){ state='connecting'; msg=he?'מתחבר…':ar?'جارٍ الاتصال…':'Connecting…'; }
-  else if(!FB.connected){ state='offline'; msg=he?'מחובר (זיהוי) · הסוקט מתחבר…':ar?'مُسجّل · يتصل بالسوكِت…':'Signed in · socket connecting…'; }
+  else if(!FB.connected){ state='offline'; msg=he?'הסוקט מתחבר…':ar?'يتصل بالسوكِت…':'Socket connecting…'; }
   else {
     state='connected';
     var n=FB.near||0;
@@ -5631,18 +5632,20 @@ function fmtClock(ts){ try{ var d=new Date(ts), p=function(x){return(x<10?'0':''
 function toggleDiagPanel(force){ var p=document.getElementById('diag-panel'); if(!p)return; var open=(force===undefined)?!p.classList.contains('on'):!!force; p.classList.toggle('on',open); p.setAttribute('aria-hidden',String(!open)); if(open)updateDiagPanel(); }
 function updateDiagPanel(){
   var p=document.getElementById('diag-panel'); if(!p)return; var he=currentLang==='he', ar=currentLang==='ar';
-  // AUTH (anonymous sign-in) — success or the NAMED error code
+  // AUTH (anonymous sign-in) — OPTIONAL now: data flows without it, so a failure
+  // is amber (informational), never red. Shows ok ✓ or the NAMED error code.
   var au=document.getElementById('diag-auth');
   if(au){ var atxt, acol;
     if(FB.authState==='ok'){ atxt='ok ✓'; acol='var(--grn)'; }
-    else if(FB.authState==='connecting'){ atxt=(he?'מתחבר…':ar?'جارٍ…':'signing in…'); acol='var(--amb)'; }
-    else { atxt=FB.authState||'—'; acol='#FF7080'; } // e.g. auth-err:auth/network-request-failed, sdk-load-failed, no-config
+    else if(FB.authState==='connecting'||!FB.authState){ atxt=(he?'לא חובה · מנסה…':ar?'اختياري · جارٍ…':'optional · trying…'); acol='var(--amb)'; }
+    else { atxt=FB.authState+(he?' · לא חובה':ar?' · اختياري':' · optional'); acol='var(--amb)'; } // e.g. auth-err:auth/network-request-failed — non-fatal
     au.textContent=atxt; au.style.color=acol; }
-  setText('diag-uid', FB.uid?(FB.uid.slice(0,12)):'—');
-  // RTDB SOCKET (.info/connected) — shown SEPARATELY from auth so we know socket vs auth
+  setText('diag-uid', FB.uid?(FB.uid.slice(0,14)):'—');
+  // RTDB SOCKET (.info/connected) — THE real connection indicator, fully separate
+  // from auth. This is what "connected" means now.
   var rt=document.getElementById('diag-rtdb');
   if(rt){ var rtxt, rcol;
-    if(!FB.ready){ rtxt=(he?'—':ar?'—':'(awaiting auth)'); rcol='var(--tx3)'; }
+    if(!FB.ready){ rtxt=(he?'מתחבר…':ar?'جارٍ…':'(connecting)'); rcol='var(--tx3)'; }
     else if(FB.connected){ rtxt='connected ✓'; rcol='var(--grn)'; }
     else { rtxt='disconnected ✗'; rcol='#FF7080'; }
     rt.textContent=rtxt; rt.style.color=rcol; }
@@ -5701,12 +5704,11 @@ async function fbInit(){
   if(!window.SHOMER_FB){ FB.authState='no-config'; FB.err='no-config'; fbLog('NO Firebase config on this build'); renderFbStatus(); return; }
   if(FB._initing)return; FB._initing=true;
   fbLog('init start · dbURL =', window.SHOMER_FB.databaseURL);
-  // WATCHDOG: any step (SDK load, persistence, sign-in, socket) can HANG on a
-  // flaky mobile network without ever rejecting → endless "connecting". If we're
-  // still not ready after 20s, NAME it as a timeout so the panel stops lying.
+  // WATCHDOG covers ONLY the data layer (SDK load + socket). Auth is now
+  // best-effort and never gates connection, so a stalled sign-in can't trip this.
   if(FB._watchdog)clearTimeout(FB._watchdog);
   FB._watchdog=setTimeout(function(){
-    if(!FB.ready){ if(!FB.err||FB.authState==='connecting'){ FB.authState=(FB.authState&&FB.authState!=='connecting')?FB.authState:(FB.sdkLoaded?'auth-timeout (no response 20s)':'sdk-timeout (no response 20s)'); FB.err=FB.authState; } fbLog('WATCHDOG fired · still not ready ·', FB.authState, '· sdkLoaded =', FB.sdkLoaded); try{renderFbStatus();}catch(e){} }
+    if(!FB.ready){ if(!FB.err){ FB.err=FB.sdkLoaded?'socket-timeout (no response 20s)':'sdk-timeout (no response 20s)'; } fbLog('WATCHDOG fired · data layer not ready ·', FB.err, '· sdkLoaded =', FB.sdkLoaded); try{renderFbStatus();}catch(e){} }
   },20000);
   try{
     // 1) Load the SDK (CSP/network failures named here)
@@ -5717,43 +5719,55 @@ async function fbInit(){
         await fbLoad('https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js');
       }
       FB.sdkLoaded=true; fbLog('SDK loaded');
-    }catch(e){ FB.sdkLoaded=false; FB.authState='sdk-load-failed'; FB.err='sdk-load:'+(e&&e.message||e); fbLog('SDK LOAD FAILED (CSP/network?):', e); throw e; }
+    }catch(e){ FB.sdkLoaded=false; FB.err='sdk-load:'+(e&&e.message||e); fbLog('SDK LOAD FAILED (CSP/network?):', e); throw e; }
 
     if(!window.firebase.apps.length)window.firebase.initializeApp(window.SHOMER_FB);
-    var auth=window.firebase.auth();
 
-    // 2) Persistence cascade — a blocked-storage throw must NEVER stop auth.
-    //    LOCAL (survives restart) → SESSION → NONE (in-memory). Whichever works.
-    var P=window.firebase.auth.Auth.Persistence, persistUsed='memory';
-    async function tryPersist(mode,name){ try{ await auth.setPersistence(mode); persistUsed=name; return true; }catch(e){ fbLog('persistence "'+name+'" blocked:', (e&&e.code)||e); return false; } }
-    if(!(await tryPersist(P.LOCAL,'local'))){ if(!(await tryPersist(P.SESSION,'session'))){ await tryPersist(P.NONE,'memory'); } }
-    FB.persist=persistUsed; fbLog('persistence =', persistUsed);
-
-    // 3) Anonymous auth — retry once on a flaky mobile network. Name the exact error.
-    //    A signInAnonymously() that HANGS (never resolves/rejects) is the classic
-    //    iOS "connecting forever" — race it against a timeout so a stuck call
-    //    surfaces as 'auth-timeout' instead of blocking init indefinitely.
-    function signInTO(ms){ return Promise.race([ auth.signInAnonymously(), new Promise(function(_,rej){ setTimeout(function(){ var e=new Error('sign-in timed out'); e.code='auth-timeout'; rej(e); }, ms); }) ]); }
-    var user=auth.currentUser;
-    if(!user){
-      try{ user=(await signInTO(12000)).user; }
-      catch(e1){
-        FB.authState='auth-err:'+((e1&&e1.code)||e1); FB.err=FB.authState; fbLog('anonymous auth attempt 1 FAILED:', (e1&&e1.code)||e1, e1); renderFbStatus();
-        await new Promise(r=>setTimeout(r,1800));
-        try{ user=(await signInTO(15000)).user; }
-        catch(e2){ FB.authState='auth-err:'+((e2&&e2.code)||e2); FB.err=FB.authState; fbLog('anonymous auth attempt 2 FAILED:', (e2&&e2.code)||e2, e2); throw e2; }
-      }
-    }
-    if(FB._watchdog){ clearTimeout(FB._watchdog); FB._watchdog=null; }
-    FB.uid=user.uid; FB.authState='ok'; FB.err=null; FB.db=window.firebase.database(); FB.ready=true;
-    fbLog('AUTH OK · uid =', user.uid, '· persistence =', persistUsed);
+    // 2) ── DATA LAYER UP IMMEDIATELY — DO NOT WAIT FOR AUTH ────────────────────
+    //    iOS Safari ITP / storage partitioning can make Firebase Auth persistence
+    //    (IndexedDB) fail so signInAnonymously() never resolves and currentUser
+    //    stays null — which, with auth!=null rules, denied EVERYTHING → "connecting"
+    //    forever. We now connect, publish presence and listen for SOS keyed on a
+    //    stable LOCAL device id; the loosened rules allow presence/sos/positions
+    //    without auth. Anonymous auth is a best-effort add-on (step 3), never a gate.
+    FB.uid=fbClientId();                 // stable per-device id (NOT auth-dependent)
+    FB.db=window.firebase.database();
+    FB.ready=true;
+    if(FB._watchdog){ clearTimeout(FB._watchdog); FB._watchdog=null; } // data layer up
     try{ FB.db.goOnline&&FB.db.goOnline(); }catch(e){}
     fbSetupPresence(); fbListenSOS(); fbListenPairs();
-    FB.listening=true; renderFbStatus();
-    try{ auth.onAuthStateChanged(function(u){ if(u&&u.uid){ FB.uid=u.uid; } }); }catch(e){}
-    // NOTE: FCM/registerPush is opt-in via the status panel (a 2nd SW on load can churn the socket).
+    FB.listening=true; fbLog('DATA LAYER READY · clientId =', FB.uid, '· (auth pending, best-effort)');
+    renderFbStatus();
+
+    // 3) ── ANON AUTH — BEST-EFFORT, BACKGROUND, NEVER BLOCKS THE DATA LAYER ─────
+    fbTryAuthBestEffort();
   }catch(e){ if(FB._watchdog){ clearTimeout(FB._watchdog); FB._watchdog=null; } FB.err=FB.err||('init:'+((e&&e.code)||(e&&e.message)||e)); fbLog('INIT FAILED ·', FB.err, e); renderFbStatus(); }
   FB._initing=false;
+}
+/* Stable per-device id — the presence/SOS key, so the realtime layer works even
+   when anonymous auth can't (iOS Safari storage partitioning). Persisted in
+   localStorage; falls back to an in-memory id if storage is blocked. */
+function fbClientId(){
+  try{ var k='shomerCID', v=localStorage.getItem(k); if(!v){ v='cid-'+Math.random().toString(36).slice(2,10)+Math.random().toString(36).slice(2,6); localStorage.setItem(k,v); } return v; }
+  catch(e){ if(!FB._memCid)FB._memCid='cid-'+Math.random().toString(36).slice(2,10); return FB._memCid; }
+}
+/* Anonymous auth is OPTIONAL now (for future per-user scoping + App Check). It
+   runs in the background and NEVER blocks presence/SOS. On success we record the
+   auth uid SEPARATELY (FB.authUid); the presence/SOS key stays the stable device
+   id so a late-resolving auth doesn't churn the presence node. */
+async function fbTryAuthBestEffort(){
+  try{
+    var auth=window.firebase.auth();
+    var P=window.firebase.auth.Auth.Persistence;
+    async function tryPersist(mode,name){ try{ await auth.setPersistence(mode); FB.persist=name; return true; }catch(e){ fbLog('persistence "'+name+'" blocked:', (e&&e.code)||e); return false; } }
+    if(!(await tryPersist(P.LOCAL,'local'))){ if(!(await tryPersist(P.SESSION,'session'))){ await tryPersist(P.NONE,'memory'); } }
+    function signInTO(ms){ return Promise.race([ auth.signInAnonymously(), new Promise(function(_,rej){ setTimeout(function(){ var e=new Error('sign-in timed out'); e.code='auth-timeout'; rej(e); }, ms); }) ]); }
+    var user=auth.currentUser;
+    if(!user){ try{ user=(await signInTO(12000)).user; }catch(e1){ fbLog('anon auth attempt 1 failed (non-fatal):',(e1&&e1.code)||e1); await new Promise(r=>setTimeout(r,1800)); user=(await signInTO(15000)).user; } }
+    FB.authUid=user.uid; FB.authState='ok'; fbLog('anon auth OK (best-effort) · authUid =', user.uid);
+    try{ auth.onAuthStateChanged(function(u){ if(u&&u.uid)FB.authUid=u.uid; }); }catch(e){}
+  }catch(e){ FB.authState='auth-err:'+((e&&e.code)||e); fbLog('anon auth FAILED (best-effort — data still flows):',(e&&e.code)||e); }
+  try{renderFbStatus();}catch(e){}
 }
 function fbSetupPresence(){
   if(!FB.ready)return;
