@@ -2615,6 +2615,10 @@ function deleteAccount(){
    if(FB&&FB.db&&uid){
      var db=FB.db;
      ['presence/','positions/','tokens/','geo/','checkin/'].forEach(function(p){ try{ db.ref(p+uid).remove(); }catch(e){} });
+     // TOMBSTONE — a durable "deleted" marker keyed on MY uid (a node I'm allowed to
+     // write). Paired partners read it on load and prune the dead link reliably, with
+     // NO need for the loosened rules or a Cloud Function. Kept tiny + PII-free.
+     try{ db.ref('tombstones/'+uid).set({deleted:true,ts:Date.now()}); }catch(e){}
      // my own live SOS events
      try{ db.ref('sos').once('value').then(function(snap){ var all=snap.val()||{}; Object.keys(all).forEach(function(id){ if(all[id]&&all[id].uid===uid){ try{db.ref('sos/'+id).remove();}catch(e){} } }); }).catch(function(){}); }catch(e){}
      // UNPAIR — drop my node AND my entry inside each partner's node, so no guardian
@@ -5621,7 +5625,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v50';
+var APP_VER='v51';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -5810,6 +5814,8 @@ async function fbInit(){
     fbSetupPresence(); fbListenSOS(); fbListenPairs();
     FB.listening=true; fbLog('DATA LAYER READY · clientId =', FB.uid, '· (auth pending, best-effort)');
     renderFbStatus();
+    // Prune any pair whose partner has deleted their account (tombstone check).
+    setTimeout(function(){ try{ fbPrunePairsByTombstone(); }catch(e){} },3000);
 
     // 3) ── ANON AUTH — BEST-EFFORT, BACKGROUND, NEVER BLOCKS THE DATA LAYER ─────
     fbTryAuthBestEffort();
@@ -6047,6 +6053,30 @@ function fbListenPairs(){
       if(changed){ saveStore(); if(document.getElementById('sh-circles')&&document.getElementById('sh-circles').classList.contains('open'))gdRenderList(); }
     }catch(e){}
   }, function(){ /* denied until /pairs rules deployed */ });
+}
+/* Cross-user unpair via TOMBSTONE — when a SHOMER deletes their account they write
+   tombstones/<theirUid>={deleted:true}. On load we check each paired partner's
+   tombstone and, if deleted, prune that link locally AND drop our own side of the
+   pair — so a guardian is never left with a dead link to a deleted SHOMER. Works
+   under the current rules (a read any authed user can do) — no backend deploy. */
+function fbPrunePairsByTombstone(){
+  if(!FB.ready||!FB.db)return;
+  try{
+    var g=gdState(); var pairs=(g.pairs||[]).filter(function(p){return p&&p.partnerUid;});
+    if(!pairs.length)return;
+    pairs.forEach(function(p){
+      try{ FB.db.ref('tombstones/'+p.partnerUid).once('value').then(function(snap){
+        var t=snap.val();
+        if(t&&t.deleted){
+          fbLog('partner deleted (tombstone) → pruning dead link', p.partnerUid);
+          var gg=gdState(); gg.pairs=(gg.pairs||[]).filter(function(x){return x.id!==p.id;});
+          try{ FB.db.ref('pairs/'+FB.uid+'/'+p.partnerUid).remove(); }catch(e){}
+          saveStore();
+          try{ var sh=document.getElementById('sh-circles'); if(sh&&sh.classList.contains('open'))gdRenderList(); }catch(e){}
+        }
+      }).catch(function(){}); }catch(e){}
+    });
+  }catch(e){}
 }
 /* Targeted closed-app push to every paired SHOMER (alarmFanout Cloud Function delivers it). */
 function fbAlertPairedSos(){
