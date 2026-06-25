@@ -5592,7 +5592,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v48';
+var APP_VER='v49';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -5654,16 +5654,13 @@ function renderFbStatus(){
   // Status is driven by the SOCKET (data layer), NOT by auth — auth is best-effort.
   // Only a DATA-layer failure (SDK load / socket) is an error; an auth error never is.
   var failed=FB.err && !FB.ready;
-  if(failed){ state='offline'; msg=(he?'תקלת חיבור · ':ar?'خطأ في الاتصال · ':'Connection error · ')+FB.err+(he?' — הקש/י לפרטים':ar?' — اضغط للتفاصيل':' — tap for details'); }
-  else if(!FB.ready){ state='connecting'; msg=he?'מתחבר…':ar?'جارٍ الاتصال…':'Connecting…'; }
-  else if(!FB.connected){ state='offline'; msg=he?'הסוקט מתחבר…':ar?'يتصل بالسوكِت…':'Socket connecting…'; }
-  else {
-    state='connected';
-    var n=FB.near||0;
-    var nearTxt=he?(n+' שומרים בקרבת מקום'):ar?(n+' حُرّاس بالقرب منك'):(n+' SHOMERs nearby');
-    var listen=he?'מאזין ל-SOS ✓':ar?'يستمع لنداءات الاستغاثة ✓':'listening for SOS ✓';
-    msg=(he?'מחובר · ':ar?'متصل · ':'Connected · ')+nearTxt+' · '+listen;
-  }
+  // The ALWAYS-ON pill is kept COMPACT (a dot + one short word) so it never covers
+  // the map legend / zoom controls. The detail (N nearby · listening · errors) lives
+  // in the TAPPABLE diagnostic panel.
+  if(failed){ state='offline'; msg=he?'תקלה — הקש/י':ar?'خطأ — اضغط':'Error — tap'; }
+  else if(!FB.ready){ state='connecting'; msg=he?'מתחבר…':ar?'جارٍ…':'Connecting…'; }
+  else if(!FB.connected){ state='offline'; msg=he?'מתחבר…':ar?'جارٍ…':'Connecting…'; }
+  else { state='connected'; msg=he?'מחובר':ar?'متصل':'Connected'; }
   el.classList.remove('connected','connecting','offline'); el.classList.add(state);
   if(txt)txt.textContent=msg;
   updateDiagPanel();
