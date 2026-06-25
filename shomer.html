@@ -5625,7 +5625,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v51';
+var APP_VER='v52';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -5787,14 +5787,18 @@ async function fbInit(){
     if(!FB.ready){ if(!FB.err){ FB.err=FB.sdkLoaded?'socket-timeout (no response 20s)':'sdk-timeout (no response 20s)'; } fbLog('WATCHDOG fired · data layer not ready ·', FB.err, '· sdkLoaded =', FB.sdkLoaded); try{renderFbStatus();}catch(e){} }
   },20000);
   try{
-    // 1) Load the SDK (CSP/network failures named here)
+    // 1) Load ONLY app + database SDK (NOT auth). With firebase-auth NOT loaded,
+    //    the RTDB connection has no auth-token provider to wait on — so the socket
+    //    opens immediately, unauthenticated. (Loading auth-compat registers a token
+    //    provider that the connection blocks on; on iOS reopen that token resolution
+    //    hangs and defers the socket — the returning-session bug. Rules are open, so
+    //    no token is needed. Auth loads LAST, in the background, only for a uid.)
     try{
       if(!window.firebase||!window.firebase.database){
         await fbLoad('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js');
-        await fbLoad('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js');
         await fbLoad('https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js');
       }
-      FB.sdkLoaded=true; fbLog('SDK loaded');
+      FB.sdkLoaded=true; fbLog('SDK loaded (app+database; auth deferred)');
     }catch(e){ FB.sdkLoaded=false; FB.err='sdk-load:'+(e&&e.message||e); fbLog('SDK LOAD FAILED (CSP/network?):', e); throw e; }
 
     if(!window.firebase.apps.length)window.firebase.initializeApp(window.SHOMER_FB);
@@ -5841,52 +5845,43 @@ function fbClientId(){
   try{ var k='shomerCID', v=localStorage.getItem(k); if(!v){ v='cid-'+Math.random().toString(36).slice(2,10)+Math.random().toString(36).slice(2,6); localStorage.setItem(k,v); } return v; }
   catch(e){ if(!FB._memCid)FB._memCid='cid-'+Math.random().toString(36).slice(2,10); return FB._memCid; }
 }
-/* Anonymous auth is OPTIONAL now (for future per-user scoping + App Check). It
-   runs in the background and NEVER blocks presence/SOS. On success we record the
-   auth uid SEPARATELY (FB.authUid); the presence/SOS key stays the stable device
-   id so a late-resolving auth doesn't churn the presence node. */
+/* Anonymous auth is fully OPTIONAL — the rules are open, so the socket + presence +
+   SOS already work without it. It runs in the BACKGROUND only, AFTER the data layer
+   is up, purely to obtain a uid for guardian pairing. It loads firebase-auth LAZILY
+   (so the auth-token provider can't wedge the RTDB connection on reopen) and never
+   gates or blocks anything. The presence/SOS key stays the stable device id. */
 async function fbTryAuthBestEffort(){
   try{
+    // Load auth-compat now (deferred from the initial connect path).
+    if(!(window.firebase&&window.firebase.auth)){
+      try{ await fbLoad('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js'); }
+      catch(e){ FB.authState='auth-skipped (sdk)'; fbLog('auth SDK not loaded (optional, data flows):',(e&&e.message)||e); try{renderFbStatus();}catch(_){ } return; }
+    }
     var auth=window.firebase.auth();
     var P=window.firebase.auth.Auth.Persistence;
-    async function tryPersist(mode,name){ try{ await auth.setPersistence(mode); FB.persist=name; return true; }catch(e){ fbLog('persistence "'+name+'" blocked:', (e&&e.code)||e); return false; } }
-    if(!(await tryPersist(P.LOCAL,'local'))){ if(!(await tryPersist(P.SESSION,'session'))){ await tryPersist(P.NONE,'memory'); } }
+    try{ await auth.setPersistence(P.LOCAL); FB.persist='local'; }
+    catch(e){ try{ await auth.setPersistence(P.NONE); FB.persist='memory'; }catch(_){ } }
     function signInTO(ms){ return Promise.race([ auth.signInAnonymously(), new Promise(function(_,rej){ setTimeout(function(){ var e=new Error('sign-in timed out'); e.code='auth-timeout'; rej(e); }, ms); }) ]); }
-    // Wait for any PERSISTED session to finish restoring (it's async) before deciding,
-    // with a timeout so a hung/ITP-blocked restore can't stall us.
-    var user=await new Promise(function(res){ var done=false,unsub; try{ unsub=auth.onAuthStateChanged(function(u){ if(!done){ done=true; try{unsub();}catch(e){} res(u||null); } }); }catch(e){ res(auth.currentUser||null); } setTimeout(function(){ if(!done){ done=true; try{unsub&&unsub();}catch(e){} res(auth.currentUser||null); } },4000); });
-    if(user){
-      // RETURNING SESSION: validate the restored token. A stale/expired token that
-      // can't refresh (iOS ITP) blocks the RTDB connection on reopen — this is the
-      // "first launch connects, reopen doesn't, reset fixes it" bug. Force-refresh;
-      // if it fails, discard the dead session and sign in fresh (NO data wipe).
-      try{ await user.getIdToken(true); fbLog('restored session valid · token refreshed · uid', user.uid); }
-      catch(reErr){ fbLog('restored token refresh FAILED → fresh sign-in:', (reErr&&reErr.code)||reErr); try{ await auth.signOut(); }catch(e){} user=null; }
-    }
-    if(!user){ try{ user=(await signInTO(12000)).user; }catch(e1){ fbLog('anon auth attempt 1 failed (non-fatal):',(e1&&e1.code)||e1); await new Promise(r=>setTimeout(r,1800)); user=(await signInTO(15000)).user; } }
-    FB.authUid=user.uid; FB.authState='ok'; fbLog('auth ready (best-effort) · authUid =', user.uid);
-    try{ auth.onAuthStateChanged(function(u){ if(u&&u.uid)FB.authUid=u.uid; }); }catch(e){}
-    // Auth is valid now → clear any stale permission denial and (re)publish presence
-    // so a returning session re-establishes its full data flow, not just the socket.
-    try{ FB.permErr=null; if(FB.ready){ FB.db&&FB.db.goOnline&&FB.db.goOnline(); fbPublishPresence(); } }catch(e){}
-  }catch(e){ FB.authState='auth-err:'+((e&&e.code)||e); fbLog('anon auth FAILED (best-effort — data still flows):',(e&&e.code)||e); }
+    // Use a restored session if present; otherwise sign in fresh — but NEVER block on
+    // it (no getIdToken refresh that can hang on iOS). Timeout-guarded, non-fatal.
+    var user=auth.currentUser;
+    if(!user){ try{ user=(await signInTO(15000)).user; }catch(e1){ fbLog('anon auth failed (optional, data still flows):',(e1&&e1.code)||e1); } }
+    if(user){ FB.authUid=user.uid; FB.authState='ok'; fbLog('auth uid ready (optional · for pairing) =', user.uid); try{ auth.onAuthStateChanged(function(u){ if(u&&u.uid)FB.authUid=u.uid; }); }catch(e){} }
+    else { FB.authState='auth-skipped'; }
+  }catch(e){ FB.authState='auth-err:'+((e&&e.code)||e); fbLog('auth background error (optional, data flows anyway):',(e&&e.code)||e); }
   try{renderFbStatus();}catch(e){}
 }
 /* CONNECTION SELF-HEAL — if the RTDB socket is STILL down a few seconds after init,
-   the usual culprit on reopen is a stale persisted auth token wedging the connection
-   (exactly what "reset account" cleared). Do that automatically — drop the token,
-   bounce the socket, sign in fresh — WITHOUT wiping any user data. Runs once. */
+   bounce the connection (goOffline → goOnline) to force a clean reconnect. This is
+   AUTH-INDEPENDENT now (rules are open; auth never gates the socket). If a stale
+   persisted auth session is loaded, drop it too — best-effort, never required. Once. */
 async function fbHealConnection(){
   if(FB._healed)return; FB._healed=true;
   try{
-    if(!window.firebase||!window.firebase.auth)return;
-    var auth=window.firebase.auth();
-    fbLog('SELF-HEAL: socket down → signOut + bounce + fresh anon (no data reset)');
-    try{ await auth.signOut(); }catch(e){}                                  // drop any stale token
+    fbLog('SELF-HEAL: socket down → bounce connection (auth-independent)');
+    try{ if(window.firebase&&window.firebase.auth){ window.firebase.auth().signOut().catch(function(){}); } }catch(e){} // drop any wedged session (harmless, rules open)
     try{ FB.db&&FB.db.goOffline&&FB.db.goOffline(); }catch(e){}
-    try{ FB.db&&FB.db.goOnline&&FB.db.goOnline(); }catch(e){}               // bounce the connection clean
-    try{ var u=(await auth.signInAnonymously()).user; FB.authUid=u.uid; FB.authState='ok'; fbLog('SELF-HEAL: fresh anon OK', u.uid); }
-    catch(e){ fbLog('SELF-HEAL anon failed (socket still retries unauth):',(e&&e.code)||e); }
+    try{ FB.db&&FB.db.goOnline&&FB.db.goOnline(); }catch(e){}               // clean reconnect
     try{ FB.permErr=null; if(FB.ready)fbPublishPresence(); renderFbStatus(); }catch(e){}
   }catch(e){ fbLog('SELF-HEAL error:', (e&&e.message)||e); }
 }
