@@ -5590,7 +5590,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v45';
+var APP_VER='v46';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -5937,9 +5937,28 @@ function querySwVersion(){
  try{
  if(!('serviceWorker' in navigator)||!navigator.serviceWorker.controller){ FB.swVer='no-controller'; try{updateDiagPanel();}catch(e){} return; }
  var ch=new MessageChannel();
- ch.port1.onmessage=function(ev){ FB.swVer=ev.data||'?'; fbLog('controlling SW version =', FB.swVer, '· app =', APP_VER); try{updateDiagPanel();}catch(e){} };
+ ch.port1.onmessage=function(ev){ FB.swVer=ev.data||'?'; fbLog('controlling SW version =', FB.swVer, '· app =', APP_VER); maybeSelfHeal(); try{updateDiagPanel();}catch(e){} };
  navigator.serviceWorker.controller.postMessage('version',[ch.port2]);
  }catch(e){ FB.swVer='err'; }
+}
+/* SELF-HEAL — if an OLDER service worker is controlling this (already-current,
+   network-first-loaded) HTML, the phone is on a stale/sticky SW. Clear it ONCE
+   per session (sessionStorage-guarded so it can NEVER loop) so the latest worker
+   takes over cleanly. This runs at page load, long before fbInit's connect
+   window, so it never interrupts an established connection. If sessionStorage is
+   blocked, we skip the auto-heal — the manual "Force-update to latest" button and
+   the ?fresh / reset.html escapes still work. */
+function maybeSelfHeal(){
+ try{
+ var sw=FB.swVer;
+ if(!sw||sw==='?'||sw==='no-controller'||sw==='err'||sw==='no-sw-support') return;
+ if(sw===APP_VER){ FB.swStale=false; return; } // already on the latest SW — nothing to do
+ FB.swStale=true;
+ if(sessionStorage.getItem('shomerSwHealed')==='1') return; // already healed this session — never loop
+ sessionStorage.setItem('shomerSwHealed','1');
+ fbLog('SELF-HEAL: stale SW',sw,'≠ app',APP_VER,'→ clearing once');
+ forceFreshReload();
+ }catch(e){ /* storage blocked → skip auto-heal; manual escapes remain */ }
 }
 /* Guaranteed escape from a stale cached build: drop EVERY SW + cache on this
    origin, then reload a clean URL so a fresh sw.js + shomer.html come straight
