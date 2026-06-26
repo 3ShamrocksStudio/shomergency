@@ -24,14 +24,23 @@ function distM(aLat, aLng, bLat, bLng) {
 exports.sosFanout = onValueCreated('/sos/{id}', async (event) => {
   const sos = event.data.val();
   if (!sos || sos.resolved || sos.lat == null) return;
-  const toks = (await db.ref('tokens').get()).val() || {};
-  const tokens = [];
+  // Targets = every PAIRED guardian (always, any distance) + every NEARBY SHOMER (≤5 km).
+  const [toksSnap, pairsSnap] = await Promise.all([
+    db.ref('tokens').get(),
+    db.ref('pairs/' + sos.uid).get()
+  ]);
+  const toks = toksSnap.val() || {};
+  const paired = new Set(pairsSnap.val() ? Object.keys(pairsSnap.val()) : []);
+  const tokenSet = new Set();
   Object.keys(toks).forEach((uid) => {
     if (uid === sos.uid) return;
     const t = toks[uid];
     if (!t || !t.token) return;
-    if (t.lat == null || distM(sos.lat, sos.lng, t.lat, t.lng) <= 5000) tokens.push(t.token);
+    const isPaired = paired.has(uid);
+    const isNear = t.lat == null || distM(sos.lat, sos.lng, t.lat, t.lng) <= 5000;
+    if (isPaired || isNear) tokenSet.add(t.token);
   });
+  const tokens = [...tokenSet];
   if (!tokens.length) return;
   const type = sos.type && sos.type !== 'unknown' ? ' · ' + sos.type : '';
   await admin.messaging().sendEachForMulticast({

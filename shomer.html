@@ -5754,7 +5754,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v53';
+var APP_VER='v54';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -5831,13 +5831,13 @@ function fmtClock(ts){ try{ var d=new Date(ts), p=function(x){return(x<10?'0':''
 function toggleDiagPanel(force){ var p=document.getElementById('diag-panel'); if(!p)return; var open=(force===undefined)?!p.classList.contains('on'):!!force; p.classList.toggle('on',open); p.setAttribute('aria-hidden',String(!open)); if(open)updateDiagPanel(); }
 function updateDiagPanel(){
   var p=document.getElementById('diag-panel'); if(!p)return; var he=currentLang==='he', ar=currentLang==='ar';
-  // AUTH (anonymous sign-in) — OPTIONAL now: data flows without it, so a failure
-  // is amber (informational), never red. Shows ok ✓ or the NAMED error code.
+  // AUTH — intentionally OFF (open rules · device-id identity). Not an error.
   var au=document.getElementById('diag-auth');
   if(au){ var atxt, acol;
     if(FB.authState==='ok'){ atxt='ok ✓'; acol='var(--grn)'; }
+    else if(typeof FB.authState==='string' && FB.authState.indexOf('off')===0){ atxt=(he?'כבוי (לא נדרש)':ar?'مُعطّل (غير مطلوب)':'off (not needed)'); acol='var(--tx3)'; }
     else if(FB.authState==='connecting'||!FB.authState){ atxt=(he?'לא חובה · מנסה…':ar?'اختياري · جارٍ…':'optional · trying…'); acol='var(--amb)'; }
-    else { atxt=FB.authState+(he?' · לא חובה':ar?' · اختياري':' · optional'); acol='var(--amb)'; } // e.g. auth-err:auth/network-request-failed — non-fatal
+    else { atxt=FB.authState+(he?' · לא חובה':ar?' · اختياري':' · optional'); acol='var(--amb)'; }
     au.textContent=atxt; au.style.color=acol; }
   setText('diag-uid', FB.uid?(FB.uid.slice(0,14)):'—');
   // RTDB SOCKET (.info/connected) — THE real connection indicator, fully separate
@@ -5889,10 +5889,41 @@ function explainStatus(){
 }
 /* User-gesture push opt-in (iOS requires a tap; safe to call repeatedly). */
 function enablePush(){ try{ if('Notification' in window && Notification.permission==='default'){ Notification.requestPermission().then(function(){ try{registerPush();}catch(e){} renderFbStatus(); }); } else { try{registerPush();}catch(e){} } }catch(e){} }
-/* Resume-from-background: the RTDB websocket + listeners auto-reconnect, but we re-publish presence
-   and refresh the status so each device immediately shows it's live + listening again. */
-document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='visible'){ if(FB.ready){ try{fbPublishPresence();}catch(e){} } renderFbStatus(); } });
-window.addEventListener('focus',function(){ if(FB.ready){ try{fbPublishPresence();}catch(e){} } renderFbStatus(); });
+/* RESUME / COLD-REOPEN RECONNECT — the real-phone "first open connects, reopen
+   doesn't (only reset fixes it)" bug. On a cold relaunch the OS has killed the RTDB
+   websocket; the SDK's reconnect timers were frozen while suspended and don't always
+   resume, so .info/connected stays false until a hard reset. fbEnsureConnected()
+   BOUNCES the connection (goOffline → goOnline) whenever the app is active but the
+   socket is down — which forces a clean reconnect and re-publishes presence. This is
+   idempotent, debounced, and AUTH-INDEPENDENT (rules are open). Wired to every resume
+   path: visibility, focus, pageshow (incl. bfcache restore), network online, + a
+   lightweight watchdog while visible. */
+function fbEnsureConnected(reason){
+  if(!FB.ready||!FB.db){ return; }
+  if(FB.connected){ return; }
+  var now=Date.now(); if(FB._lastBounce && (now-FB._lastBounce)<3000) return; FB._lastBounce=now;
+  fbLog('ensureConnected: socket down ('+(reason||'')+') → bounce goOffline/goOnline');
+  try{ FB.db.goOffline&&FB.db.goOffline(); }catch(e){}
+  try{ FB.db.goOnline&&FB.db.goOnline(); }catch(e){}
+  try{ fbPublishPresence(); }catch(e){}
+  try{ renderFbStatus(); }catch(e){}
+  // If the bounce alone didn't bring it back shortly, fbInit was never run this
+  // session (true cold load handles that itself) — re-run it to rebuild listeners.
+  setTimeout(function(){ if(FB.ready && !FB.connected){ try{ FB.db.goOnline&&FB.db.goOnline(); }catch(e){} } }, 2500);
+}
+function fbOnResume(reason){
+  // If the data layer was never initialised this session, initialise it; otherwise
+  // make sure the socket is alive. Either way, refresh presence + status.
+  if(!FB.ready && !FB._initing){ try{ fbInit(); }catch(e){} }
+  else { fbEnsureConnected(reason); if(FB.connected){ try{fbPublishPresence();}catch(e){} } }
+  try{ renderFbStatus(); }catch(e){}
+}
+document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='visible') fbOnResume('visible'); });
+window.addEventListener('focus',function(){ fbOnResume('focus'); });
+window.addEventListener('pageshow',function(ev){ fbOnResume(ev&&ev.persisted?'pageshow-bfcache':'pageshow'); });
+window.addEventListener('online',function(){ fbOnResume('online'); });
+// Watchdog: while the app is visible, if the socket is down, keep nudging it back.
+setInterval(function(){ if(document.visibilityState==='visible' && FB.ready && !FB.connected){ fbEnsureConnected('watchdog'); } },8000);
 // keep the diagnostic panel live (RTDB state, clock) while it's open
 setInterval(function(){ var p=document.getElementById('diag-panel'); if(p&&p.classList.contains('on'))updateDiagPanel(); },3000);
 try{ renderFbStatus(); }catch(e){}
@@ -5952,8 +5983,15 @@ async function fbInit(){
     // Prune any pair whose partner has deleted their account (tombstone check).
     setTimeout(function(){ try{ fbPrunePairsByTombstone(); }catch(e){} },3000);
 
-    // 3) ── ANON AUTH — BEST-EFFORT, BACKGROUND, NEVER BLOCKS THE DATA LAYER ─────
-    fbTryAuthBestEffort();
+    // 3) ── NO AUTH ON THE CONNECT PATH (root-cause fix for the reopen bug) ──────
+    //    Anonymous auth is intentionally NOT used. The rules are open; the device-id
+    //    (clientId) is the identity for presence / SOS / pairing; and FB.authUid was
+    //    never read anywhere. Loading firebase-auth only RISKED a stale restored token
+    //    wedging the RTDB connection on a cold reopen (the "reset fixes it" bug). By
+    //    not loading auth at all, NO token ever attaches and the socket reconnects
+    //    cleanly on every relaunch. (Re-enable a proper auth + App Check before
+    //    re-tightening the rules for public launch.)
+    FB.authState='off (open rules · device id)';
 
     // 4) ── SOCKET SELF-DIAGNOSIS ──────────────────────────────────────────────
     //    If the RTDB socket hasn't come up within 6s, run a raw WebSocket probe
@@ -5962,9 +6000,9 @@ async function fbInit(){
     setTimeout(function(){ if(!FB.connected && !FB.wsProbe){ fbLog('socket still down after 6s → probing'); fbProbeSocket(); } },6000);
 
     // 5) ── RETURNING-SESSION SELF-HEAL ─────────────────────────────────────────
-    //    If the socket is STILL down at 10s, auto-heal (signOut + bounce + fresh
-    //    anon) — fixes the "reopen won't reconnect, only reset works" bug WITHOUT
-    //    wiping data. Skipped entirely when the socket connects normally.
+    //    If the socket is STILL down at 10s, bounce the connection (goOffline →
+    //    goOnline). Combined with the resume handlers + watchdog, this fixes the
+    //    "reopen won't reconnect, only reset works" bug. No auth, no data wipe.
     setTimeout(function(){ if(!FB.connected){ fbHealConnection(); } },10000);
   }catch(e){ if(FB._watchdog){ clearTimeout(FB._watchdog); FB._watchdog=null; } FB.err=FB.err||('init:'+((e&&e.code)||(e&&e.message)||e)); fbLog('INIT FAILED ·', FB.err, e); renderFbStatus(); }
   FB._initing=false;
