@@ -7,9 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="שומר">
-<meta http-equiv="X-Content-Type-Options" content="nosniff">
-<meta http-equiv="X-Frame-Options" content="DENY">
-<meta http-equiv="Referrer-Policy" content="no-referrer">
+<meta http-equiv="X-Content-Type-Options" content="nosniff"><meta http-equiv="Referrer-Policy" content="no-referrer">
 <!-- CSP: no eval. Allows Leaflet (cdnjs) + OpenStreetMap tiles at runtime; everything else self-hosted. -->
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://cdnjs.cloudflare.com https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com; connect-src 'self' https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://*.googleapis.com https://fcmregistrations.googleapis.com https://firebaseinstallations.googleapis.com https://router.project-osrm.org https://*.firebaseio.com wss://*.firebaseio.com https://shomergency-default-rtdb.firebaseio.com wss://shomergency-default-rtdb.firebaseio.com https://*.firebasedatabase.app wss://*.firebasedatabase.app https://*.firebaseapp.com; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://www.gstatic.com; manifest-src 'self'; worker-src 'self';">
 <title>SHOMER · שומר — Citizens Protecting Citizens</title>
@@ -299,6 +297,11 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 .ddr-em:hover{background:linear-gradient(135deg,rgba(224,32,50,1),rgba(168,20,36,1));}
 .ddr-em .dd-ic{color:#fff;}
 .ddr-em span{color:#fff;font-weight:800;}
+/* Emergency Guide — emphasized like the emergency-numbers item, but GREEN (first-aid/medical) */
+.ddr-guide{background:linear-gradient(135deg,rgba(13,148,82,.96),rgba(8,110,60,.96));border-bottom:none;}
+.ddr-guide:hover{background:linear-gradient(135deg,rgba(20,170,98,1),rgba(10,126,70,1));}
+.ddr-guide .dd-ic{color:#fff;}
+.ddr-guide span{color:#fff;font-weight:800;}
 .dd-sep{height:1px;background:var(--b2);margin:4px 0;}
 /* DMS badge in menu */
 .dms-badge{margin-right:auto;background:rgba(14,136,64,.15);color:#40C880;border:1px solid rgba(14,136,64,.3);border-radius:4px;padding:1px 7px;font-size:10px;font-weight:700;}
@@ -672,6 +675,11 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
 .t-x{color:rgba(255,255,255,.4);font-size:16px;cursor:pointer;flex-shrink:0;padding:0 2px;}
 @keyframes tin{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
 
+/* CALM connectivity banner — only for a SUSTAINED outage; never for brief reconnects */
+.conn-banner{position:fixed;top:calc(var(--hdr-top,0px) + var(--hdr) + 6px);left:50%;transform:translateX(-50%);z-index:9550;display:none;align-items:center;gap:8px;max-width:92vw;padding:8px 14px;border-radius:999px;background:rgba(20,30,48,.96);backdrop-filter:blur(10px);border:1px solid var(--b3);box-shadow:0 6px 22px rgba(0,0,0,.4);font-size:12px;font-weight:600;color:var(--tx1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;animation:tin .2s ease;}
+.conn-banner.on{display:flex;}
+.conn-banner .cb-dot{width:8px;height:8px;border-radius:50%;background:var(--amb);flex:0 0 auto;animation:fbpulse 1.6s ease-out infinite;}
+.conn-banner.off-net .cb-dot{background:var(--r3);}
 /* iOS INSTALL BANNER — prominent, until installed (keeps you logged in + alerts) */
 .ios-install{position:fixed;bottom:calc(var(--nav) + 8px);left:10px;right:10px;z-index:9600;background:linear-gradient(135deg,#1b2c4e,#0A1628);border:1.5px solid color-mix(in srgb,var(--g3) 45%,var(--b3));border-radius:var(--r16);padding:14px 15px 15px;box-shadow:0 14px 40px rgba(0,0,0,.5);animation:tin .24s ease;}
 .ios-install .iz-top{display:flex;align-items:flex-start;gap:11px;}
@@ -6064,6 +6072,14 @@ function diagReport(){
  add('RTDB ready', (typeof FB!=='undefined'&&FB.ready?'yes':'no'), (typeof FB!=='undefined'&&FB.ready?'ok':'warn'));
  add('RTDB socket', (typeof FB!=='undefined'&&FB.connected?'connected':'not connected'), (typeof FB!=='undefined'&&FB.connected?'ok':'bad'));
  add('ever connected?', (typeof FB!=='undefined'&&FB._everConnected?'yes':'no'), (typeof FB!=='undefined'&&FB._everConnected?'ok':'warn'));
+ // Self-healing monitor: current state + recovery counters + recent transitions
+ try{ if(typeof fbHealth!=='undefined'){
+   var secs=Math.round((Date.now()-fbHealth.since)/1000);
+   add('health state', fbHealth.state+' ('+secs+'s)', (fbHealth.state==='connected'?'ok':(fbHealth.state==='offline'||fbHealth.state==='outage'?'bad':'warn')));
+   add('recover attempts', fbHealth.attempts+' · backoff '+Math.round(fbHealth.backoff/1000)+'s', '');
+   var hist=(fbHealth.history||[]).slice(-5).map(function(h){ return h.to; }).join(' → ');
+   add('health transitions', hist||'—', '');
+ } }catch(e){}
  add('auth', (typeof FB!=='undefined'&&FB.authState)||'—');
  add('WS probe', (typeof FB!=='undefined'&&FB.wsProbe)||'(not run)', (typeof FB!=='undefined'&&/open ✓/.test(FB.wsProbe||'')?'ok':(/blocked|closed|timeout/.test((FB&&FB.wsProbe)||'')?'bad':'')));
  add('CSP block', (typeof FB!=='undefined'&&FB.csp)||'none', (typeof FB!=='undefined'&&FB.csp?'bad':'ok'));
@@ -6120,7 +6136,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v62';
+var APP_VER='v63';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -6240,9 +6256,15 @@ function updateDiagPanel(){
     bd.textContent='app '+APP_VER+' · SW '+sw; bd.style.color=stale?'var(--amb)':(sw===APP_VER?'var(--grn)':'var(--tx2)'); }
 }
 function explainStatus(){
-  var he=currentLang==='he';
-  if(!FB.ready){ toast(he?'מתחבר לשירות החי…':'Connecting to the live service…',''); return; }
-  if(!FB.connected){ toast(he?'אין חיבור לרשת כרגע. כשהחיבור יחזור, נתחבר אוטומטית.':'No network right now. We\'ll reconnect automatically.','amb'); return; }
+  var he=currentLang==='he', ar=currentLang==='ar';
+  if(!FB.ready){ toast(he?'מתחבר לשירות החי…':ar?'جارٍ الاتصال بالخدمة…':'Connecting to the live service…',''); return; }
+  if(!FB.connected){
+    // Be ACCURATE: only say "no internet" if the DEVICE is offline. If the device is
+    // online it's just the live socket re-establishing — say so calmly (no scare).
+    if(!navigator.onLine){ toast(he?'אין חיבור לאינטרנט — נתחבר אוטומטית כשהרשת תחזור.':ar?'لا يوجد إنترنت — سنتصل تلقائيًا عند عودة الشبكة.':'No internet — we\'ll reconnect automatically when the network is back.','amb'); }
+    else { toast(he?'מתחבר מחדש לשירות החי… (פעולה אוטומטית, האפליקציה פעילה)':ar?'إعادة الاتصال بالخدمة الحية… تلقائيًا':'Reconnecting to the live service… (automatic — the app is working)',''); }
+    return;
+  }
   var lines=[];
   lines.push(he?('✓ מחובר ומאזין ל-SOS — '+(FB.near||0)+' שומרים פעילים בקרבת מקום'):('✓ Connected & listening — '+(FB.near||0)+' active SHOMERs nearby'));
   var ps=FB.pushState;
@@ -6255,58 +6277,107 @@ function explainStatus(){
 }
 /* User-gesture push opt-in (iOS requires a tap; safe to call repeatedly). */
 function enablePush(){ try{ if('Notification' in window && Notification.permission==='default'){ Notification.requestPermission().then(function(){ try{registerPush();}catch(e){} renderFbStatus(); }); } else { try{registerPush();}catch(e){} } }catch(e){} }
-/* RESUME / COLD-REOPEN RECONNECT — the real-phone "first open connects, reopen
-   doesn't (only reset fixes it)" bug. On a cold relaunch the OS has killed the RTDB
-   websocket; the SDK's reconnect timers were frozen while suspended and don't always
-   resume, so .info/connected stays false until a hard reset. fbEnsureConnected()
-   BOUNCES the connection (goOffline → goOnline) whenever the app is active but the
-   socket is down — which forces a clean reconnect and re-publishes presence. This is
-   idempotent, debounced, and AUTH-INDEPENDENT (rules are open). Wired to every resume
-   path: visibility, focus, pageshow (incl. bfcache restore), network online, + a
-   lightweight watchdog while visible. */
-function fbEnsureConnected(reason){
-  if(!FB.ready||!FB.db){ return; }
-  if(FB.connected){ return; }
-  // CRITICAL: do NOT bounce (goOffline) while the FIRST connection is still being
-  // established. On a high-latency mobile network the RTDB SDK can take 10-20s to
-  // reach .info/connected; goOffline() would ABORT it and, fired repeatedly, create a
-  // permanent abort→restart loop where the socket never finishes connecting — the real
-  // "disconnected forever" bug. goOnline() is a safe, idempotent nudge that never
-  // aborts an in-flight connection, so use only that until we've connected at least once.
-  try{ FB.db.goOnline&&FB.db.goOnline(); }catch(e){}
-  if(FB._everConnected){
-    // We WERE connected and the socket dropped (e.g. resume after suspension) — a single
-    // goOffline→goOnline bounce is safe here and forces a clean reconnect. Debounced long.
-    var now=Date.now(); if(!FB._lastBounce || (now-FB._lastBounce)>=15000){ FB._lastBounce=now;
-      fbLog('ensureConnected: dropped after being up ('+(reason||'')+') → single bounce');
-      try{ FB.db.goOffline&&FB.db.goOffline(); }catch(e){}
-      try{ FB.db.goOnline&&FB.db.goOnline(); }catch(e){}
-    }
-  } else {
-    fbLog('ensureConnected: initial connect still in progress ('+(reason||'')+') — letting the SDK finish (no bounce)');
+/* ════════════ SELF-HEALING CONNECTION LAYER ════════════
+   ONE autonomous monitor keeps the live connection healthy WITHOUT user action and
+   WITHOUT scary banners. It (a) distinguishes DEVICE-offline (navigator.onLine) from the
+   RTDB socket merely re-establishing; (b) recovers silently with backoff and NEVER aborts
+   an in-progress connect; (c) re-publishes presence on recovery; (d) nudges a stale SW;
+   (e) shows a CALM banner ONLY on a SUSTAINED outage, auto-dismissed the instant the
+   socket returns. Health-state transitions are logged for the hidden ?diag view. */
+var fbHealth={ state:'init', since:Date.now(), downAt:0, lastTry:0, backoff:2000, attempts:0, history:[], _swNudge:0, _bounced:false };
+function fbHealthSet(state,reason){
+  if(fbHealth.state!==state){
+    try{ fbHealth.history.push({ t:Date.now(), to:state, from:fbHealth.state, reason:reason||'' }); if(fbHealth.history.length>24) fbHealth.history.shift(); }catch(e){}
+    fbHealth.state=state; fbHealth.since=Date.now();
+    fbLog('HEALTH →', state, reason?('('+reason+')'):'');
   }
-  try{ fbPublishPresence(); }catch(e){}
-  try{ renderFbStatus(); }catch(e){}
 }
+/* Calm connectivity banner — shown ONLY by the monitor on a sustained outage; instant
+   auto-dismiss on reconnect. Accurate: device-offline vs server re-establishing. */
+function fbConnBanner(show,offNet){
+  var el=document.getElementById('conn-banner');
+  if(!el){ if(!show) return; el=document.createElement('div'); el.id='conn-banner'; el.className='conn-banner'; el.setAttribute('role','status'); el.setAttribute('aria-live','polite'); el.innerHTML='<span class="cb-dot" aria-hidden="true"></span><span id="cb-txt"></span>'; document.body.appendChild(el); }
+  if(!show){ el.classList.remove('on'); return; }
+  var he=currentLang==='he', ar=currentLang==='ar';
+  el.classList.toggle('off-net',!!offNet);
+  var t=offNet ? (he?'אין חיבור לאינטרנט — נתחבר אוטומטית':ar?'لا إنترنت — سنتصل تلقائيًا':'No internet — reconnecting automatically')
+               : (he?'מתחבר מחדש לשירות החי…':ar?'إعادة الاتصال بالخدمة…':'Reconnecting to the live service…');
+  var tx=document.getElementById('cb-txt'); if(tx)tx.textContent=t;
+  el.classList.add('on');
+}
+/* SILENT recovery. The Firebase RTDB SDK already auto-reconnects with its own backoff —
+   battle-tested in production — so our job is to ASSIST, never to fight it. We therefore:
+   • do a plain goOnline() nudge (idempotent; ensures we're not stuck in a forced-offline state),
+   • NEVER call goOffline() routinely — a bounce mid-reconnect aborts the in-progress connect
+     (the exact failure Dave hit). We reserve a SINGLE clean bounce for a LONG sustained outage
+     (>30s) and do it at most once per outage, as a last resort. */
+function fbHealthRecover(){
+  if(!FB.ready||!FB.db||FB.connected) return;
+  var now=Date.now();
+  if(fbHealth.lastTry && (now-fbHealth.lastTry)<fbHealth.backoff) return;
+  fbHealth.lastTry=now; fbHealth.attempts++;
+  try{ FB.db.goOnline&&FB.db.goOnline(); }catch(e){}                 // safe nudge — never aborts a connect
+  // LAST-RESORT single bounce: only if we were connected before, the outage is long (>30s),
+  // and we haven't already bounced this outage. This breaks a genuinely wedged socket without
+  // thrashing the SDK's own reconnect on every tick.
+  var outageMs = fbHealth.downAt ? (now-fbHealth.downAt) : 0;
+  if(FB._everConnected && outageMs>30000 && !fbHealth._bounced){
+    fbHealth._bounced=true;
+    try{ FB.db.goOffline&&FB.db.goOffline(); }catch(e){}
+    setTimeout(function(){ try{ FB.db.goOnline&&FB.db.goOnline(); }catch(e){} }, 600);
+  }
+  // Presence/SOS listeners persist across reconnects (the SDK re-fires them) and the
+  // .info/connected listener re-arms onDisconnect + re-publishes on reconnect.
+  try{ fbPublishPresence(); }catch(e){}
+  fbHealth.backoff=Math.min(Math.round(fbHealth.backoff*1.6), 20000);
+}
+function fbHealthSwNudge(){
+  try{ var now=Date.now(); if(now-fbHealth._swNudge<60000) return; fbHealth._swNudge=now;
+    if('serviceWorker' in navigator) navigator.serviceWorker.getRegistration().then(function(r){ if(r){ try{r.update();}catch(e){} } }).catch(function(){});
+  }catch(e){}
+}
+/* The autonomous monitor tick — the permanent backbone of connection resilience. */
+function fbHealthTick(){
+  try{
+    if(!FB.ready){ if(!FB._initing){ try{fbInit();}catch(e){} } fbHealthSet('init','data layer not ready'); return; }
+    if(FB.connected){
+      fbHealth.downAt=0; fbHealth.attempts=0; fbHealth.backoff=2000; fbHealth._bounced=false;
+      fbHealthSet('connected'); fbConnBanner(false);
+      return;
+    }
+    if(!fbHealth.downAt) fbHealth.downAt=Date.now();
+    var downMs=Date.now()-fbHealth.downAt;
+    if(!navigator.onLine){
+      fbHealthSet('offline','device offline');
+      fbConnBanner(downMs>9000, true);   // calm banner only if sustained; we wait for the 'online' event
+      return;
+    }
+    // Device ONLINE but socket down → the SDK is re-establishing. Recover SILENTLY.
+    // Pick ONE state per tick so history doesn't thrash: outage once sustained, else (re)connecting.
+    var sustained=downMs>10000;
+    fbHealthSet(sustained?'outage':(FB._everConnected?'reconnecting':'connecting'), sustained?('sustained '+Math.round(downMs/1000)+'s'):'online · socket down');
+    fbHealthRecover(); fbHealthSwNudge();
+    try{ renderFbStatus(); }catch(e){}
+    // CALM banner only after a SUSTAINED outage (>10s); brief reconnects stay silent.
+    fbConnBanner(sustained,false);
+  }catch(e){ try{fbLog('healthTick error:', (e&&e.message)||e);}catch(_){ } }
+}
+/* Resume — on every "app is back" signal, ensure init then immediately health-check. */
 function fbOnResume(reason){
-  // If the data layer was never initialised this session, initialise it; otherwise
-  // make sure the socket is alive. Either way, refresh presence + status.
-  if(!FB.ready && !FB._initing){ try{ fbInit(); }catch(e){} }
-  else { fbEnsureConnected(reason); if(FB.connected){ try{fbPublishPresence();}catch(e){} } }
-  try{ renderFbStatus(); }catch(e){}
+  try{
+    if(!FB.ready && !FB._initing){ try{ fbInit(); }catch(e){} }
+    fbHealthTick();
+    if(FB.connected){ try{ fbPublishPresence(); }catch(e){} }
+    try{ renderFbStatus(); }catch(e){}
+  }catch(e){}
 }
 document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='visible') fbOnResume('visible'); });
 window.addEventListener('focus',function(){ fbOnResume('focus'); });
 window.addEventListener('pageshow',function(ev){ fbOnResume(ev&&ev.persisted?'pageshow-bfcache':'pageshow'); });
-window.addEventListener('online',function(){ fbOnResume('online'); });
-// Watchdog: while the app is visible, recover from ANY down state every 8s —
-//  • data layer up but socket down → bounce it back
-//  • initial fbInit failed/hung (e.g. SDK scripts didn't load on a waking radio) →
-//    re-run fbInit so a cold launch that started offline still connects once online.
-setInterval(function(){ if(document.visibilityState!=='visible')return;
-  if(FB.ready){ if(!FB.connected) fbEnsureConnected('watchdog'); }
-  else if(!FB._initing){ fbLog('watchdog: data layer not ready → retry fbInit'); try{ fbInit(); }catch(e){} }
-},8000);
+window.addEventListener('online',function(){ fbHealth.backoff=2000; fbHealth.lastTry=0; fbHealth.downAt=0; fbHealth._bounced=false; fbOnResume('online'); });
+window.addEventListener('offline',function(){ try{ fbHealthTick(); }catch(e){} });
+// THE BACKBONE: health-check every 3s while the app is in the foreground.
+setInterval(function(){ if(document.visibilityState==='visible') fbHealthTick(); }, 3000);
 // keep the diagnostic panel live (RTDB state, clock) while it's open
 setInterval(function(){ var p=document.getElementById('diag-panel'); if(p&&p.classList.contains('on'))updateDiagPanel(); },3000);
 try{ renderFbStatus(); }catch(e){}
@@ -6382,11 +6453,11 @@ async function fbInit(){
     //    the panel. Skipped entirely when the real socket connects normally.
     setTimeout(function(){ if(!FB.connected && !FB.wsProbe){ fbLog('socket still down after 6s → probing'); fbProbeSocket(); } },6000);
 
-    // 5) ── RETURNING-SESSION SELF-HEAL ─────────────────────────────────────────
-    //    If the socket is STILL down at 10s, bounce the connection (goOffline →
-    //    goOnline). Combined with the resume handlers + watchdog, this fixes the
-    //    "reopen won't reconnect, only reset works" bug. No auth, no data wipe.
-    setTimeout(function(){ if(!FB.connected){ fbHealConnection(); } },10000);
+    // 5) ── HAND OFF TO THE SELF-HEALING MONITOR ────────────────────────────────
+    //    The autonomous fbHealth monitor (3s backbone + resume hooks) now owns all
+    //    recovery: silent reconnect with backoff, never aborting an in-progress connect.
+    //    Kick it once shortly after init so a slow/failed first connect is handled.
+    setTimeout(function(){ try{ fbHealthTick(); }catch(e){} },10000);
   }catch(e){ if(FB._watchdog){ clearTimeout(FB._watchdog); FB._watchdog=null; } FB.err=FB.err||('init:'+((e&&e.code)||(e&&e.message)||e)); fbLog('INIT FAILED ·', FB.err, e); renderFbStatus(); }
   FB._initing=false;
 }

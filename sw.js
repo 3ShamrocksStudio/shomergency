@@ -8,8 +8,8 @@
 // (a) uses network-first for navigations so a stale shell can never trap the
 // user, and (b) deletes every cache it does not own on activate.
 
-const CACHE_NAME = 'shomer-v62-cache';
-const SW_VERSION = 'v62';
+const CACHE_NAME = 'shomer-v63-cache';
+const SW_VERSION = 'v63';
 const urlsToCache = [
   './',
   'index.html',
