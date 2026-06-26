@@ -8,8 +8,8 @@
 // (a) uses network-first for navigations so a stale shell can never trap the
 // user, and (b) deletes every cache it does not own on activate.
 
-const CACHE_NAME = 'shomer-v61-cache';
-const SW_VERSION = 'v61';
+const CACHE_NAME = 'shomer-v62-cache';
+const SW_VERSION = 'v62';
 const urlsToCache = [
   './',
   'index.html',
@@ -60,8 +60,8 @@ self.addEventListener('fetch', event => {
   // ESCAPE HATCH: never touch the reset page or any ?nosw / ?fresh request. Let
   // them go straight to the network so this SW can never trap a user who is
   // trying to force the latest build. (reset.html is also never cached.)
-  if (/(^|\/)(reset|rtdb-test)\.html$/.test(url.pathname) || /[?&](nosw|fresh)\b/i.test(url.search)) {
-    return; // no respondWith → default browser network handling
+  if (/(^|\/)(reset|rtdb-test)\.html$/.test(url.pathname) || /(^|\/)version\.json$/.test(url.pathname) || /[?&](nosw|fresh)\b/i.test(url.search)) {
+    return; // straight to network (version.json must stay fresh for the auto-update check)
   }
 
   // Navigation requests: network-first, fall back to cached app shell.

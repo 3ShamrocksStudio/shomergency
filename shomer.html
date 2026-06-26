@@ -5987,6 +5987,25 @@ document.addEventListener('keydown',e=>{
 ═══════════════════════════════════ */
 // Load persisted state, apply settings, then language.
 loadStore();
+/* AUTO-UPDATE — the concrete fix for "stuck on an old cached build" (the real cause of
+   recurring login bugs once a fix is shipped): fetch the PUBLISHED version, bypassing
+   the service worker AND the HTTP cache. If this running build is OLDER than what's
+   deployed, the device is on a stale shell — clear SW + caches and reload to the latest.
+   Numeric compare (only reload when published > running, so a CDN-lagged version.json
+   can't trigger it) + once-per-session guard → no loop. Protects every build from here on. */
+(function(){
+  try{
+    if(sessionStorage.getItem('shomerVerChecked')==='1') return;
+    sessionStorage.setItem('shomerVerChecked','1');
+    fetch('version.json?cb='+(window.performance&&performance.now?Math.floor(performance.now()):Math.random()), {cache:'no-store'})
+      .then(function(r){ return r.ok?r.json():null; })
+      .then(function(d){
+        if(!d||!d.v||typeof APP_VER==='undefined')return;
+        var pub=parseInt(String(d.v).replace(/\D/g,''),10), cur=parseInt(String(APP_VER).replace(/\D/g,''),10);
+        if(pub&&cur&&pub>cur){ try{fbLog('STALE BUILD: running '+APP_VER+' · published '+d.v+' → force-updating');}catch(e){} if(typeof forceFreshReload==='function') forceFreshReload(); }
+      }).catch(function(){});
+  }catch(e){}
+})();
 applyStoredSettings();
 setLang(SS.lang||'he');
 // Init DMS display
@@ -6101,7 +6120,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v61';
+var APP_VER='v62';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
