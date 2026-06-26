@@ -672,6 +672,16 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
 .t-x{color:rgba(255,255,255,.4);font-size:16px;cursor:pointer;flex-shrink:0;padding:0 2px;}
 @keyframes tin{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
 
+/* iOS INSTALL BANNER — prominent, until installed (keeps you logged in + alerts) */
+.ios-install{position:fixed;bottom:calc(var(--nav) + 8px);left:10px;right:10px;z-index:9600;background:linear-gradient(135deg,#1b2c4e,#0A1628);border:1.5px solid color-mix(in srgb,var(--g3) 45%,var(--b3));border-radius:var(--r16);padding:14px 15px 15px;box-shadow:0 14px 40px rgba(0,0,0,.5);animation:tin .24s ease;}
+.ios-install .iz-top{display:flex;align-items:flex-start;gap:11px;}
+.ios-install .iz-ic{width:40px;height:40px;border-radius:11px;flex-shrink:0;border:1.5px solid var(--b3);}
+.ios-install .iz-t{font-size:14.5px;font-weight:800;color:var(--g3);line-height:1.25;}
+.ios-install .iz-s{font-size:12px;color:var(--tx1);line-height:1.5;margin-top:3px;}
+.ios-install .iz-x{margin-inline-start:auto;color:var(--tx3);font-size:17px;cursor:pointer;padding:2px 4px;flex-shrink:0;}
+.ios-install .iz-steps{display:flex;gap:8px;align-items:center;margin-top:11px;padding-top:11px;border-top:1px solid var(--b1);font-size:12px;color:var(--tx1);font-weight:600;justify-content:center;flex-wrap:wrap;}
+.ios-install .iz-steps .iz-share{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:7px;background:color-mix(in srgb,#19A8FF 18%,transparent);color:#5CC2FF;}
+.ios-install .iz-steps b{color:var(--g3);}
 /* A2HS Install Banner */
 .a2hs{position:fixed;bottom:calc(var(--nav) + 8px);left:10px;right:10px;z-index:9500;background:linear-gradient(135deg,#162440,#0A1628);border:1.5px solid var(--b3);border-radius:var(--r16);padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--e4);animation:tin .22s ease;}
 .a2hs-icon{width:44px;height:44px;border-radius:var(--r12);border:1.5px solid var(--b3);flex-shrink:0;}
@@ -3393,7 +3403,12 @@ function enterApp(returning){
  startGeoWatch();
  try{ fbInit(); }catch(e){} // connect to Firebase RTDB (presence + cross-device SOS) once in-app
  try{ guardianInit(); }catch(e){}
- setTimeout(function(){ try{ maybePromptBackgroundAlerts(); }catch(e){} }, 5000); // friendly A2HS / notification opt-in
+ // Re-request durable storage now that the user is engaged (browsers grant it more
+ // readily after interaction — helps the installed-PWA path keep the session).
+ try{ if(navigator.storage&&navigator.storage.persist){ navigator.storage.persist().then(function(ok){ window.__shomerPersist=ok?'granted':'denied'; },function(){}); } }catch(e){}
+ // iPhone Safari (not installed): prominent install prompt — keeps you logged in + alerts.
+ setTimeout(function(){ try{ maybePromptInstall(); }catch(e){} }, 2500);
+ setTimeout(function(){ try{ maybePromptBackgroundAlerts(); }catch(e){} }, 5000); // notification opt-in (Android/installed)
  try{ resumeDMS(); }catch(e){}
  // Handle an incoming guardian invite link (?g=…) once the map is ready.
  setTimeout(()=>{ try{ gdCheckInviteParam(); }catch(e){} },900);
@@ -6086,7 +6101,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v60';
+var APP_VER='v61';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -6740,12 +6755,49 @@ function bgAlertsState(){
   try{ if(Notification.permission==='granted') return 'on'; if(Notification.permission==='denied') return 'denied'; }catch(e){}
   return 'ask';
 }
+/* Is this an iPhone/iPad Safari tab that is NOT installed to the Home Screen? Web push
+   AND durable storage (staying logged in) require A2HS on iOS — a plain tab gets neither
+   and iOS Safari/ITP can evict its localStorage, logging the user out on reopen. */
+function isIOSSafariTab(){
+  var ua=navigator.userAgent||'';
+  // Check BOTH platform AND UA (a truthy platform must not short-circuit the UA test);
+  // also catch iPadOS, which masquerades as "Macintosh" with touch.
+  var iOS=/iP(hone|ad|od)/.test(navigator.platform||'') || /iP(hone|ad|od)/.test(ua) || (navigator.maxTouchPoints>1 && /Macintosh/.test(ua));
+  if(!iOS) return false;
+  var standalone=(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;
+  return !standalone;
+}
+/* STRONG iOS install prompt — prominent until installed, framed around the real benefit
+   (stay logged in + get SOS alerts). Dismiss is PER-SESSION only, so it returns on the
+   next launch until the user installs (and self-heals if iOS evicted the dismiss flag).
+   Once installed (standalone) it never shows. */
+function maybePromptInstall(){
+  try{
+    if(!isIOSSafariTab()) return;
+    if(document.querySelector('.ios-install')||document.querySelector('.a2hs')) return;
+    var dismissed=false; try{ dismissed=sessionStorage.getItem('shomerInstallDismissed')==='1'; }catch(e){}
+    if(dismissed) return;
+    var he=currentLang==='he', ar=currentLang==='ar';
+    var title=he?'הוסף/י את שומר למסך הבית':ar?'أضف شومير إلى الشاشة الرئيسية':'Add SHOMER to your Home Screen';
+    var sub=he?'כך תישאר/י מחובר/ת ותקבל/י התראות SOS גם כשהאפליקציה סגורה. בלי זה, אייפון עלול לנתק אותך.'
+      :ar?'لتبقى مسجّلاً وتصلك تنبيهات SOS حتى والتطبيق مغلق. بدون ذلك قد يسجّل آيفون خروجك.'
+      :'So you stay logged in and get SOS alerts even when the app is closed. Without it, iPhone may log you out.';
+    var step1=he?'הקש/י על':ar?'اضغط':'Tap';
+    var step2=he?'ואז „הוסף למסך הבית”':ar?'ثم «أضف إلى الشاشة الرئيسية»':'then "Add to Home Screen"';
+    var shareSvg='<span class="iz-share" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" width="15" height="15"><path d="M12 3v12M8 7l4-4 4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 12v7a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>';
+    var d=document.createElement('div'); d.className='ios-install'; d.setAttribute('role','dialog'); d.setAttribute('aria-label',title);
+    d.innerHTML='<div class="iz-top"><img class="iz-ic" src="logo-192.png" alt=""><div style="flex:1"><div class="iz-t">'+title+'</div><div class="iz-s">'+sub+'</div></div><span class="iz-x" id="iz-x" role="button" aria-label="סגור"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span></div><div class="iz-steps"><span>'+step1+'</span>'+shareSvg+'<b>'+step2+'</b></div>';
+    document.body.appendChild(d);
+    document.getElementById('iz-x').onclick=function(){ try{ sessionStorage.setItem('shomerInstallDismissed','1'); }catch(e){} d.remove(); };
+  }catch(e){}
+}
 function maybePromptBackgroundAlerts(){
   try{
-    if(document.querySelector('.a2hs')) return;
+    if(document.querySelector('.a2hs')||document.querySelector('.ios-install')) return;
+    if(isIOSSafariTab()) return; // iOS is handled by the dedicated install prompt above
     var dismissed=false; try{ dismissed=localStorage.getItem('shomerAlertsPrompted')==='1'; }catch(e){}
     if(dismissed) return;
-    var st=bgAlertsState(); if(st==='on'||st==='unsupported'||st==='denied') return;
+    var st=bgAlertsState(); if(st==='on'||st==='unsupported'||st==='denied'||st==='ios-add-home') return;
     var he=currentLang==='he', ar=currentLang==='ar';
     var iosMode=(st==='ios-add-home');
     var title=iosMode?(he?'קבל/י התראות SOS':ar?'استقبل تنبيهات SOS':'Get SOS alerts'):(he?'הפעל/י התראות SOS':ar?'فعّل تنبيهات SOS':'Turn on SOS alerts');
