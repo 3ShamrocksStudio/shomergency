@@ -5754,7 +5754,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v54';
+var APP_VER='v55';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -5922,8 +5922,14 @@ document.addEventListener('visibilitychange',function(){ if(document.visibilityS
 window.addEventListener('focus',function(){ fbOnResume('focus'); });
 window.addEventListener('pageshow',function(ev){ fbOnResume(ev&&ev.persisted?'pageshow-bfcache':'pageshow'); });
 window.addEventListener('online',function(){ fbOnResume('online'); });
-// Watchdog: while the app is visible, if the socket is down, keep nudging it back.
-setInterval(function(){ if(document.visibilityState==='visible' && FB.ready && !FB.connected){ fbEnsureConnected('watchdog'); } },8000);
+// Watchdog: while the app is visible, recover from ANY down state every 8s —
+//  • data layer up but socket down → bounce it back
+//  • initial fbInit failed/hung (e.g. SDK scripts didn't load on a waking radio) →
+//    re-run fbInit so a cold launch that started offline still connects once online.
+setInterval(function(){ if(document.visibilityState!=='visible')return;
+  if(FB.ready){ if(!FB.connected) fbEnsureConnected('watchdog'); }
+  else if(!FB._initing){ fbLog('watchdog: data layer not ready → retry fbInit'); try{ fbInit(); }catch(e){} }
+},8000);
 // keep the diagnostic panel live (RTDB state, clock) while it's open
 setInterval(function(){ var p=document.getElementById('diag-panel'); if(p&&p.classList.contains('on'))updateDiagPanel(); },3000);
 try{ renderFbStatus(); }catch(e){}
