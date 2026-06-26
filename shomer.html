@@ -1302,7 +1302,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </header>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
- <button class="fb-status connecting" id="fb-status" onclick="toggleDiagPanel()" aria-live="polite" aria-label="מצב חיבור">
+ <button class="fb-status connecting" id="fb-status" onclick="explainStatus()" aria-live="polite" aria-label="מצב חיבור">
  <span class="fb-dot" id="fb-dot" aria-hidden="true"></span>
  <span class="fb-status-txt" id="fb-status-txt">מתחבר…</span>
  </button>
@@ -1770,7 +1770,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="sec-cap mb12" data-he="אודות שומר" data-en="About SHOMER">אודות שומר</div>
  <div class="set-grp surf-light">
  <div class="ai-row"><span class="ai-l" data-he="מוצר" data-en="Product" data-ar="المنتج">מוצר / Product</span><span class="ai-v" dir="ltr">SHOMER<span class="tm"></span> (שומר)</span></div>
- <div class="ai-row"><span class="ai-l" data-he="גרסה" data-en="Version" data-ar="الإصدار">גרסה</span><span class="ai-v">1.0.0</span></div>
+ <div class="ai-row"><span class="ai-l" data-he="גרסה" data-en="Version" data-ar="الإصدار">גרסה</span><span class="ai-v">0.1</span></div>
  <div class="ai-row"><span class="ai-l" data-he="מוטו" data-en="Motto" data-ar="الشعار">מוטו</span><span class="ai-v">שׁוֹמֵר אָחִי אָנֹכִי</span></div>
  </div>
  <div class="sec-cap mb12" style="margin-top:18px" id="set-legal-cap">בטיחות ומשפט</div>
@@ -6019,6 +6019,12 @@ function diagReport(){
  add('storage persisted', window.__shomerPersist||'?', (window.__shomerPersist==='granted'?'ok':'warn'));
  add('RTDB ready', (typeof FB!=='undefined'&&FB.ready?'yes':'no'), (typeof FB!=='undefined'&&FB.ready?'ok':'warn'));
  add('RTDB socket', (typeof FB!=='undefined'&&FB.connected?'connected':'not connected'), (typeof FB!=='undefined'&&FB.connected?'ok':'bad'));
+ add('ever connected?', (typeof FB!=='undefined'&&FB._everConnected?'yes':'no'), (typeof FB!=='undefined'&&FB._everConnected?'ok':'warn'));
+ add('auth', (typeof FB!=='undefined'&&FB.authState)||'—');
+ add('WS probe', (typeof FB!=='undefined'&&FB.wsProbe)||'(not run)', (typeof FB!=='undefined'&&/open ✓/.test(FB.wsProbe||'')?'ok':(/blocked|closed|timeout/.test((FB&&FB.wsProbe)||'')?'bad':'')));
+ add('CSP block', (typeof FB!=='undefined'&&FB.csp)||'none', (typeof FB!=='undefined'&&FB.csp?'bad':'ok'));
+ add('SHOMERs seen', (typeof FB!=='undefined'?(FB.near||0):'—'));
+ add('background push', (typeof FB!=='undefined'&&FB.pushState)||'—');
  add('online', (navigator.onLine?'yes':'OFFLINE'), (navigator.onLine?'ok':'warn'));
  add('last error', window.__shomerErr||'none', (window.__shomerErr?'bad':'ok'));
  add('time', new Date().toLocaleString());
@@ -6027,6 +6033,7 @@ function diagReport(){
 }
 function showDiag(){
  try{ querySwVersion(); }catch(e){}
+ try{ if(typeof fbProbeSocket==='function' && (!FB.wsProbe || FB.wsProbe==='')) fbProbeSocket(); }catch(e){} // run the raw-WS test for the report
  var box=document.getElementById('diag-report'); if(!box)return;
  var render=function(){ var R=diagReport(); box.innerHTML=R.map(function(r){ return '<div class="drow"><span class="dk">'+r.k+'</span><span class="dv '+r.c+'">'+ESC(r.v)+'</span></div>'; }).join(''); };
  render();
@@ -6069,7 +6076,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v58';
+var APP_VER='v59';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -6216,15 +6223,26 @@ function enablePush(){ try{ if('Notification' in window && Notification.permissi
 function fbEnsureConnected(reason){
   if(!FB.ready||!FB.db){ return; }
   if(FB.connected){ return; }
-  var now=Date.now(); if(FB._lastBounce && (now-FB._lastBounce)<3000) return; FB._lastBounce=now;
-  fbLog('ensureConnected: socket down ('+(reason||'')+') → bounce goOffline/goOnline');
-  try{ FB.db.goOffline&&FB.db.goOffline(); }catch(e){}
+  // CRITICAL: do NOT bounce (goOffline) while the FIRST connection is still being
+  // established. On a high-latency mobile network the RTDB SDK can take 10-20s to
+  // reach .info/connected; goOffline() would ABORT it and, fired repeatedly, create a
+  // permanent abort→restart loop where the socket never finishes connecting — the real
+  // "disconnected forever" bug. goOnline() is a safe, idempotent nudge that never
+  // aborts an in-flight connection, so use only that until we've connected at least once.
   try{ FB.db.goOnline&&FB.db.goOnline(); }catch(e){}
+  if(FB._everConnected){
+    // We WERE connected and the socket dropped (e.g. resume after suspension) — a single
+    // goOffline→goOnline bounce is safe here and forces a clean reconnect. Debounced long.
+    var now=Date.now(); if(!FB._lastBounce || (now-FB._lastBounce)>=15000){ FB._lastBounce=now;
+      fbLog('ensureConnected: dropped after being up ('+(reason||'')+') → single bounce');
+      try{ FB.db.goOffline&&FB.db.goOffline(); }catch(e){}
+      try{ FB.db.goOnline&&FB.db.goOnline(); }catch(e){}
+    }
+  } else {
+    fbLog('ensureConnected: initial connect still in progress ('+(reason||'')+') — letting the SDK finish (no bounce)');
+  }
   try{ fbPublishPresence(); }catch(e){}
   try{ renderFbStatus(); }catch(e){}
-  // If the bounce alone didn't bring it back shortly, fbInit was never run this
-  // session (true cold load handles that itself) — re-run it to rebuild listeners.
-  setTimeout(function(){ if(FB.ready && !FB.connected){ try{ FB.db.goOnline&&FB.db.goOnline(); }catch(e){} } }, 2500);
 }
 function fbOnResume(reason){
   // If the data layer was never initialised this session, initialise it; otherwise
@@ -6383,17 +6401,18 @@ async function fbTryAuthBestEffort(){
 async function fbHealConnection(){
   if(FB._healed)return; FB._healed=true;
   try{
-    fbLog('SELF-HEAL: socket down → bounce connection (auth-independent)');
-    try{ if(window.firebase&&window.firebase.auth){ window.firebase.auth().signOut().catch(function(){}); } }catch(e){} // drop any wedged session (harmless, rules open)
-    try{ FB.db&&FB.db.goOffline&&FB.db.goOffline(); }catch(e){}
-    try{ FB.db&&FB.db.goOnline&&FB.db.goOnline(); }catch(e){}               // clean reconnect
+    // SAFE nudge only — goOnline() never aborts an in-flight initial connection. We do
+    // NOT goOffline() here: on a slow mobile network the first connect can still be in
+    // progress at 10s, and aborting it is exactly what kept it "disconnected forever".
+    fbLog('SELF-HEAL: socket not up yet → goOnline nudge (no abort)');
+    try{ FB.db&&FB.db.goOnline&&FB.db.goOnline(); }catch(e){}
     try{ FB.permErr=null; if(FB.ready)fbPublishPresence(); renderFbStatus(); }catch(e){}
   }catch(e){ fbLog('SELF-HEAL error:', (e&&e.message)||e); }
 }
 function fbSetupPresence(){
   if(!FB.ready)return;
   var meRef=FB.db.ref('presence/'+FB.uid);
-  FB.db.ref('.info/connected').on('value',function(snap){ FB.connected=(snap.val()===true); fbLog('RTDB socket (.info/connected) =', FB.connected); if(FB.connected){ meRef.onDisconnect().remove(); fbPublishPresence(); } renderFbStatus(); });
+  FB.db.ref('.info/connected').on('value',function(snap){ FB.connected=(snap.val()===true); fbLog('RTDB socket (.info/connected) =', FB.connected); if(FB.connected){ FB._everConnected=true; meRef.onDisconnect().remove(); fbPublishPresence(); } renderFbStatus(); });
   if(!FB._presTimer)FB._presTimer=setInterval(fbPublishPresence,25000);
   FB.db.ref('presence').on('value',function(snap){
     var all=snap.val()||{}, n=0, mlat=userLat, mlng=userLng, radM=((SS.settings&&SS.settings.radius)||5)*1000;
