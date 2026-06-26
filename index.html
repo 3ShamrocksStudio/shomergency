@@ -89,8 +89,11 @@
       background:var(--brand-950); }
     .carousel-track { display:flex; direction:ltr; transition:transform .55s cubic-bezier(.25,1,.35,1); }
     .carousel-slide { min-width:100%; position:relative; }
-    .carousel-slide .scene { position:relative; width:100%; aspect-ratio:16/10; background:var(--brand-950); }
-    .carousel-slide .scene img { width:100%; height:100%; object-fit:cover; object-position:50% 42%; display:block; }
+    /* Real app screenshots — shown as portrait phone screens, centered on a brand glow */
+    .carousel-slide .scene { position:relative; width:100%; padding:22px 0 26px; display:flex; justify-content:center;
+      background:radial-gradient(125% 88% at 50% 0%, color-mix(in srgb,var(--brand-500) 24%,transparent), var(--brand-950) 72%); }
+    .carousel-slide .scene img { width:auto; height:min(60vh,432px); border-radius:26px; display:block;
+      box-shadow:0 18px 46px color-mix(in srgb,#000 62%,transparent); border:1px solid color-mix(in srgb,#fff 9%,transparent); }
     .carousel-slide .scrim { position:absolute; inset:0; pointer-events:none;
       background:linear-gradient(to top, color-mix(in srgb,var(--bg) 95%,transparent) 2%, color-mix(in srgb,var(--bg) 58%,transparent) 28%, transparent 58%); }
     .carousel-slide .cap { position:absolute; left:0; right:0; bottom:0; padding:14px 20px 18px; direction:rtl; text-align:center; }
@@ -205,20 +208,21 @@
       <div class="header-carousel" id="header-carousel">
         <!-- Carousel: clean scenario imagery only — NO text overlays (per revisions) -->
         <div class="carousel-track" id="carousel-track">
+          <!-- REAL screenshots from the live app (v59), captured at 390×844 -->
           <div class="carousel-slide">
-            <div class="scene"><img src="hero-alley.jpg" alt="אישה לבד בסמטה חשוכה מפעילה אזעקת SOS" width="1280" height="720" loading="eager"></div>
+            <div class="scene"><img src="img/real-sos.jpg" alt="מסך SOS פעיל אמיתי באפליקציית שומר — ספירה לאחור אדומה לפני שידור" width="591" height="1280" loading="eager"></div>
           </div>
           <div class="carousel-slide">
-            <div class="scene"><img src="hero-following.jpg" alt="שתי נשים שעוקבים אחריהן מפעילות אזעקה ומשתפות מיקום" width="1280" height="720" loading="eager"></div>
+            <div class="scene"><img src="img/real-sos-map.jpg" alt="מפת שומר אמיתית עם אירוע SOS חי בקרבת מקום ומסלול הגעה" width="591" height="1280" loading="eager"></div>
           </div>
           <div class="carousel-slide">
-            <div class="scene"><img src="scenario-family.jpg" alt="אם וילד חוזרים הביתה בלילה עם אזעקת SOS פעילה" width="1280" height="720" loading="eager"></div>
+            <div class="scene"><img src="img/real-map.jpg" alt="מסך המפה החיה האמיתי של שומר — אירועים ושומרים פעילים בזמן אמת" width="591" height="1280" loading="lazy"></div>
           </div>
           <div class="carousel-slide">
-            <div class="scene"><img src="scenario-medical.jpg" alt="עובר אורח מזעיק עזרה רפואית עבור אדם שהתמוטט" width="1280" height="720" loading="eager"></div>
+            <div class="scene"><img src="img/real-myshomer.jpg" alt="מסך „השומרים שלי” האמיתי — מעגל האמון שלך" width="591" height="1280" loading="lazy"></div>
           </div>
           <div class="carousel-slide">
-            <div class="scene"><img src="hero-bullying.jpg" alt="תלמיד מול בריונים מפעיל את רשת השומרים של SHOMER" width="1280" height="720" loading="eager"></div>
+            <div class="scene"><img src="img/real-guide.jpg" alt="מסך מדריך החירום האמיתי — עזרה ראשונה אופליין" width="591" height="1280" loading="lazy"></div>
           </div>
         </div>
         <div class="carousel-nav" id="carousel-nav"></div>
@@ -267,7 +271,7 @@
         <div class="phone">
           <div class="screen">
             <div class="notch"></div>
-            <img src="img/map-current.png" alt="מסך המפה החיה של SH✡MER — דיווחי אירועים ושומרים פעילים בזמן אמת">
+            <img src="img/real-map.jpg" alt="מסך המפה החיה האמיתי של SHOMER — דיווחי אירועים ושומרים פעילים בזמן אמת" width="591" height="1280">
           </div>
         </div>
       </div>
