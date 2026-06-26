@@ -1866,6 +1866,32 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </div>
 
  <!-- ═══ CIRCLES — family/friend live-location groups ═══ -->
+ <!-- ═══ HIDDEN DIAGNOSTICS (long-press logo, or ?diag) — NOT shown in normal UI ═══ -->
+ <style>
+ #shomer-diag{position:fixed;inset:0;z-index:99999;background:#06101e;color:#D7E0EE;display:none;flex-direction:column;padding:16px;font-family:ui-monospace,Menlo,monospace;overflow:auto;direction:ltr;text-align:left;}
+ #shomer-diag.on{display:flex;}
+ #shomer-diag h2{font-family:-apple-system,system-ui,sans-serif;font-size:16px;font-weight:800;color:#E8C66B;margin:0 0 2px;}
+ #shomer-diag .sub{font-family:-apple-system,system-ui,sans-serif;font-size:11px;color:#7F94AE;margin-bottom:12px;}
+ #shomer-diag .drow{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid #14233a;font-size:12.5px;}
+ #shomer-diag .dk{color:#8FA0B6;flex-shrink:0;}
+ #shomer-diag .dv{text-align:right;word-break:break-word;}
+ #shomer-diag .ok{color:#46D08B;}#shomer-diag .bad{color:#FF7080;}#shomer-diag .warn{color:#E8C66B;}
+ #shomer-diag .dbtns{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;}
+ #shomer-diag button{font-family:-apple-system,system-ui,sans-serif;flex:1;min-width:120px;padding:12px;border-radius:10px;border:1px solid #243b58;background:#0e1c30;color:#D7E0EE;font-size:13px;font-weight:700;cursor:pointer;}
+ #shomer-diag button.pri{background:linear-gradient(135deg,#C09020,#E0A828);color:#0A1628;border:none;}
+ #shomer-diag button.danger{color:#FF7080;border-color:#5a2230;}
+ </style>
+ <div id="shomer-diag" role="dialog" aria-modal="true" aria-label="diagnostics">
+  <h2>SHOMER · diagnostics</h2>
+  <div class="sub">Screenshot this and send to support. (long-press the logo or add ?diag)</div>
+  <div id="diag-report"></div>
+  <div class="dbtns">
+   <button class="pri" onclick="diagCopy()">Copy</button>
+   <button class="danger" onclick="diagForceFresh()">Force latest (clear cache)</button>
+   <button onclick="diagClose()">Close</button>
+  </div>
+ </div>
+
  <!-- ═══ EMERGENCY GUIDE (offline-first; cached in shomer.html) ═══ -->
  <style>
  .gd-disc{background:rgba(224,40,64,.12);border:1px solid var(--r3);border-radius:var(--r12);padding:11px 13px;font-size:12.5px;line-height:1.6;color:#FFB3BD;font-weight:600;margin-bottom:12px;}
@@ -2406,6 +2432,16 @@ const AR={
  'Add someone you trust to your "My SHOMERs". They\'ll see your live location and you\'ll see theirs — by invite and mutual accept. You can stop anytime.':'أضِف شخصاً تثق به إلى قائمة „حُرّاسي". سيرى موقعك المباشر وسترى موقعه — عبر دعوة وقبول متبادل. يمكنك الإيقاف في أي وقت.',
  'Ghost mode — pause sharing':'وضع التخفّي — إيقاف المشاركة مؤقتاً','Pair invite':'دعوة ربط','Connected':'مُرتبط','Pending':'قيد الانتظار'
 };
+/* ── GLOBAL ERROR CAPTURE (so the hidden diagnostics view can show the REAL last
+   error if the app fails to restore on a device we can't inspect) ── */
+window.__shomerErr='';
+try{
+ window.addEventListener('error',function(e){ try{ window.__shomerErr=((e&&e.message)||'error')+' @ '+(((e&&e.filename)||'').split('/').pop())+':'+((e&&e.lineno)||'?'); }catch(_){} });
+ window.addEventListener('unhandledrejection',function(e){ try{ var r=e&&e.reason; window.__shomerErr='promise: '+((r&&r.code)||(r&&r.message)||r||'rejection'); }catch(_){} });
+}catch(e){}
+/* Ask the browser NOT to evict our storage (mitigates iOS/ITP wiping the session on
+   reopen — the "logged out again" symptom). Best-effort; harmless where unsupported. */
+try{ if(navigator.storage&&navigator.storage.persist){ navigator.storage.persist().then(function(ok){ window.__shomerPersist=ok?'granted':'denied'; },function(){ window.__shomerPersist='err'; }); } else { window.__shomerPersist='unsupported'; } }catch(e){ window.__shomerPersist='err'; }
 /* ── State ── */
 let currentLang='he', L=LANGS.he;
 /* Translate an English (or already-Arabic) display string to Arabic when AR is active. */
@@ -5933,9 +5969,25 @@ setLang(SS.lang||'he');
 // Init DMS display
 updateDMSDisplay();
 // Returning user — skip onboarding, restore everything.
+window.__shomerRestored=false;
 if(SS.onboarded){
  user.name=SS.user.name||localizedGuardian(); user.phone=SS.user.phone||''; user.profession=SS.user.profession||'';
- try{ enterApp(true); }catch(e){ console&&console.warn&&console.warn(e); }
+ // Hide onboarding SYNCHRONOUSLY (no flash); run the heavy restore AFTER the full
+ // script parses. ROOT CAUSE of the returning-user "reopen" failure: enterApp()→
+ // fbInit() was invoked here, mid-script, BEFORE `var FB={...}` is assigned (~line
+ // 6120) — so on every reopen the first fbInit threw on an undefined FB and the
+ // connection only limped back via fallback triggers. Deferring to a macrotask
+ // guarantees FB + every function exist first, so reopen connects on the first try.
+ try{ var _ob=document.getElementById('ob'); if(_ob)_ob.style.display='none'; }catch(e){}
+ try{ var _lb=document.getElementById('lang-bar'); if(_lb)_lb.classList.add('hidden'); }catch(e){}
+ setTimeout(function(){
+   try{ enterApp(true); window.__shomerRestored=true; }
+   catch(e){
+     try{ window.__shomerErr='restore: '+((e&&e.message)||e)+' @ '+(((e&&e.stack||'').split('\n')[1])||'').trim(); }catch(_){}
+     try{ console&&console.warn&&console.warn('restore failed',e); }catch(_){}
+     setTimeout(function(){ if(!window.__shomerRestored){ try{ enterApp(true); window.__shomerRestored=true; }catch(e2){} } }, 700);
+   }
+ }, 0);
 } else {
  // New user — ensure a random locale-appropriate name is shown and detect manual edits.
  const nmInp=document.getElementById('ob-name');
@@ -5944,6 +5996,55 @@ if(SS.onboarded){
  nmInp.addEventListener('input',()=>{nameAuto=false;nmInp.dataset.edited='1';});
  }
 }
+/* ════════════ HIDDEN DIAGNOSTICS ════════════
+   Reachable WITHOUT being logged in (works on the onboarding screen too): long-press
+   the logo for ~0.7s, or open the app with ?diag. Surfaces the real on-device state so
+   a failure we can't reproduce can be screenshotted once and read exactly. */
+function diagStorageProbe(){ try{ var k='__shomer_probe'; localStorage.setItem(k,'1'); var ok=localStorage.getItem(k)==='1'; localStorage.removeItem(k); return ok?'read+write OK':'unreadable'; }catch(e){ return 'BLOCKED: '+((e&&e.name)||e); } }
+function diagReport(){
+ var R=[]; var add=function(k,v,cls){ R.push({k:k,v:(v==null?'—':String(v)),c:cls||''}); };
+ var iOS=/iP(hone|ad|od)/.test(navigator.platform||navigator.userAgent);
+ var standalone=(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;
+ var skey=null,skeySize=0; try{ skey=localStorage.getItem(SKEY); skeySize=skey?skey.length:0; }catch(e){}
+ var cid=null; try{ cid=localStorage.getItem('shomerCID'); }catch(e){}
+ add('app version', (typeof APP_VER!=='undefined'?APP_VER:'?'), 'ok');
+ add('SW (controlling)', (FB&&FB.swVer)||'querying…', ((FB&&FB.swVer&&typeof APP_VER!=='undefined'&&FB.swVer===APP_VER)?'ok':(FB&&FB.swVer&&FB.swVer.indexOf('v')===0?'warn':'')));
+ add('platform', (iOS?'iOS':'other')+(standalone?' · installed (A2HS)':' · browser tab'), (iOS&&!standalone?'warn':''));
+ add('storage', diagStorageProbe(), (diagStorageProbe().indexOf('OK')>=0?'ok':'bad'));
+ var hadUser=false; try{ hadUser=!!skey&&/"onboarded":true/.test(skey); }catch(e){}
+ add('saved session', (hadUser?('yes · onboarded user'):(skey?'default only — session was LOST':'NONE stored')), (hadUser?'ok':'bad'));
+ add('onboarded flag', (SS&&SS.onboarded?'true':'FALSE → shows onboarding'), (SS&&SS.onboarded?'ok':'bad'));
+ add('restored this open?', (window.__shomerRestored?'yes':'no'), (window.__shomerRestored?'ok':'warn'));
+ add('device id', cid?(cid.slice(0,16)):'NONE', (cid?'ok':'warn'));
+ add('storage persisted', window.__shomerPersist||'?', (window.__shomerPersist==='granted'?'ok':'warn'));
+ add('RTDB ready', (typeof FB!=='undefined'&&FB.ready?'yes':'no'), (typeof FB!=='undefined'&&FB.ready?'ok':'warn'));
+ add('RTDB socket', (typeof FB!=='undefined'&&FB.connected?'connected':'not connected'), (typeof FB!=='undefined'&&FB.connected?'ok':'bad'));
+ add('online', (navigator.onLine?'yes':'OFFLINE'), (navigator.onLine?'ok':'warn'));
+ add('last error', window.__shomerErr||'none', (window.__shomerErr?'bad':'ok'));
+ add('time', new Date().toLocaleString());
+ add('UA', (navigator.userAgent||'').slice(0,80));
+ return R;
+}
+function showDiag(){
+ try{ querySwVersion(); }catch(e){}
+ var box=document.getElementById('diag-report'); if(!box)return;
+ var render=function(){ var R=diagReport(); box.innerHTML=R.map(function(r){ return '<div class="drow"><span class="dk">'+r.k+'</span><span class="dv '+r.c+'">'+ESC(r.v)+'</span></div>'; }).join(''); };
+ render();
+ var ov=document.getElementById('shomer-diag'); if(ov)ov.classList.add('on');
+ if(window.__diagTimer)clearInterval(window.__diagTimer);
+ window.__diagTimer=setInterval(function(){ var o=document.getElementById('shomer-diag'); if(o&&o.classList.contains('on'))render(); else clearInterval(window.__diagTimer); },1500);
+}
+function diagClose(){ var ov=document.getElementById('shomer-diag'); if(ov)ov.classList.remove('on'); if(window.__diagTimer)clearInterval(window.__diagTimer); }
+function diagCopy(){ try{ var txt=diagReport().map(function(r){return r.k+': '+r.v;}).join('\n'); if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(function(){toast('Copied','grn');},function(){}); } }catch(e){} }
+function diagForceFresh(){ try{ if(typeof forceFreshReload==='function'){ forceFreshReload(); return; } }catch(e){} try{ if('serviceWorker' in navigator)navigator.serviceWorker.getRegistrations().then(function(rs){rs.forEach(function(r){r.unregister();});}); if(window.caches)caches.keys().then(function(ks){ks.forEach(function(k){caches.delete(k);});}); }catch(e){} setTimeout(function(){ location.replace(location.origin+location.pathname); },500); }
+/* Long-press either logo to open diagnostics (works at onboarding + in-app). */
+(function(){
+ function bindLP(el){ if(!el)return; var t=null; var start=function(){ t=setTimeout(showDiag,700); }; var cancel=function(){ if(t)clearTimeout(t); };
+  el.addEventListener('touchstart',start,{passive:true}); el.addEventListener('touchend',cancel); el.addEventListener('touchmove',cancel);
+  el.addEventListener('mousedown',start); el.addEventListener('mouseup',cancel); el.addEventListener('mouseleave',cancel); }
+ try{ bindLP(document.querySelector('.ob-logo')); bindLP(document.querySelector('.hdr-logo-svg')); }catch(e){}
+ try{ if(/[?&]diag\b/.test(location.search)) setTimeout(showDiag,400); }catch(e){}
+})();
 
 /* Studio credit on EVERY full screen: inject a tasteful mini-credit at the bottom of any
  sheet body that doesn't already carry one. Appended last so it never sits over controls. */
@@ -5968,7 +6069,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v57';
+var APP_VER='v58';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
