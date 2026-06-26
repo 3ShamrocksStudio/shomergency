@@ -37,6 +37,10 @@
    measurementId: 'G-DE5NM1H0P6'
  };
  window.SHOMER_VAPID = 'BP2EPokgerOWyvuZyE2zQj-l4xfkQ1Yu1C-omNOmwgjjtOoIZQuiQzOWW0CZ4VY5OJq-8ZBWWIhi2GZYh1Lqugc';
+ // FREE background-push fan-out endpoint (Cloudflare Worker — see worker/README.md).
+ // Paste the deployed Worker URL here to enable closed/locked-app SOS pushes. Empty =
+ // disabled: the app works normally with no background push, no cost, and no errors.
+ window.SHOMER_PUSH_URL = '';
  // Back-compat for the earlier gated FCM client (initFCM reads window.SHOMER_FCM):
  window.SHOMER_FCM = { apiKey: window.SHOMER_FB.apiKey, authDomain: window.SHOMER_FB.authDomain, projectId: window.SHOMER_FB.projectId, messagingSenderId: window.SHOMER_FB.messagingSenderId, appId: window.SHOMER_FB.appId, vapidKey: window.SHOMER_VAPID };
 </script>
@@ -3289,6 +3293,7 @@ function enterApp(returning){
  startGeoWatch();
  try{ fbInit(); }catch(e){} // connect to Firebase RTDB (presence + cross-device SOS) once in-app
  try{ guardianInit(); }catch(e){}
+ setTimeout(function(){ try{ maybePromptBackgroundAlerts(); }catch(e){} }, 5000); // friendly A2HS / notification opt-in
  try{ resumeDMS(); }catch(e){}
  // Handle an incoming guardian invite link (?g=…) once the map is ready.
  setTimeout(()=>{ try{ gdCheckInviteParam(); }catch(e){} },900);
@@ -5754,7 +5759,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v55';
+var APP_VER='v56';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -6116,7 +6121,12 @@ function updateGuardiansNearby(n){
 }
 function explainNearby(){ var n=(document.getElementById('gnear-n')||{}).textContent||'0'; var he=currentLang==='he'; toast(he?n+' שומרים פעילים בקרבתך (נתון חי)':n+' active SHOMERs near you (live)',''); }
 /* Cross-device SOS over RTDB */
-function fbPublishSOS(){ if(!FB.ready||!curSosId)return; try{ FB.db.ref('sos/'+curSosId).set({uid:FB.uid,lat:(userLat!=null?userLat:32.07),lng:(userLng!=null?userLng:34.78),type:curSosType||'unknown',typeState:'self',ts:Date.now(),resolved:false,name:(SS.user&&SS.user.name)||'Shomer'}); }catch(e){} }
+function fbPublishSOS(){ if(!FB.ready||!curSosId)return; try{ FB.db.ref('sos/'+curSosId).set({uid:FB.uid,lat:(userLat!=null?userLat:32.07),lng:(userLng!=null?userLng:34.78),type:curSosType||'unknown',typeState:'self',ts:Date.now(),resolved:false,name:(SS.user&&SS.user.name)||'Shomer'}).then(function(){ fbTriggerPush(curSosId); },function(){}); }catch(e){} }
+/* Fire the FREE background-push fan-out (Cloudflare Worker) for this SOS so paired /
+   nearby SHOMERs get a notification even when their app is closed or the phone is
+   locked. No-op (and no error) until window.SHOMER_PUSH_URL is configured. The live
+   socket already covers foreground/in-app delivery; this is the closed-app path. */
+function fbTriggerPush(id){ try{ var url=window.SHOMER_PUSH_URL; if(!url||!id)return; fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:id}),keepalive:true}).then(function(r){ return r.json&&r.json().catch(function(){}); }).then(function(d){ fbLog('push fan-out:', d||'sent'); }).catch(function(e){ fbLog('push fan-out failed (non-fatal):',(e&&e.message)||e); }); }catch(e){} }
 function fbUpdateSOSType(){ if(FB.ready&&curSosId){ try{ FB.db.ref('sos/'+curSosId).update({type:curSosType,typeState:'self'}); }catch(e){} } }
 function fbResolveSOS(id){ if(FB.ready&&id){ try{ FB.db.ref('sos/'+id).update({resolved:true,resolvedTs:Date.now()}); }catch(e){} } }
 function fbListenSOS(){
@@ -6375,6 +6385,42 @@ function showA2HS(){
  document.body.appendChild(d);
  document.getElementById('a2hs-install').onclick=async()=>{deferredPrompt.prompt();const r=await deferredPrompt.userChoice;d.remove();deferredPrompt=null;if(r.outcome==='accepted')toast(currentLang==='he'?'✓ שומר הותקן!':'✓ Shomer installed!','grn');};
  document.getElementById('a2hs-close').onclick=()=>d.remove();
+}
+/* BACKGROUND-ALERTS ENABLEMENT — so closed/locked-app SOS pushes can actually arrive.
+   Two honest paths:
+   • iOS Safari tab: web push is IMPOSSIBLE until the PWA is Added to Home Screen
+     (iOS 16.4+). We show a friendly A2HS hint (Share → Add to Home Screen).
+   • Android / installed PWA: ask once, in plain language, to allow alerts → registerPush.
+   Shown once (dismiss remembered); never nags; safe before any push backend is live. */
+function bgAlertsState(){
+  var iOS=/iP(hone|ad|od)/.test(navigator.platform||navigator.userAgent);
+  var standalone=(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;
+  var canNotify=('Notification' in window)&&('serviceWorker' in navigator)&&('PushManager' in window);
+  if(iOS&&!standalone) return 'ios-add-home';            // must install first on iPhone
+  if(!canNotify) return 'unsupported';
+  try{ if(Notification.permission==='granted') return 'on'; if(Notification.permission==='denied') return 'denied'; }catch(e){}
+  return 'ask';
+}
+function maybePromptBackgroundAlerts(){
+  try{
+    if(document.querySelector('.a2hs')) return;
+    var dismissed=false; try{ dismissed=localStorage.getItem('shomerAlertsPrompted')==='1'; }catch(e){}
+    if(dismissed) return;
+    var st=bgAlertsState(); if(st==='on'||st==='unsupported'||st==='denied') return;
+    var he=currentLang==='he', ar=currentLang==='ar';
+    var iosMode=(st==='ios-add-home');
+    var title=iosMode?(he?'קבל/י התראות SOS':ar?'استقبل تنبيهات SOS':'Get SOS alerts'):(he?'הפעל/י התראות SOS':ar?'فعّل تنبيهات SOS':'Turn on SOS alerts');
+    var sub=iosMode
+      ?(he?'הוסף/י למסך הבית: שיתוף ⤴ → הוסף למסך הבית':ar?'أضف للشاشة الرئيسية: مشاركة ⤴ ← أضف للرئيسية':'Add to Home Screen: Share ⤴ → Add to Home Screen')
+      :(he?'כדי לקבל SOS גם כשהאפליקציה סגורה':ar?'لتصلك نداءات الاستغاثة حتى والتطبيق مغلق':'So you get SOS even when the app is closed');
+    var btn=iosMode?(he?'הבנתי':ar?'حسناً':'Got it'):(he?'אפשר/י':ar?'تفعيل':'Allow');
+    var d=document.createElement('div'); d.className='a2hs';
+    d.innerHTML='<img class="a2hs-icon" src="logo-192.png" alt=""><div class="a2hs-text"><div class="a2hs-t">'+title+'</div><div class="a2hs-s">'+sub+'</div></div><button class="a2hs-btn" id="ba-act">'+btn+'</button><span class="a2hs-x" id="ba-x"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span>';
+    document.body.appendChild(d);
+    var close=function(){ try{localStorage.setItem('shomerAlertsPrompted','1');}catch(e){} d.remove(); };
+    document.getElementById('ba-x').onclick=close;
+    document.getElementById('ba-act').onclick=function(){ if(!iosMode){ try{ enablePush(); }catch(e){} } close(); };
+  }catch(e){}
 }
 </script>
 </body>
