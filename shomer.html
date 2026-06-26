@@ -3224,7 +3224,15 @@ function obStep0(){
  if(!digits){ toast(he?'נא להזין מספר טלפון נייד':'Please enter a mobile number','amb'); shakeField('ob-phone'); return; }
  if(!isValidILMobile(digits)){ toast(he?'מספר נייד ישראלי לא תקין — 05X-XXXXXXX':'Invalid Israeli mobile — 05X-XXXXXXX','amb'); shakeField('ob-phone'); return; }
  user={name, phone: ilNormalize(digits), city:''};
- openObVerify();
+ // ENTRY MUST BE INSTANT + RELIABLE — no SMS/auth gate. The previous step called
+ // openObVerify() (Firebase Phone Auth + invisible reCAPTCHA, real SMS). On a real
+ // device that can HANG (reCAPTCHA load / unauthorized domain / SMS never arrives)
+ // with no thrown error, trapping the user at "sending a code…" — i.e. "can't log in".
+ // RTDB is decoupled (public rules), so phone verification gates nothing it needs; the
+ // number is still captured for the "My SHOMER by phone" registry. (Re-add real
+ // verification via App Check / Phone Auth as a pre-launch hardening step, NOT an
+ // entry gate.)
+ goStep(1);
 }
 /* Real Firebase Phone Auth (SMS). Falls back to a labelled demo code if the Phone provider
    isn't enabled / unavailable — so no real SMS is sent (and no cost) until it's configured.
@@ -6014,6 +6022,8 @@ function diagReport(){
  var hadUser=false; try{ hadUser=!!skey&&/"onboarded":true/.test(skey); }catch(e){}
  add('saved session', (hadUser?('yes · onboarded user'):(skey?'default only — session was LOST':'NONE stored')), (hadUser?'ok':'bad'));
  add('onboarded flag', (SS&&SS.onboarded?'true':'FALSE → shows onboarding'), (SS&&SS.onboarded?'ok':'bad'));
+ var inApp=false; try{ var a=document.getElementById('app'); var ob=document.getElementById('ob'); inApp=(a&&/\bon\b/.test(a.className))&&(!ob||getComputedStyle(ob).display==='none'); }catch(e){}
+ add('entered app (logged in)?', (inApp?'yes — in app':'no — on onboarding'), (inApp?'ok':'bad'));
  add('restored this open?', (window.__shomerRestored?'yes':'no'), (window.__shomerRestored?'ok':'warn'));
  add('device id', cid?(cid.slice(0,16)):'NONE', (cid?'ok':'warn'));
  add('storage persisted', window.__shomerPersist||'?', (window.__shomerPersist==='granted'?'ok':'warn'));
@@ -6076,7 +6086,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v59';
+var APP_VER='v60';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
