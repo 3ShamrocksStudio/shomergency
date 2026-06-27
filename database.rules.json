@@ -1,67 +1,101 @@
 {
-  "//WARNING": "TEMPORARY PRE-LAUNCH RULES — presence/sos/positions are OPEN (no auth) so the realtime layer works on mobile browsers where Firebase anonymous auth (IndexedDB) is blocked by iOS Safari ITP / storage partitioning. BEFORE PUBLIC LAUNCH: re-require auth and add Firebase App Check. Tracking: re-tighten presence/sos/positions to 'auth != null' once mobile auth is reliable. Other nodes (checkin/geo/tokens/alarms/invites/pairs) remain auth-gated.",
-
   "rules": {
     ".read": false,
     ".write": false,
 
     "presence": {
-      ".read": true,
+      ".read": "auth != null",
       "$uid": {
-        ".write": true,
-        ".validate": "newData.hasChildren(['lat','lng','ts'])"
+        ".write": "auth != null && auth.uid === $uid",
+        ".validate": "newData.hasChildren(['lat','lng','ts'])",
+        "lat": { ".validate": "newData.isNumber() && newData.val() >= -90 && newData.val() <= 90" },
+        "lng": { ".validate": "newData.isNumber() && newData.val() >= -180 && newData.val() <= 180" },
+        "ts":  { ".validate": "newData.isNumber()" },
+        "$other": { ".validate": false }
       }
     },
 
     "sos": {
-      ".read": true,
+      ".read": "auth != null",
       "$id": {
-        ".write": true,
-        ".validate": "newData.hasChildren(['uid','lat','lng','ts'])"
-      }
-    },
-
-    "positions": {
-      ".read": true,
-      "$uid": {
-        ".write": true
-      }
-    },
-
-    "tombstones": {
-      ".read": true,
-      "$uid": {
-        ".write": true,
-        ".validate": "newData.hasChild('deleted')"
+        ".write": "auth != null && (!data.exists() ? newData.child('uid').val() === auth.uid : data.child('uid').val() === auth.uid)",
+        ".validate": "newData.hasChildren(['uid','lat','lng','ts']) && newData.child('uid').val() === auth.uid",
+        "uid":        { ".validate": "newData.isString() && newData.val() === auth.uid" },
+        "lat":        { ".validate": "newData.isNumber() && newData.val() >= -90 && newData.val() <= 90" },
+        "lng":        { ".validate": "newData.isNumber() && newData.val() >= -180 && newData.val() <= 180" },
+        "type":       { ".validate": "newData.isString() && newData.val().length <= 32" },
+        "typeState":  { ".validate": "newData.isString() && newData.val().length <= 32" },
+        "ts":         { ".validate": "newData.isNumber()" },
+        "resolved":   { ".validate": "newData.isBoolean()" },
+        "resolvedTs": { ".validate": "newData.isNumber()" },
+        "name":       { ".validate": "newData.isString() && newData.val().length <= 60" },
+        "$other": { ".validate": false }
       }
     },
 
     "registry": {
-      ".read": true,
       "$phoneHash": {
-        ".write": true,
-        ".validate": "newData.hasChild('uid')"
-      }
-    },
-
-    "checkin": {
-      "$uid": {
         ".read": "auth != null",
-        ".write": "auth != null && auth.uid === $uid"
+        ".write": "auth != null && (newData.child('uid').val() === auth.uid || (!newData.exists() && data.child('uid').val() === auth.uid))",
+        ".validate": "$phoneHash.matches(/^[0-9a-f]{64}$/) && newData.hasChild('uid')",
+        "uid":  { ".validate": "newData.isString() && newData.val() === auth.uid" },
+        "name": { ".validate": "newData.isString() && newData.val().length <= 60" },
+        "ts":   { ".validate": "newData.isNumber()" },
+        "$other": { ".validate": false }
       }
     },
 
-    "geo": {
+    "pairs": {
       "$uid": {
         ".read": "auth != null && auth.uid === $uid",
-        ".write": "auth != null && auth.uid === $uid"
+        "$other": {
+          ".write": "auth != null && (auth.uid === $uid || auth.uid === $other)",
+          ".validate": "!newData.exists() || newData.hasChildren(['ts'])",
+          "name":  { ".validate": "newData.isString() && newData.val().length <= 60" },
+          "token": { ".validate": "newData.isString() && newData.val().length <= 64" },
+          "via":   { ".validate": "newData.isString() && newData.val().length <= 16" },
+          "ts":    { ".validate": "newData.isNumber()" },
+          "$x": { ".validate": false }
+        }
+      }
+    },
+
+    "invites": {
+      "$token": {
+        ".read": "auth != null",
+        ".write": "auth != null && ( (!data.exists() && newData.child('fromUid').val() === auth.uid) || (data.exists() && (data.child('fromUid').val() === auth.uid || newData.child('acceptedBy').val() === auth.uid)) )",
+        ".validate": "$token.length <= 40 && newData.hasChild('fromUid')",
+        "fromUid":      { ".validate": "newData.isString()" },
+        "name":         { ".validate": "newData.isString() && newData.val().length <= 60" },
+        "ts":           { ".validate": "newData.isNumber()" },
+        "acceptedBy":   { ".validate": "newData.isString() && newData.val() === auth.uid" },
+        "acceptedName": { ".validate": "newData.isString() && newData.val().length <= 60" },
+        "acceptedTs":   { ".validate": "newData.isNumber()" },
+        "$other": { ".validate": false }
+      }
+    },
+
+    "tombstones": {
+      "$uid": {
+        ".read": "auth != null",
+        ".write": "auth != null && auth.uid === $uid",
+        ".validate": "newData.hasChild('deleted')",
+        "deleted": { ".validate": "newData.isBoolean()" },
+        "ts":      { ".validate": "newData.isNumber()" },
+        "$other": { ".validate": false }
       }
     },
 
     "tokens": {
       "$uid": {
         ".read": "auth != null && auth.uid === $uid",
-        ".write": "auth != null && auth.uid === $uid"
+        ".write": "auth != null && auth.uid === $uid",
+        ".validate": "newData.hasChild('token')",
+        "token": { ".validate": "newData.isString() && newData.val().length <= 512" },
+        "lat":   { ".validate": "newData.isNumber()" },
+        "lng":   { ".validate": "newData.isNumber()" },
+        "ts":    { ".validate": "newData.isNumber()" },
+        "$other": { ".validate": false }
       }
     },
 
@@ -69,23 +103,33 @@
       ".read": false,
       "$id": {
         ".write": "auth != null && newData.child('fromUid').val() === auth.uid",
-        ".validate": "newData.hasChildren(['toUid','fromUid'])"
+        ".validate": "newData.hasChildren(['toUid','fromUid'])",
+        "fromUid": { ".validate": "newData.isString() && newData.val() === auth.uid" },
+        "toUid":   { ".validate": "newData.isString()" },
+        "title":   { ".validate": "newData.isString() && newData.val().length <= 120" },
+        "body":    { ".validate": "newData.isString() && newData.val().length <= 280" },
+        "tag":     { ".validate": "newData.isString() && newData.val().length <= 40" },
+        "ts":      { ".validate": "newData.isNumber()" },
+        "$other": { ".validate": false }
       }
     },
 
-    "invites": {
-      "$token": {
-        ".read": "auth != null",
-        ".write": "auth != null"
-      }
-    },
-
-    "pairs": {
+    "positions": {
       "$uid": {
-        ".read": "auth != null",
-        "$other": {
-          ".write": "auth != null && auth.uid === $uid"
-        }
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    },
+    "geo": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    },
+    "checkin": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid"
       }
     }
   }
