@@ -75,30 +75,53 @@
     /* Phone mockup — one screen: the map (as requested) */
     .phone-wrap { max-width: 280px; margin: 0 auto; }
     .phone { background: #05080f; border-radius: 42px; padding: 10px; box-shadow: 0 30px 70px rgba(0,0,0,0.6); border: 1px solid #3a475f; }
-    .phone .screen { background: #000; border-radius: 32px; overflow: hidden; position: relative; }
-    .phone .screen img { width: 100%; display: block; }
+    .phone .screen { background: #000; border-radius: 32px; overflow: hidden; position: relative; height: 500px; }
     .phone .notch { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); width: 68px; height: 18px; background: #05080f; border-radius: 10px; z-index: 2; }
     .mock-cap { text-align: center; margin-top: 14px; font-size: 14px; color: var(--tx2); }
 
+    /* Animated map simulation */
+    .map-sim { position: relative; height: 100%; background: #0a1628; }
+    .map-bg { width: 100%; height: 100%; object-fit: cover; opacity: 0.9; }
+    .user-pin { position: absolute; left: 25%; bottom: 55%; width: 14px; height: 14px; background: #3da7f9; border: 3px solid #fff; border-radius: 50%; box-shadow: 0 0 0 4px rgba(61,167,249,0.3); z-index: 3; }
+    .event { position: absolute; right: 30%; top: 25%; z-index: 4; }
+    .event-pin { width: 18px; height: 18px; background: #e8182c; border-radius: 50%; border: 3px solid #fff; animation: pulse 1.5s infinite; }
+    .event-label { position: absolute; top: -28px; left: 50%; transform: translateX(-50%); background: #e8182c; color: #fff; font-size: 10px; padding: 1px 6px; border-radius: 3px; white-space: nowrap; }
+    .sos-waves { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 60px; height: 60px; border: 2px solid #e8182c; border-radius: 50%; opacity: 0; animation: wave 2s infinite; }
+    .sos-waves:nth-child(2) { animation-delay: 0.6s; }
+    .path { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; }
+    .path line { stroke: #e0a828; stroke-width: 3; stroke-dasharray: 20 8; animation: dash 1.2s linear infinite; }
+    .user-pin { animation: pulse 2s infinite; }
+    .event-pin { animation: pulse 1.2s infinite; }
+    .nearby-alert { position: absolute; top: 12px; left: 12px; right: 12px; background: rgba(232,24,44,0.95); color: #fff; font-size: 11px; padding: 4px 8px; border-radius: 4px; display: flex; align-items: center; gap: 4px; animation: fadeIn 0.4s forwards; z-index: 5; }
+    @keyframes pulse { 0%,100% { transform: scale(1); opacity:1; } 50% { transform: scale(1.3); opacity:0.7; } }
+    @keyframes wave { 0% { transform: translate(-50%,-50%) scale(0.5); opacity:0.8; } 100% { transform: translate(-50%,-50%) scale(2); opacity:0; } }
+    @keyframes dash { to { stroke-dashoffset: -24; } }
+    @keyframes fadeIn { from { opacity:0; transform: translateY(-5px); } to { opacity:1; transform: translateY(0); } }
+
     .section { padding: 56px 0; }
+    #how { background: var(--surface); }
+    #app { background: #0a1628; }
+    .section:nth-of-type(4) { background: var(--surface-2); }
     .sec-head { margin-bottom: 22px; }
     .k { font-size: 12px; letter-spacing: .5px; color: var(--gold-400); text-transform: uppercase; margin-bottom: 6px; }
     h2 { font-size: 24px; font-weight: 700; line-height: 1.2; }
 
     .grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
     @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
-    .card { background: var(--surface-2); border-radius: var(--radius); padding: 18px; border: 1px solid var(--border); }
+    .card { padding: 8px 0; }
     .card h3 { font-size: 15px; margin-bottom: 6px; color: var(--gold-400); }
+    .card img { width:100%; border-radius:8px; margin-bottom:8px; display:block; }
 
     .steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
-    .step { background: var(--surface-2); border-radius: var(--radius); padding: 20px; }
-    .step-num { font-size: 13px; color: var(--gold-400); font-weight: 600; margin-bottom: 8px; }
+    .step { padding: 8px 0; display: flex; flex-direction: column; align-items: flex-start; }
+    .step-num { font-size: 13px; color: var(--gold-400); font-weight: 600; margin: 4px 0 8px; }
+    .step-icon { width:28px; height:28px; color:var(--gold-500); margin-bottom:4px; }
 
     .cta-band { background: var(--brand-gradient, linear-gradient(120deg, #2350a8 0%, #16336b 60%, #e0a82e 130%)); border-radius: 20px; padding: 38px 28px; text-align: center; color: #fff; }
     .cta-band h3 { font-size: 22px; margin-bottom: 8px; }
     .cta-band p { color: rgba(255,255,255,0.85); margin-bottom: 18px; }
 
-    .trust { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; font-size: 13.5px; color: var(--tx1); }
+    .trust { padding: 8px 0; font-size: 13.5px; color: var(--tx1); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
     .trust strong { color: var(--tx0); }
 
     footer { padding: 32px 0 40px; border-top: 1px solid var(--border); font-size: 13px; color: var(--tx2); }
@@ -196,16 +219,19 @@
       </div>
       <div class="steps">
         <div class="step">
+          <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="8" y1="9" x2="16" y2="9"/><line x1="8" y1="13" x2="16" y2="13"/></svg>
           <div class="step-num">1</div>
           <h3>פותחים את SH✡MER</h3>
           <p>בלי חנות, בלי הורדה. נפתח בדפדפן ועובד גם בלי רשת.</p>
         </div>
         <div class="step">
+          <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M4 20c0-2.5 2-4 4-4s4 1.5 4 4M12 20c0-2.5 2-4 4-4s4 1.5 4 4"/></svg>
           <div class="step-num">2</div>
           <h3>מוסיפים את השומרים שלך</h3>
           <p>משפחה, חברים, שכנים. מעגל שמקבל התראה כשצריך.</p>
         </div>
         <div class="step">
+          <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 18v-5a5 5 0 0 1 10 0v5"/><rect x="5" y="18" width="14" height="3" rx="1.5"/><path d="M12 3v2M4.5 7l1.5 1.3M19.5 7L18 8.3"/></svg>
           <div class="step-num">3</div>
           <h3>לחיצה אחת = עזרה</h3>
           <p>אזעקה חזקה, מיקום מדויק, והשומרים בקרבת מקום יודעים מיד.</p>
@@ -224,8 +250,22 @@
       <div class="phone-wrap">
         <div class="phone">
           <div class="screen">
-            <div class="notch"></div>
-            <img src="img/map.png" alt="SH✡MER live map — real screenshot">
+            <div class="map-sim">
+              <img src="img/real-map.jpg" class="map-bg" alt="SH✡MER live map base">
+              <svg class="path" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <line x1="30" y1="40" x2="70" y2="30" />
+              </svg>
+              <div class="user-pin"></div>
+              <div class="event">
+                <div class="event-pin"></div>
+                <div class="sos-waves"></div>
+                <div class="sos-waves"></div>
+                <div class="event-label">SOS</div>
+              </div>
+              <div class="nearby-alert">
+                <span>🚨</span> <span>SOS קרוב</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -241,14 +281,17 @@
       </div>
       <div class="grid">
         <div class="card">
+          <img src="img/benefits-parents.jpg" alt="הורים עם SH✡MER">
           <h3>להורים</h3>
           <p>דעו איפה הילדים. קבלו התראה כשצריך. מעגל אמון פשוט.</p>
         </div>
         <div class="card">
+          <img src="img/benefits-woman.jpg" alt="נשים עם SH✡MER">
           <h3>לנשים</h3>
           <p>הליכה לבד. תחבורה. עיר. לחיצה אחת — השומרים שלך יודעים.</p>
         </div>
         <div class="card">
+          <img src="img/benefits-hiker.jpg" alt="טיולים עם SH✡MER">
           <h3>לטיולים ולטבע</h3>
           <p>בדיקת חיים, דיווח מהיר ועזרה בקרבת מקום.</p>
         </div>
