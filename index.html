@@ -48,10 +48,12 @@
     .nav { display: flex; align-items: center; justify-content: space-between; height: 64px; }
     .wordmark { height: 28px; width: auto; }
 
-    /* HERO with carousel */
-    .hero { padding: 48px 0 32px; background: linear-gradient(180deg, #091227 0%, #0e1d3a 100%); }
-    .hero-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 48px; align-items: center; }
-    @media (max-width: 860px) { .hero-grid { grid-template-columns: 1fr; gap: 32px; } }
+    /* HERO - big, larger header with hero-alley_clean.jpg */
+    .hero { padding: 80px 0 60px; min-height: 520px; background: linear-gradient(180deg, #091227 0%, #0e1d3a 100%); }
+    .hero-grid { display: grid; grid-template-columns: 1fr 1.3fr; gap: 32px; align-items: center; }
+    @media (max-width: 860px) { .hero-grid { grid-template-columns: 1fr; gap: 24px; } }
+
+    .hero-image img { width: 100%; height: auto; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
     
     .hero h1 { font-size: clamp(28px, 5.5vw, 42px); font-weight: 800; line-height: 1.1; margin-bottom: 12px; }
     .hero .tag { font-size: 17px; color: var(--gold-400); margin-bottom: 8px; font-weight: 600; }
@@ -160,7 +162,7 @@
     </div>
   </header>
 
-  <!-- HERO with carousel of the 3 required hyperrealistic scenes -->
+  <!-- HERO - large header with hero-alley_clean.jpg -->
   <section class="hero">
     <div class="container">
       <div class="hero-grid">
@@ -182,20 +184,9 @@
           <p style="margin-top:14px; font-size:13px; color:var(--tx2);">בלי חנות. עובד גם בלי רשת. שתף עם השומרים שלך.</p>
         </div>
 
-        <!-- Carousel: exactly the 3 scenes requested -->
-        <div class="hero-carousel">
-          <div class="carousel-track" id="carousel-track">
-            <div class="carousel-slide">
-              <img src="hero-alley copy.jpg" alt="SH✡MER: אישה בסמטה חשוכה מפעילה אזעקה, שומרים מתקרבים">
-            </div>
-            <div class="carousel-slide">
-              <img src="hero-bullying.jpg" alt="SH✡MER: ילד מחוץ לבית ספר בסכנה, מפעיל הגנה">
-            </div>
-            <div class="carousel-slide">
-              <img src="hero-following.jpg" alt="SH✡MER: שתי נערות נעקבות, SH✡MER מביא עזרה">
-            </div>
-          </div>
-          <div class="carousel-nav" id="carousel-nav"></div>
+        <!-- Header hero image: hero-alley_clean.jpg - big, larger header -->
+        <div class="hero-image">
+          <img src="hero-alley_clean.jpg" alt="SH✡MER - אזרחים מגנים על אזרחים" style="width: 100%; height: auto; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.5);">
         </div>
       </div>
     </div>
