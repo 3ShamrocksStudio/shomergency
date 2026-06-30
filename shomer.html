@@ -10,7 +10,7 @@
 <meta http-equiv="X-Content-Type-Options" content="nosniff"><meta http-equiv="Referrer-Policy" content="no-referrer">
 <!-- CSP: no eval. Allows Leaflet (cdnjs) + OpenStreetMap tiles at runtime; everything else self-hosted. -->
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://cdnjs.cloudflare.com https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com; connect-src 'self' https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://*.googleapis.com https://fcmregistrations.googleapis.com https://firebaseinstallations.googleapis.com https://router.project-osrm.org https://*.firebaseio.com wss://*.firebaseio.com https://shomergency-default-rtdb.firebaseio.com wss://shomergency-default-rtdb.firebaseio.com https://*.firebasedatabase.app wss://*.firebasedatabase.app https://*.firebaseapp.com; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://www.gstatic.com https://apis.google.com; frame-src 'self' https://shomergency.firebaseapp.com; manifest-src 'self'; worker-src 'self';">
-<title>SHOMER · שומר — Citizens Protecting Citizens</title>
+<title>SHOMER · שומר — Citizens for Citizens</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" href="logo-192.png">
 <link rel="apple-touch-icon" href="logo-192.png">
@@ -68,7 +68,7 @@
  --blu:#1852C0; --blu-b:rgba(24,82,192,.14);
  --pur:#6B32D8; --pur-b:rgba(107,50,216,.14);
  /* Text */
- --tx0:#F0F4FF; --tx1:#C8D4E8; --tx2:#8898B8; --tx3:#506080; --tx4:#344060;
+ --tx0:#F0F4FF; --tx1:#C8D4E8; --tx2:#8898B8; --tx3:#8492B4; --tx4:#65718F;
  /* Borders */
  --b1:rgba(136,152,184,.12); --b2:rgba(136,152,184,.22); --b3:rgba(224,168,40,.28);
  --b4:rgba(204,20,38,.28);
@@ -1141,7 +1141,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="ob-shieldwrap">
  <img class="ob-logo" src="SHOMER_logo_big.png" alt="SHOMER" width="240" height="240">
  </div>
- <div class="ob-sub" id="ob-tagline">Citizens For Citizens</div>
+ <div class="ob-sub" id="ob-tagline">Citizens for Citizens</div>
  <!-- Language pick in onboarding -->
  <div class="ob-lang-pick" role="group" aria-label="שפה">
  <button class="olb on" onclick="setLang('he')" lang="he">עברית</button>
@@ -1465,7 +1465,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="rc-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div>
  <div class="rc-t" id="rc-t" data-he="להגיב כשומר/ת?" data-en="Respond as a guardian?">להגיב כשומר/ת?</div>
  <div class="rc-b" data-he="ניווט מגיבים מיועד בעיקר למגיבים מאומתים (כבאות/משטרה/מד״א) ולשומרים מוגדרים. הוא יציג מסלול חי ומרחק אל מי שזקוק/ה לעזרה." data-en="Responder navigation is intended primarily for verified responders (fire/police/medic) and designated guardians. It shows a live route and distance to the person in need.">ניווט מגיבים מיועד בעיקר למגיבים מאומתים (כבאות/משטרה/מד״א) ולשומרים מוגדרים. הוא יציג מסלול חי ומרחק אל מי שזקוק/ה לעזרה.</div>
- <div class="rc-warn" data-he="⚠ אל תסכן/י את עצמך. שומר מחזק עזרה הדדית ואינו תחליף לשירותי חירום. בכל מצב חירום חייגו 100 / 101 / 102. אם אינך מגיב/ה מיומן/ת — התרעה וחיוג הם התרומה הטובה ביותר." data-en="⚠ Do not put yourself in danger. SH✡MER augments mutual aid and is not a replacement for emergency services. In any emergency call 100 / 101 / 102. If you are not a trained responder, alerting and calling is the best help.">⚠ אל תסכן/י את עצמך. שומר מחזק עזרה הדדית ואינו תחליף לשירותי חירום. בכל מצב חירום חייגו 100 / 101 / 102. אם אינך מגיב/ה מיומן/ת — התרעה וחיוג הם התרומה הטובה ביותר.</div>
+ <div class="rc-warn" data-he="⚠ אל תסכן/י את עצמך. שומר מחזק עזרה הדדית ואינו תחליף לשירותי חירום. בכל מצב חירום חייגו 100 / 101 / 102. אם אינך מגיב/ה מיומן/ת — התרעה וחיוג הם התרומה הטובה ביותר." data-en="⚠ Do not put yourself in danger. SHOMER augments mutual aid and is not a replacement for emergency services. In any emergency call 100 / 101 / 102. If you are not a trained responder, alerting and calling is the best help.">⚠ אל תסכן/י את עצמך. שומר מחזק עזרה הדדית ואינו תחליף לשירותי חירום. בכל מצב חירום חייגו 100 / 101 / 102. אם אינך מגיב/ה מיומן/ת — התרעה וחיוג הם התרומה הטובה ביותר.</div>
  <div class="rc-actions">
  <button class="cta-gold" onclick="respondConsentAccept()" data-he="הבנתי — הפעל/י ניווט" data-en="I understand — start navigation">הבנתי — הפעל/י ניווט</button>
  <button class="ob-back" onclick="respondConsentDecline()" data-he="לא עכשיו" data-en="Not now">לא עכשיו</button>
@@ -1771,10 +1771,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </div>
  </div>
  <div class="set-cat"><div class="set-cat-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h3.5l1.5 4-2 1.5a11 11 0 0 0 5 5l1.5-2 4 1.5V19a2 2 0 0 1-2.2 2A16 16 0 0 1 4 6.2 2 2 0 0 1 5 4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div><div class="set-cat-t" id="set-contacts-lbl" data-he="אנשי קשר חירום" data-en="Emergency contacts">אנשי קשר חירום</div></div>
- <div class="set-grp" id="contacts-grp">
- <div class="c-row"><div class="c-av" data-he="א" data-en="M" data-ar="أ">א</div><div style="flex:1"><div class="c-nm" data-he="אמא" data-en="Mom" data-ar="أمي">אמא</div><div class="c-ph">052-XXX-XXXX</div></div><span class="c-tag" data-he="ראשון" data-en="Primary" data-ar="أساسي">ראשון</span></div>
- <div class="c-row"><div class="c-av" data-he="ד" data-en="D" data-ar="س">ד</div><div style="flex:1"><div class="c-nm" data-he="דני" data-en="Danny" data-ar="سامي">דני</div><div class="c-ph">054-XXX-XXXX</div></div><span class="c-tag" data-he="שני" data-en="Secondary" data-ar="ثانوي">שני</span></div>
- </div>
+ <div class="set-grp" id="contacts-grp"><!-- rendered live from your paired SHOMERs (renderSetContacts) --></div>
  <button class="add-c mb20" onclick="cl('sh-set');openCircles()" data-he="+ חבר/י שומר/ת" data-en="+ Connect a SHOMER">+ חבר/י שומר/ת</button>
  <div class="set-cat"><div class="set-cat-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 12h18" stroke="currentColor" stroke-width="2"/><path d="M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><div class="set-cat-t" id="set-lang-lbl" data-he="שפה" data-en="Language">שפה</div></div>
  <div class="set-grp" style="padding:10px 14px;">
@@ -2372,7 +2369,7 @@ const AR={
  // ── Onboarding ──
  'First name':'الاسم الأول','Continue →':'متابعة ←','Auto-generated — tap to edit':'يُنشأ تلقائياً — اضغط للتعديل',
  'Skip — continue without location':'تخطّي — المتابعة بدون مشاركة الموقع','Skip – continue without sharing':'تخطّي — المتابعة بدون مشاركة الموقع',
- 'Citizens For Citizens':'مواطنون من أجل مواطنين',
+ 'Citizens for Citizens':'مواطنون من أجل مواطنين',
  // ── Map / header / status ──
  'Map':'الخريطة','SHOMERs':'حُرّاس','SHOMER':'حارس','guardian':'حارس','Live event':'حدث مباشر',
  'active SHOMERs near you (live)':'حُرّاس نشطون بقربك (مباشر)','An active SHOMER nearby (approximate, anonymous)':'حارس نشط في الجوار (موقع تقريبي، مجهول الهوية)',
@@ -4615,7 +4612,29 @@ function openUpdates(){
 }
 /* Mirror "any full sheet open" onto <body> so CSS can hide the floating SOS/FABs reliably (no :has dependency). */
 function syncSheetState(){ document.body.classList.toggle('sheet-open', !!document.querySelector('.sheet.open')); }
-function op(id){closeAll();const el=document.getElementById(id);if(el)el.classList.add('open');syncSheetState();}
+function op(id){closeAll();const el=document.getElementById(id);if(el)el.classList.add('open');syncSheetState();if(id==='sh-set'){try{renderSetContacts();}catch(e){}}}
+/* Settings → "Emergency contacts" renders the user's REAL paired SHOMERs (name + link status),
+   or a clear empty state. No phone numbers are shown (pairing is privacy-first: name + uid only). */
+function renderSetContacts(){
+  var grp=document.getElementById('contacts-grp'); if(!grp)return;
+  var he=currentLang==='he', ar=currentLang==='ar';
+  var pairs=(typeof gdState==='function'?(gdState().pairs||[]):[]);
+  if(!pairs.length){
+    grp.innerHTML='<div style="padding:16px 14px;font-size:12.5px;color:var(--tx2);line-height:1.6;">'+
+      (he?'עדיין לא הוספת שומרים. הוסיפו משפחה או חברים — הם יקבלו התראה כששולחים SOS.':
+       ar?'لم تُضِف حُرّاسًا بعد. أضِف العائلة أو الأصدقاء — سيُنبَّهون عند إرسال نداء استغاثة.':
+       'No SHOMERs added yet. Add family or friends — they get alerted when you send an SOS.')+'</div>';
+    return;
+  }
+  grp.innerHTML=pairs.map(function(p){
+    var nm=((p.name||'').trim())||(he?'שומר/ת':ar?'حارس':'SHOMER');
+    var av=ESC(nm.charAt(0).toUpperCase());
+    var linked=!!(p.linked&&p.partnerUid);
+    var tag=linked?(he?'מקושר':ar?'مرتبط':'Linked'):(he?'ממתין':ar?'بانتظار':'Pending');
+    var sub=linked?(he?'מחובר/ת בזמן אמת':ar?'متصل آنيًا':'Connected live'):(he?'הזמנה ממתינה לאישור':ar?'دعوة بانتظار القبول':'Invite pending');
+    return '<div class="c-row"><div class="c-av">'+av+'</div><div style="flex:1"><div class="c-nm">'+ESC(nm)+'</div><div class="c-ph">'+sub+'</div></div><span class="c-tag">'+tag+'</span></div>';
+  }).join('');
+}
 function cl(id){
  try{stopPreview();}catch(e){} // never leave a preview tone playing after a sheet closes
  const el=document.getElementById(id);if(el)el.classList.remove('open');
@@ -6004,6 +6023,7 @@ loadStore();
 (function(){
   try{
     if(sessionStorage.getItem('shomerVerChecked')==='1') return;
+    if(!navigator.onLine) return;   // offline: skip the update check (it can't succeed; avoids a console network error)
     sessionStorage.setItem('shomerVerChecked','1');
     fetch('version.json?cb='+(window.performance&&performance.now?Math.floor(performance.now()):Math.random()), {cache:'no-store'})
       .then(function(r){ return r.ok?r.json():null; })
@@ -6139,7 +6159,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v64';
+var APP_VER='v65';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -6398,6 +6418,11 @@ function fbLoad(src){return new Promise(function(res,rej){var s=document.createE
 async function fbInit(){
   if(FB.ready)return;
   if(!window.SHOMER_FB){ FB.authState='no-config'; FB.err='no-config'; fbLog('NO Firebase config on this build'); renderFbStatus(); return; }
+  // OFFLINE: the realtime layer genuinely can't connect with no network, and attempting it
+  // just spams the console with failed WS/auth/long-poll requests. Defer cleanly — the
+  // 'online' resume hook (and the 3s monitor) call fbInit again the moment the network returns.
+  // The Emergency Guide + app shell work offline regardless (no Firebase needed).
+  if(!navigator.onLine){ if(!FB._offDeferred){ FB._offDeferred=true; fbLog('offline at boot — deferring realtime connect until online'); } FB.authState='offline — deferred'; try{renderFbStatus();}catch(e){} return; }
   if(FB._initing)return; FB._initing=true;
   fbLog('init start · dbURL =', window.SHOMER_FB.databaseURL);
   // WATCHDOG covers ONLY the data layer (SDK load + socket). Auth is now
