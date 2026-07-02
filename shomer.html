@@ -1214,20 +1214,10 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="ob-card">
  <h3 id="ob-h2">הגדרות חירום</h3>
  <p class="desc" id="ob-d2">הקש אזעקה כדי לשמוע אותה. היא תופעל עם לחיצת SOS.</p>
- <div class="ob-alarms" id="ob-alarms" role="group" aria-label="סוג אזעקה">
- <div class="ob-alarm sel" onclick="obPickAlarm(this,'siren')" role="radio" aria-checked="true" tabindex="0">
+ <div class="ob-alarms" id="ob-alarms">
+ <div class="ob-alarm sel" onclick="previewAlarm('shomer','ob-alarm-stop')" role="button" tabindex="0" aria-label="השמע את אזעקת ה-SOS של שומר">
  <div class="ob-alarm-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18v-5a5 5 0 0 1 10 0v5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><rect x="5" y="18" width="14" height="3" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3v2M4.5 7l1.5 1.3M19.5 7L18 8.3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
- <div class="ob-alarm-info"><div class="nm" id="al1-nm">סירנת ניידת</div><div class="ds" id="al1-ds">גלי צליל 440→1800Hz — הכי מזוהה כחירום</div></div>
- <span class="ob-alarm-play" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5l12 7-12 7Z" fill="currentColor"/></svg></span>
- </div>
- <div class="ob-alarm" onclick="obPickAlarm(this,'horn')" role="radio" aria-checked="false" tabindex="0">
- <div class="ob-alarm-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h3l8 4V6l-8 4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M18 9.5a3 3 0 0 1 0 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
- <div class="ob-alarm-info"><div class="nm" id="al2-nm">קרן חירום</div><div class="ds" id="al2-ds">פיצוצי square 1200Hz — מנפץ ריכוז</div></div>
- <span class="ob-alarm-play" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5l12 7-12 7Z" fill="currentColor"/></svg></span>
- </div>
- <div class="ob-alarm" onclick="obPickAlarm(this,'pulse')" role="radio" aria-checked="false" tabindex="0">
- <div class="ob-alarm-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 14h6l-1 8 9-12h-6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div>
- <div class="ob-alarm-info"><div class="nm" id="al3-nm">פולסים מהירים</div><div class="ds" id="al3-ds">2800Hz — פיזית צורם ביותר</div></div>
+ <div class="ob-alarm-info"><div class="nm" id="al1-nm">אזעקת SOS · שומר</div><div class="ds" id="al1-ds">צליל החירום הייחודי — הקש/י לשמיעה</div></div>
  <span class="ob-alarm-play" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5l12 7-12 7Z" fill="currentColor"/></svg></span>
  </div>
  </div>
@@ -1702,21 +1692,11 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div style="background:var(--rb);border:1px solid var(--b4);border-right:4px solid var(--r3);border-radius:var(--r12);padding:13px;margin-bottom:16px;font-size:13px;color:var(--tx1);line-height:1.65" id="alarm-intro-txt">
  <strong style="color:#FF7080">מטרה:</strong> משיכת תשומת לב מרבית ועזרה מיידית. מופעלת בעוצמה מלאה.
  </div>
- <div class="sec-cap mb12" id="alarm-type-lbl" data-he="סוג אזעקה" data-en="Alarm type">סוג אזעקה</div>
+ <div class="sec-cap mb12" id="alarm-type-lbl" data-he="אזעקת החירום" data-en="Emergency alarm" data-ar="إنذار الطوارئ">אזעקת החירום</div>
  <div id="alarm-list" role="group" style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
- <div class="ob-alarm sel" onclick="pickAlarm(this,'siren')" role="radio" aria-checked="true" tabindex="0">
+ <div class="ob-alarm sel" onclick="previewAlarm('shomer','set-alarm-stop')" role="button" tabindex="0" aria-label="השמע את אזעקת ה-SOS של שומר">
  <div class="ob-alarm-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18v-5a5 5 0 0 1 10 0v5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><rect x="5" y="18" width="14" height="3" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3v2M4.5 7l1.5 1.3M19.5 7L18 8.3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
- <div class="ob-alarm-info"><div class="nm" id="sal1-nm">סירנת ניידת</div><div class="ds" id="sal1-ds">גלי צליל 620→3500Hz</div></div>
- <span class="ob-alarm-play" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5l12 7-12 7Z" fill="currentColor"/></svg></span>
- </div>
- <div class="ob-alarm" onclick="pickAlarm(this,'horn')" role="radio" aria-checked="false" tabindex="0">
- <div class="ob-alarm-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h3l8 4V6l-8 4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M18 9.5a3 3 0 0 1 0 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
- <div class="ob-alarm-info"><div class="nm" id="sal2-nm">צופר תקיפה</div><div class="ds" id="sal2-ds">אזעקת קרב מאיימת + תת-בס</div></div>
- <span class="ob-alarm-play" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5l12 7-12 7Z" fill="currentColor"/></svg></span>
- </div>
- <div class="ob-alarm" onclick="pickAlarm(this,'pulse')" role="radio" aria-checked="false" tabindex="0">
- <div class="ob-alarm-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 14h6l-1 8 9-12h-6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div>
- <div class="ob-alarm-info"><div class="nm" id="sal3-nm">הדף סוני</div><div class="ds" id="sal3-ds">צרחה דו-גוונית חודרת</div></div>
+ <div class="ob-alarm-info"><div class="nm" id="sal1-nm">אזעקת SOS · שומר</div><div class="ds" id="sal1-ds">צליל החירום הייחודי — הקש/י לשמיעה</div></div>
  <span class="ob-alarm-play" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5l12 7-12 7Z" fill="currentColor"/></svg></span>
  </div>
  </div>
@@ -2189,7 +2169,7 @@ const LANGS={
  ob_h2:'הגדרות חירום',ob_d2:'הקש אזעקה כדי לשמוע אותה. היא תופעל עם לחיצת SOS.',
  geo_need:'נדרש אישור מיקום',geo_wait:'מחפש מיקום...',geo_ok:'מיקום אושר!',geo_err:'לא ניתן לאתר מיקום',
  geo_allow:'שתף מיקום',geo_next:'← המשך להגדרות חירום',geo_retry:' נסה שוב',geo_skip:'דלג – המשך בלי שיתוף מיקום',
- al1:'סירנת ניידת',al1d:'גלי צליל 620→3500Hz — הכי מזוהה כחירום',al2:'צופר תקיפה',al2d:'אזעקת קרב מאיימת — גלי דיסוננס + תת-בס',al3:'הדף סוני',al3d:'צרחה דו-גוונית חודרת — להבריח תוקף',
+ al1:'אזעקת SOS · שומר',al1d:'צליל החירום הייחודי — סירנה מתגברת, דיסוננטית ובלתי-נשכחת',al2:'',al2d:'',al3:'',al3d:'',
  vol:'עוצמת קול',test:'בדוק אזעקה',finish:'✓ כניסה לשומר',back:'← חזרה',
  shake:'<strong>Shake-to-SOS:</strong> 5 ניעורים חזקים מפעילים SOS אוטומטי.',
  dms_ob:'<strong>Dead Man\'s Switch:</strong> אם לא אישרת "הכל בסדר" תוך X דק׳ — SOS אוטומטי.',
@@ -2222,7 +2202,7 @@ const LANGS={
  ob_h2:'Emergency settings',ob_d2:'Tap an alarm to hear it. It fires when you trigger SOS.',
  geo_need:'Location access needed',geo_wait:'Locating...',geo_ok:'Location confirmed!',geo_err:'Could not locate you',
  geo_allow:'Share location',geo_next:'Continue →',geo_retry:' Retry',geo_skip:'Skip – continue without sharing',
- al1:'Police siren',al1d:'620→3500Hz sweep — most recognizable',al2:'Air-raid siren',al2d:'Menacing battle-siren wail + sub-bass',al3:'Sonic deterrent',al3d:'Piercing dual-tone scream — scares attackers',
+ al1:'SHOMER SOS alarm',al1d:'Our signature emergency sound — escalating, dissonant, unmistakable',al2:'',al2d:'',al3:'',al3d:'',
  vol:'Volume',test:'Test alarm',finish:'✓ Enter Shomer',back:'← Back',
  shake:'<strong>Shake-to-SOS:</strong> 5 hard shakes trigger automatic SOS.',
  dms_ob:"<strong>Dead Man's Switch:</strong> If you don't confirm 'All OK' in X min — auto SOS.",
@@ -2255,7 +2235,7 @@ const LANGS={
  ob_h2:'إعدادات الطوارئ',ob_d2:'اختر الإنذار — يُفعَّل فوراً عند الضغط على SOS.',
  geo_need:'مطلوب إذن الموقع',geo_wait:'جارٍ التحديد...',geo_ok:'تم تأكيد الموقع!',geo_err:'لا يمكن تحديد موقعك',
  geo_allow:'شارك الموقع',geo_next:'التالي ←',geo_retry:' أعد المحاولة',geo_skip:'تخطّي — المتابعة بدون مشاركة الموقع',
- al1:'صفارة الإنذار',al1d:'440→1800Hz — الأكثر تعرفاً',al2:'بوق الطوارئ',al2d:'1200Hz — يستقطب الانتباه',al3:'نبضات سريعة',al3d:'2800Hz — الأكثر إزعاجاً',
+ al1:'إنذار SOS · شومير',al1d:'صوت الطوارئ المميّز — تصاعدي، نشاز، لا يُنسى',al2:'',al2d:'',al3:'',al3d:'',
  vol:'مستوى الصوت',test:'اختبار الإنذار',finish:'✓ الدخول لشومير',back:'← رجوع',
  shake:'<strong>هز للاستغاثة:</strong> 5 هزات قوية تُفعّل نداء الاستغاثة تلقائياً.',
  dms_ob:'<strong>مفتاح الأمان الميت:</strong> إذا لم تؤكد خلال X دقائق — إرسال تلقائي لنداء الاستغاثة.',
@@ -2558,7 +2538,7 @@ function updateSosCardType(){
   tag.style.color=known?sosTypeColor(curSosType):'#FF9aa3';
 }
 let sosHoldConsumed=false, sosHoldTimer=null, sosHoldRAF=null;
-let alarmType='siren', alarmVol=1.0;
+let alarmType='shomer', alarmVol=1.0;
 let audioCtx=null, oscillators=[];
 let newUpd=0, repLock=false, menuOpen=false;
 let user={name:'',phone:'',city:''};
@@ -2578,7 +2558,7 @@ let SS={
  onboarded:false,
  lang:'he',
  user:{name:'',phone:'',profession:''},
- alarm:{type:'siren',vol:0.6},
+ alarm:{type:'shomer',vol:0.6},
  shake:{enabled:true,sensitivity:22},
  dms:{interval:5,active:false,deadline:0},
  settings:{radius:5,toggles:{}},
@@ -2665,7 +2645,8 @@ function makeThumb(src){return new Promise(res=>{
 
 /* Apply stored settings to globals + UI on load (before app shows). */
 function applyStoredSettings(){
- alarmType=SS.alarm.type||'siren';
+ // ONE signature alarm now — migrate any legacy saved type (siren/horn/pulse) to it.
+ alarmType='shomer'; if(SS.alarm.type!=='shomer'){ SS.alarm.type='shomer'; }
  alarmVol=(SS.alarm.vol!=null?SS.alarm.vol:1);
  dmsIv=SS.dms.interval||5; dmsInterval=dmsIv;
  try{ reflectUnits(); reflectRespondToggle(); reflectPinSetState(); reflectCheckin(); if(SS.checkin&&SS.checkin.enabled)checkinSchedule(); }catch(e){}
@@ -3082,13 +3063,9 @@ function applyTranslations(){
  setText('geo-t',T('geo_need'));
  const gb=document.getElementById('geo-btn-t');if(gb)gb.textContent=T('geo_allow');
  const gs=document.getElementById('geo-skip-t');if(gs)gs.textContent=currentLang==='he'?'דלג — המשך בלי מיקום':'Skip — continue without location';
- // Alarm names
+ // Alarm name — one signature SOS alarm (onboarding + settings)
  setText('al1-nm',T('al1'));setText('al1-ds',T('al1d'));
- setText('al2-nm',T('al2'));setText('al2-ds',T('al2d'));
- setText('al3-nm',T('al3'));setText('al3-ds',T('al3d'));
  setText('sal1-nm',T('al1'));setText('sal1-ds',T('al1d'));
- setText('sal2-nm',T('al2'));setText('sal2-ds',T('al2d'));
- setText('sal3-nm',T('al3'));setText('sal3-ds',T('al3d'));
  setText('vol-lbl',T('vol'));
  const tl=document.getElementById('test-lbl');if(tl)tl.textContent=T('test');
  const dn=document.getElementById('ob-defaults-txt');if(dn)dn.innerHTML=currentLang==='he'?'<strong>Shake-to-SOS</strong> פעיל · <strong>Dead Man\'s Switch</strong> כבוי. אפשר לשנות בכל עת בהגדרות.':'<strong>Shake-to-SOS</strong> on · <strong>Dead Man\'s Switch</strong> off. Change anytime in Settings.';
@@ -3663,87 +3640,71 @@ function playAlarm(durMs){
  for(let i=0;i<256;i++){const x=i*2/256-1;curve[i]=(Math.PI+200)*x/(Math.PI+200*Math.abs(x));}
  dist.curve=curve;dist.oversample='4x';
  dist.connect(comp);
- if(alarmType==='siren'){
- // Layer 1: Primary sweep — aggressive sawtooth, fast "yelp" modulation.
- // Cycles alternate between slow "wail" (0.5s) and fast "yelp" (0.18s)
- // sweeps the way real police/ambulance sirens do — far more alarming.
- const o1=ctx.createOscillator(),g1=ctx.createGain();
- o1.type='sawtooth';g1.gain.value=alarmVol*0.9;
- let t=now,fast=true;
+ // ═══════════════ THE SHOMER SIGNATURE SOS ALARM ═══════════════
+ // ONE unmistakable emergency sound (no more weak alternates). A relentless dual-siren
+ // "yelp" — the recognizable police-siren character Dave liked — whose pitch RATCHETS
+ // upward across each ~2.2s macro-cycle then snaps back: an unresolving, escalating
+ // panic. Thickened by a +3% beat-detuned twin (harsh dissonant "beating"), a piercing
+ // octave overtone, and a chest-thumping sub-bass. Its signature — SHOMER's sonic logo —
+ // is a harsh TRITONE STAB (the maximally-dissonant "diabolus in musica") that lands at
+ // the peak of every cycle. Harsh, urgent, dissonant, escalating, impossible to ignore.
+ const mk=(type,gain,dest)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type=type;g.gain.value=gain;o.connect(g);g.connect(dest);o.start(now);o.stop(end);oscillators.push(o);return {o:o,g:g};};
+ const cyc=2.2, step=0.14;
+ // Layer 1 — escalating dual-saw yelp + piercing octave overtone
+ const A=mk('sawtooth',alarmVol*0.95,dist);   // siren body
+ const B=mk('sawtooth',alarmVol*0.72,dist);   // +3% detuned twin → harsh dissonant beating
+ const C=mk('square',  alarmVol*0.34,dist);   // octave overtone → grating edge
+ let t=now;
  while(t<end){
- const dur=fast?0.18:0.46;
- o1.frequency.setValueAtTime(620,t);
- o1.frequency.linearRampToValueAtTime(1750,t+dur*0.55);
- o1.frequency.linearRampToValueAtTime(620,Math.min(end,t+dur));
- t+=dur; fast=!fast;
- }
- o1.connect(g1);g1.connect(dist);
- o1.start(now);o1.stop(end);oscillators.push(o1);
- // Layer 2: Octave-up square — piercing, physically grating overtone.
- const o2=ctx.createOscillator(),g2=ctx.createGain();
- o2.type='square';g2.gain.value=alarmVol*0.5;
- t=now;
- while(t<end){o2.frequency.setValueAtTime(1240,t);o2.frequency.linearRampToValueAtTime(3500,t+0.18);o2.frequency.linearRampToValueAtTime(1240,t+0.36);t+=0.36;}
- o2.connect(g2);g2.connect(dist);
- o2.start(now);o2.stop(end);oscillators.push(o2);
- // Layer 3: Hard sub-bass pulse for chest-thumping urgency.
- const o3=ctx.createOscillator(),g3=ctx.createGain();
- o3.type='sine';o3.frequency.value=90;g3.gain.value=alarmVol*0.6;
- t=now;
- while(t<end){g3.gain.setValueAtTime(alarmVol*0.6,t);g3.gain.linearRampToValueAtTime(alarmVol*0.15,t+0.22);t+=0.36;}
- o3.connect(g3);g3.connect(comp);
- o3.start(now);o3.stop(end);oscillators.push(o3);
- } else if(alarmType==='horn'){
- // ── AIR-RAID / BATTLE SIREN ──
- // A slow, menacing wail with two detuned sawtooths that "beat" against each
- // other for a dread-inducing dissonance, a harsh octave overtone, and sub-bass
- // impact hits. Engineered to sound like an imminent-danger civil-defence siren.
- const mk=(type,gv,to)=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type=type;g.gain.value=gv;o.connect(g);g.connect(to);o.start(now);o.stop(end);oscillators.push(o);return o;};
- const o1 =mk('sawtooth',alarmVol*0.85,dist); // body
- const o1b=mk('sawtooth',alarmVol*0.70,dist); // detuned twin → ominous beating
- const o2 =mk('square', alarmVol*0.30,dist); // harsh overtone
- const cyc=2.2; let t=now;
- while(t<end){
- [[o1,300],[o1b,309]].forEach(([o,base])=>{
- o.frequency.setValueAtTime(base,t);
- o.frequency.linearRampToValueAtTime(base*2.85,Math.min(end,t+cyc*0.48));
- o.frequency.linearRampToValueAtTime(base,Math.min(end,t+cyc));
+ const pos=((t-now)%cyc)/cyc;                 // 0→1 within each macro cycle
+ const base=660+pos*380;                      // ratchets 660→1040Hz, then RESETS (rising panic)
+ const top=base*2.55;
+ const seg=Math.min(step,end-t);
+ [[A,1.0],[B,1.03],[C,2.0]].forEach(function(L){
+ const o=L[0].o, mul=L[1];
+ o.frequency.setValueAtTime(base*mul,t);
+ o.frequency.linearRampToValueAtTime(top*mul,t+seg*0.5);
+ o.frequency.linearRampToValueAtTime(base*mul,Math.min(end,t+seg));
  });
- o2.frequency.setValueAtTime(620,t);
- o2.frequency.linearRampToValueAtTime(1760,Math.min(end,t+cyc*0.48));
- o2.frequency.linearRampToValueAtTime(620,Math.min(end,t+cyc));
+ t+=seg;
+ }
+ // Layer 2 — sub-bass impact thump (chest-thumping urgency)
+ const S=mk('sine',alarmVol*0.7,comp); S.o.frequency.value=72;
+ t=now; while(t<end){ S.g.gain.setValueAtTime(alarmVol*0.7,t); S.g.gain.linearRampToValueAtTime(alarmVol*0.1,Math.min(end,t+0.33)); t+=0.5; }
+ // Layer 3 — SHOMER SIGNATURE tritone stab at the peak of every cycle
+ const P1=mk('square',0.0001,dist), P2=mk('square',0.0001,dist);
+ P1.o.frequency.value=784;    // G5
+ P2.o.frequency.value=1109;   // ~C#6 → tritone against G5 (diabolus in musica)
+ t=now+cyc*0.5;
+ while(t<end){
+ [P1,P2].forEach(function(P){ P.g.gain.setValueAtTime(0.0001,t); P.g.gain.exponentialRampToValueAtTime(alarmVol*0.9,t+0.012); P.g.gain.exponentialRampToValueAtTime(0.0001,Math.min(end,t+0.34)); });
  t+=cyc;
  }
- // Sub-bass impact pulses — chest-thumping dread.
- const os=ctx.createOscillator(),gs=ctx.createGain();os.type='sine';os.frequency.value=68;os.connect(gs);gs.connect(comp);
- t=now;while(t<end){gs.gain.setValueAtTime(alarmVol*0.75,t);gs.gain.linearRampToValueAtTime(alarmVol*0.08,Math.min(end,t+0.5));t+=0.6;}
- os.start(now);os.stop(end);oscillators.push(os);
- } else {
- // ── SONIC DETERRENT / ATTACK SCREAM ──
- // A continuous, piercing dual-tone warble (interleaved dissonant high freqs)
- // with a fast tremolo "scream" envelope. This is the personal-alarm sound built
- // to physically disorient and scare off an attacker — relentless, no gaps.
- const o1=ctx.createOscillator(),g1=ctx.createGain();o1.type='square'; g1.gain.value=alarmVol*0.85;o1.connect(g1);g1.connect(dist);
- const o2=ctx.createOscillator(),g2=ctx.createGain();o2.type='sawtooth';g2.gain.value=alarmVol*0.55;o2.connect(g2);g2.connect(dist);
- const o3=ctx.createOscillator(),g3=ctx.createGain();o3.type='sawtooth';g3.gain.value=alarmVol*0.28;o3.frequency.value=4500;o3.connect(g3);g3.connect(dist);
- let t=now,hi=true;
- while(t<end){
- o1.frequency.setValueAtTime(hi?3300:2350,t); // ~8Hz warble
- o2.frequency.setValueAtTime(hi?2450:3450,t); // counter-phase → dissonant scream
- t+=0.06; hi=!hi;
+}
+/* ── LOOPING SOS ALARM + VIBRATION ──────────────────────────────────────────────
+   The signature alarm buffer is finite; for an ACTIVE SOS we re-arm it seamlessly so it
+   sounds for as long as the SOS is active, and pair it with a relentless vibration
+   pattern (the full-screen red/blue/white strobe is handled by startMaxAttention). */
+var _alarmLoopTimer=null, _alarmVibeTimer=null;
+function startSosAlarm(){
+ var CHUNK=30000;
+ var fire=function(){ try{ playAlarm(CHUNK); }catch(e){} };
+ fire();
+ clearInterval(_alarmLoopTimer);
+ _alarmLoopTimer=setInterval(fire, CHUNK-350);   // re-arm just before the buffer ends → endless, gapless loop
+ if(navigator.vibrate){
+ var pat=[500,140,500,140,500,320];              // 3 hard buzzes ≈ 2.1s, then repeat
+ var buzz=function(){ try{ navigator.vibrate(pat); }catch(e){} };
+ buzz();
+ clearInterval(_alarmVibeTimer);
+ _alarmVibeTimer=setInterval(buzz, 2100);
  }
- // Aggressive tremolo on the primary tone.
- let tt=now;
- while(tt<end){
- g1.gain.setValueAtTime(alarmVol*0.9,tt);
- g1.gain.linearRampToValueAtTime(alarmVol*0.35,Math.min(end,tt+0.085));
- g1.gain.linearRampToValueAtTime(alarmVol*0.9,Math.min(end,tt+0.17));
- tt+=0.17;
- }
- o1.start(now);o1.stop(end);oscillators.push(o1);
- o2.start(now);o2.stop(end);oscillators.push(o2);
- o3.start(now);o3.stop(end);oscillators.push(o3);
- }
+}
+function stopSosAlarm(){
+ clearInterval(_alarmLoopTimer); _alarmLoopTimer=null;
+ clearInterval(_alarmVibeTimer); _alarmVibeTimer=null;
+ try{ navigator.vibrate&&navigator.vibrate(0); }catch(e){}
+ stopAlarm();
 }
 function pickAlarm(el,type){
  document.querySelectorAll('#alarm-list .ob-alarm').forEach(a=>{a.classList.remove('sel');a.setAttribute('aria-checked','false');});
@@ -3807,7 +3768,7 @@ function beginSOS(trigger){
  sosPhase='countdown'; sosActive=true; curSosTrigger=trigger||'manual';
  const btn=document.getElementById('sos-btn');
  if(btn){btn.classList.add('active');btn.setAttribute('aria-pressed','true');}
- try{ playAlarm(60000); }catch(e){} // loud alarm on the user's OWN phone, right now (audio failure must never block the countdown/broadcast)
+ try{ startSosAlarm(); }catch(e){} // loud LOOPING signature alarm + vibration, right now (audio failure must never block the countdown/broadcast)
  startCountdown();
 }
 let curSosTrigger='manual';
@@ -3842,7 +3803,7 @@ function renderCountdown(){
  mapped history. We only bump a private false-alarm counter for the trust sim. */
 function cancelCountdown(){
  if(sosPhase!=='countdown')return;
- clearInterval(sosCdTimer); stopAlarm();
+ clearInterval(sosCdTimer); stopSosAlarm();
  sosPhase='idle'; sosActive=false;
  const ov=document.getElementById('sos-cd');
  if(ov){ov.classList.remove('on');ov.setAttribute('aria-hidden','true');}
@@ -4031,7 +3992,7 @@ function stopMorse(){ _morseTimeouts.forEach(clearTimeout); _morseTimeouts=[]; _
 function resolveSOS(){
  if(sosPhase!=='active')return;
  var proceed=function(){
-  clearInterval(sosTimer); stopAlarm(); stopMaxAttention(); releaseWake();
+  clearInterval(sosTimer); stopSosAlarm(); stopMaxAttention(); releaseWake();
   sosPhase='idle'; sosActive=false;
   var btn=document.getElementById('sos-btn');
   if(btn){btn.classList.remove('active');btn.setAttribute('aria-pressed','false');}
@@ -6275,7 +6236,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v66';
+var APP_VER='v67';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */

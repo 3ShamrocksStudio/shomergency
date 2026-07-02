@@ -43,15 +43,21 @@
       --font-body: "Inter", "Heebo", system-ui, sans-serif;
       --font-heb: "Heebo", "Inter", system-ui, sans-serif;
     }
-    * { box-sizing: border-box; margin:0; padding:0; }
+    * { box-sizing: border-box; margin:0; padding:0; min-width: 0; }
+    /* Hard guarantee: the page can NEVER scroll sideways (belt-and-braces with the
+       real per-element fixes below). */
+    html, body { max-width: 100%; overflow-x: hidden; }
     html { scroll-behavior: smooth; }
     body { background: var(--bg); color: var(--tx0); font-family: var(--font-heb); font-size: 15px; line-height: 1.6; }
+    img, svg, video { max-width: 100%; height: auto; }
     a { color: var(--gold-500); text-decoration: none; }
     .container { max-width: 1080px; margin: 0 auto; padding: 0 22px; }
 
     header { position: sticky; top:0; z-index: 50; background: rgba(9,18,39,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
-    .nav { display: flex; align-items: center; justify-content: space-between; height: 64px; }
-    .wordmark { height: 28px; width: auto; }
+    .nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 60px; }
+    .nav-logo { height: 26px; width: auto; flex: 0 1 auto; min-width: 0; }
+    .nav-cta { flex: 0 0 auto; padding: 9px 18px; font-size: 14px; white-space: nowrap; }
+    @media (max-width: 380px) { .nav-logo { height: 22px; } .nav-cta { padding: 8px 14px; font-size: 13px; } }
 
     /* HERO - large branded header, brand-gradient background (no stock imagery) */
     .hero {
@@ -157,20 +163,14 @@
   </style>
 </head>
 <body>
-  <!-- NAV — 3SDS clean -->
+  <!-- NAV — 3SDS clean: compact logo + ONE primary CTA. Fits any width from 360px up. -->
   <header>
     <div class="container nav">
-      <img src="Brand/SVG/SHOMER.APP_WHITE.svg" alt="SH✡MER" style="height:32px">
-      <div style="display:flex; gap:10px;">
-        <a href="shomer.html" class="btn btn-ghost btn-sm">
-          <svg class="ic" viewBox="0 0 24 24" width="16" height="16"><path d="M5 4h3.5l1.5 4-2 1.5a11 11 0 0 0 5 5l1.5-2 4 1.5V19a2 2 0 0 1-2.2 2A16 16 0 0 1 4 6.2 2 2 0 0 1 5 4Z" fill="none" stroke="currentColor" stroke-width="2"/></svg>
-          פתח אפליקציה
-        </a>
-        <a href="shomer.html" class="btn btn-primary btn-sm" style="padding:8px 18px">
-          <svg class="ic" viewBox="0 0 24 24" width="16" height="16"><path d="M12 3v12m0 0l-4-4m4 4l4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="4" y="17" width="16" height="3" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>
-          התקן עכשיו
-        </a>
-      </div>
+      <img class="nav-logo" src="Brand/SVG/SHOMER.APP_WHITE.svg" alt="SH✡MER">
+      <a href="shomer.html" class="btn btn-primary nav-cta">
+        <svg class="ic" viewBox="0 0 24 24" width="16" height="16"><path d="M12 3v12m0 0l-4-4m4 4l4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="4" y="17" width="16" height="3" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+        התקן עכשיו
+      </a>
     </div>
   </header>
 
@@ -182,8 +182,8 @@
           <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
             <img src="SHOMER_logo_big.png" alt="SH✡MER" class="logo-hero">
           </div>
-          <h1>SH✡MER.<br>אזרחים מגנים על אזרחים.</h1>
-          <p class="tag">One tap. You're not alone.</p>
+          <h1><span dir="ltr" style="unicode-bidi:isolate">SH✡MER</span><br>אזרחים מגנים על אזרחים.</h1>
+          <p class="tag" dir="ltr" style="unicode-bidi:isolate; text-align:right">One tap. You're not alone.</p>
           <p>אזעקה חזקה. מיקום מדויק. עזרה מהירה — בלחיצה אחת.</p>
 
           <div class="hero-ctas">
