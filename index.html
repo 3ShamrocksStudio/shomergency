@@ -146,6 +146,14 @@
       .hero-grid { grid-template-columns: 1fr; }
       .steps, .grid { grid-template-columns: 1fr; }
     }
+    /* Mobile nav must never overflow: keep the logo + ONE primary CTA (both nav
+       buttons link to the same place, so the ghost is redundant on small screens). */
+    @media (max-width: 560px) {
+      header .nav .btn-ghost { display: none; }
+      header .nav .btn-primary { padding: 9px 16px; font-size: 13.5px; }
+      .wordmark, header .nav img { max-width: 46vw; }
+    }
+    img { max-width: 100%; height: auto; }
   </style>
 </head>
 <body>
@@ -252,27 +260,13 @@
       </div>
       <div class="phone-wrap">
         <div class="phone">
-          <div class="screen">
-            <div class="map-sim">
-              <img src="img/real-map.jpg" class="map-bg" alt="SH✡MER live map base">
-              <svg class="path" viewBox="0 0 100 100" preserveAspectRatio="none">
-                <line x1="30" y1="40" x2="70" y2="30" />
-              </svg>
-              <div class="user-pin"></div>
-              <div class="event">
-                <div class="event-pin"></div>
-                <div class="sos-waves"></div>
-                <div class="sos-waves"></div>
-                <div class="event-label">SOS</div>
-              </div>
-              <div class="nearby-alert">
-                <span>🚨</span> <span>SOS קרוב</span>
-              </div>
-            </div>
+          <div class="screen" style="height:auto;">
+            <div class="notch"></div>
+            <img src="img/real-sos-map.jpg" alt="מפת SH✡MER החיה עם אירוע SOS אמיתי, שומרים פעילים ומיקום מדויק" style="width:100%; height:auto; display:block;">
           </div>
         </div>
       </div>
-      <p class="mock-cap">מיקומך בזמן אמת + דיווחי אירועים + שומרים פעילים בקרבת מקום.</p>
+      <p class="mock-cap">צילום מסך אמיתי מהאפליקציה — מיקום בזמן אמת, דיווחי אירועים ושומרים פעילים בקרבת מקום.</p>
     </div>
   </section>
 

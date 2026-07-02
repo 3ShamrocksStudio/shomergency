@@ -258,6 +258,24 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 .hdr{position:absolute;top:var(--hdr-top,0px);left:0;right:0;z-index:600;height:var(--hdr);direction:ltr;background:rgba(8,18,36,.97);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--b3);display:flex;align-items:center;padding:0 12px;gap:8px;box-shadow:0 2px 24px rgba(0,0,0,.6);}
 .hdr::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent 5%,var(--gd) 35%,var(--gd) 65%,transparent 95%);}
 .hdr-left{display:flex;align-items:center;gap:7px;flex:1;justify-content:flex-start;}
+.hdr-guide{position:relative;width:42px;height:42px;border-radius:50%;background:rgba(13,148,82,.16);border:1px solid rgba(20,170,98,.45);display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;}
+.hdr-guide:hover{background:rgba(13,148,82,.28);}
+.hdr-guide .ic{width:22px;height:22px;color:#37D98A;}
+/* ── FIRST-RUN FEATURE TOUR (coached spotlight over the real controls) ── */
+.tour-ov{position:fixed;inset:0;z-index:9600;display:none;}
+.tour-ov.on{display:block;}
+.tour-spot{position:fixed;border-radius:16px;box-shadow:0 0 0 9999px rgba(4,10,22,.76);border:2px solid var(--g3);transition:top .32s cubic-bezier(.4,0,.2,1),left .32s cubic-bezier(.4,0,.2,1),width .32s cubic-bezier(.4,0,.2,1),height .32s cubic-bezier(.4,0,.2,1);pointer-events:none;}
+.tour-bub{position:fixed;z-index:9601;width:min(310px,88vw);background:linear-gradient(180deg,rgba(24,38,66,.99),rgba(13,24,44,.99));border:1px solid var(--b3);border-radius:16px;padding:15px 16px 13px;box-shadow:0 18px 50px rgba(0,0,0,.65);animation:pfade .2s ease;}
+.tour-bub h4{font-size:16px;font-weight:800;color:var(--tx0);margin:0 0 6px;display:flex;align-items:center;gap:9px;}
+.tour-bub h4 .tb-ic{width:30px;height:30px;flex-shrink:0;color:var(--g3);padding:5px;border-radius:9px;background:rgba(224,168,40,.12);border:1px solid rgba(224,168,40,.24);box-sizing:border-box;}
+.tour-bub p{font-size:12.5px;line-height:1.55;color:var(--tx2);margin:0 0 12px;}
+.tour-row{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.tour-dots{display:flex;gap:5px;}
+.tour-dot{width:6px;height:6px;border-radius:50%;background:var(--n5);transition:background .2s;}
+.tour-dot.on{background:var(--g3);}
+.tour-btns{display:flex;gap:6px;align-items:center;}
+.tour-skip{background:none;color:var(--tx3);font-size:12px;font-weight:600;padding:8px 6px;cursor:pointer;}
+.tour-next{background:linear-gradient(135deg,#C09020,#E0A828);color:var(--n0);font-size:13px;font-weight:800;padding:9px 18px;border-radius:10px;cursor:pointer;border:none;}
 .hdr-bell{position:relative;width:42px;height:42px;border-radius:50%;background:var(--n3);border:1px solid var(--b2);display:flex;align-items:center;justify-content:center;font-size:18px;transition:all .15s;flex-shrink:0;}
 .hdr-bell:hover{background:var(--n4);}
 .bell-dot{position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:var(--r3);border:2px solid rgba(8,18,36,.97);display:none;}
@@ -1312,6 +1330,9 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <img class="hdr-logo-svg" src="Brand/SVG/SHOMER.APP_WHITE.svg" alt="SHOMER" width="150" height="35">
  </div>
  <div class="hdr-right">
+ <button class="hdr-guide" onclick="openGuide()" aria-label="מדריך חירום" title="מדריך חירום">
+ <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 9v6M9 12h6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+ </button>
  <button class="hdr-bell" onclick="openUpdates()" aria-label="עדכונים" title="עדכונים">
  <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M13.7 21a2 2 0 0 1-3.4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
  <span class="bell-dot" id="bell-dot" aria-hidden="true"></span>
@@ -1801,12 +1822,10 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <span style="color:var(--tx3)">מקורות: הלמ"ס · משטרת ישראל (data.gov.il) · מרכז טאוב.</span>
  </p>
  </div>
- <div class="sec-cap mb12" style="margin-top:18px" id="reset-cap">איפוס</div>
+ <div class="sec-cap mb12" style="margin-top:18px" id="reset-cap" data-he="חשבון" data-en="Account" data-ar="الحساب">חשבון</div>
  <div class="set-grp" style="border-color:var(--b4);">
- <button style="width:100%;padding:14px;background:var(--rb);border:none;font-size:14px;font-weight:800;color:#FF7080;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;" onclick="resetApp()" id="reset-btn"><span id="reset-btn-lbl"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-.6 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 4v5h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> <span data-he="איפוס האפליקציה" data-en="Reset app">איפוס האפליקציה</span></span></button>
+ <button style="width:100%;padding:14px;background:var(--rb);border:none;font-size:14px;font-weight:800;color:#FF7080;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;" onclick="deleteAccount()" id="delete-account-btn"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7M6.5 7l.8 12a2 2 0 0 0 2 1.9h5.4a2 2 0 0 0 2-1.9L17.5 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> <span data-he="מחיקת חשבון" data-en="Delete account" data-ar="حذف الحساب">מחיקת חשבון</span></button>
  </div>
- <div class="sr-sb" id="reset-hint" style="margin:-10px 2px 16px;line-height:1.6" data-he="מאפס את האפליקציה במכשיר הזה (פרופיל, דיווחים, היסטוריית SOS, הגדרות) וחוזר להרשמה. לא מוחק את החשבון מהשרת." data-en="Resets the app on THIS device (profile, reports, SOS history, settings) and returns to signup. Does not delete your account from the server.">מאפס את האפליקציה במכשיר הזה (פרופיל, דיווחים, היסטוריית SOS, הגדרות) וחוזר להרשמה. לא מוחק את החשבון מהשרת.</div>
- <button style="width:100%;padding:13px;border:1px solid var(--b1);border-radius:var(--r12);background:var(--n3);font-size:13px;font-weight:600;color:#FF7080;margin-top:8px;cursor:pointer;" onclick="deleteAccount()" id="delete-account-btn" data-he="מחיקת חשבון" data-en="Delete account" data-ar="حذف الحساب">מחיקת חשבון</button>
  <div class="sr-sb" id="delete-hint" style="margin:8px 2px 16px;line-height:1.6" data-he="מחיקה מלאה וסופית: מוחק את כל הנתונים מהשרת (נוכחות, SOS, פרופיל, הגדרות), מסיר אותך ממעגלי השומרים המשויכים, ומבטל את שם המשתמש שנוצר אוטומטית. פתיחה מחדש יוצרת זהות חדשה לגמרי." data-en="Full, permanent erase: removes all your data from the server (presence, SOS, profile, settings), removes you from any paired SHOMERs' circles, and discards your auto-generated username. Reopening creates a brand-new identity.">מחיקה מלאה וסופית: מוחק את כל הנתונים מהשרת (נוכחות, SOS, פרופיל, הגדרות), מסיר אותך ממעגלי השומרים המשויכים, ומבטל את שם המשתמש שנוצר אוטומטית. פתיחה מחדש יוצרת זהות חדשה לגמרי.</div>
  <div class="legal-links" id="set-legal-links">
  <button onclick="openLegal('tos')" id="set-ll-tos">תנאי שימוש</button><span class="sep">·</span>
@@ -1919,6 +1938,10 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  .gd-row{display:flex;align-items:center;gap:13px;width:100%;padding:14px 14px;border-radius:var(--r12);background:var(--n3);border:1px solid var(--b2);margin-bottom:8px;cursor:pointer;text-align:start;transition:background .12s;}
  .gd-row:active{background:var(--n4,#16243e);}
  .gd-emoji{font-size:25px;width:34px;text-align:center;flex-shrink:0;}
+ /* Airplane-safety-card pictograms — branded gold line icons in a rounded tile, so the
+    guide is glanceable in panic (no reading required to find the right card). */
+ .gd-picto{width:38px;height:38px;flex-shrink:0;color:var(--g3);padding:6px;border-radius:11px;background:rgba(224,168,40,.10);border:1px solid rgba(224,168,40,.24);box-sizing:border-box;}
+ .gd-d-picto{width:52px;height:52px;flex-shrink:0;color:var(--g3);padding:9px;border-radius:14px;background:rgba(224,168,40,.13);border:1px solid rgba(224,168,40,.28);box-sizing:border-box;box-shadow:inset 0 1px 0 rgba(255,255,255,.06);}
  .gd-row-t{display:block;font-size:15.5px;font-weight:800;color:var(--tx0);line-height:1.25;}
  .gd-row-s{display:block;font-size:11.5px;color:var(--tx2);margin-top:2px;line-height:1.3;}
  .gd-chev{margin-inline-start:auto;color:var(--tx3);font-size:20px;}
@@ -3165,9 +3188,7 @@ function applyTranslations(){
  setText('set-contacts-lbl',he?'אנשי קשר חירום':'Emergency contacts');
  setText('set-contacts-help',he?'אנשים שיקבלו את מיקומך והתראה אוטומטית כשתשלח/י SOS. הוסף/י את מי שיגיב/ה הכי מהר.':'People who get your location and an automatic alert when you fire SOS. Add whoever responds fastest.');
  setText('set-lang-help',he?'שפת התצוגה של האפליקציה. ניתן לשנות בכל עת — לא משפיע על דיווחים קיימים.':'The app\'s display language. Change anytime — it doesn\'t affect existing reports.');
- setText('reset-cap',he?'איפוס':'Reset');
- setText('reset-btn-lbl',he?' איפוס האפליקציה':' Reset app');
- setText('reset-hint',he?'מוחק פרופיל, דיווחים, היסטוריית SOS והגדרות — וחוזר להרשמה.':'Clears profile, reports, SOS history & settings — returns to onboarding.');
+ setText('reset-cap',he?'חשבון':currentLang==='ar'?'الحساب':'Account');
  setText('datasrc-cap',he?'נתונים ומקורות':'Data & sources');
  {const dt=document.getElementById('datasrc-txt');if(dt)dt.innerHTML=he
  ?'סמני הערים הם <strong style="color:var(--g3)">סקירה סטטיסטית מצרפית</strong>, לא אירועים ספציפיים. פינים אישיים מגיעים רק מדיווחי משתמשים ומ-SOS חי.<br><span style="color:var(--tx3)">מקורות: הלמ"ס · משטרת ישראל (data.gov.il) · מרכז טאוב.</span>'
@@ -3380,6 +3401,8 @@ function obFinish(){
  if(/^\d{4}$/.test(pin)){ if(!SS.security)SS.security={}; SS.security.pin=pin; }
  saveStore();
  enterApp(false);
+ // Introduce the top features once, after the app is visible + Leaflet has laid out.
+ setTimeout(function(){ try{ startFeatureTour(); }catch(e){} }, 950);
 }
 /* Shared app-entry path — used by fresh onboarding AND by returning users on load. */
 function enterApp(returning){
@@ -4802,18 +4825,38 @@ function guideApplyLang(){ var L=currentLang==='ar'?'ar':currentLang==='en'?'en'
  setText('gd-disc', GUIDE_DISC[L]); setText('gd-back-lbl', he?'חזרה לרשימה':L==='ar'?'العودة للقائمة':'Back to list');
  setText('gd-c101', he?'מד״א':L==='ar'?'إسعاف':'MDA'); setText('gd-c100', he?'משטרה':L==='ar'?'شرطة':'Police'); setText('gd-c102', he?'כבאות':L==='ar'?'إطفاء':'Fire');
  var s=document.getElementById('guide-search'); if(s)s.placeholder=(he?'חיפוש נושא…':L==='ar'?'ابحث عن موضوع…':'Search a topic…'); }
+/* ── AIRPLANE-SAFETY-CARD PICTOGRAMS ──────────────────────────────────────────
+   One branded, glanceable line pictogram per first-aid topic (SHOMER gold, single
+   stroke, 24×24). Crafted SVG — not photos — so the set is consistent, tiny, works
+   fully OFFLINE (inline, cached in shomer.html), and reads instantly in panic. */
+var GUIDE_PICTO={
+ cpr:'<path d="M2.5 12.5h3l1.3-3 2.3 6.2 1.6-4.2 1 3h1.3"/><path d="M17.6 6.3a2.8 2.8 0 0 1 4 3.9l-4 4-4-4a2.8 2.8 0 0 1 4-3.9Z"/>',
+ choke:'<circle cx="12" cy="6" r="3"/><path d="M9 10.6c-1.7 1-3 2.9-3 5.2V18h12v-2.2c0-2.3-1.3-4.2-3-5.2"/><path d="M9.6 13.6c1.5.8 3.3.8 4.8 0"/>',
+ bleed:'<path d="M12 3.4c3 3.7 5 6.5 5 8.9A5 5 0 0 1 7 12.3c0-2.4 2-5.2 5-8.9Z"/><path d="M12 9.4v4M10 11.4h4"/>',
+ burn:'<path d="M13.2 3c.5 3-1.6 4.1-2.8 5.7C9.1 10.6 8 12.1 8 14a4 4 0 0 0 8 0c0-1.4-.5-2.7-1.4-3.7.4 1.4-.4 2.4-1.2 2.7.7-2.2-.2-4.7-.5-6.1-.3-1.6 0-3.1 1.2-4.3C13.7 5 13.4 4 13.2 3Z"/>',
+ stroke:'<circle cx="12" cy="12" r="8.5"/><path d="M8.6 10h.01M15.4 10h.01"/><path d="M9 15.6c1.3-1.1 3.2-1.4 5.6-.2"/>',
+ heart:'<path d="M12 20.4C6.8 16.7 4 13 4 9.8A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 8 2.8c0 3.2-2.8 6.9-8 10.6Z"/><path d="M12.6 8.6l-2.1 3.1h3l-2 3"/>',
+ allergy:'<path d="M13.8 4l6.2 6.2M16.4 6.6l-9.2 9.2M6 15.4 4 20l4.6-2M9.2 12.6l2.2 2.2"/>',
+ seizure:'<circle cx="12" cy="8" r="4"/><path d="M8.2 21l1.8-6M15.8 21 14 15"/><path d="M13 5.2l-2 2.7h2l-2 2.4"/>',
+ drown:'<circle cx="12" cy="4.6" r="1.3"/><path d="M3 10c2-2 3.6-2 5.6 0S12 12 14 10s3.6-2 5.4 0"/><path d="M3 15c2-2 3.6-2 5.6 0S12 17 14 15s3.6-2 5.4 0"/>',
+ shock:'<circle cx="6" cy="9" r="1.9"/><path d="M4 19.5v-4l6-1 4-3.8 4.2 3-3.2 3-5 .6"/><path d="M3 19.5h13"/>',
+ faint:'<circle cx="11.5" cy="7" r="2.4"/><path d="M11.5 9.4v5l-3 5M11.5 14.4l3 4.6"/><path d="M15 4.4c1.5 0 1.5 2 3 2"/>',
+ bone:'<path d="M8.5 15.5l7-7M8 8.4a1.9 1.9 0 1 1 .5-2.7 1.9 1.9 0 1 1 2.2 2.2M16 15.6a1.9 1.9 0 1 0 .5 2.7 1.9 1.9 0 1 0 2.2-2.2"/>',
+ call:'<path d="M6 4h3l1.6 4-2 1.4a11 11 0 0 0 5 5L15 16l4 1.6V21a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/>'
+};
+function guidePicto(id,cls){ var p=GUIDE_PICTO[id]; if(!p)return '<span class="'+(cls||'gd-picto')+'"></span>'; return '<svg class="'+(cls||'gd-picto')+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>'; }
 function guideRenderList(q){ var L=currentLang==='ar'?'ar':currentLang==='en'?'en':'he'; var box=document.getElementById('guide-topics'); if(!box)return;
  q=(q||'').trim().toLowerCase();
  var items=EMERGENCY_GUIDE.filter(function(g){ if(!q)return true; return (g.t[L]+' '+g.s[L]+' '+g.t.en+' '+g.t.he).toLowerCase().indexOf(q)>=0; });
  box.innerHTML='';
  if(!items.length){ var e=document.createElement('div'); e.className='gd-row-s'; e.style.padding='14px 4px'; e.textContent=(L==='he'?'לא נמצא נושא':L==='ar'?'لا يوجد موضوع':'No topic found'); box.appendChild(e); return; }
  items.forEach(function(g){ var b=document.createElement('button'); b.className='gd-row'; b.setAttribute('role','listitem'); b.onclick=function(){ openGuideTopic(g.id); };
-  b.innerHTML='<span class="gd-emoji" aria-hidden="true">'+g.e+'</span><span style="flex:1"><span class="gd-row-t">'+ESC(g.t[L])+'</span><span class="gd-row-s">'+ESC(g.s[L])+'</span></span><span class="gd-chev" aria-hidden="true">›</span>';
+  b.innerHTML=guidePicto(g.id,'gd-picto')+'<span style="flex:1"><span class="gd-row-t">'+ESC(g.t[L])+'</span><span class="gd-row-s">'+ESC(g.s[L])+'</span></span><span class="gd-chev" aria-hidden="true">›</span>';
   box.appendChild(b); }); }
 function guideFilter(){ var s=document.getElementById('guide-search'); guideRenderList(s?s.value:''); }
 function openGuideTopic(id){ var L=currentLang==='ar'?'ar':currentLang==='en'?'en':'he', he=L==='he'; var g=EMERGENCY_GUIDE.find(function(x){return x.id===id;}); if(!g)return;
  var d=document.getElementById('guide-detail'); if(!d)return;
- var html='<div class="gd-d-hd"><span class="gd-d-emoji" aria-hidden="true">'+g.e+'</span><span class="gd-d-ttl">'+ESC(g.t[L])+'</span></div>';
+ var html='<div class="gd-d-hd">'+guidePicto(g.id,'gd-d-picto')+'<span class="gd-d-ttl">'+ESC(g.t[L])+'</span></div>';
  g.steps[L].forEach(function(st,i){ html+='<div class="gd-step"><span class="gd-num">'+(i+1)+'</span><span class="gd-step-tx">'+ESC(st)+'</span></div>'; });
  if(g.call){ html+='<div class="gd-dont" style="background:rgba(232,168,40,.12);border-color:var(--amb)"><div class="gd-dont-h" style="color:var(--amb)">📞 '+(he?'מתי לחייג 101':L==='ar'?'متى تتصل بـ101':'When to call 101')+'</div><div class="gd-dont-tx" style="color:var(--tx1)">'+ESC(g.call[L])+'</div></div>'; }
  if(g.dont){ html+='<div class="gd-dont"><div class="gd-dont-h">⛔ '+(he?'אסור':L==='ar'?'ممنوع':'Do NOT')+'</div><div class="gd-dont-tx">'+ESC(g.dont[L])+'</div></div>'; }
@@ -4825,6 +4868,60 @@ function openGuideTopic(id){ var L=currentLang==='ar'?'ar':currentLang==='en'?'e
  document.getElementById('guide-detail-view').style.display='block';
  var body=document.querySelector('#sh-guide .sh-body'); if(body)body.scrollTop=0; }
 function guideBackToList(){ var lv=document.getElementById('guide-list-view'), dv=document.getElementById('guide-detail-view'); if(lv)lv.style.display='block'; if(dv)dv.style.display='none'; }
+/* ═══ FIRST-RUN FEATURE TOUR ═══ Coached spotlight over the REAL controls, shown once
+   after onboarding: introduces SOS, the live map/route, My SHOMER, and the emergency
+   guide with a short bubble on each. Robust: skips any control not on screen, clamps the
+   bubble on-screen, and can never trap the user (Skip/Done always end it). */
+function tourSteps(){ var he=currentLang==='he', ar=currentLang==='ar'; var P=function(o){return he?o.he:ar?o.ar:o.en;};
+ return [
+  {sel:'#sos-btn', ic:'<path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>',
+   t:P({he:'כפתור SOS',en:'SOS button',ar:'زر الاستغاثة'}),
+   b:P({he:'לחיצה שולחת את מיקומך ואזעקה לשומרים בקרבתך ולאנשי הקשר שלך. בחירום אמיתי חייגו גם 100 / 101 / 102.',en:'Press to send your location + an alarm to nearby SHOMERs and your contacts. In a real emergency also call 100 / 101 / 102.',ar:'اضغط لإرسال موقعك وإنذار إلى الحُرّاس القريبين وجهات اتصالك. في الطوارئ اتصل أيضًا بـ100 / 101 / 102.'})},
+  {sel:'#map-wrap', ic:'<path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 4v14M15 6v14" fill="none" stroke="currentColor" stroke-width="2"/>',
+   t:P({he:'מפת בטיחות חיה',en:'Live safety map',ar:'خريطة أمان مباشرة'}),
+   b:P({he:'רואים אירועים בקרבתכם ושומרים פעילים בזמן אמת. כשמתקבל SOS מוצג מסלול לאירוע.',en:'See nearby events and active SHOMERs in real time. When an SOS comes in, a route to it appears.',ar:'شاهد الأحداث القريبة والحُرّاس النشطين مباشرة. عند وصول استغاثة يظهر مسار إليها.'})},
+  {sel:'#menu-btn', ic:'<path d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M17 7.2a3 3 0 0 1 0 5.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+   t:P({he:'השומרים שלי',en:'My SHOMER',ar:'حُرّاسي'}),
+   b:P({he:'בתפריט: חברו אנשים שאתם סומכים עליהם. הם יראו את מיקומכם החי ואתם את שלהם — בהזמנה ובאישור, וניתן לעצור בכל רגע.',en:'In the menu: connect people you trust. They see your live location and you see theirs — by invite + consent, and you can stop anytime.',ar:'في القائمة: اربط أشخاصًا تثق بهم. يرون موقعك المباشر وترى مواقعهم — بدعوة وموافقة، ويمكنك الإيقاف في أي وقت.'})},
+  {sel:'.hdr-guide', ic:'<rect x="3.5" y="5" width="17" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 9v6M9 12h6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>',
+   t:P({he:'מדריך חירום',en:'Emergency guide',ar:'دليل الطوارئ'}),
+   b:P({he:'כרטיסי עזרה ראשונה גלויים במבט (החייאה, חנק, דימום, שבץ ועוד) — עובד גם ללא אינטרנט.',en:'Glanceable first-aid cards (CPR, choking, bleeding, stroke and more) — works even offline.',ar:'بطاقات إسعاف أولي واضحة (إنعاش، اختناق، نزيف، سكتة والمزيد) — تعمل حتى دون إنترنت.'})}
+ ];
+}
+var _tour={i:0,steps:[]};
+function startFeatureTour(force){
+ try{ if(!force && localStorage.getItem('shomerTourDone')==='1') return; }catch(e){}
+ _tour.steps=tourSteps(); _tour.i=0;
+ var ov=document.getElementById('tour-ov');
+ if(!ov){ ov=document.createElement('div'); ov.id='tour-ov'; ov.className='tour-ov'; ov.innerHTML='<div class="tour-spot" id="tour-spot"></div><div class="tour-bub" id="tour-bub"></div>'; document.body.appendChild(ov); }
+ ov.classList.add('on'); tourShow();
+}
+function tourEnd(){ var ov=document.getElementById('tour-ov'); if(ov)ov.classList.remove('on'); try{ localStorage.setItem('shomerTourDone','1'); }catch(e){} }
+function tourNext(){ _tour.i++; if(_tour.i>=_tour.steps.length){ tourEnd(); return; } tourShow(); }
+function tourShow(){
+ var st=_tour.steps[_tour.i]; if(!st){ tourEnd(); return; }
+ var el=document.querySelector(st.sel); var r=el?el.getBoundingClientRect():null;
+ if(!el || !r || (r.width===0&&r.height===0)){ tourNext(); return; }   // skip controls not on screen
+ var spot=document.getElementById('tour-spot'), bub=document.getElementById('tour-bub');
+ var pad=6, vw=window.innerWidth, vh=window.innerHeight;
+ var sx=Math.max(4,r.left-pad), sy=Math.max(4,r.top-pad), sw=Math.min(vw-8,r.width+pad*2), sh=Math.min(r.height+pad*2, vh-8);
+ spot.style.left=sx+'px'; spot.style.top=sy+'px'; spot.style.width=sw+'px'; spot.style.height=sh+'px';
+ var he=currentLang==='he';
+ var dots=_tour.steps.map(function(_,k){return '<span class="tour-dot'+(k===_tour.i?' on':'')+'"></span>';}).join('');
+ var last=_tour.i===_tour.steps.length-1;
+ var nextLbl=last?(he?'סיום':currentLang==='ar'?'إنهاء':'Done'):(he?'הבא':currentLang==='ar'?'التالي':'Next');
+ var skipLbl=he?'דלג':currentLang==='ar'?'تخطٍ':'Skip';
+ bub.innerHTML='<h4><span class="tb-ic"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">'+st.ic+'</svg></span>'+ESC(st.t)+'</h4><p>'+ESC(st.b)+'</p><div class="tour-row"><div class="tour-dots">'+dots+'</div><div class="tour-btns"><button class="tour-skip" onclick="tourEnd()">'+skipLbl+'</button><button class="tour-next" onclick="tourNext()">'+nextLbl+'</button></div></div>';
+ bub.style.visibility='hidden'; bub.style.left='0px'; bub.style.top='0px';
+ requestAnimationFrame(function(){
+  var bw=bub.offsetWidth, bh=bub.offsetHeight, gap=12;
+  var below=sy+sh+gap;
+  var top=(below+bh+8<=vh)?below:Math.max(8, sy-bh-gap);
+  var cx=r.left+r.width/2-bw/2;
+  var left=Math.max(8, Math.min(cx, vw-bw-8));
+  bub.style.left=left+'px'; bub.style.top=top+'px'; bub.style.visibility='visible';
+ });
+}
 function toast(txt,cls){
  if(typeof arTr==='function')txt=arTr(txt);
  const c=document.getElementById('toasts');
@@ -6077,6 +6174,25 @@ function diagReport(){
  var standalone=(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;
  var skey=null,skeySize=0; try{ skey=localStorage.getItem(SKEY); skeySize=skey?skey.length:0; }catch(e){}
  var cid=null; try{ cid=localStorage.getItem('shomerCID'); }catch(e){}
+ // ── ONE-LINE VERDICT — the single most useful line: names the likely cause so a
+ //    single screenshot pinpoints it without reading every row below. ──
+ (function(){
+   try{
+     var f=(typeof FB!=='undefined')?FB:{}; var v, c;
+     var sw=f.swVer, stale=(sw&&sw!=='?'&&sw!=='no-controller'&&sw!=='err'&&typeof APP_VER!=='undefined'&&sw!==APP_VER);
+     var authBad=/operation-not-allowed|admin-restricted|configuration-not-found/.test(String(f.authState||''));
+     if(!navigator.onLine){ v='DEVICE OFFLINE — no network'; c='bad'; }
+     else if(stale){ v='STALE BUILD (SW '+sw+' ≠ app '+APP_VER+') — tap "Force latest"'; c='bad'; }
+     else if(f.csp){ v='CSP BLOCKING the socket — see CSP row'; c='bad'; }
+     else if(!f.ready){ v='SDK/data layer not ready — '+(f.err||'loading…'); c=f.err?'bad':'warn'; }
+     else if(!f.connected){ v='SOCKET DOWN — '+((f.wsProbe&&/blocked|closed|timeout|network/.test(f.wsProbe))?('WS '+f.wsProbe):'still trying (see WS probe)'); c='bad'; }
+     else if(authBad){ v='ANON AUTH REJECTED — enable Anonymous sign-in in Firebase console ('+f.authState+')'; c='bad'; }
+     else if(!f._authReady){ v='SOCKET UP but AUTH not landed — '+(f.authState||'securing…'); c='warn'; }
+     else if(f.permErr){ v='CONNECTED but RULES DENY — '+f.permErr; c='bad'; }
+     else { v='OK — connected & authed (live)'; c='ok'; }
+     add('▶ VERDICT', v, c);
+   }catch(e){ add('▶ VERDICT', 'diag error: '+((e&&e.message)||e), 'bad'); }
+ })();
  add('app version', (typeof APP_VER!=='undefined'?APP_VER:'?'), 'ok');
  add('SW (controlling)', (FB&&FB.swVer)||'querying…', ((FB&&FB.swVer&&typeof APP_VER!=='undefined'&&FB.swVer===APP_VER)?'ok':(FB&&FB.swVer&&FB.swVer.indexOf('v')===0?'warn':'')));
  add('platform', (iOS?'iOS':'other')+(standalone?' · installed (A2HS)':' · browser tab'), (iOS&&!standalone?'warn':''));
@@ -6159,7 +6275,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v65';
+var APP_VER='v66';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -6224,10 +6340,14 @@ function renderFbStatus(){
   // The ALWAYS-ON pill is kept COMPACT (a dot + one short word) so it never covers
   // the map legend / zoom controls. The detail (N nearby · listening · errors) lives
   // in the TAPPABLE diagnostic panel.
-  if(failed){ state='offline'; msg=he?'תקלה — הקש/י':ar?'خطأ — اضغط':'Error — tap'; }
-  else if(!FB.ready){ state='connecting'; msg=he?'מתחבר…':ar?'جارٍ…':'Connecting…'; }
-  else if(!FB.connected){ state='offline'; msg=he?'מתחבר…':ar?'جارٍ…':'Connecting…'; }
-  else { state='connected'; msg=he?'מחובר':ar?'متصل':'Connected'; }
+  // HONEST chip: GREEN "מחובר" ONLY when the socket is up AND the secure identity has
+  // landed (auth.uid) — i.e. presence/SOS can actually flow under the locked rules.
+  // Socket-up-but-not-authed is NOT "working", so it stays amber. It never looks
+  // connected while it isn't.
+  var live = FB.connected && FB._authReady;
+  if(failed){ state='offline'; msg=he?'לא מחובר · שגיאה':ar?'غير متصل · خطأ':'Not connected · error'; }
+  else if(live){ state='connected'; msg=he?'מחובר':ar?'متصل':'Connected'; }
+  else { state='connecting'; msg=he?'לא מחובר · מנסה להתחבר':ar?'غير متصل · تتم المحاولة':'Not connected · trying'; }
   el.classList.remove('connected','connecting','offline'); el.classList.add(state);
   if(txt)txt.textContent=msg;
   updateDiagPanel();
@@ -6280,14 +6400,15 @@ function updateDiagPanel(){
 }
 function explainStatus(){
   var he=currentLang==='he', ar=currentLang==='ar';
-  if(!FB.ready){ toast(he?'מתחבר לשירות החי…':ar?'جارٍ الاتصال بالخدمة…':'Connecting to the live service…',''); return; }
+  if(!FB.ready){ toast(he?'עדיין לא מחובר — מנסה להתחבר לשירות החי…':ar?'غير متصل بعد — تتم محاولة الاتصال…':'Not connected yet — trying to reach the live service…','amb'); return; }
   if(!FB.connected){
-    // Be ACCURATE: only say "no internet" if the DEVICE is offline. If the device is
-    // online it's just the live socket re-establishing — say so calmly (no scare).
-    if(!navigator.onLine){ toast(he?'אין חיבור לאינטרנט — נתחבר אוטומטית כשהרשת תחזור.':ar?'لا يوجد إنترنت — سنتصل تلقائيًا عند عودة الشبكة.':'No internet — we\'ll reconnect automatically when the network is back.','amb'); }
-    else { toast(he?'מתחבר מחדש לשירות החי… (פעולה אוטומטית, האפליקציה פעילה)':ar?'إعادة الاتصال بالخدمة الحية… تلقائيًا':'Reconnecting to the live service… (automatic — the app is working)',''); }
+    // Be ACCURATE: only say "no internet" if the DEVICE is offline. Otherwise the socket
+    // is still trying — say so honestly (never imply it already works).
+    if(!navigator.onLine){ toast(he?'אין חיבור לאינטרנט — נתחבר אוטומטית כשהרשת תחזור.':ar?'لا يوجد إنترنت — سنتصل تلقائيًا عند عودة الشبكة.':'No internet — we\'ll connect automatically when the network is back.','amb'); }
+    else { toast(he?'לא מחובר — מנסה להתחבר לשירות החי… (אם זה נמשך, פתח/י אבחון בלחיצה ארוכה על הלוגו)':ar?'غير متصل — تتم محاولة الاتصال…':'Not connected — trying to reach the live service…','amb'); }
     return;
   }
+  if(!FB._authReady){ toast(he?'מחובר לרשת, מאמת זהות מאובטחת… (רגע)':ar?'متصل بالشبكة، جارٍ تأمين الهوية…':'Network up — securing identity… (a moment)','amb'); return; }
   var lines=[];
   lines.push(he?('✓ מחובר ומאזין ל-SOS — '+(FB.near||0)+' שומרים פעילים בקרבת מקום'):('✓ Connected & listening — '+(FB.near||0)+' active SHOMERs nearby'));
   var ps=FB.pushState;
@@ -6318,15 +6439,11 @@ function fbHealthSet(state,reason){
 /* Calm connectivity banner — shown ONLY by the monitor on a sustained outage; instant
    auto-dismiss on reconnect. Accurate: device-offline vs server re-establishing. */
 function fbConnBanner(show,offNet){
-  var el=document.getElementById('conn-banner');
-  if(!el){ if(!show) return; el=document.createElement('div'); el.id='conn-banner'; el.className='conn-banner'; el.setAttribute('role','status'); el.setAttribute('aria-live','polite'); el.innerHTML='<span class="cb-dot" aria-hidden="true"></span><span id="cb-txt"></span>'; document.body.appendChild(el); }
-  if(!show){ el.classList.remove('on'); return; }
-  var he=currentLang==='he', ar=currentLang==='ar';
-  el.classList.toggle('off-net',!!offNet);
-  var t=offNet ? (he?'אין חיבור לאינטרנט — נתחבר אוטומטית':ar?'لا إنترنت — سنتصل تلقائيًا':'No internet — reconnecting automatically')
-               : (he?'מתחבר מחדש לשירות החי…':ar?'إعادة الاتصال بالخدمة…':'Reconnecting to the live service…');
-  var tx=document.getElementById('cb-txt'); if(tx)tx.textContent=t;
-  el.classList.add('on');
+  // DEPRECATED — the old centre banner overlapped the map legend and, by saying
+  // "reconnecting…", implied the app was working while it wasn't. The single compact
+  // #fb-status chip is now the SOLE connection indicator (honest amber/green). This
+  // stays as a no-op guard so any lingering caller can never resurrect the banner.
+  var el=document.getElementById('conn-banner'); if(el)el.classList.remove('on');
 }
 /* SILENT recovery. The Firebase RTDB SDK already auto-reconnects with its own backoff —
    battle-tested in production — so our job is to ASSIST, never to fight it. We therefore:
