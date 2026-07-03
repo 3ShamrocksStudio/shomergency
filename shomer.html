@@ -6188,7 +6188,7 @@ function diagReport(){
  add('auth state', (typeof FB!=='undefined'&&FB.authState)||'—', (typeof FB!=='undefined'&&FB.authState==='ok'?'ok':''));
  add('auth uid', (typeof FB!=='undefined'&&FB.authUid?String(FB.authUid).slice(0,12)+'…':'—'), '');
  add('persistence', (typeof FB!=='undefined'&&FB.persist)||'—', '');
- add('WS probe', (typeof FB!=='undefined'&&FB.wsProbe)||'(not run)', (typeof FB!=='undefined'&&/open ✓/.test(FB.wsProbe||'')?'ok':(/blocked|closed|timeout/.test((FB&&FB.wsProbe)||'')?'bad':'')));
+ add('WebSocket', 'not used — REST+SSE over HTTPS', 'ok');
  add('CSP block', (typeof FB!=='undefined'&&FB.csp)||'none', (typeof FB!=='undefined'&&FB.csp?'bad':'ok'));
  add('SHOMERs seen', (typeof FB!=='undefined'?(FB.near||0):'—'));
  add('background push', (typeof FB!=='undefined'&&FB.pushState)||'—');
@@ -6200,7 +6200,8 @@ function diagReport(){
 }
 function showDiag(){
  try{ querySwVersion(); }catch(e){}
- try{ if(typeof fbProbeSocket==='function' && (!FB.wsProbe || FB.wsProbe==='')) fbProbeSocket(); }catch(e){} // run the raw-WS test for the report
+ // (No WebSocket probe — the realtime transport is REST+SSE over plain HTTPS; the app
+ //  never opens a WebSocket, so there is nothing WS-related to test.)
  var box=document.getElementById('diag-report'); if(!box)return;
  var render=function(){ var R=diagReport(); box.innerHTML=R.map(function(r){ return '<div class="drow"><span class="dk">'+r.k+'</span><span class="dv '+r.c+'">'+ESC(r.v)+'</span></div>'; }).join(''); };
  render();
@@ -6243,7 +6244,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v69';
+var APP_VER='v70';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -6262,30 +6263,11 @@ window.addEventListener('securitypolicyviolation',function(ev){
     }
   }catch(e){}
 });
-/* RAW WEBSOCKET PROBE — bypass the Firebase SDK and try to open the RTDB socket
-   directly, so we capture the EXACT reason it won't open on a real phone:
-   - throws SecurityError  → CSP is blocking it (names the directive via the
-     violation listener above)
-   - onopen fired          → the socket layer works; the problem is app/SDK
-   - onclose code 1006     → network/region blocked the WebSocket (env, not us)
-   This is best-effort and self-cleaning; it never affects the real connection. */
-function fbProbeSocket(){
-  try{
-    var host=(window.SHOMER_FB&&window.SHOMER_FB.databaseURL||'').replace(/^https?:\/\//,'').replace(/\/$/,'');
-    var ns=host.split('.')[0];
-    if(!host){ FB.wsProbe='no-dburl'; return; }
-    var url='wss://'+host+'/.ws?v=5&ns='+ns;
-    FB.wsProbe='opening…'; fbLog('WS probe →', url);
-    var ws, settled=false;
-    var finish=function(s){ if(settled)return; settled=true; FB.wsProbe=s; fbLog('WS probe result:', s); try{updateDiagPanel();}catch(e){} try{ws&&ws.close();}catch(e){} };
-    try{ ws=new WebSocket(url); }
-    catch(e){ finish('blocked (CSP/SecurityError): '+((e&&e.message)||e)); return; }
-    ws.onopen=function(){ finish('open ✓ (socket layer OK — issue is app/SDK)'); };
-    ws.onerror=function(){ if(!settled){ FB.wsProbe='error (CSP or network — see console/CSP row)'; try{updateDiagPanel();}catch(e){} } };
-    ws.onclose=function(ev){ finish('closed code '+ (ev&&ev.code) + (ev&&ev.code===1006?' (1006 = network/region blocked WS)': (ev&&ev.reason?(' '+ev.reason):''))); };
-    setTimeout(function(){ finish('timeout (no open/close in 12s — likely network/region block)'); }, 12000);
-  }catch(e){ FB.wsProbe='probe-err:'+((e&&e.message)||e); }
-}
+/* WebSocket probe REMOVED — the RTDB SDK's WebSocket transport is gone entirely; SHOMER's
+   realtime runs over REST + Server-Sent-Events on plain HTTPS/443 (proven to work on the
+   devices/networks where the WS never completes). The app opens NO WebSocket anywhere, so
+   there is nothing to probe. Kept as a no-op only so any stray caller is harmless. */
+function fbProbeSocket(){ FB.wsProbe='n/a — REST+SSE transport (no WebSocket)'; }
 var fbSosMarkers={};
 /* Push capability on THIS device (so the status pill can tell the truth). */
 function fbPushState(){
@@ -6350,7 +6332,7 @@ function updateDiagPanel(){
     pm.textContent=ptxt; pm.style.color=pcol; }
   // SOCKET PROBE — raw WebSocket result (only runs when the real socket is down)
   var wp=document.getElementById('diag-wsprobe');
-  if(wp){ var wtxt=FB.wsProbe||(FB.connected?'not needed ✓':'—'); wp.textContent=wtxt; wp.style.color=(/open ✓|not needed/.test(wtxt))?'var(--grn)':(/blocked|closed|error|timeout|network/.test(wtxt)?'#FF7080':'var(--tx3)'); }
+  if(wp){ wp.textContent='not used · REST+SSE'; wp.style.color='var(--grn)'; }
   // CSP BLOCK — any Content-Security-Policy violation that hit a connection
   var cs=document.getElementById('diag-csp');
   if(cs){ cs.textContent=FB.csp||'none ✓'; cs.style.color=FB.csp?'#FF7080':'var(--grn)'; }
