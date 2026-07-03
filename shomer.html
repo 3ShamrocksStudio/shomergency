@@ -6142,15 +6142,15 @@ function diagReport(){
      var f=(typeof FB!=='undefined')?FB:{}; var v, c;
      var sw=f.swVer, stale=(sw&&sw!=='?'&&sw!=='no-controller'&&sw!=='err'&&typeof APP_VER!=='undefined'&&sw!==APP_VER);
      var authBad=/operation-not-allowed|admin-restricted|configuration-not-found/.test(String(f.authState||''));
+     // Transport is now REST+SSE (EventSource) over plain HTTPS — no SDK WebSocket.
      if(!navigator.onLine){ v='DEVICE OFFLINE — no network'; c='bad'; }
      else if(stale){ v='STALE BUILD (SW '+sw+' ≠ app '+APP_VER+') — tap "Force latest"'; c='bad'; }
-     else if(f.csp){ v='CSP BLOCKING the socket — see CSP row'; c='bad'; }
-     else if(!f.ready){ v='SDK/data layer not ready — '+(f.err||'loading…'); c=f.err?'bad':'warn'; }
-     else if(!f.connected){ v='SOCKET DOWN — '+((f.wsProbe&&/blocked|closed|timeout|network/.test(f.wsProbe))?('WS '+f.wsProbe):'still trying (see WS probe)'); c='bad'; }
+     else if(!f.ready){ v='TRANSPORT not ready — '+(f.err||'loading auth SDK…'); c=f.err?'bad':'warn'; }
      else if(authBad){ v='ANON AUTH REJECTED — enable Anonymous sign-in in Firebase console ('+f.authState+')'; c='bad'; }
-     else if(!f._authReady){ v='SOCKET UP but AUTH not landed — '+(f.authState||'securing…'); c='warn'; }
-     else if(f.permErr){ v='CONNECTED but RULES DENY — '+f.permErr; c='bad'; }
-     else { v='OK — connected & authed (live)'; c='ok'; }
+     else if(!f._authReady){ v='AUTH/ID-TOKEN not landed yet — '+(f.authState||'securing…'); c='warn'; }
+     else if(f.permErr){ v='AUTHED but RULES DENY — '+f.permErr; c='bad'; }
+     else if(!f.connected){ v='SSE STREAM DOWN — reconnecting (auth+token OK)'; c='warn'; }
+     else { v='OK — SSE live & authed (REST+SSE transport)'; c='ok'; }
      add('▶ VERDICT', v, c);
    }catch(e){ add('▶ VERDICT', 'diag error: '+((e&&e.message)||e), 'bad'); }
  })();
@@ -6171,8 +6171,10 @@ function diagReport(){
  add('restored this open?', (window.__shomerRestored?'yes':'no'), (window.__shomerRestored?'ok':'warn'));
  add('device id', cid?(cid.slice(0,16)):'NONE', (cid?'ok':'warn'));
  add('storage persisted', window.__shomerPersist||'?', (window.__shomerPersist==='granted'?'ok':'warn'));
- add('RTDB ready', (typeof FB!=='undefined'&&FB.ready?'yes':'no'), (typeof FB!=='undefined'&&FB.ready?'ok':'warn'));
- add('RTDB socket', (typeof FB!=='undefined'&&FB.connected?'connected':'not connected'), (typeof FB!=='undefined'&&FB.connected?'ok':'bad'));
+ add('transport', (typeof FB!=='undefined'&&FB.transport)||'REST+SSE', 'ok');
+ add('transport ready', (typeof FB!=='undefined'&&FB.ready?'yes':'no'), (typeof FB!=='undefined'&&FB.ready?'ok':'warn'));
+ add('SSE stream (live)', (typeof FB!=='undefined'&&FB.connected?'live & receiving':'not live'), (typeof FB!=='undefined'&&FB.connected?'ok':'bad'));
+ try{ var _ns=0,_nh=0; for(var _p in FB_STREAMS){ _ns++; if(FB_STREAMS[_p].healthy)_nh++; } add('SSE streams', _nh+' live / '+_ns+' open', (_ns&&_nh===_ns?'ok':(_ns?'warn':''))); }catch(e){}
  add('ever connected?', (typeof FB!=='undefined'&&FB._everConnected?'yes':'no'), (typeof FB!=='undefined'&&FB._everConnected?'ok':'warn'));
  // Self-healing monitor: current state + recovery counters + recent transitions
  try{ if(typeof fbHealth!=='undefined'){
@@ -6241,7 +6243,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v68';
+var APP_VER='v69';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -6498,6 +6500,135 @@ function presenceIcon(){
     iconSize:[26,26],iconAnchor:[13,13]});
 }
 function fbLoad(src){return new Promise(function(res,rej){var s=document.createElement('script');s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s);});}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   REST + SSE REALTIME TRANSPORT  (replaces the Firebase RTDB SDK's WebSocket)
+   ─────────────────────────────────────────────────────────────────────────────
+   WHY: the RTDB SDK's realtime socket is broken in some installed-PWA / Android
+   WebViews (raw WS probe opens, auth is fine, CSP clear, SW bypasses Firebase — yet
+   .info/connected never becomes true; works only in incognito). Plain HTTPS + anon
+   auth work perfectly on those devices, so we run the realtime layer over plain
+   HTTPS instead:
+     • LIVE READS  → RTDB REST streaming via EventSource (Server-Sent Events):
+                     GET <db>/<path>.json?auth=<ID_TOKEN>  (EventSource auto-sends
+                     Accept: text/event-stream). We fold the put/patch events into a
+                     local cache and surface it as a `.on('value')`-style snapshot.
+     • WRITES      → REST PUT/PATCH/POST/DELETE to <db>/<path>.json?auth=<ID_TOKEN>.
+     • AUTH        → Firebase ANONYMOUS auth still mints the ID token; it's attached
+                     to every SSE/REST call so the SAME secure rules apply, and it is
+                     refreshed (getIdToken(true)) before expiry with a stream reconnect.
+   Same project, same rules, same data paths — only the transport changes. `FB.db`
+   is a drop-in shim exposing ref().on/once/set/update/remove/push/onDisconnect so the
+   existing presence/SOS/pairing/registry code is unchanged. FB.connected is driven by
+   the SSE stream actually being live + receiving (never by the SDK socket). */
+var FB_REST='';                 // set at init from window.SHOMER_FB.databaseURL
+var FB_STREAMS={};              // path -> live EventSource stream state
+var FB_UNLOAD_REMOVE={};        // paths to best-effort DELETE on page unload (onDisconnect)
+function fbRestUrl(path,extraQ){
+  var p=String(path).replace(/^\/+/,'').replace(/\/+$/,'');
+  var q=[]; if(FB.idToken)q.push('auth='+encodeURIComponent(FB.idToken)); if(extraQ)q.push(extraQ);
+  return FB_REST+'/'+p+'.json'+(q.length?('?'+q.join('&')):'');
+}
+function fbSnap(v){ return { val:function(){ return (v===undefined?null:v); }, exists:function(){ return v!=null; } }; }
+/* Apply an SSE 'put' (set/replace at a sub-path; null = delete). */
+function fbSetIn(root,path,data){
+  var parts=String(path).split('/').filter(Boolean);
+  if(!parts.length) return data;
+  if(!root||typeof root!=='object') root={};
+  var o=root; for(var i=0;i<parts.length-1;i++){ if(!o[parts[i]]||typeof o[parts[i]]!=='object')o[parts[i]]={}; o=o[parts[i]]; }
+  var last=parts[parts.length-1];
+  if(data===null||data===undefined) delete o[last]; else o[last]=data;
+  return root;
+}
+/* Apply an SSE 'patch' (merge keys at a sub-path; null values delete). */
+function fbMergeIn(root,path,data){
+  if(!root||typeof root!=='object') root={};
+  var parts=String(path).split('/').filter(Boolean);
+  var o=root; for(var i=0;i<parts.length;i++){ if(!o[parts[i]]||typeof o[parts[i]]!=='object')o[parts[i]]={}; o=o[parts[i]]; }
+  if(data&&typeof data==='object'){ Object.keys(data).forEach(function(k){ if(data[k]===null)delete o[k]; else o[k]=data[k]; }); }
+  return root;
+}
+function fbRestGet(path){
+  return fetch(fbRestUrl(path),{method:'GET'}).then(function(r){
+    if(!r.ok){ var e=new Error('HTTP '+r.status); e.code=(r.status===401?'unauthenticated':r.status===403?'PERMISSION_DENIED':'http-'+r.status); throw e; }
+    return r.json();
+  }).then(function(v){ return fbSnap(v); });
+}
+function fbRestWrite(method,path,val){
+  var opt={ method:method, keepalive:true };
+  if(method!=='DELETE'){ opt.headers={'Content-Type':'application/json'}; opt.body=JSON.stringify(val===undefined?null:val); }
+  return fetch(fbRestUrl(path),opt).then(function(r){
+    if(!r.ok){ var e=new Error('HTTP '+r.status); e.code=(r.status===401?'unauthenticated':r.status===403?'PERMISSION_DENIED':'http-'+r.status); throw e; }
+    return r.json().catch(function(){ return null; });
+  });
+}
+/* ── SSE live stream (mimics ref.on('value')) ── */
+function fbStream(path,cb,errCb){
+  var st=FB_STREAMS[path];
+  if(st){ st.cb=cb; st.errCb=errCb; return st; }
+  st={ path:path, cb:cb, errCb:errCb, cache:undefined, es:null, healthy:false, open:true, backoff:1500, retryT:null, lastEvent:0 };
+  FB_STREAMS[path]=st; fbStreamConnect(st); return st;
+}
+function fbStreamConnect(st){
+  if(!st.open)return;
+  if(!FB.idToken){ if(st.retryT)clearTimeout(st.retryT); st.retryT=setTimeout(function(){ fbStreamConnect(st); },400); return; }
+  try{ if(st.es)st.es.close(); }catch(e){}
+  var es; try{ es=new EventSource(fbRestUrl(st.path)); }catch(e){ fbLog('SSE create failed',st.path,e); fbStreamRetry(st); return; }
+  st.es=es;
+  es.addEventListener('put',function(ev){ try{ var d=JSON.parse(ev.data); if(d.path==='/'){ st.cache=d.data; } else { st.cache=fbSetIn(st.cache,d.path,d.data); } fbStreamHealthy(st); if(st.cb)st.cb(fbSnap(st.cache)); }catch(e){ fbLog('SSE put parse err',st.path,e); } });
+  es.addEventListener('patch',function(ev){ try{ var d=JSON.parse(ev.data); st.cache=fbMergeIn(st.cache,d.path,d.data); fbStreamHealthy(st); if(st.cb)st.cb(fbSnap(st.cache)); }catch(e){} });
+  es.addEventListener('keep-alive',function(){ fbStreamHealthy(st); });
+  es.addEventListener('cancel',function(){ fbLog('SSE cancel (permission?)',st.path); FB.permErr='PERMISSION_DENIED'; if(st.errCb)st.errCb({code:'PERMISSION_DENIED'}); try{renderFbStatus();}catch(e){} fbStreamRetry(st); });
+  es.addEventListener('auth_revoked',function(){ fbLog('SSE auth_revoked → refreshing token',st.path); fbRefreshTokenNow(function(){ try{es.close();}catch(e){} fbStreamConnect(st); }); });
+  es.onopen=function(){ fbLog('SSE open',st.path); };
+  es.onerror=function(){ st.healthy=false; fbConnRecompute(); try{es.close();}catch(e){} if(st.open)fbStreamRetry(st); };
+}
+function fbStreamHealthy(st){ st.healthy=true; st.lastEvent=Date.now(); st.backoff=1500; if(FB.permErr==='PERMISSION_DENIED')FB.permErr=null; fbConnRecompute(); }
+function fbStreamRetry(st){ if(!st.open)return; if(st.retryT)clearTimeout(st.retryT); st.retryT=setTimeout(function(){ fbStreamConnect(st); },st.backoff); st.backoff=Math.min(Math.round(st.backoff*1.7),20000); }
+function fbConnRecompute(){
+  var any=false; for(var p in FB_STREAMS){ if(FB_STREAMS[p].healthy){ any=true; break; } }
+  var was=FB.connected; FB.connected=any;
+  if(any&&!FB._everConnected)FB._everConnected=true;
+  if(was!==FB.connected)fbLog('SSE live =',FB.connected);
+  try{renderFbStatus();}catch(e){}
+}
+function fbSseReconnectAll(){ for(var p in FB_STREAMS){ var st=FB_STREAMS[p]; if(st&&st.open){ st.backoff=1500; fbStreamConnect(st); } } }
+function fbStreamCloseAll(){ for(var p in FB_STREAMS){ var st=FB_STREAMS[p]; st.open=false; try{st.es&&st.es.close();}catch(e){} if(st.retryT)clearTimeout(st.retryT); } FB_STREAMS={}; }
+/* Stale-stream watchdog: Firebase sends keep-alive ~every 30s; if a "healthy" stream
+   goes silent >50s (a silently-dead connection), force a reconnect. */
+setInterval(function(){ if(document.visibilityState!=='visible')return; var now=Date.now();
+  for(var p in FB_STREAMS){ var st=FB_STREAMS[p]; if(st&&st.open&&st.healthy&&st.lastEvent&&(now-st.lastEvent)>50000){ fbLog('SSE stale >50s → reconnect',p); st.healthy=false; fbConnRecompute(); fbStreamConnect(st); } }
+},10000);
+/* onDisconnect().remove() has no REST equivalent → best-effort DELETE on page unload.
+   (Presence also self-expires via its ts: readers drop entries older than 90s.) */
+window.addEventListener('pagehide',function(){ try{ for(var p in FB_UNLOAD_REMOVE){ try{ fetch(fbRestUrl(p),{method:'DELETE',keepalive:true}); }catch(e){} } }catch(e){} });
+/* Drop-in ref shim — same surface the existing data code already calls. */
+function restRef(path){
+  var ref={
+    on:function(evt,cb,errCb){ if(evt==='value')fbStream(path,cb,errCb); return ref; },
+    off:function(){ var st=FB_STREAMS[path]; if(st){ st.open=false; try{st.es&&st.es.close();}catch(e){} if(st.retryT)clearTimeout(st.retryT); delete FB_STREAMS[path]; fbConnRecompute(); } return ref; },
+    once:function(evt){ return fbRestGet(path); },
+    set:function(v){ return fbRestWrite('PUT',path,v); },
+    update:function(v){ return fbRestWrite('PATCH',path,v); },
+    remove:function(){ return fbRestWrite('DELETE',path); },
+    push:function(v){ return fbRestWrite('POST',path,v); },
+    onDisconnect:function(){ return { remove:function(){ FB_UNLOAD_REMOVE[path]=1; return Promise.resolve(); }, cancel:function(){ delete FB_UNLOAD_REMOVE[path]; return Promise.resolve(); }, set:function(){ return Promise.resolve(); } }; },
+    child:function(c){ return restRef(path+'/'+c); }
+  };
+  return ref;
+}
+/* Get / refresh the anonymous ID token that authorizes every SSE/REST call. */
+function fbAcquireToken(u,startLayer){
+  FB.authUser=u;
+  u.getIdToken().then(function(tok){ FB.idToken=tok; if(startLayer)fbOnAuthed(u.uid); fbScheduleTokenRefresh(u); })
+   .catch(function(e){ FB.authState='token-err:'+((e&&e.code)||e); fbLog('getIdToken failed',e); try{renderFbStatus();}catch(_){ } });
+}
+function fbScheduleTokenRefresh(u){
+  if(FB._tokTimer)clearInterval(FB._tokTimer);
+  FB._tokTimer=setInterval(function(){ try{ u.getIdToken(true).then(function(tok){ FB.idToken=tok; fbLog('ID token refreshed → reconnecting streams'); fbSseReconnectAll(); }).catch(function(e){ fbLog('token refresh failed',e); }); }catch(e){} }, 50*60*1000);
+}
+function fbRefreshTokenNow(cb){ try{ if(FB.authUser){ FB.authUser.getIdToken(true).then(function(tok){ FB.idToken=tok; cb&&cb(); }).catch(function(){ cb&&cb(); }); } else { cb&&cb(); } }catch(e){ cb&&cb(); } }
+
 async function fbInit(){
   if(FB.ready)return;
   if(!window.SHOMER_FB){ FB.authState='no-config'; FB.err='no-config'; fbLog('NO Firebase config on this build'); renderFbStatus(); return; }
@@ -6507,68 +6638,37 @@ async function fbInit(){
   // The Emergency Guide + app shell work offline regardless (no Firebase needed).
   if(!navigator.onLine){ if(!FB._offDeferred){ FB._offDeferred=true; fbLog('offline at boot — deferring realtime connect until online'); } FB.authState='offline — deferred'; try{renderFbStatus();}catch(e){} return; }
   if(FB._initing)return; FB._initing=true;
-  fbLog('init start · dbURL =', window.SHOMER_FB.databaseURL);
-  // WATCHDOG covers ONLY the data layer (SDK load + socket). Auth is now
-  // best-effort and never gates connection, so a stalled sign-in can't trip this.
+  FB_REST=(window.SHOMER_FB.databaseURL||'').replace(/\/+$/,'');
+  fbLog('init start · REST+SSE transport · db =', FB_REST);
+  FB.transport='REST+SSE';
+  // The realtime transport is REST+SSE over plain HTTPS (the RTDB SDK's WebSocket is
+  // broken in some installed-PWA/Android WebViews; plain HTTPS + anon auth work there).
+  // FB.db is a drop-in shim so all existing presence/SOS/pairing/registry code is unchanged.
+  FB.db={ ref:restRef, goOnline:fbSseReconnectAll, goOffline:function(){} };
+  FB.cid=fbClientId(); FB.uid=FB.cid;      // stable device id until the auth uid lands
+  // Watchdog: the ONLY thing that must land is the ID token (then streams open).
   if(FB._watchdog)clearTimeout(FB._watchdog);
-  FB._watchdog=setTimeout(function(){
-    if(!FB.ready){ if(!FB.err){ FB.err=FB.sdkLoaded?'socket-timeout (no response 20s)':'sdk-timeout (no response 20s)'; } fbLog('WATCHDOG fired · data layer not ready ·', FB.err, '· sdkLoaded =', FB.sdkLoaded); try{renderFbStatus();}catch(e){} }
-  },20000);
+  FB._watchdog=setTimeout(function(){ if(!FB._authReady&&!FB.err){ FB.err='auth-timeout (no token 20s)'; fbLog('WATCHDOG · no ID token in 20s'); try{renderFbStatus();}catch(e){} } },20000);
   try{
-    // 1) Load ONLY app + database SDK (NOT auth). With firebase-auth NOT loaded,
-    //    the RTDB connection has no auth-token provider to wait on — so the socket
-    //    opens immediately, unauthenticated. (Loading auth-compat registers a token
-    //    provider that the connection blocks on; on iOS reopen that token resolution
-    //    hangs and defers the socket — the returning-session bug. Rules are open, so
-    //    no token is needed. Auth loads LAST, in the background, only for a uid.)
+    // Load ONLY firebase-app + firebase-auth (to mint the anonymous ID token). NO
+    // database SDK — its WebSocket transport is exactly what's broken on the device.
     try{
-      if(!window.firebase||!window.firebase.database){
+      if(!(window.firebase&&window.firebase.auth)){
         await fbLoad('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js');
-        await fbLoad('https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js');
+        await fbLoad('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js');
       }
-      FB.sdkLoaded=true; fbLog('SDK loaded (app+database; auth deferred)');
-    }catch(e){ FB.sdkLoaded=false; FB.err='sdk-load:'+(e&&e.message||e); fbLog('SDK LOAD FAILED (CSP/network?):', e); throw e; }
+      FB.sdkLoaded=true; fbLog('auth SDK loaded (no database SDK — REST+SSE transport)');
+    }catch(e){ FB.sdkLoaded=false; FB.err='sdk-load:'+(e&&e.message||e); fbLog('AUTH SDK LOAD FAILED (CSP/network?):', e); throw e; }
 
     if(!window.firebase.apps.length)window.firebase.initializeApp(window.SHOMER_FB);
     try{ fbInitAppCheck(); }catch(e){}   // defense-in-depth, DORMANT until a site key is configured
-
-    // 2) ── SOCKET UP IMMEDIATELY — CONNECTION NEVER WAITS ON AUTH ──────────────
-    //    The realtime socket (and .info/connected, which is ALWAYS readable
-    //    regardless of rules) comes up first, independent of auth. This is what
-    //    keeps the v63 self-healing robustness intact: "connected" is driven purely
-    //    by the socket, never by token resolution — so auth can never wedge the
-    //    connection the way the old early-auth-load did on cold reopen.
-    FB.cid=fbClientId();                 // stable per-device id (diagnostics / fallback only)
-    FB.uid=FB.cid;                       // temporary until auth lands; NO data is written before then
-    FB.db=window.firebase.database();
-    FB.ready=true;
-    if(FB._watchdog){ clearTimeout(FB._watchdog); FB._watchdog=null; } // socket layer up
-    try{ FB.db.goOnline&&FB.db.goOnline(); }catch(e){}
-    fbSetupConnState();                  // .info/connected listener ONLY (no auth needed)
-    FB.listening=true; fbLog('SOCKET LAYER READY · cid =', FB.cid, '· (securing identity…)');
+    FB.ready=true; FB.listening=true;    // shell/transport ready; FB.connected follows SSE stream health
     renderFbStatus();
 
-    // 3) ── SECURE IDENTITY: anonymous auth as the data identity (non-blocking) ──
-    //    Re-introduced for SECURE rules (auth.uid === $uid ownership). It loads
-    //    AFTER the socket is up (so the auth-token provider can't block the initial
-    //    connect — the root cause of the old reopen wedge), uses LOCAL persistence
-    //    so the SAME uid returns across cold reopens (My-SHOMER pairing survives),
-    //    and the self-healing monitor retries it. Presence/SOS/pairing data writes
-    //    are GATED on the auth uid (fbOnAuthed) — never on the socket. If auth lags,
-    //    the app still shows "connected" and the map/guide work; data flows the
-    //    instant the uid lands (typically 1–3s on Android).
+    // Anonymous auth → ID token → fbOnAuthed starts the SSE streams (presence/SOS/pairs).
     fbAuthBootstrap();
 
-    // 4) ── SOCKET SELF-DIAGNOSIS ──────────────────────────────────────────────
-    //    If the RTDB socket hasn't come up within 6s, run a raw WebSocket probe
-    //    to capture WHY (CSP block vs network/region vs app/SDK) and show it in
-    //    the panel. Skipped entirely when the real socket connects normally.
-    setTimeout(function(){ if(!FB.connected && !FB.wsProbe){ fbLog('socket still down after 6s → probing'); fbProbeSocket(); } },6000);
-
-    // 5) ── HAND OFF TO THE SELF-HEALING MONITOR ────────────────────────────────
-    //    The autonomous fbHealth monitor (3s backbone + resume hooks) now owns all
-    //    recovery: silent reconnect with backoff, never aborting an in-progress connect.
-    //    Kick it once shortly after init so a slow/failed first connect is handled.
+    // Hand off to the self-healing monitor (reconnects streams with backoff).
     setTimeout(function(){ try{ fbHealthTick(); }catch(e){} },10000);
   }catch(e){ if(FB._watchdog){ clearTimeout(FB._watchdog); FB._watchdog=null; } FB.err=FB.err||('init:'+((e&&e.code)||(e&&e.message)||e)); fbLog('INIT FAILED ·', FB.err, e); renderFbStatus(); }
   FB._initing=false;
@@ -6627,8 +6727,9 @@ async function fbAuthBootstrap(){
     var P=window.firebase.auth.Auth.Persistence;
     try{ await auth.setPersistence(P.LOCAL); FB.persist='local'; }
     catch(e){ try{ await auth.setPersistence(P.NONE); FB.persist='memory'; }catch(_){ } }
-    // onAuthStateChanged → the moment a uid exists (restored or fresh), run the data layer.
-    if(!FB._authListener){ FB._authListener=true; try{ auth.onAuthStateChanged(function(u){ if(u&&u.uid){ fbOnAuthed(u.uid); } }); }catch(e){} }
+    // onAuthStateChanged → the moment a uid exists (restored or fresh), mint the ID
+    // token and start the SSE data layer (fbAcquireToken → fbOnAuthed).
+    if(!FB._authListener){ FB._authListener=true; try{ auth.onAuthStateChanged(function(u){ if(u&&u.uid){ fbAcquireToken(u,true); } }); }catch(e){} }
     // No restored session? sign in anonymously (non-blocking; onAuthStateChanged handles success).
     if(!auth.currentUser){
       auth.signInAnonymously().catch(function(e){ FB.authState='auth-retry:'+((e&&e.code)||e); fbLog('anon sign-in failed (monitor will retry):',(e&&e.code)||e); try{renderFbStatus();}catch(_){ } });
@@ -6642,10 +6743,10 @@ async function fbAuthBootstrap(){
    FB.uid (presence/SOS/registry/pairs/tokens) now uses the AUTH uid, matching the rules. */
 function fbOnAuthed(uid){
   FB.authUid=uid; FB.authState='ok';
+  if(FB._watchdog){ clearTimeout(FB._watchdog); FB._watchdog=null; }
   if(FB._authReady && FB.uid===uid){ return; } // already running on this uid
   FB.uid=uid; FB._authReady=true;
-  fbLog('AUTH READY · secure uid =', uid, '· starting data layer');
-  try{ if(FB.connected){ FB.db.ref('presence/'+FB.uid).onDisconnect().remove(); } }catch(e){}
+  fbLog('AUTH READY · secure uid =', uid, '· ID token acquired · opening SSE data layer');
   try{ fbStartPresence(); }catch(e){}
   try{ fbListenSOS(); }catch(e){}
   try{ fbListenPairs(); }catch(e){}
@@ -6658,22 +6759,14 @@ function fbOnAuthed(uid){
    is always readable). This is the source of truth for FB.connected and feeds the v63
    self-healing monitor, fully decoupled from auth. Presence is (re)armed here only once
    the secure uid is ready, so onDisconnect/publish always use the auth uid. */
-function fbSetupConnState(){
-  if(!FB.ready||FB._connListener)return; FB._connListener=true;
-  FB.db.ref('.info/connected').on('value',function(snap){
-    FB.connected=(snap.val()===true);
-    fbLog('RTDB socket (.info/connected) =', FB.connected);
-    if(FB.connected){ FB._everConnected=true;
-      if(FB._authReady){ try{ FB.db.ref('presence/'+FB.uid).onDisconnect().remove(); }catch(e){} try{ fbPublishPresence(); }catch(e){} }
-    }
-    renderFbStatus();
-  });
-}
+/* DEPRECATED — the SDK's .info/connected socket signal is no longer used. FB.connected
+   is now driven by the SSE stream actually being live + receiving (fbConnRecompute). */
+function fbSetupConnState(){ /* no-op: connection state comes from the SSE streams */ }
 /* Presence publish + nearby-SHOMER read. Runs ONLY after the secure uid is ready
    (fbOnAuthed), so writes are owned by auth.uid and the read passes auth!=null rules. */
 function fbStartPresence(){
   if(!FB.ready||!FB._authReady)return;
-  try{ if(FB.connected) FB.db.ref('presence/'+FB.uid).onDisconnect().remove(); }catch(e){}
+  try{ FB.db.ref('presence/'+FB.uid).onDisconnect().remove(); }catch(e){}  // best-effort unload DELETE
   fbPublishPresence();
   if(!FB._presTimer)FB._presTimer=setInterval(fbPublishPresence,25000);
   if(FB._presListener)return; FB._presListener=true;
