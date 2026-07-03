@@ -8,8 +8,8 @@
 // (a) uses network-first for navigations so a stale shell can never trap the
 // user, and (b) deletes every cache it does not own on activate.
 
-const CACHE_NAME = 'shomer-v67-cache';
-const SW_VERSION = 'v67';
+const CACHE_NAME = 'shomer-v68-cache';
+const SW_VERSION = 'v68';
 const urlsToCache = [
   './',
   'index.html',
@@ -44,17 +44,43 @@ self.addEventListener('activate', event => {
   })());
 });
 
+// Lightweight instrumentation — the ?diag panel queries this ('swstats') so a real
+// device can PROVE whether this SW ever intercepts a Firebase request (it must not).
+let SW_STATS = { total: 0, fbBypassed: 0, handled: 0 };
+
 self.addEventListener('fetch', event => {
   const req = event.request;
+  const u = req.url;
+  SW_STATS.total++;
+
+  // ═══ #1 FIRST-LINE FIREBASE / GOOGLE BYPASS (root-cause fix) ═══════════════════
+  // ANY request to a Firebase / Google backend endpoint, or any RTDB transport path,
+  // goes STRAIGHT to the network. The SW must NEVER intercept, cache, delay, or
+  // respondWith the Realtime-DB handshake / long-poll (/.lp) / websocket negotiation
+  // (/.ws) / .info, or the auth-token calls (identitytoolkit / securetoken). This is
+  // checked FIRST and synchronously (no URL parsing) so the handler returns with
+  // minimal work. Symptom it fixes: installed-PWA Android hung on "connecting" — raw
+  // socket + auth OK, but the SDK session never completed while the SW was active
+  // (works in incognito with no SW). Do NOT weaken this.
+  if (
+    u.indexOf('firebaseio.com') !== -1 ||
+    u.indexOf('firebasedatabase.app') !== -1 ||
+    u.indexOf('firebaseapp.com') !== -1 ||
+    u.indexOf('googleapis.com') !== -1 ||            // identitytoolkit / securetoken / fcm token
+    u.indexOf('google.com') !== -1 ||                // apis/accounts.google.com auth
+    u.indexOf('gstatic.com') !== -1 ||               // the Firebase SDK bundles
+    u.indexOf('/.lp') !== -1 || u.indexOf('/.ws') !== -1 || u.indexOf('/.info') !== -1
+  ) {
+    SW_STATS.fbBypassed++;
+    return; // no respondWith → browser makes the request natively, fully untouched
+  }
+
   if (req.method !== 'GET') return;
 
-  // CRITICAL: only ever handle SAME-ORIGIN requests. Cross-origin requests
-  // (Firebase RTDB long-poll + auth on firebaseio.com / googleapis.com / gstatic,
-  // map tiles, OSRM, fonts) must go straight to the network, untouched by the SW.
-  // Intercepting Firebase's HTTP fallback transport breaks the realtime connection
-  // on mobile networks that block WebSockets — the app then hangs on "connecting".
+  // Belt-and-braces: any OTHER cross-origin request (map tiles, OSRM, fonts) also
+  // goes straight to the network, untouched by the SW.
   let url;
-  try { url = new URL(req.url); } catch (e) { return; }
+  try { url = new URL(u); } catch (e) { return; }
   if (url.origin !== self.location.origin) return;
 
   // ESCAPE HATCH: never touch the reset page or any ?nosw / ?fresh request. Let
@@ -66,6 +92,7 @@ self.addEventListener('fetch', event => {
 
   // Navigation requests: network-first, fall back to cached app shell.
   if (req.mode === 'navigate') {
+    SW_STATS.handled++;
     event.respondWith(
       fetch(req)
         .then(res => {
@@ -79,6 +106,7 @@ self.addEventListener('fetch', event => {
   }
 
   // Same-origin assets: cache-first, then network (offline-friendly).
+  SW_STATS.handled++;
   event.respondWith(
     caches.match(req).then(cached => cached || fetch(req).then(res => {
       const copy = res.clone();
@@ -95,6 +123,11 @@ self.addEventListener('message', event => {
   if (event.data === 'skipWaiting') self.skipWaiting();
   if (event.data === 'version' && event.ports && event.ports[0]) {
     event.ports[0].postMessage(SW_VERSION);
+  }
+  // Diagnostics: report fetch stats so ?diag can PROVE the SW never intercepted a
+  // Firebase request (fbBypassed should be > 0 and NONE handled/cached).
+  if (event.data === 'swstats' && event.ports && event.ports[0]) {
+    event.ports[0].postMessage(JSON.stringify(SW_STATS));
   }
 });
 

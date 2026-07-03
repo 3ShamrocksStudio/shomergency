@@ -6156,6 +6156,11 @@ function diagReport(){
  })();
  add('app version', (typeof APP_VER!=='undefined'?APP_VER:'?'), 'ok');
  add('SW (controlling)', (FB&&FB.swVer)||'querying…', ((FB&&FB.swVer&&typeof APP_VER!=='undefined'&&FB.swVer===APP_VER)?'ok':(FB&&FB.swVer&&FB.swVer.indexOf('v')===0?'warn':'')));
+ // SW fetch stats — proves the SW passes Firebase straight through (never intercepts it).
+ (function(){ var s=(typeof FB!=='undefined')&&FB.swStats;
+   if(s&&typeof s==='object'){ add('SW fetch (fb bypassed)', 'firebase '+s.fbBypassed+' bypassed · '+s.handled+' app-cached · '+s.total+' total', (s.fbBypassed>=0?'ok':'')); }
+   else { add('SW fetch (fb bypassed)', s||'querying…', ''); }
+ })();
  add('platform', (iOS?'iOS':'other')+(standalone?' · installed (A2HS)':' · browser tab'), (iOS&&!standalone?'warn':''));
  add('storage', diagStorageProbe(), (diagStorageProbe().indexOf('OK')>=0?'ok':'bad'));
  var hadUser=false; try{ hadUser=!!skey&&/"onboarded":true/.test(skey); }catch(e){}
@@ -6236,7 +6241,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v67';
+var APP_VER='v68';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -6889,7 +6894,20 @@ function querySwVersion(){
  var ch=new MessageChannel();
  ch.port1.onmessage=function(ev){ FB.swVer=ev.data||'?'; fbLog('controlling SW version =', FB.swVer, '· app =', APP_VER); maybeSelfHeal(); try{updateDiagPanel();}catch(e){} };
  navigator.serviceWorker.controller.postMessage('version',[ch.port2]);
+ try{ querySwStats(); }catch(e){}
  }catch(e){ FB.swVer='err'; }
+}
+/* Ask the controlling SW for its fetch stats so ?diag can PROVE it never intercepts a
+   Firebase request: fbBypassed should be > 0, and NONE of the connection endpoints are
+   'handled'/cached. If the connection still fails while fbBypassed > 0, the SW's fetch
+   handler is definitively NOT the cause. */
+function querySwStats(){
+ try{
+ if(!('serviceWorker' in navigator)||!navigator.serviceWorker.controller){ FB.swStats='no-controller'; return; }
+ var ch=new MessageChannel();
+ ch.port1.onmessage=function(ev){ try{ FB.swStats=JSON.parse(ev.data); }catch(e){ FB.swStats=ev.data; } fbLog('SW fetch stats =', ev.data); try{updateDiagPanel();}catch(e){} };
+ navigator.serviceWorker.controller.postMessage('swstats',[ch.port2]);
+ }catch(e){ FB.swStats='err'; }
 }
 /* SELF-HEAL — if an OLDER service worker is controlling this (already-current,
    network-first-loaded) HTML, the phone is on a stale/sticky SW. Clear it ONCE
