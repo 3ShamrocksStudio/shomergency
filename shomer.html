@@ -3396,13 +3396,10 @@ function showGeoResult(ok,msg){
  btn.disabled=false;
  btn.innerHTML=`<span>${ESC(T('geo_retry'))}</span>`;
  btn.onclick=requestGeo;
- if(!document.getElementById('geo-skip')){
- const skip=document.createElement('button');
- skip.id='geo-skip'; skip.className='ob-back'; skip.style.marginTop='8px';
- skip.textContent=T('geo_skip');
- skip.onclick=()=>goStep(2);
- document.querySelector('#step1 .ob-card').appendChild(skip);
- }
+ // The static #geo-skip-btn is the single skip control — just make sure it's visible.
+ // (Previously a second skip button was appended here on geo failure → a visible duplicate.)
+ const skipBtn=document.getElementById('geo-skip-btn'); if(skipBtn)skipBtn.style.display='';
+ const dup=document.getElementById('geo-skip'); if(dup)dup.remove();
 }
 function obPickAlarm(el,type){
  document.querySelectorAll('#ob-alarms .ob-alarm').forEach(a=>{a.classList.remove('sel');a.setAttribute('aria-checked','false');});
@@ -6464,7 +6461,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v73';
+var APP_VER='v74';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
