@@ -276,6 +276,32 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 .tour-btns{display:flex;gap:6px;align-items:center;}
 .tour-skip{background:none;color:var(--tx3);font-size:12px;font-weight:600;padding:8px 6px;cursor:pointer;}
 .tour-next{background:linear-gradient(135deg,#C09020,#E0A828);color:var(--n0);font-size:13px;font-weight:800;padding:9px 18px;border-radius:10px;cursor:pointer;border:none;}
+/* ── Post-entry SETUP prompt + THEFT-SELFIE overlays ── */
+.setup-ov{position:fixed;inset:0;z-index:9650;display:none;align-items:flex-end;justify-content:center;background:rgba(4,10,22,.72);backdrop-filter:blur(3px);}
+.setup-ov.on{display:flex;animation:tin .2s ease;}
+.setup-card{width:100%;max-width:440px;background:linear-gradient(180deg,#16233e,#0d1830);border:1px solid var(--b3);border-top-left-radius:22px;border-top-right-radius:22px;padding:20px 18px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -14px 46px rgba(0,0,0,.6);animation:sheetUp .3s cubic-bezier(.3,.9,.3,1);}
+@keyframes sheetUp{from{transform:translateY(24px);opacity:.6}to{transform:translateY(0);opacity:1}}
+.setup-badge{width:56px;height:56px;border-radius:16px;margin:0 auto 12px;display:grid;place-items:center;color:var(--g3);background:rgba(224,168,40,.12);border:1px solid rgba(224,168,40,.28);}
+.setup-card h3{font-size:19px;font-weight:800;color:var(--tx0);text-align:center;margin-bottom:5px;}
+.setup-sub{font-size:12.5px;color:var(--tx2);text-align:center;line-height:1.5;margin-bottom:14px;}
+.setup-item{display:flex;align-items:center;gap:12px;width:100%;text-align:start;background:var(--n3);border:1px solid var(--b2);border-radius:14px;padding:13px 14px;margin-bottom:9px;cursor:pointer;transition:background .12s;}
+.setup-item:active{background:var(--n4);}
+.setup-item .su-ic{flex:0 0 auto;width:40px;height:40px;border-radius:11px;display:grid;place-items:center;color:var(--g3);background:rgba(224,168,40,.1);border:1px solid rgba(224,168,40,.2);}
+.setup-item .su-tx{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0;}
+.setup-item .su-tx b{font-size:14.5px;font-weight:800;color:var(--tx0);}
+.setup-item .su-tx span{font-size:11.5px;color:var(--tx2);line-height:1.35;}
+.setup-item .su-chev{color:var(--tx3);flex:0 0 auto;}
+.setup-skip{width:100%;padding:11px;margin-top:4px;background:none;border:none;color:var(--tx2);font-size:13.5px;font-weight:700;cursor:pointer;}
+/* Theft-selfie "was this you?" guard + evidence */
+.selfie-ov{position:fixed;inset:0;z-index:10050;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(6,10,20,.9);backdrop-filter:blur(6px);}
+.selfie-ov.on{display:flex;}
+.selfie-card{width:100%;max-width:360px;background:linear-gradient(180deg,#241018,#150a12);border:1px solid var(--r3);border-radius:20px;padding:20px 18px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.65);}
+.selfie-card h3{font-size:19px;font-weight:800;color:#FF9aa3;margin-bottom:6px;}
+.selfie-card p{font-size:13px;color:var(--tx1);line-height:1.55;margin-bottom:14px;}
+.selfie-thumb{width:120px;height:150px;object-fit:cover;border-radius:12px;border:2px solid var(--r3);margin:0 auto 14px;display:block;background:#0a1628;}
+.selfie-count{font-size:34px;font-weight:900;color:#FF7080;line-height:1;margin-bottom:2px;}
+.selfie-cancel{width:100%;padding:14px;background:linear-gradient(135deg,#16a06a,#0e8f5c);border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:800;cursor:pointer;}
+.selfie-note{font-size:10.5px;color:var(--tx3);margin-top:10px;line-height:1.5;}
 .hdr-bell{position:relative;width:42px;height:42px;border-radius:50%;background:var(--n3);border:1px solid var(--b2);display:flex;align-items:center;justify-content:center;font-size:18px;transition:all .15s;flex-shrink:0;}
 .hdr-bell:hover{background:var(--n4);}
 .bell-dot{position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:var(--r3);border:2px solid rgba(8,18,36,.97);display:none;}
@@ -1189,7 +1215,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <span class="dc-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l9 16H3Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17" r="1.2" fill="currentColor"/></svg></span>
  <span id="ob-disclaimer-txt"><strong>שומר אינו תחליף לשירותי חירום.</strong> זהו כלי לבטיחות אישית ושיתוף מיקום. במצב חירום אמיתי חייגו <b>100</b> (משטרה) · <b>101</b> (מד״א) · <b>102</b> (כבאות). שומר אינו מתקשר לרשויות עבורך.</span>
  </div>
- <button class="ob-cta" id="ob-cta0" onclick="obStep0()"><span id="ob-cta0-t">המשך ←</span></button>
+ <button class="ob-cta" id="ob-cta0" onclick="obStep0()"><span id="ob-cta0-t">המשך</span> <svg class="ic ob-fwd" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M14 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
  </div>
  </div>
 
@@ -1205,7 +1231,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </div>
  <button class="ob-cta" id="geo-btn" onclick="requestGeo()"><span id="geo-btn-t">שתף מיקום</span></button>
  <button class="ob-cta" style="background:var(--n4);color:var(--tx1);box-shadow:none;margin-top:8px;border:1px solid var(--b2);" onclick="goStep(2)" id="geo-skip-btn"><span id="geo-skip-t">דלג – המשך בלי שיתוף מיקום</span></button>
- <button class="ob-back" onclick="goStep(0)" id="ob-back1">← חזרה</button>
+ <button class="ob-back" onclick="goStep(0)" id="ob-back1"><svg class="ic ob-bk" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M10 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> <span id="ob-back1-t">חזרה</span></button>
  </div>
  </div>
 
@@ -1235,9 +1261,12 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <input class="ob-f" id="ob-pin" type="password" inputmode="numeric" maxlength="4" pattern="[0-9]*" dir="ltr" style="text-align:center;letter-spacing:10px;font-size:20px" placeholder="••••" autocomplete="off" aria-label="SOS cancel code">
  <p class="ob-pin-hint" id="ob-pin-hint" style="font-size:10.5px;color:var(--tx3);line-height:1.5;margin:5px 2px 0" data-he="נדרש כדי לבטל SOS פעיל — מונע ביטול בכפייה. לעולם לא טביעת אצבע." data-en="Required to cancel an active SOS — prevents forced cancellation. Never biometric.">נדרש כדי לבטל SOS פעיל — מונע ביטול בכפייה. לעולם לא טביעת אצבע.</p>
  </div>
- <button class="ob-cta" onclick="obFinish()" id="ob-finish-btn">✓ <span id="ob-finish-t">כניסה לשומר</span></button>
+ <div style="display:flex;gap:9px;margin-top:6px">
+ <button class="ob-cta" onclick="obFinish()" id="ob-finish-btn" style="flex:1;margin-top:0"><svg class="ic" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M10 17l5-5-5-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 12H4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> <span id="ob-finish-t">כניסה</span></button>
+ <button class="ob-cta" onclick="obFinishToSettings()" id="ob-settings-btn" style="flex:0 0 auto;margin-top:0;background:var(--n4);color:var(--tx1);box-shadow:none;border:1px solid var(--b2)"><svg class="ic" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-2.87 1.2V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-2.87-1.2l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.1A1.7 1.7 0 0 0 4.6 8.4l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 5.6a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 2.87 1.2l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 21 9.6h.4a2 2 0 1 1 0 4H21a1.7 1.7 0 0 0-1.6 1.4Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg> <span id="ob-settings-t">הגדרות</span></button>
+ </div>
  <p style="font-size:10.5px;color:var(--tx3);line-height:1.6;margin:10px 2px 0;text-align:center" id="ob-agree-txt">בכניסה את/ה מסכים/ה ל<button type="button" class="lnk-inline" onclick="openLegal('tos')">תנאי השימוש</button> ול<button type="button" class="lnk-inline" onclick="openLegal('privacy')">מדיניות הפרטיות</button>. שיתוף מיקום הוא בהסכמה בלבד.</p>
- <button class="ob-back" onclick="goStep(1)" id="ob-back2">← חזרה</button>
+ <button class="ob-back" onclick="goStep(1)" id="ob-back2"><svg class="ic" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M10 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> <span id="ob-back2-t">חזרה</span></button>
  </div>
  </div>
 
@@ -1734,6 +1763,10 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="set-grp"><div class="set-row" onclick="op('sh-dms');cl('sh-set')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="sr-nm" data-he="Dead Man's Switch" data-en="Dead Man's Switch" data-ar="مفتاح الأمان الميت">Dead Man's Switch</div></div><span style="color:var(--tx3);font-size:18px">›</span></div><div class="set-row" onclick="op('sh-alarm');cl('sh-set')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18v-5a5 5 0 0 1 10 0v5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><rect x="5" y="18" width="14" height="3" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3v2M4.5 7l1.5 1.3M19.5 7L18 8.3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div class="sr-nm" data-he="הגדרות אזעקה" data-en="Alarm settings">הגדרות אזעקה</div></div><span style="color:var(--tx3);font-size:18px">›</span></div></div>
  <div class="set-grp"><div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4 L17 18.5 L12 15.2 L7 18.5 Z" fill="currentColor"/></svg></div><div><div class="sr-nm" id="resp-tog-lbl" data-he="ניווט מגיב/ה (הצטרפות)" data-en="Responder navigation (opt-in)">ניווט מגיב/ה (הצטרפות)</div><div class="sr-sb" id="resp-tog-sub" data-he="הצג מסלול חי ומרחק כשמגיבים ל-SOS. מיועד למגיבים מאומתים ולשומרים — לא תחליף לחיוג 100/101/102." data-en="Show a live route + distance when responding to an SOS. For verified responders/guardians — not a replacement for 100/101/102.">הצג מסלול חי ומרחק כשמגיבים ל-SOS.</div></div></div><div class="tog" id="resp-tog" onclick="toggleRespond(this)" role="switch"></div></div></div>
  <div class="set-grp"><div class="set-row" onclick="openSetPin()" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><div><div class="sr-nm" data-he="קוד לביטול SOS (PIN)" data-en="SOS cancel code (PIN)">קוד לביטול SOS (PIN)</div><div class="sr-sb" data-he="נדרש לביטול SOS פעיל — לעולם לא טביעת אצבע." data-en="Required to cancel an active SOS — never a fingerprint.">נדרש לביטול SOS פעיל — לעולם לא טביעת אצבע.</div></div></div><span id="pin-set-state" style="font-size:12px;font-weight:700;color:var(--amb);white-space:nowrap">לא הוגדר</span></div></div>
+ <div class="set-grp">
+ <div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="13.5" r="3.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 7l1.5-2h3L15 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div><div><div class="sr-nm" id="selfie-tog-lbl" data-he="הגנת גנב — סלפי" data-en="Theft protection — selfie" data-ar="حماية السرقة — سيلفي">הגנת גנב — סלפי</div><div class="sr-sb" id="selfie-tog-sub" data-he="אחרי 3 קודים שגויים: צילום סלפי של מי שמחזיק את הטלפון + שליחת מיקום חי לשומרים שלך. דורש הרשאת מצלמה. פועל רק כשהאפליקציה פתוחה." data-en="After 3 wrong codes: snap a selfie of whoever holds the phone + send live location to your SHOMERs. Needs camera permission. Works only while the app is open.">אחרי 3 קודים שגויים: סלפי + מיקום חי לשומרים שלך.</div></div></div><div class="tog" id="selfie-tog" onclick="toggleSelfie(this)" role="switch" aria-label="הגנת גנב סלפי"></div></div>
+ <div class="set-row" onclick="openTheftEvidence()" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><div><div class="sr-nm" data-he="ראיות גניבה" data-en="Theft evidence" data-ar="أدلة السرقة">ראיות גניבה</div><div class="sr-sb" data-he="סלפי ומיקום שנלכדו — ראיה מתועדת למשטרה." data-en="Captured selfies + locations — documented proof for police.">סלפי ומיקום שנלכדו — ראיה למשטרה.</div></div></div><span id="theft-ev-state" style="font-size:12px;font-weight:700;color:var(--g3);white-space:nowrap"></span></div>
+ </div>
  <div class="set-grp"><div class="set-row" onclick="op('sh-checkin')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="sr-nm" data-he="צ׳ק-אין הדדי (עם שומר/ת)" data-en="Mutual check-in (with a guardian)">צ׳ק-אין הדדי</div><div class="sr-sb" data-he="„הכל בסדר?” תקופתי — אם לא תאשר/י, השומר/ת מקבל/ה אזעקה." data-en="Periodic 'Are you OK?' — if you don't confirm, your guardian is alerted.">„הכל בסדר?” תקופתי.</div></div></div><span id="ci-set-state" style="font-size:12px;font-weight:700;color:var(--tx3);white-space:nowrap">כבוי</span></div></div>
  <div class="sec-cap mb12" id="shake-set-lbl">Shake-to-SOS</div>
  <div class="set-grp">
@@ -2580,6 +2613,7 @@ let SS={
  },
  reports:[], // {id,type,desc,loc,lat,lng,photos:[thumbs],ts,anon}
  sosHistory:[], // {id,ts,lat,lng,trigger,resolution,broadcast,rateLimited}
+ theftEvents:[], // theft-selfie evidence (owner's proof): {id,ts,lat,lng,photo}
  /* ── Circles (family/friend live-location groups) — LOCAL SIMULATION ──
  Real cross-device, always-on sharing needs native + backend (see CIRCLES.md). */
  circles:[], // {id,name,type:'family'|'friends'}
@@ -2649,7 +2683,7 @@ function applyStoredSettings(){
  alarmType='shomer'; if(SS.alarm.type!=='shomer'){ SS.alarm.type='shomer'; }
  alarmVol=(SS.alarm.vol!=null?SS.alarm.vol:1);
  dmsIv=SS.dms.interval||5; dmsInterval=dmsIv;
- try{ reflectUnits(); reflectRespondToggle(); reflectPinSetState(); reflectCheckin(); if(SS.checkin&&SS.checkin.enabled)checkinSchedule(); }catch(e){}
+ try{ reflectUnits(); reflectRespondToggle(); reflectPinSetState(); reflectCheckin(); reflectSelfieToggle(); if(SS.checkin&&SS.checkin.enabled)checkinSchedule(); }catch(e){}
  if(SS.user){user.name=SS.user.name||'';user.phone=SS.user.phone||'';}
  reflectAlarmSelection();
  reflectDmsSelection();
@@ -3055,10 +3089,11 @@ function applyTranslations(){
  setText('ob-why',T('ob_why'));
  setText('ob-h1',T('ob_h1')); setText('ob-d1',T('ob_d1'));
  setText('ob-h2',T('ob_h2')); setText('ob-d2',T('ob_d2'));
- setText('ob-cta0-t',currentLang==='he'?'המשך ←':'Continue →');
- setText('ob-finish-t',T('finish'));
- const f=document.getElementById('ob-back1');if(f)f.textContent=T('back');
- const f2=document.getElementById('ob-back2');if(f2)f2.textContent=T('back');
+ setText('ob-cta0-t',currentLang==='he'?'המשך':currentLang==='ar'?'متابعة':'Continue');
+ setText('ob-finish-t',currentLang==='he'?'כניסה':currentLang==='ar'?'دخول':'Enter');
+ setText('ob-settings-t',currentLang==='he'?'הגדרות':currentLang==='ar'?'الإعدادات':'Settings');
+ setText('ob-back1-t',currentLang==='he'?'חזרה':currentLang==='ar'?'رجوع':'Back');
+ setText('ob-back2-t',currentLang==='he'?'חזרה':currentLang==='ar'?'رجوع':'Back');
  // Geo
  setText('geo-t',T('geo_need'));
  const gb=document.getElementById('geo-btn-t');if(gb)gb.textContent=T('geo_allow');
@@ -3366,7 +3401,7 @@ function previewAlarm(type,stopId){
 }
 function hideAlarmStops(){['ob-alarm-stop','set-alarm-stop'].forEach(id=>{const b=document.getElementById(id);if(b)b.style.display='none';});}
 function stopPreview(){stopAlarm();hideAlarmStops();clearTimeout(previewAlarm._t);}
-function obFinish(){
+function obFinish(goSettings){
  try{stopPreview();}catch(e){} // ensure no preview tone leaks into the app
  user.name=user.name||pickRandomName();
  // Persist onboarding so it never loops on reload.
@@ -3378,9 +3413,38 @@ function obFinish(){
  if(/^\d{4}$/.test(pin)){ if(!SS.security)SS.security={}; SS.security.pin=pin; }
  saveStore();
  enterApp(false);
- // Introduce the top features once, after the app is visible + Leaflet has laid out.
- setTimeout(function(){ try{ startFeatureTour(); }catch(e){} }, 950);
+ // "הגדרות" → straight into Settings. "כניסה" → fast entry + a prominent (non-blocking)
+ // setup nudge for the two things that make SHOMER actually work: a trusted circle + a
+ // security code (which also arms theft-selfie protection).
+ if(goSettings===true){ setTimeout(function(){ try{ op('sh-set'); }catch(e){} }, 450); return; }
+ setTimeout(function(){ try{ showSetupPrompt(); }catch(e){ try{ startFeatureTour(); }catch(_){ } } }, 900);
 }
+function obFinishToSettings(){ obFinish(true); }
+/* ── Post-entry setup nudge — prominent but NEVER blocking; Enter is always fast ── */
+function showSetupPrompt(){
+ var he=currentLang==='he', ar=currentLang==='ar';
+ var ov=document.getElementById('setup-prompt');
+ if(!ov){ ov=document.createElement('div'); ov.id='setup-prompt'; ov.className='setup-ov'; document.body.appendChild(ov); }
+ var hasCode=!!(SS.security&&/^\d{4}$/.test(SS.security.pin||''));
+ var selfieOn=!!(SS.settings&&SS.settings.selfie);
+ var chev='<svg class="ic su-chev" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M14 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+ ov.innerHTML='<div class="setup-card" role="dialog" aria-modal="true">'
+  +'<div class="setup-badge" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z"/><path d="M9 12l2 2 4-4" stroke-linecap="round"/></svg></div>'
+  +'<h3>'+(he?'שני צעדים כדי ששומר יעבוד':ar?'خطوتان ليعمل شومير':'Two steps to make SHOMER work')+'</h3>'
+  +'<p class="setup-sub">'+(he?'אלה מפעילים את הליבה — עזרה הדדית והגנה. אפשר גם אחר כך.':ar?'هذه تُفعّل الأساس. يمكن لاحقًا.':'These turn on the core. You can also do it later.')+'</p>'
+  +'<button class="setup-item" onclick="setupDo(\'circle\')"><span class="su-ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="9" r="3"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0" stroke-linecap="round"/><path d="M16.5 7.2a3 3 0 0 1 0 5.6M18.5 19a6 6 0 0 0-3-5.2" stroke-linecap="round"/></svg></span><span class="su-tx"><b>'+(he?'הוסף/י את מעגל האמון':ar?'أضف دائرة الثقة':'Add your trusted circle')+'</b><span>'+(he?'משפחה וחברים שיקבלו את ה-SOS שלך':ar?'من يتلقّى استغاثتك':'Who receives your SOS')+'</span></span>'+chev+'</button>'
+  +'<button class="setup-item" onclick="setupDo(\'code\')"><span class="su-ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span><span class="su-tx"><b>'+(he?'הגדר/י קוד אבטחה':ar?'اضبط رمز الأمان':'Set a security code')+(hasCode?' ✓':'')+'</b><span>'+(he?'לביטול SOS — ומפעיל את הגנת הגנב':ar?'لإلغاء الاستغاثة وتفعيل حماية السرقة':'Cancels SOS + arms theft protection')+'</span></span>'+chev+'</button>'
+  +'<button class="setup-item" id="su-selfie" onclick="setupDo(\'selfie\')"><span class="su-ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="13" rx="2.5"/><circle cx="12" cy="13.5" r="3.2"/><path d="M9 7l1.5-2h3L15 7" stroke-linejoin="round"/></svg></span><span class="su-tx"><b>'+(he?'הגנת גנב — סלפי':ar?'حماية السرقة — سيلفي':'Theft selfie protection')+(selfieOn?' ✓':'')+'</b><span>'+(he?'צילום מי שמחזיק את הטלפון אחרי 3 קודים שגויים':ar?'صورة بعد 3 محاولات خاطئة':'Snaps a photo after 3 wrong codes')+'</span></span>'+chev+'</button>'
+  +'<button class="setup-skip" onclick="setupDone()">'+(he?'אחר כך — למפה':ar?'لاحقًا — إلى الخريطة':'Later — to the map')+'</button>'
+  +'</div>';
+ ov.classList.add('on');
+}
+function setupDo(what){
+ if(what==='circle'){ setupDone(true); try{ openCircles(); }catch(e){} }
+ else if(what==='code'){ setupDone(true); try{ openSetPin(); }catch(e){} }
+ else if(what==='selfie'){ enableSelfieMode(true); try{ showSetupPrompt(); }catch(e){} } // re-render (show ✓), keep prompt
+}
+function setupDone(silent){ var ov=document.getElementById('setup-prompt'); if(ov)ov.classList.remove('on'); if(!silent){ setTimeout(function(){ try{ startFeatureTour(); }catch(e){} }, 350); } }
 /* Shared app-entry path — used by fresh onboarding AND by returning users on load. */
 function enterApp(returning){
  const profNm=document.getElementById('profNm');
@@ -3892,16 +3956,138 @@ function pinDel(){ _pinBuf=_pinBuf.slice(0,-1); reflectPinDots(); var e=document
 function pinSubmit(){
  var he=currentLang==='he';
  if(_pinMode==='set'){ if(!SS.security)SS.security={}; SS.security.pin=_pinBuf; saveStore(); closeSosPin(); reflectPinSetState(); toast(he?'✓ קוד הביטול נשמר':'✓ Cancel code saved','grn'); return; }
- if(_pinBuf===((SS.security&&SS.security.pin)||'')){ var cb=_pinCb; closeSosPin(); if(cb)cb(); }
- else { var e=document.getElementById('pin-err'); if(e)e.textContent=he?'קוד שגוי':'Wrong code'; _pinBuf=''; reflectPinDots(); try{navigator.vibrate&&navigator.vibrate(180);}catch(x){} }
+ if(_pinBuf===((SS.security&&SS.security.pin)||'')){ _pinFails=0; var cb=_pinCb; closeSosPin(); if(cb)cb(); }
+ else {
+   var e=document.getElementById('pin-err'); _pinFails=(_pinFails||0)+1;
+   var left=3-_pinFails;
+   if(e)e.textContent=(he?'קוד שגוי':'Wrong code')+(left>0&&_pinFails>=1?(' · '+(he?('נותרו '+left):(left+' left'))):'');
+   _pinBuf=''; reflectPinDots(); try{navigator.vibrate&&navigator.vibrate(180);}catch(x){}
+   // THEFT PROTECTION: after 3 wrong codes, capture a selfie of whoever's holding the phone.
+   if(_pinFails>=3){ _pinFails=0; try{ selfieTheftTrigger(); }catch(x){} }
+ }
 }
-function openSosPin(cb){ _pinMode='verify';_pinBuf='';_pinCb=cb; buildPinPad(); reflectPinDots(); _pinSetTexts(); var e=document.getElementById('pin-err'); if(e)e.textContent=''; var ov=document.getElementById('sos-pin'); if(ov){ov.classList.add('on');ov.setAttribute('aria-hidden','false');} }
+var _pinFails=0;
+function openSosPin(cb){ _pinMode='verify';_pinBuf='';_pinFails=0;_pinCb=cb; buildPinPad(); reflectPinDots(); _pinSetTexts(); var e=document.getElementById('pin-err'); if(e)e.textContent=''; var ov=document.getElementById('sos-pin'); if(ov){ov.classList.add('on');ov.setAttribute('aria-hidden','false');} }
 function openSetPin(){ _pinMode='set';_pinBuf='';_pinCb=null; buildPinPad(); reflectPinDots(); _pinSetTexts(); var e=document.getElementById('pin-err'); if(e)e.textContent=''; var ov=document.getElementById('sos-pin'); if(ov){ov.classList.add('on');ov.setAttribute('aria-hidden','false');} }
 function _pinSetTexts(){ var he=currentLang==='he', set=_pinMode==='set';
  setText('pin-ttl',set?(he?'בחר/י קוד ביטול':'Choose a cancel code'):(he?'קוד לביטול SOS':'SOS cancel code'));
  setText('pin-sub',set?(he?'4 ספרות. יידרש כדי לבטל SOS פעיל. לעולם לא טביעת אצבע.':'4 digits. Required to cancel an active SOS. Never a fingerprint.'):(he?'ביטול SOS פעיל מחייב את הקוד האישי שלך — לעולם לא טביעת אצבע.':'Cancelling an active SOS requires your personal code — never a fingerprint.')); }
 function reflectPinSetState(){ var el=document.getElementById('pin-set-state'); if(el){var he=currentLang==='he', has=SS.security&&/^\d{4}$/.test(SS.security.pin||''); el.textContent=has?(he?'מוגדר ✓':'Set ✓'):(he?'לא הוגדר':'Not set'); el.style.color=has?'var(--grn)':'var(--amb)';} }
 function closeSosPin(){ var ov=document.getElementById('sos-pin'); if(ov){ov.classList.remove('on');ov.setAttribute('aria-hidden','true');} _pinBuf='';_pinCb=null; }
+
+/* ═══════════════ THEFT-SELFIE PROTECTION (opt-in) ═══════════════
+   On 3 wrong security-code attempts, capture a FRONT-CAMERA selfie of whoever's holding
+   the phone, give the OWNER a quick "was this you?" cancel window, and — if not cancelled —
+   broadcast the phone's live LOCATION as a theft event (nearby SHOMERs + My SHOMER see it
+   on the map) and save/attach the selfie as documented proof. HONEST CONSTRAINT: a web PWA
+   can only capture while the app is OPEN (a thief interacting with the code prompt); true
+   locked/closed-app capture needs the native build. */
+var _selfieBusy=false, _selfieGuardT=null;
+function enableSelfieMode(on){
+  if(!SS.settings)SS.settings={};
+  var he=currentLang==='he';
+  if(on===false){ SS.settings.selfie=false; saveStore(); reflectSelfieToggle(); return; }
+  // Enabling requires camera consent up front (transparent) — permission is the opt-in.
+  if(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia){
+    navigator.mediaDevices.getUserMedia({video:{facingMode:'user'}}).then(function(stream){
+      try{ stream.getTracks().forEach(function(t){t.stop();}); }catch(e){}
+      SS.settings.selfie=true; saveStore(); reflectSelfieToggle();
+      try{ toast(he?'הגנת גנב פעילה — סלפי אחרי 3 קודים שגויים':'Theft protection on — selfie after 3 wrong codes','grn'); }catch(e){}
+    }).catch(function(){
+      SS.settings.selfie=false; saveStore(); reflectSelfieToggle();
+      try{ toast(he?'צריך הרשאת מצלמה כדי להפעיל הגנת גנב':'Camera permission is needed for theft protection','amb'); }catch(e){}
+    });
+  } else { SS.settings.selfie=false; try{ toast(he?'המצלמה אינה נתמכת כאן':'Camera not supported here','amb'); }catch(e){} }
+}
+function toggleSelfie(el){ enableSelfieMode(!(SS.settings&&SS.settings.selfie)); }
+function reflectSelfieToggle(){ var t=document.getElementById('selfie-tog'); if(t)t.classList.toggle('on',!!(SS.settings&&SS.settings.selfie));
+  var st=document.getElementById('theft-ev-state'); if(st){ var n=(SS.theftEvents&&SS.theftEvents.length)||0; st.textContent=n?(currentLang==='he'?(n+' ראיות'):(n+' saved')):''; } }
+async function captureSelfie(){
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia) return null;
+  var stream=null;
+  try{ stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:{ideal:640},height:{ideal:480}},audio:false}); }
+  catch(e){ return null; }
+  try{
+    var v=document.createElement('video'); v.muted=true; v.playsInline=true; v.setAttribute('playsinline',''); v.srcObject=stream;
+    try{ await v.play(); }catch(e){}
+    await new Promise(function(r){ var done=false, fin=function(){ if(!done){done=true;r();} }; if(v.readyState>=2)fin(); else v.addEventListener('loadeddata',fin,{once:true}); setTimeout(fin,900); });
+    var vw=v.videoWidth||480, vh=v.videoHeight||640, W=Math.min(360,vw), H=Math.round(vh*(W/vw));
+    var c=document.createElement('canvas'); c.width=W; c.height=H; c.getContext('2d').drawImage(v,0,0,W,H);
+    return c.toDataURL('image/jpeg',0.7);
+  }catch(e){ return null; }
+  finally{ try{ stream.getTracks().forEach(function(t){t.stop();}); }catch(e){} }
+}
+async function selfieTheftTrigger(){
+  if(!(SS.settings&&SS.settings.selfie)) return;   // opt-in only
+  if(_selfieBusy) return; _selfieBusy=true;
+  var photo=null; try{ photo=await captureSelfie(); }catch(e){}
+  _selfieBusy=false;
+  openSelfieGuard(photo);
+}
+function openSelfieGuard(photo){
+  var he=currentLang==='he', ar=currentLang==='ar';
+  var ov=document.getElementById('selfie-guard');
+  if(!ov){ ov=document.createElement('div'); ov.id='selfie-guard'; ov.className='selfie-ov'; document.body.appendChild(ov); }
+  var secs=15;
+  ov.innerHTML='<div class="selfie-card">'
+    +(photo?('<img class="selfie-thumb" src="'+photo+'" alt="">'):'')
+    +'<h3>'+(he?'זוהו 3 קודים שגויים':ar?'3 رموز خاطئة':'3 wrong codes')+'</h3>'
+    +'<p>'+(he?'אם זה הטלפון שלך — בטל/י עכשיו. אחרת, סלפי ומיקום יישלחו לשומרים שלך.':ar?'إن كان هاتفك فألغِ الآن، وإلا ستُرسل صورة وموقع لحُرّاسك.':'If this is your phone, cancel now. Otherwise a selfie + location go to your SHOMERs.')+'</p>'
+    +'<div class="selfie-count" id="selfie-count">'+secs+'</div>'
+    +'<button class="selfie-cancel" onclick="selfieGuardCancel()">'+(he?'זה אני — בטל':ar?'هذا أنا — إلغاء':'It\'s me — cancel')+'</button>'
+    +'<div class="selfie-note">'+(he?'הצילום נלכד רק כשהאפליקציה פתוחה. צילום במסך נעול יתווסף בגרסה המותקנת.':ar?'يُلتقط فقط والتطبيق مفتوح.':'Capture works only while the app is open. Locked-screen capture arrives in the installed app.')+'</div>'
+    +'</div>';
+  ov.classList.add('on');
+  if(_selfieGuardT)clearInterval(_selfieGuardT);
+  _selfieGuardT=setInterval(function(){ secs--; var c=document.getElementById('selfie-count'); if(c)c.textContent=secs; if(secs<=0){ clearInterval(_selfieGuardT); var o=document.getElementById('selfie-guard'); if(o)o.classList.remove('on'); selfieTheftBroadcast(photo); } },1000);
+}
+function selfieGuardCancel(){ if(_selfieGuardT)clearInterval(_selfieGuardT); var ov=document.getElementById('selfie-guard'); if(ov)ov.classList.remove('on'); try{ toast(currentLang==='he'?'בוטל — לא נשלח דבר':'Cancelled — nothing sent',''); }catch(e){} }
+function selfieTheftBroadcast(photo){
+  var he=currentLang==='he';
+  var id='theft'+Date.now();
+  var lat=userLat!=null?userLat:32.07, lng=userLng!=null?userLng:34.78;
+  // 1) OWNER's local documented proof (thief's face + where + when) — always saved.
+  try{ if(!SS.theftEvents)SS.theftEvents=[]; SS.theftEvents.push({id:id,ts:Date.now(),lat:lat,lng:lng,photo:photo||''}); if(SS.theftEvents.length>30)SS.theftEvents=SS.theftEvents.slice(-30); saveStore(); reflectSelfieToggle(); }catch(e){}
+  // 2) Broadcast the phone's LIVE LOCATION as a theft event → nearby SHOMERs + My SHOMER
+  //    see it on the live map (existing REST+SSE 'sos' path; works under current rules).
+  try{ fbBroadcastTheft(id,lat,lng); }catch(e){}
+  // 3) Attach the selfie cross-device so guardians can see the face (needs the /theft rule).
+  try{ fbAttachTheftPhoto(id,lat,lng,photo); }catch(e){}
+  // 4) Ping My SHOMER directly.
+  try{ fbAlertPairedTheft(); }catch(e){}
+  try{ toast(he?'🚨 התראת גניבה נשלחה — סלפי ומיקום נשמרו כראיה':'🚨 Theft alert sent — selfie + location saved as evidence','red'); }catch(e){}
+  try{ startGeoWatch(); }catch(e){}   // keep the phone location live for responders
+}
+function fbBroadcastTheft(id,lat,lng){
+  if(!FB.ready||!FB._authReady) return;
+  var nm=(SS.user&&SS.user.name)||'Shomer';
+  try{ FB.db.ref('sos/'+id).set({uid:FB.uid,lat:lat,lng:lng,type:'theft',typeState:'self',ts:Date.now(),resolved:false,name:nm}); }catch(e){}
+}
+function fbAttachTheftPhoto(id,lat,lng,photo){
+  if(!FB.ready||!FB._authReady||!photo) return;
+  var nm=(SS.user&&SS.user.name)||'Shomer';
+  try{ FB.db.ref('theft/'+FB.uid+'/'+id).set({ts:Date.now(),lat:lat,lng:lng,photo:photo,name:nm}).catch(function(e){ fbLog('theft photo write (needs the /theft rule published):',(e&&e.code)||e); }); }catch(e){}
+}
+function fbAlertPairedTheft(){
+  if(!FB.ready||!FB._pairedUids) return;
+  var he=currentLang==='he', nm=(SS.user&&SS.user.name)||(he?'שומר/ת':'a SHOMER');
+  Object.keys(FB._pairedUids).forEach(function(uid){ try{ fbQueueAlarm(uid,(he?'🚨 חשד לגניבת טלפון — '+nm:'🚨 Possible phone theft — '+nm),(he?'סלפי ומיקום החי זמינים במפה':'Selfie + live location on the map'),'theft'); }catch(e){} });
+}
+/* Owner's theft-evidence viewer (documented proof for police): captured selfies + map link. */
+function openTheftEvidence(){
+  var he=currentLang==='he', ar=currentLang==='ar';
+  var ov=document.getElementById('theft-ev'); if(!ov){ ov=document.createElement('div'); ov.id='theft-ev'; ov.className='selfie-ov'; document.body.appendChild(ov); }
+  var evs=(SS.theftEvents||[]).slice().reverse();
+  var rows=evs.length? evs.map(function(e){ var when=new Date(e.ts).toLocaleString(); var maps='https://www.google.com/maps?q='+e.lat+','+e.lng;
+      return '<div style="display:flex;gap:11px;align-items:center;background:var(--n3);border:1px solid var(--b2);border-radius:12px;padding:10px;margin-bottom:8px">'
+        +(e.photo?('<img src="'+e.photo+'" style="width:56px;height:70px;object-fit:cover;border-radius:8px;border:1px solid var(--b3)" alt="">'):'<div style="width:56px;height:70px;border-radius:8px;background:var(--n4);display:grid;place-items:center;color:var(--tx3);font-size:10px">אין<br>תמונה</div>')
+        +'<div style="flex:1;min-width:0;text-align:start"><div style="font-size:12.5px;color:var(--tx1);font-weight:700">'+when+'</div><a href="'+maps+'" target="_blank" rel="noopener" style="font-size:12px;color:var(--g3)">'+(he?'פתח מיקום במפה ›':'Open location ›')+'</a></div></div>';
+    }).join('') : '<div style="color:var(--tx3);font-size:13px;padding:14px 4px;text-align:center">'+(he?'אין עדיין ראיות. מופיעות אוטומטית לאחר 3 קודים שגויים כשההגנה פעילה.':'No evidence yet. Captured automatically after 3 wrong codes when protection is on.')+'</div>';
+  ov.innerHTML='<div class="selfie-card" style="background:linear-gradient(180deg,#16233e,#0d1830);border-color:var(--b3);max-width:400px;text-align:start;max-height:80vh;overflow:auto">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><h3 style="color:var(--tx0);margin:0">'+(he?'ראיות גניבה':ar?'أدلة السرقة':'Theft evidence')+'</h3><button onclick="document.getElementById(\'theft-ev\').classList.remove(\'on\')" style="background:var(--n3);border:1px solid var(--b2);border-radius:8px;color:var(--tx1);padding:6px 10px;cursor:pointer">'+(he?'סגור':'Close')+'</button></div>'
+    +rows+'</div>';
+  ov.classList.add('on');
+}
 
 /* ── SOS MAX-ATTENTION: full-screen red/blue/white strobe (all devices) + flashlight morse
    SOS (Android Chrome torch via MediaStream/applyConstraints). iOS Safari does NOT allow
@@ -6244,7 +6430,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v70';
+var APP_VER='v71';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -6746,34 +6932,60 @@ function fbOnAuthed(uid){
 function fbSetupConnState(){ /* no-op: connection state comes from the SSE streams */ }
 /* Presence publish + nearby-SHOMER read. Runs ONLY after the secure uid is ready
    (fbOnAuthed), so writes are owned by auth.uid and the read passes auth!=null rules. */
+/* Presence cadence + load-shedding constants (v71 launch-hardening).
+   PRESENCE_MS: publish interval, raised 25s→40s → ~38% fewer presence writes/user,
+     a direct ~38% cut in global fan-out + RTDB egress under the current listener.
+   PSTALE: tolerate ~3 missed beats before dropping a peer.
+   PRES_MARKER_CAP: max presence markers rendered — protects the map/DOM in a dense area
+     (or under the O(N²) global fan-out) that would otherwise create thousands of pins.
+   PRES_DEBOUNCE_MS: coalesce the presence re-scan so a burst of stream events is processed
+     at most ~once/2s instead of per-event (bounds CPU under load). */
+var PRESENCE_MS=40000, PSTALE=140*1000, PRES_MARKER_CAP=200, PRES_DEBOUNCE_MS=2000;
 function fbStartPresence(){
   if(!FB.ready||!FB._authReady)return;
   try{ FB.db.ref('presence/'+FB.uid).onDisconnect().remove(); }catch(e){}  // best-effort unload DELETE
   fbPublishPresence();
-  if(!FB._presTimer)FB._presTimer=setInterval(fbPublishPresence,25000);
+  if(!FB._presTimer)FB._presTimer=setInterval(fbPublishPresence,PRESENCE_MS);
+  // Republish immediately when the tab returns to the foreground (writes pause while hidden).
+  if(!FB._presVisHook){ FB._presVisHook=true; try{ document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='visible')fbPublishPresence(); }); }catch(e){} }
   if(FB._presListener)return; FB._presListener=true;
+  // GRACEFUL DEGRADATION: the raw stream can fire thousands of events/sec under the global
+  // fan-out. Never re-scan on every event — stash the latest snapshot and process it on a
+  // debounced schedule so the SOS path + UI stay responsive even when presence is hammered.
   FB.db.ref('presence').on('value',function(snap){
-    var all=snap.val()||{}, n=0, mlat=userLat, mlng=userLng, radM=((SS.settings&&SS.settings.radius)||5)*1000;
-    var seen={}, PSTALE=90*1000;
-    Object.keys(all).forEach(function(k){ if(k===FB.uid)return; var p=all[k]; if(!p||p.lat==null)return;
-      if(p.ts && (Date.now()-p.ts)>PSTALE)return; // skip dead sessions (presence refreshes every 25s)
-      var within=(mlat==null)||distMeters(mlat,mlng,p.lat,p.lng)<=radM;
-      if(within)n++;
-      seen[k]=1;
-      // anonymized presence marker — coarse location only, NO identity
-      if(MAP){
-        if(fbPresenceMarkers[k]){ fbPresenceMarkers[k].setLatLng([p.lat,p.lng]); }
-        else { fbPresenceMarkers[k]=window.L.marker([p.lat,p.lng],{icon:presenceIcon(),zIndexOffset:200,interactive:true,keyboard:false,alt:(currentLang==='he'?'שומר/ת פעיל/ה':'Active SHOMER')}).addTo(MAP);
-          fbPresenceMarkers[k].on('click',function(){ toast(currentLang==='he'?'שומר/ת פעיל/ה בקרבת מקום (מיקום מקורב, אנונימי)':'An active SHOMER nearby (approximate, anonymous)',''); }); }
-      }
-    });
-    // drop markers for SHOMERs who went offline
-    Object.keys(fbPresenceMarkers).forEach(function(k){ if(!seen[k]){ try{MAP&&MAP.removeLayer(fbPresenceMarkers[k]);}catch(e){} delete fbPresenceMarkers[k]; } });
-    FB.permErr=null; updateGuardiansNearby(n);
+    FB._presSnap=snap;
+    if(FB._presPending)return; FB._presPending=true;
+    setTimeout(function(){ FB._presPending=false; try{ fbProcessPresence(FB._presSnap); }catch(e){} }, PRES_DEBOUNCE_MS);
   }, function(e){ FB.permErr=(e&&e.code)||'denied'; fbLog('presence READ denied:', FB.permErr, e); renderFbStatus(); });
+}
+function fbProcessPresence(snap){
+  if(!snap)return;
+  var all=snap.val()||{}, n=0, mlat=userLat, mlng=userLng, radM=((SS.settings&&SS.settings.radius)||5)*1000;
+  var seen={}, rendered=0, now=Date.now();
+  Object.keys(all).forEach(function(k){ if(k===FB.uid)return; var p=all[k]; if(!p||p.lat==null)return;
+    if(p.ts && (now-p.ts)>PSTALE)return; // skip dead sessions (presence refreshes every 40s)
+    var within=(mlat==null)||distMeters(mlat,mlng,p.lat,p.lng)<=radM;
+    if(within)n++;
+    seen[k]=1;
+    // anonymized presence marker — coarse location only, NO identity. Cap rendered markers.
+    if(MAP){
+      if(fbPresenceMarkers[k]){ fbPresenceMarkers[k].setLatLng([p.lat,p.lng]); rendered++; }
+      else if(rendered<PRES_MARKER_CAP){ fbPresenceMarkers[k]=window.L.marker([p.lat,p.lng],{icon:presenceIcon(),zIndexOffset:200,interactive:true,keyboard:false,alt:(currentLang==='he'?'שומר/ת פעיל/ה':'Active SHOMER')}).addTo(MAP);
+        fbPresenceMarkers[k].on('click',function(){ toast(currentLang==='he'?'שומר/ת פעיל/ה בקרבת מקום (מיקום מקורב, אנונימי)':'An active SHOMER nearby (approximate, anonymous)',''); }); rendered++; }
+      else { seen[k]=0; } // over the render cap → don't create a marker (still counted in n)
+    }
+  });
+  // drop markers for SHOMERs who went offline / fell past the render cap
+  Object.keys(fbPresenceMarkers).forEach(function(k){ if(!seen[k]){ try{MAP&&MAP.removeLayer(fbPresenceMarkers[k]);}catch(e){} delete fbPresenceMarkers[k]; } });
+  FB.permErr=null; updateGuardiansNearby(n);
 }
 function fbPublishPresence(){
   if(!FB.ready)return;
+  // GRACEFUL DEGRADATION: don't republish presence while backgrounded — a hidden PWA isn't
+  // "actively guarding", and this removes the largest source of idle writes/egress (installed
+  // PWAs spend most of their life backgrounded). Peers drop us after PSTALE; we republish
+  // instantly on foreground (visibilitychange hook). SOS + closed-app push are unaffected.
+  if(typeof document!=='undefined' && document.visibilityState==='hidden') return;
   // coarse (~1km) location for privacy; precise location only for SOS / opt-in responder positions
   var lat=userLat!=null?Math.round(userLat*100)/100:32.07, lng=userLng!=null?Math.round(userLng*100)/100:34.78;
   FB.db.ref('presence/'+FB.uid).set({lat:lat,lng:lng,ts:Date.now()}).then(function(){ if(FB.permErr){FB.permErr=null;renderFbStatus();} }).catch(function(e){ FB.permErr=(e&&e.code)||'write-denied'; fbLog('presence WRITE denied:', FB.permErr, e); renderFbStatus(); });
