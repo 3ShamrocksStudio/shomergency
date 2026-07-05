@@ -366,6 +366,21 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 .sos-inc-go:active{transform:scale(.95);}
 .sos-inc-x{flex-shrink:0;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.18);border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;}
 .sos-inc-x .ic{width:16px;height:16px;}
+/* Live event detail — facts + real responder coordination ("אני בדרך") */
+.ev-facts{display:flex;flex-direction:column;gap:1px;border-radius:12px;overflow:hidden;border:1px solid var(--b2);}
+.ev-fact{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 13px;background:var(--n3);}
+.ev-fact .ev-k{font-size:12px;color:var(--tx2);font-weight:600;}
+.ev-fact .ev-v{font-size:13.5px;color:var(--tx0);font-weight:700;text-align:end;}
+.ev-resp-live{background:rgba(14,136,64,.08);border:1px solid rgba(14,136,64,.32);border-radius:12px;padding:12px 13px;}
+.ev-resp-h{display:flex;align-items:center;gap:9px;font-size:14px;color:#37D98A;margin-bottom:2px;}
+.ev-resp-h b{font-weight:800;}
+.ev-resp-dot{width:9px;height:9px;border-radius:50%;background:#37D98A;box-shadow:0 0 0 0 rgba(55,217,138,.6);animation:sosIncDot 1.2s ease-out infinite;flex-shrink:0;}
+.ev-resp-row{display:flex;align-items:center;gap:9px;margin-top:9px;}
+.ev-resp-av{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#0E8840,#14A857);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ev-resp-nm{flex:1;font-size:13px;color:var(--tx1);font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ev-resp-d{font-size:12px;color:var(--tx2);font-weight:700;}
+.resp-mk .resp-dot{position:relative;width:26px;height:26px;border-radius:50%;background:rgba(14,136,64,.95);display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(14,136,64,.5);}
+.resp-mk .resp-ring{position:absolute;inset:-5px;border-radius:50%;border:2px solid rgba(14,136,64,.6);animation:sosIncDot 1.4s ease-out infinite;}
 /* Live connection-status pill (top-center) — shows connected · N nearby · listening ✓ */
 .fb-status{position:absolute;top:calc(var(--hdr-top,0px) + var(--hdr) + 8px);left:50%;transform:translateX(-50%);z-index:560;display:flex;align-items:center;gap:7px;padding:5px 13px;border-radius:999px;background:rgba(8,18,36,.92);backdrop-filter:blur(10px);border:1px solid var(--b2);box-shadow:0 4px 16px rgba(0,0,0,.4);font-size:11.5px;font-weight:600;color:var(--tx1);max-width:93vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;transition:opacity .3s;}
 .fb-dot{width:8px;height:8px;border-radius:50%;background:var(--amb);flex-shrink:0;}
@@ -3930,6 +3945,7 @@ function activateSOS(){
  buildSosTypeBar(); reflectSosType(); scheduleSosFallback();
  try{ fbPublishSOS(); }catch(e){} // cross-device: broadcast this SOS over RTDB
  try{ fbAlertPairedSos(); }catch(e){} // targeted closed-app push to paired SHOMERs
+ try{ if(curSosId) fbRespondersListen(curSosId); }catch(e){} // live "N שומרים בדרך" as responders commit
  toast(he?' SOS שודר — שומרים בקרבתך עודכנו':' SOS broadcast — nearby SHOMERs notified','red');
  // Auto-dial prompt (opens dialer; a native app could place the call directly).
  setTimeout(()=>{
@@ -4187,6 +4203,7 @@ function resolveSOS(){
  if(sosPhase!=='active')return;
  var proceed=function(){
   clearInterval(sosTimer); stopSosAlarm(); stopMaxAttention(); releaseWake();
+  try{ if(curSosId){ FB.db&&FB.db.ref('responders/'+curSosId).off&&FB.db.ref('responders/'+curSosId).off(); delete fbRespStreams[curSosId]; } fbClearResponderMarkers(); }catch(e){}
   sosPhase='idle'; sosActive=false;
   var btn=document.getElementById('sos-btn');
   if(btn){btn.classList.remove('active');btn.setAttribute('aria-pressed','false');}
@@ -6447,7 +6464,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v72';
+var APP_VER='v73';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -7039,12 +7056,13 @@ function fbListenSOS(){
     if(MAP) Object.keys(fbSosMarkers).forEach(function(id){ if(!all[id]||all[id].resolved){ try{MAP.removeLayer(fbSosMarkers[id]);}catch(e){} delete fbSosMarkers[id]; } });
     var fresh=[], STALE=25*60*1000, now=Date.now(), firstSync=!FB._sosInit;
     Object.keys(all).forEach(function(id){ var s=all[id]; if(!s||s.resolved||s.uid===FB.uid||s.lat==null)return;
-      if(s.ts && (now-s.ts)>STALE){ if(fbSosMarkers[id]){ try{MAP&&MAP.removeLayer(fbSosMarkers[id]);}catch(e){} delete fbSosMarkers[id]; } return; }
+      if(s.ts && (now-s.ts)>STALE){ if(fbSosMarkers[id]){ try{MAP&&MAP.removeLayer(fbSosMarkers[id]);}catch(e){} delete fbSosMarkers[id]; } delete fbLiveSos[id]; return; }
+      fbLiveSos[id]=Object.assign({id:id},s);   // keep live data so a tap opens the event detail
       if(MAP){
         if(fbSosMarkers[id]){ fbSosMarkers[id].setLatLng([s.lat,s.lng]); fbSosMarkers[id].setIcon(sosPinIcon(s.type)); }
         else {
           fbSosMarkers[id]=window.L.marker([s.lat,s.lng],{icon:sosPinIcon(s.type),zIndexOffset:1000,alt:'SOS '+(s.name||'')}).addTo(MAP);
-          (function(mid){ fbSosMarkers[mid].on('click',function(){ var ll=fbSosMarkers[mid].getLatLng(); respondToSOS(ll.lat,ll.lng,(currentLang==='he'?'אירוע חי':'Live event')); }); })(id);
+          (function(mid){ fbSosMarkers[mid].on('click',function(){ openLiveSosDetail(mid); }); })(id);   // tap → full event detail card
         }
       }
       // Alert logic — NO proximity gate, clock-skew immune:
@@ -7095,17 +7113,122 @@ function showSosBanner(label,dist,s){
   setText('sos-inc-ttl', he?'🆘 SOS בקרבת מקום':ar?'🆘 نداء استغاثة قريب':'🆘 SOS nearby');
   setText('sos-inc-sub', label+(dist?' · '+dist:''));
   bar.classList.add('on'); bar.setAttribute('aria-hidden','false');
-  bar.dataset.lat=s.lat; bar.dataset.lng=s.lng; bar.dataset.label=label;
+  bar.dataset.lat=s.lat; bar.dataset.lng=s.lng; bar.dataset.label=label; bar.dataset.sosId=s.id||'';
   if(_sosBannerTimer)clearTimeout(_sosBannerTimer);
   _sosBannerTimer=setTimeout(dismissSosBanner,15000);
 }
 function dismissSosBanner(){ var bar=document.getElementById('sos-incoming'); if(bar){bar.classList.remove('on');bar.setAttribute('aria-hidden','true');} }
 function respondToIncomingSos(){
   var bar=document.getElementById('sos-incoming'); if(!bar)return;
-  var lat=parseFloat(bar.dataset.lat), lng=parseFloat(bar.dataset.lng), label=bar.dataset.label||'';
+  var sid=bar.dataset.sosId||'';
   dismissSosBanner();
+  if(sid && fbLiveSos[sid]){ openLiveSosDetail(sid); return; }   // → full event detail
+  var lat=parseFloat(bar.dataset.lat), lng=parseFloat(bar.dataset.lng), label=bar.dataset.label||'';
   if(!isNaN(lat)&&!isNaN(lng)) respondToSOS(lat,lng,label);
 }
+/* ═══════════════ LIVE EVENT DETAIL (item: clickable map events) ═══════════════
+   Tapping a live SOS marker (or the incoming banner) opens the full event card:
+   what · where · when · who · type · distance, plus the LIVE responder count and the
+   "אני בדרך" responder-coordination controls. */
+var fbLiveSos={};
+function openLiveSosDetail(sosId){
+  var s=fbLiveSos[sosId]; if(!s){ return; }
+  var he=currentLang==='he', ar=currentLang==='ar';
+  var T2=(TYPES[s.type]||TYPES.viol);
+  var label=(s.type&&s.type!=='unknown'&&window.sosTypeLabel)?sosTypeLabel(s.type):(he?'מצוקה':ar?'استغاثة':'Distress');
+  var dist=(userLat!=null&&s.lat!=null)?fmtDistance(distMeters(userLat,userLng,s.lat,s.lng)):(he?'מרחק לא ידוע':'distance unknown');
+  var when=s.ts?relTime(s.ts):'';
+  var who=(s.name&&String(s.name).trim())?String(s.name):(he?'אנונימי/ת':ar?'مجهول':'Anonymous');
+  var coord=(s.lat!=null&&s.lng!=null)?((+s.lat).toFixed(5)+', '+(+s.lng).toFixed(5)):'';
+  setText('det-ttl', he?'אירוע חי':ar?'حدث مباشر':'Live event');
+  var mine=(_myResponders[sosId]);           // have I already committed?
+  var respLbl=mine?(he?'בטל — לא יכול/הגעתי':ar?'إلغاء — لا أستطيع/وصلت':'Cancel — can\'t / arrived'):T('respond');
+  var respAct=mine?('cancelOnMyWay(\''+sosId+'\')'):('respondOnMyWay(\''+sosId+'\')');
+  var body=document.getElementById('det-body');
+  body.innerHTML=
+    '<div class="det-head mb16" style="border-right-color:'+T2.color+';background:rgba(204,20,38,.10);border-color:rgba(204,20,38,.3)">'
+    +'<div style="display:flex;align-items:center;gap:9px;margin-bottom:8px"><div style="width:14px;height:14px;border-radius:50%;background:'+T2.color+';box-shadow:0 0 10px '+T2.color+'88;flex-shrink:0"></div><span class="det-title" style="font-weight:900"></span></div>'
+    +'<div class="det-tags"><span class="det-tag"><span class="det-loc"></span></span><span class="det-tag"><span class="det-when"></span></span><span class="det-tag" style="direction:ltr"><span class="det-coord"></span></span></div></div>'
+    +'<div class="sec-cap mb12">'+(he?'פרטי האירוע':ar?'تفاصيل الحدث':'Event details')+'</div>'
+    +'<div class="ev-facts mb16">'
+      +'<div class="ev-fact"><span class="ev-k">'+(he?'סוג':ar?'النوع':'Type')+'</span><span class="ev-v ev-type" style="color:'+T2.color+'"></span></div>'
+      +'<div class="ev-fact"><span class="ev-k">'+(he?'מי דיווח':ar?'من أبلغ':'Reported by')+'</span><span class="ev-v ev-who"></span></div>'
+      +'<div class="ev-fact"><span class="ev-k">'+(he?'מתי':ar?'متى':'When')+'</span><span class="ev-v ev-when2"></span></div>'
+      +'<div class="ev-fact"><span class="ev-k">'+(he?'מרחק ממך':ar?'المسافة':'Distance')+'</span><span class="ev-v ev-dist"></span></div>'
+    +'</div>'
+    +'<div id="ev-resp-live" class="ev-resp-live mb16">'+respLiveHtml(0,[])+'</div>'
+    +'<button class="dcta pr" style="width:100%;margin-bottom:8px;background:linear-gradient(135deg,#0E8840,#14A857)" onclick="navFromLive(\''+sosId+'\')"><svg class="ic" viewBox="0 0 24 24" style="width:18px;height:18px;vertical-align:-3px;margin-inline-end:6px" aria-hidden="true"><path d="M3 11l18-8-8 18-2-8-8-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>'+(he?'נווט לאירוע · מסלול חי':ar?'التوجّه · مسار مباشر':'Navigate · live route')+'</button>'
+    +'<div class="det-ctas"><button class="dcta pr" id="ev-respond-btn" onclick="'+respAct+'" style="'+(mine?'background:var(--rb);color:#FF9aa3;box-shadow:none':'')+'">'+respLbl+'</button><button class="dcta gd" onclick="callNum(\'100\')">'+T('call100')+'</button><button class="dcta sc" onclick="cl(\'det-sheet\')">'+T('close')+'</button></div>';
+  body.querySelector('.det-title').textContent=label+' · SOS';
+  body.querySelector('.det-loc').textContent='📍 '+dist;
+  body.querySelector('.det-when').textContent=when;
+  body.querySelector('.det-coord').textContent=coord;
+  body.querySelector('.ev-type').textContent=label;
+  body.querySelector('.ev-who').textContent=who;
+  body.querySelector('.ev-when2').textContent=when;
+  body.querySelector('.ev-dist').textContent=dist;
+  _liveDetailId=sosId;
+  op('det-sheet');
+  fbRespondersListen(sosId);   // stream the REAL responder list into this card
+}
+function respLiveHtml(n,list){
+  var he=currentLang==='he', ar=currentLang==='ar';
+  var head='<div class="ev-resp-h"><span class="ev-resp-dot"></span><b>'+(n>0?(he?(n+' שומרים בדרך'):ar?(n+' حُرّاس في الطريق'):(n+' SHOMERs on the way')):(he?'עדיין אף אחד לא בדרך':ar?'لا أحد في الطريق بعد':'No responders yet'))+'</b></div>';
+  var rows=(list||[]).slice(0,8).map(function(r){ var nm=(r.name&&r.name.trim())?r.name:(he?'שומר/ת':'SHOMER'); var d=(r.lat!=null&&userLat!=null)?fmtDistance(distMeters(userLat,userLng,r.lat,r.lng)):''; return '<div class="ev-resp-row"><span class="ev-resp-av">'+ESC(nm[0]||'ש')+'</span><span class="ev-resp-nm">'+ESC(nm)+'</span><span class="ev-resp-d">'+ESC(d)+'</span></div>'; }).join('');
+  return head+rows;
+}
+/* ── Responder coordination: broadcast "אני בדרך" so the person in need + other SHOMERs
+   see who's coming, live. Uses REST+SSE (responders/<sosId>/<uid>). ── */
+var fbRespStreams={}, fbResponderMarkers={}, _myResponders={}, _liveDetailId=null;
+function respondOnMyWay(sosId){
+  var s=fbLiveSos[sosId]||{}; var he=currentLang==='he';
+  if(!FB.ready||!FB._authReady){ toast(he?'עדיין מתחבר — נסה/י שוב':'Still connecting — try again','amb'); return; }
+  var eta=(userLat!=null&&s.lat!=null)?Math.round(distMeters(userLat,userLng,s.lat,s.lng)/1.4/60):0; // ~walking min
+  var rec={name:(SS.user&&SS.user.name)||'Shomer',lat:(userLat!=null?userLat:32.07),lng:(userLng!=null?userLng:34.78),eta:eta,ts:Date.now()};
+  _myResponders[sosId]=1;                                 // optimistic → instant UI flip to "cancel"
+  try{ if(s.lat!=null) respondToSOS(s.lat,s.lng,(he?'אירוע חי':'Live event')); }catch(e){}   // draw my live route
+  if(_liveDetailId===sosId) openLiveSosDetail(sosId);     // refresh the card to "cancel" state
+  FB.db.ref('responders/'+sosId+'/'+FB.uid).set(rec).then(function(){
+    toast(he?'✓ סימנת „אני בדרך" — הנפגע/ת והשומרים רואים אותך':'✓ On-my-way — the person + SHOMERs can see you','grn');
+  }).catch(function(e){ fbLog('responder write (needs /responders rule published):',(e&&e.code)||e); toast(he?'סומן — שידור בין-מכשירי יופעל לאחר פרסום הכללים':'Marked — cross-device broadcast activates after the rules publish','amb'); });
+}
+function cancelOnMyWay(sosId){
+  var he=currentLang==='he';
+  try{ FB.db.ref('responders/'+sosId+'/'+FB.uid).remove(); }catch(e){}
+  delete _myResponders[sosId];
+  try{ stopResponderNav(); }catch(e){}
+  toast(he?'ביטלת — הוסרת מרשימת המגיבים':'Cancelled — removed from responders','');
+  if(_liveDetailId===sosId) openLiveSosDetail(sosId);
+}
+function navFromLive(sosId){ var s=fbLiveSos[sosId]||{}; try{ cl('det-sheet'); }catch(e){} if(s.lat!=null) respondToSOS(s.lat,s.lng,(currentLang==='he'?'אירוע חי':'Live event')); }
+/* Stream the live responder list for an event → update the count, the detail card, and
+   converging markers on the map. Real responders only (those who tapped "אני בדרך"). */
+function fbRespondersListen(sosId){
+  if(!FB.ready)return;
+  if(fbRespStreams[sosId])return; fbRespStreams[sosId]=1;
+  FB.db.ref('responders/'+sosId).on('value',function(snap){
+    var all=snap.val()||{}; var list=[]; var n=0, mine=0;
+    Object.keys(all).forEach(function(uid){ var r=all[uid]; if(!r)return; if(r.ts&&(Date.now()-r.ts)>30*60*1000)return; list.push(Object.assign({uid:uid},r)); n++;
+      // converging responder marker on the map (real position)
+      if(MAP&&r.lat!=null&&uid!==FB.uid){ if(fbResponderMarkers[uid]){ fbResponderMarkers[uid].setLatLng([r.lat,r.lng]); } else { fbResponderMarkers[uid]=window.L.marker([r.lat,r.lng],{icon:responderIcon(),zIndexOffset:600,alt:'responder'}).addTo(MAP); } }
+    });
+    // drop markers for responders who left
+    Object.keys(fbResponderMarkers).forEach(function(uid){ if(!all[uid]){ try{MAP&&MAP.removeLayer(fbResponderMarkers[uid]);}catch(e){} delete fbResponderMarkers[uid]; } });
+    // update the open detail card
+    var live=document.getElementById('ev-resp-live'); if(live&&_liveDetailId===sosId){ live.innerHTML=respLiveHtml(n,list); }
+    // if this is MY active SOS, tell me help is coming
+    if(sosId===curSosId){ showRespToPerson(n); }
+  }, function(){ /* denied until /responders rule published */ });
+}
+function responderIcon(){
+  return window.L.divIcon({className:'shomer-marker resp-mk',html:'<div class="resp-dot"><span class="resp-ring"></span><svg viewBox="0 0 24 24" width="13" height="13" style="position:relative"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="#0E8840" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></svg></div>',iconSize:[26,26],iconAnchor:[13,13]});
+}
+/* Person-in-need: a live "N שומרים בדרך" reassurance while their SOS is active. */
+function showRespToPerson(n){
+  var he=currentLang==='he'; var el=document.getElementById('ss-s');
+  if(el && n>0){ el.textContent=(he?(n+' שומרים בדרך אליך — הישאר/י במקומך'):(n+' SHOMERs on the way — stay where you are')); }
+}
+function fbClearResponderMarkers(){ try{ Object.keys(fbResponderMarkers).forEach(function(uid){ try{MAP&&MAP.removeLayer(fbResponderMarkers[uid]);}catch(e){} }); }catch(e){} fbResponderMarkers={}; }
 /* Register this device's FCM token + location so the Cloud Function can target it for push. */
 function fbRegisterToken(token){ if(!FB.ready||!token)return; var lat=userLat!=null?userLat:32.07, lng=userLng!=null?userLng:34.78; try{ FB.db.ref('tokens/'+FB.uid).set({token:token,lat:lat,lng:lng,ts:Date.now()}); }catch(e){} }
 /* Queue a targeted alarm — alarmFanout Cloud Function pushes it to the recipient even when their
