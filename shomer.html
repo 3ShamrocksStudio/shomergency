@@ -1383,7 +1383,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <!-- REAL "guardians nearby" — live count from RTDB presence (shown only when connected). -->
  <button class="hdr-near" id="hdr-near" style="display:none" onclick="explainNearby()" aria-live="polite">
  <div class="ldot" aria-hidden="true"></div>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:1;pointer-events:none">v75 · 06.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:1;pointer-events:none">v76 · 06.07.26</div>
  <span id="gnear-n">0</span>
  <span class="gnear-lbl" id="gnear-lbl" data-he="שומרים" data-en="SH✡MERs" data-ar="حُرّاس">שומרים</span>
  </button>
@@ -1427,26 +1427,28 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
 
  <!-- DROPDOWN -->
  <nav id="dd" role="menu" aria-label="תפריט ניווט" hidden>
- <button class="ddr" onclick="navTo('rep');closeDD()" role="menuitem">
- <div class="dd-ic c-rep" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2 2 0 0 0-3-3L5 17Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 7l3 3" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><span id="dd-rep">דיווח אירוע</span>
- </button>
- <button class="ddr" onclick="openCircles();closeDD()" role="menuitem">
- <div class="dd-ic c-guard" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M17 7.2a3 3 0 0 1 0 5.6M18.5 20a6 6 0 0 0-3-5.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><span id="dd-guard">השומרים שלי</span>
- </button>
  <button class="ddr ddr-guide" onclick="openGuide();closeDD()" role="menuitem">
- <div class="dd-ic c-guide" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 9v6M9 12h6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></div><span id="dd-guide">מדריך חירום</span>
+  <div class="dd-ic c-guide" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 9v6M9 12h6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></div>
+  <span id="dd-guide" data-he="מדריך חירום" data-en="Emergency Guide" data-ar="دليل الطوارئ">מדריך חירום</span>
+ </button>
+ <button class="ddr ddr-em" onclick="op('sh-em');closeDD()" role="menuitem">
+  <div class="dd-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24"><path d="M5 4h3.5l1.5 4-2 1.5a11 11 0 0 0 5 5l1.5-2 4 1.5V19a2 2 0 0 1-2.2 2A16 16 0 0 1 4 6.2 2 2 0 0 1 5 4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div>
+  <span id="dd-em" data-he="מספרי חירום" data-en="Emergency Numbers" data-ar="أرقام الطوارئ">מספרי חירום</span>
+ </button>
+ <button class="ddr ddr-rep" onclick="navTo('rep');closeDD()" role="menuitem" style="background:rgba(220,80,30,.1);border-right:3px solid rgba(220,80,30,.7);">
+  <div class="dd-ic c-rep" style="color:#E05020" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24"><path d="M4 20h4L19 9a2 2 0 0 0-3-3L5 17Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 7l3 3" fill="none" stroke="currentColor" stroke-width="2"/></svg></div>
+  <span id="dd-rep" data-he="דיווח SH✡MER" data-en="SH✡MER Report" style="color:#E05020;font-weight:700">דיווח SH✡MER</span>
  </button>
  <div class="dd-sep"></div>
  <button class="ddr" onclick="op('sh-prof');closeDD()" role="menuitem">
- <div class="dd-ic c-prof" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><span id="dd-prof">פרופיל</span>
+  <div class="dd-ic c-prof" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+  <span id="dd-prof" data-he="פרופיל SH✡MER" data-en="SH✡MER Profile">פרופיל SH✡MER</span>
  </button>
  <button class="ddr" onclick="op('sh-set');closeDD()" role="menuitem">
- <div class="dd-ic c-set" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2.5l1.3 2.3 2.6-.4.5 2.6 2.3 1.3-1 2.4 1 2.4-2.3 1.3-.5 2.6-2.6-.4L12 21.5l-1.3-2.3-2.6.4-.5-2.6L5.3 15.7l1-2.4-1-2.4 2.3-1.3.5-2.6 2.6.4Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div><span id="dd-set">הגדרות</span>
+  <div class="dd-ic c-set" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2.5l1.3 2.3 2.6-.4.5 2.6 2.3 1.3-1 2.4 1 2.4-2.3 1.3-.5 2.6-2.6-.4L12 21.5l-1.3-2.3-2.6.4-.5-2.6L5.3 15.7l1-2.4-1-2.4 2.3-1.3.5-2.6 2.6.4Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+  <span id="dd-set" data-he="הגדרות" data-en="Settings">הגדרות</span>
  </button>
- <button class="ddr ddr-em" onclick="op('sh-em');closeDD()" role="menuitem">
- <div class="dd-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h3.5l1.5 4-2 1.5a11 11 0 0 0 5 5l1.5-2 4 1.5V19a2 2 0 0 1-2.2 2A16 16 0 0 1 4 6.2 2 2 0 0 1 5 4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div><span id="dd-em">מספרי חירום</span>
- </button>
- </nav>
+</nav>
 
  <!-- INCOMING SOS BANNER (another SHOMER nearby needs help) -->
  <div class="sos-incoming" id="sos-incoming" role="alert" aria-live="assertive" aria-hidden="true">
@@ -2055,8 +2057,8 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="gd-hero-s" id="gd-hero-s">צרף/י אדם שאת/ה סומך/ת עליו (הורה/בן-זוג). הם יראו את מיקומך החי ואת/ה את שלהם — בהזמנה ואישור. את/ה שולט/ת מי רואה את מי, וניתן לעצור בכל רגע.</div>
  <button class="cta-gold" onclick="gdAddPhoneOpen()" id="gd-addph-btn" style="width:100%;margin-bottom:8px"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg> <span id="gd-addph-lbl" data-he="הוסף/י שומר/ת לפי טלפון" data-en="Add My SHOMER by phone" data-ar="أضف حارسي عبر الهاتف">הוסף/י שומר/ת לפי טלפון</span></button>
  <div class="gd-btns">
- <button class="row-btn" onclick="gdCreateInvite()" id="gd-invite-btn"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 15l6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M11 7l1.5-1.5a4 4 0 0 1 5.7 5.7L16.7 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M13 17l-1.5 1.5a4 4 0 0 1-5.7-5.7L7.3 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> <span id="gd-invite-lbl">הזמן/י שומר/ת</span></button>
- <button class="row-btn" style="flex:0 0 auto;width:auto" onclick="gdEnterCodeOpen()" id="gd-enter-btn"><span id="gd-enter-lbl">יש לי קוד</span></button>
+ 
+ 
  </div>
  </div>
  <div id="gd-list" role="list" style="margin-top:10px"></div>
@@ -5164,21 +5166,15 @@ function genId(p){return (p||'id')+'_'+Math.floor(performance.now()*1000%1e9).to
 
 /* Seed two demo circles + believable members on first run (only if empty). */
 function seedCirclesIfEmpty(){
- if(SS.circles&&SS.circles.length)return;
- const he=currentLang==='he', ar=currentLang==='ar';
- SS.circles=[
- {id:'fam', name:he?'משפחה':ar?'عائلة':'Family', type:'family'},
- {id:'frnd', name:he?'חברים':ar?'أصدقاء':'Friends', type:'friends'},
- ];
- SS.circleMembers=[
- {id:'m_mom', cid:'fam', name:he?'אמא':ar?'أمي':'Mom', rel:he?'אמא':ar?'الأم':'Mother', emoji:'', color:'#E0A828', lat:32.0790,lng:34.7740, moving:true, shareTo:true, seeThem:true, sos:false, seed:true},
- {id:'m_jak', cid:'fam', name:he?'יעקב':ar?'سامي':'Jakob', rel:he?'אח':ar?'الأخ':'Brother', emoji:'', color:'#2962FF', lat:32.0705,lng:34.7895, moving:true, shareTo:true, seeThem:true, sos:false, seed:true},
- {id:'m_dad', cid:'fam', name:he?'אבא':ar?'أبي':'Dad', rel:he?'אבא':ar?'الأب':'Father', emoji:'', color:'#00C853', lat:32.0840,lng:34.7700, moving:false, shareTo:true, seeThem:false, sos:false, seed:true},
- {id:'m_dana', cid:'frnd',name:he?'דנה':ar?'دانة':'Dana', rel:he?'חברה':ar?'صديقة':'Friend', emoji:'', color:'#E91E8C', lat:32.0680,lng:34.7820, moving:true, shareTo:false, seeThem:true, sos:false, seed:true},
- {id:'m_noam', cid:'frnd',name:he?'נועם':ar?'نور':'Noam', rel:he?'חבר':ar?'صديق':'Friend', emoji:'', color:'#9C27B0', lat:32.0720,lng:34.7965, moving:true, shareTo:true, seeThem:true, sos:false, seed:true},
- ];
- SS.circleMembers.forEach(m=>{m.baseLat=m.lat;m.baseLng=m.lng;});
- saveStore();
+  if(!SS.circles||!SS.circles.length){
+    const he=currentLang==='he',ar=currentLang==='ar';
+    SS.circles=[
+      {id:'fam',name:he?'משפחה':ar?'عائلة':'Family',type:'family'},
+      {id:'frnd',name:he?'חברים':ar?'أصدقاء':'Friends',type:'friends'},
+      {id:'nbr',name:he?'שכנים':ar?'الجيران':'Neighbors',type:'neighbors'},
+    ];
+  }
+  if(!SS.circleMembers)SS.circleMembers=[];
 }
 function circlesList(){return SS.circles||[];}
 function membersOf(cid){return (SS.circleMembers||[]).filter(m=>m.cid===cid);}
