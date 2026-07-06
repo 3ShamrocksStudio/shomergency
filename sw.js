@@ -1,4 +1,4 @@
-// SH✡MER Service Worker v2
+// SHâ¡MER Service Worker v2
 // Offline support + Push notifications for emergency alerts
 // By 3Shamrocks.Studio
 //
@@ -8,7 +8,7 @@
 // (a) uses network-first for navigations so a stale shell can never trap the
 // user, and (b) deletes every cache it does not own on activate.
 
-const CACHE_NAME = 'shomer-v74-cache';
+const CACHE_NAME = 'shomer-v75-cache';
 const SW_VERSION = 'v74';
 const urlsToCache = [
   './',
@@ -22,7 +22,7 @@ const urlsToCache = [
   '3shamrocks.png',
   'SHOMER_logo_big.png',
   'SHOMER-bg.jpg',
-  // Emergency-guide topic illustrations — precached so the (offline-capable) guide shows
+  // Emergency-guide topic illustrations â precached so the (offline-capable) guide shows
   // its pictograms with no network.
   'img/guide/cpr.jpg','img/guide/choke.jpg','img/guide/bleed.jpg','img/guide/burn.jpg',
   'img/guide/stroke.jpg','img/guide/heart.jpg','img/guide/allergy.jpg','img/guide/seizure.jpg',
@@ -41,15 +41,15 @@ self.addEventListener('install', event => {
 
 self.addEventListener('activate', event => {
   event.waitUntil((async () => {
-    // Purge ALL other caches on this (shared) origin — including any left by
-    // sibling org projects — so nothing stale or foreign can be served.
+    // Purge ALL other caches on this (shared) origin â including any left by
+    // sibling org projects â so nothing stale or foreign can be served.
     const keys = await caches.keys();
     await Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)));
     await self.clients.claim();
   })());
 });
 
-// Lightweight instrumentation — the ?diag panel queries this ('swstats') so a real
+// Lightweight instrumentation â the ?diag panel queries this ('swstats') so a real
 // device can PROVE whether this SW ever intercepts a Firebase request (it must not).
 let SW_STATS = { total: 0, fbBypassed: 0, handled: 0 };
 
@@ -58,13 +58,13 @@ self.addEventListener('fetch', event => {
   const u = req.url;
   SW_STATS.total++;
 
-  // ═══ #1 FIRST-LINE FIREBASE / GOOGLE BYPASS (root-cause fix) ═══════════════════
+  // âââ #1 FIRST-LINE FIREBASE / GOOGLE BYPASS (root-cause fix) âââââââââââââââââââ
   // ANY request to a Firebase / Google backend endpoint, or any RTDB transport path,
   // goes STRAIGHT to the network. The SW must NEVER intercept, cache, delay, or
   // respondWith the Realtime-DB handshake / long-poll (/.lp) / websocket negotiation
   // (/.ws) / .info, or the auth-token calls (identitytoolkit / securetoken). This is
   // checked FIRST and synchronously (no URL parsing) so the handler returns with
-  // minimal work. Symptom it fixes: installed-PWA Android hung on "connecting" — raw
+  // minimal work. Symptom it fixes: installed-PWA Android hung on "connecting" â raw
   // socket + auth OK, but the SDK session never completed while the SW was active
   // (works in incognito with no SW). Do NOT weaken this.
   if (
@@ -77,7 +77,7 @@ self.addEventListener('fetch', event => {
     u.indexOf('/.lp') !== -1 || u.indexOf('/.ws') !== -1 || u.indexOf('/.info') !== -1
   ) {
     SW_STATS.fbBypassed++;
-    return; // no respondWith → browser makes the request natively, fully untouched
+    return; // no respondWith â browser makes the request natively, fully untouched
   }
 
   if (req.method !== 'GET') return;
@@ -139,7 +139,7 @@ self.addEventListener('message', event => {
 // Push notification handler (for SOS / emergency alerts)
 self.addEventListener('push', event => {
   const data = event.data ? event.data.json() : {};
-  const title = data.title || '🚨 SH✡MER Emergency Alert';
+  const title = data.title || 'ð¨ SHâ¡MER Emergency Alert';
   const options = {
     body: data.body || 'Immediate help needed nearby. Tap to open map.',
     icon: 'logo-192.png',
