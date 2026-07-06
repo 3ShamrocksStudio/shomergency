@@ -1125,6 +1125,32 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
 .name-field-wrap{position:relative;}
 .name-edit-ic{position:absolute;top:14px;inset-inline-end:14px;font-size:13px;color:var(--tx3);pointer-events:none;opacity:.8;}
 .name-hint{font-size:10px;color:var(--tx3);margin:-4px 0 12px;line-height:1.5;display:flex;align-items:center;gap:5px;}
+
+/* SH✡MER FIXES */
+.sh-x{width:32px!important;height:32px!important;border-radius:8px!important;background:rgba(255,255,255,.09)!important;border:1px solid rgba(255,255,255,.15)!important;display:flex!important;align-items:center!important;justify-content:center!important;cursor:pointer!important;transition:.15s!important;flex-shrink:0!important;}
+.sh-x:hover{background:rgba(255,255,255,.18)!important;border-color:rgba(255,255,255,.3)!important;}
+.setup-skip{width:100%!important;padding:13px!important;background:transparent!important;border:1.5px solid rgba(255,255,255,.2)!important;border-radius:12px!important;color:var(--tx2)!important;font-size:14px!important;font-weight:600!important;cursor:pointer!important;font-family:inherit!important;margin-top:8px!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;transition:.15s!important;}
+.setup-skip:hover{background:rgba(255,255,255,.07)!important;border-color:rgba(255,255,255,.35)!important;}
+.sh-body{overflow-x:hidden!important;max-height:calc(100dvh - 120px);overflow-y:auto;}
+.set-row{overflow:hidden;min-width:0;display:flex;align-items:center;gap:12px;padding:14px;border-bottom:1px solid var(--b1);min-height:56px;}
+.set-row:last-child{border-bottom:none;}
+.sr-l{min-width:0;flex:1;overflow:hidden;}
+.sr-nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.tog{flex-shrink:0!important;}
+.set-grp{border-radius:14px;background:var(--n3,rgba(255,255,255,.04));border:1px solid var(--b1);overflow:hidden;margin-bottom:16px;}
+.circle-family{border-color:rgba(201,168,76,.5)!important;}
+.circle-friends{border-color:rgba(59,130,246,.5)!important;}
+.circle-neighbors{border-color:rgba(16,185,129,.5)!important;}
+.prof-opt[data-prof="police"] .pic{color:#3B82F6;background:rgba(59,130,246,.12);border-radius:10px;padding:6px;}
+.prof-opt[data-prof="doctor"] .pic{color:#10B981;background:rgba(16,185,129,.12);border-radius:10px;padding:6px;}
+.prof-opt[data-prof="fire"] .pic{color:#EF4444;background:rgba(239,68,68,.12);border-radius:10px;padding:6px;}
+.prof-opt[data-prof="security"] .pic{color:#8B5CF6;background:rgba(139,92,246,.12);border-radius:10px;padding:6px;}
+.prof-opt[data-prof="nurse"] .pic{color:#F59E0B;background:rgba(245,158,11,.12);border-radius:10px;padding:6px;}
+.prof-opt[data-prof="paramedic"] .pic{color:#DC2626;background:rgba(220,38,38,.12);border-radius:10px;padding:6px;}
+.rad-explainer{font-size:11px;color:var(--tx3);text-align:center;margin-top:6px;line-height:1.4;}
+#gd-ph-err{display:none;margin-top:10px;padding:10px 12px;background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.3);border-radius:10px;font-size:13px;color:#ef4444;font-weight:600;}
+#name-err{display:none;font-size:11px;color:#ef4444;margin-top:3px;}
+.name-restriction{font-size:10px;color:var(--tx3);margin-top:4px;}
 </style>
 </head>
 <body class="lb-on">
@@ -1220,7 +1246,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <h3 id="ob-h0">יצירת חשבון שומר</h3>
  <p class="desc" id="ob-d0">מפת בטיחות חיה · SOS + אזעקה מיידית · עזרה הדדית</p>
  <div class="name-field-wrap">
- <input class="ob-f" id="ob-name" type="text" autocomplete="given-name" maxlength="40" placeholder="שם פרטי" aria-label="שם פרטי" style="margin-bottom:6px">
+ <input class="ob-f" id="ob-name" type="text" autocomplete="given-name" maxlength="24" oninput="validateDisplayName(this)" placeholder="שם פרטי" aria-label="שם פרטי" style="margin-bottom:6px">
  <span class="name-edit-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2 2 0 0 0-3-3L5 17Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 7l3 3" fill="none" stroke="currentColor" stroke-width="2"/></svg></span>
  </div>
  <p class="name-hint" id="name-hint"><span id="name-hint-txt">נוצר אוטומטית — אפשר לערוך</span></p>
@@ -1276,9 +1302,9 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <input class="ob-f" id="ob-pin" type="password" inputmode="numeric" maxlength="4" pattern="[0-9]*" dir="ltr" style="text-align:center;letter-spacing:10px;font-size:20px" placeholder="••••" autocomplete="off" aria-label="SOS cancel code">
  <p class="ob-pin-hint" id="ob-pin-hint" style="font-size:10.5px;color:var(--tx3);line-height:1.5;margin:5px 2px 0" data-he="נדרש כדי לבטל SOS פעיל — מונע ביטול בכפייה. לעולם לא טביעת אצבע." data-en="Required to cancel an active SOS — prevents forced cancellation. Never biometric.">נדרש כדי לבטל SOS פעיל — מונע ביטול בכפייה. לעולם לא טביעת אצבע.</p>
  </div>
- <div style="display:flex;gap:9px;margin-top:6px">
- <button class="ob-cta" onclick="obFinish()" id="ob-finish-btn" style="flex:1;margin-top:0"><svg class="ic" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M10 17l5-5-5-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 12H4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> <span id="ob-finish-t">כניסה</span></button>
- <button class="ob-cta" onclick="obFinishToSettings()" id="ob-settings-btn" style="flex:0 0 auto;margin-top:0;background:var(--n4);color:var(--tx1);box-shadow:none;border:1px solid var(--b2)"><svg class="ic" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-2.87 1.2V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-2.87-1.2l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.1A1.7 1.7 0 0 0 4.6 8.4l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 5.6a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 2.87 1.2l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 21 9.6h.4a2 2 0 1 1 0 4H21a1.7 1.7 0 0 0-1.6 1.4Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg> <span id="ob-settings-t">הגדרות</span></button>
+ <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">
+ <button class="ob-cta" onclick="obFinish()" id="ob-finish-btn" style="width:100%;margin-top:0;justify-content:center"><svg class="ic" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M10 17l5-5-5-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 12H4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg> <span id="ob-finish-t">כניסה</span></button>
+ <button class="ob-cta" onclick="obFinishToSettings()" id="ob-settings-btn" style="width:100%;margin-top:0;background:var(--n4);color:var(--tx1);box-shadow:none;border:1px solid var(--b2)"><svg class="ic" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-2.87 1.2V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-2.87-1.2l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.1A1.7 1.7 0 0 0 4.6 8.4l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 5.6a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 2.87 1.2l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 21 9.6h.4a2 2 0 1 1 0 4H21a1.7 1.7 0 0 0-1.6 1.4Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg> <span id="ob-settings-t">הגדרות</span></button>
  </div>
  <p style="font-size:10.5px;color:var(--tx3);line-height:1.6;margin:10px 2px 0;text-align:center" id="ob-agree-txt">בכניסה את/ה מסכים/ה ל<button type="button" class="lnk-inline" onclick="openLegal('tos')">תנאי השימוש</button> ול<button type="button" class="lnk-inline" onclick="openLegal('privacy')">מדיניות הפרטיות</button>. שיתוף מיקום הוא בהסכמה בלבד.</p>
  <button class="ob-back" onclick="goStep(1)" id="ob-back2"><svg class="ic" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M10 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> <span id="ob-back2-t">חזרה</span></button>
@@ -1357,7 +1383,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <button class="hdr-near" id="hdr-near" style="display:none" onclick="explainNearby()" aria-live="polite">
  <div class="ldot" aria-hidden="true"></div>
  <span id="gnear-n">0</span>
- <span class="gnear-lbl" id="gnear-lbl" data-he="שומרים" data-en="SHOMERs" data-ar="حُرّاس">שומרים</span>
+ <span class="gnear-lbl" id="gnear-lbl" data-he="שומרים" data-en="SH✡MERs" data-ar="حُرّاس">שומרים</span>
  </button>
  </div>
  <div class="hdr-center">
@@ -1635,7 +1661,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <button class="chip" onclick="chipOn(this)">נסגר ✓</button>
  </div>
  <div id="upd-list" role="list"></div>
- <div class="mini-credit" dir="ltr">SHOMER<span class="tm"></span> · 2026 3Shamrocks Studio</div>
+ <div class="mini-credit" dir="ltr">SH✡MER<span class="tm"></span> · 2026 3Shamrocks Studio</div>
  </div>
  </div>
 
@@ -1831,9 +1857,9 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </div>
  </div>
  <div class="set-cat"><div class="set-cat-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2.5l1.3 2.3 2.6-.4.5 2.6 2.3 1.3-1 2.4 1 2.4-2.3 1.3-.5 2.6-2.6-.4L12 21.5l-1.3-2.3-2.6.4-.5-2.6L5.3 15.7l1-2.4-1-2.4 2.3-1.3.5-2.6 2.6.4Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div><div class="set-cat-t" data-he="חשבון ומידע" data-en="Account &amp; About">חשבון ומידע</div></div>
- <div class="sec-cap mb12" data-he="אודות שומר" data-en="About SHOMER">אודות שומר</div>
+ <div class="sec-cap mb12" data-he="אודות שומר" data-en="About SH✡MER">אודות שומר</div>
  <div class="set-grp surf-light">
- <div class="ai-row"><span class="ai-l" data-he="מוצר" data-en="Product" data-ar="المنتج">מוצר / Product</span><span class="ai-v" dir="ltr">SHOMER<span class="tm"></span> (שומר)</span></div>
+ <div class="ai-row"><span class="ai-l" data-he="מוצר" data-en="Product" data-ar="المنتج">מוצר / Product</span><span class="ai-v" dir="ltr">SH✡MER<span class="tm"></span> (שומר)</span></div>
  <div class="ai-row"><span class="ai-l" data-he="גרסה" data-en="Version" data-ar="الإصدار">גרסה</span><span class="ai-v">0.1</span></div>
  <div class="ai-row"><span class="ai-l" data-he="מוטו" data-en="Motto" data-ar="الشعار">מוטו</span><span class="ai-v">שׁוֹמֵר אָחִי אָנֹכִי</span></div>
  </div>
@@ -2104,7 +2130,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="ff-pick" id="gd-addphone" role="dialog" aria-modal="true" aria-labelledby="gd-addph-ttl" aria-hidden="true">
  <div class="ff-pick-card">
  <div class="ff-pick-hd">
- <span class="ff-pick-ttl" id="gd-addph-ttl" data-he="הוסף/י שומר/ת" data-en="Add My SHOMER" data-ar="أضف حارسي">הוסף/י שומר/ת</span>
+ <span class="ff-pick-ttl" id="gd-addph-ttl" data-he="הוסף/י שומר/ת" data-en="Add MY SH✡MER" data-ar="أضف حارسي">הוסף/י שומר/ת</span>
  <button class="sh-x" onclick="gdClose('gd-addphone')" aria-label="סגור"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
  </div>
  <!-- FIND mode: enter a phone, verify it's a registered SHOMER -->
@@ -3309,11 +3335,9 @@ function obStep0(){
    isn't enabled / unavailable — so no real SMS is sent (and no cost) until it's configured.
    COST DISCIPLINE: one SMS per attempt; resend is rate-limited (30s). */
 let _obvConfirm=null, _obvRecaptcha=null, _obvDemo=false, _obvLastSend=0;
-async function fbEnsureAuthSdk(){
-  if(window.firebase&&window.firebase.auth)return;
-  await fbLoad('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js');
-  await fbLoad('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js');
-  if(!window.firebase.apps.length)window.firebase.initializeApp(window.SHOMER_FB);
+async async function fbEnsureAuthSdk(){
+  if(!window.firebase){console.error('[FB] not loaded');return;}
+  if(!window.firebase.apps||!window.firebase.apps.length){window.firebase.initializeApp(window.SHOMER_FB);}
 }
 async function openObVerify(){
  const he=currentLang==='he';
@@ -3327,10 +3351,14 @@ async function openObVerify(){
   if(!_obvRecaptcha){ _obvRecaptcha=new window.firebase.auth.RecaptchaVerifier('recaptcha-container',{size:'invisible'}); }
   _obvConfirm=await window.firebase.auth().signInWithPhoneNumber('+'+user.phone,_obvRecaptcha);
   setText('obv-demo',he?'נשלח קוד SMS אמיתי למספר שלך — הזן/י אותו כאן.':'A real SMS code was sent to your phone — enter it here.');
- }catch(e){
-  // Provider not enabled / unavailable → safe demo fallback (NO SMS sent, no cost).
-  _obvDemo=true; _obvCode=genVerifyCode();
-  setText('obv-demo',(he?'קוד האימות שלך: ':'Your verification code: ')+_obvCode);
+  }catch(e){
+  const he=currentLang==='he';
+  console.error('[PhoneAuth]',e.code,e.message);
+  try{if(_obvRecaptcha){_obvRecaptcha.clear();}}catch(_){}
+  _obvRecaptcha=null;
+  const em={'auth/invalid-phone-number':he?'❌ מספר לא תקין':'❌ Invalid number','auth/too-many-requests':he?'❌ ניסיונות רבים. המתן 10 דקות':'❌ Too many attempts','auth/quota-exceeded':he?'❌ מכסה מלאה':'❌ Quota exceeded','auth/network-request-failed':he?'❌ בעיית רשת':'❌ Network error'};
+  setText('obv-demo',em[e.code]||(he?'❌ שגיאה: ':'❌ Error: ')+(e.code||e.message));
+  if(btn)btn.disabled=false;
  }
  setTimeout(function(){var i=document.getElementById('obv-code');if(i)i.focus();},120);
 }
@@ -7493,6 +7521,9 @@ function maybePromptBackgroundAlerts(){
     document.getElementById('ba-act').onclick=function(){ if(!iosMode){ try{ enablePush(); }catch(e){} } close(); };
   }catch(e){}
 }
+
+const BANNED=['שרמוטה','זונה','כוס','זין','fuck','shit','bitch','ass','cunt','dick'];
+function validateDisplayName(inp){const v=(inp&&inp.value)||'',e=document.getElementById('name-err'),ok=/^[\u05D0-\u05EAa-zA-Z0-9 \-.]+$/;if(v.length<2){showNE('מינימום 2 תווים');return false;}if(v.length>24){showNE('מקסימום 24');return false;}if(!ok.test(v)){showNE(currentLang==='he'?'אותיות, מספרים ורווח בלבד':'Letters, numbers, spaces only');return false;}for(const w of BANNED){if(v.toLowerCase().includes(w)){showNE('שם לא מתאים');if(inp)inp.value='';return false;}}if(e)e.style.display='none';return true;}function showNE(m){const e=document.getElementById('name-err');if(e){e.textContent=m;e.style.display='block';}}
 </script>
 </body>
 </html>
