@@ -1337,7 +1337,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <button class="ob-back" onclick="obvResend()" data-he="שלח/י קוד שוב" data-en="Resend code">שלח/י קוד שוב</button>
  <button class="ob-back" onclick="obvCancel()" data-he="חזרה" data-en="Back">חזרה</button>
  </div>
- <div id="recaptcha-container"></div>
+ <div id="recaptcha-container" style="margin:12px auto;display:flex;justify-content:center"></div>
  </div>
  </div>
 </div>
@@ -1563,7 +1563,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="sh-pill" aria-hidden="true"></div>
  <div class="sh-head"><span class="sh-ttl" id="ci-ttl" data-he="צ׳ק-אין הדדי" data-en="Mutual check-in">צ׳ק-אין הדדי</span><button class="sh-x" onclick="cl('sh-checkin')" aria-label="close"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button></div>
  <div class="sh-body">
- <p class="set-help" data-he="מתג-מת חברתי דו-כיווני: האפליקציה תשאל אותך מדי פעם „הכל בסדר?”. אם לא תאשר/י בזמן — השומר/ת המקושר/ת מקבל/ת אזעקה ויכול/ה לשלוח SOS בשמך." data-en="A two-way social Dead Man's Switch: the app periodically asks 'Are you OK?'. If you don't confirm in time, your paired guardian is alerted and can send an SOS on your behalf.">מתג-מת חברתי דו-כיווני.</p>
+ <p class="set-help" data-he="מתג-מת חברתי דו-כיווני: האפליקציה תשאל אותך מדי פעם „הכל בסדר?”. אם לא תאשר/י בזמן — השומר/ת המקושר/ת מקבל/ת אזעקה ויכול/ה לשלוח SOS בשמך." data-en="A two-way social Dead Man's Switch: the app periodically asks 'Are you OK?'. If you don't confirm in time, your paired guardian is alerted and can send an SOS on your behalf.">מתג-מת חברתי דו-כיווני.</p><p id="obv-cap-note" style="font-size:11px;color:var(--tx3);text-align:center;margin:4px 0 0" data-he="אשר/י שאינך רובוט, ואז תשלח לך SMS" data-en="Verify you're human, then SMS is sent">אשר/י שאינך רובוט, ואז תשלח לך SMS</p>
  <div class="sec-cap mb12" data-he="שומר/ת מקושר/ת" data-en="Paired guardian">שומר/ת מקושר/ת</div>
  <input class="ob-f" id="ci-guardian" type="text" maxlength="40" placeholder="שם השומר/ת" aria-label="guardian">
  <div class="sec-cap mb12" style="margin-top:6px" data-he="תדירות" data-en="Frequency">תדירות</div>
@@ -3349,8 +3349,7 @@ async function openObVerify(){
     try{if(_obvRecaptcha)_obvRecaptcha.clear();}catch(_){}
     _obvRecaptcha=null;
     _obvRecaptcha=new window.firebase.auth.RecaptchaVerifier('recaptcha-container',{
-      size:'invisible',callback:()=>{},
-      'error-callback':e=>console.error('[reCAPTCHA]',e)
+      size:'normal'
     });
     await _obvRecaptcha.render();
     _obvConfirm=await window.firebase.auth().signInWithPhoneNumber('+'+user.phone,_obvRecaptcha);
