@@ -1383,7 +1383,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <!-- REAL "guardians nearby" — live count from RTDB presence (shown only when connected). -->
  <button class="hdr-near" id="hdr-near" style="display:none" onclick="explainNearby()" aria-live="polite">
  <div class="ldot" aria-hidden="true"></div>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:1;pointer-events:none">v76 · 06.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:1;pointer-events:none">v77 · 06.07.26</div>
  <span id="gnear-n">0</span>
  <span class="gnear-lbl" id="gnear-lbl" data-he="שומרים" data-en="SH✡MERs" data-ar="حُرّاس">שומרים</span>
  </button>
@@ -3325,59 +3325,35 @@ function obStep0(){
  if(!digits){ toast(he?'נא להזין מספר טלפון נייד':'Please enter a mobile number','amb'); shakeField('ob-phone'); return; }
  if(!isValidILMobile(digits)){ toast(he?'מספר נייד ישראלי לא תקין — 05X-XXXXXXX':'Invalid Israeli mobile — 05X-XXXXXXX','amb'); shakeField('ob-phone'); return; }
  user={name, phone: ilNormalize(digits), city:''};
- // ENTRY MUST BE INSTANT + RELIABLE — no SMS/auth gate. The previous step called
- // openObVerify() (Firebase Phone Auth + invisible reCAPTCHA, real SMS). On a real
- // device that can HANG (reCAPTCHA load / unauthorized domain / SMS never arrives)
- // with no thrown error, trapping the user at "sending a code…" — i.e. "can't log in".
- // RTDB is decoupled (public rules), so phone verification gates nothing it needs; the
- // number is still captured for the "My SHOMER by phone" registry. (Re-add real
- // verification via App Check / Phone Auth as a pre-launch hardening step, NOT an
- // entry gate.)
- goStep(1);
+ openObVerify();
 }
-/* Real Firebase Phone Auth (SMS). Falls back to a labelled demo code if the Phone provider
-   isn't enabled / unavailable — so no real SMS is sent (and no cost) until it's configured.
-   COST DISCIPLINE: one SMS per attempt; resend is rate-limited (30s). */
-let _obvConfirm=null, _obvRecaptcha=null, _obvDemo=false, _obvLastSend=0;
-async function fbEnsureAuthSdk(){
-  if(!window.firebase){console.error('[FB] not loaded');return;}
-  if(!window.firebase.apps||!window.firebase.apps.length){window.firebase.initializeApp(window.SHOMER_FB);}
-}
-async function openObVerify(){
- const he=currentLang==='he';
- const ov=document.getElementById('ob-verify'); if(ov){ov.classList.add('on');ov.setAttribute('aria-hidden','false');}
- setText('obv-err',''); const inp=document.getElementById('obv-code'); if(inp){inp.value='';}
- setText('obv-sub',(he?'שולחים קוד אל ':'Sending a code to ')+'+'+user.phone);
- setText('obv-demo',he?'…':'…');
- _obvDemo=false; _obvConfirm=null; _obvLastSend=Date.now();
+async function obvSuccess(){
+ const he=currentLang==='he',ar=currentLang==='ar';
+ const ov=document.getElementById('ob-verify');
+ if(ov){ov.classList.remove('on');ov.setAttribute('aria-hidden','true');}
+ if(!SS.security)SS.security={};
+ SS.security.phoneVerified=true;
+ if(SS.user)SS.user.phone=user.phone;
  try{
-  await fbEnsureAuthSdk();
-  if(!_obvRecaptcha){ _obvRecaptcha=new window.firebase.auth.RecaptchaVerifier('recaptcha-container',{size:'invisible'}); }
-  _obvConfirm=await window.firebase.auth().signInWithPhoneNumber('+'+user.phone,_obvRecaptcha);
-  setText('obv-demo',he?'נשלח קוד SMS אמיתי למספר שלך — הזן/י אותו כאן.':'A real SMS code was sent to your phone — enter it here.');
-  }catch(e){
-  const he=currentLang==='he';
-  console.error('[PhoneAuth]',e.code,e.message);
-  try{if(_obvRecaptcha){_obvRecaptcha.clear();}}catch(_){}
-  _obvRecaptcha=null;
-  const em={'auth/invalid-phone-number':he?'❌ מספר לא תקין':'❌ Invalid number','auth/too-many-requests':he?'❌ ניסיונות רבים. המתן 10 דקות':'❌ Too many attempts','auth/quota-exceeded':he?'❌ מכסה מלאה':'❌ Quota exceeded','auth/network-request-failed':he?'❌ בעיית רשת':'❌ Network error'};
-  setText('obv-demo',em[e.code]||(he?'❌ שגיאה: ':'❌ Error: ')+(e.code||e.message));
-  if(btn)btn.disabled=false;
+  const db=window.firebase.database();
+  const digits=(user.phone||'').replace(/[^0-9]/g,'');
+  const hb=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(digits));
+  const ph=Array.from(new Uint8Array(hb)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  FB._myPhoneHash=ph;
+  let uname=SS.user&&SS.user.username;
+  if(!uname){
+   const snap=await db.ref('meta/userCount').transaction(n=>(n||0)+1);
+   const num=snap.snapshot.val();
+   uname='SH✡MER'+String(num).padStart(4,'0');
+   if(SS.user)SS.user.username=uname;
+  }
+  const fbU=window.firebase.auth().currentUser;
+  await db.ref('registry/'+ph).set({uid:fbU?fbU.uid:ph,username:uname,name:(SS.user&&SS.user.name)||uname,registeredAt:Date.now(),lang:currentLang});
+  SS.security.firebaseUid=fbU?fbU.uid:'';saveStore();
+  toast(he?`✓ ברוך הבא, ${uname}`:ar?`✓ مرحبا, ${uname}`:`✓ Welcome, ${uname}`,'grn');
+ }catch(re){
+  console.error('[Registry]',re);saveStore();toast(he?'✓ אומת':'✓ Verified','grn');
  }
- setTimeout(function(){var i=document.getElementById('obv-code');if(i)i.focus();},120);
-}
-async function obvVerify(){
- const he=currentLang==='he';
- const v=(document.getElementById('obv-code').value||'').replace(/\D/g,'');
- if(_obvDemo){ if(v===_obvCode){ obvSuccess(); } else { setText('obv-err',he?'קוד שגוי — נסה/י שוב':'Wrong code — try again'); } return; }
- if(_obvConfirm){ try{ await _obvConfirm.confirm(v); obvSuccess(); }catch(e){ setText('obv-err',he?'קוד שגוי — נסה/י שוב':'Wrong code — try again'); } return; }
- setText('obv-err',he?'נסה/י לשלוח קוד שוב':'Try resending the code');
-}
-function obvSuccess(){
- const he=currentLang==='he';
- if(!SS.security)SS.security={}; SS.security.phoneVerified=true; SS.user&&(SS.user.phone=user.phone); saveStore();
- const ov=document.getElementById('ob-verify'); if(ov){ov.classList.remove('on');ov.setAttribute('aria-hidden','true');}
- toast(he?'✓ הטלפון אומת':'✓ Phone verified','grn');
  goStep(1);
 }
 function obvResend(){
@@ -3454,7 +3430,13 @@ function previewAlarm(type,stopId){
 function hideAlarmStops(){['ob-alarm-stop','set-alarm-stop'].forEach(id=>{const b=document.getElementById(id);if(b)b.style.display='none';});}
 function stopPreview(){stopAlarm();hideAlarmStops();clearTimeout(previewAlarm._t);}
 function obFinish(goSettings){
- try{stopPreview();}catch(e){} // ensure no preview tone leaks into the app
+ const _he=currentLang==='he';
+ if(!SS.security||!SS.security.phoneVerified){
+  toast(_he?'❌ יש לאמת מספר טלפון תחילה':'❌ Phone verification required','err');
+  openObVerify();
+  return;
+ }
+ try{stopPreview();}catch(e){}
  user.name=user.name||pickRandomName();
  // Persist onboarding so it never loops on reload.
  SS.onboarded=true;
