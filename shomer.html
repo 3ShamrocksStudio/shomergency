@@ -1246,9 +1246,10 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <h3 id="ob-h0">יצירת חשבון שומר</h3>
  <p class="desc" id="ob-d0">מפת בטיחות חיה · SOS + אזעקה מיידית · עזרה הדדית</p>
  <div class="name-field-wrap">
- <input class="ob-f" id="ob-name" type="text" autocomplete="given-name" maxlength="24" oninput="validateDisplayName(this)" placeholder="שם פרטי" aria-label="שם פרטי" style="margin-bottom:6px">
+ <input class="ob-f" id="ob-name" type="text" autocomplete="given-name" maxlength="24" placeholder="שם פרטי" aria-label="שם פרטי" style="margin-bottom:6px">
  <span class="name-edit-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2 2 0 0 0-3-3L5 17Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 7l3 3" fill="none" stroke="currentColor" stroke-width="2"/></svg></span>
  </div>
+<div id="name-err" style="display:none;font-size:11px;color:#ef4444;margin-top:3px"></div>
  <p class="name-hint" id="name-hint"><span id="name-hint-txt">נוצר אוטומטית — אפשר לערוך</span></p>
  <input class="ob-f" id="ob-phone" type="tel" autocomplete="tel" maxlength="15" placeholder="050-000-0000" inputmode="tel" dir="ltr" style="text-align:start" aria-label="מספר טלפון">
  <p style="font-size:11px;color:var(--tx3);margin:-4px 0 12px;line-height:1.6" id="ob-why">מספר הטלפון משמש לשליחת עזרה בעת חירום.</p>
@@ -3335,7 +3336,7 @@ function obStep0(){
    isn't enabled / unavailable — so no real SMS is sent (and no cost) until it's configured.
    COST DISCIPLINE: one SMS per attempt; resend is rate-limited (30s). */
 let _obvConfirm=null, _obvRecaptcha=null, _obvDemo=false, _obvLastSend=0;
-async async function fbEnsureAuthSdk(){
+async function fbEnsureAuthSdk(){
   if(!window.firebase){console.error('[FB] not loaded');return;}
   if(!window.firebase.apps||!window.firebase.apps.length){window.firebase.initializeApp(window.SHOMER_FB);}
 }
