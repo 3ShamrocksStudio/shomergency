@@ -1383,7 +1383,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <!-- REAL "guardians nearby" — live count from RTDB presence (shown only when connected). -->
  <button class="hdr-near" id="hdr-near" style="display:none" onclick="explainNearby()" aria-live="polite">
  <div class="ldot" aria-hidden="true"></div>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:1;pointer-events:none">v77 · 06.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:1;pointer-events:none">v78 · 06.07.26</div>
  <span id="gnear-n">0</span>
  <span class="gnear-lbl" id="gnear-lbl" data-he="שומרים" data-en="SH✡MERs" data-ar="حُرّاس">שומרים</span>
  </button>
@@ -3327,6 +3327,62 @@ function obStep0(){
  user={name, phone: ilNormalize(digits), city:''};
  openObVerify();
 }
+/* ── Firebase Phone Auth ────────────────── */
+let _obvConfirm=null, _obvRecaptcha=null, _obvLastSend=0;
+
+async function fbEnsureAuthSdk(){
+  if(!window.firebase){console.error('[FB] not loaded');return;}
+  if(!window.firebase.apps||!window.firebase.apps.length){window.firebase.initializeApp(window.SHOMER_FB);}
+}
+
+async function openObVerify(){
+  const he=currentLang==='he',ar=currentLang==='ar';
+  const ov=document.getElementById('ob-verify');
+  if(ov){ov.classList.add('on');ov.setAttribute('aria-hidden','false');}
+  const inp=document.getElementById('obv-code');if(inp)inp.value='';
+  setText('obv-err','');
+  setText('obv-sub',(he?'שולחים קוד אל ':'Sending a code to ')+'+'+user.phone);
+  setText('obv-demo',he?'שולח SMS...':'Sending SMS...');
+  _obvConfirm=null; _obvLastSend=Date.now();
+  try{
+    await fbEnsureAuthSdk();
+    try{if(_obvRecaptcha)_obvRecaptcha.clear();}catch(_){}
+    _obvRecaptcha=null;
+    _obvRecaptcha=new window.firebase.auth.RecaptchaVerifier('recaptcha-container',{
+      size:'invisible',callback:()=>{},
+      'error-callback':e=>console.error('[reCAPTCHA]',e)
+    });
+    await _obvRecaptcha.render();
+    _obvConfirm=await window.firebase.auth().signInWithPhoneNumber('+'+user.phone,_obvRecaptcha);
+    setText('obv-demo',he?'✉️ נשלח קוד SMS — הזן/י אותו כאן':'✉️ SMS code sent — enter it here');
+  }catch(e){
+    console.error('[PhoneAuth]',e.code,e.message);
+    try{if(_obvRecaptcha)_obvRecaptcha.clear();}catch(_){}
+    _obvRecaptcha=null;
+    const em={
+      'auth/invalid-phone-number':he?'❌ מספר לא תקין — 05X-XXXXXXX':'❌ Invalid number — 05X-XXXXXXX',
+      'auth/too-many-requests':he?'❌ יותר מדי ניסיונות. המתן 10 דקות':'❌ Too many attempts. Wait 10 min.',
+      'auth/quota-exceeded':he?'❌ מכסת SMS מלאה. נסה מחר':'❌ Daily SMS quota exceeded.',
+      'auth/network-request-failed':he?'❌ בעיית רשת. בדוק חיבור':'❌ Network error. Check connection.',
+    };
+    setText('obv-demo',em[e.code]||(he?'❌ שגיאה: ':'❌ Error: ')+(e.code||e.message||'unknown'));
+  }
+  setTimeout(()=>{try{document.getElementById('obv-code').focus();}catch(_){}},150);
+}
+
+async function obvVerify(){
+  const he=currentLang==='he';
+  const v=(document.getElementById('obv-code').value||'').replace(/\D/g,'');
+  if(!v){setText('obv-err',he?'הזן/י את הקוד מה-SMS':'Enter the SMS code');return;}
+  if(_obvConfirm){
+    try{await _obvConfirm.confirm(v);await obvSuccess();}
+    catch(e){setText('obv-err',he?'קוד שגוי — נסה/י שוב':'Wrong code — try again');}
+    return;
+  }
+  setText('obv-err',he?'שלח/י קוד שוב':'Resend the code');
+}
+/* ─────────────────────────────────────── */
+
 async function obvSuccess(){
  const he=currentLang==='he',ar=currentLang==='ar';
  const ov=document.getElementById('ob-verify');
