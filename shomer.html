@@ -3364,6 +3364,8 @@ async function openObVerify(){
       'auth/too-many-requests':he?'❌ יותר מדי ניסיונות. המתן 10 דקות':'❌ Too many attempts. Wait 10 min.',
       'auth/quota-exceeded':he?'❌ מכסת SMS מלאה. נסה מחר':'❌ Daily SMS quota exceeded.',
       'auth/network-request-failed':he?'❌ בעיית רשת. בדוק חיבור':'❌ Network error. Check connection.',
+      'auth/internal-error':he?'❌ שגיאת שרת. נסה שוב':'❌ Server error. Try again.',
+      'auth/captcha-check-failed':he?'❌ פתח ב-Safari ונסה שוב':'❌ Open in Safari and try again.',
     };
     setText('obv-demo',em[e.code]||(he?'❌ שגיאה: ':'❌ Error: ')+(e.code||e.message||'unknown'));
   }
