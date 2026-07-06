@@ -1383,6 +1383,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <!-- REAL "guardians nearby" — live count from RTDB presence (shown only when connected). -->
  <button class="hdr-near" id="hdr-near" style="display:none" onclick="explainNearby()" aria-live="polite">
  <div class="ldot" aria-hidden="true"></div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:1;pointer-events:none">v75 · 06.07.26</div>
  <span id="gnear-n">0</span>
  <span class="gnear-lbl" id="gnear-lbl" data-he="שומרים" data-en="SH✡MERs" data-ar="حُرّاس">שומרים</span>
  </button>
@@ -7525,6 +7526,16 @@ function maybePromptBackgroundAlerts(){
 
 const BANNED=['שרמוטה','זונה','כוס','זין','fuck','shit','bitch','ass','cunt','dick'];
 function validateDisplayName(inp){const v=(inp&&inp.value)||'',e=document.getElementById('name-err'),ok=/^[\u05D0-\u05EAa-zA-Z0-9 \-.]+$/;if(v.length<2){showNE('מינימום 2 תווים');return false;}if(v.length>24){showNE('מקסימום 24');return false;}if(!ok.test(v)){showNE(currentLang==='he'?'אותיות, מספרים ורווח בלבד':'Letters, numbers, spaces only');return false;}for(const w of BANNED){if(v.toLowerCase().includes(w)){showNE('שם לא מתאים');if(inp)inp.value='';return false;}}if(e)e.style.display='none';return true;}function showNE(m){const e=document.getElementById('name-err');if(e){e.textContent=m;e.style.display='block';}}
+
+// Force SW update check on every load
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.ready.then(reg=>{
+    reg.update().catch(()=>{});
+  });
+  navigator.serviceWorker.addEventListener('message',e=>{
+    if(e.data&&e.data.type==='SW_UPDATED') window.location.reload(true);
+  });
+}
 </script>
 </body>
 </html>
