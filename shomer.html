@@ -1210,6 +1210,9 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
 .map-ring-frnd{stroke:#3B82F6;}
 .map-ring-nbr{stroke:#10B981;}
 
+
+.ob-logo{padding-top:max(12px,env(safe-area-inset-top));}
+.ob-logo img{max-height:160px;width:auto;}
 </style>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 </head>
@@ -1284,7 +1287,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="ob-bg" aria-hidden="true"></div>
  <div class="ob-hero">
  <div class="ob-shieldwrap">
- <img class="ob-logo" src="SHOMER_logo_big.png" alt="SHOMER" width="240" height="240">
+ <img class="ob-logo" style="padding-top:env(safe-area-inset-top,12px);margin-top:12px" src="SHOMER_logo_big.png" alt="SHOMER" width="240" height="240">
  </div>
  <div class="ob-sub" id="ob-tagline">Citizens for Citizens</div>
  <!-- Language pick in onboarding -->
@@ -1360,7 +1363,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <span id="ob-defaults-txt"><strong>Shake-to-SOS</strong> פעיל · <strong>Dead Man's Switch</strong> כבוי. אפשר לשנות בכל עת בהגדרות.</span>
  </div>
  <div style="margin-top:12px">
- <div class="sec-cap" id="ob-pin-lbl" data-he="קוד לביטול SOS (4 ספרות)" data-en="SOS cancel code (4 digits)">קוד לביטול SOS (4 ספרות)</div>
+ <div class="sec-cap" id="ob-pin-lbl" data-he="קוד לביטול SOS (6 ספרות)" data-en="SOS cancel code (6 digits)">קוד לביטול SOS (6 ספרות)</div>
  <input class="ob-f" id="ob-pin" type="password" inputmode="numeric" maxlength="6" pattern="[0-9]*" dir="ltr" style="text-align:center;letter-spacing:10px;font-size:20px" placeholder="••••••" autocomplete="off" aria-label="SOS cancel code">
  <p class="ob-pin-hint" id="ob-pin-hint" style="font-size:10.5px;color:var(--tx3);line-height:1.5;margin:5px 2px 0" data-he="נדרש כדי לבטל SOS פעיל — מונע ביטול בכפייה. לעולם לא טביעת אצבע." data-en="Required to cancel an active SOS — prevents forced cancellation. Never biometric.">נדרש כדי לבטל SOS פעיל — מונע ביטול בכפייה. לעולם לא טביעת אצבע.</p>
  </div>
@@ -1444,7 +1447,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <!-- REAL "guardians nearby" — live count from RTDB presence (shown only when connected). -->
  <button class="hdr-near" id="hdr-near" style="display:none" onclick="explainNearby()" aria-live="polite">
  <div class="ldot" aria-hidden="true"></div>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:1;pointer-events:none">v80 · 06.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:1;pointer-events:none">v81 · 06.07.26</div>
  <span id="gnear-n">0</span>
  <span class="gnear-lbl" id="gnear-lbl" data-he="שומרים" data-en="SH✡MERs" data-ar="حُرّاس">שומרים</span>
  </button>
@@ -4154,7 +4157,7 @@ function openSosPin(cb){ _pinMode='verify';_pinBuf='';_pinFails=0;_pinCb=cb; bui
 function openSetPin(){ _pinMode='set';_pinBuf='';_pinCb=null; buildPinPad(); reflectPinDots(); _pinSetTexts(); var e=document.getElementById('pin-err'); if(e)e.textContent=''; var ov=document.getElementById('sos-pin'); if(ov){ov.classList.add('on');ov.setAttribute('aria-hidden','false');} }
 function _pinSetTexts(){ var he=currentLang==='he', set=_pinMode==='set';
  setText('pin-ttl',set?(he?'בחר/י קוד ביטול':'Choose a cancel code'):(he?'קוד לביטול SOS':'SOS cancel code'));
- setText('pin-sub',set?(he?'4 ספרות. יידרש כדי לבטל SOS פעיל. לעולם לא טביעת אצבע.':'4 digits. Required to cancel an active SOS. Never a fingerprint.'):(he?'ביטול SOS פעיל מחייב את הקוד האישי שלך — לעולם לא טביעת אצבע.':'Cancelling an active SOS requires your personal code — never a fingerprint.')); }
+ setText('pin-sub',set?(he?'6 ספרות. יידרש כדי לבטל SOS פעיל. לעולם לא טביעת אצבע.':'6 digits. Required to cancel an active SOS. Never a fingerprint.'):(he?'ביטול SOS פעיל מחייב את הקוד האישי שלך — לעולם לא טביעת אצבע.':'Cancelling an active SOS requires your personal code — never a fingerprint.')); }
 function reflectPinSetState(){ var el=document.getElementById('pin-set-state'); if(el){var he=currentLang==='he', has=SS.security&&/^\d{4}$/.test(SS.security.pin||''); el.textContent=has?(he?'מוגדר ✓':'Set ✓'):(he?'לא הוגדר':'Not set'); el.style.color=has?'var(--grn)':'var(--amb)';} }
 function closeSosPin(){ var ov=document.getElementById('sos-pin'); if(ov){ov.classList.remove('on');ov.setAttribute('aria-hidden','true');} _pinBuf='';_pinCb=null; }
 
@@ -5049,7 +5052,7 @@ var EMERGENCY_GUIDE=[
  {id:'cpr',e:'❤️',t:{he:'החייאה (CPR)',en:'CPR',ar:'الإنعاش القلبي (CPR)'},
   s:{he:'אדם לא מגיב ואינו נושם',en:'Unresponsive, not breathing',ar:'لا يستجيب ولا يتنفّس'},
   steps:{he:['ודא/י שהאדם אינו מגיב ואינו נושם תקין (או רק נושף נשיפות בודדות).','חייג/י 101 מיד ובקש/י דפיברילטור (AED). הפעל/י רמקול.','הנח/י כף יד במרכז בית החזה (חצי תחתון של עצם החזה), יד שנייה מעליה.','לחץ/י חזק ומהר: קצב 100–120 לדקה, עומק 5–6 ס״מ.','תן/י לחזה לחזור למצב מלא בין הלחיצות — אל תישען/י עליו.','אם הוכשרת: 30 לחיצות ל-2 הנשמות (הטיית ראש, הרמת סנטר, סתימת אף, נשיפה עד שהחזה עולה).','לא הוכשרת? בצע/י לחיצות חזה רצופות בלבד, ללא הפסקה.','כשמגיע AED — הפעל/י ועקוב/י אחר ההוראות הקוליות.','המשך/י עד שמגיע צוות רפואי או שהאדם מתעורר.'],
-   en:['Confirm the person is unresponsive and not breathing normally (or only gasping).','Call 101 now and ask for an AED. Put the phone on speaker.','Place the heel of your hand on the center of the chest (lower half of the breastbone), other hand on top.','Push hard and fast: 100–120 per minute, depth 5–6 cm (2–2.4 in).','Let the chest fully recoil between compressions — do not lean on it.','If trained: 30 compressions to 2 rescue breaths (tilt head, lift chin, pinch nose, breathe until the chest rises).','Not trained? Do continuous chest compressions only, without stopping.','When an AED arrives, turn it on and follow the voice prompts.','Continue until EMS arrives or the person wakes up.'],
+   en:['Confirm the person is unresponsive and not breathing normally (or only gasping).','Call 101 now and ask for an AED. Put the phone on speaker.','Place the heel of your hand on the center of the chest (lower half of the breastbone), other hand on top.','Push hard and fast: 100–120 per minute, depth 5–6 cm (2–2.4 in).','Let the chest fully recoil between compressions — do not lean on it.','If trained: 30 chest compressions at 100/min (MDA standard) to 2 rescue breaths (tilt head, lift chin, pinch nose, breathe until the chest rises).','Not trained? Do continuous chest compressions only, without stopping.','When an AED arrives, turn it on and follow the voice prompts.','Continue until EMS arrives or the person wakes up.'],
    ar:['تأكّد أن الشخص لا يستجيب ولا يتنفّس بشكل طبيعي (أو يلهث فقط).','اتصل بـ101 فورًا واطلب جهاز صدمات (AED). شغّل مكبّر الصوت.','ضع كعب يدك في منتصف الصدر (النصف السفلي من عظم القص)، واليد الأخرى فوقها.','اضغط بقوة وسرعة: 100–120 ضغطة في الدقيقة، بعمق 5–6 سم.','اترك الصدر يعود كاملًا بين الضغطات — لا تتّكئ عليه.','إذا كنت مدرَّبًا: 30 ضغطة مقابل نفَسين (إمالة الرأس، رفع الذقن، إغلاق الأنف، نفخ حتى يرتفع الصدر).','غير مدرَّب؟ اكتفِ بالضغطات المتواصلة دون توقف.','عند وصول جهاز AED، شغّله واتبع التعليمات الصوتية.','استمر حتى وصول الإسعاف أو استيقاظ الشخص.']},
   dont:{he:'אל תפסיק/י לחיצות שלא לצורך · אל תבדק/י דופק לפני התחלה · עומק לא יותר מ-6 ס״מ.',en:'Do not interrupt compressions unnecessarily · do not delay to check a pulse · depth no more than 6 cm.',ar:'لا توقف الضغطات دون داعٍ · لا تتأخر لفحص النبض · العمق لا يزيد عن 6 سم.'},
   src:'מד״א (MDA) · AHA cpr.heart.org · ERC/Resus Council UK · ILCOR'},
@@ -5114,7 +5117,7 @@ var EMERGENCY_GUIDE=[
  {id:'drown',e:'🌊',t:{he:'טביעה',en:'Drowning',ar:'الغرق'},
   s:{he:'הוצא/י מהמים והנשם/י',en:'Get them out, give breaths',ar:'أخرجه وأعطه أنفاسًا'},
   steps:{he:['שמור/י על עצמך — הושט/זרוק, אל תיכנס/י למים אם אינך מיומן/ת. אל תהפוך/י לקורבן שני.','הוצא/י את האדם מהמים במהירות ובבטחה.','חייג/י 101, רמקול.','אם אינו מגיב ואינו נושם — תן/י 5 הנשמות תחילה, ואז התחל/י החייאה.','המשך/י 30 לחיצות ל-2 הנשמות עד עזרה או סימני חיים.'],
-   en:['Protect yourself — reach or throw, do not enter the water unless trained. Do not become a second victim.','Get the person out of the water quickly and safely.','Call 101, on speaker.','If unresponsive and not breathing — give 5 rescue breaths first, then start CPR.','Continue 30 compressions to 2 breaths until help or signs of life.'],
+   en:['Protect yourself — reach or throw, do not enter the water unless trained. Do not become a second victim.','Get the person out of the water quickly and safely.','Call 101, on speaker.','If unresponsive and not breathing — give 5 rescue breaths first, then start CPR.','Continue 30 chest compressions at 100/min (MDA standard) to 2 breaths until help or signs of life.'],
    ar:['احمِ نفسك — مدّ يدك أو ارمِ طوقًا، ولا تدخل الماء إن لم تكن مدرَّبًا. لا تصبح ضحية ثانية.','أخرج الشخص من الماء بسرعة وأمان.','اتصل بـ101 ومكبّر الصوت مفعّل.','إن كان لا يستجيب ولا يتنفّس — أعطِ 5 أنفاس أولًا، ثم ابدأ الإنعاش.','تابع 30 ضغطة مقابل نفَسين حتى وصول المساعدة أو ظهور علامات حياة.']},
   dont:{he:'אל תיכנס/י למים ללא הכשרה · בטביעה ההנשמות חיוניות — אל תסתפק/י בלחיצות בלבד.',en:'Do not enter the water untrained · for drowning the rescue breaths are essential — do not rely on compressions only.',ar:'لا تدخل الماء دون تدريب · في الغرق الأنفاس ضرورية — لا تكتفِ بالضغطات.'},
   src:'Resus Council UK 2025 · British Red Cross · מד״א (MDA)'},
@@ -7668,40 +7671,36 @@ async function enterAppAnonymously(){
  const he=currentLang==="he";
  try{
   await fbEnsureAuthSdk();
-  // Sign in anonymously — no reCAPTCHA, works on every device
   let fbUser=window.firebase.auth().currentUser;
   if(!fbUser){
    const cred=await window.firebase.auth().signInAnonymously();
    fbUser=cred.user;
   }
   const db=window.firebase.database();
+  // Use BOTH device UUID AND phone hash for strongest identity
+  const deviceId=await getOrCreateDeviceId();
   const digits=(user.phone||"").replace(/[^0-9]/g,"");
-  const hb=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(digits));
+  const hb=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(digits+deviceId));
   const ph=Array.from(new Uint8Array(hb)).map(b=>b.toString(16).padStart(2,"0")).join("");
   FB._myPhoneHash=ph;
-  // One phone = one account: check if phone already registered
+  // One device+phone = one account
   const snap=await db.ref("registry/"+ph).once("value");
   const existing=snap.val();
   let uname="";
   if(existing&&existing.username){
-   // Returning user — restore their identity
    uname=existing.username;
    toast(he?"✓ ברוך השב/ת, "+uname:"✓ Welcome back, "+uname,"grn");
-  } else {
-   // New user — assign sequential SH✡MER ID
+  }else{
    const countSnap=await db.ref("meta/userCount").transaction(n=>(n||0)+1);
    const num=countSnap.snapshot.val();
    uname="SH✡MER"+String(num).padStart(4,"0");
-   await db.ref("registry/"+ph).set({
-    uid:fbUser.uid,username:uname,
-    name:user.name||uname,
-    registeredAt:Date.now(),lang:currentLang
-   });
+   await db.ref("registry/"+ph).set({uid:fbUser.uid,username:uname,name:user.name||uname,deviceId:deviceId,registeredAt:Date.now(),lang:currentLang});
    toast(he?"✓ ברוך הבא, "+uname:"✓ Welcome, "+uname,"grn");
   }
   if(!SS.security)SS.security={};
   SS.security.phoneVerified=true;
   SS.security.firebaseUid=fbUser.uid;
+  SS.security.deviceId=deviceId;
   if(!SS.user)SS.user={};
   SS.user.username=uname;
   SS.user.phone=user.phone;
@@ -7710,8 +7709,7 @@ async function enterAppAnonymously(){
   saveStore();
   goStep(1);
  }catch(e){
-  console.error("[Auth]",e.code,e.message);
-  // Even if Firebase fails — let user in offline
+  console.error("[Auth]",e);
   if(!SS.security)SS.security={};
   SS.security.phoneVerified=true;
   if(!SS.user)SS.user={};
@@ -7852,6 +7850,32 @@ async function addShomerToCircle(phoneDigits, displayName, circleId){
 
 
 // ─────────────────────────────────────────────────────────────────
+
+// ── Permanent device identity (IndexedDB) ────────────────────
+const _DEVICE_STORE="shomer_device";
+async function getOrCreateDeviceId(){
+ return new Promise((resolve)=>{
+  try{
+   const req=indexedDB.open("shomer_identity",1);
+   req.onupgradeneeded=e=>{e.target.result.createObjectStore("device",{keyPath:"k"});};
+   req.onsuccess=e=>{
+    const db=e.target.result;
+    const tx=db.transaction("device","readwrite");
+    const store=tx.objectStore("device");
+    const gr=store.get("device_id");
+    gr.onsuccess=()=>{
+     if(gr.result){resolve(gr.result.v);return;}
+     const id="D-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,8);
+     store.put({k:"device_id",v:id});
+     resolve(id);
+    };
+    gr.onerror=()=>resolve("D-fallback-"+Math.random().toString(36).slice(2));
+   };
+   req.onerror=()=>resolve("D-err-"+Date.now().toString(36));
+  }catch(e){resolve("D-catch-"+Math.random().toString(36).slice(2));}
+ });
+}
+// ────────────────────────────────────────────────────────────────
 </script>
 
 <style>
