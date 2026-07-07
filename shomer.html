@@ -1447,7 +1447,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <!-- REAL "guardians nearby" — live count from RTDB presence (shown only when connected). -->
  <button class="hdr-near" id="hdr-near" style="display:none" onclick="explainNearby()" aria-live="polite">
  <div class="ldot" aria-hidden="true"></div>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:1;pointer-events:none">v81 · 06.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:1;pointer-events:none">v82 · 06.07.26</div>
  <span id="gnear-n">0</span>
  <span class="gnear-lbl" id="gnear-lbl" data-he="שומרים" data-en="SH✡MERs" data-ar="حُرّاس">שומרים</span>
  </button>
@@ -7669,21 +7669,108 @@ if('serviceWorker' in navigator){
 // ── Anonymous auth + phone registry ────────────────────────────────
 async function enterAppAnonymously(){
  const he=currentLang==="he";
+ // Show SMS code input screen
+ showSMSCodeScreen();
+}
+
+const TWILIO_BASE="https://shomer-verify-8701-prod.twil.io";
+
+async function sendTwilioOTP(){
+ const he=currentLang==="he";
+ const btn=document.getElementById("ob-submit-btn");
+ const statusEl=document.getElementById("ob-sms-status");
+ if(btn){btn.disabled=true;btn.textContent=he?"שולח קוד...":"Sending code...";}
+ if(statusEl)statusEl.textContent=he?"⏳ שולח קוד SMS...":"⏳ Sending SMS code...";
+ try{
+  const r=await fetch(TWILIO_BASE+"/sendOTP",{
+   method:"POST",
+   headers:{"Content-Type":"application/x-www-form-urlencoded"},
+   body:"phone="+encodeURIComponent("+"+user.phone)
+  });
+  const data=await r.json();
+  if(data.success){
+   if(statusEl)statusEl.textContent=he?"✅ קוד נשלח! בדוק/י את ה-SMS":"✅ Code sent! Check your SMS";
+   document.getElementById("ob-code-inp")&&document.getElementById("ob-code-inp").focus();
+  }else{
+   if(statusEl)statusEl.textContent="❌ "+(data.error||"Failed");
+   if(btn){btn.disabled=false;btn.textContent=he?"שלח קוד":"Send code";}
+  }
+ }catch(e){
+  if(statusEl)statusEl.textContent=he?"❌ בעיית רשת":"❌ Network error";
+  if(btn){btn.disabled=false;btn.textContent=he?"שלח קוד":"Send code";}
+ }
+}
+
+function showSMSCodeScreen(){
+ const he=currentLang==="he";
+ const wrap=document.querySelector(".ob-wrap,.ob-scroll")||document.getElementById("ob-wrap");
+ if(!wrap)return;
+ wrap.innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100dvh;padding:28px;text-align:center">
+  <div style="font-size:52px;margin-bottom:16px">??</div>
+  <h2 style="font-size:22px;font-weight:800;color:var(--tx0);margin-bottom:8px">
+   ${he?"אימות מספר טלפון":"Phone Verification"}
+  </h2>
+  <p style="font-size:14px;color:var(--tx2);margin-bottom:4px">
+   ${he?"שולחים קוד SMS אל:":"Sending SMS code to:"}
+  </p>
+  <p style="font-size:16px;font-weight:700;color:var(--gold);margin-bottom:20px;direction:ltr">+${user.phone}</p>
+  <div id="ob-sms-status" style="font-size:13px;color:var(--tx2);min-height:24px;margin-bottom:16px"></div>
+  <input id="ob-code-inp" type="tel" inputmode="numeric" maxlength="6"
+   placeholder="• • • • • •"
+   style="font-size:30px;letter-spacing:14px;text-align:center;width:220px;background:var(--n3);border:2px solid var(--gold);border-radius:14px;padding:14px;color:var(--tx0);font-family:inherit;margin-bottom:16px">
+  <button onclick="verifyTwilioCode()" id="ob-verify-twilio-btn"
+   style="width:100%;max-width:280px;padding:16px;background:linear-gradient(135deg,#C9A84C,#e8c96a);color:#0a0c12;border:none;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:10px">
+   ${he?"אמת/י ✓":"Verify ✓"}
+  </button>
+  <div id="ob-verify-err" style="font-size:13px;color:#ef4444;min-height:20px;margin-bottom:10px"></div>
+  <button onclick="sendTwilioOTP()" id="ob-submit-btn"
+   style="background:transparent;border:1px solid var(--b2);border-radius:10px;padding:10px 20px;color:var(--tx2);font-size:13px;cursor:pointer;font-family:inherit">
+   ${he?"שלח/י שוב":"Resend code"}
+  </button>
+ </div>`;
+ sendTwilioOTP();
+}
+
+async function verifyTwilioCode(){
+ const he=currentLang==="he";
+ const inp=document.getElementById("ob-code-inp");
+ const code=(inp&&inp.value||"").replace(/\D/g,"");
+ const errEl=document.getElementById("ob-verify-err");
+ const btn=document.getElementById("ob-verify-twilio-btn");
+ if(code.length<6){if(errEl)errEl.textContent=he?"הזן/י 6 ספרות":"Enter 6 digits";return;}
+ if(btn){btn.disabled=true;btn.textContent=he?"מאמת...":"Verifying...";}
+ if(errEl)errEl.textContent="";
+ try{
+  const r=await fetch(TWILIO_BASE+"/verifyOTP",{
+   method:"POST",
+   headers:{"Content-Type":"application/x-www-form-urlencoded"},
+   body:"phone="+encodeURIComponent("+"+user.phone)+"&code="+encodeURIComponent(code)
+  });
+  const data=await r.json();
+  if(data.verified){
+   await completeRegistration();
+  }else{
+   if(errEl)errEl.textContent=he?"❌ קוד שגוי — נסה/י שוב":"❌ Wrong code — try again";
+   if(btn){btn.disabled=false;btn.textContent=he?"אמת/י ✓":"Verify ✓";}
+   if(inp){inp.value="";inp.focus();}
+  }
+ }catch(e){
+  if(errEl)errEl.textContent=he?"❌ בעיית רשת":"❌ Network error";
+  if(btn){btn.disabled=false;btn.textContent=he?"אמת/י ✓":"Verify ✓";}
+ }
+}
+
+async function completeRegistration(){
+ const he=currentLang==="he";
  try{
   await fbEnsureAuthSdk();
   let fbUser=window.firebase.auth().currentUser;
-  if(!fbUser){
-   const cred=await window.firebase.auth().signInAnonymously();
-   fbUser=cred.user;
-  }
+  if(!fbUser){const cred=await window.firebase.auth().signInAnonymously();fbUser=cred.user;}
   const db=window.firebase.database();
-  // Use BOTH device UUID AND phone hash for strongest identity
-  const deviceId=await getOrCreateDeviceId();
   const digits=(user.phone||"").replace(/[^0-9]/g,"");
-  const hb=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(digits+deviceId));
+  const hb=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(digits));
   const ph=Array.from(new Uint8Array(hb)).map(b=>b.toString(16).padStart(2,"0")).join("");
   FB._myPhoneHash=ph;
-  // One device+phone = one account
   const snap=await db.ref("registry/"+ph).once("value");
   const existing=snap.val();
   let uname="";
@@ -7691,33 +7778,20 @@ async function enterAppAnonymously(){
    uname=existing.username;
    toast(he?"✓ ברוך השב/ת, "+uname:"✓ Welcome back, "+uname,"grn");
   }else{
-   const countSnap=await db.ref("meta/userCount").transaction(n=>(n||0)+1);
-   const num=countSnap.snapshot.val();
+   const s2=await db.ref("meta/userCount").transaction(n=>(n||0)+1);
+   const num=s2.snapshot.val();
    uname="SH✡MER"+String(num).padStart(4,"0");
-   await db.ref("registry/"+ph).set({uid:fbUser.uid,username:uname,name:user.name||uname,deviceId:deviceId,registeredAt:Date.now(),lang:currentLang});
-   toast(he?"✓ ברוך הבא, "+uname:"✓ Welcome, "+uname,"grn");
+   await db.ref("registry/"+ph).set({uid:fbUser.uid,username:uname,name:user.name||uname,phone:"+"+digits,verified:true,registeredAt:Date.now(),lang:currentLang});
+   toast(he?"✓ ברוך הבא/ה, "+uname:"✓ Welcome, "+uname,"grn");
   }
   if(!SS.security)SS.security={};
-  SS.security.phoneVerified=true;
-  SS.security.firebaseUid=fbUser.uid;
-  SS.security.deviceId=deviceId;
+  SS.security.phoneVerified=true;SS.security.twilioVerified=true;SS.security.firebaseUid=fbUser.uid;
   if(!SS.user)SS.user={};
-  SS.user.username=uname;
-  SS.user.phone=user.phone;
-  SS.user.name=user.name||uname;
-  FB._myPhoneHash=ph;
-  saveStore();
-  goStep(1);
+  SS.user.username=uname;SS.user.phone=user.phone;SS.user.name=user.name||uname;
+  FB._myPhoneHash=ph;saveStore();goStep(1);
  }catch(e){
-  console.error("[Auth]",e);
-  if(!SS.security)SS.security={};
-  SS.security.phoneVerified=true;
-  if(!SS.user)SS.user={};
-  SS.user.phone=user.phone;
-  SS.user.name=user.name||"";
-  saveStore();
-  toast(he?"⚠️ מצב ללא אינטרנט":"⚠️ Offline mode","amb");
-  goStep(1);
+  console.error("[Register]",e);
+  toast(he?"⚠️ שגיאה בהרשמה":"⚠️ Registration error","err");
  }
 }
 // ───────────────────────────────────────────────────────────────────
