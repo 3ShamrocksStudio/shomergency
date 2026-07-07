@@ -1196,6 +1196,20 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
 .ghost-name{height:12px;background:var(--b2);border-radius:6px;width:120px;margin-bottom:6px;}
 .ghost-sub{height:10px;background:var(--b2);border-radius:5px;width:80px;}
 
+
+/* Circle sections in sh-circles */
+.circle-group{margin-top:16px;}
+.circle-group-hdr{display:flex;align-items:center;gap:8px;padding:8px 0;margin-bottom:8px;}
+.cg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.cg-lbl{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;}
+.cg-count{font-size:11px;color:var(--tx3);margin-right:auto;}
+.cg-add{background:transparent;border:1px dashed rgba(255,255,255,.2);border-radius:8px;padding:5px 10px;font-size:12px;color:var(--tx2);cursor:pointer;font-family:inherit;}
+.cg-add:hover{border-color:rgba(255,255,255,.4);color:var(--tx0);}
+/* Map pin rings per circle type */
+.map-ring-fam{stroke:#C9A84C;}
+.map-ring-frnd{stroke:#3B82F6;}
+.map-ring-nbr{stroke:#10B981;}
+
 </style>
 </head>
 <body class="lb-on">
@@ -2128,15 +2142,19 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="sh-head"><span class="sh-ttl" id="circ-ttl">השומרים שלי</span><button class="sh-x" onclick="cl('sh-circles')" aria-label="סגור"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button></div>
  <div class="sh-body">
  <!-- ═══ CONNECT A GUARDIAN (primary, top) ═══ -->
- <div class="gd-hero">
- <div class="gd-hero-t"><span aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span><span id="gd-hero-t">חבר/י שומר/ת</span></div>
- <div class="gd-hero-s" id="gd-hero-s">צרף/י אדם שאת/ה סומך/ת עליו (הורה/בן-זוג). הם יראו את מיקומך החי ואת/ה את שלהם — בהזמנה ואישור. את/ה שולט/ת מי רואה את מי, וניתן לעצור בכל רגע.</div>
- <button class="cta-gold" onclick="gdAddPhoneOpen()" id="gd-addph-btn" style="width:100%;margin-bottom:8px"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg> <span id="gd-addph-lbl" data-he="הוסף/י שומר/ת לפי טלפון" data-en="Add My SHOMER by phone" data-ar="أضف حارسي عبر الهاتف">הוסף/י שומר/ת לפי טלפון</span></button>
- <div class="gd-btns">
- 
- 
- </div>
- </div>
+ <div style="padding:4px 0 16px">
+ <p style="font-size:13px;color:var(--tx2);line-height:1.6;margin-bottom:14px">הוסף/י אנשים שאת/ה סומך/ת עליהם למעגלי האמון שלך. הם יראו אתך על המפה.</p>
+ <!-- Primary: Contacts picker -->
+ <button onclick="openContactPicker()" style="width:100%;padding:14px;background:linear-gradient(135deg,#C9A84C,#e8c96a);color:#0a0c12;border:none;border-radius:14px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px">
+  <svg class="ic" viewBox="0 0 24 24" width="18"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="7" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 11h6M19 8v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+  <span id="gd-contacts-lbl" data-he="בחר/י מאנשי הקשר שלך" data-en="Pick from Contacts">בחר/י מאנשי הקשר שלך</span>
+ </button>
+ <!-- Secondary: Manual entry -->
+ <button onclick="gdAddPhoneOpen()" style="width:100%;padding:12px;background:var(--n3);color:var(--tx1);border:1px solid var(--b2);border-radius:14px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px">
+  <svg class="ic" viewBox="0 0 24 24" width="16"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+  <span data-he="הזן מספר ידנית" data-en="Enter number manually">הזן מספר ידנית</span>
+ </button>
+</div>
  <div id="gd-list" role="list" style="margin-top:10px"></div>
  <div class="ghost-row" id="ghost-row">
  <div class="ghost-l">
@@ -7716,6 +7734,116 @@ function updateProfileCircleCount(){
   if(el('pcr-nbr-n'))el('pcr-nbr-n').textContent=nbr;
  }catch(_){}
 }
+
+// ── SOS Alarm — bypasses hardware volume (AudioContext) ────────
+let _sirenCtx=null, _sirenNodes=[];
+function startSiren(){
+ stopSiren();
+ try{
+  _sirenCtx=new(window.AudioContext||window.webkitAudioContext)();
+  function beep(freq,start,dur){
+   const osc=_sirenCtx.createOscillator();
+   const gain=_sirenCtx.createGain();
+   osc.connect(gain);
+   gain.connect(_sirenCtx.destination);
+   osc.type='sawtooth';
+   osc.frequency.setValueAtTime(freq,_sirenCtx.currentTime+start);
+   gain.gain.setValueAtTime(1,_sirenCtx.currentTime+start);
+   gain.gain.exponentialRampToValueAtTime(0.001,_sirenCtx.currentTime+start+dur);
+   osc.start(_sirenCtx.currentTime+start);
+   osc.stop(_sirenCtx.currentTime+start+dur+0.05);
+   _sirenNodes.push(osc);
+  }
+  // Repeating wail pattern
+  function cycle(t){
+   beep(880,t,0.3);beep(660,t+0.35,0.3);
+   setTimeout(()=>cycle(0),750);
+  }
+  cycle(0);
+  // Also vibrate if available
+  try{navigator.vibrate&&navigator.vibrate([500,200,500,200,500]);}catch(_){}
+ }catch(e){
+  console.error('[Siren]',e);
+  // Fallback: screen flash
+  document.body.style.background='#DC2626';
+  setTimeout(()=>document.body.style.background='',200);
+ }
+}
+function stopSiren(){
+ _sirenNodes.forEach(n=>{try{n.stop();}catch(_){}});
+ _sirenNodes=[];
+ if(_sirenCtx){try{_sirenCtx.close();}catch(_){}}
+ _sirenCtx=null;
+ try{navigator.vibrate&&navigator.vibrate(0);}catch(_){}
+}
+// ────────────────────────────────────────────────────────────
+
+// ── Contact Picker (native phonebook) ──────────────────────
+async function openContactPicker(circleId){
+ const he=currentLang==='he';
+ if(!navigator.contacts||!navigator.contacts.select){
+  // Fallback to manual entry
+  gdAddPhoneOpen(circleId);
+  return;
+ }
+ try{
+  const contacts=await navigator.contacts.select(['name','tel'],{multiple:true});
+  if(!contacts||!contacts.length)return;
+  for(const contact of contacts){
+   const phone=(contact.tel||[]).find(t=>t.value||t)||contact.tel?.[0];
+   const phoneVal=typeof phone==='string'?phone:(phone?.value||'');
+   const name=(contact.name||[]).find(n=>n)||contact.name?.[0]||'';
+   const nameStr=typeof name==='string'?name:(name?.value||name?.toString()||'');
+   if(phoneVal){
+    // Normalize the phone number
+    const digits=phoneVal.replace(/[^0-9+]/g,'');
+    const norm=digits.startsWith('+')?digits.slice(1):digits.startsWith('0')?'972'+digits.slice(1):digits;
+    await addShomerToCircle(norm,nameStr||null,circleId||'frnd');
+   }
+  }
+  toast(he?'✓ נוספו למעגל':'✓ Added to circle','grn');
+ }catch(e){
+  console.error('[ContactPicker]',e);
+  // User denied or not supported — fall back to manual
+  gdAddPhoneOpen(circleId);
+ }
+}
+
+async function addShomerToCircle(phoneDigits, displayName, circleId){
+ const he=currentLang==='he';
+ if(!phoneDigits)return;
+ try{
+  const db=window.firebase.database();
+  const hb=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(phoneDigits));
+  const ph=Array.from(new Uint8Array(hb)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  // Check if this person is registered in SH✡MER
+  const snap=await db.ref('registry/'+ph).once('value');
+  const reg=snap.val();
+  if(reg){
+   // Found — add to circle
+   if(!SS.circleMembers)SS.circleMembers=[];
+   const exists=SS.circleMembers.find(m=>m.ph===ph);
+   if(!exists){
+    SS.circleMembers.push({ph,circle:circleId||'frnd',username:reg.username,name:displayName||reg.name||reg.username,addedAt:Date.now()});
+    saveStore();
+    toast(he?`✓ נוסף/ה ${reg.username||displayName||'שומר'}`:'✓ Added','grn');
+   } else {
+    toast(he?'כבר במעגל':'Already in circle','amb');
+   }
+  } else {
+   // Not registered — offer to invite via WhatsApp
+   const invMsg=encodeURIComponent((he?'היי! הזמינו/י אותי/ב ל-SH✡MER — אפליקציית בטיחות קהילתית לישראל. חינם: ':'Hey! Join SH✡MER — community safety app for Israel. Free: ')+'https://3shamrocksstudio.github.io/shomergency/');
+   const wa='https://wa.me/'+phoneDigits+'?text='+invMsg;
+   // Show invite option
+   const errEl=document.getElementById('gd-ph-err');
+   if(errEl){
+    errEl.innerHTML='<span>מספר זה אינו רשום ב-SH✡MER. <a href="'+wa+'" target="_blank" style="color:#25D366;font-weight:700">שלח/י הזמנה ב-WhatsApp</a></span>';
+    errEl.style.display='block';
+   }
+  }
+ }catch(e){console.error('[addShomerToCircle]',e);}
+}
+// ──────────────────────────────────────────────────────────
 </script>
 
 <style>
