@@ -1151,6 +1151,51 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
 #gd-ph-err{display:none;margin-top:10px;padding:10px 12px;background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.3);border-radius:10px;font-size:13px;color:#ef4444;font-weight:600;}
 #name-err{display:none;font-size:11px;color:#ef4444;margin-top:3px;}
 .name-restriction{font-size:10px;color:var(--tx3);margin-top:4px;}
+
+.prof-circle-row{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--n3,rgba(255,255,255,.04));border-radius:12px;border:1px solid var(--b1);}
+.pcr-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.pcr-name{flex:1;font-size:13px;font-weight:600;color:var(--tx1);}
+.pcr-count{font-size:18px;font-weight:800;color:var(--tx0);}
+
+
+/* Settings visual improvements */
+.set-section{margin-bottom:8px;}
+.set-section-label{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3);padding:14px 2px 6px;display:block;}
+.set-grp{border-radius:14px;overflow:hidden;border:1px solid var(--b1);background:var(--n3,rgba(255,255,255,.04));margin-bottom:6px;}
+.set-row{display:flex;align-items:center;gap:12px;padding:13px 14px;min-height:52px;border-bottom:1px solid var(--b1);}
+.set-row:last-child{border-bottom:none;}
+.sr-l{flex:1;min-width:0;}
+.sr-nm{font-size:14px;font-weight:600;color:var(--tx0);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sr-sb{font-size:11px;color:var(--tx3);margin-top:1px;overflow:hidden;text-overflow:ellipsis;}
+.tog{flex-shrink:0;}
+.sh-body .set-row{border-bottom:1px solid rgba(255,255,255,.04);}
+
+
+/* MY SH✡MER screen — clean, minimal, non-threatening */
+.gd-hero{background:var(--n3);border-radius:16px;padding:16px;margin-bottom:16px;border:1px solid var(--b1);}
+.gd-hero-t{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;color:var(--tx0);margin-bottom:8px;}
+.gd-hero-s{font-size:12px;color:var(--tx2);line-height:1.5;margin-bottom:12px;}
+.cta-gold{background:linear-gradient(135deg,#C9A84C,#e8c96a);color:#0a0c12;border:none;border-radius:12px;padding:13px 18px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:8px;width:100%;justify-content:center;}
+/* Circle type headers */
+.circle-section{margin-top:16px;}
+.circle-section-hdr{display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:6px;}
+.csh-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.csh-lbl{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;}
+/* Member cards — clean, minimal */
+.gd-pair{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--n3);border-radius:12px;border:1px solid var(--b1);margin-bottom:6px;}
+.gd-pair-av{width:38px;height:38px;border-radius:50%;background:var(--n4);border:2px solid var(--b2);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;color:var(--tx2);}
+.gd-pair-info{flex:1;min-width:0;}
+.gd-pair-name{font-size:14px;font-weight:700;color:var(--tx0);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.gd-pair-id{font-size:11px;color:var(--tx3);margin-top:1px;}
+.gd-pair-status{font-size:10px;color:var(--grn,#2ECC71);font-weight:600;}
+/* Add phone form */
+.gd-ph-form{background:var(--n3);border-radius:14px;padding:14px;border:1px solid var(--b1);}
+/* Ghost / empty state */
+.ghost-row{display:flex;align-items:center;gap:12px;padding:16px 14px;background:var(--n3);border-radius:12px;border:1px dashed var(--b2);opacity:.6;}
+.ghost-l{flex:1;}
+.ghost-name{height:12px;background:var(--b2);border-radius:6px;width:120px;margin-bottom:6px;}
+.ghost-sub{height:10px;background:var(--b2);border-radius:5px;width:80px;}
+
 </style>
 </head>
 <body class="lb-on">
@@ -1914,6 +1959,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="stats" role="group">
  <div class="st"><div class="st-n" id="stat-reports">0</div><div class="st-l" id="stat-reports-lbl">דיווחים</div></div>
  <div class="st"><div class="st-n" id="stat-sos">0</div><div class="st-l" id="stat-sos-lbl">אירועי SOS</div></div>
+ <div class="st"><div class="st-n" id="stat-responded">0</div><div class="st-l">הגרבתי</div></div>
  </div>
  <div class="sec-cap mb12" id="prof-prof-cap">תפקיד מקצועי (מתנדב/ת מגיב/ה)</div>
  <p class="sr-sb" id="prof-prof-hint" style="margin:-4px 2px 12px;line-height:1.6">בחר/י תפקיד אם את/ה מגיב/ה מקצועי/ת — סמל יוצג בפרופיל ועל הסמן שלך במפה.</p>
@@ -1925,6 +1971,36 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="prof-opt" data-prof="security" onclick="selectProfession('security')" role="button" tabindex="0"><span class="pic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span><span class="pl" data-pl="security">אבטחה</span></div>
  <div class="prof-opt sel" data-prof="" onclick="selectProfession('')" role="button" tabindex="0"><span class="pic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6.3 6.3l11.4 11.4" fill="none" stroke="currentColor" stroke-width="2"/></svg></span><span class="pl" data-pl="none">ללא</span></div>
  </div>
+<!-- MY SH✡MER inside profile -->
+<div id="prof-my-shomer-section" style="margin-top:24px;padding-top:20px;border-top:1px solid rgba(201,168,76,.2)">
+ <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+  <div style="display:flex;align-items:center;gap:10px">
+   <div style="width:30px;height:30px;border-radius:9px;background:rgba(201,168,76,.15);display:flex;align-items:center;justify-content:center">
+    <svg class="ic" viewBox="0 0 24 24" width="16" style="color:#C9A84C"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+   </div>
+   <span style="font-size:14px;font-weight:800;color:#C9A84C">MY SH✡MER</span>
+  </div>
+  <button onclick="op('sh-circles')" style="background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);color:#C9A84C;border-radius:10px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">נהל/י</button>
+ </div>
+ <div style="display:flex;flex-direction:column;gap:7px">
+  <div style="display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--n3);border-radius:11px;border:1px solid var(--b1)">
+   <div style="width:9px;height:9px;border-radius:50%;background:#C9A84C;flex-shrink:0"></div>
+   <span style="flex:1;font-size:13px;font-weight:600;color:var(--tx1)">משפחה</span>
+   <span style="font-size:16px;font-weight:800;color:var(--tx0)" id="pcr-fam-n">0</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--n3);border-radius:11px;border:1px solid var(--b1)">
+   <div style="width:9px;height:9px;border-radius:50%;background:#3B82F6;flex-shrink:0"></div>
+   <span style="flex:1;font-size:13px;font-weight:600;color:var(--tx1)">חברים</span>
+   <span style="font-size:16px;font-weight:800;color:var(--tx0)" id="pcr-frnd-n">0</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--n3);border-radius:11px;border:1px solid var(--b1)">
+   <div style="width:9px;height:9px;border-radius:50%;background:#10B981;flex-shrink:0"></div>
+   <span style="flex:1;font-size:13px;font-weight:600;color:var(--tx1)">שכנים</span>
+   <span style="font-size:16px;font-weight:800;color:var(--tx0)" id="pcr-nbr-n">0</span>
+  </div>
+ </div>
+</div>
+
  <div class="sec-cap mb12" id="myrep-cap">הדיווחים שלי</div>
  <div id="my-reports-list" class="mb20" role="list"></div>
  <div class="sec-cap mb12" id="soshist-cap">היסטוריית SOS</div>
@@ -7627,6 +7703,25 @@ async function enterAppAnonymously(){
  }
 }
 // ───────────────────────────────────────────────────────────────────
+
+function updateProfileCircleCount(){
+ try{
+  const members=SS.circleMembers||[];
+  const fam=members.filter(m=>m.circle==='fam').length;
+  const frnd=members.filter(m=>m.circle==='frnd').length;
+  const nbr=members.filter(m=>m.circle==='nbr').length;
+  const el=id=>document.getElementById(id);
+  if(el('pcr-fam-n'))el('pcr-fam-n').textContent=fam;
+  if(el('pcr-frnd-n'))el('pcr-frnd-n').textContent=frnd;
+  if(el('pcr-nbr-n'))el('pcr-nbr-n').textContent=nbr;
+ }catch(_){}
+}
 </script>
+
+<style>
+/* Settings compact */
+#sh-set .sh-body{padding-top:8px;}
+#sh-set .set-grp + .sec-cap{margin-top:16px;}
+</style>
 </body>
 </html>
