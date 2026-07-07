@@ -3349,7 +3349,7 @@ async function openObVerify(){
     try{if(_obvRecaptcha)_obvRecaptcha.clear();}catch(_){}
     _obvRecaptcha=null;
     _obvRecaptcha=new window.firebase.auth.RecaptchaVerifier('recaptcha-container',{
-      size:'normal'
+      size:'invisible'
     });
     await _obvRecaptcha.render();
     _obvConfirm=await window.firebase.auth().signInWithPhoneNumber('+'+user.phone,_obvRecaptcha);
@@ -3362,7 +3362,7 @@ async function openObVerify(){
       'auth/invalid-phone-number':he?'❌ מספר לא תקין — 05X-XXXXXXX':'❌ Invalid number — 05X-XXXXXXX',
       'auth/too-many-requests':he?'❌ יותר מדי ניסיונות. המתן 10 דקות':'❌ Too many attempts. Wait 10 min.',
       'auth/quota-exceeded':he?'❌ מכסת SMS מלאה. נסה מחר':'❌ Daily SMS quota exceeded.',
-      'auth/network-request-failed':he?'❌ בעיית רשת. בדוק חיבור':'❌ Network error. Check connection.',
+      'auth/network-request-failed':he?'❌ בעיית רשת. בדוק חיבור':'❌ Network error. Check connection.','auth/operation-not-allowed':he?'❌ SMS לא מופעל בפרויקט. פנה/י לתמיכה':'❌ SMS not enabled for this project. Contact support.',
       'auth/internal-error':he?'❌ שגיאת שרת. נסה שוב':'❌ Server error. Try again.',
       'auth/captcha-check-failed':he?'❌ פתח ב-Safari ונסה שוב':'❌ Open in Safari and try again.',
     };
