@@ -7854,8 +7854,23 @@ async function addShomerToCircle(phoneDigits, displayName, circleId){
 // ── Email Magic Link Auth ─────────────────────────────────────────
 async function sendMagicLink(){
  const he=currentLang==="he";
+ // Show status on screen — not just toast
+ function setStatus(msg, color){
+  let el=document.getElementById("ob-status-msg");
+  if(!el){
+   el=document.createElement("div");
+   el.id="ob-status-msg";
+   el.style.cssText="margin-top:12px;padding:12px 14px;border-radius:12px;font-size:13px;font-weight:600;text-align:center;line-height:1.5;";
+   const btn=document.getElementById("ob-submit-btn");
+   if(btn)btn.parentNode.insertBefore(el,btn.nextSibling);
+  }
+  el.textContent=msg;
+  el.style.background=color==="err"?"rgba(220,38,38,.15)":color==="ok"?"rgba(46,204,113,.15)":"rgba(201,168,76,.1)";
+  el.style.color=color==="err"?"#ef4444":color==="ok"?"#2ECC71":"#C9A84C";
+ }
  const btn=document.getElementById("ob-submit-btn");
  if(btn){btn.disabled=true;btn.textContent=he?"שולח...":"Sending...";}
+ setStatus(he?"⏳ שולח קישור לאימייל...":"⏳ Sending link to your email...","amb");
  try{
   await fbEnsureAuthSdk();
   const digits=(user.phone||"").replace(/[^0-9]/g,"");
@@ -7866,21 +7881,24 @@ async function sendMagicLink(){
   localStorage.setItem("shomer_phone_hash",ph);
   localStorage.setItem("shomer_phone",user.phone||"");
   localStorage.setItem("shomer_name",user.name||"");
+  setStatus(he?"⏳ מתחבר ל-Firebase...":"⏳ Connecting to Firebase...","amb");
   await window.firebase.auth().sendSignInLinkToEmail(user.email,{
    url:window.location.origin+window.location.pathname,
    handleCodeInApp:true
   });
+  if(btn){btn.disabled=false;}
   showEmailSentScreen(user.email);
  }catch(e){
   console.error("[MagicLink]",e.code,e.message);
   if(btn){btn.disabled=false;btn.textContent=he?"שלח קישור":"Send link";}
+  // Show full error visibly on screen
+  const errText="["+e.code+"] "+e.message;
+  setStatus(errText,"err");
   if(e.code==="auth/operation-not-allowed"){
-   toast(he?"⚠️ כניסה זמנית...":"⚠️ Entering temporarily...","amb");
-   setTimeout(()=>enterAppAnonymously(),1200);
-  } else if(e.code==="auth/invalid-email"){
-   toast(he?"❌ אימייל לא תקין":"❌ Invalid email","err");
-  } else {
-   toast((he?"❌ ":"❌ ")+e.message,"err");
+   setTimeout(()=>{
+    setStatus(he?"⚠️ אימות אימייל לא הופעל. כניסה זמנית...":"⚠️ Email auth not enabled. Entering temporarily...","amb");
+    enterAppAnonymously();
+   },2000);
   }
  }
 }
