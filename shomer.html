@@ -1316,6 +1316,11 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <span class="dc-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l9 16H3Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17" r="1.2" fill="currentColor"/></svg></span>
  <span id="ob-disclaimer-txt"><strong>שומר אינו תחליף לשירותי חירום.</strong> זהו כלי לבטיחות אישית ושיתוף מיקום. במצב חירום אמיתי חייגו <b>100</b> (משטרה) · <b>101</b> (מד״א) · <b>102</b> (כבאות). שומר אינו מתקשר לרשויות עבורך.</span>
  </div>
+<div style="margin-top:10px">
+ <label style="display:block;font-size:11px;font-weight:700;color:var(--tx3);margin-bottom:6px;text-align:right" data-he="אימייל לאימות חשבון" data-en="Email for account verification">אימייל לאימות</label>
+ <input class="ob-f" id="ob-email" type="email" inputmode="email" autocomplete="email" placeholder="your@email.com" style="direction:ltr;text-align:left">
+ <p style="font-size:10px;color:var(--tx3);margin-top:5px;line-height:1.5" data-he="ישלח קישור אימות לאימייל שלך. אימות אחת לפי מספר טלפון." data-en="A verification link will be sent. One account per phone number.">ישלח קישור אימות לאימייל שלך. אימות אחת לפי מספר טלפון.</p>
+</div>
  <button class="ob-cta" id="ob-cta0" onclick="obStep0()"><span id="ob-cta0-t">המשך</span> <svg class="ic ob-fwd" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M14 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
  </div>
  </div>
@@ -3411,15 +3416,19 @@ let _obvCode='', _obvName='';
 function genVerifyCode(){ return String(Math.floor(1000+Math.random()*9000)); }
 function obStep0(){
  const he=currentLang==='he',ar=currentLang==='ar';
+ // Collect name + phone + email
  let raw=document.getElementById('ob-phone').value;
  let digits=raw.replace(/\D/g,'');
- let name=document.getElementById('ob-name').value.trim().substring(0,40)||pickRandomName();
+ let name=(document.getElementById('ob-name').value||'').trim().substring(0,40)||pickRandomName();
+ let email=(document.getElementById('ob-email').value||'').trim().toLowerCase();
  _obvName=name;
- if(!digits){toast(he?'נא להזין מספר טלפון נייד':'Please enter a mobile number','amb');shakeField('ob-phone');return;}
- if(!isValidILMobile(digits)){toast(he?'מספר נייד ישראלי לא תקין — 05X-XXXXXXX':'Invalid Israeli mobile — 05X-XXXXXXX','amb');shakeField('ob-phone');return;}
- user={name:name,phone:ilNormalize(digits),city:''};
- // Anonymous auth — no SMS/reCAPTCHA needed. Phone stored for circle lookup.
- enterAppAnonymously();
+ // Validate phone
+ if(!digits){toast(he?'\u05e0\u05d0 \u05dc\u05d4\u05d6\u05d9\u05df \u05de\u05e1\u05e4\u05e8 \u05d8\u05dc\u05e4\u05d5\u05df \u05e0\u05d9\u05d9\u05d3':'Please enter a mobile number','amb');shakeField('ob-phone');return;}
+ if(!isValidILMobile(digits)){toast(he?'\u05de\u05e1\u05e4\u05e8 \u05e0\u05d9\u05d9\u05d3 \u05d9\u05e9\u05e8\u05d0\u05dc\u05d9 \u05dc\u05d0 \u05ea\u05e7\u05d9\u05df \u2014 05X-XXXXXXX':'Invalid Israeli mobile — 05X-XXXXXXX','amb');shakeField('ob-phone');return;}
+ // Validate email
+ if(!email||!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){toast(he?'\u05d4\u05d6\u05df/\u05d9 \u05db\u05ea\u05d5\u05d1\u05ea \u05d0\u05d9\u05de\u05d9\u05d9\u05dc \u05ea\u05e7\u05d9\u05e0\u05d4':'Enter a valid email address','amb');shakeField('ob-email');return;}
+ user={name:name,phone:ilNormalize(digits),city:'',email:email};
+ sendMagicLink();
 }
 /* ── Firebase Phone Auth ────────────────── */
 let _obvConfirm=null, _obvRecaptcha=null, _obvLastSend=0;
@@ -7681,6 +7690,14 @@ async function enterAppAnonymously(){
   FB._myPhoneHash=ph;
   // Assign sequential SH✡MER username
   let uname=SS.user&&SS.user.username;
+  
+  // One phone = one account: check if this phone is already registered
+  const existingSnap=await db.ref('registry/'+ph).once('value');
+  const existingReg=existingSnap.val();
+  if(existingReg&&existingReg.username){
+   uname=existingReg.username;
+   SS.security.firebaseUid=existingReg.uid||fbUser.uid;
+  }
   if(!uname){
    const snap=await db.ref('meta/userCount').transaction(n=>(n||0)+1);
    const num=snap.snapshot.val();
@@ -7844,6 +7861,161 @@ async function addShomerToCircle(phoneDigits, displayName, circleId){
  }catch(e){console.error('[addShomerToCircle]',e);}
 }
 // ──────────────────────────────────────────────────────────
+
+// ── Email Magic Link Auth ─────────────────────────────────────
+async function sendMagicLink(){
+ const he=currentLang==='he';
+ const btn=document.getElementById('ob-next-btn');
+ if(btn){btn.disabled=true;btn.textContent=he?'\u05e9\u05d5\u05dc\u05d7 \u05e7\u05d9\u05e9\u05d5\u05e8...':'Sending link...';}
+ try{
+  await fbEnsureAuthSdk();
+  // First check if phone already registered (one phone = one account)
+  const db=window.firebase.database();
+  const digits=(user.phone||'').replace(/[^0-9]/g,'');
+  const hb=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(digits));
+  const ph=Array.from(new Uint8Array(hb)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  FB._myPhoneHash=ph;
+  const existing=await db.ref('registry/'+ph).once('value');
+  const reg=existing.val();
+  if(reg){
+   // Phone already registered — sign in to existing account
+   localStorage.setItem('shomer_email_auth',user.email);
+   localStorage.setItem('shomer_phone_hash',ph);
+   localStorage.setItem('shomer_phone',user.phone);
+   localStorage.setItem('shomer_name',user.name||'');
+   localStorage.setItem('shomer_existing_uid',reg.uid||'');
+  } else {
+   // New account — store pending data
+   localStorage.setItem('shomer_email_auth',user.email);
+   localStorage.setItem('shomer_phone_hash',ph);
+   localStorage.setItem('shomer_phone',user.phone);
+   localStorage.setItem('shomer_name',user.name||'');
+   localStorage.setItem('shomer_existing_uid','');
+  }
+  // Send magic link
+  const actionCodeSettings={
+   url:window.location.href.split('?')[0]+'?auth=email',
+   handleCodeInApp:true
+  };
+  await window.firebase.auth().sendSignInLinkToEmail(user.email,actionCodeSettings);
+  // Show "check email" screen
+  showEmailSentScreen(user.email);
+ }catch(e){
+  console.error('[MagicLink]',e);
+  const he=currentLang==='he';
+  const msgs={
+   'auth/invalid-email':he?'\u05db\u05ea\u05d5\u05d1\u05ea \u05d0\u05d9\u05de\u05d9\u05d9\u05dc \u05dc\u05d0 \u05ea\u05e7\u05d9\u05e0\u05d4':'Invalid email address',
+   'auth/user-disabled':he?'\u05d7\u05e9\u05d1\u05d5\u05df \u05d6\u05d4 \u05d4\u05d5\u05e9\u05d1\u05ea':'Account disabled',
+  };
+  toast(msgs[e.code]||(he?'\u05e9\u05d2\u05d9\u05d0\u05d4: '+e.message:'Error: '+e.message),'err');
+  if(btn){btn.disabled=false;btn.textContent=he?'\u05e9\u05dc\u05d7 \u05e7\u05d9\u05e9\u05d5\u05e8':'Send link';}
+ }
+}
+
+function showEmailSentScreen(email){
+ const he=currentLang==='he';
+ // Replace onboarding body with "check your email" message
+ const obWrap=document.getElementById('ob-wrap')||document.querySelector('.ob-wrap');
+ if(obWrap){
+  obWrap.innerHTML=\`
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100dvh;padding:32px;text-align:center">
+   <div style="font-size:64px;margin-bottom:24px">\u2709\uFE0F</div>
+   <h2 style="font-size:22px;font-weight:800;color:var(--tx0);margin-bottom:12px">\${he?'\u05e7\u05d9\u05e9\u05d5\u05e8 \u05e0\u05e9\u05dc\u05d7!':'Link sent!'}</h2>
+   <p style="font-size:15px;color:var(--tx1);line-height:1.7;margin-bottom:8px">
+    \${he?'\u05e9\u05dc\u05d7\u05e0\u05d5 \u05e7\u05d9\u05e9\u05d5\u05e8 \u05db\u05e0\u05d9\u05e1\u05d4 \u05d0\u05dc:':'We sent a sign-in link to:'}
+   </p>
+   <p style="font-size:16px;font-weight:700;color:var(--gold);margin-bottom:28px;direction:ltr">\${email}</p>
+   <p style="font-size:13px;color:var(--tx2);line-height:1.6;margin-bottom:32px">
+    \${he?'\u05e4\u05ea\u05d7/\u05d9 \u05d0\u05ea \u05d4\u05d0\u05d9\u05de\u05d9\u05d9\u05dc, \u05dc\u05d7\u05e5/\u05d9 \u05e2\u05dc \u05d4\u05e7\u05d9\u05e9\u05d5\u05e8 \u05d5\u05ea\u05d3\u05d0\u05d9/\u05d9 \u05dc\u05d0\u05e4\u05dc\u05d9\u05e7\u05e6\u05d9\u05d4. \u05d4\u05e7\u05d9\u05e9\u05d5\u05e8 \u05ea\u05e7\u05e3 \u05dc-15 \u05d3\u05e7\u05d5\u05ea.':'Open your email, click the link, and you\'re in. Link valid for 15 minutes.'}
+   </p>
+   <button onclick="sendMagicLink()" style="background:var(--n3);border:1px solid var(--b2);border-radius:12px;padding:12px 24px;color:var(--tx1);font-size:14px;font-family:inherit;cursor:pointer">
+    \${he?'\u05e9\u05dc\u05d7/\u05d9 \u05e9\u05d5\u05d1':'Resend link'}
+   </button>
+  </div>\`;
+ }
+}
+
+// ── Check on every page load if returning from magic link ──
+(async function checkMagicLinkReturn(){
+ try{
+  const url=window.location.href;
+  // Check URL params or Firebase method
+  await fbEnsureAuthSdk();
+  if(!window.firebase.auth||!window.firebase.auth().isSignInWithEmailLink(url))return;
+  // Get stored email
+  let email=localStorage.getItem('shomer_email_auth');
+  if(!email){
+   email=prompt(currentLang==='he'?'\u05d0\u05e9\u05e8/\u05d9 \u05db\u05ea\u05d5\u05d1\u05ea \u05d0\u05d9\u05de\u05d9\u05d9\u05dc:':'Confirm your email:','');
+  }
+  if(!email)return;
+  // Complete sign in
+  const result=await window.firebase.auth().signInWithEmailLink(email,url);
+  const fbUser=result.user;
+  // Get stored pending data
+  const ph=localStorage.getItem('shomer_phone_hash')||'';
+  const phone=localStorage.getItem('shomer_phone')||'';
+  const name=localStorage.getItem('shomer_name')||'';
+  const existingUid=localStorage.getItem('shomer_existing_uid')||'';
+  // Clean URL
+  window.history.replaceState({},'',window.location.pathname);
+  // Write to Firebase
+  const db=window.firebase.database();
+  let uname='';
+  if(existingUid&&ph){
+   // Returning user — get existing username
+   const snap=await db.ref('registry/'+ph).once('value');
+   const reg=snap.val();
+   if(reg)uname=reg.username;
+  }
+  if(!uname&&ph){
+   // New user — assign sequential SH\u2721MER ID
+   const snap=await db.ref('meta/userCount').transaction(n=>(n||0)+1);
+   const num=snap.snapshot.val();
+   uname='SH\u2721MER'+String(num).padStart(4,'0');
+  }
+  if(ph){
+   await db.ref('registry/'+ph).set({
+    uid:fbUser.uid,
+    username:uname,
+    name:name||uname,
+    email:email,
+    registeredAt:Date.now()
+   });
+   await db.ref('users/'+fbUser.uid).set({
+    username:uname,
+    phoneHash:ph,
+    phone:phone,
+    name:name||uname,
+    email:email,
+    registeredAt:Date.now()
+   });
+  }
+  // Store locally
+  if(!SS.security)SS.security={};
+  SS.security.phoneVerified=true;
+  SS.security.emailVerified=true;
+  SS.security.firebaseUid=fbUser.uid;
+  if(!SS.user)SS.user={};
+  SS.user.username=uname;
+  SS.user.phone=phone;
+  SS.user.name=name||uname;
+  SS.user.email=email;
+  FB._myPhoneHash=ph;
+  saveStore();
+  // Clear pending auth data
+  ['shomer_email_auth','shomer_phone_hash','shomer_phone','shomer_name','shomer_existing_uid'].forEach(k=>localStorage.removeItem(k));
+  const he=currentLang==='he';
+  toast(he?\`\u2713 \u05d1\u05e8\u05d5\u05da \u05d4\u05d1\u05d0, \${uname}\`:\`\u2713 Welcome, \${uname}\`,'grn');
+  // Enter app
+  setTimeout(()=>enterApp(false),800);
+ }catch(e){
+  console.error('[MagicLinkReturn]',e);
+  if(e.code==='auth/invalid-action-code'){
+   toast(currentLang==='he'?'\u05d4\u05e7\u05d9\u05e9\u05d5\u05e8 \u05e4\u05d2 \u05d0\u05d5 \u05db\u05d1\u05e8 \u05e0\u05d5\u05e6\u05dc. \u05e9\u05dc\u05d7/\u05d9 \u05e9\u05d5\u05d1.':'Link expired or already used. Request a new one.','err');
+  }
+ }
+})();
+// ──────────────────────────────────────────────────────────────
 </script>
 
 <style>
