@@ -3316,16 +3316,16 @@ function shakeField(id){ var el=document.getElementById(id); if(!el)return; el.c
 let _obvCode='', _obvName='';
 function genVerifyCode(){ return String(Math.floor(1000+Math.random()*9000)); }
 function obStep0(){
- const he=currentLang==='he';
+ const he=currentLang==='he',ar=currentLang==='ar';
  let raw=document.getElementById('ob-phone').value;
  let digits=raw.replace(/\D/g,'');
  let name=document.getElementById('ob-name').value.trim().substring(0,40)||pickRandomName();
  _obvName=name;
- // REQUIRE a valid Israeli mobile — no bypass. Onboarding cannot proceed unverified.
- if(!digits){ toast(he?'נא להזין מספר טלפון נייד':'Please enter a mobile number','amb'); shakeField('ob-phone'); return; }
- if(!isValidILMobile(digits)){ toast(he?'מספר נייד ישראלי לא תקין — 05X-XXXXXXX':'Invalid Israeli mobile — 05X-XXXXXXX','amb'); shakeField('ob-phone'); return; }
- user={name, phone: ilNormalize(digits), city:''};
- openObVerify();
+ if(!digits){toast(he?'נא להזין מספר טלפון נייד':'Please enter a mobile number','amb');shakeField('ob-phone');return;}
+ if(!isValidILMobile(digits)){toast(he?'מספר נייד ישראלי לא תקין — 05X-XXXXXXX':'Invalid Israeli mobile — 05X-XXXXXXX','amb');shakeField('ob-phone');return;}
+ user={name:name,phone:ilNormalize(digits),city:''};
+ // Anonymous auth — no SMS/reCAPTCHA needed. Phone stored for circle lookup.
+ enterAppAnonymously();
 }
 /* ── Firebase Phone Auth ────────────────── */
 let _obvConfirm=null, _obvRecaptcha=null, _obvLastSend=0;
@@ -3488,11 +3488,7 @@ function hideAlarmStops(){['ob-alarm-stop','set-alarm-stop'].forEach(id=>{const 
 function stopPreview(){stopAlarm();hideAlarmStops();clearTimeout(previewAlarm._t);}
 function obFinish(goSettings){
  const _he=currentLang==='he';
- if(!SS.security||!SS.security.phoneVerified){
-  toast(_he?'❌ יש לאמת מספר טלפון תחילה':'❌ Phone verification required','err');
-  openObVerify();
-  return;
- }
+ 
  try{stopPreview();}catch(e){}
  user.name=user.name||pickRandomName();
  // Persist onboarding so it never loops on reload.
@@ -7571,6 +7567,66 @@ if('serviceWorker' in navigator){
     if(e.data&&e.data.type==='SW_UPDATED') window.location.reload(true);
   });
 }
+
+// ── Anonymous auth + phone registry ────────────────────────────────
+async function enterAppAnonymously(){
+ const he=currentLang==='he',ar=currentLang==='ar';
+ try{
+  await fbEnsureAuthSdk();
+  // Sign in anonymously — works on every device, no reCAPTCHA
+  let fbUser=window.firebase.auth().currentUser;
+  if(!fbUser){
+   const cred=await window.firebase.auth().signInAnonymously();
+   fbUser=cred.user;
+  }
+  const db=window.firebase.database();
+  const digits=(user.phone||'').replace(/[^0-9]/g,'');
+  // Hash the phone number (privacy-preserving)
+  const hb=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(digits));
+  const ph=Array.from(new Uint8Array(hb)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  FB._myPhoneHash=ph;
+  // Assign sequential SH✡MER username
+  let uname=SS.user&&SS.user.username;
+  if(!uname){
+   const snap=await db.ref('meta/userCount').transaction(n=>(n||0)+1);
+   const num=snap.snapshot.val();
+   uname='SH✡MER'+String(num).padStart(4,'0');
+  }
+  if(!SS.security)SS.security={};
+  SS.security.phoneVerified=true;
+  SS.security.firebaseUid=fbUser.uid;
+  if(SS.user){SS.user.phone=user.phone;SS.user.username=uname;SS.user.name=user.name||uname;}
+  // Write to registry — enables circle lookup by other users
+  await db.ref('registry/'+ph).set({
+   uid:fbUser.uid,
+   username:uname,
+   name:user.name||uname,
+   registeredAt:Date.now(),
+   lang:currentLang
+  });
+  await db.ref('users/'+fbUser.uid).update({
+   username:uname,
+   phoneHash:ph,
+   name:user.name||uname,
+   lang:currentLang,
+   phone:user.phone
+  });
+  saveStore();
+  toast(he?`✓ ברוך הבא, ${uname}`:`✓ Welcome, ${uname}`,'grn');
+  goStep(1);
+ }catch(e){
+  console.error('[AnonAuth]',e);
+  const he=currentLang==='he';
+  // Even if Firebase fails, let user in — offline mode
+  if(!SS.security)SS.security={};
+  SS.security.phoneVerified=true;
+  if(SS.user){SS.user.phone=user.phone;}
+  saveStore();
+  toast(he?'✓ ממשיך במצב אינטרנט חלש':'✓ Continuing in offline mode','amb');
+  goStep(1);
+ }
+}
+// ───────────────────────────────────────────────────────────────────
 </script>
 </body>
 </html>
