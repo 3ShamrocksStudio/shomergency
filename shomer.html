@@ -1464,7 +1464,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v88 · 08.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v89 · 08.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -3521,12 +3521,12 @@ function obvResend(){
 function obvCancel(){ const ov=document.getElementById('ob-verify'); if(ov){ov.classList.remove('on');ov.setAttribute('aria-hidden','true');} }
 function goStep(n){
  try{stopPreview();}catch(e){} // stop any alarm preview when changing onboarding steps
- document.getElementById('step'+obCurStep).classList.remove('active');
- document.getElementById('st'+obCurStep).classList.remove('on');
+ var pa=document.getElementById('step'+obCurStep),sa=document.getElementById('st'+obCurStep);
+ if(pa)pa.classList.remove('active'); if(sa)sa.classList.remove('on');
  obCurStep=Math.max(0,Math.min(2,n));
- document.getElementById('step'+obCurStep).classList.add('active');
- document.getElementById('st'+obCurStep).classList.add('on');
- document.querySelector('.ob-steps').setAttribute('aria-valuenow',obCurStep+1);
+ var pb=document.getElementById('step'+obCurStep),sb=document.getElementById('st'+obCurStep);
+ if(pb)pb.classList.add('active'); if(sb)sb.classList.add('on');
+ var st=document.querySelector('.ob-steps'); if(st)st.setAttribute('aria-valuenow',obCurStep+1);
 }
 function requestGeo(){
  const btn=document.getElementById('geo-btn-t');
@@ -6622,7 +6622,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v88';
+var APP_VER='v89';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -7679,7 +7679,7 @@ const TWILIO_BASE="https://shomer-verify-8701-prod.twil.io";
 
 async function sendTwilioOTP(){
  const he=currentLang==="he";
- const btn=document.getElementById("ob-submit-btn");
+ const btn=document.getElementById("ob-resend-btn");
  const statusEl=document.getElementById("ob-sms-status");
  if(btn){btn.disabled=true;btn.textContent=he?"שולח קוד...":"Sending code...";}
  if(statusEl)statusEl.textContent=he?"⏳ שולח קוד SMS...":"⏳ Sending SMS code...";
@@ -7692,14 +7692,15 @@ async function sendTwilioOTP(){
   let data=await r.json();if(typeof data==="string"){try{data=JSON.parse(data);}catch(_){}}
   if(data.success){
    if(statusEl)statusEl.textContent=he?"✅ קוד נשלח! בדוק/י את ה-SMS":"✅ Code sent! Check your SMS";
+   if(btn){btn.disabled=false;btn.textContent=he?"לא קיבלת/ה קוד? שלח/י שוב":"No code? Send again";}
    document.getElementById("ob-code-inp")&&document.getElementById("ob-code-inp").focus();
   }else{
    if(statusEl)statusEl.textContent="❌ "+(data.error||"Failed");
-   if(btn){btn.disabled=false;btn.textContent=he?"שלח קוד":"Send code";}
+   if(btn){btn.disabled=false;btn.textContent=he?"לא קיבלת/ה קוד? שלח/י שוב":"No code? Send again";}
   }
  }catch(e){
   if(statusEl)statusEl.textContent=he?"❌ בעיית רשת":"❌ Network error";
-  if(btn){btn.disabled=false;btn.textContent=he?"שלח קוד":"Send code";}
+  if(btn){btn.disabled=false;btn.textContent=he?"לא קיבלת/ה קוד? שלח/י שוב":"No code? Send again";}
  }
 }
 
@@ -7711,29 +7712,32 @@ function showSMSCodeScreen(){
   sub:he?"שלחנו קוד 6 ספרות אל:":ar?"تم إرسال رمز 6 أرقام إلى:":"We sent a 6-digit code to:",
   status:he?"⏳ שולח SMS...":ar?"⏳ جاري الإرسال...":"⏳ Sending SMS...",
   verify:he?"אימות":ar?"تحقق":"Verify",
-  resend:he?"שלח שוב":ar?"إعادة الإرسال":"Resend code",
+  resend:he?"לא קיבלת/ה קוד? שלח/י שוב":ar?"لم يصل الرمز؟ أعد الإرسال":"No code? Send again",
   valid:he?"תקף 10 דקות":ar?"صالح 10 دقائق":"Valid for 10 minutes"
  };
- const wrap=document.getElementById("ob")||document.getElementById("step0")||document.querySelector(".ob-card");
+ const wrap=document.getElementById("ob");
  if(!wrap){console.error("[SMS] no container");return;}
- wrap.innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:65vh;padding:32px 24px;text-align:center;direction:${isRTL?"rtl":"ltr"}">
-  <img src="SHOMER_logo_big.png" alt="SH✡MER" style="width:min(240px,55vw);height:auto;margin-bottom:20px;filter:drop-shadow(0 4px 16px rgba(201,168,76,.4))">
+ document.querySelectorAll("#ob .ob-panel").forEach(p=>p.style.display="none");
+ let panel=document.getElementById("ob-sms-panel");
+ if(!panel){panel=document.createElement("div");panel.id="ob-sms-panel";panel.style.width="100%";wrap.appendChild(panel);}
+ panel.style.display="";
+ panel.innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 24px 28px;text-align:center;direction:${isRTL?"rtl":"ltr"}">
   <h2 style="font-size:22px;font-weight:800;color:var(--tx0,#f2f6ff);margin-bottom:6px">${lbl.title}</h2>
   <p style="font-size:13px;color:var(--tx2,#8c9bbd);margin-bottom:4px">${lbl.sub}</p>
   <p style="font-size:15px;font-weight:700;color:var(--gold,#C9A84C);margin-bottom:6px;direction:ltr">+${user.phone}</p>
   <p style="font-size:11px;color:var(--tx3,#5a6a8a);margin-bottom:20px">${lbl.valid}</p>
   <div id="ob-sms-status" style="font-size:13px;color:var(--tx2,#8c9bbd);min-height:22px;margin-bottom:14px">${lbl.status}</div>
   <input id="ob-code-inp" type="tel" inputmode="numeric" maxlength="6" autocomplete="one-time-code"
-   placeholder="• • • • • •"
+   placeholder="••••••"
    onkeyup="if(this.value.replace(/\D/g,'').length===6)verifyTwilioCode()"
-   style="font-size:28px;letter-spacing:12px;text-align:center;width:210px;background:rgba(255,255,255,.06);border:2px solid var(--gold,#C9A84C);border-radius:14px;padding:14px;color:var(--tx0,#f2f6ff);font-family:inherit;margin-bottom:16px;direction:ltr">
+   style="font-size:26px;letter-spacing:9px;text-align:center;width:min(300px,84vw);background:rgba(255,255,255,.06);border:2px solid var(--gold,#C9A84C);border-radius:14px;padding:14px;color:var(--tx0,#f2f6ff);font-family:inherit;margin-bottom:16px;direction:ltr">
   <button onclick="verifyTwilioCode()" id="ob-verify-twilio-btn"
    style="width:100%;max-width:280px;padding:15px;background:linear-gradient(135deg,#C09020 0%,#E0A828 60%,#F5C840 100%);color:#0a0c12;border:none;border-radius:14px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:8px;letter-spacing:.3px">
    ${lbl.verify}
   </button>
   <div id="ob-verify-err" style="font-size:12px;color:#ef4444;min-height:18px;margin-bottom:10px"></div>
-  <button onclick="sendTwilioOTP()" id="ob-submit-btn"
-   style="background:transparent;border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:9px 18px;color:var(--tx2,#8c9bbd);font-size:12px;cursor:pointer;font-family:inherit">
+  <button onclick="sendTwilioOTP()" id="ob-resend-btn"
+   style="background:transparent;border:none;padding:9px 18px;color:var(--gold,#C9A84C);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;text-decoration:underline;text-underline-offset:3px">
    ${lbl.resend}
   </button>
  </div>`;
@@ -7797,7 +7801,10 @@ async function completeRegistration(){
   SS.security.phoneVerified=true;SS.security.twilioVerified=true;SS.security.firebaseUid=fbUser.uid;
   if(!SS.user)SS.user={};
   SS.user.username=uname;SS.user.phone=user.phone;SS.user.name=user.name||uname;
-  FB._myPhoneHash=ph;saveStore();goStep(1);
+  FB._myPhoneHash=ph;saveStore();
+  const sp=document.getElementById("ob-sms-panel");if(sp)sp.remove();
+  document.querySelectorAll("#ob .ob-panel").forEach(p=>p.style.display="");
+  goStep(1);
  }catch(e){
   console.error("[Register]",e);
   toast(he?"⚠️ שגיאה בהרשמה":"⚠️ Registration error","err");
