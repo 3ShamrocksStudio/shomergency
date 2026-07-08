@@ -5,307 +5,230 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#091227">
 <title>SH✡MER — אזרחים שומרים על אזרחים</title>
-<meta name="description" content="SH✡MER. אזעקת SOS, מפת אירועים חיה, מעגלי שומרים — בלחיצה אחת. אינך לבד.">
+<meta name="description" content="אזעקת SOS חזקה, מיקום מדויק, עזרה מהירה. בלחיצה אחת. אינך לבד.">
 <link rel="icon" href="logo-192.png">
-<link rel="apple-touch-icon" href="logo-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&family=Sora:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#091227;--surface:#0e1d3a;--surface2:#122448;--gold:#C9A84C;--tx0:#f2f6ff;--tx1:#c8d4e8;--tx2:#8c9bbd;--tx3:#4a5a7a;--border:rgba(140,155,189,.18);--r:16px}
+/* ── 3SDS TOKENS ── */
+:root{
+  --n0:#060F1E; --n1:#0A1628; --n2:#101E34; --n3:#162440; --n4:#1C2C4E;
+  --g1:#9A6C1A; --g2:#C09020; --g3:#E0A828; --g4:#F5C840;
+  --gold-grad:linear-gradient(135deg,#C09020 0%,#E0A828 60%,#F5C840 100%);
+  --p2:#8392AB; --p3:#B6C2D6;
+  --tx0:#F0F4FF; --tx1:#C8D4E8; --tx2:#8898B8; --tx3:#506080;
+  --danger:#DC2626; --safe:#0E8840;
+  --border:rgba(140,155,189,.18);
+  --r:14px;
+}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;overflow-x:hidden}
-body{background:var(--bg);color:var(--tx0);font-family:'Heebo',system-ui,sans-serif;font-size:16px;line-height:1.65;overflow-x:hidden}
-a{color:var(--gold);text-decoration:none}
+body{background:var(--n1);color:var(--tx0);font-family:'Heebo',system-ui,sans-serif;line-height:1.6;overflow-x:hidden}
+a{color:var(--g3);text-decoration:none}
 img{max-width:100%;height:auto;display:block}
 .wrap{max-width:1100px;margin:0 auto;padding:0 20px}
 
 /* NAV */
-nav{position:sticky;top:0;z-index:100;background:rgba(9,18,39,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:14px 0}
-.nav-inner{display:flex;align-items:center;justify-content:space-between}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,22,40,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
 .nav-logo{display:flex;align-items:center;gap:10px;font-family:'Sora',sans-serif;font-size:18px;font-weight:800;color:var(--tx0)}
-.nav-logo img{width:32px;height:32px}
-.gold{color:var(--gold)}
-.nav-cta{background:var(--gold);color:#0a0c12;padding:10px 22px;border-radius:10px;font-weight:800;font-size:14px}
+.nav-logo img{width:30px;height:30px}
+.nav-cta{background:var(--gold-grad);color:#0A0C12;padding:10px 20px;border-radius:10px;font-weight:800;font-size:14px;white-space:nowrap}
 
-/* HERO */
-.hero{position:relative;overflow:hidden;min-height:92vh;display:flex;align-items:center}
+/* HERO — full bleed on mobile */
+.hero{position:relative;min-height:100dvh;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden}
 .hero-bg{position:absolute;inset:0;z-index:0}
-.hero-bg-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .8s}
-.hero-bg-img.active{opacity:.32}
-.hero-bg-overlay{position:absolute;inset:0;background:linear-gradient(to left,rgba(9,18,39,.2) 0%,rgba(9,18,39,.82) 50%,rgba(9,18,39,.97) 100%),linear-gradient(to top,rgba(9,18,39,.95) 0%,transparent 35%)}
-.hero .wrap{position:relative;z-index:2;padding:90px 20px 70px;width:100%}
-.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);color:var(--gold);padding:6px 16px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:22px}
-.pulse{width:7px;height:7px;background:var(--gold);border-radius:50%;animation:pulse 2s infinite}
+.hero-bg-slide{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.2s ease}
+.hero-bg-slide.on{opacity:1}
+.hero-overlay{
+  position:absolute;inset:0;
+  background:
+    linear-gradient(to top, rgba(6,15,30,.98) 0%, rgba(6,15,30,.7) 45%, rgba(6,15,30,.25) 75%, rgba(6,15,30,.1) 100%),
+    linear-gradient(to right, rgba(6,15,30,.5) 0%, transparent 60%)
+}
+.hero-content{position:relative;z-index:2;padding:100px 24px 40px;display:flex;flex-direction:column;gap:0}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(224,168,40,.12);border:1px solid rgba(224,168,40,.35);color:var(--g3);padding:6px 14px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:18px;width:fit-content}
+.pulse-dot{width:7px;height:7px;background:var(--g3);border-radius:50%;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
-.hero-title{font-family:'Sora',sans-serif;font-size:clamp(38px,5.5vw,64px);font-weight:900;line-height:1.1;letter-spacing:-1.5px;color:var(--tx0);margin-bottom:20px}
-.hero-sub{font-size:18px;color:var(--tx1);line-height:1.7;margin-bottom:36px;max-width:480px}
-.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:40px}
-.btn-primary{background:var(--gold);color:#0a0c12;padding:16px 32px;border-radius:14px;font-weight:800;font-size:16px;display:inline-flex;align-items:center;gap:8px;transition:opacity .15s,transform .15s}
+.hero-title{font-family:'Sora',sans-serif;font-size:clamp(36px,10vw,68px);font-weight:900;line-height:1.08;letter-spacing:-1.5px;color:var(--tx0);margin-bottom:14px}
+.hero-title .gold{background:var(--gold-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:clamp(15px,4vw,18px);color:var(--tx1);line-height:1.65;margin-bottom:28px;max-width:520px}
+.hero-cta-row{display:flex;flex-direction:column;gap:12px;margin-bottom:36px}
+.btn-primary{background:var(--gold-grad);color:#0A0C12;padding:17px 32px;border-radius:var(--r);font-weight:800;font-size:17px;text-align:center;display:block;transition:opacity .15s,transform .15s}
 .btn-primary:hover{opacity:.88;transform:translateY(-2px)}
-.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--tx1);padding:15px 28px;border-radius:14px;font-weight:600;font-size:15px;transition:border-color .2s,color .2s}
-.btn-ghost:hover{border-color:var(--gold);color:var(--gold)}
-.hero-stats{display:flex;gap:28px}
-.stat-n{font-size:26px;font-weight:900;color:var(--gold);font-family:'Sora',sans-serif;display:block}
-.stat-l{font-size:12px;color:var(--tx2)}
+.btn-ghost{background:rgba(255,255,255,.06);border:1.5px solid var(--border);color:var(--tx1);padding:14px 28px;border-radius:var(--r);font-weight:600;font-size:15px;text-align:center;display:block}
+.hero-stats{display:flex;gap:24px;flex-wrap:wrap}
+.stat-n{display:block;font-size:24px;font-weight:900;color:var(--g3);font-family:'Sora',sans-serif}
+.stat-l{display:block;font-size:11px;color:var(--tx2)}
 
-/* Phone mockup */
-.hero-visual{display:flex;justify-content:center;position:relative}
-.phone-frame{width:min(280px,80vw);border-radius:36px;border:3px solid rgba(201,168,76,.25);box-shadow:0 40px 80px rgba(0,0,0,.6),0 0 60px rgba(201,168,76,.08);overflow:hidden;position:relative}
-.phone-frame img{width:100%;display:block}
-.phone-glow{position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(201,168,76,.08) 100%);pointer-events:none}
-.alert-badge{position:absolute;bottom:50px;left:-16px;background:rgba(9,18,39,.96);border:1px solid rgba(220,38,38,.4);border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:10px;box-shadow:0 8px 24px rgba(0,0,0,.5);animation:slideIn .6s .6s ease both}
-@keyframes slideIn{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:none}}
-.alert-title{font-size:11px;font-weight:800;color:#ef4444}
-.alert-sub{font-size:10px;color:var(--tx2)}
+/* PHONE MOCKUP strip on desktop */
+.hero-mockup{display:none}
+
+/* SECTIONS */
+section{padding:72px 0}
+.section-label{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--g3);margin-bottom:8px}
+.section-title{font-family:'Sora',sans-serif;font-size:clamp(24px,5vw,40px);font-weight:800;color:var(--tx0);margin-bottom:12px;letter-spacing:-.4px}
+.section-sub{font-size:15px;color:var(--tx1);max-width:480px;line-height:1.65}
 
 /* FEATURES */
-.features{background:var(--surface);padding:80px 0}
-.section-label{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
-.section-title{font-family:'Sora',sans-serif;font-size:clamp(26px,4vw,40px);font-weight:800;color:var(--tx0);margin-bottom:14px;letter-spacing:-.5px}
-.section-sub{font-size:16px;color:var(--tx1);max-width:500px}
-.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:52px}
-.feat-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:28px 24px;transition:transform .2s,border-color .2s}
-.feat-card:hover{transform:translateY(-4px);border-color:rgba(201,168,76,.3)}
-.feat-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;font-size:24px}
-.feat-title{font-size:17px;font-weight:800;color:var(--tx0);margin-bottom:8px}
-.feat-text{font-size:14px;color:var(--tx1);line-height:1.65}
+.bg-surface{background:var(--n2)}
+.features-grid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:44px}
+.feat-card{background:var(--n3);border:1px solid var(--border);border-radius:var(--r);padding:22px;display:flex;gap:16px;align-items:flex-start;transition:border-color .2s}
+.feat-card:hover{border-color:rgba(224,168,40,.35)}
+.feat-icon{font-size:26px;flex-shrink:0;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center}
+.feat-title{font-size:16px;font-weight:800;color:var(--tx0);margin-bottom:4px}
+.feat-text{font-size:13px;color:var(--tx1);line-height:1.6}
 
 /* HOW IT WORKS */
-.how{padding:80px 0}
-.how-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;margin-top:52px}
-.steps{display:flex;flex-direction:column;gap:32px}
-.step{display:flex;gap:18px;align-items:flex-start}
-.step-num{width:38px;height:38px;border-radius:50%;background:rgba(201,168,76,.15);border:1.5px solid rgba(201,168,76,.4);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:var(--gold);flex-shrink:0}
-.step-title{font-size:16px;font-weight:700;color:var(--tx0);margin-bottom:4px}
+.steps{display:flex;flex-direction:column;gap:28px;margin-top:44px}
+.step{display:flex;gap:16px}
+.step-num{width:36px;height:36px;border-radius:50%;background:rgba(224,168,40,.15);border:1.5px solid rgba(224,168,40,.4);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:var(--g3);flex-shrink:0;margin-top:2px}
+.step-title{font-size:15px;font-weight:700;color:var(--tx0);margin-bottom:3px}
 .step-text{font-size:13px;color:var(--tx2);line-height:1.6}
 
 /* SCENARIOS */
-.scenarios{background:var(--surface);padding:80px 0}
-.scenarios-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:52px}
-.scenario{position:relative;border-radius:var(--r);overflow:hidden;aspect-ratio:3/4}
-.scenario img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
-.scenario:hover img{transform:scale(1.05)}
-.scenario-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(9,18,39,.92) 0%,transparent 50%);display:flex;flex-direction:column;justify-content:flex-end;padding:22px}
-.scenario-tag{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--gold);margin-bottom:6px}
+.scenarios-grid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:44px}
+.scenario{position:relative;border-radius:var(--r);overflow:hidden;aspect-ratio:16/9}
+.scenario img{width:100%;height:100%;object-fit:cover}
+.scenario-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(6,15,30,.92) 0%,transparent 55%);display:flex;flex-direction:column;justify-content:flex-end;padding:20px}
+.scenario-tag{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--g3);margin-bottom:5px}
 .scenario-title{font-size:18px;font-weight:800;color:var(--tx0);line-height:1.3}
 
-/* CTA */
-.cta-section{background:linear-gradient(135deg,rgba(201,168,76,.1) 0%,rgba(30,60,150,.08) 100%);border-top:1px solid var(--border);border-bottom:1px solid var(--border);text-align:center;padding:90px 20px}
-.cta-title{font-family:'Sora',sans-serif;font-size:clamp(28px,5vw,52px);font-weight:900;color:var(--tx0);margin-bottom:16px;letter-spacing:-.8px}
-.cta-sub{font-size:17px;color:var(--tx1);margin-bottom:36px}
-.cta-center{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+/* CTA BAND */
+.cta-band{background:linear-gradient(135deg,rgba(192,144,32,.12),rgba(16,30,52,.9));border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:72px 24px;text-align:center}
+.cta-title{font-family:'Sora',sans-serif;font-size:clamp(26px,7vw,52px);font-weight:900;color:var(--tx0);margin-bottom:14px;letter-spacing:-.6px}
+.cta-sub{font-size:16px;color:var(--tx1);margin-bottom:32px}
 
 /* FOOTER */
-footer{background:var(--surface);border-top:1px solid var(--border);padding:36px 0;text-align:center}
-.footer-logo{color:var(--gold);font-weight:800;font-size:15px;margin-bottom:8px}
-.footer-links{display:flex;gap:24px;justify-content:center;margin-bottom:16px}
+footer{background:var(--n2);border-top:1px solid var(--border);padding:32px 20px;text-align:center}
+.footer-logo{font-weight:800;color:var(--g3);margin-bottom:12px;font-size:15px}
+.footer-links{display:flex;gap:20px;justify-content:center;margin-bottom:14px;flex-wrap:wrap}
 .footer-links a{font-size:13px;color:var(--tx2)}
-.footer-copy{font-size:12px;color:var(--tx3)}
+.footer-copy{font-size:11px;color:var(--tx3)}
 
-/* SCROLL ANIMATIONS */
-.fade-in{opacity:0;transform:translateY(28px);transition:opacity .6s ease,transform .6s ease}
-.fade-in.visible{opacity:1;transform:none}
+/* FADE IN */
+.fi{opacity:0;transform:translateY(24px);transition:opacity .55s ease,transform .55s ease}
+.fi.vis{opacity:1;transform:none}
 
-/* RESPONSIVE */
-@media(max-width:768px){
-  .hero-grid,.how-grid{grid-template-columns:1fr}
-  .hero-visual{order:-1}
-  .phone-frame{width:min(220px,70vw)}
-  .features-grid,.scenarios-grid{grid-template-columns:1fr 1fr}
-  .hero-stats{gap:16px}
+/* DESKTOP ≥ 800px */
+@media(min-width:800px){
+  .hero{flex-direction:row;justify-content:flex-start;align-items:center;min-height:92vh}
+  .hero-content{max-width:55%;padding:120px 48px 80px}
+  .hero-cta-row{flex-direction:row}
+  .btn-primary,.btn-ghost{display:inline-block;width:auto}
+  .hero-mockup{display:flex;position:absolute;right:60px;top:50%;transform:translateY(-50%);z-index:3;justify-content:center}
+  .phone-frame{width:260px;border-radius:34px;border:3px solid rgba(224,168,40,.22);box-shadow:0 40px 80px rgba(0,0,0,.6),0 0 60px rgba(224,168,40,.07);overflow:hidden;position:relative}
+  .phone-frame img{width:100%;display:block}
+  .alert-badge{position:absolute;bottom:48px;left:-24px;background:rgba(6,15,30,.96);border:1px solid rgba(220,38,38,.4);border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:10px;box-shadow:0 8px 24px rgba(0,0,0,.5);animation:slideIn .6s .5s ease both}
+  @keyframes slideIn{from{opacity:0;transform:translateX(-18px)}to{opacity:1;transform:none}}
+  .features-grid{grid-template-columns:repeat(2,1fr)}
+  .scenarios-grid{grid-template-columns:repeat(3,1fr)}
+  .scenario{aspect-ratio:3/4}
 }
-@media(max-width:480px){
-  .features-grid,.scenarios-grid{grid-template-columns:1fr}
-  .hero-actions{flex-direction:column}
-  .btn-primary,.btn-ghost{width:100%;justify-content:center;text-align:center}
-  .hero-stats{flex-wrap:wrap}
+@media(min-width:1024px){
+  .features-grid{grid-template-columns:repeat(3,1fr)}
+  .hero-cta-row{flex-direction:row}
 }
 </style>
 </head>
 <body>
 
 <nav>
-  <div class="wrap nav-inner">
-    <a href="/" class="nav-logo">
-      <img src="logo-192.png" alt="SH✡MER">
-      <span>SH<span class="gold">✡</span>MER</span>
-    </a>
-    <a href="shomer.html" class="nav-cta">פתח את האפליקציה</a>
-  </div>
+  <a href="/" class="nav-logo">
+    <img src="logo-192.png" alt="SH✡MER">
+    <span>SH<span style="background:var(--gold-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">✡</span>MER</span>
+  </a>
+  <a href="shomer.html" class="nav-cta">פתח את האפליקציה</a>
 </nav>
 
-<!-- HERO: scenario images in BG, phone mockup in FG -->
+<!-- HERO: emergency scenario images as full-bleed background -->
 <section class="hero">
   <div class="hero-bg">
-    <img class="hero-bg-img active" id="bg1" src="img/benefits-woman.jpg" alt="">
-    <img class="hero-bg-img" id="bg2" src="img/benefits-parents.jpg" alt="">
-    <img class="hero-bg-img" id="bg3" src="img/benefits-hiker.jpg" alt="">
-    <div class="hero-bg-overlay"></div>
+    <img class="hero-bg-slide on" id="bg1" src="img/benefits-woman.jpg" alt="">
+    <img class="hero-bg-slide" id="bg2" src="img/benefits-parents.jpg" alt="">
+    <img class="hero-bg-slide" id="bg3" src="img/benefits-hiker.jpg" alt="">
+    <div class="hero-overlay"></div>
   </div>
-  <div class="wrap">
-    <div class="hero-grid">
-      <div>
-        <div class="hero-badge">
-          <span class="pulse"></span>
-          אזרחים שומרים על אזרחים
-        </div>
-        <h1 class="hero-title">כי ברגע אמת<br><span class="gold">אינך לבד</span></h1>
-        <p class="hero-sub">SH✡MER מחבר/ת אותך לרשת שמירה קהילתית. SOS בלחיצה אחת, מפת אירועים חיה, מעגלי שומרים שתמיד עליך.</p>
-        <div class="hero-actions">
-          <a href="shomer.html" class="btn-primary">הצטרף/י עכשיו — חינם</a>
-          <a href="#how" class="btn-ghost">איך זה עובד</a>
-        </div>
-        <div class="hero-stats">
-          <div class="stat"><span class="stat-n">1</span><span class="stat-l">לחיצה לשליחת SOS</span></div>
-          <div class="stat"><span class="stat-n">24/7</span><span class="stat-l">רשת קהילתית חיה</span></div>
-          <div class="stat"><span class="stat-n">0₪</span><span class="stat-l">חינם לאזרחים</span></div>
-        </div>
-      </div>
-      <div class="hero-visual">
-        <div class="phone-frame">
-          <img src="img/real-sos.jpg" alt="SH✡MER SOS screen">
-          <div class="phone-glow"></div>
-        </div>
-        <div class="alert-badge">
-          <span style="font-size:20px">🆘</span>
-          <div>
-            <div class="alert-title">SOS פעיל</div>
-            <div class="alert-sub">3 שומרים מגיבים</div>
-          </div>
-        </div>
+
+  <div class="hero-content">
+    <div class="hero-badge"><span class="pulse-dot"></span>אזרחים שומרים על אזרחים</div>
+    <h1 class="hero-title">כי ברגע אמת<br><span class="gold">אינך לבד</span></h1>
+    <p class="hero-sub">SH✡MER מחבר/ת אותך לרשת שמירה קהילתית. SOS בלחיצה אחת, מפת אירועים חיה, מעגלי שומרים שתמיד עליך.</p>
+    <div class="hero-cta-row">
+      <a href="shomer.html" class="btn-primary">הצטרף/י עכשיו — חינם</a>
+      <a href="#how" class="btn-ghost">איך זה עובד</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-n">1</span><span class="stat-l">לחיצה לשליחת SOS</span></div>
+      <div class="stat"><span class="stat-n">24/7</span><span class="stat-l">רשת קהילתית</span></div>
+      <div class="stat"><span class="stat-n">0₪</span><span class="stat-l">חינם לאזרחים</span></div>
+    </div>
+  </div>
+
+  <!-- Phone mockup — desktop only (hidden on mobile) -->
+  <div class="hero-mockup">
+    <div class="phone-frame">
+      <img src="img/real-sos.jpg" alt="SH✡MER SOS">
+      <div class="alert-badge">
+        <span style="font-size:20px">🆘</span>
+        <div><div style="font-size:11px;font-weight:800;color:#ef4444">SOS פעיל</div><div style="font-size:10px;color:var(--tx2)">3 שומרים מגיבים</div></div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- FEATURES -->
-<section class="features fade-in" id="features">
+<section class="bg-surface fi" id="features">
   <div class="wrap">
     <div class="section-label">מה SH✡MER עושה</div>
     <h2 class="section-title">ממשק אחד. כל מה שצריך.</h2>
     <p class="section-sub">בנוי לרגעים האמיתיים — לא לתרחישים תיאורטיים.</p>
     <div class="features-grid">
-      <div class="feat-card">
-        <div class="feat-icon" style="background:rgba(220,38,38,.15)">🆘</div>
-        <div class="feat-title">אזעקת SOS</div>
-        <div class="feat-text">לחיצה אחת. אזעקה שלא ניתן להשתיק, מיקומך מגיע לשומרים שלך מיד.</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon" style="background:rgba(59,130,246,.15)">🗺️</div>
-        <div class="feat-title">מפת אירועים חיה</div>
-        <div class="feat-text">ראה/י בזמן אמת אירועי ביטחון ורפואה באזורך. תמיד מעודכן.</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon" style="background:rgba(201,168,76,.15)">🛡️</div>
-        <div class="feat-title">מעגלי שומרים</div>
-        <div class="feat-text">משפחה, חברים, שכנים. הם רואים אותך ומקבלים התראות כשצריך.</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon" style="background:rgba(16,185,129,.15)">📋</div>
-        <div class="feat-title">מדריך חירום</div>
-        <div class="feat-text">CPR, מחנק, דימום, שבץ — לפי הנחיות מד"א. זמין ללא אינטרנט.</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon" style="background:rgba(139,92,246,.15)">📍</div>
-        <div class="feat-title">שיתוף מיקום חי</div>
-        <div class="feat-text">השומרים שלך יודעים איפה את/ה — רק כשאת/ה רוצה.</div>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon" style="background:rgba(245,158,11,.15)">🔔</div>
-        <div class="feat-title">דיווח אירועים</div>
-        <div class="feat-text">דווח/י על אירועים בשכונה. בנה/י מפה קהילתית אמיתית.</div>
-      </div>
+      <div class="feat-card"><div class="feat-icon" style="background:rgba(220,38,38,.15)">🆘</div><div><div class="feat-title">אזעקת SOS</div><div class="feat-text">לחיצה אחת. אזעקה שלא ניתן להשתיק, מיקומך מגיע לשומרים מיד.</div></div></div>
+      <div class="feat-card"><div class="feat-icon" style="background:rgba(59,130,246,.15)">🗺️</div><div><div class="feat-title">מפת אירועים חיה</div><div class="feat-text">אירועי ביטחון ורפואה באזורך בזמן אמת. תמיד מעודכן.</div></div></div>
+      <div class="feat-card"><div class="feat-icon" style="background:rgba(224,168,40,.15)">🛡️</div><div><div class="feat-title">מעגלי שומרים</div><div class="feat-text">משפחה, חברים, שכנים. הם רואים אותך ומגיבים כשצריך.</div></div></div>
+      <div class="feat-card"><div class="feat-icon" style="background:rgba(14,136,64,.15)">📋</div><div><div class="feat-title">מדריך חירום</div><div class="feat-text">CPR, מחנק, דימום, שבץ — לפי מד"א. זמין ללא אינטרנט.</div></div></div>
+      <div class="feat-card"><div class="feat-icon" style="background:rgba(139,92,246,.15)">📍</div><div><div class="feat-title">שיתוף מיקום חי</div><div class="feat-text">השומרים שלך יודעים איפה את/ה — רק כשאת/ה מאשר/ת.</div></div></div>
+      <div class="feat-card"><div class="feat-icon" style="background:rgba(245,158,11,.15)">🔔</div><div><div class="feat-title">דיווח אירועים</div><div class="feat-text">דווח/י על אירועים בשכונה. בנה/י מפה קהילתית אמיתית.</div></div></div>
     </div>
   </div>
 </section>
 
 <!-- HOW IT WORKS -->
-<section class="how fade-in" id="how">
+<section class="fi" id="how">
   <div class="wrap">
     <div class="section-label">תהליך</div>
     <h2 class="section-title">איך זה עובד</h2>
-    <div class="how-grid">
-      <div class="steps">
-        <div class="step">
-          <div class="step-num">1</div>
-          <div>
-            <div class="step-title">נכנס/ת עם מספר טלפון</div>
-            <div class="step-text">הזן/י שם ומספר ישראלי. מספרך מוצמד לחשבון ייחודי.</div>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">2</div>
-          <div>
-            <div class="step-title">בנה/י את מעגל השמירה</div>
-            <div class="step-text">הוסף/י משפחה, חברים ושכנים. רשת הדדית של אמון.</div>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">3</div>
-          <div>
-            <div class="step-title">לחץ/י SOS — הכל קורה מיד</div>
-            <div class="step-text">אזעקה, מיקום, התראה לשומרים — בלחיצה אחת. ללא דיבור.</div>
-          </div>
-        </div>
-        <div class="step">
-          <div class="step-num">4</div>
-          <div>
-            <div class="step-title">הקהילה מגיבה</div>
-            <div class="step-text">שומרים בסביבתך מגיעים ומסייעים. ישראל שומרת על ישראל.</div>
-          </div>
-        </div>
-      </div>
-      <div class="phone-frame" style="max-width:240px;margin:0 auto">
-        <img src="img/real-sos-map.jpg" alt="SH✡MER מפה">
-        <div class="phone-glow"></div>
-      </div>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div><div class="step-title">נכנס/ת עם מספר טלפון</div><div class="step-text">הזן/י שם ומספר ישראלי. קוד SMS מגיע לטלפון שלך — חשבון ייחודי לכל מספר.</div></div></div>
+      <div class="step"><div class="step-num">2</div><div><div class="step-title">בנה/י את מעגל השמירה</div><div class="step-text">הוסף/י משפחה, חברים ושכנים מאנשי הקשר שלך. רשת הדדית של אמון.</div></div></div>
+      <div class="step"><div class="step-num">3</div><div><div class="step-title">לחץ/י SOS — הכל קורה מיד</div><div class="step-text">אזעקה, שיתוף מיקום, התראה לשומרים — בלחיצה אחת. ללא צורך בדיבור.</div></div></div>
+      <div class="step"><div class="step-num">4</div><div><div class="step-title">הקהילה מגיבה</div><div class="step-text">שומרים בסביבתך מתריעים, מגיעים ומסייעים. ישראל שומרת על ישראל.</div></div></div>
     </div>
   </div>
 </section>
 
 <!-- SCENARIOS -->
-<section class="scenarios fade-in">
+<section class="bg-surface fi">
   <div class="wrap">
     <div class="section-label">תרחישים אמיתיים</div>
     <h2 class="section-title">SH✡MER שם כשצריך</h2>
     <div class="scenarios-grid">
-      <div class="scenario">
-        <img src="img/benefits-woman.jpg" alt="בטיחות אישית">
-        <div class="scenario-overlay">
-          <div class="scenario-tag">בטיחות אישית</div>
-          <div class="scenario-title">הולכת לבד בלילה</div>
-        </div>
-      </div>
-      <div class="scenario">
-        <img src="img/benefits-parents.jpg" alt="משפחה">
-        <div class="scenario-overlay">
-          <div class="scenario-tag">מעגל משפחה</div>
-          <div class="scenario-title">ילד לא מגיע הביתה</div>
-        </div>
-      </div>
-      <div class="scenario">
-        <img src="img/benefits-hiker.jpg" alt="טיול">
-        <div class="scenario-overlay">
-          <div class="scenario-tag">טיולים</div>
-          <div class="scenario-title">תאונה בשטח פתוח</div>
-        </div>
-      </div>
+      <div class="scenario"><img src="img/benefits-woman.jpg" alt="בטיחות אישית"><div class="scenario-overlay"><div class="scenario-tag">בטיחות אישית</div><div class="scenario-title">הולכת לבד בלילה</div></div></div>
+      <div class="scenario"><img src="img/benefits-parents.jpg" alt="משפחה"><div class="scenario-overlay"><div class="scenario-tag">מעגל משפחה</div><div class="scenario-title">ילד לא מגיע הביתה</div></div></div>
+      <div class="scenario"><img src="img/benefits-hiker.jpg" alt="טיול"><div class="scenario-overlay"><div class="scenario-tag">טיולים</div><div class="scenario-title">תאונה בשטח פתוח</div></div></div>
     </div>
   </div>
 </section>
 
 <!-- CTA -->
-<section class="cta-section fade-in">
+<section class="cta-band fi">
   <div class="wrap">
-    <div class="section-label">הצטרף/י עכשיו</div>
+    <div class="section-label" style="text-align:center;display:block">הצטרף/י עכשיו</div>
     <h2 class="cta-title">SH✡MER שלך מחכה לך</h2>
-    <p class="cta-sub">בלי הורדה. בלי תשלום. שם + מספר — ואת/ה בפנים.</p>
-    <div class="cta-center">
-      <a href="shomer.html" class="btn-primary" style="font-size:17px;padding:18px 44px">הצטרף/י עכשיו — חינם</a>
-    </div>
-    <p style="margin-top:20px;font-size:12px;color:var(--tx3)">SH✡MER אינו תחליף לשירותי חירום. בחירום — חייג/י 100 · 101 · 102</p>
+    <p class="cta-sub">בלי הורדה. בלי תשלום. שם + מספר טלפון — ואת/ה בפנים.</p>
+    <a href="shomer.html" class="btn-primary" style="max-width:320px;margin:0 auto;font-size:18px;padding:18px 40px">הצטרף/י עכשיו — חינם</a>
+    <p style="margin-top:20px;font-size:11px;color:var(--tx3)">SH✡MER אינו תחליף לשירותי חירום. בחירום — חייג/י 100 · 101 · 102</p>
   </div>
 </section>
 
@@ -322,20 +245,19 @@ footer{background:var(--surface);border-top:1px solid var(--border);padding:36px
 </footer>
 
 <script>
-// Crossfade background images
-let current = 0;
-const imgs = document.querySelectorAll('.hero-bg-img');
-setInterval(() => {
-  imgs[current].classList.remove('active');
-  current = (current + 1) % imgs.length;
-  imgs[current].classList.add('active');
-}, 3500);
+// BG crossfade
+var imgs = document.querySelectorAll('.hero-bg-slide'), cur = 0;
+setInterval(function(){
+  imgs[cur].classList.remove('on');
+  cur = (cur+1) % imgs.length;
+  imgs[cur].classList.add('on');
+}, 4000);
 
-// Scroll fade-in
-const obs = new IntersectionObserver(entries => {
-  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
-}, {threshold: 0.1});
-document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+// Scroll fade
+var obs = new IntersectionObserver(function(entries){
+  entries.forEach(function(e){ if(e.isIntersecting) e.target.classList.add('vis'); });
+},{threshold:0.08});
+document.querySelectorAll('.fi').forEach(function(el){ obs.observe(el); });
 </script>
 </body>
 </html>
