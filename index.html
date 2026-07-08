@@ -323,24 +323,71 @@ footer {
   transition: opacity .6s ease, transform .6s ease;
 }
 .fade-in.visible { opacity: 1; transform: none; }
-</style>
-</head>
-<body>
 
-<!-- NAV -->
-<nav>
-  <div class="wrap nav-inner">
-    <a href="/" class="nav-logo">
-      <img src="logo-192.png" alt="SH✡MER">
-      <span>SH<span style="color:var(--gold)">✡</span>MER</span>
-    </a>
-    <a href="shomer.html" class="nav-cta">פתח את האפליקציה</a>
-  </div>
-</nav>
-
-<!-- HERO -->
+/* Hero background scenario images */
+.hero { position: relative; overflow: hidden; min-height: 92vh; }
+.hero-bg-images {
+  position: absolute; inset: 0;
+  display: grid; grid-template-columns: repeat(3,1fr);
+  z-index: 0;
+}
+.hero-bg-img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  <!-- HERO -->
 <section class="hero">
+  <!-- Background: emergency scenario images layered -->
+  <div class="hero-bg-images">
+    <img class="hero-bg-img hero-bg-1" src="img/benefits-woman.jpg" alt="">
+    <img class="hero-bg-img hero-bg-2" src="img/benefits-hiker.jpg" alt="">
+    <img class="hero-bg-img hero-bg-3" src="img/benefits-parents.jpg" alt="">
+  </div>
+  <div class="hero-bg-overlay"></div>
   <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-badge">
+          <span></span>
+          אזרחים שומרים על אזרחים
+        </div>
+        <h1 class="hero-title">
+          כי ברגע אמת<br>
+          <span class="gold">אינך לבד</span>
+        </h1>
+        <p class="hero-sub">
+          SH✡MER מחבר/ת אותך לרשת שמירה קהילתית.
+          SOS בלחיצה אחת, מפת אירועים חיה, מעגלי שומרים שתמיד עליך.
+        </p>
+        <div class="hero-actions">
+          <a href="shomer.html" class="btn-primary">הצטרף/י עכשיו — חינם</a>
+          <a href="#how" class="btn-ghost">איך זה עובד</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><span class="stat-n">1</span><span class="stat-l">לחיצה לשליחת SOS</span></div>
+          <div class="stat"><span class="stat-n">24/7</span><span class="stat-l">רשת קהילתית חיה</span></div>
+          <div class="stat"><span class="stat-n">0₪</span><span class="stat-l">חינם לאזרחים</span></div>
+        </div>
+      </div>
+      <!-- Foreground: app mockup -->
+      <div class="hero-visual">
+        <div class="phone-frame">
+          <img src="img/real-sos.jpg" alt="SH✡MER — מסך SOS">
+          <div class="phone-glow"></div>
+        </div>
+        <!-- Floating alert badge -->
+        <div class="hero-alert-badge">
+          <span style="font-size:18px">🆘</span>
+          <div>
+            <div style="font-size:11px;font-weight:800;color:#DC2626">SOS פעיל</div>
+            <div style="font-size:10px;color:var(--tx2)">3 שומרים מגיבים</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
     <div class="hero-grid">
       <div>
         <div class="hero-badge">
