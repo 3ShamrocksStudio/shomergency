@@ -1471,7 +1471,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v92 · 08.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v93 · 08.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -4011,6 +4011,10 @@ function triggerSOS(trigger){
 }
 
 /* PHASE 1 — alarm immediately, then the cancel countdown. No broadcast yet. */
+/* Anti-abuse: repeated SOS broadcasts add friction (hold-to-arm) and pause community fanout,
+   but NEVER silence the personal alarm — blocking a real emergency is unacceptable. */
+function sosRecentFires(win){ var now=Date.now(); SS.sos._fires=(SS.sos._fires||[]).filter(function(t){return now-t<(win||1800000);}); return SS.sos._fires.length; }
+function sosAbuseOver(){ return sosRecentFires(1800000)>=3; }
 function beginSOS(trigger){
  if(sosPhase!=='idle')return;
  sosPhase='countdown'; sosActive=true; curSosTrigger=trigger||'manual';
@@ -4071,7 +4075,9 @@ function activateSOS(){
  sosPhase='active';
  const he=currentLang==='he';
  sosRollDay();
- const overLimit=sosRemainingToday()<=0;
+ SS.sos._fires=(SS.sos._fires||[]); SS.sos._fires.push(Date.now());
+ if(sosAbuseOver()&&!SS.sos.holdToArm){ SS.sos.holdToArm=true; saveStore(); toast(he?'⚠️ שימוש חוזר ב-SOS — מעכשיו נדרשת לחיצה ארוכה (2 שנ׳)':'⚠️ Repeated SOS use — press & hold (2s) now required','amb'); }
+ const overLimit=sosRemainingToday()<=0||sosAbuseOver();
  curSosId='s'+Date.now();
  curSosType='unknown'; // SOS fires now; type is classified after, never blocking it
  // Log to persistent history. broadcast=false when rate-limited (alarm still helps the
@@ -5396,13 +5402,17 @@ function buildMemberRow(m,he){
  priv.innerHTML=`
  <div class="pv-row"><div><div class="pv-l">${he?'שתף/י את מיקומי עם '+ESC(m.name):'Share my location with '+ESC(m.name)}</div><div class="pv-s">${he?'הם יוכלו לראות אותך':'They can see you'}</div></div><div class="tog ${m.shareTo?'on':''}" data-k="shareTo" role="switch"></div></div>
  <div class="pv-row"><div><div class="pv-l">${he?'ראה/י את המיקום של '+ESC(m.name):'See '+ESC(m.name)+"'s location"}</div><div class="pv-s">${he?'יופיע/תופיע על המפה שלך':'Shows on your map'}</div></div><div class="tog ${m.seeThem?'on':''}" data-k="seeThem" role="switch"></div></div>
+ <div class="pv-row" style="align-items:center"><div class="pv-l">${he?'מעגל:':'Circle:'}</div><div class="cm-circ-move" style="display:flex;gap:6px;flex-wrap:wrap">${circlesList().map(cc=>`<button class="cm-act${cc.id===m.cid?' cur':''}" data-mv="${cc.id}" style="${cc.id===m.cid?'border-color:var(--gold,#C9A84C);color:var(--gold,#C9A84C);':''}">${ESC(cc.name)}</button>`).join('')}</div></div>
  <div class="cm-actions">
+ <button class="cm-act" data-a="rename">✏️ ${he?'שנה/י שם':'Rename'}</button>
  <button class="cm-act" data-a="sos"> ${he?'הדמה SOS':'Simulate SOS'}</button>
  <button class="cm-act danger" data-a="remove"> ${he?'הסר/י':'Remove'}</button>
  </div>`;
  priv.querySelectorAll('.tog').forEach(t=>{
  t.onclick=(e)=>{e.stopPropagation();const k=t.getAttribute('data-k');m[k]=!m[k];t.classList.toggle('on',m[k]);saveStore();renderCircles();};
  });
+ priv.querySelector('[data-a="rename"]').onclick=(e)=>{e.stopPropagation();const nn=prompt(he?'שם חדש עבור '+m.name+':':'New name for '+m.name+':',m.name);if(nn&&nn.trim()){m.name=nn.trim().substring(0,40);saveStore();renderCircles();toast(he?'✓ השם עודכן':'✓ Renamed','grn');}};
+ priv.querySelectorAll('[data-mv]').forEach(b=>{b.onclick=(e)=>{e.stopPropagation();const tc=b.getAttribute('data-mv');if(tc===m.cid)return;m.cid=tc;saveStore();renderCircles();toast(he?'✓ הועבר/ה למעגל אחר':'✓ Moved to another circle','grn');};});
  priv.querySelector('[data-a="sos"]').onclick=(e)=>{e.stopPropagation();memberSOS(m.id);};
  priv.querySelector('[data-a="remove"]').onclick=(e)=>{e.stopPropagation();removeMember(m.id);};
  row.querySelector('.cm-main').onclick=()=>{priv.style.display=priv.style.display==='none'?'block':'none';};
@@ -5473,6 +5483,24 @@ function clearCircleMarkers(){
  Object.keys(mapLayers.circle).forEach(id=>{if(MAP)MAP.removeLayer(mapLayers.circle[id]);});
  mapLayers.circle={};
 }
+function memberPopupHtml(id){
+ const m=memberById(id); if(!m)return '';
+ const he=currentLang==='he';
+ const circ=circlesList().find(cc=>cc.id===m.cid)||{};
+ const st=statusOf(m,he);
+ return `<div style="font-family:inherit;min-width:170px" dir="${he?'rtl':'ltr'}">
+  <div style="font-weight:800;font-size:14px;margin-bottom:2px">${ESC(m.name)}</div>
+  <div style="font-size:11px;color:#8c9bbd;margin-bottom:4px">${he?'מעגל':'Circle'}: <b style="color:#C9A84C">${ESC(circ.name||'-')}</b> · ${st.txt}</div>
+  <div style="display:flex;gap:6px;margin-top:6px">
+   <button onclick="openMemberEdit('${m.id}')" style="flex:1;background:linear-gradient(135deg,#C09020,#E0A828,#F5C840);border:none;border-radius:8px;padding:7px 10px;font-weight:800;font-size:11.5px;color:#23170a;cursor:pointer">${he?'עריכה / My SH✡MER':'Edit / My SH✡MER'}</button>
+  </div></div>`;
+}
+function openMemberEdit(id){
+ const m=memberById(id); if(!m)return;
+ activeCircleId=m.cid;
+ try{MAP&&MAP.closePopup();}catch(e){}
+ openCircles();
+}
 function renderCircleMarkers(){
  if(!MAP||mapCircleId==null)return;
  const want={}; visibleMembers(mapCircleId).forEach(m=>want[m.id]=m);
@@ -5483,7 +5511,7 @@ function renderCircleMarkers(){
  // add/update wanted
  Object.values(want).forEach(m=>{
  if(mapLayers.circle[m.id]){mapLayers.circle[m.id].setLatLng([m.lat,m.lng]);mapLayers.circle[m.id].setIcon(circleIcon(m));}
- else{mapLayers.circle[m.id]=window.L.marker([m.lat,m.lng],{icon:circleIcon(m),zIndexOffset:m.sos?950:700,alt:m.name}).addTo(MAP);}
+ else{const mk=window.L.marker([m.lat,m.lng],{icon:circleIcon(m),zIndexOffset:m.sos?950:700,alt:m.name});mk.bindPopup(()=>memberPopupHtml(m.id),{maxWidth:230,closeButton:true});mk.addTo(MAP);mapLayers.circle[m.id]=mk;}
  });
 }
 function showCircleOnMap(cid){
@@ -5527,6 +5555,8 @@ function geoAddReminder(){
  var he=currentLang==='he';
  var sel=document.getElementById('gr-member'); var mid=sel&&sel.value; var m=mid&&memberById(mid);
  if(!m){ toast(he?'בחר/י איש קשר ששיתף מיקום':'Pick a contact who shares location','amb'); return; }
+ var _cnt=(SS.geoReminders||[]).filter(function(r){return r.memberId===mid&&!r.done;}).length;
+ if(_cnt>=3){ toast(he?'עד 3 תזכורות פעילות לכל My SH✡MER':'Up to 3 active reminders per My SH✡MER','amb'); return; }
  var label=(document.getElementById('gr-label').value||'').trim()||(he?'יעד':'Destination');
  var c=MAP?MAP.getCenter():{lat:m.baseLat||m.lat,lng:m.baseLng||m.lng};
  SS.geoReminders.push({id:'g'+Date.now(),memberId:mid,memberName:m.name,label:label,lat:c.lat,lng:c.lng,radius:geoRad,done:false});
@@ -6641,7 +6671,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v92';
+var APP_VER='v93';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
