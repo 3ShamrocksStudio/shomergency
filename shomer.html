@@ -1085,7 +1085,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
 /* ══════════ ONBOARDING — crafted obsidian ground, badge as hero ══════════ */
 /* Hand-built in CSS (no raster) so the warm glow sits precisely behind the
  badge's gold star, stays crisp at any density, and is fully reproducible. */
-#ob{background:#05080F;}
+#ob{background:linear-gradient(rgba(5,8,15,.5),rgba(5,8,15,.78)),url("SHOMER-bg.jpg") center/cover no-repeat #05080F;}
 .ob-bg{position:fixed;inset:0;z-index:-1;pointer-events:none;background-color:#05080F;
  background-image:
  radial-gradient(ellipse 135% 78% at 50% -12%, rgba(26,34,54,.74) 0%, rgba(13,21,36,.8) 36%, rgba(8,13,24,.9) 66%, rgba(5,8,15,.96) 100%),
@@ -1337,7 +1337,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </div>
  <button class="ob-cta" id="geo-btn" onclick="requestGeo()"><span id="geo-btn-t">שתף מיקום</span></button>
  <button class="ob-cta" style="background:var(--n4);color:var(--tx1);box-shadow:none;margin-top:8px;border:1px solid var(--b2);" onclick="goStep(2)" id="geo-skip-btn"><span id="geo-skip-t">דלג – המשך בלי שיתוף מיקום</span></button>
- <button class="ob-back" onclick="goStep(0)" id="ob-back1"><svg class="ic ob-bk" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M10 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>span id="ob-back1-t">חזרה</span></button>
+ <button class="ob-back" onclick="goStep(0)" id="ob-back1"><svg class="ic ob-bk" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M10 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="ob-back1-t">חזרה</span></button>
  </div>
  </div>
 
@@ -1353,7 +1353,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <span class="ob-alarm-play" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5l12 7-12 7Z" fill="currentColor"/></svg></span>
  </div>
  </div>
- <button class="alarm-stop-btn" id="ob-alarm-stop" onclick="stopPreview()" style="display:none"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>span id="ob-stop-lbl">עצור צליל</span></button>
+ <button class="alarm-stop-btn" id="ob-alarm-stop" onclick="stopPreview()" style="display:none"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg><span id="ob-stop-lbl">עצור צליל</span></button>
  <div class="ob-vol-wrap">
  <div class="vol-row"><span class="vol-lbl" id="vol-lbl">עוצמת קול</span><span class="vol-val" id="ob-vv">60%</span></div>
  <input type="range" id="ob-vol-slider" min="10" max="100" value="60" aria-label="עוצמת קול" oninput="document.getElementById('ob-vv').textContent=this.value+'%';alarmVol=this.value/100;" onchange="SS.alarm.vol=alarmVol;saveStore();">
@@ -1368,11 +1368,11 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <p class="ob-pin-hint" id="ob-pin-hint" style="font-size:10.5px;color:var(--tx3);line-height:1.5;margin:5px 2px 0" data-he="נדרש כדי לבטל SOS פעיל — מונע ביטול בכפייה. לעולם לא טביעת אצבע." data-en="Required to cancel an active SOS — prevents forced cancellation. Never biometric.">נדרש כדי לבטל SOS פעיל — מונע ביטול בכפייה. לעולם לא טביעת אצבע.</p>
  </div>
  <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">
- <button class="ob-cta" onclick="obFinish()" id="ob-finish-btn" style="width:100%;margin-top:0;justify-content:center"><svg class="ic" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M10 17l5-5-5-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 12H4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>span id="ob-finish-t">כניסה</span></button>
- <button class="ob-cta" onclick="obFinishToSettings()" id="ob-settings-btn" style="width:100%;margin-top:0;background:var(--n4);color:var(--tx1);box-shadow:none;border:1px solid var(--b2)"><svg class="ic" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-2.87 1.2V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-2.87-1.2l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.1A1.7 1.7 0 0 0 4.6 8.4l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 5.6a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 2.87 1.2l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 21 9.6h.4a2 2 0 1 1 0 4H21a1.7 1.7 0 0 0-1.6 1.4Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>span id="ob-settings-t">הגדרות</span></button>
+ <button class="ob-cta" onclick="obFinish()" id="ob-finish-btn" style="width:100%;margin-top:0;justify-content:center"><svg class="ic" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M10 17l5-5-5-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 12H4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="ob-finish-t">כניסה</span></button>
+ <button class="ob-cta" onclick="obFinishToSettings()" id="ob-settings-btn" style="width:100%;margin-top:0;background:var(--n4);color:var(--tx1);box-shadow:none;border:1px solid var(--b2)"><svg class="ic" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-2.87 1.2V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-2.87-1.2l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.1A1.7 1.7 0 0 0 4.6 8.4l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 5.6a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 2.87 1.2l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 21 9.6h.4a2 2 0 1 1 0 4H21a1.7 1.7 0 0 0-1.6 1.4Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg><span id="ob-settings-t">הגדרות</span></button>
  </div>
  <p style="font-size:10.5px;color:var(--tx3);line-height:1.6;margin:10px 2px 0;text-align:center" id="ob-agree-txt">בכניסה את/ה מסכים/ה ל<button type="button" class="lnk-inline" onclick="openLegal('tos')">תנאי השימוש</button> ול<button type="button" class="lnk-inline" onclick="openLegal('privacy')">מדיניות הפרטיות</button>. שיתוף מיקום הוא בהסכמה בלבד.</p>
- <button class="ob-back" onclick="goStep(1)" id="ob-back2"><svg class="ic" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M10 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>span id="ob-back2-t">חזרה</span></button>
+ <button class="ob-back" onclick="goStep(1)" id="ob-back2"><svg class="ic" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M10 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="ob-back2-t">חזרה</span></button>
  </div>
  </div>
 
@@ -1447,7 +1447,6 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <!-- REAL "guardians nearby" — live count from RTDB presence (shown only when connected). -->
  <button class="hdr-near" id="hdr-near" style="display:none" onclick="explainNearby()" aria-live="polite">
  <div class="ldot" aria-hidden="true"></div>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:1;pointer-events:none">v86 · 06.07.26</div>
  <span id="gnear-n">0</span>
  <span class="gnear-lbl" id="gnear-lbl" data-he="שומרים" data-en="SH✡MERs" data-ar="حُرّاس">שומרים</span>
  </button>
@@ -1465,6 +1464,8 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v87 · 08.07.26</div>
+<div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
  <button class="fb-status connecting" id="fb-status" onclick="explainStatus()" aria-live="polite" aria-label="מצב חיבור">
@@ -1536,7 +1537,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="ss-t" id="ss-t">SOS פעיל — אזעקה פועלת · מיקומך שותף</div>
  <div class="ss-s" id="ss-s">ממתין לתגובה...</div>
  </div>
- <button class="ss-x" onclick="resolveSOS()" id="ss-cancel">✓span id="ss-cancel-lbl">אני בטוח/ה</span></button>
+ <button class="ss-x" onclick="resolveSOS()" id="ss-cancel">✓ <span id="ss-cancel-lbl">אני בטוח/ה</span></button>
  </div>
  </div>
 
@@ -1598,7 +1599,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="ca-t" id="circle-alert-t">חבר/ת מעגל הפעיל/ה SOS</div>
  <div class="ca-s" id="circle-alert-s">כל המעגל קיבל התראה · מיקום חי משותף</div>
  </div>
- <button class="ca-btn" id="circle-alert-btn" onclick="respondToAlertMember()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4 L17 18.5 L12 15.2 L7 18.5 Z" fill="currentColor"/></svg>span id="circle-alert-btn-lbl">הגב/י ונווט/י</span></button>
+ <button class="ca-btn" id="circle-alert-btn" onclick="respondToAlertMember()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4 L17 18.5 L12 15.2 L7 18.5 Z" fill="currentColor"/></svg><span id="circle-alert-btn-lbl">הגב/י ונווט/י</span></button>
  </div>
 
  <!-- RESPONDER NAV — live distance pill -->
@@ -1792,7 +1793,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="mb16">
  <div class="tog-row"><div><div class="tl" id="anon-lbl">דיווח אנונימי</div><div class="ts" id="anon-sub">שמך לא יוצג</div></div><div class="tog on" onclick="this.classList.toggle('on')" role="switch" aria-checked="true"></div></div>
  </div>
- <button class="cta-gold" onclick="sendReport()" id="rep-send-btn"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="2.6" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="6" r="2.6" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="18" r="2.6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8.3 10.8l7.4-3.6M8.3 13.2l7.4 3.6" fill="none" stroke="currentColor" stroke-width="2"/></svg>span id="rep-send-lbl">שלח דיווח לכל השומרים</span></button>
+ <button class="cta-gold" onclick="sendReport()" id="rep-send-btn"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="12" r="2.6" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="6" r="2.6" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="18" r="2.6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8.3 10.8l7.4-3.6M8.3 13.2l7.4 3.6" fill="none" stroke="currentColor" stroke-width="2"/></svg><span id="rep-send-lbl">שלח דיווח לכל השומרים</span></button>
  </div>
  </div>
 
@@ -1815,7 +1816,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="dms-status" id="dms-status-txt" data-he="עד הבדיקה הבאה" data-en="Until next check">עד הבדיקה הבאה</div>
  <button class="dms-ok" style="margin-top:12px;padding:10px 28px;border-radius:var(--r12);font-size:14px;cursor:pointer;border:none" onclick="dmsConfirm()" id="dms-ok-big" data-he="✓ הכל בסדר" data-en="✓ I'm OK">✓ הכל בסדר</button>
  </div>
- <button class="cta-gold mb16" id="dms-toggle-btn" onclick="toggleDMS()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5l12 7-12 7Z" fill="currentColor"/></svg>span data-he="הפעל Dead Man's Switch" data-en="Activate Dead Man's Switch">הפעל Dead Man's Switch</span></button>
+ <button class="cta-gold mb16" id="dms-toggle-btn" onclick="toggleDMS()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5l12 7-12 7Z" fill="currentColor"/></svg><span data-he="הפעל Dead Man's Switch" data-en="Activate Dead Man's Switch">הפעל Dead Man's Switch</span></button>
  <div style="background:var(--n3);border:1px solid var(--b1);border-radius:var(--r12);padding:13px;font-size:12px;color:var(--tx2);line-height:1.75" id="dms-tips-txt" data-i18n-html="1" data-he=" <strong>מומלץ לשימוש:</strong> הליכות לבד בלילה · כניסה לחניון מבודד · מפגש עם זר · ריצה בשעות חשוכות" data-en=" <strong>Best used for:</strong> walking alone at night · entering an isolated car park · meeting a stranger · running after dark">
  <strong>מומלץ לשימוש:</strong> הליכות לבד בלילה · כניסה לחניון מבודד · מפגש עם זר · ריצה בשעות חשוכות
  </div>
@@ -1843,7 +1844,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <input type="range" id="vol-slider" min="10" max="100" value="60" aria-label="עוצמת קול" oninput="document.getElementById('vol-val').textContent=this.value+'%';alarmVol=this.value/100;" onchange="SS.alarm.vol=alarmVol;saveStore();">
  </div>
  <p style="font-size:11px;color:var(--tx3);margin:-4px 0 12px;line-height:1.55" id="alarm-tap-hint">הקש על אזעקה למעלה כדי לשמוע אותה.</p>
- <button class="alarm-stop-btn" id="set-alarm-stop" onclick="stopPreview()" style="display:none"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>span data-he="עצור צליל" data-en="Stop sound">עצור צליל</span></button>
+ <button class="alarm-stop-btn" id="set-alarm-stop" onclick="stopPreview()" style="display:none"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg><span data-he="עצור צליל" data-en="Stop sound">עצור צליל</span></button>
  <button class="cta-red" onclick="saveAlarmSettings()">✓ שמור הגדרות</button>
  </div>
  </div>
@@ -1885,7 +1886,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="vol-row"><span class="vol-lbl" id="shake-sens-lbl">רגישות ניעור</span><span class="vol-val" id="shake-sens-v">בינונית</span></div>
  <input type="range" id="shake-sens" min="12" max="32" value="22" aria-label="shake sensitivity" oninput="setShakeSens(this.value)">
  <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--tx3);margin-top:6px"><span>גבוהה</span><span>נמוכה</span></div>
- <button class="test-alarm-btn" style="margin-top:12px" onclick="simulateShake()" id="sim-shake-btn"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 14h6l-1 8 9-12h-6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>span id="sim-shake-lbl">סימולציית ניעור (בדיקה)</span></button>
+ <button class="test-alarm-btn" style="margin-top:12px" onclick="simulateShake()" id="sim-shake-btn"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 14h6l-1 8 9-12h-6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span id="sim-shake-lbl">סימולציית ניעור (בדיקה)</span></button>
  </div>
  <div class="sec-cap mb12" id="sos-safety-cap">בטיחות SOS</div>
  <div class="sl-card">
@@ -1946,7 +1947,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </div>
  <div class="sec-cap mb12" style="margin-top:18px" id="reset-cap" data-he="חשבון" data-en="Account" data-ar="الحساب">חשבון</div>
  <div class="set-grp" style="border-color:var(--b4);">
- <button style="width:100%;padding:14px;background:var(--rb);border:none;font-size:14px;font-weight:800;color:#FF7080;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;" onclick="deleteAccount()" id="delete-account-btn"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7M6.5 7l.8 12a2 2 0 0 0 2 1.9h5.4a2 2 0 0 0 2-1.9L17.5 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>span data-he="מחיקת חשבון" data-en="Delete account" data-ar="حذف الحساب">מחיקת חשבון</span></button>
+ <button style="width:100%;padding:14px;background:var(--rb);border:none;font-size:14px;font-weight:800;color:#FF7080;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;" onclick="deleteAccount()" id="delete-account-btn"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7M6.5 7l.8 12a2 2 0 0 0 2 1.9h5.4a2 2 0 0 0 2-1.9L17.5 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-he="מחיקת חשבון" data-en="Delete account" data-ar="حذف الحساب">מחיקת חשבון</span></button>
  </div>
  <div class="sr-sb" id="delete-hint" style="margin:8px 2px 16px;line-height:1.6" data-he="מחיקה מלאה וסופית: מוחק את כל הנתונים מהשרת (נוכחות, SOS, פרופיל, הגדרות), מסיר אותך ממעגלי השומרים המשויכים, ומבטל את שם המשתמש שנוצר אוטומטית. פתיחה מחדש יוצרת זהות חדשה לגמרי." data-en="Full, permanent erase: removes all your data from the server (presence, SOS, profile, settings), removes you from any paired SHOMERs' circles, and discards your auto-generated username. Reopening creates a brand-new identity.">מחיקה מלאה וסופית: מוחק את כל הנתונים מהשרת (נוכחות, SOS, פרופיל, הגדרות), מסיר אותך ממעגלי השומרים המשויכים, ומבטל את שם המשתמש שנוצר אוטומטית. פתיחה מחדש יוצרת זהות חדשה לגמרי.</div>
  <div class="legal-links" id="set-legal-links">
@@ -2171,19 +2172,19 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="sec-cap mb12" style="margin-top:20px" id="circ-demo-cap">השומרים שלי</div>
  <div class="circ-tabs" id="circ-tabs" role="tablist" aria-label="מעגלים"></div>
  <div style="display:flex;gap:8px;margin-bottom:12px;">
- <button class="cta-gold" style="flex:1;padding:12px;font-size:13px" onclick="findFriendOpen()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16.5 16.5L21 21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>span id="circ-find-lbl">מצא חבר/ה</span></button>
+ <button class="cta-gold" style="flex:1;padding:12px;font-size:13px" onclick="findFriendOpen()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16.5 16.5L21 21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span id="circ-find-lbl">מצא חבר/ה</span></button>
  <button class="row-btn" style="flex:0 0 auto;width:auto;padding:12px 14px;justify-content:center" onclick="toggleAddMember()" aria-label="הוסף חבר/ה"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
  </div>
- <button class="row-btn" style="width:100%;margin-bottom:12px;justify-content:flex-start;gap:9px" onclick="cl('sh-circles');openGeoRemind()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="color:var(--g3)"><path d="M12 22s7-6.4 7-12a7 7 0 1 0-14 0c0 5.6 7 12 7 12Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.6" fill="currentColor"/></svg>span data-he="תזכורת הגעה (כשמישהו מגיע למקום)" data-en="Arrival reminder (when someone reaches a place)">תזכורת הגעה</span></button>
+ <button class="row-btn" style="width:100%;margin-bottom:12px;justify-content:flex-start;gap:9px" onclick="cl('sh-circles');openGeoRemind()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="color:var(--g3)"><path d="M12 22s7-6.4 7-12a7 7 0 1 0-14 0c0 5.6 7 12 7 12Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.6" fill="currentColor"/></svg><span data-he="תזכורת הגעה (כשמישהו מגיע למקום)" data-en="Arrival reminder (when someone reaches a place)">תזכורת הגעה</span></button>
  <div class="cm-add-form" id="cm-add-form" style="display:none">
  <input class="ob-f" id="cm-add-name" type="text" maxlength="24" placeholder="שם (למשל אמא, יעקב)" aria-label="שם">
  <div class="row">
  <input class="ob-f" id="cm-add-rel" type="text" maxlength="20" placeholder="קשר (אמא/אח/חבר)" aria-label="קשר" style="flex:1;margin-bottom:0">
  </div>
- <button class="cta-gold" style="padding:11px;font-size:13px;margin-top:10px" onclick="addMember()">✓span id="cm-add-save">הוסף למעגל</span></button>
+ <button class="cta-gold" style="padding:11px;font-size:13px;margin-top:10px" onclick="addMember()">✓ <span id="cm-add-save">הוסף למעגל</span></button>
  </div>
  <div id="circ-members" role="list"></div>
- <button class="cm-act danger" style="width:100%;padding:12px;margin-top:6px" onclick="leaveCircle()" id="circ-leave-btn"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6.3 6.3l11.4 11.4" fill="none" stroke="currentColor" stroke-width="2"/></svg>span id="circ-leave-lbl">עזוב מעגל זה</span></button>
+ <button class="cm-act danger" style="width:100%;padding:12px;margin-top:6px" onclick="leaveCircle()" id="circ-leave-btn"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6.3 6.3l11.4 11.4" fill="none" stroke="currentColor" stroke-width="2"/></svg><span id="circ-leave-lbl">עזוב מעגל זה</span></button>
  <div class="mini-credit" dir="ltr"><img class="footer-3s" src="3shamrocks.png" alt="3Shamrocks Studio"></div>
  </div>
  </div>
@@ -2211,7 +2212,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <input id="gd-invite-link" type="text" readonly aria-label="קישור הזמנה" onclick="this.select()">
  <button class="gd-copy" onclick="gdCopyLink()" id="gd-copy-lbl">העתק</button>
  </div>
- <button class="cta-gold" onclick="gdShareLink()" id="gd-share-btn">span id="gd-share-lbl">שתף/י קישור</span></button>
+ <button class="cta-gold" onclick="gdShareLink()" id="gd-share-btn"><span id="gd-share-lbl">שתף/י קישור</span></button>
  <p style="font-size:11px;color:var(--tx3);line-height:1.6;margin-top:12px" id="gd-invite-note">המיקום משותף רק לאחר אישור, ורק עם מי שבחרת. אפשר להפסיק את השיתוף בכל רגע.</p>
  </div>
  </div>
@@ -2225,7 +2226,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </div>
  <p style="font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:10px" id="gd-enter-help">הדבק/י קישור הזמנה או קוד שקיבלת.</p>
  <input class="ob-f" id="gd-enter-input" type="text" placeholder="הדבק/י קישור או קוד" aria-label="קישור או קוד הזמנה" style="direction:ltr;font-family:ui-monospace,monospace">
- <button class="cta-gold" style="margin-top:10px" onclick="gdEnterCodeSubmit()" id="gd-enter-submit">✓span id="gd-enter-submit-lbl">חבר/י</span></button>
+ <button class="cta-gold" style="margin-top:10px" onclick="gdEnterCodeSubmit()" id="gd-enter-submit">✓ <span id="gd-enter-submit-lbl">חבר/י</span></button>
  </div>
  </div>
 
@@ -2241,7 +2242,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <p style="font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:10px" data-he="אפשר להוסיף רק אנשי קשר שכבר משתמשים ב-SHOMER. הזן/י מספר נייד — נבדוק בצורה מאובטחת (המספר אף פעם לא נחשף)." data-en="You can only add contacts who already use SHOMER. Enter a mobile number — we check securely (the number is never exposed)." data-ar="يمكنك إضافة جهات تستخدم SHOMER فقط. أدخل رقم جوال — نتحقق بأمان (لا يُكشف الرقم).">אפשר להוסיף רק אנשי קשר שכבר משתמשים ב-SHOMER. הזן/י מספר נייד — נבדוק בצורה מאובטחת (המספר אף פעם לא נחשף).</p>
  <input class="ob-f" id="gd-ph-input" type="tel" inputmode="tel" autocomplete="tel" maxlength="15" placeholder="050-000-0000" dir="ltr" aria-label="מספר נייד">
  <input class="ob-f" id="gd-ph-name" type="text" maxlength="24" placeholder="שם (לא חובה)" data-he-ph="שם (לא חובה)" aria-label="שם" style="margin-top:8px">
- <button class="cta-gold" id="gd-ph-go" style="margin-top:10px" onclick="gdAddPhoneSubmit()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16.5 16.5L21 21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>span data-he="בדוק/י והוסף/י" data-en="Check & add" data-ar="تحقّق وأضف">בדוק/י והוסף/י</span></button>
+ <button class="cta-gold" id="gd-ph-go" style="margin-top:10px" onclick="gdAddPhoneSubmit()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16.5 16.5L21 21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span data-he="בדוק/י והוסף/י" data-en="Check & add" data-ar="تحقّق وأضف">בדוק/י והוסף/י</span></button>
  </div>
  <!-- INVITE mode: contact is NOT a SHOMER yet -->
  <div id="gd-ph-invite" style="display:none">
@@ -2268,7 +2269,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </div>
  <p style="font-size:13px;color:var(--tx1);line-height:1.7;margin-bottom:6px" id="gd-accept-body">מישהו מזמין אותך להיות השומר/ת שלו.</p>
  <p style="font-size:11.5px;color:var(--tx2);line-height:1.6;margin-bottom:14px" id="gd-accept-sub">באישור: תראו זה את מיקומו החי של זה. ניתן לעצור בכל רגע מתוך "מעגלים".</p>
- <button class="cta-gold" onclick="gdAcceptInvite()" id="gd-accept-yes">✓span id="gd-accept-yes-lbl">אשר/י וחבר/י</span></button>
+ <button class="cta-gold" onclick="gdAcceptInvite()" id="gd-accept-yes">✓ <span id="gd-accept-yes-lbl">אשר/י וחבר/י</span></button>
  <button class="row-btn" style="margin-top:10px;justify-content:center;color:#FF7080" onclick="gdDeclineInvite()" id="gd-accept-no">דחה/י</button>
  </div>
  </div>
@@ -2304,7 +2305,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <p style="font-size:12.5px;color:var(--tx1);line-height:1.65;margin-bottom:4px" id="consent-intro">כדי לחבר שומר/ת, עליך להסכים לשתף את מיקומך החי. ההסכמה היא בבחירתך וניתן לבטל אותה בכל רגע.</p>
  <ul class="consent-points" id="consent-points"></ul>
  <p style="font-size:11px;color:var(--tx3);line-height:1.6;margin:0 0 12px" id="consent-policy">בהסכמתך את/ה מאשר/ת את <button type="button" class="lnk-inline" onclick="openLegal('tos')">תנאי השימוש</button> ו<button type="button" class="lnk-inline" onclick="openLegal('privacy')">מדיניות הפרטיות</button>.</p>
- <button class="cta-gold" onclick="gdConsentAgree()" id="consent-agree">✓span id="consent-agree-lbl">אני מסכים/ה לשתף מיקום</span></button>
+ <button class="cta-gold" onclick="gdConsentAgree()" id="consent-agree">✓ <span id="consent-agree-lbl">אני מסכים/ה לשתף מיקום</span></button>
  <button class="row-btn" style="margin-top:10px;justify-content:center" onclick="gdConsentCancel()" id="consent-cancel-btn">ביטול</button>
  </div>
  </div>
@@ -3398,11 +3399,12 @@ const NAMES={
 };
 let nameAuto=true; // true until the user edits the name field themselves
 // Auto-generated handle: "Shomer" + a zero-padded number (e.g. Shomer00001). Editable.
-function pickRandomName(){if(pickRandomName._n==null)pickRandomName._n=Math.floor(Math.random()*99999)+1;return 'Shomer'+String(pickRandomName._n).padStart(5,'0');}
+function pickRandomName(){if(pickRandomName._n==null)pickRandomName._n=Math.floor(Math.random()*9999)+1;return 'SH✡MER'+String(pickRandomName._n).padStart(4,'0');}
 function localizedGuardian(){return ({he:'שומר',en:'Guardian',ar:'حارس',ru:'Страж',am:'ጠባቂ',fr:'Gardien'})[currentLang]||'Guardian';}
 function randomizeName(){const inp=document.getElementById('ob-name');if(!inp)return;nameAuto=true;pickRandomName._n=null;inp.value=pickRandomName();}
 /* If the field still holds an auto-generated name (user hasn't typed), refresh it
  to the current language so name + UI localize together. */
+try{document.addEventListener('DOMContentLoaded',function(){try{refreshAutoName();}catch(e){}});}catch(e){}
 function refreshAutoName(){
  if(!nameAuto)return;
  const inp=document.getElementById('ob-name');
@@ -6620,7 +6622,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v74';
+var APP_VER='v87';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -7675,7 +7677,7 @@ async function enterAppAnonymously(){
 
 const TWILIO_BASE="https://shomer-verify-8701-prod.twil.io";
 
-async async function sendTwilioOTP(){
+async function sendTwilioOTP(){
  const he=currentLang==="he";
  const btn=document.getElementById("ob-submit-btn");
  const statusEl=document.getElementById("ob-sms-status");
@@ -7738,7 +7740,7 @@ function showSMSCodeScreen(){
  sendTwilioOTP();
 }
 
-async function verifyTwilioCodeioCode(){
+async function verifyTwilioCode(){
  const he=currentLang==="he";
  const inp=document.getElementById("ob-code-inp");
  const code=(inp&&inp.value||"").replace(/\D/g,"");
@@ -7764,7 +7766,10 @@ async function verifyTwilioCodeioCode(){
  }catch(e){
   if(errEl)errEl.textContent=he?"❌ בעיית רשת":"❌ Network error";
   if(btn){btn.disabled=false;btn.textContent=he?"אמת/י ✓":"Verify ✓";}
-async function completeRegistrationRegistration(){
+ }
+}
+
+async function completeRegistration(){
  const he=currentLang==="he";
  try{
   await fbEnsureAuthSdk();
@@ -7856,7 +7861,8 @@ function stopSiren(){
 }
 // ────────────────────────────────────────────────────────────
 
-// ── Contact Picker (native phonebook) ───────────async function openContactPicker openContactPicker(circleId){
+// ── Contact Picker (native phonebook) ───────────
+async function openContactPicker(circleId){
  const he=currentLang==='he';
  if(!navigator.contacts||!navigator.contacts.select){
   // Fallback to manual entry
@@ -7882,7 +7888,11 @@ function stopSiren(){
  }catch(e){
   console.error('[ContactPicker]',e);
   // User denied or not supported — fall back to manual
-  gdAddPhoneOpenasync function addShomerToCirclenction addShomerToCircle(phoneDigits, displayName, circleId){
+  gdAddPhoneOpen(circleId);
+ }
+}
+
+async function addShomerToCircle(phoneDigits, displayName, circleId){
  const he=currentLang==='he';
  if(!phoneDigits)return;
  try{
