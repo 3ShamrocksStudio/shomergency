@@ -382,7 +382,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 .resp-mk .resp-dot{position:relative;width:26px;height:26px;border-radius:50%;background:rgba(14,136,64,.95);display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(14,136,64,.5);}
 .resp-mk .resp-ring{position:absolute;inset:-5px;border-radius:50%;border:2px solid rgba(14,136,64,.6);animation:sosIncDot 1.4s ease-out infinite;}
 /* Live connection-status pill (top-center) — shows connected · N nearby · listening ✓ */
-.fb-status{position:absolute;top:calc(var(--hdr-top,0px) + var(--hdr) + 8px);left:50%;transform:translateX(-50%);z-index:560;display:flex;align-items:center;gap:7px;padding:5px 13px;border-radius:999px;background:rgba(8,18,36,.92);backdrop-filter:blur(10px);border:1px solid var(--b2);box-shadow:0 4px 16px rgba(0,0,0,.4);font-size:11.5px;font-weight:600;color:var(--tx1);max-width:93vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;transition:opacity .3s;}
+.fb-status{position:static;display:flex;align-items:center;gap:5px;padding:4px 9px;border-radius:999px;background:rgba(8,18,36,.85);border:1px solid var(--b2);font-size:10px;font-weight:600;color:var(--tx1);max-width:118px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;transition:opacity .3s;}
 .fb-dot{width:8px;height:8px;border-radius:50%;background:var(--amb);flex-shrink:0;}
 .fb-status.connected{color:var(--tx0);}
 .fb-status.connected .fb-dot{background:var(--grn);animation:fbpulse 2s ease-out infinite;}
@@ -1213,6 +1213,14 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
 
 .ob-logo{padding-top:max(12px,env(safe-area-inset-top));}
 .ob-logo img{max-height:160px;width:auto;}
+
+/* Profile: identity card + differentiated stat tiles */
+.prof-top{background:linear-gradient(160deg,rgba(224,168,40,.10),rgba(16,30,52,.65));border:1px solid rgba(224,168,40,.35);border-radius:16px;padding:18px 14px 16px;margin-bottom:14px;}
+.prof-top .p-nm{font-family:inherit;letter-spacing:.3px;}
+.stats .st{border-top:3px solid transparent;border-radius:12px;}
+.stats .st:nth-child(1){border-top-color:rgba(224,168,40,.7);}
+.stats .st:nth-child(2){border-top-color:rgba(255,90,90,.7);}
+.stats .st:nth-child(3){border-top-color:rgba(46,204,113,.7);}
 </style>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 </head>
@@ -1450,6 +1458,10 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <img class="hdr-logo-svg" src="Brand/SVG/SHOMER.APP_WHITE.svg" alt="SHOMER" width="150" height="35">
  </div>
  <div class="hdr-right">
+ <button class="fb-status connecting" id="fb-status" onclick="explainStatus()" aria-live="polite" aria-label="מצב חיבור">
+ <span class="fb-dot" id="fb-dot" aria-hidden="true"></span>
+ <span class="fb-status-txt" id="fb-status-txt">מתחבר…</span>
+ </button>
  <button class="hdr-guide" onclick="openGuide()" aria-label="מדריך חירום" title="מדריך חירום">
  <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 9v6M9 12h6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
  </button>
@@ -1459,15 +1471,11 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v90 · 08.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v91 · 08.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
- <button class="fb-status connecting" id="fb-status" onclick="explainStatus()" aria-live="polite" aria-label="מצב חיבור">
- <span class="fb-dot" id="fb-dot" aria-hidden="true"></span>
- <span class="fb-status-txt" id="fb-status-txt">מתחבר…</span>
- </button>
- <!-- DIAGNOSTIC PANEL — read on each phone to pinpoint where SOS breaks -->
+  <!-- DIAGNOSTIC PANEL — read on each phone to pinpoint where SOS breaks -->
  <div class="diag-panel" id="diag-panel" aria-hidden="true">
  <div class="diag-ttl" data-he="מצב חיבור · SHOMER" data-en="Connection status · SHOMER" data-ar="حالة الاتصال · شومير">מצב חיבור · SHOMER</div>
  <div class="diag-row"><span class="diag-k" data-he="זיהוי (Auth)" data-en="Sign-in (Auth)" data-ar="تسجيل الدخول (Auth)">זיהוי (Auth)</span><span class="diag-v" id="diag-auth">—</span></div>
@@ -1569,7 +1577,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="rc-ic" style="margin:0 auto 14px"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg></div>
  <div class="sos-cd-ttl" id="pin-ttl" data-he="קוד לביטול SOS" data-en="SOS cancel code">קוד לביטול SOS</div>
  <div class="sos-cd-sub" id="pin-sub" data-he="ביטול SOS פעיל מחייב את הקוד האישי שלך — לעולם לא טביעת אצבע." data-en="Cancelling an active SOS requires your personal code — never a fingerprint.">ביטול SOS פעיל מחייב את הקוד האישי שלך — לעולם לא טביעת אצבע.</div>
- <div class="pin-dots" id="pin-dots" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+ <div class="pin-dots" id="pin-dots" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
  <div class="pin-err" id="pin-err" role="alert"></div>
  <div class="pin-pad" id="pin-pad"></div>
  <button class="ob-back" style="margin-top:14px" onclick="closeSosPin()" data-he="חזרה" data-en="Back">חזרה</button>
@@ -3487,20 +3495,14 @@ async function obvSuccess(){
  SS.security.phoneVerified=true;
  if(SS.user)SS.user.phone=user.phone;
  try{
-  const db=window.firebase.database();
   const digits=(user.phone||'').replace(/[^0-9]/g,'');
   const hb=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(digits));
   const ph=Array.from(new Uint8Array(hb)).map(b=>b.toString(16).padStart(2,'0')).join('');
   FB._myPhoneHash=ph;
-  let uname=SS.user&&SS.user.username;
-  if(!uname){
-   const snap=await db.ref('meta/userCount').transaction(n=>(n||0)+1);
-   const num=snap.snapshot.val();
-   uname='SH✡MER'+String(num).padStart(4,'0');
-   if(SS.user)SS.user.username=uname;
-  }
-  const fbU=window.firebase.auth().currentUser;
-  await db.ref('registry/'+ph).set({uid:fbU?fbU.uid:ph,username:uname,name:(SS.user&&SS.user.name)||uname,registeredAt:Date.now(),lang:currentLang});
+  let uname=(SS.user&&SS.user.username)||shomerHandleFromHash(ph);
+  if(SS.user)SS.user.username=uname;
+  const fbU=window.firebase.auth&&window.firebase.auth().currentUser;
+  await fbRestWrite('PUT','registry/'+ph,{uid:fbU?fbU.uid:ph,name:((SS.user&&SS.user.name)||uname).substring(0,60),ts:Date.now()});
   SS.security.firebaseUid=fbU?fbU.uid:'';saveStore();
   toast(he?`✓ ברוך הבא, ${uname}`:ar?`✓ مرحبا, ${uname}`:`✓ Welcome, ${uname}`,'grn');
  }catch(re){
@@ -3592,7 +3594,7 @@ function obFinish(goSettings){
  SS.alarm.type=alarmType;
  SS.lang=currentLang;
  const pin=(document.getElementById('ob-pin')||{}).value||'';
- if(/^\d{4}$/.test(pin)){ if(!SS.security)SS.security={}; SS.security.pin=pin; }
+ if(/^\d{4,6}$/.test(pin)){ if(!SS.security)SS.security={}; SS.security.pin=pin; }
  saveStore();
  enterApp(false);
  // "הגדרות" → straight into Settings. "כניסה" → fast entry + a prominent (non-blocking)
@@ -3607,7 +3609,7 @@ function showSetupPrompt(){
  var he=currentLang==='he', ar=currentLang==='ar';
  var ov=document.getElementById('setup-prompt');
  if(!ov){ ov=document.createElement('div'); ov.id='setup-prompt'; ov.className='setup-ov'; document.body.appendChild(ov); }
- var hasCode=!!(SS.security&&/^\d{4}$/.test(SS.security.pin||''));
+ var hasCode=!!(SS.security&&/^\d{4,6}$/.test(SS.security.pin||''));
  var selfieOn=!!(SS.settings&&SS.settings.selfie);
  var chev='<svg class="ic su-chev" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M14 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
  ov.innerHTML='<div class="setup-card" role="dialog" aria-modal="true">'
@@ -3630,7 +3632,7 @@ function setupDone(silent){ var ov=document.getElementById('setup-prompt'); if(o
 /* Shared app-entry path — used by fresh onboarding AND by returning users on load. */
 function enterApp(returning){
  const profNm=document.getElementById('profNm');
- if(profNm)profNm.textContent=user.name||localizedGuardian();
+ if(profNm)profNm.textContent=(SS.user&&SS.user.username)||user.name||localizedGuardian();
  try{ renderProfession(); }catch(e){}
  // Best-effort setup — never let a failure here trap the user.
  try{ startShakeDetection(); }catch(e){}
@@ -4105,7 +4107,7 @@ function activateSOS(){
  try{ fbPublishSOS(); }catch(e){} // cross-device: broadcast this SOS over RTDB
  try{ fbAlertPairedSos(); }catch(e){} // targeted closed-app push to paired SHOMERs
  try{ if(curSosId) fbRespondersListen(curSosId); }catch(e){} // live "N שומרים בדרך" as responders commit
- toast(he?' SOS שודר — שומרים בקרבתך עודכנו':' SOS broadcast — nearby SHOMERs notified','red');
+ toast(he?' SOS שודר — שומרים בקרבתך עודכנו':' SOS broadcast — nearby SHOMERs notified','red',function(){try{openUpdates();}catch(e){}});
  // Auto-dial prompt (opens dialer; a native app could place the call directly).
  setTimeout(()=>{
  if(sosPhase!=='active')return;
@@ -4118,7 +4120,7 @@ function activateSOS(){
  r++;
  const ss=document.getElementById('ss-s');
  if(ss) ss.textContent=`${r} ${he?'שומר'+(r>1?'ים':'')+' בדרך':'guardian'+(r>1?'s':'')+' responding'}`;
- if(r>=3){toast(he?'3 שומרים בדרך — הישאר במקומך!':'3 guardians responding — stay put!','grn');clearInterval(sosTimer);}
+ if(r>=3){toast(he?'3 שומרים בדרך — הישאר במקומך!':'3 guardians responding — stay put!','grn',function(){try{openUpdates();}catch(e){}});clearInterval(sosTimer);}
  },5000);
  setTimeout(()=>{if(sosPhase==='active')openUpdates();},800);
 }
@@ -4134,7 +4136,7 @@ function buildPinPad(){
  pad.innerHTML=keys.map(function(k){return k===''?'<span class="pin-key empty"></span>':k==='del'?'<button class="pin-key" onclick="pinDel()" aria-label="delete">⌫</button>':'<button class="pin-key" onclick="pinDigit(\''+k+'\')">'+k+'</button>';}).join('');
 }
 function reflectPinDots(){ document.querySelectorAll('#pin-dots span').forEach(function(s,i){s.classList.toggle('on',i<_pinBuf.length);}); }
-function pinDigit(d){ if(_pinBuf.length>=4)return; _pinBuf+=d; reflectPinDots(); if(_pinBuf.length===4)setTimeout(pinSubmit,130); }
+function pinDigit(d){ var lim=_pinMode==='set'?6:((((SS.security&&SS.security.pin)||'').length)||6); if(_pinBuf.length>=lim)return; _pinBuf+=d; reflectPinDots(); if(_pinBuf.length===lim)setTimeout(pinSubmit,130); }
 function pinDel(){ _pinBuf=_pinBuf.slice(0,-1); reflectPinDots(); var e=document.getElementById('pin-err'); if(e)e.textContent=''; }
 function pinSubmit(){
  var he=currentLang==='he';
@@ -4155,7 +4157,7 @@ function openSetPin(){ _pinMode='set';_pinBuf='';_pinCb=null; buildPinPad(); ref
 function _pinSetTexts(){ var he=currentLang==='he', set=_pinMode==='set';
  setText('pin-ttl',set?(he?'בחר/י קוד ביטול':'Choose a cancel code'):(he?'קוד לביטול SOS':'SOS cancel code'));
  setText('pin-sub',set?(he?'6 ספרות. יידרש כדי לבטל SOS פעיל. לעולם לא טביעת אצבע.':'6 digits. Required to cancel an active SOS. Never a fingerprint.'):(he?'ביטול SOS פעיל מחייב את הקוד האישי שלך — לעולם לא טביעת אצבע.':'Cancelling an active SOS requires your personal code — never a fingerprint.')); }
-function reflectPinSetState(){ var el=document.getElementById('pin-set-state'); if(el){var he=currentLang==='he', has=SS.security&&/^\d{4}$/.test(SS.security.pin||''); el.textContent=has?(he?'מוגדר ✓':'Set ✓'):(he?'לא הוגדר':'Not set'); el.style.color=has?'var(--grn)':'var(--amb)';} }
+function reflectPinSetState(){ var el=document.getElementById('pin-set-state'); if(el){var he=currentLang==='he', has=SS.security&&/^\d{4,6}$/.test(SS.security.pin||''); el.textContent=has?(he?'מוגדר ✓':'Set ✓'):(he?'לא הוגדר':'Not set'); el.style.color=has?'var(--grn)':'var(--amb)';} }
 function closeSosPin(){ var ov=document.getElementById('sos-pin'); if(ov){ov.classList.remove('on');ov.setAttribute('aria-hidden','true');} _pinBuf='';_pinCb=null; }
 
 /* ═══════════════ THEFT-SELFIE PROTECTION (opt-in) ═══════════════
@@ -4290,10 +4292,12 @@ function startMaxAttention(){
  setText('strobe-note',he?'הבהוב המסך, הצליל והפנס פועלים כל עוד האפליקציה פתוחה. הבהוב במסך נעול יתווסף בגרסה המותקנת.':ar?'وميض الشاشة والصوت والمصباح يعمل طالما التطبيق مفتوح. وميض الشاشة المقفلة سيُضاف في النسخة المُثبَّتة.':'Screen flash, sound and flashlight run while the app is open. Locked-screen flashing arrives in the installed app.');
  var ov=document.getElementById('sos-strobe'); if(ov){ov.classList.add('on');ov.setAttribute('aria-hidden','false');}
  startMorse();
+ try{if(window._sosVibT)clearInterval(window._sosVibT);window._sosVibT=setInterval(function(){try{navigator.vibrate&&navigator.vibrate([420,140,420]);}catch(e){}},1300);}catch(e){}
 }
 function stopMaxAttention(){
  var ov=document.getElementById('sos-strobe'); if(ov){ov.classList.remove('on');ov.setAttribute('aria-hidden','true');}
  stopMorse();
+ try{if(window._sosVibT){clearInterval(window._sosVibT);window._sosVibT=null;}navigator.vibrate&&navigator.vibrate(0);}catch(e){}
 }
 /* Hide the strobe visual to reach the map / type picker — SOS stays ACTIVE (alarm + morse
    continue). Fully stopping requires the cancel code (never biometric). */
@@ -4370,9 +4374,9 @@ function resolveSOS(){
   var ov=document.getElementById('sos-resolve');
   if(ov){ov.classList.add('on');ov.setAttribute('aria-hidden','false');}
  };
- var hasPin=SS.security&&/^\d{4}$/.test(SS.security.pin||'');
+ var hasPin=SS.security&&/^\d{4,6}$/.test(SS.security.pin||'');
  if(hasPin){ openSosPin(proceed); }
- else { toast(currentLang==='he'?'טיפ: הגדר/י קוד ביטול ב"הגדרות → בטיחות" להגנה מפני ביטול בכפייה':'Tip: set a cancel code in Settings → Safety to guard against forced cancellation','amb'); proceed(); }
+ else { toast(currentLang==='he'?'טיפ: הגדר/י קוד ביטול ב"הגדרות → בטיחות" להגנה מפני ביטול בכפייה':'Tip: set a cancel code in Settings → Safety to guard against forced cancellation','amb',function(){try{op('sh-set');}catch(e){}}); proceed(); }
 }
 /* Resolution choice. accidental/test are scrubbed from the map + feed and never shown
  to others; only confirmed-real events remain mapped. */
@@ -5214,6 +5218,9 @@ function guideBackToList(){ var lv=document.getElementById('guide-list-view'), d
    bubble on-screen, and can never trap the user (Skip/Done always end it). */
 function tourSteps(){ var he=currentLang==='he', ar=currentLang==='ar'; var P=function(o){return he?o.he:ar?o.ar:o.en;};
  return [
+  {sel:'.hdr-guide', ic:'<rect x="3.5" y="5" width="17" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 9v6M9 12h6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>',
+   t:P({he:'מדריך חירום',en:'Emergency guide',ar:'دليل الطوارئ'}),
+   b:P({he:'כרטיסי עזרה ראשונה גלויים במבט (החייאה, חנק, דימום, שבץ ועוד) — עובד גם ללא אינטרנט.',en:'Glanceable first-aid cards (CPR, choking, bleeding, stroke and more) — works even offline.',ar:'بطاقات إسعاف أولي واضحة (إنعاش، اختناق، نزيف، سكتة والمزيد) — تعمل حتى دون إنترنت.'})},
   {sel:'#sos-btn', ic:'<path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>',
    t:P({he:'כפתור SOS',en:'SOS button',ar:'زر الاستغاثة'}),
    b:P({he:'לחיצה שולחת את מיקומך ואזעקה לשומרים בקרבתך ולאנשי הקשר שלך. בחירום אמיתי חייגו גם 100 / 101 / 102.',en:'Press to send your location + an alarm to nearby SHOMERs and your contacts. In a real emergency also call 100 / 101 / 102.',ar:'اضغط لإرسال موقعك وإنذار إلى الحُرّاس القريبين وجهات اتصالك. في الطوارئ اتصل أيضًا بـ100 / 101 / 102.'})},
@@ -5222,10 +5229,7 @@ function tourSteps(){ var he=currentLang==='he', ar=currentLang==='ar'; var P=fu
    b:P({he:'רואים אירועים בקרבתכם ושומרים פעילים בזמן אמת. כשמתקבל SOS מוצג מסלול לאירוע.',en:'See nearby events and active SHOMERs in real time. When an SOS comes in, a route to it appears.',ar:'شاهد الأحداث القريبة والحُرّاس النشطين مباشرة. عند وصول استغاثة يظهر مسار إليها.'})},
   {sel:'#menu-btn', ic:'<path d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M17 7.2a3 3 0 0 1 0 5.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
    t:P({he:'השומרים שלי',en:'My SHOMER',ar:'حُرّاسي'}),
-   b:P({he:'בתפריט: חברו אנשים שאתם סומכים עליהם. הם יראו את מיקומכם החי ואתם את שלהם — בהזמנה ובאישור, וניתן לעצור בכל רגע.',en:'In the menu: connect people you trust. They see your live location and you see theirs — by invite + consent, and you can stop anytime.',ar:'في القائمة: اربط أشخاصًا تثق بهم. يرون موقعك المباشر وترى مواقعهم — بدعوة وموافقة، ويمكنك الإيقاف في أي وقت.'})},
-  {sel:'.hdr-guide', ic:'<rect x="3.5" y="5" width="17" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 9v6M9 12h6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>',
-   t:P({he:'מדריך חירום',en:'Emergency guide',ar:'دليل الطوارئ'}),
-   b:P({he:'כרטיסי עזרה ראשונה גלויים במבט (החייאה, חנק, דימום, שבץ ועוד) — עובד גם ללא אינטרנט.',en:'Glanceable first-aid cards (CPR, choking, bleeding, stroke and more) — works even offline.',ar:'بطاقات إسعاف أولي واضحة (إنعاش، اختناق، نزيف، سكتة والمزيد) — تعمل حتى دون إنترنت.'})}
+   b:P({he:'בתפריט: חברו אנשים שאתם סומכים עליהם. הם יראו את מיקומכם החי ואתם את שלהם — בהזמנה ובאישור, וניתן לעצור בכל רגע.',en:'In the menu: connect people you trust. They see your live location and you see theirs — by invite + consent, and you can stop anytime.',ar:'في القائمة: اربط أشخاصًا تثق بهم. يرون موقعك المباشر وترى مواقعهم — بدعوة وموافقة، ويمكنك الإيقاف في أي وقت.'})}
  ];
 }
 var _tour={i:0,steps:[]};
@@ -5262,7 +5266,7 @@ function tourShow(){
   bub.style.left=left+'px'; bub.style.top=top+'px'; bub.style.visibility='visible';
  });
 }
-function toast(txt,cls){
+function toast(txt,cls,act){
  if(typeof arTr==='function')txt=arTr(txt);
  const c=document.getElementById('toasts');
  const cm={red:'#CC1426',grn:'#2ECC71',amb:'#C07808',pur:'#8E4DFF','':`#C9A84C`};
@@ -5274,6 +5278,7 @@ function toast(txt,cls){
  const span=document.createElement('span');span.className='t-tx';span.textContent=txt;
  const xBtn=document.createElement('button');xBtn.className='t-x';xBtn.textContent='✕';xBtn.setAttribute('aria-label','סגור');xBtn.onclick=()=>d.remove();
  d.appendChild(dot);d.appendChild(span);d.appendChild(xBtn);
+ if(typeof act==='function'){d.style.cursor='pointer';dot.style.cursor='pointer';span.style.cursor='pointer';span.style.textDecoration='underline';span.style.textUnderlineOffset='3px';var go=function(ev){try{act();}catch(e){} d.remove();};dot.onclick=go;span.onclick=go;}
  c.appendChild(d);
  while(c.children.length>3)c.firstChild.remove();
  setTimeout(()=>{if(d.parentElement)d.remove();},7000);
@@ -5569,7 +5574,7 @@ function memberSOS(id){
  setText('circle-alert-s',he?'כל המעגל קיבל התראה · מיקום חי משותף':'Whole circle alerted · live location shared');
  if(strip)strip.classList.add('on');
  cl('sh-circles');
- toast((he?' SOS מ':' SOS from ')+m.name,'red');
+ toast((he?' SOS מ':' SOS from ')+m.name,'red',function(){try{openUpdates();}catch(e){}});
  try{pushNotify(' SHOMER — Circle SOS',m.name+(he?' זקוק/ה לעזרה':' needs help'),'circle-sos');}catch(e){}
  flyToMember(id);
  // Demo auto-resolve so the simulated alert clears itself after a while.
@@ -6606,6 +6611,25 @@ function injectSheetCredits(){
  });
 }
 try{ injectSheetCredits(); }catch(e){}
+/* Per-category visual identity in Settings: each section gets its own accent. */
+function styleSettingsSections(){
+ try{
+  var body=document.querySelector('#sh-set .sh-body'); if(!body||body.dataset.styled)return; body.dataset.styled='1';
+  var ACC=['#E0A828','#FF5A5A','#19A8FF','#2ECC71','#8E4DFF'];
+  var i=-1;
+  Array.prototype.forEach.call(body.children,function(el){
+   if(el.classList.contains('set-cat')){
+    i=Math.min(i+1,ACC.length-1); var a=ACC[i];
+    var ic=el.querySelector('.set-cat-ic'); if(ic){ic.style.color=a;ic.style.background=a+'1f';ic.style.border='1px solid '+a+'55';ic.style.borderRadius='10px';}
+    var t=el.querySelector('.set-cat-t'); if(t)t.style.color=a;
+   } else if(i>=0 && (el.classList.contains('set-grp')||el.classList.contains('sl-card'))){
+    el.style.borderRight='3px solid '+ACC[i]+'66';
+   }
+  });
+ }catch(e){}
+}
+try{ styleSettingsSections(); }catch(e){}
+
 try{ hydrateIcons(document); }catch(e){}
 
 /* ═══════════════════════════════════════════════════════════════════════
@@ -6617,7 +6641,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v90';
+var APP_VER='v91';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -7780,7 +7804,8 @@ async function fbEnsureAuthReady(ms){
  return false;
 }
 /* Deterministic per-phone handle: same phone => same number, on any device. No server counter needed. */
-function shomerHandleFromHash(ph){ return "SH✡MER"+String((parseInt(ph.slice(0,8),16)%9999)+1).padStart(4,"0"); }
+var FOUNDER_PH="ed8e941f0cd44dd2d47d184047fae955420ab062f4a4bb838da7733a68c71d16";
+function shomerHandleFromHash(ph){ if(ph===FOUNDER_PH)return "SH✡MER0000"; return "SH✡MER"+String((parseInt(ph.slice(0,8),16)%9999)+1).padStart(4,"0"); }
 async function completeRegistration(){
  const he=currentLang==="he";
  const btn=document.getElementById("ob-verify-twilio-btn");
