@@ -1321,7 +1321,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <span id="ob-disclaimer-txt"><strong>שומר אינו תחליף לשירותי חירום.</strong> זהו כלי לבטיחות אישית ושיתוף מיקום. במצב חירום אמיתי חייגו <b>100</b> (משטרה) · <b>101</b> (מד״א) · <b>102</b> (כבאות). שומר אינו מתקשר לרשויות עבורך.</span>
  </div>
 
- <button class="ob-cta" id="ob-cta0" id="ob-submit-btn" onclick="obStep0()"><span id="ob-cta0-t">המשך</span></button>
+ <button class="ob-cta" id="ob-submit-btn" onclick="obStep0()"><span id="ob-cta0-t">המשך</span></button>
  </div>
  </div>
 
@@ -1447,7 +1447,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <!-- REAL "guardians nearby" — live count from RTDB presence (shown only when connected). -->
  <button class="hdr-near" id="hdr-near" style="display:none" onclick="explainNearby()" aria-live="polite">
  <div class="ldot" aria-hidden="true"></div>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:1;pointer-events:none">v84 · 06.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:1;pointer-events:none">v85 · 06.07.26</div>
  <span id="gnear-n">0</span>
  <span class="gnear-lbl" id="gnear-lbl" data-he="שומרים" data-en="SH✡MERs" data-ar="حُرّاس">שומרים</span>
  </button>
@@ -7571,7 +7571,7 @@ window.addEventListener('beforeinstallprompt',e=>{
  e.preventDefault();deferredPrompt=e;
  setTimeout(showA2HS,3000);
 });
-function showA2HS(){
+async function showA2HS(){
  if(!deferredPrompt||document.querySelector('.a2hs'))return;
  const d=document.createElement('div');d.className='a2hs';
  d.innerHTML=`<img class="a2hs-icon" src="logo-192.png" alt=""><div class="a2hs-text"><div class="a2hs-t">${currentLang==='he'?'התקן את שומר':'Install Shomer'}</div><div class="a2hs-s">${currentLang==='he'?'גישה מהירה מהמסך הראשי':'Quick access from home screen'}</div></div><button class="a2hs-btn" id="a2hs-install">${currentLang==='he'?'התקן':'Install'}</button><span class="a2hs-x" id="a2hs-close"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span>`;
@@ -7738,7 +7738,7 @@ function showSMSCodeScreen(){
  sendTwilioOTP();
 }
 
-async function verifyTwilioCode(){
+async function verifyTwilioCodeioCode(){
  const he=currentLang==="he";
  const inp=document.getElementById("ob-code-inp");
  const code=(inp&&inp.value||"").replace(/\D/g,"");
@@ -7764,10 +7764,7 @@ async function verifyTwilioCode(){
  }catch(e){
   if(errEl)errEl.textContent=he?"❌ בעיית רשת":"❌ Network error";
   if(btn){btn.disabled=false;btn.textContent=he?"אמת/י ✓":"Verify ✓";}
- }
-}
-
-async function completeRegistration(){
+async function completeRegistrationRegistration(){
  const he=currentLang==="he";
  try{
   await fbEnsureAuthSdk();
@@ -7859,8 +7856,7 @@ function stopSiren(){
 }
 // ────────────────────────────────────────────────────────────
 
-// ── Contact Picker (native phonebook) ──────────────────────
-async function openContactPicker(circleId){
+// ── Contact Picker (native phonebook) ───────────async function openContactPicker openContactPicker(circleId){
  const he=currentLang==='he';
  if(!navigator.contacts||!navigator.contacts.select){
   // Fallback to manual entry
@@ -7886,11 +7882,7 @@ async function openContactPicker(circleId){
  }catch(e){
   console.error('[ContactPicker]',e);
   // User denied or not supported — fall back to manual
-  gdAddPhoneOpen(circleId);
- }
-}
-
-async function addShomerToCircle(phoneDigits, displayName, circleId){
+  gdAddPhoneOpenasync function addShomerToCirclenction addShomerToCircle(phoneDigits, displayName, circleId){
  const he=currentLang==='he';
  if(!phoneDigits)return;
  try{
