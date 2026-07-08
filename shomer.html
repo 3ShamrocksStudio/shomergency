@@ -1471,7 +1471,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v91 · 08.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v92 · 08.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -6641,7 +6641,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v91';
+var APP_VER='v92';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -7696,9 +7696,19 @@ async function enterAppAnonymously(){
 
 const TWILIO_BASE="https://shomer-verify-8701-prod.twil.io";
 
+var _otpSends=0,_otpCoolT=null;
+function _otpCooldown(btn,secs){
+ if(!btn)return; var he=currentLang==="he"; btn.disabled=true; var s=secs;
+ if(_otpCoolT)clearInterval(_otpCoolT);
+ var lbl=function(){btn.textContent=(he?"שליחה חוזרת בעוד ":"Resend in ")+s+(he?" שנ׳":"s");};
+ lbl();
+ _otpCoolT=setInterval(function(){ s--; if(s<=0){clearInterval(_otpCoolT);_otpCoolT=null;btn.disabled=false;btn.textContent=he?"לא קיבלת/ה קוד? שלח/י שוב":"No code? Send again";}else lbl(); },1000);
+}
 async function sendTwilioOTP(){
  const he=currentLang==="he";
  const btn=document.getElementById("ob-resend-btn");
+ if(_otpSends>=4){ const st=document.getElementById("ob-sms-status"); if(st)st.textContent=he?"יותר מדי ניסיונות — נסה/י שוב מאוחר יותר (הגנת דיוור)":"Too many attempts — try again later (anti-abuse protection)"; if(btn)btn.disabled=true; return; }
+ _otpSends++;
  const statusEl=document.getElementById("ob-sms-status");
  if(btn){btn.disabled=true;btn.textContent=he?"שולח קוד...":"Sending code...";}
  if(statusEl)statusEl.textContent=he?"⏳ שולח קוד SMS...":"⏳ Sending SMS code...";
@@ -7711,7 +7721,7 @@ async function sendTwilioOTP(){
   let data=await r.json();if(typeof data==="string"){try{data=JSON.parse(data);}catch(_){}}
   if(data.success){
    if(statusEl)statusEl.textContent=he?"✅ קוד נשלח! בדוק/י את ה-SMS":"✅ Code sent! Check your SMS";
-   if(btn){btn.disabled=false;btn.textContent=he?"לא קיבלת/ה קוד? שלח/י שוב":"No code? Send again";}
+   _otpCooldown(btn,45);
    document.getElementById("ob-code-inp")&&document.getElementById("ob-code-inp").focus();
   }else{
    if(statusEl)statusEl.textContent="❌ "+(data.error||"Failed");
