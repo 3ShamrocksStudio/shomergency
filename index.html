@@ -39,39 +39,29 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,22,40,.94
 .nav-logo img{width:44px;height:44px}
 .nav-cta{background:var(--gold-grad);color:#0A0C12;padding:10px 20px;border-radius:10px;font-weight:800;font-size:14px;white-space:nowrap}
 
-/* HERO — full bleed on mobile */
-.hero{position:relative;min-height:100dvh;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden}
-.hero-bg{position:absolute;inset:0;z-index:0}
+/* HERO — compact media block, logo straddles image bottom */
+.hero{position:relative;background:var(--n1);padding-top:68px}
+.hero-media{position:relative;width:100%;aspect-ratio:1/1;max-height:54vh;overflow:hidden;background:var(--n0)}
 .hero-bg-slide{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.2s ease}
 .hero-bg-slide.on{opacity:1}
-.hero-overlay{
-  position:absolute;inset:0;
-  background:
-    linear-gradient(to top, rgba(6,15,30,.98) 0%, rgba(6,15,30,.72) 45%, rgba(6,15,30,.3) 75%, rgba(6,15,30,.35) 100%),
-    linear-gradient(to right, rgba(6,15,30,.5) 0%, transparent 60%)
-}
-.hero-content{position:relative;z-index:2;padding:86px 24px 40px;display:flex;flex-direction:column;gap:0;align-items:center;text-align:center}
-/* Large brand logo — readable, unmissable */
-.hero-brandlogo{width:clamp(170px,44vw,250px);height:auto;margin:0 auto 6px;filter:drop-shadow(0 10px 34px rgba(0,0,0,.65)) drop-shadow(0 0 40px rgba(224,168,40,.18))}
-.hero-wordmark{font-size:clamp(30px,8vw,52px);color:var(--tx0);margin-bottom:16px;line-height:1}
-.hero-title{font-family:'Heebo',sans-serif;font-size:clamp(38px,10.5vw,70px);font-weight:900;line-height:1.1;letter-spacing:-1px;color:var(--tx0);margin-bottom:14px}
+.hero-media::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,var(--n1) 0%,rgba(10,22,40,.25) 22%,transparent 45%);pointer-events:none}
+.hero-logo{position:relative;z-index:3;display:block;width:clamp(150px,40vw,210px);height:auto;margin:calc(clamp(150px,40vw,210px) / -2) auto 0;filter:drop-shadow(0 12px 30px rgba(0,0,0,.65)) drop-shadow(0 0 34px rgba(224,168,40,.16))}
+.hero-content{position:relative;z-index:2;padding:14px 24px 46px;display:flex;flex-direction:column;align-items:center;text-align:center}
+.hero-title{font-family:'Heebo',sans-serif;font-size:clamp(34px,9.5vw,62px);font-weight:900;line-height:1.12;letter-spacing:-1px;color:var(--tx0);margin-bottom:10px}
 .hero-title .gold{background:var(--gold-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero-sub{font-size:clamp(15px,4vw,18px);color:var(--tx1);line-height:1.65;margin-bottom:26px;max-width:520px}
-.hero-cta-row{display:flex;flex-direction:column;gap:12px;margin-bottom:34px;width:100%;max-width:420px}
+.hero-sub{font-size:clamp(14px,3.8vw,17px);color:var(--tx1);line-height:1.6;margin-bottom:22px;max-width:480px}
+.hero-cta-row{display:flex;flex-direction:column;gap:12px;margin-bottom:34px;width:100%;max-width:380px}
 .btn-primary{background:var(--gold-grad);color:#0A0C12;padding:17px 32px;border-radius:var(--r);font-weight:800;font-size:17px;text-align:center;display:block;transition:opacity .15s,transform .15s;box-shadow:0 10px 30px rgba(224,168,40,.22)}
 .btn-primary:hover{opacity:.88;transform:translateY(-2px)}
 .btn-ghost{background:rgba(255,255,255,.06);border:1.5px solid var(--border);color:var(--tx1);padding:14px 28px;border-radius:var(--r);font-weight:600;font-size:15px;text-align:center;display:block}
 
-/* STATS — centered, branded */
-.hero-stats{display:flex;gap:14px;justify-content:center;align-items:stretch;width:100%;max-width:520px;margin:0 auto}
-.stat{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;background:rgba(16,30,52,.72);border:1px solid rgba(224,168,40,.28);border-radius:var(--r);padding:14px 8px;backdrop-filter:blur(8px)}
-.stat-ic{width:38px;height:38px;border-radius:12px;background:rgba(224,168,40,.13);border:1px solid rgba(224,168,40,.35);display:flex;align-items:center;justify-content:center;color:var(--g3)}
-.stat-ic svg{width:20px;height:20px}
-.stat-n{display:block;font-size:22px;font-weight:900;color:var(--g3);font-family:'Cinzel',serif}
-.stat-l{display:block;font-size:11px;color:var(--tx1);line-height:1.4}
-
-/* PHONE MOCKUP strip on desktop */
-.hero-mockup{display:none}
+/* STATS — boxless, branded gold discs */
+.hero-stats{display:flex;gap:8px;justify-content:center;align-items:flex-start;width:100%;max-width:480px;margin:0 auto}
+.stat{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;gap:7px}
+.stat-ic{width:52px;height:52px;border-radius:50%;background:var(--gold-grad);display:flex;align-items:center;justify-content:center;color:#23170a;box-shadow:0 8px 22px rgba(224,168,40,.3),inset 0 1px 0 rgba(255,255,255,.35)}
+.stat-ic svg{width:25px;height:25px}
+.stat-n{display:block;font-size:22px;font-weight:900;color:var(--g3);font-family:'Cinzel',serif;line-height:1}
+.stat-l{display:block;font-size:11px;color:var(--tx1);line-height:1.45;max-width:110px}
 
 /* SECTIONS */
 section{padding:72px 0}
@@ -79,16 +69,19 @@ section{padding:72px 0}
 .section-title .gold-line{display:block;background:var(--gold-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .section-sub{font-size:17px;font-weight:700;color:var(--tx1);max-width:480px;line-height:1.65}
 
-/* FEATURES */
+/* FEATURES — light brand section, compact */
 .bg-surface{background:var(--n2)}
-.features-grid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:44px}
-.feat-card{background:var(--n3);border:1px solid var(--border);border-radius:var(--r);padding:22px;display:flex;gap:16px;align-items:flex-start;transition:border-color .2s}
-.feat-card:hover{border-color:rgba(224,168,40,.35)}
-.feat-icon{flex-shrink:0;width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(224,168,40,.12);border:1px solid rgba(224,168,40,.3);color:var(--g3)}
-.feat-icon svg{width:23px;height:23px}
-.feat-icon.red{background:rgba(220,38,38,.13);border-color:rgba(220,38,38,.35);color:#ef6a6a}
-.feat-title{font-size:16px;font-weight:800;color:var(--tx0);margin-bottom:4px}
-.feat-text{font-size:13px;color:var(--tx1);line-height:1.6}
+.bg-light{background:linear-gradient(180deg,#FBF4E3 0%,#F5EAD0 100%)}
+.bg-light .section-title{color:#23170a}
+.bg-light .section-title .gold-line{background:linear-gradient(135deg,#9A6C1A,#C09020);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.bg-light .section-sub{color:#5A4A28;font-weight:800}
+.features-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:30px}
+.feat-card{background:rgba(255,255,255,.6);border-radius:var(--r);padding:16px 12px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;box-shadow:0 3px 14px rgba(154,108,26,.1)}
+.feat-icon{flex-shrink:0;width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--gold-grad);color:#23170a;box-shadow:0 6px 16px rgba(192,144,32,.28),inset 0 1px 0 rgba(255,255,255,.35)}
+.feat-icon svg{width:22px;height:22px}
+.feat-icon.red{background:linear-gradient(135deg,#B91C1C,#DC2626,#EF4444);color:#fff}
+.feat-title{font-size:14px;font-weight:800;color:#23170a}
+.feat-text{font-size:11.5px;color:#5A4A28;line-height:1.55}
 
 /* HOW IT WORKS */
 .steps{display:flex;flex-direction:column;gap:28px;margin-top:44px}
@@ -130,17 +123,17 @@ footer{background:var(--n2);border-top:1px solid var(--border);padding:34px 20px
 
 /* DESKTOP ≥ 800px */
 @media(min-width:800px){
-  .hero{min-height:96vh}
-  .hero-content{max-width:760px;margin:0 auto;padding:130px 48px 80px}
-  .hero-cta-row{flex-direction:row;justify-content:center}
+  .hero{padding-top:90px}
+  .hero-media{max-width:640px;margin:0 auto;border-radius:22px;border:1px solid var(--border)}
+  .hero-content{max-width:760px;margin:0 auto;padding:16px 48px 70px}
+  .hero-cta-row{flex-direction:row;justify-content:center;max-width:520px}
   .btn-primary,.btn-ghost{display:inline-block;width:auto;flex:1}
-  .features-grid{grid-template-columns:repeat(2,1fr)}
+  .features-grid{grid-template-columns:repeat(3,1fr);gap:14px}
+  .feat-card{padding:22px 16px}
   .scenarios-grid{grid-template-columns:repeat(3,1fr)}
   .scenario{aspect-ratio:3/4}
 }
-@media(min-width:1024px){
-  .features-grid{grid-template-columns:repeat(3,1fr)}
-}
+
 </style>
 </head>
 <body>
@@ -155,32 +148,28 @@ footer{background:var(--n2);border-top:1px solid var(--border);padding:34px 20px
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-bg">
+  <div class="hero-media">
     <img class="hero-bg-slide on" id="bg1" src="Shomer1080x1080px_A_blank.jpg" alt="">
     <img class="hero-bg-slide" id="bg2" src="Shomer1080x1080px_B_blank.jpg" alt="">
-    <div class="hero-overlay"></div>
   </div>
-
+  <img class="hero-logo" src="SHOMER_logo_big.png" alt="SH✡MER — שומר אחי אנוכי">
   <div class="hero-content">
-    <img class="hero-brandlogo" src="SHOMER_logo_big.png" alt="SH✡MER — שומר אחי אנוכי">
-    <div class="hero-wordmark wm">SH<span class="star">✡</span>MER</div>
     <h1 class="hero-title">אזרחים<br><span class="gold">למען אזרחים</span></h1>
     <p class="hero-sub">SH✡MER מחבר/ת אותך לרשת שמירה קהילתית. SOS בלחיצה אחת, מפת אירועים חיה, מעגלי שומרים להשגחה צמודה.</p>
     <div class="hero-cta-row">
       <a href="shomer.html" class="btn-primary">הצטרף/י עכשיו — חינם</a>
-      <a href="#how" class="btn-ghost">איך זה עובד</a>
     </div>
     <div class="hero-stats">
       <div class="stat">
-        <div class="stat-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4.5 13.5H11L9.5 22 19 10h-6.5Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div>
+        <div class="stat-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3h8l5 5v8l-5 5H8l-5-5V8Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M12 7.5v5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="12" cy="16" r="1.3" fill="currentColor"/></svg></div>
         <span class="stat-n">1</span><span class="stat-l">לחיצה לשליחת SOS</span>
       </div>
       <div class="stat">
-        <div class="stat-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 8v4l2.5 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="stat-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M12 8.5v3.5l2.3 1.8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <span class="stat-n">24/7</span><span class="stat-l">רשת קהילתית</span>
       </div>
       <div class="stat">
-        <div class="stat-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 8v8M9 8h3.2a2.4 2.4 0 0 1 0 4.8H9m4.5 3.2c.8-1 1.3-2 1.5-3.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="stat-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-9-8.5C1.4 8.2 3.5 5 6.8 5c2 0 3.6 1.1 4.5 2.7l.7 1.2.7-1.2C13.6 6.1 15.2 5 17.2 5c3.3 0 5.4 3.2 3.8 6.5-2 4.1-9 8.5-9 8.5Z" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round"/></svg></div>
         <span class="stat-n">0₪</span><span class="stat-l">חינם לאזרחים</span>
       </div>
     </div>
@@ -188,7 +177,7 @@ footer{background:var(--n2);border-top:1px solid var(--border);padding:34px 20px
 </section>
 
 <!-- FEATURES -->
-<section class="bg-surface fi" id="features">
+<section class="bg-light fi" id="features">
   <div class="wrap">
     <h2 class="section-title">ממשק אחד.<span class="gold-line">כל מה שצריך.</span></h2>
     <p class="section-sub">מורידים, מצטרפים ועוזרים!</p>
