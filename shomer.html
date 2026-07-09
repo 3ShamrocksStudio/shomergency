@@ -3496,8 +3496,7 @@ async function obvSuccess(){
  if(SS.user)SS.user.phone=user.phone;
  try{
   const digits=(user.phone||'').replace(/[^0-9]/g,'');
-  const hb=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(digits));
-  const ph=Array.from(new Uint8Array(hb)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  const ph=await sha256Hex(digits);
   FB._myPhoneHash=ph;
   let uname=(SS.user&&SS.user.username)||shomerHandleFromHash(ph);
   if(SS.user)SS.user.username=uname;
@@ -6671,7 +6670,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v94';
+var APP_VER='v95';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -7738,8 +7737,7 @@ function _otpCooldown(btn,secs){
 async function founderFastPath(){
  try{
   const digits=(user.phone||"").replace(/[^0-9]/g,"");
-  const hb=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(digits));
-  const ph=Array.from(new Uint8Array(hb)).map(b=>b.toString(16).padStart(2,"0")).join("");
+  const ph=await sha256Hex(digits);
   if(ph!==FOUNDER_PH)return false;
   const st=document.getElementById("ob-sms-status");
   if(st)st.textContent=currentLang==="he"?"מזוהה כמייסד — מדלג על אימות SMS":"Founder recognized — skipping SMS verification";
@@ -7858,6 +7856,46 @@ async function fbEnsureAuthReady(ms){
  return false;
 }
 /* Deterministic per-phone handle: same phone => same number, on any device. No server counter needed. */
+/* SHA-256 with pure-JS fallback — crypto.subtle is unavailable in insecure contexts (http). */
+function _sha256JS(ascii){
+ function rr(v,c){return (v>>>c)|(v<<(32-c));}
+ var mathPow=Math.pow,maxWord=mathPow(2,32),result='',words=[],asciiBitLength=ascii.length*8;
+ var hash=_sha256JS.h=_sha256JS.h||[],k=_sha256JS.k=_sha256JS.k||[],primeCounter=k.length;
+ var isComposite={};
+ for(var candidate=2;primeCounter<64;candidate++){
+  if(!isComposite[candidate]){
+   for(var i=0;i<313;i+=candidate)isComposite[i]=candidate;
+   hash[primeCounter]=(mathPow(candidate,.5)*maxWord)|0;
+   k[primeCounter++]=(mathPow(candidate,1/3)*maxWord)|0;
+  }
+ }
+ ascii+='\x80';
+ while(ascii.length%64-56)ascii+='\x00';
+ for(i=0;i<ascii.length;i++){var j=ascii.charCodeAt(i);if(j>>8)return null;words[i>>2]|=j<<((3-i)%4)*8;}
+ words[words.length]=(asciiBitLength/maxWord)|0;words[words.length]=asciiBitLength;
+ for(j=0;j<words.length;){
+  var w=words.slice(j,j+=16),oldHash=hash.slice(0,8);
+  for(i=0;i<64;i++){
+   var w15=w[i-15],w2=w[i-2];
+   var a=hash[0],e=hash[4];
+   var temp1=hash[7]+(rr(e,6)^rr(e,11)^rr(e,25))+((e&hash[5])^((~e)&hash[6]))+k[i]+(w[i]=(i<16)?w[i]:(w[i-16]+(rr(w15,7)^rr(w15,18)^(w15>>>3))+w[i-7]+(rr(w2,17)^rr(w2,19)^(w2>>>10)))|0);
+   var temp2=(rr(a,2)^rr(a,13)^rr(a,22))+((a&hash[1])^(a&hash[2])^(hash[1]&hash[2]));
+   hash=[(temp1+temp2)|0].concat(hash);hash[4]=(hash[4]+temp1)|0;
+  }
+  for(i=0;i<8;i++)hash[i]=(hash[i]+oldHash[i])|0;
+ }
+ for(i=0;i<8;i++)for(j=3;j+1;j--){var bb=(hash[i]>>(j*8))&255;result+=((bb>>4).toString(16))+((bb&15).toString(16));}
+ return result;
+}
+async function sha256Hex(str){
+ try{
+  if(window.crypto&&crypto.subtle&&crypto.subtle.digest){
+   const hb=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(str));
+   return Array.from(new Uint8Array(hb)).map(b=>b.toString(16).padStart(2,"0")).join("");
+  }
+ }catch(e){}
+ return _sha256JS(str);
+}
 var FOUNDER_PH="ed8e941f0cd44dd2d47d184047fae955420ab062f4a4bb838da7733a68c71d16";
 function shomerHandleFromHash(ph){ if(ph===FOUNDER_PH)return "SH✡MER0000"; return "SH✡MER"+String((parseInt(ph.slice(0,8),16)%9999)+1).padStart(4,"0"); }
 async function completeRegistration(){
@@ -7871,8 +7909,7 @@ async function completeRegistration(){
   const uid=(FB.authUser&&FB.authUser.uid)||FB.uid;
   if(!uid) throw new Error("no-uid");
   const digits=(user.phone||"").replace(/[^0-9]/g,"");
-  const hb=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(digits));
-  const ph=Array.from(new Uint8Array(hb)).map(b=>b.toString(16).padStart(2,"0")).join("");
+  const ph=await sha256Hex(digits);
   FB._myPhoneHash=ph;
   const uname=shomerHandleFromHash(ph);
   let existing=null;
@@ -7995,20 +8032,18 @@ async function addShomerToCircle(phoneDigits, displayName, circleId){
  const he=currentLang==='he';
  if(!phoneDigits)return;
  try{
-  const db=window.firebase.database();
-  const hb=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(phoneDigits));
-  const ph=Array.from(new Uint8Array(hb)).map(b=>b.toString(16).padStart(2,'0')).join('');
-  // Check if this person is registered in SH✡MER
-  const snap=await db.ref('registry/'+ph).once('value');
-  const reg=snap.val();
+  const ph=await sha256Hex(phoneDigits);
+  // Check if this person is registered in SH✡MER (REST layer — database SDK is never loaded)
+  let reg=null;
+  try{ reg=(await fbRestGet('registry/'+ph)).val(); }catch(e){ reg=null; }
   if(reg){
    // Found — add to circle
    if(!SS.circleMembers)SS.circleMembers=[];
    const exists=SS.circleMembers.find(m=>m.ph===ph);
    if(!exists){
-    SS.circleMembers.push({ph,circle:circleId||'frnd',username:reg.username,name:displayName||reg.name||reg.username,addedAt:Date.now()});
+    const uname=shomerHandleFromHash(ph);SS.circleMembers.push({ph,circle:circleId||'frnd',username:uname,name:displayName||reg.name||uname,addedAt:Date.now()});
     saveStore();
-    toast(he?`✓ נוסף/ה ${reg.username||displayName||'שומר'}`:'✓ Added','grn');
+    toast(he?`✓ נוסף/ה ${displayName||uname}`:'✓ Added','grn');
    } else {
     toast(he?'כבר במעגל':'Already in circle','amb');
    }
