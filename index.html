@@ -109,18 +109,32 @@ section{padding:72px 0}
 .emg-txt{font-size:12.5px;color:#ffd8d8;line-height:1.65}
 .emg-txt b{color:#fff}
 
-/* FOOTER */
-footer{background:var(--n2);border-top:1px solid var(--border);padding:34px 20px 26px;text-align:center}
-.footer-logo{display:flex;justify-content:center;margin-bottom:16px}
-.footer-logo img{height:34px;width:auto}
-.footer-social{display:flex;gap:14px;justify-content:center;margin-bottom:18px}
-.fs-chip{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(224,168,40,.1);border:1.5px solid rgba(224,168,40,.4);color:var(--g3);transition:background .15s,transform .15s}
-.fs-chip:hover{background:var(--gold-grad);color:#0A0C12;transform:translateY(-2px)}
-.fs-chip svg{width:21px;height:21px}
-.footer-links{display:flex;gap:20px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
-.footer-links a{font-size:13px;color:var(--tx2)}
+/* FAQ */
+.faq-list{margin-top:36px;display:flex;flex-direction:column;gap:10px}
+.faq{background:var(--n3);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:border-color .2s}
+.faq[open]{border-color:rgba(224,168,40,.45)}
+.faq summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;font-size:15px;font-weight:700;color:var(--tx0)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:'+';font-size:22px;font-weight:400;color:var(--g3);transition:transform .25s;line-height:1}
+.faq[open] summary::after{transform:rotate(45deg)}
+.faq-a{padding:0 18px 16px;font-size:13.5px;color:var(--tx1);line-height:1.7}
+
+/* FOOTER — badge, inviting action pills, socials, legal */
+footer{background:linear-gradient(180deg,var(--n2) 0%,var(--n0) 100%);border-top:1px solid var(--border);padding:44px 20px 26px;text-align:center}
+.footer-badge{display:flex;justify-content:center;margin-bottom:10px}
+.footer-badge img{width:clamp(96px,24vw,130px);height:auto;filter:drop-shadow(0 8px 24px rgba(0,0,0,.6)) drop-shadow(0 0 26px rgba(224,168,40,.14))}
+.footer-tag{font-size:13px;color:var(--tx1);margin-bottom:22px;font-weight:600}
+.footer-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:22px}
+.fa-pill{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:999px;font-size:13.5px;font-weight:700;border:1.5px solid rgba(224,168,40,.4);color:var(--g3);background:rgba(224,168,40,.08);transition:background .15s,color .15s,transform .15s}
+.fa-pill svg{width:17px;height:17px}
+.fa-pill:hover{background:var(--gold-grad);color:#0A0C12;transform:translateY(-2px)}
+.fa-pill.solid{background:var(--gold-grad);color:#0A0C12;border-color:transparent;box-shadow:0 8px 22px rgba(224,168,40,.25)}
+.fa-pill.solid:hover{opacity:.9}
+.footer-legal{display:flex;gap:18px;justify-content:center;margin-bottom:16px}
+.footer-legal a{font-size:12px;color:var(--tx3)}
+.footer-legal a:hover{color:var(--tx1)}
 .footer-copy{font-size:11px;color:var(--tx3);display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
-.footer-copy img{height:11px;width:auto;opacity:.75;display:inline-block}
+.footer-copy img{height:12px;width:auto;opacity:.75;display:inline-block}
 
 /* FADE IN */
 .fi{opacity:0;transform:translateY(24px);transition:opacity .55s ease,transform .55s ease}
@@ -249,6 +263,20 @@ nav{gap:10px;min-width:0}
   </div>
 </section>
 
+<!-- FAQ -->
+<section class="fi">
+  <div class="wrap">
+    <h2 class="section-title">שאלות נפוצות</h2>
+    <div class="faq-list">
+      <details class="faq"><summary>מה זה SH✡MER?</summary><div class="faq-a">רשת בטיחות קהילתית: כפתור SOS שמפעיל אזעקה ושולח את מיקומך לשומרים שלך, מפת אירועים חיה, מעגלי משפחה וחברים, ומדריך חירום מלא — הכל באפליקציה אחת.</div></details>
+      <details class="faq"><summary>כמה זה עולה?</summary><div class="faq-a">כלום. SH✡MER חינם לגמרי לאזרחים — בלי מנוי, בלי פרסומות, בלי מכירת מידע. אזרחים למען אזרחים.</div></details>
+      <details class="faq"><summary>איך עובד כפתור ה-SOS?</summary><div class="faq-a">לחיצה אחת: אזעקה חזקה שלא ניתן להשתיק ללא קוד אישי, הבזק מסך ורטט, ומיקומך המדויק נשלח מיד למעגלי השומרים שלך ולשומרים בסביבה.</div></details>
+      <details class="faq"><summary>מה עם הפרטיות שלי?</summary><div class="faq-a">המיקום שלך משותף רק כשאת/ה מאשר/ת — ב-SOS או בשיתוף יזום. מספר הטלפון משמש לאימות בלבד ומאוחסן מוצפן (hash). לעולם לא נשתמש בו לשיווק.</div></details>
+      <details class="faq"><summary>האם זה מחליף את המשטרה או מד״א?</summary><div class="faq-a">לא. SH✡MER אינו תחליף לשירותי חירום. במצב חירום אמיתי חייג/י 100 (משטרה), 101 (מד״א) או 102 (כבאות). SH✡MER מוסיף שכבת קהילה — לא מחליף רשויות.</div></details>
+    </div>
+  </div>
+</section>
+
 <!-- CTA -->
 <section class="cta-band fi">
   <div class="wrap">
@@ -264,24 +292,28 @@ nav{gap:10px;min-width:0}
 
 <footer>
   <div class="wrap">
-    <div class="footer-logo"><img src="Brand/SVG/SHOMER.APP_WHITE.svg" alt="SH✡MER.APP"></div>
-    <div class="footer-social">
-      <a class="fs-chip" href="mailto:suport@shomer-app.co.il" aria-label="Email" title="suport@shomer-app.co.il">
+    <div class="footer-badge"><img src="SHOMER_logo_big.png" alt="SH✡MER — שומר אחי אנוכי"></div>
+    <div class="footer-tag">אזרחים למען אזרחים</div>
+    <div class="footer-actions">
+      <a class="fa-pill solid" href="shomer.html">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        פתח/י את האפליקציה</a>
+      <a class="fa-pill" href="mailto:suport@shomer-app.co.il">
         <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 7.5l8 5.5 8-5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
-      <a class="fs-chip" href="https://www.linkedin.com/company/sh%E2%9C%A1mer/" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">
+        כתבו לנו</a>
+      <a class="fa-pill" href="https://www.linkedin.com/company/sh%E2%9C%A1mer/" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 10.5V16.5M8 7.6v.1M12 16.5v-3.4c0-1.4 1-2.4 2.3-2.4s2.2 1 2.2 2.4v3.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
-      <a class="fs-chip" href="https://www.instagram.com/shomer.app/" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">
+        LinkedIn</a>
+      <a class="fa-pill" href="https://www.instagram.com/shomer.app/" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3.6" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17" cy="7" r="1.15" fill="currentColor"/></svg>
-      </a>
+        Instagram</a>
     </div>
-    <div class="footer-links">
-      <a href="shomer.html">כניסה לאפליקציה</a>
+    <div class="footer-legal">
       <a href="#">פרטיות</a>
       <a href="#">תנאים</a>
+      <a href="#">הצהרת נגישות</a>
     </div>
-    <div class="footer-copy"><img src="3shamrocks.png" alt="3Shamrocks Studio"><span>© 2026 3Shamrocks Studio · אזרחים למען אזרחים</span></div>
+    <div class="footer-copy"><img src="3shamrocks.png" alt="3Shamrocks Studio"><span>© 2026 3Shamrocks Studio · SH✡MER.app</span></div>
   </div>
 </footer>
 
@@ -299,6 +331,13 @@ var obs = new IntersectionObserver(function(entries){
   entries.forEach(function(e){ if(e.isIntersecting) e.target.classList.add('vis'); });
 },{threshold:0.08});
 document.querySelectorAll('.fi').forEach(function(el){ obs.observe(el); });
+
+// FAQ: one open at a time
+document.querySelectorAll('.faq').forEach(function(d){
+  d.addEventListener('toggle', function(){
+    if(d.open) document.querySelectorAll('.faq[open]').forEach(function(o){ if(o!==d) o.open=false; });
+  });
+});
 </script>
 
 <script>
@@ -373,5 +412,4 @@ function setLangLanding(l){
 try{ var saved=localStorage.getItem('shomer-landing-lang'); if(saved&&saved!=='he')setLangLanding(saved); }catch(e){}
 </script>
 </body>
-<!-- build-kick 08.07.26 -->
 </html>
