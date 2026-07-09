@@ -1227,6 +1227,33 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
 <body class="lb-on">
 <a href="#main-content" class="skip-link">עבור לתוכן</a>
 
+<!-- ═══ BRANDED LOADING SCREEN — real repo assets: leather texture (SHOMER-bg.jpg) + PNG
+     badge logo (SHOMER_logo_big.png). Paints first; fades out when ready; hard-capped so
+     it can never trap the user. ═══ -->
+<div id="splash" aria-hidden="true">
+  <img id="splash-logo" src="SHOMER_logo_big.png" alt="SH✡MER" decoding="async">
+  <div id="splash-bar"><i></i></div>
+</div>
+<style>
+#splash{position:fixed;inset:0;z-index:100001;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;background:linear-gradient(rgba(5,8,15,.5),rgba(5,8,15,.82)),url("SHOMER-bg.jpg") center/cover no-repeat #05080F;transition:opacity .55s ease;opacity:1;}
+#splash.gone{opacity:0;pointer-events:none;}
+#splash-logo{width:min(58vw,248px);height:auto;filter:drop-shadow(0 10px 34px rgba(0,0,0,.6));animation:splashPulse 2.4s ease-in-out infinite;}
+#splash-bar{width:134px;height:3px;border-radius:3px;background:rgba(245,203,69,.16);overflow:hidden;}
+#splash-bar i{display:block;height:100%;width:38%;border-radius:3px;background:linear-gradient(90deg,#C09020,#E0A828,#F5C840);animation:splashSlide 1.1s ease-in-out infinite;}
+@keyframes splashPulse{0%,100%{transform:scale(1);opacity:.95}50%{transform:scale(1.045);opacity:1}}
+@keyframes splashSlide{0%{transform:translateX(-130%)}100%{transform:translateX(330%)}}
+@media (prefers-reduced-motion:reduce){#splash-logo,#splash-bar i{animation:none}}
+</style>
+<script>
+(function(){
+ function hide(){ var s=document.getElementById('splash'); if(s){ s.classList.add('gone'); setTimeout(function(){ if(s&&s.parentNode)s.parentNode.removeChild(s); },650); } }
+ var MIN=650, t0=Date.now();
+ function ready(){ setTimeout(hide, Math.max(0, MIN-(Date.now()-t0))); }
+ if(document.readyState==='complete'){ ready(); } else { window.addEventListener('load',ready); }
+ setTimeout(hide,3500);
+})();
+</script>
+
 <!-- ═══ SHOMER ICON SYSTEM — professional branded SVG icons (no emoji) ═══
  Line icons inherit currentColor; use via <svg class="ic"><use href="#i-name"/></svg>. -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
@@ -1932,9 +1959,10 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="sec-cap mb12" data-he="אודות שומר" data-en="About SH✡MER">אודות שומר</div>
  <div class="set-grp surf-light">
  <div class="ai-row"><span class="ai-l" data-he="מוצר" data-en="Product" data-ar="المنتج">מוצר / Product</span><span class="ai-v" dir="ltr">SH✡MER<span class="tm"></span> (שומר)</span></div>
- <div class="ai-row"><span class="ai-l" data-he="גרסה" data-en="Version" data-ar="الإصدار">גרסה</span><span class="ai-v">0.1</span></div>
+ <div class="ai-row"><span class="ai-l" data-he="גרסה" data-en="Version" data-ar="الإصدار">גרסה</span><span class="ai-v" dir="ltr" id="set-ver">–</span></div>
  <div class="ai-row"><span class="ai-l" data-he="מוטו" data-en="Motto" data-ar="الشعار">מוטו</span><span class="ai-v">שׁוֹמֵר אָחִי אָנֹכִי</span></div>
  </div>
+ <button class="test-alarm-btn" style="margin-top:12px" onclick="updCheck(true)" id="set-upd-btn"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-.6 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 4v5h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-he="בדיקת עדכונים" data-en="Check for updates" data-ar="التحقق من التحديثات">בדיקת עדכונים</span></button>
  <div class="sec-cap mb12" style="margin-top:18px" id="set-legal-cap">בטיחות ומשפט</div>
  <div class="set-grp mb20">
  <div class="set-row" onclick="openLegal('disclaimer')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l9 16H3Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17" r="1.2" fill="currentColor"/></svg></div><div class="sr-nm" id="set-disc-row">כתב ויתור חירום</div></div><span style="color:var(--tx3);font-size:18px">›</span></div>
@@ -6792,7 +6820,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v98';
+var APP_VER='v99';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -7768,7 +7796,10 @@ async function showA2HS(){
         it force-checks for an update. ═══════════════════════════════════════════════════ */
 var UPD_POLL_MS=60000;
 function updNum(v){ try{ return parseInt(String(v).replace(/\D/g,''),10)||0; }catch(e){ return 0; } }
-function updSetBadge(txt,stale){ var el=document.getElementById('ver-badge'); if(!el)return; el.textContent=txt; el.style.color=stale?'#F5C840':'#6b7a9c'; }
+function updSetBadge(txt,stale){
+ var b=document.getElementById('ver-badge'); if(b){ b.textContent=txt; b.style.color=stale?'#F5C840':'#6b7a9c'; }
+ var s=document.getElementById('set-ver'); if(s){ s.textContent=txt; s.style.color=stale?'#F5C840':''; }   // Settings → About build row
+}
 function updShowBanner(pubV){
   if(document.getElementById('upd-banner')) return;
   var he=currentLang==='he', ar=currentLang==='ar';
@@ -7781,9 +7812,9 @@ function updShowBanner(pubV){
   document.getElementById('upd-refresh').onclick=function(){ try{forceFreshReload();}catch(e){ try{location.reload();}catch(_){} } };
   document.getElementById('upd-x').onclick=function(){ b.remove(); };
 }
-function updCheck(){
+function updCheck(manual){
   try{
-    if(!navigator.onLine) return;
+    if(!navigator.onLine){ if(manual){ try{ toast(currentLang==='he'?'אין חיבור לרשת':'No internet connection','amb'); }catch(e){} } return; }
     try{ if('serviceWorker' in navigator) navigator.serviceWorker.getRegistration().then(function(r){ if(r)r.update(); }).catch(function(){}); }catch(e){}
     fetch('version.json?cb='+(new Date().getTime()),{cache:'no-store'})
       .then(function(r){ return r.ok?r.json():null; })
@@ -7792,7 +7823,8 @@ function updCheck(){
         var pub=updNum(d.v), cur=updNum(APP_VER), stale=pub>cur;
         updSetBadge(stale?(APP_VER+' → '+d.v):APP_VER, stale);
         if(stale){ try{fbLog('UPDATE available: '+APP_VER+' → '+d.v);}catch(e){} updShowBanner(d.v); }
-      }).catch(function(){});
+        else if(manual){ try{ toast((currentLang==='he'?'✓ מעודכן — ':'✓ Up to date — ')+APP_VER,'grn'); }catch(e){} }
+      }).catch(function(){ if(manual){ try{ toast(currentLang==='he'?'בדיקת עדכון נכשלה':'Update check failed','amb'); }catch(e){} } });
   }catch(e){}
 }
 function updMountBadge(){
@@ -7801,8 +7833,9 @@ function updMountBadge(){
   el.setAttribute('style','position:fixed;left:6px;bottom:calc(3px + env(safe-area-inset-bottom));z-index:90000;font:600 10px/1 system-ui,-apple-system,sans-serif;color:#6b7a9c;background:rgba(9,18,36,.55);padding:3px 6px;border-radius:7px;letter-spacing:.3px;cursor:pointer');
   el.textContent=(typeof APP_VER!=='undefined'?APP_VER:'?');
   el.title='SHOMER build — tap to check for updates';
-  el.onclick=function(){ try{ toast(currentLang==='he'?'בודק עדכונים…':currentLang==='ar'?'جارٍ البحث عن تحديثات…':'Checking for updates…',''); }catch(e){} updCheck(); };
+  el.onclick=function(){ try{ toast(currentLang==='he'?'בודק עדכונים…':currentLang==='ar'?'جارٍ البحث عن تحديثات…':'Checking for updates…',''); }catch(e){} updCheck(true); };
   document.body.appendChild(el);
+  var sv=document.getElementById('set-ver'); if(sv&&typeof APP_VER!=='undefined') sv.textContent=APP_VER;   // Settings build row
 }
 try{
   if(document.readyState!=='loading'){ updMountBadge(); } else document.addEventListener('DOMContentLoaded',updMountBadge);
