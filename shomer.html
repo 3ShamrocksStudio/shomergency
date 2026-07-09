@@ -7734,7 +7734,21 @@ function _otpCooldown(btn,secs){
  lbl();
  _otpCoolT=setInterval(function(){ s--; if(s<=0){clearInterval(_otpCoolT);_otpCoolT=null;btn.disabled=false;btn.textContent=he?"לא קיבלת/ה קוד? שלח/י שוב":"No code? Send again";}else lbl(); },1000);
 }
+/* ⚠️ PRE-LAUNCH ONLY: founder fast-path — bypasses SMS OTP for the founder phone (Twilio prefix block workaround). REMOVE BEFORE PUBLIC LAUNCH. */
+async function founderFastPath(){
+ try{
+  const digits=(user.phone||"").replace(/[^0-9]/g,"");
+  const hb=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(digits));
+  const ph=Array.from(new Uint8Array(hb)).map(b=>b.toString(16).padStart(2,"0")).join("");
+  if(ph!==FOUNDER_PH)return false;
+  const st=document.getElementById("ob-sms-status");
+  if(st)st.textContent=currentLang==="he"?"מזוהה כמייסד — מדלג על אימות SMS":"Founder recognized — skipping SMS verification";
+  await completeRegistration();
+  return true;
+ }catch(e){ return false; }
+}
 async function sendTwilioOTP(){
+ if(await founderFastPath())return;
  const he=currentLang==="he";
  const btn=document.getElementById("ob-resend-btn");
  if(_otpSends>=4){ const st=document.getElementById("ob-sms-status"); if(st)st.textContent=he?"יותר מדי ניסיונות — נסה/י שוב מאוחר יותר (הגנת דיוור)":"Too many attempts — try again later (anti-abuse protection)"; if(btn)btn.disabled=true; return; }
