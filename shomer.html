@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="שומר">
 <meta http-equiv="X-Content-Type-Options" content="nosniff"><meta http-equiv="Referrer-Policy" content="no-referrer">
 <!-- CSP: no eval. Allows Leaflet (cdnjs) + OpenStreetMap tiles at runtime; everything else self-hosted. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://cdnjs.cloudflare.com https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com; connect-src 'self' https://*.twil.io https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://*.googleapis.com https://fcmregistrations.googleapis.com https://firebaseinstallations.googleapis.com https://router.project-osrm.org https://*.firebaseio.com wss://*.firebaseio.com https://shomergency-default-rtdb.firebaseio.com wss://shomergency-default-rtdb.firebaseio.com https://*.firebasedatabase.app wss://*.firebasedatabase.app https://*.firebaseapp.com; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://www.gstatic.com https://apis.google.com; frame-src 'self' https://shomergency.firebaseapp.com https://www.google.com https://recaptcha.google.com https://accounts.google.com; manifest-src 'self'; worker-src 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://cdnjs.cloudflare.com https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://*.google-analytics.com https://*.googletagmanager.com; connect-src 'self' https://*.twil.io https://*.tile.openstreetmap.org https://*.basemaps.cartocdn.com https://*.googleapis.com https://fcmregistrations.googleapis.com https://firebaseinstallations.googleapis.com https://router.project-osrm.org https://*.firebaseio.com wss://*.firebaseio.com https://shomergency-default-rtdb.firebaseio.com wss://shomergency-default-rtdb.firebaseio.com https://*.firebasedatabase.app wss://*.firebasedatabase.app https://*.firebaseapp.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://www.gstatic.com https://apis.google.com https://www.googletagmanager.com; frame-src 'self' https://shomergency.firebaseapp.com https://www.google.com https://recaptcha.google.com https://accounts.google.com; manifest-src 'self'; worker-src 'self';">
 <title>SHOMER · שומר — Citizens for Citizens</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" href="logo-192.png">
@@ -6714,7 +6714,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v96';
+var APP_VER='v97';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -7203,6 +7203,8 @@ function fbOnAuthed(uid){
   try{ fbListenSOS(); }catch(e){}
   try{ fbListenPairs(); }catch(e){}
   try{ fbRegisterMe(); }catch(e){}
+  try{ statsTrack(); }catch(e){}            // count install + daily-active (first-party, RTDB)
+  try{ statsInitAnalytics(); }catch(e){}    // GA4 for historical DAU/WAU/MAU + retention
   if(FB._pendingSOS){ FB._pendingSOS=0; try{ fbPublishSOS(); }catch(e){} } // flush an SOS pressed pre-auth
   setTimeout(function(){ try{ fbPrunePairsByTombstone(); }catch(e){} },2000);
   try{renderFbStatus();}catch(e){}
@@ -7641,11 +7643,12 @@ else if('serviceWorker' in navigator){
  navigator.serviceWorker.getRegistrations().then(regs=>{
  regs.forEach(r=>{ if(r.scope.indexOf(SHOMER_SCOPE)!==0) r.unregister(); });
  }).catch(()=>{}).then(()=>{
- navigator.serviceWorker.register('sw.js').then(reg=>{
- // ONE update check, ONCE, on load — finds a new deploy and installs it in the
- // background. No focus/visibility/interval re-checks (those churned the SW on
- // mobile). When a new worker reaches 'installed' it just WAITS; we surface an
- // optional "update ready" flag for the diag panel but never force activation.
+ navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(reg=>{
+ // updateViaCache:'none' → the browser ALWAYS re-fetches sw.js from the network on an
+ // update check, so a new deploy is detected immediately (not up to 24h later from the
+ // HTTP cache). This was the core reason installed users sat on a stale build.
+ // Update checks now also re-run on foreground/interval (see the update-manager below);
+ // sw.js is byte-stable between deploys, so re-checking can't churn the worker.
  try{ reg.update(); }catch(e){}
  reg.addEventListener('updatefound',()=>{
  const nw=reg.installing; if(!nw)return;
@@ -7673,6 +7676,185 @@ async function showA2HS(){
  document.getElementById('a2hs-install').onclick=async()=>{deferredPrompt.prompt();const r=await deferredPrompt.userChoice;d.remove();deferredPrompt=null;if(r.outcome==='accepted')toast(currentLang==='he'?'✓ שומר הותקן!':'✓ Shomer installed!','grn');};
  document.getElementById('a2hs-close').onclick=()=>d.remove();
 }
+/* ══════════════════════════════════════════════════════════════════════════
+   UPDATE PROPAGATION — make a fresh deploy reach installed users promptly.
+   (P0: an installed PWA sat on a stale cached shell and never showed new builds.)
+   Loop-proof by design — we NEVER auto-reload mid-session (that old→new handoff once
+   killed the in-progress connect). Layers:
+     1. sw.js is registered with updateViaCache:'none' (above) → update checks always hit
+        the network, so a new sw.js is seen at once.
+     2. Recurring version.json poll (boot + every 60s + on foreground) compares PUBLISHED
+        vs running build. Newer → a tappable "Update available" banner. The user taps to
+        refresh; the existing cold-boot check still auto-heals the first jump.
+     3. An always-visible build badge so Dave can confirm his version at a glance; tapping
+        it force-checks for an update. ═══════════════════════════════════════════════════ */
+var UPD_POLL_MS=60000;
+function updNum(v){ try{ return parseInt(String(v).replace(/\D/g,''),10)||0; }catch(e){ return 0; } }
+function updSetBadge(txt,stale){ var el=document.getElementById('ver-badge'); if(!el)return; el.textContent=txt; el.style.color=stale?'#F5C840':'#6b7a9c'; }
+function updShowBanner(pubV){
+  if(document.getElementById('upd-banner')) return;
+  var he=currentLang==='he', ar=currentLang==='ar';
+  var b=document.createElement('div'); b.id='upd-banner';
+  b.setAttribute('style','position:fixed;left:50%;transform:translateX(-50%);bottom:calc(64px + env(safe-area-inset-bottom));z-index:99998;display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:14px;background:linear-gradient(135deg,#C09020,#E0A828 60%,#F5C840);color:#23170a;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-weight:800;font-size:13.5px;box-shadow:0 10px 30px rgba(0,0,0,.45);max-width:92vw');
+  b.innerHTML='<span>'+(he?'עדכון זמין':ar?'تحديث متاح':'Update available')+' · '+pubV+'</span>'
+    +'<button id="upd-refresh" style="border:none;background:#23170a;color:#F5C840;font-weight:800;font-size:13px;padding:7px 13px;border-radius:10px;cursor:pointer">'+(he?'רענן':ar?'تحديث':'Refresh')+'</button>'
+    +'<span id="upd-x" style="cursor:pointer;font-weight:700;opacity:.65;padding:0 4px">✕</span>';
+  document.body.appendChild(b);
+  document.getElementById('upd-refresh').onclick=function(){ try{forceFreshReload();}catch(e){ try{location.reload();}catch(_){} } };
+  document.getElementById('upd-x').onclick=function(){ b.remove(); };
+}
+function updCheck(){
+  try{
+    if(!navigator.onLine) return;
+    try{ if('serviceWorker' in navigator) navigator.serviceWorker.getRegistration().then(function(r){ if(r)r.update(); }).catch(function(){}); }catch(e){}
+    fetch('version.json?cb='+(new Date().getTime()),{cache:'no-store'})
+      .then(function(r){ return r.ok?r.json():null; })
+      .then(function(d){
+        if(!d||!d.v||typeof APP_VER==='undefined') return;
+        var pub=updNum(d.v), cur=updNum(APP_VER), stale=pub>cur;
+        updSetBadge(stale?(APP_VER+' → '+d.v):APP_VER, stale);
+        if(stale){ try{fbLog('UPDATE available: '+APP_VER+' → '+d.v);}catch(e){} updShowBanner(d.v); }
+      }).catch(function(){});
+  }catch(e){}
+}
+function updMountBadge(){
+  if(document.getElementById('ver-badge')) return;
+  var el=document.createElement('div'); el.id='ver-badge';
+  el.setAttribute('style','position:fixed;left:6px;bottom:calc(3px + env(safe-area-inset-bottom));z-index:90000;font:600 10px/1 system-ui,-apple-system,sans-serif;color:#6b7a9c;background:rgba(9,18,36,.55);padding:3px 6px;border-radius:7px;letter-spacing:.3px;cursor:pointer');
+  el.textContent=(typeof APP_VER!=='undefined'?APP_VER:'?');
+  el.title='SHOMER build — tap to check for updates';
+  el.onclick=function(){ try{ toast(currentLang==='he'?'בודק עדכונים…':currentLang==='ar'?'جارٍ البحث عن تحديثات…':'Checking for updates…',''); }catch(e){} updCheck(); };
+  document.body.appendChild(el);
+}
+try{
+  if(document.readyState!=='loading'){ updMountBadge(); } else document.addEventListener('DOMContentLoaded',updMountBadge);
+  setTimeout(updCheck,1500);
+  setInterval(updCheck, UPD_POLL_MS);
+  document.addEventListener('visibilitychange',function(){ if(document.visibilityState==='visible') updCheck(); });
+}catch(e){}
+/* ══════════════════════════════════════════════════════════════════════════
+   USAGE STATS — first-party, owned by us (never just Google Analytics).
+   Every marker is keyed by the caller's OWN auth.uid, so the rules only ever let
+   a user write their own node — there is no shared counter to race or inflate.
+     • /analytics/installs/<uid> = ts          → child count = real install ("download") total
+     • /analytics/seen/<YYYY-MM-DD>/<uid> = ts  → child count = that day's active users (DAU)
+     • active-NOW is derived live from /presence (ts within STATS_ACTIVE_MIN minutes)
+     • total registered = /registry child count
+   Google Analytics (GA4) runs in parallel for historical DAU/WAU/MAU + retention.
+   Private dashboard: open  ?stats=<passphrase>  — gated by a SHA-256 hash so the
+   passphrase itself is NEVER in the source. ═══════════════════════════════════ */
+var STATS_ACTIVE_MIN=5;                 // "active now" = presence seen within this many minutes
+var STATS_KEY_HASH='41369e8397f16835d344dd9e92bce71f15d007c8c0d48b42b15070096fe48719';
+function statsToday(){ var d=new Date(); function p(n){return (n<10?'0':'')+n;} return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate()); }
+function statsIsInstalled(){
+  try{
+    if(window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) return true;
+    if(navigator.standalone===true) return true;                 // iOS home-screen
+    if(localStorage.getItem('shomer_installed_flag')==='1') return true;
+  }catch(e){}
+  return false;
+}
+/* Real install event (Android/desktop) → remember it + count immediately. */
+try{ window.addEventListener('appinstalled',function(){
+  try{ localStorage.setItem('shomer_installed_flag','1'); }catch(e){}
+  try{ statsLogEvent('app_installed'); }catch(e){}
+  try{ statsTrack(); }catch(e){}
+}); }catch(e){}
+/* Called once the secure uid is ready (from fbOnAuthed). Idempotent + double-count-safe:
+   guarded by a local flag AND keyed by uid, so re-runs just overwrite the same node. */
+function statsTrack(){
+  try{
+    if(!FB.ready||!FB._authReady||!FB.uid) return;
+    var now=Date.now();
+    if(statsIsInstalled() && localStorage.getItem('shomer_install_logged')!=='1'){
+      FB.db.ref('analytics/installs/'+FB.uid).set(now)
+        .then(function(){ try{ localStorage.setItem('shomer_install_logged','1'); }catch(e){} fbLog('stat · install counted'); })
+        .catch(function(e){ fbLog('stat install write (pending analytics rule):',(e&&e.code)||e); });
+      statsLogEvent('app_installed');
+    }
+    var day=statsToday(), dk='shomer_dau_'+day;
+    if(localStorage.getItem(dk)!=='1'){
+      FB.db.ref('analytics/seen/'+day+'/'+FB.uid).set(now)
+        .then(function(){ try{ localStorage.setItem(dk,'1'); }catch(e){} })
+        .catch(function(e){ fbLog('stat DAU write (pending analytics rule):',(e&&e.code)||e); });
+    }
+    statsLogEvent('app_open');
+  }catch(e){}
+}
+/* Google Analytics for Firebase (GA4) — free tier; historical DAU/WAU/MAU + retention.
+   Loaded lazily and fully non-fatally: any failure here never touches the app. */
+function statsInitAnalytics(){
+  try{
+    if(FB._analytics||FB._analyticsIniting) return; if(!(window.firebase&&window.firebase.initializeApp)) return;
+    FB._analyticsIniting=true;
+    fbLoad('https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics-compat.js').then(function(){
+      try{ FB._analytics=window.firebase.analytics(); fbLog('analytics (GA4) ready'); statsLogEvent('app_open'); }
+      catch(e){ fbLog('analytics init failed (non-fatal):',(e&&e.message)||e); }
+    }).catch(function(e){ fbLog('analytics SDK load failed (non-fatal):',(e&&e.message)||e); });
+  }catch(e){}
+}
+function statsLogEvent(name,params){ try{ if(FB._analytics)FB._analytics.logEvent(name,params||{}); }catch(e){} }
+
+/* ── Private stats dashboard — open  ?stats=<passphrase> . Live from RTDB. ── */
+async function statsGateCheck(){
+  try{
+    var q; try{ q=new URLSearchParams(location.search); }catch(e){ return; }
+    var k=q.get('stats'); if(!k) return;
+    var h=await sha256Hex(String(k)); if(h!==STATS_KEY_HASH){ return; }   // wrong key → silently ignore
+    statsOpen();
+  }catch(e){}
+}
+function statsCard(id,label,sub,color){
+  return '<div style="background:#0e1d3aee;border:1px solid #8c9bbd22;border-radius:16px;padding:16px 18px;margin-bottom:11px">'
+   +'<div style="font-size:12.5px;color:#c8d4e8;font-weight:600">'+label+'</div>'
+   +'<div id="'+id+'" style="font-size:42px;font-weight:800;line-height:1.1;color:'+color+';font-variant-numeric:tabular-nums;margin:2px 0">–</div>'
+   +'<div style="font-size:11px;color:#8c9bbd">'+sub+'</div></div>';
+}
+function statsOpen(){
+  if(document.getElementById('stats-view')) return;
+  var he=currentLang==='he';
+  var d=document.createElement('div'); d.id='stats-view';
+  d.setAttribute('style','position:fixed;inset:0;z-index:100000;background:linear-gradient(160deg,#091227,#0e1d3a);color:#f2f6ff;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:max(22px,env(safe-area-inset-top)) 18px 40px;direction:'+(he?'rtl':'ltr')+'');
+  d.innerHTML=''
+   +'<div style="max-width:460px;margin:0 auto">'
+   +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">'
+   +'<div style="font-size:13px;font-weight:800;letter-spacing:.4px;color:#f5cb45">SH✡MER · '+(he?'מדדי שימוש':'USAGE')+'</div>'
+   +'<button id="stats-x" style="background:none;border:1px solid #8c9bbd55;color:#c8d4e8;border-radius:9px;padding:5px 11px;font-size:13px;font-weight:700">✕</button></div>'
+   +'<div id="stats-updated" style="font-size:11px;color:#8c9bbd;margin-bottom:16px;direction:ltr;text-align:'+(he?'right':'left')+'">…</div>'
+   +statsCard('stats-active-now', he?'פעילים עכשיו':'Active right now', he?'נראו ב-'+STATS_ACTIVE_MIN+' הדקות האחרונות':'seen in the last '+STATS_ACTIVE_MIN+' min','#3ad29f')
+   +statsCard('stats-today', he?'פעילים היום':'Active today', he?'משתמשים ייחודיים היום (DAU)':'distinct users today (DAU)','#f5cb45')
+   +statsCard('stats-installs', he?'התקנות':'Installs', he?'סה"כ התקנות (הורדות)':'total app installs ("downloads")','#5aa9ff')
+   +statsCard('stats-registered', he?'משתמשים רשומים':'Registered users', he?'סה"כ חשבונות במרשם':'total accounts in the registry','#c9a0ff')
+   +'<button id="stats-refresh" style="width:100%;margin-top:8px;padding:12px;border:1px solid #8c9bbd44;border-radius:12px;background:#122850;color:#f5cb45;font-size:14px;font-weight:800">'+(he?'רענון':'Refresh')+'</button>'
+   +'<div style="font-size:10.5px;color:#6b7a9c;margin-top:14px;line-height:1.6;text-align:center">'+(he?'מתעדכן כל 15 שניות · מספרים חיים מ-Firebase':'auto-refreshes every 15s · live numbers from Firebase')+'</div>'
+   +'</div>';
+  document.body.appendChild(d);
+  document.getElementById('stats-x').onclick=statsClose;
+  document.getElementById('stats-refresh').onclick=statsRefresh;
+  statsRefresh();
+  if(FB._statsTimer)clearInterval(FB._statsTimer);
+  FB._statsTimer=setInterval(statsRefresh,15000);
+}
+function statsClose(){ if(FB._statsTimer){clearInterval(FB._statsTimer);FB._statsTimer=null;} var d=document.getElementById('stats-view'); if(d)d.remove(); }
+function statsSet(id,v){ var el=document.getElementById(id); if(el)el.textContent=v; }
+async function statsRefresh(){
+  try{
+    var he=currentLang==='he';
+    if(!FB.ready||!FB._authReady){ statsSet('stats-updated', he?'מתחבר…':'connecting…'); return; }
+    var now=Date.now(), day=statsToday();
+    function rd(p){ return FB.db.ref(p).once('value').then(function(s){ return s.val()||{}; }).catch(function(){ return null; }); }
+    var res=await Promise.all([ rd('presence'), rd('analytics/installs'), rd('registry'), rd('analytics/seen/'+day) ]);
+    var pres=res[0]||{}, inst=res[1], reg=res[2]||{}, act=res[3];
+    var activeNow=Object.keys(pres).filter(function(k){ var p=pres[k]; return p&&p.ts&&(now-p.ts)<STATS_ACTIVE_MIN*60000; }).length;
+    statsSet('stats-active-now', activeNow);
+    statsSet('stats-registered', Object.keys(reg).length);
+    statsSet('stats-installs', inst===null?'–':Object.keys(inst).length);      // '–' = analytics rule not published yet
+    statsSet('stats-today',    act ===null?'–':Object.keys(act).length);
+    var pend=(inst===null||act===null);
+    statsSet('stats-updated', (he?'עודכן ':'updated ')+new Date().toLocaleTimeString()+(pend?(he?'  ·  התקנות/DAU: צריך לפרסם כללי analytics':'  ·  installs/DAU need the analytics rule'):''));
+  }catch(e){ fbLog('stats refresh err',e); }
+}
+try{ if(document.readyState!=='loading'){ statsGateCheck(); } else { document.addEventListener('DOMContentLoaded',function(){ try{statsGateCheck();}catch(e){} }); } }catch(e){}
 /* BACKGROUND-ALERTS ENABLEMENT — so closed/locked-app SOS pushes can actually arrive.
    Two honest paths:
    • iOS Safari tab: web push is IMPOSSIBLE until the PWA is Added to Home Screen
