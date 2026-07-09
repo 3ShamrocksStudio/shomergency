@@ -5792,7 +5792,7 @@ function phoneCanon(raw){ var d=String(raw||'').replace(/\D/g,''); if(!d)return 
 function phoneIsValidIL(canon){ return /^9725\d{8}$/.test(canon||''); }
 /* SHA-256 → hex. Used to store a PRIVACY-SAFE registry (hashed phone → uid): the
    raw number is NEVER stored or exposed; matching a contact = hash + lookup. */
-async function sha256Hex(s){ try{ var b=await crypto.subtle.digest('SHA-256', new TextEncoder().encode(String(s))); return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,'0');}).join(''); }catch(e){ fbLog&&fbLog('sha256 unavailable:',(e&&e.message)||e); return ''; } }
+/* sha256Hex: canonical implementation with pure-JS fallback defined in the registration module (v95). */
 function gdInviteLink(p){ return gdBaseUrl()+'?g='+encodeURIComponent(p.token)+'#n='+encodeURIComponent(gdState().myName||''); }
 
 function guardianInit(){
