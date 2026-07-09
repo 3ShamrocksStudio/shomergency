@@ -7,6 +7,16 @@
 <script>try{if(window.top!==window.self){window.top.location.replace(window.self.location.href);}}catch(e){}</script>
 <title>SH✡MER — אזרחים למען אזרחים</title>
 <meta name="description" content="אזעקת SOS חזקה, מיקום מדויק, עזרה מהירה. בלחיצה אחת. אינך לבד.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="SH✡MER — אזרחים למען אזרחים">
+<meta property="og:description" content="אזעקת SOS בלחיצה אחת, מפת אירועים חיה, מעגלי שומרים. חינם לאזרחים.">
+<meta property="og:url" content="https://www.shomer-app.co.il/">
+<meta property="og:image" content="https://www.shomer-app.co.il/og-share.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="he_IL">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.shomer-app.co.il/og-share.jpg">
 <link rel="icon" href="logo-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -108,6 +118,23 @@ section{padding:72px 0}
 .emg-ic svg{width:19px;height:19px}
 .emg-txt{font-size:12.5px;color:#ffd8d8;line-height:1.65}
 .emg-txt b{color:#fff}
+
+/* APP SHOWCASE — phone-framed real screenshots */
+.shots-rail{display:flex;gap:16px;overflow-x:auto;padding:36px 4px 18px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+.shots-rail::-webkit-scrollbar{display:none}
+.shot{flex:0 0 auto;scroll-snap-align:center;width:min(230px,62vw)}
+.shot-frame{border-radius:26px;border:3px solid #2A3A5C;box-shadow:0 18px 44px rgba(0,0,0,.5),0 0 0 1px rgba(224,168,40,.15);overflow:hidden;background:#060F1E}
+.shot-frame img{display:block;width:100%;height:auto}
+.shot-cap{text-align:center;font-size:12.5px;color:var(--tx1);margin-top:10px;font-weight:600}
+@media(min-width:800px){.shots-rail{justify-content:center;overflow-x:visible}}
+
+/* INSTALL STRIP */
+.install-steps{display:flex;flex-direction:column;gap:12px;margin-top:30px}
+.inst{display:flex;gap:14px;align-items:flex-start;background:var(--n3);border:1px solid var(--border);border-radius:var(--r);padding:15px 16px}
+.inst-n{width:30px;height:30px;border-radius:50%;background:var(--gold-grad);color:#23170a;font-weight:900;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.inst-t{font-size:13.5px;color:var(--tx1);line-height:1.6}
+.inst-t b{color:var(--tx0)}
+@media(min-width:800px){.install-steps{flex-direction:row}.inst{flex:1}}
 
 /* FAQ */
 .faq-list{margin-top:36px;display:flex;flex-direction:column;gap:10px}
@@ -263,6 +290,31 @@ nav{gap:10px;min-width:0}
   </div>
 </section>
 
+<!-- APP SHOWCASE -->
+<section class="bg-surface fi">
+  <div class="wrap">
+    <h2 class="section-title">הצצה לתוך האפליקציה</h2>
+    <div class="shots-rail">
+      <div class="shot"><div class="shot-frame"><img src="app-screen-map.jpg" alt="מפת בטיחות חיה עם כפתור SOS" loading="lazy"></div><div class="shot-cap">מפה חיה + SOS</div></div>
+      <div class="shot"><div class="shot-frame"><img src="app-screen-guide.jpg" alt="מדריך חירום מלא" loading="lazy"></div><div class="shot-cap">מדריך חירום</div></div>
+      <div class="shot"><div class="shot-frame"><img src="app-screen-circles.jpg" alt="מעגלי השומרים שלי" loading="lazy"></div><div class="shot-cap">השומרים שלי</div></div>
+      <div class="shot"><div class="shot-frame"><img src="app-screen-settings.jpg" alt="הגדרות מותאמות אישית" loading="lazy"></div><div class="shot-cap">שליטה מלאה</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- INSTALL -->
+<section class="fi">
+  <div class="wrap">
+    <h2 class="section-title">איך מתקינים? 20 שניות.</h2>
+    <div class="install-steps">
+      <div class="inst"><div class="inst-n">1</div><div class="inst-t"><b>פתחו את האפליקציה</b> בדפדפן הטלפון — לחיצה על הכפתור הצהוב למעלה.</div></div>
+      <div class="inst"><div class="inst-n">2</div><div class="inst-t"><b>באייפון:</b> שיתוף ← הוספה למסך הבית. <b>באנדרואיד:</b> תפריט ← התקנת אפליקציה.</div></div>
+      <div class="inst"><div class="inst-n">3</div><div class="inst-t"><b>זהו.</b> SH✡MER על מסך הבית — נרשמים בחינם ומצטרפים לרשת.</div></div>
+    </div>
+  </div>
+</section>
+
 <!-- FAQ -->
 <section class="fi">
   <div class="wrap">
@@ -309,9 +361,9 @@ nav{gap:10px;min-width:0}
         Instagram</a>
     </div>
     <div class="footer-legal">
-      <a href="#">פרטיות</a>
-      <a href="#">תנאים</a>
-      <a href="#">הצהרת נגישות</a>
+      <a href="privacy.html">פרטיות</a>
+      <a href="terms.html">תנאים</a>
+      <a href="accessibility.html">הצהרת נגישות</a>
     </div>
     <div class="footer-copy"><img src="3shamrocks.png" alt="3Shamrocks Studio"><span>© 2026 3Shamrocks Studio · SH✡MER.app</span></div>
   </div>
