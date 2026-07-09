@@ -2896,6 +2896,7 @@ function toggleShake(el){
  el.classList.toggle('on');
  SS.shake.enabled=el.classList.contains('on');
  saveStore();
+ if(SS.shake.enabled){ try{ shakeArmPermission(); }catch(e){} }   // this tap is a user gesture → iOS motion permission
  toast(SS.shake.enabled?(currentLang==='he'?' Shake-to-SOS פעיל':' Shake-to-SOS on'):(currentLang==='he'?'Shake-to-SOS כבוי':'Shake-to-SOS off'),SS.shake.enabled?'grn':'');
 }
 function setShakeSens(v){
@@ -2905,6 +2906,7 @@ function setShakeSens(v){
 }
 /* Manual trigger for desktop testing — behaves like 5 real shakes. */
 function simulateShake(){
+ try{ shakeArmPermission(); }catch(e){}   // also arm real motion permission from this tap (iOS)
  toast(currentLang==='he'?' ניעור זוהה':' Shake detected','amb');
  if(!sosActive)setTimeout(()=>triggerSOS('shake'),400);
 }
@@ -3630,7 +3632,8 @@ function enterApp(returning){
  if(profNm)profNm.textContent=(SS.user&&SS.user.username)||user.name||localizedGuardian();
  try{ renderProfession(); }catch(e){}
  // Best-effort setup — never let a failure here trap the user.
- try{ startShakeDetection(); }catch(e){}
+ try{ startShakeDetection(); }catch(e){}       // Android/desktop: live immediately
+ try{ shakeArmOnFirstGesture(); }catch(e){}    // iOS: request motion permission on first tap
  try{ registerPush(); }catch(e){}
  try{ buildPins(); }catch(e){}
  try{ buildInitialUpdates(); }catch(e){}
@@ -3720,33 +3723,62 @@ function pushNotify(title,body,tag){
 /* ═══════════════════════════════════
  SHAKE-TO-SOS
 ═══════════════════════════════════ */
-let shakeStarted=false;
+let shakeStarted=false, _shakeGrav={x:0,y:0,z:0};
+/* iOS 13+ only DELIVERS devicemotion after requestPermission() is called from a REAL user
+   gesture. Booting the listener silently (as before) meant shake never worked on iPhone.
+   So: Android/desktop start immediately; iOS is armed from a tap (the Shake toggle, the
+   test button, or the first touch anywhere — see the one-time arm at boot). Idempotent. */
+function shakeArmPermission(cb){
+ try{
+   if(window.DeviceMotionEvent && typeof DeviceMotionEvent.requestPermission==='function'){
+     DeviceMotionEvent.requestPermission().then(function(r){
+       SS.shake._perm=r; if(r==='granted'){ startShakeDetection(); }
+       else { try{ toast(currentLang==='he'?'צריך לאשר חיישני תנועה לניעור-SOS':'Allow motion access for Shake-to-SOS','amb'); }catch(e){} }
+       if(cb)cb(r);
+     }).catch(function(){ if(cb)cb('error'); });
+   } else { startShakeDetection(); if(cb)cb('granted'); }
+ }catch(e){ if(cb)cb('error'); }
+}
 function startShakeDetection(){
  if(!window.DeviceMotionEvent||shakeStarted) return;
+ // On iOS, wait until permission is granted (arm from a gesture); attaching before grant
+ // just yields no events. On everything else, attach now.
+ if(typeof DeviceMotionEvent.requestPermission==='function' && SS.shake._perm!=='granted') return;
  shakeStarted=true;
- const WINDOW=1500, REQUIRED=5;
+ const WINDOW=1600, REQUIRED=5, MIN_GAP=110;
+ let count=0, firstT=0, lastPeak=0;
  const handler=e=>{
- if(SS.shake.enabled===false) return;
- const a=e.acceleration||e.accelerationIncludingGravity;
- if(!a) return;
- const THRESHOLD=SS.shake.sensitivity||22;
- const mag=Math.sqrt((a.x||0)**2+(a.y||0)**2+(a.z||0)**2);
- if(mag>THRESHOLD){
+ if(SS.shake && SS.shake.enabled===false) return;
+ // Use includingGravity when present and high-pass out the slow gravity vector → pure
+ // motion magnitude that behaves the SAME whether or not the platform pre-removes gravity.
+ const ag=e.accelerationIncludingGravity||e.acceleration; if(!ag) return;
+ const A=0.8;
+ _shakeGrav.x=A*_shakeGrav.x+(1-A)*(ag.x||0);
+ _shakeGrav.y=A*_shakeGrav.y+(1-A)*(ag.y||0);
+ _shakeGrav.z=A*_shakeGrav.z+(1-A)*(ag.z||0);
+ const dx=(ag.x||0)-_shakeGrav.x, dy=(ag.y||0)-_shakeGrav.y, dz=(ag.z||0)-_shakeGrav.z;
+ const mag=Math.sqrt(dx*dx+dy*dy+dz*dz);
+ const THRESHOLD=(SS.shake&&SS.shake.sensitivity)||22;
  const now=Date.now();
- if(now-shakeLastT>300){shakeCount++;shakeLastT=now;}
- if(shakeCount>=REQUIRED){
- shakeCount=0;
- if(!sosActive)triggerSOS('shake');
- }
- setTimeout(()=>{shakeCount=Math.max(0,shakeCount-1);},WINDOW);
+ if(mag>THRESHOLD && now-lastPeak>MIN_GAP){
+   if(!firstT || now-firstT>WINDOW){ firstT=now; count=0; }   // (re)open the counting window
+   count++; lastPeak=now;
+   if(count>=REQUIRED){ count=0; firstT=0; if(!sosActive){ try{navigator.vibrate&&navigator.vibrate([90,50,90]);}catch(_){}
+     triggerSOS('shake'); } }
  }
  };
- if(typeof DeviceMotionEvent.requestPermission==='function'){
- // iOS 13+ requires permission
- DeviceMotionEvent.requestPermission().then(r=>{if(r==='granted')window.addEventListener('devicemotion',handler);}).catch(()=>{});
- } else {
- window.addEventListener('devicemotion',handler,{passive:true});
- }
+ try{ window.addEventListener('devicemotion',handler,{passive:true}); }catch(e){ shakeStarted=false; }
+}
+/* One-time iOS arm: the first touch anywhere requests motion permission so Shake-to-SOS
+   works even for users who never open Settings. No-op on Android/desktop. */
+function shakeArmOnFirstGesture(){
+ try{
+   if(!(window.DeviceMotionEvent && typeof DeviceMotionEvent.requestPermission==='function')) return; // Android/desktop: already live
+   if(SS.shake && SS.shake._perm==='granted') return;
+   const once=function(){ document.removeEventListener('touchend',once); document.removeEventListener('click',once); shakeArmPermission(); };
+   document.addEventListener('touchend',once,{once:true,passive:true});
+   document.addEventListener('click',once,{once:true});
+ }catch(e){}
 }
 
 /* ═══════════════════════════════════
@@ -3930,6 +3962,7 @@ function playAlarm(durMs){
    pattern (the full-screen red/blue/white strobe is handled by startMaxAttention). */
 var _alarmLoopTimer=null, _alarmVibeTimer=null;
 function startSosAlarm(){
+ try{ alarmResilienceStart(); }catch(e){}         // force max gain + re-assert-if-suspended + persistent notif
  var CHUNK=30000;
  var fire=function(){ try{ playAlarm(CHUNK); }catch(e){} };
  fire();
@@ -3947,7 +3980,41 @@ function stopSosAlarm(){
  clearInterval(_alarmLoopTimer); _alarmLoopTimer=null;
  clearInterval(_alarmVibeTimer); _alarmVibeTimer=null;
  try{ navigator.vibrate&&navigator.vibrate(0); }catch(e){}
+ try{ alarmResilienceStop(); }catch(e){}
  stopAlarm();
+}
+/* ── ALARM RESILIENCE (P0) ───────────────────────────────────────────────────────
+   HONEST LIMITATION: a PWA cannot hard-block the hardware volume keys or the iOS silent
+   switch — a truly un-silenceable alarm needs the native wrapper. What IS possible, we do:
+     • force the ACTIVE alarm to full gain (ignores the softer test-volume setting),
+     • re-assert audio if the OS SUSPENDS the context (incoming call / interruption / background)
+       — this IS detectable (audioCtx.state) and is the common cause of an alarm going quiet,
+     • stay multi-sensory: strong vibration + full-screen strobe (startMaxAttention) + a
+       persistent notification, so the alarm still commands attention even if muted. */
+var _sosVolSaved=null, _alarmWatch=null;
+function alarmResilienceStart(){
+  try{ if(typeof alarmVol!=='undefined' && alarmVol<1){ _sosVolSaved=alarmVol; alarmVol=1; } }catch(e){}
+  try{
+    if(_alarmWatch)clearInterval(_alarmWatch);
+    _alarmWatch=setInterval(function(){
+      try{ if(!sosActive){ clearInterval(_alarmWatch); _alarmWatch=null; return; }
+        if(audioCtx && audioCtx.state==='suspended'){ audioCtx.resume().catch(function(){}); }  // re-assert if the OS cut audio
+      }catch(e){}
+    },1200);
+  }catch(e){}
+  try{
+    if('Notification' in window && Notification.permission==='granted' && navigator.serviceWorker && navigator.serviceWorker.ready){
+      var he=currentLang==='he';
+      navigator.serviceWorker.ready.then(function(reg){
+        try{ reg.showNotification('🚨 SH✡MER — SOS', { body:(he?'האזעקה פועלת. אם אינך שומע/ת — ייתכן שהטלפון במצב שקט; הרטט וההבהוב ממשיכים.':'Alarm active. Can\'t hear it? Your phone may be silenced — vibration + flashing continue.'), tag:'shomer-sos-active', requireInteraction:true, icon:'logo-192.png', badge:'logo-192.png', vibrate:[500,140,500,140,500] }); }catch(e){}
+      }).catch(function(){});
+    }
+  }catch(e){}
+}
+function alarmResilienceStop(){
+  try{ if(_sosVolSaved!=null){ alarmVol=_sosVolSaved; _sosVolSaved=null; } }catch(e){}
+  try{ if(_alarmWatch){ clearInterval(_alarmWatch); _alarmWatch=null; } }catch(e){}
+  try{ if(navigator.serviceWorker && navigator.serviceWorker.ready){ navigator.serviceWorker.ready.then(function(reg){ reg.getNotifications({tag:'shomer-sos-active'}).then(function(ns){ ns.forEach(function(n){ try{n.close();}catch(e){} }); }).catch(function(){}); }).catch(function(){}); } }catch(e){}
 }
 function pickAlarm(el,type){
  document.querySelectorAll('#alarm-list .ob-alarm').forEach(a=>{a.classList.remove('sel');a.setAttribute('aria-checked','false');});
@@ -4290,7 +4357,7 @@ function startMaxAttention(){
  var known=curSosType&&curSosType!=='unknown';
  /* SAFETY-CRITICAL — emergency banner; native-Arabic review required */
  setText('strobe-sub',(he?'חירום — קוראים לעזרה':ar?'طوارئ — نطلب المساعدة':'EMERGENCY — calling for help')+(known?' · '+sosTypeLabel(curSosType):''));
- setText('strobe-note',he?'הבהוב המסך, הצליל והפנס פועלים כל עוד האפליקציה פתוחה. הבהוב במסך נעול יתווסף בגרסה המותקנת.':ar?'وميض الشاشة والصوت والمصباح يعمل طالما التطبيق مفتوح. وميض الشاشة المقفلة سيُضاف في النسخة المُثبَّتة.':'Screen flash, sound and flashlight run while the app is open. Locked-screen flashing arrives in the installed app.');
+ setText('strobe-note',he?'הבהוב המסך, הצליל והפנס פועלים כל עוד האפליקציה פתוחה. אם אינך שומע/ת את האזעקה — ייתכן שהטלפון במצב שקט; הרטט וההבהוב ממשיכים. הבהוב במסך נעול יתווסף בגרסה המותקנת.':ar?'وميض الشاشة والصوت والمصباح يعمل طالما التطبيق مفتوح. إن لم تسمع الإنذار فقد يكون الهاتف صامتًا؛ الاهتزاز والوميض مستمران. وميض الشاشة المقفلة في النسخة المُثبَّتة.':'Screen flash, sound and flashlight run while the app is open. Can\'t hear it? Your phone may be on silent — vibration + flashing continue. Locked-screen flashing arrives in the installed app.');
  var ov=document.getElementById('sos-strobe'); if(ov){ov.classList.add('on');ov.setAttribute('aria-hidden','false');}
  startMorse();
  try{if(window._sosVibT)clearInterval(window._sosVibT);window._sosVibT=setInterval(function(){try{navigator.vibrate&&navigator.vibrate([420,140,420]);}catch(e){}},1300);}catch(e){}
@@ -5277,9 +5344,20 @@ function toast(txt,cls,act){
  // No innerHTML for user content — toast text is from our own code only here
  const dot=document.createElement('div');dot.className='toast-dot';dot.style.cssText=`background:${col};box-shadow:0 0 8px ${col}88;width:10px;height:10px;border-radius:50%;flex-shrink:0;`;dot.setAttribute('aria-hidden','true');
  const span=document.createElement('span');span.className='t-tx';span.textContent=txt;
- const xBtn=document.createElement('button');xBtn.className='t-x';xBtn.textContent='✕';xBtn.setAttribute('aria-label','סגור');xBtn.onclick=()=>d.remove();
- d.appendChild(dot);d.appendChild(span);d.appendChild(xBtn);
- if(typeof act==='function'){d.style.cursor='pointer';dot.style.cursor='pointer';span.style.cursor='pointer';span.style.textDecoration='underline';span.style.textUnderlineOffset='3px';var go=function(ev){try{act();}catch(e){} d.remove();};dot.onclick=go;span.onclick=go;}
+ const xBtn=document.createElement('button');xBtn.className='t-x';xBtn.textContent='✕';xBtn.setAttribute('aria-label','סגור');xBtn.onclick=function(e){if(e)e.stopPropagation();d.remove();};
+ d.appendChild(dot);d.appendChild(span);
+ if(typeof act==='function'){
+  // The WHOLE toast is the tap target (not just the text) with a clear › affordance, so a
+  // notification reliably jumps to its event/feature — including on mobile where a mistap
+  // on the toast body used to do nothing. ✕ stops propagation so closing never navigates.
+  d.style.cursor='pointer';d.setAttribute('role','button');
+  span.style.textDecoration='underline';span.style.textUnderlineOffset='3px';
+  var chev=document.createElement('span');chev.textContent='›';chev.setAttribute('aria-hidden','true');chev.style.cssText='margin-inline-start:2px;font-weight:900;font-size:17px;opacity:.85;flex-shrink:0;';
+  d.appendChild(chev);
+  var go=function(ev){if(ev)ev.stopPropagation();try{act();}catch(e){} d.remove();};
+  d.onclick=go;
+ }
+ d.appendChild(xBtn);
  c.appendChild(d);
  while(c.children.length>3)c.firstChild.remove();
  setTimeout(()=>{if(d.parentElement)d.remove();},7000);
@@ -6494,7 +6572,7 @@ function startSim(){
  let i=0;
  setInterval(()=>{
  if(Math.random()>.72){
- toast(evts[i%evts.length].t,evts[i%evts.length].c); i++;
+ var _e=evts[i%evts.length]; toast(_e.t,_e.c,function(){try{openUpdates();}catch(_){}}); i++;   // tappable → live updates feed
  const el=document.getElementById('liveN');
  if(el){const n=parseInt(el.textContent)+(Math.random()>.5?1:-1);el.textContent=Math.max(150,n);}
  }
@@ -6714,7 +6792,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v97';
+var APP_VER='v98';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
