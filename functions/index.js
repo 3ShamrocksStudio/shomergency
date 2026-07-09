@@ -11,7 +11,7 @@ const admin = require('firebase-admin');
 admin.initializeApp();
 setGlobalOptions({region: 'us-central1', maxInstances: 10});
 const db = admin.database();
-const LINK = 'https://3shamrocksstudio.github.io/shomergency/shomer.html';
+const LINK = 'https://www.shomer-app.co.il/shomer.html';
 
 function distM(aLat, aLng, bLat, bLng) {
   const R = 6371000, toRad = d => d * Math.PI / 180;

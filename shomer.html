@@ -6671,7 +6671,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v93';
+var APP_VER='v94';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -8014,7 +8014,7 @@ async function addShomerToCircle(phoneDigits, displayName, circleId){
    }
   } else {
    // Not registered — offer to invite via WhatsApp
-   const invMsg=encodeURIComponent((he?'היי! הזמינו/י אותי/ב ל-SH✡MER — אפליקציית בטיחות קהילתית לישראל. חינם: ':'Hey! Join SH✡MER — community safety app for Israel. Free: ')+'https://3shamrocksstudio.github.io/shomergency/');
+   const invMsg=encodeURIComponent((he?'היי! הזמינו/י אותי/ב ל-SH✡MER — אפליקציית בטיחות קהילתית לישראל. חינם: ':'Hey! Join SH✡MER — community safety app for Israel. Free: ')+'https://www.shomer-app.co.il/');
    const wa='https://wa.me/'+phoneDigits+'?text='+invMsg;
    // Show invite option
    const errEl=document.getElementById('gd-ph-err');

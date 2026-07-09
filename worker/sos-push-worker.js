@@ -16,8 +16,8 @@
    ════════════════════════════════════════════════════════════════════════════ */
 
 const DB = 'https://shomergency-default-rtdb.firebaseio.com';
-const LINK = 'https://3shamrocksstudio.github.io/shomergency/shomer.html';
-const ALLOW_ORIGIN = 'https://3shamrocksstudio.github.io';
+const LINK = 'https://www.shomer-app.co.il/shomer.html';
+const ALLOW_ORIGIN = 'https://www.shomer-app.co.il';
 const RADIUS_M = 5000;
 
 export default {
