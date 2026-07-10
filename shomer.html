@@ -1503,7 +1503,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v96 · 09.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v97 · 09.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -5662,7 +5662,19 @@ async function addGuardian(){
  }
  var m={id:genId('m'),cid:activeCircleId,name:name,rel:'',phoneCanon:validPhone?canon:null,registered:registered,partnerUid:theirUid,pending:(validPhone&&!registered),emoji:'',color:palette[(SS.circleMembers.length)%palette.length],lat:TLV[0]+off(),lng:TLV[1]+off(),moving:registered,shareTo:true,seeThem:true,sos:false};
  m.baseLat=m.lat;m.baseLng=m.lng;
- SS.circleMembers.push(m); saveStore();
+ SS.circleMembers.push(m);
+ // A registered SHOMER also becomes a real map-visible PAIR (so we see them live).
+ if(registered && theirUid){
+   var g=gdState();
+   if(!g.pairs.some(function(p){return p.partnerUid===theirUid;})){
+     var tok='ph'+Math.random().toString(36).slice(2,10);
+     g.pairs.push({id:genId('g'),token:tok,name:name,rel:'',shareToThem:true,seeThem:true,addedTs:Date.now(),initiator:true,pending:false,partnerUid:theirUid,linked:true,color:m.color,lat:null,lng:null,ts:0,live:false,via:'phone',simLat:null,simLng:null});
+     m.pairId=g.pairs[g.pairs.length-1].id;
+   }
+   try{ fbListenPeerLoc(theirUid); }catch(e){}   // subscribe to their live location now
+ }
+ saveStore();
+ try{ gdRenderMarkers(); }catch(e){}
  if(nmEl)nmEl.value=''; if(phEl)phEl.value=''; var hint=document.getElementById('ag-hint'); if(hint)hint.textContent='';
  renderCircles(); if(mapCircleId===activeCircleId)renderCircleMarkers();
  if(go){go.disabled=false;go.style.opacity='';}
@@ -6062,8 +6074,8 @@ function gdBroadcast(){
  if(SS.circleGhost) return; // ghost mode pauses outgoing sharing
  if(userLat==null||userLng==null) return;
  const toks=g.pairs.filter(p=>p.shareToThem).map(p=>p.token);
- if(!toks.length) return;
- gdSend({type:'pos',toks:toks,lat:userLat,lng:userLng});
+ gdSend({type:'pos',toks:toks,lat:userLat,lng:userLng});   // same-device tabs
+ try{ fbPublishMyLoc(); }catch(e){}                          // cross-device RTDB
 }
 /* Incoming — a peer announced presence or sent a live position. */
 function gdHandle(msg){
@@ -6941,7 +6953,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v103';
+var APP_VER='v97';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -7429,6 +7441,8 @@ function fbOnAuthed(uid){
   try{ fbStartPresence(); }catch(e){}
   try{ fbListenSOS(); }catch(e){}
   try{ fbListenPairs(); }catch(e){}
+  try{ fbListenAllPeerLocs(); }catch(e){}     // subscribe to every paired partner's live location
+  try{ fbStartLocPublish(); }catch(e){}       // start writing my own live location
   try{ fbRegisterMe(); }catch(e){}
   try{ statsTrack(); }catch(e){}            // count install + daily-active (first-party, RTDB)
   try{ statsInitAnalytics(); }catch(e){}    // GA4 for historical DAU/WAU/MAU + retention
@@ -7473,7 +7487,9 @@ function fbStartPresence(){
 }
 function fbProcessPresence(snap){
   if(!snap)return;
-  var all=snap.val()||{}, n=0, mlat=userLat, mlng=userLng, radM=((SS.settings&&SS.settings.radius)||5)*1000;
+  var all=snap.val()||{};
+  try{ fbApplyPeerPresence(all); }catch(e){}   // resolve paired partners' live positions
+  var n=0, mlat=userLat, mlng=userLng, radM=((SS.settings&&SS.settings.radius)||5)*1000;
   var seen={}, rendered=0, now=Date.now();
   Object.keys(all).forEach(function(k){ if(k===FB.uid)return; var p=all[k]; if(!p||p.lat==null)return;
     if(p.ts && (now-p.ts)>PSTALE)return; // skip dead sessions (presence refreshes every 40s)
@@ -7738,6 +7754,37 @@ function fbAcceptInvite(token,myName){
     return inv.fromUid;
   }).catch(function(){return null;});
 }
+/* ══ CROSS-DEVICE LIVE LOCATION (real users see each other) ══
+   Uses the EXISTING presence/<uid> node (verified writable+readable under live rules).
+   fbStartPresence already publishes my {lat,lng,ts}. Here we resolve each paired
+   partner's live position from the presence snapshot by their partnerUid. No rules
+   deploy needed — presence is already the shared, authed-readable location layer. */
+function fbApplyPeerPresence(all){
+  try{
+    if(!all)return;
+    var g=gdState(), changed=false, now=Date.now();
+    g.pairs.forEach(function(p){
+      if(!p.partnerUid)return;
+      var pr=all[p.partnerUid];
+      if(pr && pr.lat!=null && pr.lng!=null){
+        // fresh presence (< 2 min) = live; else keep last known but not "live"
+        var fresh=(now-(pr.ts||0))<120000;
+        if(p.lat!==pr.lat||p.lng!==pr.lng||p.live!==fresh){ changed=true; }
+        p.lat=pr.lat; p.lng=pr.lng; p.ts=(pr.ts||now); p.live=fresh; p.pending=false;
+      }
+    });
+    if(changed){
+      saveStore();
+      try{ gdRenderMarkers(); }catch(e){}
+      try{ if(document.getElementById('sh-circles')&&document.getElementById('sh-circles').classList.contains('open'))gdRenderList(); }catch(e){}
+    }
+  }catch(e){}
+}
+/* Backwards-compatible shims (called elsewhere) — now no-ops / presence-backed. */
+function fbPublishMyLoc(){ try{ fbPublishPresence(); }catch(e){} }   // presence IS my location publish
+function fbStartLocPublish(){ /* presence timer already runs via fbStartPresence */ }
+function fbListenPeerLoc(uid){ /* presence stream already covers all peers; resolved in fbProcessPresence */ }
+function fbListenAllPeerLocs(){ try{ if(FB._presSnap)fbApplyPeerPresence(FB._presSnap.val()||{}); }catch(e){} }
 function fbListenPairs(){
   if(!FB.ready)return;
   FB.db.ref('pairs/'+FB.uid).on('value',function(snap){
@@ -7751,8 +7798,9 @@ function fbListenPairs(){
             || g.pairs.find(function(p){return !p.partnerUid && info.token && p.token===info.token;});
         if(ex){ var ch=false; if(ex.partnerUid!==uid){ex.partnerUid=uid;ch=true;} if(!ex.linked){ex.linked=true;ch=true;} if(ex.pending){ex.pending=false;ch=true;} if(info.name&&!ex.name){ex.name=info.name;ch=true;} if(ch)changed=true; }
         else { g.pairs.push({id:genId('g'),token:info.token||('p'+uid.slice(0,8)),name:info.name||'',rel:'',shareToThem:true,seeThem:true,addedTs:Date.now(),initiator:false,pending:false,partnerUid:uid,linked:true,color:GD_PALETTE[g.pairs.length%GD_PALETTE.length],lat:null,lng:null,ts:0,live:false}); changed=true; }
+        try{ fbListenPeerLoc(uid); }catch(e){}    // subscribe to the newly-discovered partner's location
       });
-      if(changed){ saveStore(); if(document.getElementById('sh-circles')&&document.getElementById('sh-circles').classList.contains('open'))gdRenderList(); }
+      if(changed){ saveStore(); try{gdRenderMarkers();}catch(e){} if(document.getElementById('sh-circles')&&document.getElementById('sh-circles').classList.contains('open'))gdRenderList(); }
     }catch(e){}
   }, function(){ /* denied until /pairs rules deployed */ });
 }
