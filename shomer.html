@@ -2111,7 +2111,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
   <div id="diag-report"></div>
   <div class="dbtns">
    <button class="pri" onclick="diagCopy()">Copy</button>
-   <button class="danger" onclick="diagForceFresh()">Force latest (clear cache)</button>
+   <button class="danger" onclick="diagForceFresh()" data-he="טען מחדש גרסה עדכנית (נקה מטמון)" data-en="Force latest (clear cache)" data-ar="فرض أحدث إصدار (مسح الذاكرة)">טען מחדש גרסה עדכנית (נקה מטמון)</button>
    <button onclick="diagClose()">Close</button>
   </div>
  </div>
@@ -2586,6 +2586,30 @@ const LANGS={
    SOS / disclaimer strings that MUST get a native-Arabic human review before launch.
    ══════════════════════════════════════════════════════════════════════════ */
 const AR={
+ // ── Trilingual audit fills (check-in · geofence · verify · map labels) ──
+ 'Resend code':'إعادة إرسال الرمز','Not now':'ليس الآن','Legend':'مفتاح الخريطة',
+ 'Paired guardian':'حارس مقترن','Frequency':'التكرار','Response window':'مهلة الاستجابة',
+ 'Start check-in':'بدء تسجيل الوصول','Arrival reminder':'تذكير الوصول','Place label':'اسم المكان',
+ 'Geofence radius':'نطاق السياج الجغرافي','Active reminders':'التذكيرات النشطة',
+ 'Works best while the app is open.':'يعمل بأفضل صورة أثناء فتح التطبيق.',
+ 'Contact (shares location)':'جهة اتصال (تشارك الموقع)','Add reminder (map center)':'إضافة تذكير (مركز الخريطة)',
+ 'Add my SHOMER':'أضف حارسي','My SHOMER':'حارسي','Edit':'تعديل','Remove':'إزالة','Rename':'إعادة تسمية',
+ 'Pending invite':'دعوة معلّقة','Invite sent':'أُرسلت الدعوة','Nickname':'الاسم المستعار',
+ // ── Report form ──
+ 'Incident type':'نوع الحادثة','Suspicious stalking':'ملاحقة مشبوهة','Sexual harassment':'تحرّش جنسي',
+ 'Other':'أخرى','Detailed description':'وصف تفصيلي','Photo documentation':'توثيق بالصور',
+ 'Attach photos':'إرفاق صور','Location':'الموقع','Share current location':'مشاركة الموقع الحالي',
+ 'No reports yet. Submit one from the menu.':'لا بلاغات بعد. أرسل بلاغاً من القائمة.',
+ 'No SOS events logged.':'لا أحداث استغاثة مسجّلة.',
+ // ── Check-in / alarm / misc ──
+ 'No check-in response':'لا استجابة لتسجيل الوصول','Dismiss':'تجاهل','Tap for details':'اضغط للتفاصيل',
+ 'Choose interval':'اختر الفاصل الزمني','Volume':'مستوى الصوت','Tap an alarm above to hear it.':'اضغط على إنذار بالأعلى لسماعه.',
+ 'Close':'إغلاق','Force latest (clear cache)':'فرض أحدث إصدار (مسح الذاكرة)',
+ // ── Professions (responder roles) ──
+ 'Responder role (volunteer)':'دور المستجيب (متطوّع)','Police':'شرطة','Doctor (MD)':'طبيب',
+ 'Firefighter':'إطفائي','Paramedic':'مسعف','Security':'أمن','Nurse':'ممرّض/ة','None':'بدون',
+ "Verify you're human, then SMS is sent":'أثبت أنك لست روبوتاً، ثم تُرسَل رسالة SMS',
+ 'Tap for details':'اضغط للتفاصيل','Report':'إبلاغ','Terms of Service':'شروط الخدمة',
  // ── Onboarding ──
  'First name':'الاسم الأول','Continue →':'متابعة ←','Auto-generated — tap to edit':'يُنشأ تلقائياً — اضغط للتعديل',
  'Skip — continue without location':'تخطّي — المتابعة بدون مشاركة الموقع','Skip – continue without sharing':'تخطّي — المتابعة بدون مشاركة الموقع',
@@ -3032,7 +3056,7 @@ function renderReportsList(){
  l.innerHTML='';
  if(!SS.reports.length){
  const e=document.createElement('div');e.className='sr-sb';e.style.padding='4px 2px';
- e.textContent=currentLang==='he'?'אין דיווחים עדיין. שלח דיווח ראשון מהתפריט.':'No reports yet. Submit one from the menu.';
+ e.textContent=arTr(currentLang==='he'?'אין דיווחים עדיין. שלח דיווח ראשון מהתפריט.':'No reports yet. Submit one from the menu.');
  l.appendChild(e);return;
  }
  [...SS.reports].reverse().forEach(rep=>{
@@ -3064,7 +3088,7 @@ function renderSosHistory(){
  l.innerHTML='';
  if(!SS.sosHistory.length){
  const e=document.createElement('div');e.className='sr-sb';e.style.padding='4px 2px';
- e.textContent=currentLang==='he'?'אין אירועי SOS בהיסטוריה.':'No SOS events logged.';
+ e.textContent=arTr(currentLang==='he'?'אין אירועי SOS בהיסטוריה.':'No SOS events logged.');
  l.appendChild(e);return;
  }
  [...SS.sosHistory].reverse().forEach(ev=>{
@@ -3111,7 +3135,7 @@ const PROFESSIONS={
  para: {icon:'medic', he:'פרמדיק/ית', en:'Paramedic'},
  security:{icon:'shield', he:'אבטחה', en:'Security'},
 };
-function profLabel(key){const p=PROFESSIONS[key];if(!p)return'';return currentLang==='he'?p.he:p.en;}
+function profLabel(key){const p=PROFESSIONS[key];if(!p)return'';return currentLang==='he'?p.he:(currentLang==='ar'?(p.ar||arTr(p.en)):p.en);}
 function selectProfession(key){
  if(!PROFESSIONS[key])key='';
  SS.user.profession=key; user.profession=key; saveStore();
@@ -3291,7 +3315,7 @@ function applyTranslations(){
  const tl=document.getElementById('test-lbl');if(tl)tl.textContent=T('test');
  const dn=document.getElementById('ob-defaults-txt');if(dn)dn.innerHTML=currentLang==='he'?'<strong>Shake-to-SOS</strong> פעיל · <strong>Dead Man\'s Switch</strong> כבוי. אפשר לשנות בכל עת בהגדרות.':'<strong>Shake-to-SOS</strong> on · <strong>Dead Man\'s Switch</strong> off. Change anytime in Settings.';
  const stp=document.getElementById('ob-stop-lbl');if(stp)stp.textContent=currentLang==='he'?'עצור צליל':'Stop sound';
- const ath=document.getElementById('alarm-tap-hint');if(ath)ath.textContent=currentLang==='he'?'הקש על אזעקה למעלה כדי לשמוע אותה.':'Tap an alarm above to hear it.';
+ const ath=document.getElementById('alarm-tap-hint');if(ath)ath.textContent=arTr(currentLang==='he'?'הקש על אזעקה למעלה כדי לשמוע אותה.':'Tap an alarm above to hear it.');
  // Nav
  setText('nav-map',T('nav_map'));setText('nav-upd',T('nav_upd'));setText('nav-sos',T('nav_sos'));
  // Dropdown
@@ -4064,9 +4088,10 @@ function alarmResilienceStart(){
   }catch(e){}
   try{
     if('Notification' in window && Notification.permission==='granted' && navigator.serviceWorker && navigator.serviceWorker.ready){
-      var he=currentLang==='he';
+      var he=currentLang==='he', ar=currentLang==='ar';
+      var _body=he?'האזעקה פועלת. אם אינך שומע/ת — ייתכן שהטלפון במצב שקט; הרטט וההבהוב ממשיכים.':ar?'الإنذار يعمل. إن لم تسمعه فقد يكون الهاتف صامتًا؛ الاهتزاز والوميض مستمران.':'Alarm active. Can\'t hear it? Your phone may be silenced — vibration + flashing continue.';
       navigator.serviceWorker.ready.then(function(reg){
-        try{ reg.showNotification('🚨 SH✡MER — SOS', { body:(he?'האזעקה פועלת. אם אינך שומע/ת — ייתכן שהטלפון במצב שקט; הרטט וההבהוב ממשיכים.':'Alarm active. Can\'t hear it? Your phone may be silenced — vibration + flashing continue.'), tag:'shomer-sos-active', requireInteraction:true, icon:'logo-192.png', badge:'logo-192.png', vibrate:[500,140,500,140,500] }); }catch(e){}
+        try{ reg.showNotification('🚨 SH✡MER — SOS', { body:_body, tag:'shomer-sos-active', requireInteraction:true, icon:'logo-192.png', badge:'logo-192.png', vibrate:[500,140,500,140,500] }); }catch(e){}
       }).catch(function(){});
     }
   }catch(e){}
@@ -4909,7 +4934,7 @@ function buildInitialUpdates(){
  <div class="uc-meta"><span class="uc-time"></span>${c.dist?'<span class="uc-sep"></span><span class="uc-loc"></span>':''}</div>
  <div class="uc-desc"></div>
  ${c.resp.length?`<div class="uc-resp"><div class="avs">${c.resp.map(r=>`<div class="av">${ESC(r.a)}</div>`).join('')}</div><span class="uc-rcount">${c.resp.length} ${currentLang==='he'?'בדרך':'responding'}</span>${c.dist?`<span class="dtag">${ESC(c.dist)}</span>`:''} </div>`:''}
- <div class="uc-hint"> ${currentLang==='he'?'הקש לפרטים':'Tap for details'}</div>
+ <div class="uc-hint"> ${arTr(currentLang==='he'?'הקש לפרטים':'Tap for details')}</div>
  </div>`;
  // Set text safely
  div.querySelector('.uc-ttl').textContent=c.title;
@@ -6737,7 +6762,16 @@ loadStore();
   }catch(e){}
 })();
 applyStoredSettings();
-setLang(SS.lang||'he');
+/* First launch: detect the device language (he/ar/en); fall back to Hebrew (primary
+   audience). Once the user picks a language it's persisted in SS.lang and wins. */
+function detectDeviceLang(){
+ try{ var l=String(navigator.language||navigator.userLanguage||'he').toLowerCase();
+  if(l.indexOf('ar')===0) return 'ar';
+  if(l.indexOf('en')===0) return 'en';
+  return 'he';
+ }catch(e){ return 'he'; }
+}
+setLang(SS.lang||detectDeviceLang());
 // Init DMS display
 updateDMSDisplay();
 // Returning user — skip onboarding, restore everything.
@@ -6907,7 +6941,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v102';
+var APP_VER='v103';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -8010,21 +8044,22 @@ function statsCard(id,label,sub,color){
 }
 function statsOpen(){
   if(document.getElementById('stats-view')) return;
-  var he=currentLang==='he';
+  var he=currentLang==='he', ar=currentLang==='ar', rtl=(he||ar);
+  var TT=function(h,a,e){ return he?h:ar?a:e; };
   var d=document.createElement('div'); d.id='stats-view';
-  d.setAttribute('style','position:fixed;inset:0;z-index:100000;background:linear-gradient(160deg,#091227,#0e1d3a);color:#f2f6ff;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:max(22px,env(safe-area-inset-top)) 18px 40px;direction:'+(he?'rtl':'ltr')+'');
+  d.setAttribute('style','position:fixed;inset:0;z-index:100000;background:linear-gradient(160deg,#091227,#0e1d3a);color:#f2f6ff;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:max(22px,env(safe-area-inset-top)) 18px 40px;direction:'+(rtl?'rtl':'ltr')+'');
   d.innerHTML=''
    +'<div style="max-width:460px;margin:0 auto">'
    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">'
-   +'<div style="font-size:13px;font-weight:800;letter-spacing:.4px;color:#f5cb45">SH✡MER · '+(he?'מדדי שימוש':'USAGE')+'</div>'
+   +'<div style="font-size:13px;font-weight:800;letter-spacing:.4px;color:#f5cb45">SH✡MER · '+TT('מדדי שימוש','مؤشرات الاستخدام','USAGE')+'</div>'
    +'<button id="stats-x" style="background:none;border:1px solid #8c9bbd55;color:#c8d4e8;border-radius:9px;padding:5px 11px;font-size:13px;font-weight:700">✕</button></div>'
-   +'<div id="stats-updated" style="font-size:11px;color:#8c9bbd;margin-bottom:16px;direction:ltr;text-align:'+(he?'right':'left')+'">…</div>'
-   +statsCard('stats-active-now', he?'פעילים עכשיו':'Active right now', he?'נראו ב-'+STATS_ACTIVE_MIN+' הדקות האחרונות':'seen in the last '+STATS_ACTIVE_MIN+' min','#3ad29f')
-   +statsCard('stats-today', he?'פעילים היום':'Active today', he?'משתמשים ייחודיים היום (DAU)':'distinct users today (DAU)','#f5cb45')
-   +statsCard('stats-installs', he?'התקנות':'Installs', he?'סה"כ התקנות (הורדות)':'total app installs ("downloads")','#5aa9ff')
-   +statsCard('stats-registered', he?'משתמשים רשומים':'Registered users', he?'סה"כ חשבונות במרשם':'total accounts in the registry','#c9a0ff')
-   +'<button id="stats-refresh" style="width:100%;margin-top:8px;padding:12px;border:1px solid #8c9bbd44;border-radius:12px;background:#122850;color:#f5cb45;font-size:14px;font-weight:800">'+(he?'רענון':'Refresh')+'</button>'
-   +'<div style="font-size:10.5px;color:#6b7a9c;margin-top:14px;line-height:1.6;text-align:center">'+(he?'מתעדכן כל 15 שניות · מספרים חיים מ-Firebase':'auto-refreshes every 15s · live numbers from Firebase')+'</div>'
+   +'<div id="stats-updated" style="font-size:11px;color:#8c9bbd;margin-bottom:16px;direction:ltr;text-align:'+(rtl?'right':'left')+'">…</div>'
+   +statsCard('stats-active-now', TT('פעילים עכשיו','نشطون الآن','Active right now'), TT('נראו ב-'+STATS_ACTIVE_MIN+' הדקות האחרונות','شوهدوا خلال آخر '+STATS_ACTIVE_MIN+' دقائق','seen in the last '+STATS_ACTIVE_MIN+' min'),'#3ad29f')
+   +statsCard('stats-today', TT('פעילים היום','نشطون اليوم','Active today'), TT('משתמשים ייחודיים היום (DAU)','مستخدمون فريدون اليوم (DAU)','distinct users today (DAU)'),'#f5cb45')
+   +statsCard('stats-installs', TT('התקנות','التثبيتات','Installs'), TT('סה"כ התקנות (הורדות)','إجمالي التثبيتات (التنزيلات)','total app installs ("downloads")'),'#5aa9ff')
+   +statsCard('stats-registered', TT('משתמשים רשומים','المستخدمون المسجّلون','Registered users'), TT('סה"כ חשבונות במרשם','إجمالي الحسابات في السجل','total accounts in the registry'),'#c9a0ff')
+   +'<button id="stats-refresh" style="width:100%;margin-top:8px;padding:12px;border:1px solid #8c9bbd44;border-radius:12px;background:#122850;color:#f5cb45;font-size:14px;font-weight:800">'+TT('רענון','تحديث','Refresh')+'</button>'
+   +'<div style="font-size:10.5px;color:#6b7a9c;margin-top:14px;line-height:1.6;text-align:center">'+TT('מתעדכן כל 15 שניות · מספרים חיים מ-Firebase','يتحدّث كل 15 ثانية · أرقام حيّة من Firebase','auto-refreshes every 15s · live numbers from Firebase')+'</div>'
    +'</div>';
   document.body.appendChild(d);
   document.getElementById('stats-x').onclick=statsClose;
@@ -8037,8 +8072,8 @@ function statsClose(){ if(FB._statsTimer){clearInterval(FB._statsTimer);FB._stat
 function statsSet(id,v){ var el=document.getElementById(id); if(el)el.textContent=v; }
 async function statsRefresh(){
   try{
-    var he=currentLang==='he';
-    if(!FB.ready||!FB._authReady){ statsSet('stats-updated', he?'מתחבר…':'connecting…'); return; }
+    var he=currentLang==='he', ar=currentLang==='ar';
+    if(!FB.ready||!FB._authReady){ statsSet('stats-updated', he?'מתחבר…':ar?'جارٍ الاتصال…':'connecting…'); return; }
     var now=Date.now(), day=statsToday();
     function rd(p){ return FB.db.ref(p).once('value').then(function(s){ return s.val()||{}; }).catch(function(){ return null; }); }
     var res=await Promise.all([ rd('presence'), rd('analytics/installs'), rd('registry'), rd('analytics/seen/'+day) ]);
@@ -8049,7 +8084,7 @@ async function statsRefresh(){
     statsSet('stats-installs', inst===null?'–':Object.keys(inst).length);      // '–' = analytics rule not published yet
     statsSet('stats-today',    act ===null?'–':Object.keys(act).length);
     var pend=(inst===null||act===null);
-    statsSet('stats-updated', (he?'עודכן ':'updated ')+new Date().toLocaleTimeString()+(pend?(he?'  ·  התקנות/DAU: צריך לפרסם כללי analytics':'  ·  installs/DAU need the analytics rule'):''));
+    statsSet('stats-updated', (he?'עודכן ':ar?'حُدّث ':'updated ')+new Date().toLocaleTimeString()+(pend?(he?'  ·  התקנות/DAU: צריך לפרסם כללי analytics':ar?'  ·  التثبيتات/DAU: انشر قواعد analytics':'  ·  installs/DAU need the analytics rule'):''));
   }catch(e){ fbLog('stats refresh err',e); }
 }
 try{ if(document.readyState!=='loading'){ statsGateCheck(); } else { document.addEventListener('DOMContentLoaded',function(){ try{statsGateCheck();}catch(e){} }); } }catch(e){}
