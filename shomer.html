@@ -1397,11 +1397,16 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <input class="ob-f" id="ob-pin" type="password" inputmode="numeric" maxlength="6" pattern="[0-9]*" dir="ltr" style="text-align:center;letter-spacing:10px;font-size:20px" placeholder="••••••" autocomplete="off" aria-label="SOS cancel code">
  <p class="ob-pin-hint" id="ob-pin-hint" style="font-size:10.5px;color:var(--tx3);line-height:1.5;margin:5px 2px 0" data-he="נדרש כדי לבטל SOS פעיל — מונע ביטול בכפייה. לעולם לא טביעת אצבע." data-en="Required to cancel an active SOS — prevents forced cancellation. Never biometric.">נדרש כדי לבטל SOS פעיל — מונע ביטול בכפייה. לעולם לא טביעת אצבע.</p>
  </div>
- <div style="display:flex;flex-direction:column;gap:8px;margin-top:10px">
+ <!-- LEGAL ACKNOWLEDGEMENT GATE — must be checked before entering -->
+ <div id="ob-agree-row" style="display:flex;gap:9px;align-items:flex-start;margin:4px 2px 8px;padding:9px 11px;border:1px solid var(--b2);border-radius:10px;background:var(--n3)">
+ <input type="checkbox" id="ob-agree-chk" style="margin-top:2px;width:19px;height:19px;flex-shrink:0;accent-color:#E0A828" aria-labelledby="ob-agree-lbl">
+ <span id="ob-agree-lbl" style="font-size:11px;color:var(--tx2);line-height:1.55" data-he="קראתי ואני מסכים/ה לתנאי השימוש, לכתב הוויתור ולמדיניות הפרטיות. שומר אינו תחליף לשירותי חירום — בחירום חייגו 100 / 101 / 102." data-en="I have read and agree to the Terms of Use, Disclaimer and Privacy Policy. SHOMER is not a replacement for emergency services — in an emergency call 100 / 101 / 102." data-ar="قرأت وأوافق على شروط الاستخدام وإخلاء المسؤولية وسياسة الخصوصية. شومير ليس بديلاً عن خدمات الطوارئ — في الطوارئ اتصل بـ 100 / 101 / 102.">קראתי ואני מסכים/ה לתנאי השימוש, לכתב הוויתור ולמדיניות הפרטיות. שומר אינו תחליף לשירותי חירום — בחירום חייגו 100 / 101 / 102.</span>
+ </div>
+ <div style="display:flex;flex-direction:column;gap:8px;margin-top:0">
  <button class="ob-cta" onclick="obFinish()" id="ob-finish-btn" style="width:100%;margin-top:0;justify-content:center"><svg class="ic" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M10 17l5-5-5-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 12H4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M14 4h4a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="ob-finish-t">כניסה</span></button>
  <button class="ob-cta" onclick="obFinishToSettings()" id="ob-settings-btn" style="width:100%;margin-top:0;background:var(--n4);color:var(--tx1);box-shadow:none;border:1px solid var(--b2)"><svg class="ic" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-2.87 1.2V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-2.87-1.2l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.1A1.7 1.7 0 0 0 4.6 8.4l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 5.6a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 2.87 1.2l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 21 9.6h.4a2 2 0 1 1 0 4H21a1.7 1.7 0 0 0-1.6 1.4Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg><span id="ob-settings-t">הגדרות</span></button>
  </div>
- <p style="font-size:10.5px;color:var(--tx3);line-height:1.6;margin:10px 2px 0;text-align:center" id="ob-agree-txt">בכניסה את/ה מסכים/ה ל<button type="button" class="lnk-inline" onclick="openLegal('tos')">תנאי השימוש</button> ול<button type="button" class="lnk-inline" onclick="openLegal('privacy')">מדיניות הפרטיות</button>. שיתוף מיקום הוא בהסכמה בלבד.</p>
+ <p style="font-size:10.5px;color:var(--tx3);line-height:1.6;margin:10px 2px 0;text-align:center" id="ob-agree-txt"><button type="button" class="lnk-inline" onclick="openLegal('tos')" data-he="תנאי שימוש" data-en="Terms of Use" data-ar="شروط الاستخدام">תנאי שימוש</button> · <button type="button" class="lnk-inline" onclick="openLegal('disclaimer')" data-he="כתב ויתור" data-en="Disclaimer" data-ar="إخلاء المسؤولية">כתב ויתור</button> · <button type="button" class="lnk-inline" onclick="openLegal('privacy')" data-he="מדיניות פרטיות" data-en="Privacy Policy" data-ar="سياسة الخصوصية">מדיניות פרטיות</button></p>
  <button class="ob-back" onclick="goStep(1)" id="ob-back2"><svg class="ic" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M10 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="ob-back2-t">חזרה</span></button>
  </div>
  </div>
@@ -2816,7 +2821,7 @@ let SS={
  acknowledged. Revocable anytime (ghost / disconnect / reset). */
  consent:{ share:false, tos:false, ts:0, ver:'' }
 };
-const LEGAL_VER='2026-06-19-draft'; // bump when ToS/Privacy text materially changes
+const LEGAL_VER='2026-07-10-draft'; // bump when ToS/Privacy text materially changes
 function deepMerge(base,o){
  const out=Array.isArray(base)?[]:{...base};
  if(Array.isArray(o))return o.slice();
@@ -3610,7 +3615,15 @@ function hideAlarmStops(){['ob-alarm-stop','set-alarm-stop'].forEach(id=>{const 
 function stopPreview(){stopAlarm();hideAlarmStops();clearTimeout(previewAlarm._t);}
 function obFinish(goSettings){
  const _he=currentLang==='he';
- 
+ // LEGAL ACKNOWLEDGEMENT GATE — must accept the Terms/Disclaimer before using the app.
+ var _chk=document.getElementById('ob-agree-chk');
+ if(_chk && !_chk.checked){
+  try{ toast(_he?'יש לאשר את תנאי השימוש כדי להמשיך':currentLang==='ar'?'يجب الموافقة على الشروط للمتابعة':'Please accept the Terms to continue','amb'); }catch(e){}
+  try{ var _r=document.getElementById('ob-agree-row'); if(_r){ _r.style.outline='2px solid #E0A828'; _r.scrollIntoView({block:'center',behavior:'smooth'}); setTimeout(function(){ _r.style.outline=''; },2000); } }catch(e){}
+  return;
+ }
+ try{ if(!SS.consent)SS.consent={share:false,tos:false,ts:0,ver:''}; SS.consent.tos=true; SS.consent.tosTs=Date.now(); SS.consent.ver=LEGAL_VER; }catch(e){}
+
  try{stopPreview();}catch(e){}
  user.name=user.name||pickRandomName();
  // Persist onboarding so it never loops on reload.
@@ -6338,8 +6351,14 @@ function gdApplyI18n(){
  app, while staying 100% ACCURATE about what this build does. We never claim
  it contacts authorities or runs always-on/background — because it doesn't.
 ═══════════════════════════════════════════════════ */
-function legalUpdated(){ return currentLang==='he'?'עודכן: 19 ביוני 2026':currentLang==='ar'?'آخر تحديث: 19 يونيو 2026':'Updated: 19 June 2026'; }
-function legalDraftBox(){ return ''; }
+function legalUpdated(){ return currentLang==='he'?'עודכן: 10 ביולי 2026':currentLang==='ar'?'آخر تحديث: 10 يوليو 2026':'Updated: 10 July 2026'; }
+function legalDraftBox(){
+ var he=currentLang==='he', ar=currentLang==='ar';
+ var t = he ? 'טיוטה — מסמך זה נמצא בבדיקה משפטית, אינו מהווה ייעוץ משפטי, ועשוי להשתנות לפני ההשקה הרשמית.'
+       : ar ? 'مسودة — هذه الوثيقة قيد المراجعة القانونية، وليست استشارة قانونية، وقد تتغيّر قبل الإطلاق الرسمي.'
+       : 'DRAFT — this document is under legal review, is not legal advice, and may change before public launch.';
+ return '<div class="legal-draft" style="background:#FFF6E6;border:1px solid #E0A82e;border-radius:10px;padding:10px 12px;margin:0 0 14px;font-size:11.5px;color:#8a6d1a;line-height:1.55">⚠ '+t+'</div>';
+}
 
 /* Emergency disclaimer — the single most important compliance text. */
 function disclaimerHTML(){ const he=currentLang==='he', ar=currentLang==='ar';
@@ -6413,10 +6432,16 @@ function tosHTML(){ const he=currentLang==='he';
  <p>مشاركة الموقع اختيارية (opt-in). أنت تتحكّم بمن يراك ويمكنك الإيقاف في أي لحظة (وضع التخفّي، فصل حارس، أو إعادة ضبط بياناتك).</p>
  <h4>5. توفّر الميزات</h4>
  <p>بعض الميزات — التنبيهات في الخلفية وعلى الشاشة المقفلة والتشفير من الطرف إلى الطرف — محدودة في نسخة الويب. للحصول على الحماية الكاملة، أبقِ التطبيق مفتوحاً.</p>
- <h4>6. تحديد المسؤولية</h4>
- <p>إلى الحدّ الذي يسمح به القانون، لا تتحمّل 3Shamrocks Studio المسؤولية عن أي ضرر ناتج عن استخدام التطبيق أو الاعتماد عليه، بما في ذلك أيّ إخفاق في تلقّي المساعدة.</p>
- <h4>7. التغييرات والقانون الحاكم</h4>
- <p>قد نُحدّث هذه الشروط؛ ويُعدّ استمرار الاستخدام موافقةً عليها. تخضع لقوانين دولة إسرائيل.</p>
+ <h4>6. تحمّل المخاطر</h4>
+ <p>تستخدم شومير على مسؤوليتك الخاصة. حالات الطوارئ خطِرة بطبيعتها؛ أنت مسؤول عن سلامتك وقراراتك، ويجب ألا تُعرّض نفسك للخطر اعتماداً على التطبيق.</p>
+ <h4>7. المحتوى والسلوك</h4>
+ <p>أنت وحدك المسؤول عن كل ما تُبلّغ عنه أو تُشاركه أو تبثّه (بلاغات، مواقع، صور، رسائل). لا تُطلق إنذارات كاذبة، ولا تُضايق أو تُهدّد أو تنتحل الهوية أو تُسيء استخدام الخدمة. لسنا مسؤولين عن محتوى المستخدمين، ولا عن الإنذارات الكاذبة أو إساءة الاستخدام، ولا عن تصرّف المستخدمين الآخرين أو تقاعسهم. يجوز لنا إزالة المحتوى وتعليق أو حظر المستخدمين وفق تقديرنا.</p>
+ <h4>8. تحديد المسؤولية</h4>
+ <p>إلى أقصى حدّ يسمح به القانون، لا تتحمّل 3Shamrocks Studio ومشغّلوها ومساهموها المسؤولية عن أي إصابة أو وفاة أو خسارة أو أضرار من أي نوع — مباشرة أو غير مباشرة أو تبعية أو خاصة — ناتجة عن الاستخدام أو تعذّره أو الإخفاق أو الاعتماد على التطبيق، بما في ذلك أي إخفاق في إرسال تنبيه أو إنذار أو تسليمه أو تلقّيه أو التصرّف بناءً عليه، وكذلك أفعال أو إغفالات أي مستخدم أو مستجيب آخر.</p>
+ <h4>9. التعويض</h4>
+ <p>توافق على تعويض وإبراء ذمّة 3Shamrocks Studio ومشغّليها من أي مطالبة أو مسؤولية أو ضرر أو نفقة (بما فيها أتعاب المحاماة) تنشأ عن استخدامك أو إساءة استخدامك للتطبيق أو مخالفتك لهذه الشروط.</p>
+ <h4>10. الخصوصية والقبول والتغييرات والقانون الحاكم</h4>
+ <p>يُعالَج موقعك وبياناتك كما هو موضّح في سياسة الخصوصية. يجب قبول هذه الشروط لاستخدام شومير؛ ويُعدّ استمرار الاستخدام موافقةً. قد نُحدّث هذه الشروط. تخضع لقوانين دولة إسرائيل، وتختص بها المحاكم المختصة في إسرائيل.</p>
  <p class="legal-meta">${legalUpdated()}</p>`;
  return legalDraftBox()+(he?`
  <h4>1. מה שומר הוא</h4>
@@ -6433,10 +6458,16 @@ function tosHTML(){ const he=currentLang==='he';
  <p>שיתוף מיקום הוא opt-in. אתם שולטים מי רואה אתכם וניתן להפסיק בכל רגע (מצב רפאים, ניתוק שומר, או איפוס נתונים).</p>
  <h4>5. זמינות תכונות</h4>
  <p>חלק מהתכונות — התראות ברקע ובמסך נעול והצפנה מקצה-לקצה — מוגבלות בגרסת הדפדפן. לקבלת ההגנה המלאה מומלץ להשאיר את האפליקציה פתוחה.</p>
- <h4>6. הגבלת אחריות</h4>
- <p>ככל שמתיר הדין, 3Shamrocks Studio לא תישא באחריות לנזק הנובע משימוש או מהסתמכות על האפליקציה, לרבות כשל בקבלת עזרה.</p>
- <h4>7. שינויים ודין</h4>
- <p>נוכל לעדכן תנאים אלה; המשך שימוש מהווה הסכמה. כפוף לדין מדינת ישראל.</p>
+ <h4>6. נטילת סיכון</h4>
+ <p>השימוש בשומר הוא באחריותך בלבד. מצבי חירום מסוכנים מטבעם; אתה/את אחראי/ת לבטיחותך ולהחלטותיך, ואין להעמיד את עצמך בסכנה בהסתמך על האפליקציה.</p>
+ <h4>7. התוכן וההתנהגות שלך</h4>
+ <p>אתה/את האחראי/ת הבלעדי/ת לכל דיווח, שיתוף או שידור שלך (דיווחים, מיקומים, תמונות, הודעות). אין להפעיל אזעקות שווא, להטריד, לאיים, להתחזות או לעשות שימוש לרעה בשירות. איננו אחראים לתוכן משתמשים, לאזעקות שווא, לשימוש לרעה או להתעללות, ולאופן שבו משתמשים אחרים פועלים או נמנעים מלפעול. אנו רשאים להסיר תוכן ולהשעות או לחסום משתמשים לפי שיקול דעתנו.</p>
+ <h4>8. הגבלת אחריות</h4>
+ <p>ככל שמתיר הדין, 3Shamrocks Studio, מפעיליה ותורמיה לא יישאו באחריות לכל פגיעה, מוות, אובדן או נזק מכל סוג — ישיר, עקיף, תוצאתי או מיוחד — הנובע משימוש, מאי-יכולת להשתמש, מכשל או מהסתמכות על האפליקציה, לרבות כל כשל בשליחת התראה או אזעקה, במסירתה, בקבלתה או בפעולה בעקבותיה, וכן מעשה או מחדל של כל משתמש או מגיב אחר.</p>
+ <h4>9. שיפוי</h4>
+ <p>אתה/את מתחייב/ת לשפות ולפצות את 3Shamrocks Studio ומפעיליה בגין כל תביעה, חבות, נזק או הוצאה (לרבות שכר טרחת עורך דין) הנובעים משימושך או שימושך לרעה באפליקציה או מהפרת תנאים אלה.</p>
+ <h4>10. פרטיות, קבלה, שינויים ודין</h4>
+ <p>המיקום והנתונים שלך מטופלים כמתואר במדיניות הפרטיות. עליך לקבל תנאים אלה כדי להשתמש בשומר; המשך שימוש מהווה הסכמה. נוכל לעדכן תנאים אלה. תנאים אלה כפופים לדין מדינת ישראל, וכל מחלוקת תובא בפני בתי המשפט המוסמכים בישראל.</p>
  <p class="legal-meta">${legalUpdated()}</p>`
  :`
  <h4>1. What Shomer is</h4>
@@ -6453,10 +6484,16 @@ function tosHTML(){ const he=currentLang==='he';
  <p>Location sharing is opt-in. You control who can see you and can stop anytime (ghost mode, disconnect a SHOMER, or reset your data).</p>
  <h4>5. Feature availability</h4>
  <p>Some features — background and locked-screen alerts and end-to-end encryption — are limited in the web version. For full protection, keep the app open.</p>
- <h4>6. Limitation of liability</h4>
- <p>To the extent permitted by law, 3Shamrocks Studio is not liable for damages arising from use of, or reliance on, the app — including any failure to receive help.</p>
- <h4>7. Changes & governing law</h4>
- <p>We may update these terms; continued use is acceptance. Governed by the laws of the State of Israel.</p>
+ <h4>6. Assumption of risk</h4>
+ <p>You use SHOMER at your own risk. Emergencies are inherently dangerous; you are responsible for your own safety and decisions, and must never place yourself in danger relying on the app.</p>
+ <h4>7. Your content & conduct</h4>
+ <p>You are solely responsible for anything you report, share, or broadcast (reports, locations, photos, messages). Do not trigger false alarms, harass, threaten, impersonate, or otherwise misuse the service. We are not responsible for user-generated content, for false alarms, misuse or abuse, or for how other users act or fail to act. We may remove content and suspend or ban users at our discretion.</p>
+ <h4>8. Limitation of liability</h4>
+ <p>To the maximum extent permitted by law, 3Shamrocks Studio, its operators and contributors shall not be liable for any injury, death, loss, or damages of any kind — whether direct, indirect, incidental, special, or consequential — arising from your use of, inability to use, failure of, or reliance on the app, including any failure of an alert or alarm to send, be delivered, be received, or be acted upon, and including the acts or omissions of any other user or responder.</p>
+ <h4>9. Indemnification</h4>
+ <p>You agree to indemnify and hold harmless 3Shamrocks Studio and its operators from any claim, liability, damage or expense (including legal fees) arising from your use or misuse of the app or your breach of these terms.</p>
+ <h4>10. Privacy, acceptance, changes & governing law</h4>
+ <p>Your location and data are handled as described in the Privacy Policy. You must accept these terms to use SHOMER; continued use is acceptance. We may update these terms. These terms are governed by the laws of the State of Israel, and any dispute shall be subject to the competent courts of Israel.</p>
  <p class="legal-meta">${legalUpdated()}</p>`);
 }
 
@@ -6548,8 +6585,16 @@ function renderLegal(){
  :currentLang==='ar'
  ?`<div class="disc-call"><button class="pr" onclick="callNum('100')"> 100 شرطة</button><button onclick="callNum('101')"> 101 إسعاف</button><button onclick="callNum('102')"> 102 إطفاء</button></div>`
  :`<div class="disc-call"><button class="pr" onclick="callNum('100')"> 100 Police</button><button onclick="callNum('101')"> 101 MDA</button><button onclick="callNum('102')"> 102 Fire</button></div>`);
- const t=document.getElementById('tos-body'); if(t)t.innerHTML=tosHTML();
- const p=document.getElementById('priv-body'); if(p)p.innerHTML=privacyHTML();
+ const t=document.getElementById('tos-body'); if(t)t.innerHTML=tosHTML()+legalFooter();
+ const p=document.getElementById('priv-body'); if(p)p.innerHTML=privacyHTML()+legalFooter();
+ if(d)d.innerHTML+=legalFooter();
+}
+/* 3Shamrocks Studio brand footer for the legal screens (per 3S branding rule). */
+function legalFooter(){
+ return '<div class="legal-3s" style="margin-top:22px;padding-top:14px;border-top:1px solid #e6dcc4;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center">'
+  +'<img src="3shamrocks.png" alt="3Shamrocks Studio" style="height:30px;width:auto;opacity:.92">'
+  +'<span style="font-size:11px;color:#8a7a52;font-weight:600">© 2026 3Shamrocks Studio · SH✡MER</span>'
+  +'</div>';
 }
 function openLegal(which){
  renderLegal();
@@ -6862,7 +6907,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v101';
+var APP_VER='v102';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
