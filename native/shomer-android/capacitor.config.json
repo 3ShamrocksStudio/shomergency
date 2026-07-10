@@ -1,0 +1,11 @@
+{
+  "appId": "il.co.shomerapp",
+  "appName": "SHOMER",
+  "webDir": "www",
+  "server": {
+    "url": "https://www.shomer-app.co.il/shomer.html",
+    "androidScheme": "https",
+    "allowNavigation": ["www.shomer-app.co.il", "shomer-app.co.il"]
+  },
+  "android": { "allowMixedContent": false }
+}

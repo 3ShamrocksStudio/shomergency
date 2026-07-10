@@ -1,0 +1,13 @@
+# deps / build artifacts
+node_modules/
+android/.gradle/
+android/build/
+android/app/build/
+android/capacitor-cordova-android-plugins/build/
+android/local.properties
+*.apk
+*.aab
+# secrets — NEVER commit
+keystore/
+keystore.properties
+android/app/google-services.json

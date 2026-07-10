@@ -1,0 +1,17 @@
+{
+  "name": "shomer-android",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SHOMER native Android wrapper (Capacitor) — thin shell over the live PWA, adds un-silenceable alarm, background shake-to-SOS, and background FCM push.",
+  "scripts": {
+    "sync": "cap sync android",
+    "open": "cap open android",
+    "apk:debug": "cd android && ./gradlew assembleDebug",
+    "aab:release": "cd android && ./gradlew bundleRelease"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.2.1",
+    "@capacitor/cli": "^6.2.1",
+    "@capacitor/core": "^6.2.1"
+  }
+}

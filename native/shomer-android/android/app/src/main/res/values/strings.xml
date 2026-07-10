@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">SHOMER</string>
+    <string name="title_activity_main">SHOMER</string>
+    <string name="package_name">il.co.shomerapp</string>
+    <string name="custom_url_scheme">il.co.shomerapp</string>
+</resources>
