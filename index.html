@@ -150,6 +150,11 @@ section{padding:72px 0}
 .store-cta{text-align:center;margin-top:32px}
 .store-note{font-size:12.5px;color:var(--tx2);max-width:440px;margin:14px auto 0;line-height:1.6}
 
+.store-grid-2{grid-template-columns:repeat(2,1fr);max-width:620px;margin-inline:auto}
+.placeholder-card{aspect-ratio:auto;min-height:230px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(160deg,var(--n2),var(--n3));border:1px dashed rgba(224,168,40,.3)}
+.ph-visual{width:74px;height:74px;border-radius:50%;background:var(--gd);display:flex;align-items:center;justify-content:center;color:var(--g3);margin-bottom:6px}
+.ph-visual svg{width:38px;height:38px}
+.placeholder-card .merch-info{text-align:center}
 /* FAQ */
 .faq-list{margin-top:36px;display:flex;flex-direction:column;gap:10px}
 .faq{background:var(--n3);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:border-color .2s}
@@ -352,11 +357,17 @@ nav{gap:10px;min-width:0}
       <h2 class="section-title">חנות SH✡MER</h2>
       <p class="section-sub" style="margin:0 auto">לא מרצ׳נדייז — ציוד. גאווה קהילתית שאפשר ללבוש, ונראות שמצילה חיים.</p>
     </div>
-    <div class="store-grid">
-      <div class="merch-card"><span class="merch-soon">בקרוב</span><img src="merch-statement.jpg" alt="חולצת SH✡MER — שומר אחי אנוכי" loading="lazy"><div class="merch-info"><div class="merch-name">The Statement</div><div class="merch-desc">הסמל המלא + ״שומר אחי אנוכי״</div></div></div>
-      <div class="merch-card"><span class="merch-soon">בקרוב</span><img src="merch-band.jpg" alt="סרט זרוע מחזיר אור SH✡MER" loading="lazy"><div class="merch-info"><div class="merch-name">Reflector Band</div><div class="merch-desc">סרט זרוע מחזיר אור — נראות בחושך</div></div></div>
-      <div class="merch-card"><span class="merch-soon">בקרוב</span><img src="merch-flatlay.jpg" alt="חולצת SH✡MER" loading="lazy"><div class="merch-info"><div class="merch-name">The Classic</div><div class="merch-desc">נייבי + סמל זהב, גזרה נקייה</div></div></div>
-      <div class="merch-card"><span class="merch-soon">בקרוב</span><img src="merch-minimal.jpg" alt="חולצת SH✡MER מינימלי" loading="lazy"><div class="merch-info"><div class="merch-name">The Minimal</div><div class="merch-desc">✡ קטן + הכיתוב, ליומיום</div></div></div>
+    <div class="store-grid store-grid-2">
+      <div class="merch-card placeholder-card">
+        <div class="ph-visual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4l3-1 2 1 2-1 3 1v3l-2 1v11a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1V8L7 7Z"/></svg></div>
+        <span class="merch-soon">בקרוב</span>
+        <div class="merch-info"><div class="merch-name">Armed Citizen — Sleeve</div><div class="merch-desc">שרוול ממותג SH✡MER · מחזיר אור לבטיחות</div></div>
+      </div>
+      <div class="merch-card placeholder-card">
+        <div class="ph-visual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13a9 9 0 0 1 18 0"/><path d="M2 13h20l-1 3H3Z"/></svg></div>
+        <span class="merch-soon">בקרוב</span>
+        <div class="merch-info"><div class="merch-name">Armed Citizen — Cap</div><div class="merch-desc">כובע ממותג SH✡MER · גזרה נקייה</div></div>
+      </div>
     </div>
     <div class="store-cta">
       <p class="store-note">אנחנו מעצבים את הקולקציה הראשונה. השאירו מייל ותהיו הראשונים לדעת כשהחנות נפתחת.</p>
