@@ -275,18 +275,21 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 .gt .tog{width:34px;height:19px;flex:0 0 auto}
 /* colourful professional roles */
 .prof-opt .pic{transition:background .18s,color .18s,border-color .18s}
-.prof-opt[data-prof="police"] .pic{background:rgba(41,98,255,.16);color:#5B8DEF;border-color:rgba(41,98,255,.4)}
-.prof-opt[data-prof="doctor"] .pic{background:rgba(48,163,108,.16);color:#4ED08A;border-color:rgba(48,163,108,.4)}
-.prof-opt[data-prof="fire"]   .pic{background:rgba(232,129,28,.18);color:#F0A15A;border-color:rgba(232,129,28,.42)}
-.prof-opt[data-prof="para"]   .pic{background:rgba(229,72,77,.16);color:#F0787C;border-color:rgba(229,72,77,.4)}
-.prof-opt[data-prof="security"] .pic{background:rgba(201,168,76,.18);color:#E0C26A;border-color:rgba(201,168,76,.44)}
-.prof-opt[data-prof=""] .pic{background:rgba(136,152,184,.14);color:#8898B8;border-color:rgba(136,152,184,.3)}
+.prof-opt .pic{border:0!important;color:#fff!important;box-shadow:0 6px 16px rgba(0,0,0,.4)}
+.prof-opt[data-prof="police"] .pic{background:linear-gradient(150deg,#4DA3FF,#1670E0 55%,#0B4491)}
+.prof-opt[data-prof="doctor"] .pic{background:linear-gradient(150deg,#3DDC97,#12A594 55%,#0A6E62)}
+.prof-opt[data-prof="fire"]   .pic{background:linear-gradient(150deg,#FFB03A,#E8811C 55%,#A9500A)}
+.prof-opt[data-prof="para"]   .pic{background:linear-gradient(150deg,#FF3B50,#E0182C 55%,#9A0F1E)}
+.prof-opt[data-prof="security"] .pic{background:linear-gradient(135deg,#C09020,#E0A828 60%,#F5C840);color:#23170a!important}
+.prof-opt[data-prof=""] .pic{background:linear-gradient(150deg,#8898B8,#5A6B87 60%,#3A465C)}
+.prof-opt.sel{border-color:var(--g3)!important;background:rgba(224,168,40,.10)}
+.prof-opt.sel .pic{box-shadow:0 0 0 3px rgba(245,200,64,.55),0 6px 16px rgba(0,0,0,.45)}
 .prof-opt.sel .pic{box-shadow:0 0 0 2px currentColor inset}
 /* profile stat circles */
 .pstats{display:flex;gap:18px;justify-content:center;margin:6px 0 22px}
 .pcirc{width:104px;height:104px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;box-shadow:0 10px 26px rgba(0,0,0,.4)}
-.pcirc.resp{background:linear-gradient(150deg,#2E6FE0,#1D4FBF)}
-.pcirc.rep{background:linear-gradient(150deg,#E5484D,#B8232C)}
+.pcirc.resp{background:radial-gradient(circle at 36% 28%,#4DA3FF 0%,#1670E0 42%,#0B4491 100%);border:3px solid rgba(255,255,255,.18);box-shadow:0 0 0 4px rgba(22,112,224,.28),0 10px 30px rgba(0,0,0,.5)}
+.pcirc.rep{background:radial-gradient(circle at 36% 28%,#FF3B50 0%,#E0182C 42%,#9A0F1E 100%);border:3px solid rgba(255,255,255,.2);box-shadow:0 0 0 4px rgba(204,20,38,.34),0 10px 30px rgba(0,0,0,.5)}
 .pcirc .pc-n{font-size:30px;font-weight:900;line-height:1}
 .pcirc .pc-l{font-size:11.5px;font-weight:700;opacity:.92;margin-top:3px}
 
@@ -1270,7 +1273,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
   <div id="splash-bar"><i></i></div>
 </div>
 <style>
-#splash{position:fixed;inset:0;z-index:100001;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;background:linear-gradient(rgba(5,8,15,.5),rgba(5,8,15,.82)),url("SHOMER-bg.jpg") center/cover no-repeat #05080F;transition:opacity .55s ease;opacity:1;}
+#splash{position:fixed;inset:0;z-index:100001;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;background:radial-gradient(ellipse at 50% 38%,rgba(224,168,40,.10),transparent 62%),linear-gradient(rgba(6,15,30,.55),rgba(4,10,22,.9)),url("SHOMER-bg.jpg") center/cover no-repeat #0A1628;transition:opacity .55s ease;opacity:1;}
 #splash.gone{opacity:0;pointer-events:none;}
 #splash-logo{width:min(58vw,248px);height:auto;filter:drop-shadow(0 10px 34px rgba(0,0,0,.6));animation:splashPulse 2.4s ease-in-out infinite;}
 #splash-bar{width:134px;height:3px;border-radius:3px;background:rgba(245,203,69,.16);overflow:hidden;}
@@ -1539,7 +1542,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v100 · 12.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v101 · 12.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -5196,7 +5199,11 @@ function openUpdates(){
 }
 /* Mirror "any full sheet open" onto <body> so CSS can hide the floating SOS/FABs reliably (no :has dependency). */
 function syncSheetState(){ document.body.classList.toggle('sheet-open', !!document.querySelector('.sheet.open')); }
-function op(id){closeAll();const el=document.getElementById(id);if(el)el.classList.add('open');syncSheetState();if(id==='sh-set'){try{renderSetContacts();}catch(e){}}}
+function op(id){closeAll();const el=document.getElementById(id);if(el)el.classList.add('open');syncSheetState();
+ if(id==='sh-set'){try{renderSetContacts();}catch(e){}}
+ if(id==='sh-circles'){ try{renderCircles();}catch(e){} try{gdRenderList();}catch(e){} }   // was never re-rendered → circles list + toggles appeared empty
+ if(id==='sh-prof'){ try{renderProfile();}catch(e){} try{renderCircles();}catch(e){} }
+}
 /* Settings → "Emergency contacts" renders the user's REAL paired SHOMERs (name + link status),
    or a clear empty state. No phone numbers are shown (pairing is privacy-first: name + uid only). */
 function renderSetContacts(){
@@ -7083,7 +7090,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v100';
+var APP_VER='v101';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
