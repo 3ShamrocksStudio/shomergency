@@ -1539,7 +1539,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v98 · 12.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v99 · 12.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -2247,7 +2247,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
    <div id="ag-hint" style="font-size:11px;color:var(--tx3);min-height:14px;margin-bottom:8px;text-align:center"></div>
    <button class="cta-gold" id="ag-go" style="width:100%;padding:13px;font-size:15px;font-weight:800" onclick="addGuardian()">
      <svg class="ic" viewBox="0 0 24 24" width="17" style="margin-inline-end:6px"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
-     <span id="ag-go-lbl">הוסף/י למעגל</span>
+     <span id="ag-go-lbl">שלח/י בקשה</span>
    </button>
  </div>
 </div>
@@ -3378,7 +3378,7 @@ function applyTranslations(){
  setText('circ-ttl',he?'השומרים שלי':'My SHOMERs');
  setText('ghost-nm',he?'מצב רפאים — השהה שיתוף':'Ghost mode — pause sharing');
  setText('ghost-sb',he?'אף אחד לא יראה את מיקומך':'No one sees your location');
- setText('ag-go-lbl',he?'הוסף/י למעגל':currentLang==='ar'?'أضف للدائرة':'Add to circle');
+ setText('ag-go-lbl',he?'שלח/י בקשה':currentLang==='ar'?'إرسال طلب':'Send request');
  setText('circ-find-lbl',he?'מצא חבר/ה':'Find a friend');
  setText('cm-add-save',he?'הוסף למעגל':'Add to circle');
  setText('circ-leave-lbl',he?'עזוב מעגל זה':'Leave this circle');
@@ -5753,7 +5753,7 @@ async function addGuardian(){
  }
  var palette=['#C9A84C','#2962FF','#00C853','#E91E8C','#9C27B0','#FF6A00'];
  var off=function(){return (Math.random()-0.5)*0.02;};
- var registered=false, theirUid=null;
+ var registered=false, theirUid=null, agToken=null;
  if(validPhone){
    try{
      var h=await sha256Hex(canon);
@@ -5761,12 +5761,14 @@ async function addGuardian(){
      if(h){
        var rec=null; try{ rec=(await fbRestGet('registry/'+h)).val(); }catch(e){ rec=null; }
        if(rec && rec.uid){ registered=true; theirUid=rec.uid;
+         /* CONSENT — never force-pair. Create an invite; they must APPROVE.
+            RTDB rules only let each side write its OWN pairs: they write theirs on accept,
+            we write ours only once we see their acceptance. */
          try{
            var myName=(SS.user&&SS.user.name)||(SS.user&&SS.user.username)||'';
-           var token='ph'+Math.random().toString(36).slice(2,10);
-           await fbRestWrite('PUT','pairs/'+FB.uid+'/'+theirUid,{name:name,token:token,ts:Date.now(),via:'phone'});
-           await fbRestWrite('PUT','pairs/'+theirUid+'/'+FB.uid,{name:myName,token:token,ts:Date.now(),via:'phone'});
-         }catch(e){ if(typeof fbLog==='function')fbLog('pair write:',(e&&e.message)||e); }
+           agToken='g'+Math.random().toString(36).slice(2,8)+Math.random().toString(36).slice(2,6);
+           await fbRestWrite('PUT','invites/'+agToken,{fromUid:FB.uid,name:myName,ts:Date.now()});
+         }catch(e){ if(typeof fbLog==='function')fbLog('invite create:',(e&&e.message)||e); }
        }
      }
    }catch(e){ if(typeof fbLog==='function')fbLog('guardian lookup:',(e&&e.message)||e); }
@@ -5779,11 +5781,11 @@ async function addGuardian(){
  if(registered && theirUid){
    var g=gdState();
    if(!g.pairs.some(function(p){return p.partnerUid===theirUid;})){
-     var tok='ph'+Math.random().toString(36).slice(2,10);
-     g.pairs.push({id:genId('g'),token:tok,name:name,rel:'',shareToThem:true,seeThem:true,addedTs:Date.now(),initiator:true,pending:false,partnerUid:theirUid,linked:true,color:m.color,lat:null,lng:null,ts:0,live:false,via:'phone',simLat:null,simLng:null});
+     g.pairs.push({id:genId('g'),token:agToken,name:name,rel:'',shareToThem:true,seeThem:true,addedTs:Date.now(),initiator:true,pending:true,partnerUid:theirUid,linked:false,color:m.color,lat:null,lng:null,ts:0,live:false,via:'phone',simLat:null,simLng:null});
      m.pairId=g.pairs[g.pairs.length-1].id;
    }
-   try{ fbListenPeerLoc(theirUid); }catch(e){}   // subscribe to their live location now
+   m.pending=true;                                  // stays pending until THEY approve
+   if(agToken) fbWatchApproval(agToken, theirUid);  // completes the pair on approval
  }
  saveStore();
  try{ gdRenderMarkers(); }catch(e){}
@@ -5791,7 +5793,12 @@ async function addGuardian(){
  renderCircles(); if(mapCircleId===activeCircleId)renderCircleMarkers();
  if(go){go.disabled=false;go.style.opacity='';}
  if(registered){
-   toast(he?('\u2713 '+name+' \u05de\u05d7\u05d5\u05d1\u05e8/\u05ea \u2014 \u05ea\u05e8\u05d0\u05d5 \u05d6\u05d4 \u05d0\u05ea \u05d6\u05d4 \u05e2\u05dc \u05d4\u05de\u05e4\u05d4'):('\u2713 '+name+' paired'),'grn',function(){try{cl('sh-circles');}catch(e){}});
+   // Send the approval request — they must tap Approve before anything is shared.
+   var reqLink='https://www.shomer-app.co.il/shomer.html?g='+encodeURIComponent(agToken||'');
+   var reqMsg=encodeURIComponent(he
+     ? ('\u05d4\u05d9\u05d9 '+name+', \u05d4\u05d5\u05e1\u05e4\u05ea\u05d9 \u05d0\u05d5\u05ea\u05da \u05dc\u05de\u05e2\u05d2\u05dc \u05d4\u05e9\u05d5\u05de\u05e8\u05d9\u05dd \u05e9\u05dc\u05d9 \u05d1-SH\u2721MER. \u05de\u05d0\u05e9\u05e8/\u05ea? '+reqLink)
+     : ('Hi '+name+', I added you to my SH\u2721MER guardian circle. Approve? '+reqLink));
+   toast(he?('\u05d1\u05e7\u05e9\u05d4 \u05e0\u05e9\u05dc\u05d7\u05d4 \u2014 \u05de\u05de\u05ea\u05d9\u05df \u05dc\u05d0\u05d9\u05e9\u05d5\u05e8 \u05e9\u05dc '+name+'. \u05d4\u05e7\u05e9/\u05d9 \u05dc\u05e9\u05dc\u05d5\u05d7 \u05d1-WhatsApp'):('Request sent \u2014 awaiting '+name+"'s approval. Tap to send on WhatsApp"),'amb',function(){ try{ window.open('https://wa.me/'+canon+'?text='+reqMsg,'_blank'); }catch(e){} });
  } else if(validPhone){
    var invMsg=encodeURIComponent(he?('\u05d4\u05d9\u05d9! \u05d4\u05e6\u05d8\u05e8\u05e3/\u05d9 \u05d0\u05dc\u05d9\u05d9 \u05d1-SH\u2721MER \u2014 \u05d0\u05e4\u05dc\u05d9\u05e7\u05e6\u05d9\u05d9\u05ea \u05d1\u05d8\u05d9\u05d7\u05d5\u05ea \u05e7\u05d4\u05d9\u05dc\u05ea\u05d9\u05ea. \u05d7\u05d9\u05e0\u05dd: https://www.shomer-app.co.il/'):('Join me on SH\u2721MER: https://www.shomer-app.co.il/'));
    toast(he?('\u2713 '+name+' \u05e0\u05d5\u05e1\u05e3/\u05d4. \u05d8\u05e8\u05dd \u05d1-SH\u2721MER \u2014 \u05d4\u05e7\u05e9/\u05d9 \u05dc\u05d4\u05d6\u05de\u05e0\u05d4'):('\u2713 '+name+' added. Tap to invite'),'amb',function(){ try{ window.open('https://wa.me/'+canon+'?text='+invMsg,'_blank'); }catch(e){} });
@@ -6382,11 +6389,12 @@ function gdPairWithUid(theirUid, theirName, label){
  var g=gdState();
  if(g.pairs.some(function(p){return p.partnerUid===theirUid;})){ toast(he?'כבר במעגל שלך':'Already in your circle','amb'); gdClose('gd-addphone'); return; }
  var myName=g.myName||(SS.user&&SS.user.name)||'';
- var token='ph'+Math.random().toString(36).slice(2,10);
+ var token='g'+Math.random().toString(36).slice(2,8)+Math.random().toString(36).slice(2,6);
+ /* CONSENT — request approval instead of force-pairing (rules also forbid writing their side). */
  try{
-   FB.db.ref('pairs/'+FB.uid+'/'+theirUid).set({name:(theirName||''),token:token,ts:Date.now(),via:'phone'});
-   FB.db.ref('pairs/'+theirUid+'/'+FB.uid).set({name:myName,token:token,ts:Date.now(),via:'phone'});
- }catch(e){ fbLog('pairWithUid write error:',(e&&e.message)||e); }
+   FB.db.ref('invites/'+token).set({fromUid:FB.uid,name:myName,ts:Date.now()});
+   fbWatchApproval(token, theirUid);
+ }catch(e){ fbLog('invite create error:',(e&&e.message)||e); }
  g.pairs.push({id:genId('g'),token:token,name:(theirName||label||''),rel:'',shareToThem:true,seeThem:true,addedTs:Date.now(),initiator:true,pending:false,partnerUid:theirUid,linked:true,color:GD_PALETTE[g.pairs.length%GD_PALETTE.length],lat:null,lng:null,ts:0,live:false,via:'phone',simLat:TLV[0]+(Math.random()-.5)*.02,simLng:TLV[1]+(Math.random()-.5)*.02});
  saveStore(); try{gdRenderList();gdRenderMarkers();}catch(e){}
  toast(he?('✓ חוברת ל'+(theirName||'שומר/ת')):'✓ Paired with '+(theirName||'SHOMER'),'grn');
@@ -7075,7 +7083,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v98';
+var APP_VER='v99';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -7563,7 +7571,8 @@ function fbOnAuthed(uid){
   try{ fbStartPresence(); }catch(e){}
   try{ fbListenSOS(); }catch(e){}
   try{ fbListenPairs(); }catch(e){}
-  try{ fbListenAllPeerLocs(); }catch(e){}     // subscribe to every paired partner's live location
+  try{ fbListenAllPeerLocs(); }catch(e){}
+  try{ gdState().pairs.forEach(function(p){ if(p&&p.pending&&!p.linked&&p.token&&p.partnerUid) fbWatchApproval(p.token,p.partnerUid); }); }catch(e){}     // subscribe to every paired partner's live location
   try{ fbStartLocPublish(); }catch(e){}       // start writing my own live location
   try{ fbRegisterMe(); }catch(e){}
   try{ statsTrack(); }catch(e){}            // count install + daily-active (first-party, RTDB)
@@ -7881,6 +7890,36 @@ function fbAcceptInvite(token,myName){
    fbStartPresence already publishes my {lat,lng,ts}. Here we resolve each paired
    partner's live position from the presence snapshot by their partnerUid. No rules
    deploy needed — presence is already the shared, authed-readable location layer. */
+/* ══ APPROVAL HANDSHAKE ══
+   We ask; they approve. On approve THEY write pairs/<them>/<us> and stamp acceptedBy
+   on the invite. We watch for that stamp, then write OUR side. Only then do we
+   appear on each other's maps. Nobody is ever added without consent. */
+function fbWatchApproval(token, theirUid){
+  if(!FB.ready||!token)return;
+  FB._appr=FB._appr||{};
+  if(FB._appr[token])return;
+  FB._appr[token]=true;
+  try{
+    FB.db.ref('invites/'+token).on('value', function(snap){
+      var inv=snap.val(); if(!inv||!inv.acceptedBy)return;      // still awaiting approval
+      var he=currentLang==='he';
+      var g=gdState();
+      var p=g.pairs.find(function(x){return x.token===token;});
+      if(!p||p.linked)return;
+      var puid=inv.acceptedBy||theirUid;
+      try{ fbRestWrite('PUT','pairs/'+FB.uid+'/'+puid,{name:p.name||'',token:token,ts:Date.now(),via:'phone'}); }catch(e){}
+      p.pending=false; p.linked=true; p.partnerUid=puid;
+      if(inv.acceptedName&&!p.name)p.name=inv.acceptedName;
+      var mm=(SS.circleMembers||[]).find(function(x){return x.pairId===p.id;});
+      if(mm){ mm.pending=false; mm.partnerUid=puid; mm.moving=true; }
+      saveStore();
+      try{ fbListenPeerLoc(puid); }catch(e){}
+      try{ gdRenderMarkers(); renderCircles(); }catch(e){}
+      toast(he?('\u2713 '+(p.name||'')+' \u05d0\u05d9\u05e9\u05e8/\u05d4 \u2014 \u05ea\u05e8\u05d0\u05d5 \u05d6\u05d4 \u05d0\u05ea \u05d6\u05d4 \u05e2\u05dc \u05d4\u05de\u05e4\u05d4'):('\u2713 '+(p.name||'')+' approved \u2014 you can see each other'),'grn');
+      try{ pushNotify('SHOMER', he?((p.name||'')+' \u05d0\u05d9\u05e9\u05e8/\u05d4 \u05d0\u05ea \u05d4\u05d1\u05e7\u05e9\u05d4'):((p.name||'')+' approved your request'),'gd-appr'); }catch(e){}
+    }, function(){});
+  }catch(e){}
+}
 function fbApplyPeerPresence(all){
   try{
     if(!all)return;
