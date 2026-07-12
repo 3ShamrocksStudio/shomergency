@@ -1542,7 +1542,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v102 · 12.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v103 · 12.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -5291,58 +5291,44 @@ var EMERGENCY_GUIDE=[
   dont:{he:'אל תאמר/י "תירגע/י" או "זה לא נורא" · אל תיגע/י בלי רשות · אל תשאיר/י אדם במצוקה חריפה לבד. במחשבות אובדניות — חייג/י 1201 (ער"ן) או 101.',en:'Never say "calm down" or "it is not a big deal" · do not touch without permission · do not leave someone in acute distress alone. For suicidal thoughts call 1201 (ERAN) or 101.',ar:'لا تقل "اهدأ" · لا تلمس دون إذن · لا تترك شخصًا في ضائقة حادّة وحيدًا. عند وجود أفكار انتحارية اتصل بـ1201 أو 101.'},
   src:'ער"ן 1201 · משרד הבריאות · NCPTSD · WHO Psychological First Aid'},
 
- {id:'selfdef',e:'',t:{he:'הגנה עצמית ברחוב (קרב מגע)',en:'Street self-defence (Krav Maga)',ar:'الدفاع عن النفس (كراف ماغا)'},
-  s:{he:'למנוע · להרתיע · להשתחרר · לברוח',en:'Prevent · deter · break free · escape',ar:'المنع · الردع · التحرّر · الهروب'},
+ {id:'selfdef',e:'',t:{he:'בטיחות ברחוב — מה באמת עובד',en:'Street safety — what actually works',ar:'السلامة في الشارع — ما ينجح فعلاً'},
+  s:{he:'מניעה · מרחק · קול · בריחה',en:'Prevent · distance · voice · escape',ar:'المنع · المسافة · الصوت · الهروب'},
   steps:{he:[
-   'המטרה היחידה: לחזור הביתה. לא לנצח, לא להוכיח, לא להעניש. כל טכניקה מסתיימת בבריחה.',
-   '1) מניעה — 90% מהעבודה. ראש מורם, אוזניות בחוץ, טלפון בכיס. הליכה בקצב בטוח ובמרכז המדרכה. תוקפים בוחרים מי שנראה מוסח ולא מודע.',
-   'סרוק/י מראש: מי סביבי? איפה היציאה? איפה יש אור, אנשים, חנות פתוחה? תכנן/י מסלול בריחה לפני שצריך אותו.',
-   'תחושת בטן היא מודיעין. אם משהו מרגיש לא בסדר — עצור/י, חצה/י כביש, היכנס/י לחנות. אל תתבייש/י לטעות.',
-   '2) מרחק ועמידת גדר — הכלי הכי חשוב. שמור/י 2 צעדים. ידיים פתוחות בגובה החזה, כף יד קדימה, רגל חלשה קדימה, ברכיים רכות. זו לא תנוחת קרב — היא מגנה, שומרת מרחק, ונראית לא-תוקפנית לעדים ולמצלמות.',
-   '3) קול הוא הנשק הראשון. „אחורה! אל תתקרב!” — חזק, נמוך, פקודה. זה מרתיע, מושך עדים, מפעיל את הגוף שלך ומתעד את המצב.',
-   'שוד? תן/י את הארנק. תזרוק/י אותו לכיוון אחד ותברח/י לכיוון השני. רכוש מתחלף — את/ה לא.',
-   '4) אם הותקפת — פגע/י קצר ובזק בנקודות רכות בלבד: עיניים (דקירת אצבעות), גרון, מפשעה (ברך/בעיטה), ברך (בעיטה קדימה נמוכה), רגל (דריכה). לא אגרופים לפנים — שוברים יד.',
-   'שחרור מאחיזת יד: סובב/י את היד לכיוון האגודל שלו (הנקודה החלשה של האחיזה) ומשוך/י בחדות תוך צעד אחורה.',
-   'שחרור מחניקה מלפנים: „פלאק” — שתי ידיים חדות מעלה בין זרועותיו לשבירת האחיזה, מיד סטירת מפשעה/ברך, סיבוב גוף — ובריחה.',
-   'שחרור מחיבוק מאחור: הורד/י מרכז כובד (שקיעה), מרפק אחורה לצלעות, דריכה על כף הרגל, סיבוב והשתחררות.',
-   'נפלת לקרקע? זו הסכנה הגדולה. צד, לא גב. רגליים לכיוון התוקף כמגן, בעט/י לברך/מפשעה, קום/י מיד — לא נשארים על הרצפה.',
-   '5) בריחה — תמיד. רוץ/י לכיוון אור, אנשים, חנות פתוחה, כביש ראשי. לא הביתה אם עוקבים אחריך.',
-   '6) אחרי: חייג/י 100 (משטרה). לחץ/י SOS ב-SH✡MER — השומרים שלך יראו איפה את/ה. שמור/י בגדים, אל תתקלח/י אם היתה תקיפה פיזית, ותעד/י פרטים בזיכרון (גובה, לבוש, כיוון בריחה).',
-   'תרגול הופך את זה לאמיתי. שיעור קרב מגע אחד שווה יותר ממאה סרטונים — הגוף לומד בלחץ, לא במסך.'],
+   'האמת קודם: טכניקה לא נלמדת מטקסט. מי שקורא „שחרור מחניקה” ומאמין שהוא יודע — ישאר להילחם במקום לברוח, וייפגע. הדף הזה מלמד את מה שבאמת מציל: להימנע, להרתיע ולברוח. לטכניקה — לך/י לשיעור קרב מגע אמיתי.',
+   '1) מודעות מנצחת כוח. ראש מורם, אוזניות בחוץ, טלפון בכיס. תוקפים בוחרים מי שנראה מוסח — לא מי שנראה חזק.',
+   '2) תחושת בטן היא מודיעין. משהו מרגיש לא בסדר? עצור/י, חצה/י כביש, היכנס/י לחנות מוארת. אל תתבייש/י לטעות. עדיף מביך מאשר פגוע.',
+   '3) מרחק הוא ההגנה. שני צעדים. ידיים פתוחות בגובה החזה, כפות קדימה. זו לא תנוחת קרב — היא שומרת מרחק ונראית לא-תוקפנית לעדים ולמצלמות.',
+   '4) הקול הוא הנשק הראשון והיעיל ביותר. „אחורה! אל תתקרב!” — חזק, נמוך, פקודה. מרתיע, מושך עדים, ומעיר את הגוף שלך.',
+   '5) שוד? תן/י את הארנק. תזרוק/י אותו לכיוון אחד ותברח/י לשני. רכוש מתחלף — את/ה לא.',
+   '6) אם אין ברירה — קצר ובזק, ואז לברוח. נקודות רכות בלבד: עיניים, גרון, מפשעה, ברך. בלי אגרופים לפנים (שוברים יד). כל מגע נועד לקנות שנייה אחת כדי לרוץ.',
+   '7) לרוץ זה לנצח. לכיוון אור, אנשים, חנות פתוחה, כביש ראשי. לא הביתה אם עוקבים אחריך.',
+   '8) אחרי: 100 (משטרה). SOS ב-SH✡MER — השומרים שלך רואים איפה את/ה. שמור/י בגדים, אל תתקלח/י אחרי תקיפה, ורשום/י פרטים מיד (גובה, לבוש, כיוון בריחה).',
+   'רוצה באמת לדעת להגן על עצמך? שיעור אחד בקרב מגע שווה יותר ממאה מדריכים כתובים. הגוף לומד בלחץ — לא במסך.'],
    en:[
-   'The only goal: get home. Not to win, not to prove a point. Every technique ends in escape.',
-   '1) Prevention is 90% of it. Head up, earphones out, phone pocketed. Walk with purpose, centre of the pavement. Attackers pick people who look distracted.',
-   'Scan ahead: who is around, where is the exit, where is light, people, an open shop? Plan the escape before you need it.',
-   'Your gut is intelligence. If it feels wrong — stop, cross the street, step into a shop. Never be embarrassed to be wrong.',
-   '2) Distance and the fence stance — your most important tool. Keep two steps. Open hands at chest height, palms out, weak leg forward, knees soft. It protects, keeps distance, and looks non-aggressive to witnesses and cameras.',
-   '3) Your voice is the first weapon. "BACK OFF! DO NOT COME CLOSER!" — loud, low, a command. It deters, draws witnesses, switches your body on.',
-   'Robbery? Give the wallet. Throw it one way, run the other. Property is replaceable — you are not.',
-   '4) If attacked — strike short and explosive, soft targets only: eyes (finger jab), throat, groin (knee/kick), knee (low front kick), foot (stomp). No punches to the face — you break your hand.',
-   'Wrist-grab release: rotate toward their thumb (the weak point of any grip) and pull sharply while stepping back.',
-   'Front choke release: "pluck" — both hands drive sharply up between their arms to break the grip, immediate groin/knee strike, turn, escape.',
-   'Rear bear-hug: drop your weight, elbow back into the ribs, stomp the foot, turn out.',
-   'On the ground? This is the danger zone. Get on your side, not your back. Feet toward the attacker as a shield, kick the knee/groin, get up immediately.',
-   '5) Escape — always. Run toward light, people, an open shop, a main road. Not home if you are being followed.',
-   '6) Afterwards: call 100 (police). Press SOS in SH✡MER — your guardians see where you are. Keep your clothes, do not shower after a physical assault, and record details (height, clothing, direction of escape).',
-   'Practice makes it real. One Krav Maga class beats a hundred videos — the body learns under pressure, not on a screen.'],
+   'The truth first: technique cannot be learned from text. Someone who reads "choke release" and believes they know it will stay and fight instead of running — and get hurt. This page teaches what actually saves you: avoid, deter, escape. For technique, take a real Krav Maga class.',
+   '1) Awareness beats strength. Head up, earphones out, phone pocketed. Attackers pick people who look distracted — not people who look weak.',
+   '2) Your gut is intelligence. Something feels wrong? Stop, cross the street, step into a lit shop. Never be embarrassed to be wrong. Awkward beats injured.',
+   '3) Distance is the defence. Two steps. Open hands at chest height, palms out. Not a fighting stance — it keeps distance and looks non-aggressive to witnesses and cameras.',
+   '4) Your voice is the first and most effective weapon. "BACK OFF! DO NOT COME CLOSER!" — loud, low, a command. It deters, draws witnesses, and wakes your body up.',
+   '5) Robbery? Give the wallet. Throw it one way, run the other. Property is replaceable — you are not.',
+   '6) If there is no choice — short, explosive, then run. Soft targets only: eyes, throat, groin, knee. No punches to the face (you break your hand). Every strike buys one second to run.',
+   '7) Running is winning. Toward light, people, an open shop, a main road. Not home if you are being followed.',
+   '8) Afterwards: call 100. Press SOS in SH✡MER — your guardians see where you are. Keep your clothes, do not shower after an assault, write down details immediately.',
+   'Actually want to defend yourself? One Krav Maga class beats a hundred written guides. The body learns under pressure, not on a screen.'],
    ar:[
-   'الهدف الوحيد: العودة إلى البيت. لا الانتصار ولا إثبات شيء. كل تقنية تنتهي بالهروب.',
-   '1) الوقاية هي 90%. ارفع رأسك، انزع السمّاعات، ضع الهاتف في جيبك. امشِ بثقة في وسط الرصيف.',
-   'امسح المكان: من حولك؟ أين المخرج؟ أين الضوء والناس ومتجر مفتوح؟ خطّط للهروب قبل الحاجة إليه.',
-   'حدسك معلومة. إذا شعرت أن شيئًا خاطئ — توقّف، اعبر الشارع، ادخل متجرًا.',
-   '2) المسافة ووقفة السياج — أهم أداة. حافظ على خطوتين. يدان مفتوحتان عند الصدر، الراحتان للأمام، الركبتان مرنتان.',
-   '3) صوتك هو السلاح الأول: "ابتعد! لا تقترب!" — بصوت عالٍ وحازم. يردع ويجذب الشهود.',
-   'سرقة؟ أعطِ المحفظة. ارمها في اتجاه واهرب في الاتجاه الآخر. الممتلكات تُعوَّض وأنت لا.',
-   '4) إذا هوجمت — اضرب النقاط الرخوة فقط: العينان، الحلق، المغبن، الركبة، القدم. لا لكمات للوجه.',
-   'التحرّر من قبضة المعصم: أدر ذراعك باتجاه إبهامه واسحب بحدّة مع خطوة للخلف.',
-   'التحرّر من الخنق الأمامي: ادفع يديك بحدّة للأعلى بين ذراعيه، ثم اضرب المغبن/الركبة، استدر واهرب.',
-   'العناق من الخلف: اخفض ثقلك، مرفق للخلف نحو الأضلاع، دُس على قدمه، واستدر.',
-   'سقطت أرضًا؟ هذه أخطر وضعية. على جنبك لا ظهرك، قدماك نحو المهاجم، اركل الركبة، وانهض فورًا.',
-   '5) الهروب دائمًا — نحو الضوء والناس ومتجر مفتوح. ليس إلى البيت إن كنت مُتَتبَّعًا.',
-   '6) بعدها: اتصل بـ100 (الشرطة). اضغط SOS في SH✡MER. احتفظ بملابسك ولا تستحمّ بعد اعتداء جسدي، وسجّل التفاصيل.',
-   'التدريب هو ما يجعل هذا حقيقيًا. درس واحد أفضل من مئة فيديو.']},
-  dont:{he:'אל תילחם/י על רכוש · אל תרדוף/י אחרי תוקף · אל תישאר/י על הרצפה · אל תיקח/י את התוקף הביתה. אין חובה חוקית להילחם — יש זכות לברוח.',en:'Never fight over property · never chase an attacker · never stay on the ground · never lead an attacker home. There is no duty to fight — you have the right to flee.',ar:'لا تقاتل من أجل الممتلكات · لا تطارد المهاجم · لا تبقَ على الأرض · لا تقُد المهاجم إلى بيتك.'},
-  src:'עקרונות קרב מגע (IKMF/KMG) · משטרת ישראל — מניעה והגנה עצמית · 100'},
+   'الحقيقة أولًا: التقنية لا تُتعلَّم من نص. من يقرأ "التحرّر من الخنق" ويظن أنه يعرف، سيبقى ليقاتل بدل أن يهرب — وسيُصاب. هذه الصفحة تعلّم ما ينقذ فعلاً: التجنّب والردع والهروب.',
+   '1) الوعي يتفوّق على القوة. ارفع رأسك، انزع السمّاعات، ضع الهاتف في جيبك.',
+   '2) حدسك معلومة. شعرت أن شيئًا خاطئ؟ توقّف، اعبر الشارع، ادخل متجرًا مضاءً.',
+   '3) المسافة هي الدفاع. خطوتان. يدان مفتوحتان عند الصدر.',
+   '4) صوتك هو السلاح الأول: "ابتعد! لا تقترب!" — عالٍ وحازم.',
+   '5) سرقة؟ أعطِ المحفظة. ارمها في اتجاه واهرب في الآخر.',
+   '6) إن لم يكن هناك خيار — ضربة قصيرة على نقطة رخوة ثم اركض.',
+   '7) الركض هو الانتصار. نحو الضوء والناس. ليس إلى البيت إن كنت مُتَتبَّعًا.',
+   '8) بعدها: اتصل بـ100. اضغط SOS في SH✡MER.',
+   'تريد أن تتعلّم حقًا؟ درس واحد أفضل من مئة دليل مكتوب.']},
+  dont:{he:'אל תילחם/י על רכוש · אל תרדוף/י אחרי תוקף · אל תיקח/י תוקף הביתה · אל תסמוך/כי על טכניקה שלמדת מטקסט. אין חובה להילחם — יש זכות לברוח.',en:'Never fight over property · never chase an attacker · never lead one home · never trust technique you learned from text. No duty to fight — you have the right to flee.',ar:'لا تقاتل من أجل الممتلكات · لا تطارد المهاجم · لا تثق بتقنية تعلّمتها من نص.'},
+  src:'משטרת ישראל — מניעה והגנה עצמית · עקרונות קרב מגע (IKMF/KMG) · 100'},
+
 
 
  {id:'cpr',e:'❤️',t:{he:'החייאה (CPR)',en:'CPR',ar:'الإنعاش القلبي (CPR)'},
@@ -5827,8 +5813,10 @@ async function addGuardian(){
    }catch(e){ if(typeof fbLog==='function')fbLog('guardian lookup:',(e&&e.message)||e); }
  }
  var _selC=(document.getElementById('ag-circle')||{}).value||activeCircleId;
- var m={id:genId('m'),cid:_selC,name:name,rel:'',phoneCanon:validPhone?canon:null,registered:registered,partnerUid:theirUid,pending:(validPhone&&!registered),emoji:'',color:palette[(SS.circleMembers.length)%palette.length],lat:TLV[0]+off(),lng:TLV[1]+off(),moving:registered,shareTo:true,seeThem:true,sos:false};
- m.baseLat=m.lat;m.baseLng=m.lng;
+ var m={id:genId('m'),cid:_selC,name:name,rel:'',phoneCanon:validPhone?canon:null,registered:registered,partnerUid:theirUid,pending:(validPhone&&!registered),emoji:'',color:palette[(SS.circleMembers.length)%palette.length],lat:null,lng:null,moving:false,shareTo:true,seeThem:true,sos:false};
+ /* NO simulated coordinates. A guardian is only ever drawn where they REALLY are
+    (resolved from their live presence). Until then they have no position at all —
+    showing a person at a fake location in a safety app is worse than showing nothing. */
  SS.circleMembers.push(m);
  // A registered SHOMER also becomes a real map-visible PAIR (so we see them live).
  if(registered && theirUid){
@@ -5867,8 +5855,7 @@ function addMember(){
  const off=()=>(Math.random()-0.5)*0.02;
  const m={id:genId('m'),cid:activeCircleId,name:name,rel:(rl&&rl.value||'').trim(),
  emoji:'',color:palette[(SS.circleMembers.length)%palette.length],
- lat:TLV[0]+off(),lng:TLV[1]+off(),moving:true,shareTo:true,seeThem:true,sos:false};
- m.baseLat=m.lat;m.baseLng=m.lng;
+ lat:null,lng:null,moving:false,shareTo:true,seeThem:true,sos:false};   /* no fake coordinates — ever */
  SS.circleMembers.push(m); saveStore();
  if(nm)nm.value='';if(rl)rl.value='';
  toggleAddMember(); renderCircles();
@@ -5951,7 +5938,7 @@ function openMemberEdit(id){
 }
 function renderCircleMarkers(){
  if(!MAP||mapCircleId==null)return;
- const want={}; visibleMembers(mapCircleId).forEach(m=>want[m.id]=m);
+ const want={}; visibleMembers(mapCircleId).forEach(m=>{ if(m.lat!=null&&m.lng!=null) want[m.id]=m; });   // only real, live positions get a pin
  // remove markers no longer wanted
  Object.keys(mapLayers.circle).forEach(id=>{
  if(!want[id]){MAP.removeLayer(mapLayers.circle[id]);delete mapLayers.circle[id];}
@@ -6295,7 +6282,7 @@ function gdSimWalk(){
 
 /* ── Pair position helpers (live coords if fresh, else simulated) ── */
 function gdIsLive(p){ return !!p.live && (Date.now()-(p.ts||0)<GD_FRESH); }
-function gdPos(p){ if(gdIsLive(p)) return [p.lat,p.lng]; if(p.simLat!=null) return [p.simLat,p.simLng]; return null; }
+function gdPos(p){ if(gdIsLive(p)) return [p.lat,p.lng]; if(p.lat!=null&&p.lng!=null) return [p.lat,p.lng]; if(p.demo&&p.simLat!=null) return [p.simLat,p.simLng]; return null; }
 
 /* ── Map markers ── */
 function guardianIcon(p,live){
@@ -7136,7 +7123,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v102';
+var APP_VER='v103';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -7985,6 +7972,9 @@ function fbApplyPeerPresence(all){
         var fresh=(now-(pr.ts||0))<120000;
         if(p.lat!==pr.lat||p.lng!==pr.lng||p.live!==fresh){ changed=true; }
         p.lat=pr.lat; p.lng=pr.lng; p.ts=(pr.ts||now); p.live=fresh; p.pending=false;
+        // mirror the REAL position onto the circle-member row so its pin is truthful
+        var cm=(SS.circleMembers||[]).find(function(x){ return x.pairId===p.id || (x.partnerUid&&x.partnerUid===p.partnerUid); });
+        if(cm){ cm.lat=pr.lat; cm.lng=pr.lng; cm.live=fresh; cm.moving=fresh; changed=true; }
       }
     });
     if(changed){
