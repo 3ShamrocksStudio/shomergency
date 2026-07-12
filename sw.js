@@ -8,8 +8,8 @@
 // (a) uses network-first for navigations so a stale shell can never trap the
 // user, and (b) deletes every cache it does not own on activate.
 
-const CACHE_NAME = 'shomer-v99-cache';
-const SW_VERSION = 'v99';
+const CACHE_NAME = 'shomer-v100-cache';
+const SW_VERSION = 'v100';
 const urlsToCache = [
   './',
   'index.html',
@@ -163,4 +163,10 @@ self.addEventListener('notificationclick', event => {
   } else {
     clients.openWindow('shomer.html');
   }
+});
+
+
+// Allow the page to activate a new SW immediately (used by forceFreshReload).
+self.addEventListener('message', function(e){
+  if(e.data && e.data.type === 'SKIP_WAITING'){ self.skipWaiting(); }
 });
