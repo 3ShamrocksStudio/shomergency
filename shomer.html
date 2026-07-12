@@ -1382,7 +1382,10 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </div>
 <div id="name-err" style="display:none;font-size:11px;color:#ef4444;margin-top:3px"></div>
  <p class="name-hint" id="name-hint"><span id="name-hint-txt">נוצר אוטומטית — אפשר לערוך</span></p>
- <input class="ob-f" id="ob-phone" type="tel" autocomplete="tel" maxlength="15" placeholder="050-000-0000" inputmode="tel" dir="ltr" style="text-align:start" aria-label="מספר טלפון">
+ <div style="display:flex;gap:8px;margin-bottom:10px">
+ <select class="ob-f" id="ob-cc" aria-label="Country code" dir="ltr" style="flex:0 0 auto;width:104px;margin-bottom:0;text-align:left"></select>
+ <input class="ob-f" id="ob-phone" style="flex:1;margin-bottom:0;text-align:start" type="tel" autocomplete="tel" maxlength="18" placeholder="50 000 0000" inputmode="tel" dir="ltr" aria-label="מספר טלפון">
+</div>
  <p style="font-size:11px;color:var(--tx3);margin:-4px 0 12px;line-height:1.6" id="ob-why">מספר הטלפון משמש לשליחת עזרה בעת חירום.</p>
  <div class="disclaimer" id="ob-disclaimer" style="margin-bottom:12px">
  <span class="dc-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l9 16H3Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17" r="1.2" fill="currentColor"/></svg></span>
@@ -1542,7 +1545,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v103 · 12.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v104 · 12.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -2109,11 +2112,11 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="sh-head"><span class="sh-ttl" id="em-ttl">מספרי חירום</span><button class="sh-x" onclick="cl('sh-em')" aria-label="סגור"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button></div>
  <div class="sh-body">
  <p style="font-size:12px;color:var(--tx2);margin-bottom:14px;line-height:1.7" id="em-intro">הקש לחיוג ישיר. אם אינך מסוגל לדבר — השאר הקו פתוח.</p>
- <button class="call-btn pr" onclick="callNum('100')" aria-label="התקשר למשטרה 100">
+ <button class="call-btn pr" onclick="callNum(policeNum())" aria-label="התקשר למשטרה 100">
  <div class="cc-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.2 1.6L17 4l.4 2.8L20 8l-1 2.6L20 13l-2.6 1.2L17 17l-2.8-.6L12 18l-2.2-1.6L7 17l-.4-2.8L4 13l1-2.4L4 8l2.6-1.2L7 4l2.8.6Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9.5 11.5l1.8 1.8 3.4-3.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="cc-nm" data-he="100 — משטרת ישראל" data-en="100 — Israel Police">100 — משטרת ישראל</div><div class="cc-sb" data-he="חיוג ישיר ברמקול" data-en="Direct call on speaker">חיוג ישיר ברמקול</div></div>
  </button>
- <button class="call-btn" onclick="callNum('101')"><div class="cc-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17V9a2 2 0 0 1 2-2h7l4 3.5V17" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="8" cy="18" r="2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="16" cy="18" r="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10.5 11v3M9 12.5h3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div><div><div class="cc-nm" data-he="101 — מד&quot;א" data-en="101 — Magen David Adom">101 — מד"א</div><div class="cc-sb" data-he="דחיפות רפואית" data-en="Medical emergency">דחיפות רפואית</div></div></button>
- <button class="call-btn" onclick="callNum('102')"><div class="cc-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3s5 4 5 9a5 5 0 0 1-10 0c0-1.6.7-2.8 1.5-3.6C8.7 10.2 9 12 10 12.5c0-2.2 1-4 2-6 .2 1.4 0 2.5 0 2.5S12 5 12 3Z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg></div><div><div class="cc-nm" data-he="102 — כבאות" data-en="102 — Fire & Rescue">102 — כבאות</div><div class="cc-sb" data-he="שריפה / חילוץ" data-en="Fire / rescue">שריפה / חילוץ</div></div></button>
+ <button class="call-btn" onclick="callNum(ambulanceNum())"><div class="cc-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17V9a2 2 0 0 1 2-2h7l4 3.5V17" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="8" cy="18" r="2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="16" cy="18" r="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10.5 11v3M9 12.5h3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div><div><div class="cc-nm" data-he="101 — מד&quot;א" data-en="101 — Magen David Adom">101 — מד"א</div><div class="cc-sb" data-he="דחיפות רפואית" data-en="Medical emergency">דחיפות רפואית</div></div></button>
+ <button class="call-btn" onclick="callNum(fireNum())"><div class="cc-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3s5 4 5 9a5 5 0 0 1-10 0c0-1.6.7-2.8 1.5-3.6C8.7 10.2 9 12 10 12.5c0-2.2 1-4 2-6 .2 1.4 0 2.5 0 2.5S12 5 12 3Z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg></div><div><div class="cc-nm" data-he="102 — כבאות" data-en="102 — Fire & Rescue">102 — כבאות</div><div class="cc-sb" data-he="שריפה / חילוץ" data-en="Fire / rescue">שריפה / חילוץ</div></div></button>
  <button class="call-btn" onclick="callNum('1201')"><div class="cc-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.6 6.7 19.5l1.2-6L3.4 9.3l6-.7Z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg></div><div><div class="cc-nm">1201 — ZAKA</div><div class="cc-sb" data-he="תאונות ואסונות" data-en="Accidents & disasters">תאונות ואסונות</div></div></button>
  <button class="call-btn" onclick="callNum('1202')"><div class="cc-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div><div><div class="cc-nm" data-he="1202 — שב&quot;כ" data-en="1202 — Shin Bet">1202 — שב"כ</div><div class="cc-sb" data-he="אירוע ביטחוני" data-en="Security incident">אירוע ביטחוני</div></div></button>
  <div class="lock-card">
@@ -2202,9 +2205,9 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
   <div id="guide-list-view">
    <div class="gd-disc" id="gd-disc"></div>
    <div class="gd-calls">
-    <button class="gd-call em" onclick="callNum('101')"><b>101</b><span id="gd-c101">מד״א</span></button>
-    <button class="gd-call" onclick="callNum('100')"><b>100</b><span id="gd-c100">משטרה</span></button>
-    <button class="gd-call" onclick="callNum('102')"><b>102</b><span id="gd-c102">כבאות</span></button>
+    <button class="gd-call em" onclick="callNum(ambulanceNum())"><b>101</b><span id="gd-c101">מד״א</span></button>
+    <button class="gd-call" onclick="callNum(policeNum())"><b>100</b><span id="gd-c100">משטרה</span></button>
+    <button class="gd-call" onclick="callNum(fireNum())"><b>102</b><span id="gd-c102">כבאות</span></button>
    </div>
    <input class="gd-search" id="guide-search" type="text" oninput="guideFilter()" placeholder="חיפוש נושא…" aria-label="חיפוש נושא">
    <div id="guide-topics" role="list"></div>
@@ -2238,7 +2241,8 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div style="background:var(--n3);border:1px solid var(--b2);border-radius:16px;padding:14px">
    <input class="ob-f" id="ag-name" type="text" maxlength="24" autocomplete="name" placeholder="שם (למשל: אמא, יעקב)" aria-label="שם" style="margin-bottom:10px">
    <div style="display:flex;gap:8px;margin-bottom:10px">
-     <input class="ob-f" id="ag-phone" type="tel" inputmode="tel" autocomplete="tel" dir="ltr" placeholder="05X-XXX-XXXX" aria-label="מספר נייד" style="flex:1;margin-bottom:0;text-align:left" oninput="agPhoneHint()" onkeydown="if(event.key==='Enter')addGuardian()">
+     <select class="ob-f" id="ag-cc" aria-label="קידומת מדינה" style="flex:0 0 auto;width:96px;margin-bottom:0;text-align:left" dir="ltr"></select>
+     <input class="ob-f" id="ag-phone" type="tel" inputmode="tel" autocomplete="tel" dir="ltr" placeholder="+972 · +81 · +1 …" aria-label="מספר נייד" style="flex:1;margin-bottom:0;text-align:left" oninput="agPhoneHint()" onkeydown="if(event.key==='Enter')addGuardian()">
      <button onclick="agPickContact()" title="מאנשי הקשר" aria-label="מאנשי הקשר" style="flex:0 0 auto;width:46px;background:var(--n2);color:var(--g3);border:1px solid var(--b2);border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center">
        <svg class="ic" viewBox="0 0 24 24" width="20"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="7" r="4" fill="none" stroke="currentColor" stroke-width="2"/></svg>
      </button>
@@ -3530,12 +3534,16 @@ function genVerifyCode(){ return String(Math.floor(1000+Math.random()*9000)); }
 function obStep0(){
  const he=currentLang==="he";
  const raw=document.getElementById("ob-phone").value;
- const digits=raw.replace(/\D/g,"");
+ const ccEl=document.getElementById("ob-cc");
+ const cc=(ccEl&&ccEl.value)||myDial();
  const name=(document.getElementById("ob-name").value||"").trim().substring(0,40)||pickRandomName();
  _obvName=name;
- if(!digits){toast(he?"נא להזין מספר טלפון נייד":"Please enter a mobile number","amb");shakeField("ob-phone");return;}
- if(!isValidILMobile(digits)){toast(he?"מספר לא תקין — 05X-XXXXXXX":"Invalid number — 05X-XXXXXXX","amb");shakeField("ob-phone");return;}
- user={name:name,phone:ilNormalize(digits),city:""};
+ if(!String(raw||"").replace(/\D/g,"")){toast(he?"נא להזין מספר טלפון נייד":"Please enter a mobile number","amb");shakeField("ob-phone");return;}
+ /* GLOBAL: any country. E.164 canonical digits — the same hash on every continent. */
+ const canon=phoneCanon(raw,cc);
+ if(!phoneIsValid(canon)){toast(he?"מספר לא תקין — כלול/י קידומת מדינה":"Invalid number — include your country code","amb");shakeField("ob-phone");return;}
+ if(SS){ SS.country=(ccEl&&ccEl.selectedOptions&&ccEl.selectedOptions[0]?ccEl.selectedOptions[0].textContent.split(" ")[0]:myCountry()); try{saveStore();}catch(e){} }
+ user={name:name,phone:canon,city:""};
  enterAppAnonymously();
 }
 /* ── Firebase Phone Auth ────────────────── */
@@ -4917,7 +4925,7 @@ function openDetail(idx){
  const canNav=(d.lat!=null&&d.lng!=null&&d.status!=='טופל');
  const navBtn=canNav?`<button class="dcta pr" style="width:100%;margin-bottom:8px;background:linear-gradient(135deg,#0E8840,#14A857)" onclick="navigateToEvent()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:18px;height:18px;vertical-align:-3px;margin-inline-end:6px"><path d="M3 11l18-8-8 18-2-8-8-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>${currentLang==='he'?'נווט לאירוע · מסלול חי':'Navigate to event · live route'}</button>`:'';
  if(['sos','viol','stalk','med'].includes(d.type)){
- ctas=navBtn+`<div class="det-ctas"><button class="dcta pr" onclick="respondDet(this)" id="det-respond-btn">${T('respond')}</button><button class="dcta gd" onclick="callNum('100')">${T('call100')}</button><button class="dcta sc" onclick="cl('det-sheet')">${T('close')}</button></div>`;
+ ctas=navBtn+`<div class="det-ctas"><button class="dcta pr" onclick="respondDet(this)" id="det-respond-btn">${T('respond')}</button><button class="dcta gd" onclick="callNum(policeNum())">${T('call100')}</button><button class="dcta sc" onclick="cl('det-sheet')">${T('close')}</button></div>`;
  } else { ctas=navBtn; }
  // Use innerHTML only for trusted static HTML, user data only via textContent/ESC
  const body=document.getElementById('det-body');
@@ -5637,6 +5645,18 @@ function renderCircles(){
      cot.appendChild(r);
    });
  }
+ // ── country-code picker (global) ──
+ const ccs=document.getElementById('ag-cc');
+ if(ccs && !ccs.options.length){
+   const seen={};
+   Object.keys(DIAL).sort().forEach(function(k){
+     const dv=DIAL[k]; if(seen[k])return; seen[k]=1;
+     const o=document.createElement('option');
+     o.value=dv; o.textContent=k+' +'+dv;
+     ccs.appendChild(o);
+   });
+   ccs.value=myDial();
+ }
  // ── circle dropdown on the add form ──
  const sel=document.getElementById('ag-circle');
  if(sel){
@@ -5757,10 +5777,11 @@ function agPhoneHint(){
  var raw=(document.getElementById('ag-phone')||{}).value||'';
  var hint=document.getElementById('ag-hint'); if(!hint)return;
  if(!raw.trim()){ hint.textContent=''; return; }
- var canon=(typeof phoneCanon==='function')?phoneCanon(raw):raw.replace(/[^0-9]/g,'');
- var ok=(typeof phoneIsValidIL==='function')?phoneIsValidIL(canon):/^9725\d{8}$/.test(canon);
+ var cc=(document.getElementById('ag-cc')||{}).value||myDial();
+ var canon=phoneCanon(raw,cc);
+ var ok=phoneIsValid(canon);
  hint.style.color=ok?'var(--safe,#0E8840)':'var(--tx3)';
- hint.textContent=ok?(he?'\u2713 \u05de\u05e1\u05e4\u05e8 \u05ea\u05e7\u05d9\u05df':'\u2713 Valid number'):(he?'\u05d4\u05d6\u05df/\u05d9 \u05de\u05e1\u05e4\u05e8 \u05e0\u05d9\u05d9\u05d3 \u05d9\u05e9\u05e8\u05d0\u05dc\u05d9':'Enter an Israeli mobile');
+ hint.textContent=ok?(he?'\u2713 \u05de\u05e1\u05e4\u05e8 \u05ea\u05e7\u05d9\u05df':'\u2713 Valid number'):(he?'\u05de\u05e1\u05e4\u05e8 \u05e2\u05dd \u05e7\u05d9\u05d3\u05d5\u05de\u05ea \u05de\u05d3\u05d9\u05e0\u05d4':'Number with country code');
 }
 function agPickContact(){
  var he=currentLang==='he';
@@ -5781,10 +5802,11 @@ async function addGuardian(){
  var nmEl=document.getElementById('ag-name'), phEl=document.getElementById('ag-phone'), go=document.getElementById('ag-go');
  var name=((nmEl&&nmEl.value)||'').trim().substring(0,24);
  var raw=((phEl&&phEl.value)||'').trim();
- var canon=(typeof phoneCanon==='function')?phoneCanon(raw):raw.replace(/[^0-9]/g,'').replace(/^0/,'972');
+ var _cc=(document.getElementById('ag-cc')||{}).value||myDial();
+ var canon=phoneCanon(raw,_cc);
  if(!name){ toast(he?'\u05d4\u05d6\u05df/\u05d9 \u05e9\u05dd':'Enter a name','amb'); if(typeof shakeField==='function')shakeField('ag-name'); return; }
- var validPhone=raw && ((typeof phoneIsValidIL==='function')?phoneIsValidIL(canon):/^9725\d{8}$/.test(canon));
- if(raw && !validPhone){ toast(he?'\u05de\u05e1\u05e4\u05e8 \u05e0\u05d9\u05d9\u05d3 \u05d9\u05e9\u05e8\u05d0\u05dc\u05d9 \u05dc\u05d0 \u05ea\u05e7\u05d9\u05df':'Invalid Israeli mobile','amb'); if(typeof shakeField==='function')shakeField('ag-phone'); return; }
+ var validPhone=raw && phoneIsValid(canon);
+ if(raw && !validPhone){ toast(he?'\u05de\u05e1\u05e4\u05e8 \u05dc\u05d0 \u05ea\u05e7\u05d9\u05df \u2014 \u05db\u05dc\u05d5\u05dc/\u05d9 \u05e7\u05d9\u05d3\u05d5\u05de\u05ea \u05de\u05d3\u05d9\u05e0\u05d4 (\u05dc\u05de\u05e9\u05dc +81)':'Invalid number \u2014 include the country code (e.g. +81)','amb'); if(typeof shakeField==='function')shakeField('ag-phone'); return; }
  if(go){go.disabled=true;go.style.opacity='.6';}
  if(validPhone){
    var dup=(SS.circleMembers||[]).find(function(m){return m.phoneCanon===canon;});
@@ -6204,8 +6226,74 @@ function gdPairById(id){ return gdState().pairs.find(p=>p.id===id); }
 function gdBaseUrl(){ return location.origin+location.pathname.replace(/index\.html$/,'shomer.html'); }
 /* Canonical IL mobile form for matching (same on both sides of a lookup): digits
    only, leading 0 → 972, bare 5xxxxxxxx → 972 prefix. Yields e.g. 972541234567. */
-function phoneCanon(raw){ var d=String(raw||'').replace(/\D/g,''); if(!d)return ''; d=d.replace(/^0/,'972'); if(/^5\d{8}$/.test(d))d='972'+d; return d; }
-function phoneIsValidIL(canon){ return /^9725\d{8}$/.test(canon||''); }
+/* ══ GLOBAL PHONE ENGINE (E.164) ══
+   SH✡MER is worldwide. Numbers are stored as pure E.164 digits (no +), which is what
+   the hashed registry keys on — so a user in Tokyo and a user in Tel Aviv hash the
+   same way and can find each other. */
+var DIAL={IL:'972',JP:'81',US:'1',CA:'1',GB:'44',AU:'61',NZ:'64',IE:'353',DE:'49',FR:'33',ES:'34',IT:'39',PT:'351',NL:'31',BE:'32',CH:'41',AT:'43',SE:'46',NO:'47',DK:'45',FI:'358',PL:'48',CZ:'420',GR:'30',RO:'40',HU:'36',UA:'380',RU:'7',TR:'90',IN:'91',CN:'86',KR:'82',TH:'66',VN:'84',PH:'63',ID:'62',MY:'60',SG:'65',HK:'852',TW:'886',BR:'55',MX:'52',AR:'54',CL:'56',CO:'57',PE:'51',ZA:'27',NG:'234',KE:'254',EG:'20',MA:'212',AE:'971',SA:'966',QA:'974',JO:'962',CY:'357'};
+/* Emergency numbers by country. 112 is the GSM universal fallback and works on almost
+   any network on earth, even with no SIM. */
+var EMERG={
+ IL:{p:'100',a:'101',f:'102'}, JP:{p:'110',a:'119',f:'119'},
+ US:{p:'911',a:'911',f:'911'}, CA:{p:'911',a:'911',f:'911'},
+ GB:{p:'999',a:'999',f:'999'}, IE:{p:'112',a:'112',f:'112'},
+ AU:{p:'000',a:'000',f:'000'}, NZ:{p:'111',a:'111',f:'111'},
+ IN:{p:'112',a:'102',f:'101'}, CN:{p:'110',a:'120',f:'119'},
+ KR:{p:'112',a:'119',f:'119'}, TW:{p:'110',a:'119',f:'119'},
+ HK:{p:'999',a:'999',f:'999'}, SG:{p:'999',a:'995',f:'995'},
+ TH:{p:'191',a:'1669',f:'199'}, PH:{p:'911',a:'911',f:'911'},
+ ID:{p:'110',a:'118',f:'113'}, MY:{p:'999',a:'999',f:'999'},
+ VN:{p:'113',a:'115',f:'114'},
+ BR:{p:'190',a:'192',f:'193'}, MX:{p:'911',a:'911',f:'911'},
+ AR:{p:'911',a:'107',f:'100'}, CL:{p:'133',a:'131',f:'132'},
+ CO:{p:'123',a:'123',f:'123'}, PE:{p:'105',a:'106',f:'116'},
+ ZA:{p:'10111',a:'10177',f:'10177'}, NG:{p:'112',a:'112',f:'112'},
+ KE:{p:'999',a:'999',f:'999'}, EG:{p:'122',a:'123',f:'180'},
+ MA:{p:'190',a:'150',f:'150'},
+ AE:{p:'999',a:'998',f:'997'}, SA:{p:'999',a:'997',f:'998'},
+ QA:{p:'999',a:'999',f:'999'}, JO:{p:'911',a:'911',f:'911'},
+ RU:{p:'112',a:'103',f:'101'}, UA:{p:'112',a:'103',f:'101'},
+ TR:{p:'112',a:'112',f:'112'}
+};
+var EMERG_DEFAULT={p:'112',a:'112',f:'112'};   /* EU + GSM universal */
+function myCountry(){
+  try{
+    if(SS && SS.country) return SS.country;
+    var r=(navigator.language||navigator.userLanguage||'').split('-')[1];
+    if(r && /^[A-Za-z]{2}$/.test(r)) return r.toUpperCase();
+    var tz=(Intl.DateTimeFormat().resolvedOptions().timeZone||'');
+    if(/Jerusalem|Tel_Aviv/.test(tz)) return 'IL';
+    if(/Tokyo/.test(tz)) return 'JP';
+    if(/New_York|Chicago|Denver|Los_Angeles/.test(tz)) return 'US';
+    if(/London/.test(tz)) return 'GB';
+  }catch(e){}
+  return 'IL';
+}
+function myDial(){ return DIAL[myCountry()] || '972'; }
+function emergencyNums(){ return EMERG[myCountry()] || EMERG_DEFAULT; }
+function policeNum(){ return emergencyNums().p; }
+function ambulanceNum(){ return emergencyNums().a; }
+function fireNum(){ return emergencyNums().f; }
+/* Convert any human input into E.164 digits. Handles +, 00, national 0-prefix, or bare. */
+function phoneCanon(raw, cc){
+  var s=String(raw||'').trim();
+  var intl = /^\+/.test(s) || /^00/.test(s);
+  var d=s.replace(/\D/g,'');
+  if(!d) return '';
+  if(/^00/.test(s)) d=d.replace(/^00/,'');
+  if(intl) return d;                                  // already international
+  var dial = cc || myDial();
+  if(d.charAt(0)==='0') return dial + d.replace(/^0+/,'');   // national format 05x / 090…
+  // bare digits: if it already starts with a known dial code and is long enough, trust it
+  for(var k in DIAL){ if(DIAL[k] && d.indexOf(DIAL[k])===0 && d.length>=(DIAL[k].length+7)) return d; }
+  return dial + d;
+}
+/* E.164: 7–15 digits, no leading zero. Deliberately permissive — the world is messy. */
+function phoneIsValid(canon){ return /^[1-9]\d{6,14}$/.test(canon||''); }
+function phoneIsValidIL(canon){ return phoneIsValid(canon); }   /* legacy call-sites */
+function phonePretty(canon){ return canon ? ('+'+canon) : ''; }
+
+
 /* SHA-256 → hex. Used to store a PRIVACY-SAFE registry (hashed phone → uid): the
    raw number is NEVER stored or exposed; matching a contact = hash + lookup. */
 /* sha256Hex: canonical implementation with pure-JS fallback defined in the registration module (v95). */
@@ -6788,10 +6876,10 @@ function privacyHTML(){ const he=currentLang==='he';
 
 function renderLegal(){
  const d=document.getElementById('disc-body'); if(d)d.innerHTML=disclaimerHTML()+(currentLang==='he'
- ?`<div class="disc-call"><button class="pr" onclick="callNum('100')"> 100 משטרה</button><button onclick="callNum('101')"> 101 מד״א</button><button onclick="callNum('102')"> 102 כבאות</button></div>`
+ ?`<div class="disc-call"><button class="pr" onclick="callNum(policeNum())"> <span class="em-p">100</span> משטרה</button><button onclick="callNum(ambulanceNum())"> 101 מד״א</button><button onclick="callNum(fireNum())"> 102 כבאות</button></div>`
  :currentLang==='ar'
- ?`<div class="disc-call"><button class="pr" onclick="callNum('100')"> 100 شرطة</button><button onclick="callNum('101')"> 101 إسعاف</button><button onclick="callNum('102')"> 102 إطفاء</button></div>`
- :`<div class="disc-call"><button class="pr" onclick="callNum('100')"> 100 Police</button><button onclick="callNum('101')"> 101 MDA</button><button onclick="callNum('102')"> 102 Fire</button></div>`);
+ ?`<div class="disc-call"><button class="pr" onclick="callNum(policeNum())"> <span class="em-p">100</span> شرطة</button><button onclick="callNum(ambulanceNum())"> 101 إسعاف</button><button onclick="callNum(fireNum())"> 102 إطفاء</button></div>`
+ :`<div class="disc-call"><button class="pr" onclick="callNum(policeNum())"> <span class="em-p">100</span> Police</button><button onclick="callNum(ambulanceNum())"> 101 MDA</button><button onclick="callNum(fireNum())"> 102 Fire</button></div>`);
  const t=document.getElementById('tos-body'); if(t)t.innerHTML=tosHTML()+legalFooter();
  const p=document.getElementById('priv-body'); if(p)p.innerHTML=privacyHTML()+legalFooter();
  if(d)d.innerHTML+=legalFooter();
@@ -7123,7 +7211,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v103';
+var APP_VER='v104';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -8441,7 +8529,15 @@ if('serviceWorker' in navigator){
 }
 
 // ── Anonymous auth + phone registry ────────────────────────────────
-async function enterAppAnonymously(){
+async function obFillCC(){
+  var el=document.getElementById('ob-cc'); if(!el||el.options.length)return;
+  Object.keys(DIAL).sort().forEach(function(k){
+    var o=document.createElement('option'); o.value=DIAL[k]; o.textContent=k+' +'+DIAL[k]; el.appendChild(o);
+  });
+  el.value=myDial();
+}
+try{ if(document.readyState!=='loading'){ setTimeout(obFillCC,0); } else { document.addEventListener('DOMContentLoaded',obFillCC); } }catch(e){}
+function enterAppAnonymously(){
  const he=currentLang==="he";
  // Show SMS code input screen
  showSMSCodeScreen();
