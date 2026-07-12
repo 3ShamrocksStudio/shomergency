@@ -1539,7 +1539,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v99 · 12.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v100 · 12.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -7083,7 +7083,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v99';
+var APP_VER='v100';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -8049,12 +8049,24 @@ function maybeSelfHeal(){
    when the URL is opened with ?fresh / ?nosw (Dave can just add that in a browser). */
 function forceFreshReload(){
  try{ toast(currentLang==='he'?'מאחזר גרסה עדכנית…':currentLang==='ar'?'جارٍ جلب أحدث إصدار…':'Fetching the latest build…',''); }catch(e){}
- var clean=location.origin+location.pathname; // no query → no reload loop with the ?fresh handler
- var go=function(){ location.replace(clean); };
- if(!('serviceWorker' in navigator)){ go(); return; }
- navigator.serviceWorker.getRegistrations().then(function(rs){ return Promise.all(rs.map(function(r){return r.unregister();})); })
- .catch(function(){}).then(function(){ if(window.caches&&caches.keys) return caches.keys().then(function(ks){ return Promise.all(ks.map(function(k){return caches.delete(k);})); }); })
- .catch(function(){}).then(go, go);
+ /* The SW + CacheStorage are only half the problem: the BROWSER HTTP disk cache also
+    holds the old HTML (GitHub Pages sends max-age), so reloading a clean URL returned
+    the SAME stale build → the update toast reappeared forever. We now (1) drop the SW,
+    (2) wipe CacheStorage, (3) force-revalidate the document, and (4) reload through a
+    one-shot cache-busting query so the HTML can never come from disk cache. */
+ var bust=location.origin+location.pathname+'?u='+Date.now();
+ var go=function(){ try{ location.replace(bust); }catch(e){ location.reload(); } };
+ var done=false, fire=function(){ if(!done){ done=true; go(); } };
+ setTimeout(fire, 4000);   // never hang on a stuck promise
+ if(!('serviceWorker' in navigator)){ fire(); return; }
+ navigator.serviceWorker.getRegistrations()
+  .then(function(rs){ return Promise.all(rs.map(function(r){ return r.unregister(); })); })
+  .catch(function(){})
+  .then(function(){ if(window.caches&&caches.keys) return caches.keys().then(function(ks){ return Promise.all(ks.map(function(k){ return caches.delete(k); })); }); })
+  .catch(function(){})
+  .then(function(){ try{ return fetch(location.pathname+'?rv='+Date.now(),{cache:'reload'}); }catch(e){} })
+  .catch(function(){})
+  .then(fire, fire);
 }
 var _swFresh=/[?&](nosw|fresh)\b/i.test(location.search);
 if(_swFresh && 'serviceWorker' in navigator){
@@ -8146,6 +8158,7 @@ function updCheck(manual){
   try{
     if(!navigator.onLine){ if(manual){ try{ toast(currentLang==='he'?'אין חיבור לרשת':'No internet connection','amb'); }catch(e){} } return; }
     try{ if('serviceWorker' in navigator) navigator.serviceWorker.getRegistration().then(function(r){ if(r)r.update(); }).catch(function(){}); }catch(e){}
+    if(!manual && /[?&]u=\d+/.test(location.search) && !window._updRecheck){ window._updRecheck=1; }
     fetch('version.json?cb='+(new Date().getTime()),{cache:'no-store'})
       .then(function(r){ return r.ok?r.json():null; })
       .then(function(d){
