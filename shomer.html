@@ -255,7 +255,42 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 #map-wrap{position:absolute;inset:0;overflow:hidden;background:#20242b;}
 
 /* ══════════ HEADER ══════════ */
-.hdr{position:absolute;top:var(--hdr-top,0px);left:0;right:0;z-index:600;height:var(--hdr);direction:ltr;background:rgba(8,18,36,.97);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--b3);display:flex;align-items:center;padding:0 12px;gap:8px;box-shadow:0 2px 24px rgba(0,0,0,.6);}
+/* ══ LIGHT SURFACES — break the navy for wayfinding ══ */
+.lt-card{background:linear-gradient(180deg,#F5F8FD,#E9F0F9);border:1px solid #CBD8EA;border-radius:16px;padding:14px;color:#0A1628;box-shadow:0 6px 20px rgba(0,0,0,.28);margin-bottom:14px}
+.lt-card .lt-h{font-size:13px;font-weight:800;color:#0A1628;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+.lt-card .lt-sub{font-size:11.5px;color:#5B6B85;font-weight:600}
+.lt-card input,.lt-card select{background:#fff;border:1px solid #C3D2E6;color:#0A1628}
+.lt-card input::placeholder{color:#8C9BB2}
+/* circle-of-trust rows */
+.cot{display:flex;align-items:center;gap:10px;padding:11px 4px;border-bottom:1px solid #DCE5F0}
+.cot:last-child{border-bottom:0}
+.cot-nm{flex:1;font-size:14.5px;font-weight:700;color:#0A1628}
+.cot-n{font-size:15px;font-weight:900;color:#0A1628;min-width:34px;text-align:center}
+.cot-ed{background:none;border:0;color:#5B6B85;cursor:pointer;padding:4px;display:flex}
+.cot-ed svg{width:16px;height:16px}
+.cot-new{display:flex;align-items:center;gap:7px;padding:11px 4px;color:#1D6FD6;font-weight:800;font-size:13.5px;cursor:pointer;background:none;border:0;width:100%}
+/* inline per-guardian toggles */
+.gt-row{display:flex;gap:14px;margin-top:7px;flex-wrap:wrap}
+.gt{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--tx2);font-weight:600}
+.gt .tog{width:34px;height:19px;flex:0 0 auto}
+/* colourful professional roles */
+.prof-opt .pic{transition:background .18s,color .18s,border-color .18s}
+.prof-opt[data-prof="police"] .pic{background:rgba(41,98,255,.16);color:#5B8DEF;border-color:rgba(41,98,255,.4)}
+.prof-opt[data-prof="doctor"] .pic{background:rgba(48,163,108,.16);color:#4ED08A;border-color:rgba(48,163,108,.4)}
+.prof-opt[data-prof="fire"]   .pic{background:rgba(232,129,28,.18);color:#F0A15A;border-color:rgba(232,129,28,.42)}
+.prof-opt[data-prof="para"]   .pic{background:rgba(229,72,77,.16);color:#F0787C;border-color:rgba(229,72,77,.4)}
+.prof-opt[data-prof="security"] .pic{background:rgba(201,168,76,.18);color:#E0C26A;border-color:rgba(201,168,76,.44)}
+.prof-opt[data-prof=""] .pic{background:rgba(136,152,184,.14);color:#8898B8;border-color:rgba(136,152,184,.3)}
+.prof-opt.sel .pic{box-shadow:0 0 0 2px currentColor inset}
+/* profile stat circles */
+.pstats{display:flex;gap:18px;justify-content:center;margin:6px 0 22px}
+.pcirc{width:104px;height:104px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;box-shadow:0 10px 26px rgba(0,0,0,.4)}
+.pcirc.resp{background:linear-gradient(150deg,#2E6FE0,#1D4FBF)}
+.pcirc.rep{background:linear-gradient(150deg,#E5484D,#B8232C)}
+.pcirc .pc-n{font-size:30px;font-weight:900;line-height:1}
+.pcirc .pc-l{font-size:11.5px;font-weight:700;opacity:.92;margin-top:3px}
+
+.hdr{position:absolute;top:var(--hdr-top,0px);left:0;right:0;z-index:600;height:var(--hdr);background:rgba(8,18,36,.97);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--b3);display:flex;align-items:center;padding:0 12px;gap:8px;box-shadow:0 2px 24px rgba(0,0,0,.6);}
 .hdr::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent 5%,var(--gd) 35%,var(--gd) 65%,transparent 95%);}
 .hdr-left{display:flex;align-items:center;gap:7px;flex:1;justify-content:flex-start;}
 .hdr-guide{position:relative;width:42px;height:42px;border-radius:50%;background:rgba(13,148,82,.16);border:1px solid rgba(20,170,98,.45);display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;}
@@ -1479,6 +1514,9 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <header class="hdr" role="banner" id="main-content">
  <div class="hdr-left">
  <button class="hdr-menu" id="menu-btn" onclick="toggleDD()" aria-label="תפריט" aria-expanded="false" aria-haspopup="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+ <button class="hdr-guide" onclick="openGuide()" aria-label="מדריך חירום" title="מדריך חירום">
+ <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 9v6M9 12h6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+ </button>
  <!-- REAL "guardians nearby" — live count from RTDB presence (shown only when connected). -->
  <button class="hdr-near" id="hdr-near" style="display:none" onclick="explainNearby()" aria-live="polite">
  <div class="ldot" aria-hidden="true"></div>
@@ -1494,16 +1532,14 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <span class="fb-dot" id="fb-dot" aria-hidden="true"></span>
  <span class="fb-status-txt" id="fb-status-txt">מתחבר…</span>
  </button>
- <button class="hdr-guide" onclick="openGuide()" aria-label="מדריך חירום" title="מדריך חירום">
- <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 9v6M9 12h6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
- </button>
+ 
  <button class="hdr-bell" onclick="openUpdates()" aria-label="עדכונים" title="עדכונים">
  <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M13.7 21a2 2 0 0 1-3.4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
  <span class="bell-dot" id="bell-dot" aria-hidden="true"></span>
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v97 · 09.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v98 · 12.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -2012,11 +2048,11 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <span class="p-prof-badge" id="prof-prof-badge"><span class="ic" id="prof-prof-ic"></span><span id="prof-prof-nm"></span></span>
  </div>
  </div>
- <div class="stats" role="group">
- <div class="st"><div class="st-n" id="stat-reports">0</div><div class="st-l" id="stat-reports-lbl">דיווחים</div></div>
- <div class="st"><div class="st-n" id="stat-sos">0</div><div class="st-l" id="stat-sos-lbl">אירועי SOS</div></div>
- <div class="st"><div class="st-n" id="stat-responded">0</div><div class="st-l">הגרבתי</div></div>
+ <div class="pstats" role="group" aria-label="הפעילות שלי">
+ <div class="pcirc resp"><div class="pc-n" id="stat-responded">0</div><div class="pc-l" id="stat-responded-lbl">הגבתי</div></div>
+ <div class="pcirc rep"><div class="pc-n" id="stat-reports">0</div><div class="pc-l" id="stat-reports-lbl">דיווחתי</div></div>
  </div>
+ <div style="display:none"><span id="stat-sos">0</span><span id="stat-sos-lbl"></span></div>
  <div class="sec-cap mb12" id="prof-prof-cap">תפקיד מקצועי (מתנדב/ת מגיב/ה)</div>
  <p class="sr-sb" id="prof-prof-hint" style="margin:-4px 2px 12px;line-height:1.6">בחר/י תפקיד אם את/ה מגיב/ה מקצועי/ת — סמל יוצג בפרופיל ועל הסמן שלך במפה.</p>
  <div class="prof-grid mb20" id="prof-grid" role="group" aria-label="תפקיד מקצועי">
@@ -2183,6 +2219,16 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="sh-pill" aria-hidden="true"></div>
  <div class="sh-head"><span class="sh-ttl" id="circ-ttl">השומרים שלי</span><button class="sh-x" onclick="cl('sh-circles')" aria-label="סגור"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button></div>
  <div class="sh-body">
+ <!-- CIRCLES OF TRUST — light card, live counts, rename, add new -->
+ <div class="lt-card" id="cot-card">
+   <div class="lt-h"><span>מעגלי שומרים</span><span class="lt-sub">circles of trust</span></div>
+   <div id="cot-list"></div>
+   <button class="cot-new" onclick="addCircle()">
+     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+     <span>מעגל חדש</span>
+   </button>
+ </div>
+
  <!-- ADD A GUARDIAN — unified always-visible form -->
  <div style="padding:4px 0 8px">
  <p style="font-size:13px;color:var(--tx2);line-height:1.6;margin-bottom:14px">הוסף/י אנשים שאת/ה סומכים עליהם. אם הם כבר ב-SH✡MER — תראו זה את זה על המפה. אם לא — נשלח להם הזמנה.</p>
@@ -2193,6 +2239,10 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
      <button onclick="agPickContact()" title="מאנשי הקשר" aria-label="מאנשי הקשר" style="flex:0 0 auto;width:46px;background:var(--n2);color:var(--g3);border:1px solid var(--b2);border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center">
        <svg class="ic" viewBox="0 0 24 24" width="20"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="7" r="4" fill="none" stroke="currentColor" stroke-width="2"/></svg>
      </button>
+   </div>
+   <div style="display:flex;align-items:center;gap:9px;margin-bottom:10px">
+     <label for="ag-circle" style="font-size:12.5px;color:var(--tx2);font-weight:700;white-space:nowrap">הוסף למעגל:</label>
+     <select class="ob-f" id="ag-circle" aria-label="בחר מעגל" style="flex:1;margin-bottom:0"></select>
    </div>
    <div id="ag-hint" style="font-size:11px;color:var(--tx3);min-height:14px;margin-bottom:8px;text-align:center"></div>
    <button class="cta-gold" id="ag-go" style="width:100%;padding:13px;font-size:15px;font-weight:800" onclick="addGuardian()">
@@ -5226,6 +5276,22 @@ var GUIDE_DISC={
  ar:'⚠ إرشادات أساسية فقط — ليست بديلًا عن المساعدة الطبية المهنية. في حالة طوارئ حقيقية اتصل بـ101 (نجمة داوود الحمراء) فورًا.'
 };
 var EMERGENCY_GUIDE=[
+ {id:'ptsd',e:'',t:{he:'מצוקה נפשית / חרדה ופוסט-טראומה',en:'Emotional distress / PTSD',ar:'ضائقة نفسية / اضطراب ما بعد الصدمة'},
+  s:{he:'התקף חרדה, הלם, פלאשבק',en:'Panic, shock, flashback',ar:'ذعر، صدمة، ذكريات اقتحامية'},
+  steps:{he:['זהה/י את הסימנים: נשימה מהירה ורדודה, רעד, הזעה, מבט "קפוא", בלבול, ניתוק, בכי בלתי נשלט, או תחושת "זה קורה עכשיו שוב" (פלאשבק).','גש/י בשקט. הצג/י את עצמך בשם. אל תיגע/י בלי לבקש רשות — מגע פתאומי עלול להחמיר.','דבר/י לאט, במשפטים קצרים: "אני כאן. את/ה בטוח/ה. זה יעבור."','עגן/י במציאות (Grounding 5-4-3-2-1): בקש/י שיציין/תציין 5 דברים שרואה, 4 שנוגע/ת, 3 ששומע/ת, 2 שמריח/ה, 1 שטועם/ת.','ויסות נשימה: נשימה פנימה 4 שניות, החזקה 4, החוצה 6. נשום/נשמי יחד איתו/ה — קצב מדבק.','הסר/י גירויים: אורות, רעש, קהל. הצע/י מקום שקט וישיבה.','אל תתווכח/י עם מה שהוא/היא מרגיש/ה ואל תאמר/י "תירגע/י" — זה מגביר מצוקה.','שאל/י ישירות: "יש לך מחשבות לפגוע בעצמך?" — לשאול לא מכניס רעיון לראש; זה מציל חיים.','הישאר/י עד שהמצוקה שוככת או עד שמגיע גורם מקצועי.'],
+   en:['Recognise the signs: fast shallow breathing, shaking, sweating, a "frozen" stare, confusion, dissociation, uncontrollable crying, or reliving the event (flashback).','Approach calmly. Say your name. Do not touch without asking — sudden contact can escalate it.','Speak slowly in short sentences: "I am here. You are safe. This will pass."','Ground them (5-4-3-2-1): ask for 5 things they see, 4 they can touch, 3 they hear, 2 they smell, 1 they taste.','Regulate breathing: in for 4 seconds, hold 4, out for 6. Breathe with them — the rhythm is contagious.','Reduce stimulation: lights, noise, crowds. Offer a quiet place to sit.','Never argue with their feelings or say "calm down" — it increases distress.','Ask directly: "Are you having thoughts of hurting yourself?" Asking does not plant the idea; it saves lives.','Stay until the distress eases or professional help arrives.'],
+   ar:['تعرّف على العلامات: تنفّس سريع سطحي، ارتجاف، تعرّق، نظرة "متجمّدة"، ارتباك، انفصال، بكاء لا يمكن السيطرة عليه، أو إعادة عيش الحدث.','اقترب بهدوء. عرّف عن نفسك بالاسم. لا تلمس دون إذن — اللمس المفاجئ قد يفاقم الحالة.','تحدّث ببطء وبجُمل قصيرة: "أنا هنا. أنت بأمان. سيمرّ هذا."','ثبّته في الواقع (5-4-3-2-1): اطلب 5 أشياء يراها، 4 يلمسها، 3 يسمعها، 2 يشمّها، 1 يتذوّقها.','نظّم التنفّس: شهيق 4 ثوانٍ، حبس 4، زفير 6. تنفّس معه.','قلّل المُثيرات: الأضواء، الضجيج، الحشود. اعرض مكانًا هادئًا للجلوس.','لا تجادل مشاعره ولا تقل "اهدأ" — فهذا يزيد الضائقة.','اسأل مباشرة: "هل لديك أفكار لإيذاء نفسك؟" السؤال لا يزرع الفكرة؛ بل ينقذ حياة.','ابقَ حتى تهدأ الضائقة أو يصل مختص.']},
+  dont:{he:'אל תאמר/י "תירגע/י" או "זה לא נורא" · אל תיגע/י בלי רשות · אל תשאיר/י אדם במצוקה חריפה לבד. במחשבות אובדניות — חייג/י 1201 (ער"ן) או 101.',en:'Never say "calm down" or "it is not a big deal" · do not touch without permission · do not leave someone in acute distress alone. For suicidal thoughts call 1201 (ERAN) or 101.',ar:'لا تقل "اهدأ" · لا تلمس دون إذن · لا تترك شخصًا في ضائقة حادّة وحيدًا. عند وجود أفكار انتحارية اتصل بـ1201 أو 101.'},
+  src:'ער"ן 1201 · משרד הבריאות · NCPTSD · WHO Psychological First Aid'},
+
+ {id:'selfdef',e:'',t:{he:'הגנה עצמית ברחוב (קרב מגע)',en:'Street self-defence (Krav Maga)',ar:'الدفاع عن النفس (كراف ماغا)'},
+  s:{he:'עקרונות בסיסיים למנוע ולהימלט',en:'Basics: prevent, escape',ar:'أساسيات: المنع والهروب'},
+  steps:{he:['המטרה היחידה היא לברוח — לא לנצח. הגנה עצמית מוצלחת = את/ה הולך/ת הביתה.','מודעות קודמת לטכניקה: ראש מורם, אוזניות בחוץ, טלפון בכיס. רוב התקיפות נמנעות לפני שהן מתחילות.','עמידה: רגליים ברוחב כתפיים, אחת קדימה, ידיים פתוחות בגובה החזה ("עמידת גדר") — לא אגרופים. זה מגן וגם נראה לא-מאיים.','קול הוא נשק: צעק/י "אחורה!" חזק וברור. זה מרתיע, מושך עדים ומפעיל את הגוף שלך.','אם נתפסת — תקוף/תקפי נקודות רכות: עיניים, גרון, מפשעה, ברך. קצר, חד, ומיד לברוח.','שחרור מאחיזת פרק כף יד: סובב/י את היד לכיוון האגודל של התוקף (הנקודה החלשה) ומשוך/י בחדות.','שחרור מחניקה מלפנים: הרם/י ידיים חדות מעלה בין זרועות התוקף ("pluck"), הסט/י את הגוף הצידה, בעט/י והימלט/י.','מרחק = בטיחות. כל טכניקה מסתיימת באותה מילה: לרוץ. לכיוון אנשים, אור, חנות פתוחה.','לחץ/י SOS ב-SH✡MER ברגע שאת/ה במקום בטוח — או לפני, אם יש לך רגע.','תרגול הוא מה שהופך את זה לאמיתי. שיעור אחד בקרב מגע שווה יותר ממאה סרטונים.'],
+   en:['The only goal is to escape — not to win. Successful self-defence = you go home.','Awareness beats technique: head up, earphones out, phone in pocket. Most attacks are avoided before they start.','Stance: feet shoulder-width, one forward, open hands at chest height (the "fence") — not fists. It protects you and looks non-threatening.','Your voice is a weapon: shout "BACK OFF!" loudly. It deters, draws witnesses, and switches your body on.','If grabbed — strike soft targets: eyes, throat, groin, knee. Short, sharp, then run.','Wrist-grab release: rotate your arm toward the attacker\'s thumb (the weak point) and pull sharply.','Front choke release: drive both hands sharply up between their arms ("pluck"), turn your body aside, kick, and escape.','Distance equals safety. Every technique ends with the same word: run — toward people, light, an open shop.','Press SOS in SH✡MER the moment you are safe — or before, if you have a second.','Practice makes it real. One Krav Maga class beats a hundred videos.'],
+   ar:['الهدف الوحيد هو الهروب — لا الانتصار. الدفاع الناجح = أن تعود إلى بيتك.','الوعي أهم من التقنية: ارفع رأسك، انزع السمّاعات، ضع الهاتف في جيبك.','الوقفة: القدمان بعرض الكتفين، واحدة للأمام، اليدان مفتوحتان عند مستوى الصدر — لا قبضتان.','صوتك سلاح: اصرخ "ابتعد!" بوضوح. هذا يردع ويجذب الشهود.','إذا أُمسك بك — استهدف النقاط الرخوة: العينان، الحلق، المغبن، الركبة. ضربة قصيرة ثم اهرب.','التحرّر من قبضة المعصم: أدر ذراعك باتجاه إبهام المهاجم واسحب بحدّة.','التحرّر من الخنق الأمامي: ادفع يديك بحدّة للأعلى بين ذراعيه، أدر جسمك، اركل، واهرب.','المسافة هي الأمان. كل تقنية تنتهي بكلمة واحدة: اركض — نحو الناس والضوء.','اضغط SOS في SH✡MER فور وصولك إلى مكان آمن.','التدريب هو ما يجعل هذا حقيقيًا. درس واحد أفضل من مئة فيديو.']},
+  dont:{he:'אל תילחם/י על רכוש — תן/י אותו · אל תרדוף/י אחרי תוקף · אל תישאר/י כדי "לנצח". קרב מגע אמיתי נלמד באימון, לא מטקסט.',en:'Never fight over property — hand it over · never chase an attacker · never stay to "win". Real Krav Maga is learned in training, not from text.',ar:'لا تقاتل من أجل الممتلكات — سلّمها · لا تطارد المهاجم · لا تبقَ لتنتصر.'},
+  src:'עקרונות קרב מגע (IKMF/KMG) · משטרת ישראל — המלצות מניעה'},
+
  {id:'cpr',e:'❤️',t:{he:'החייאה (CPR)',en:'CPR',ar:'الإنعاش القلبي (CPR)'},
   s:{he:'אדם לא מגיב ואינו נושם',en:'Unresponsive, not breathing',ar:'لا يستجيب ولا يتنفّس'},
   steps:{he:['ודא/י שהאדם אינו מגיב ואינו נושם תקין (או רק נושף נשיפות בודדות).','חייג/י 101 מיד ובקש/י דפיברילטור (AED). הפעל/י רמקול.','הנח/י כף יד במרכז בית החזה (חצי תחתון של עצם החזה), יד שנייה מעליה.','לחץ/י חזק ומהר: קצב 100–120 לדקה, עומק 5–6 ס״מ.','תן/י לחזה לחזור למצב מלא בין הלחיצות — אל תישען/י עליו.','אם הוכשרת: 30 לחיצות ל-2 הנשמות (הטיית ראש, הרמת סנטר, סתימת אף, נשיפה עד שהחזה עולה).','לא הוכשרת? בצע/י לחיצות חזה רצופות בלבד, ללא הפסקה.','כשמגיע AED — הפעל/י ועקוב/י אחר ההוראות הקוליות.','המשך/י עד שמגיע צוות רפואי או שהאדם מתעורר.'],
@@ -5342,6 +5408,8 @@ function guideApplyLang(){ var L=currentLang==='ar'?'ar':currentLang==='en'?'en'
    stroke, 24×24). Crafted SVG — not photos — so the set is consistent, tiny, works
    fully OFFLINE (inline, cached in shomer.html), and reads instantly in panic. */
 var GUIDE_PICTO={
+ ptsd:'<circle cx="12" cy="12" r="8.6"/><path d="M8.4 10h.01M15.6 10h.01"/><path d="M8.8 15.4c1.6-1.4 4.8-1.4 6.4 0"/><path d="M12 3.2v1.4M4.6 6.2l1 1M19.4 6.2l-1 1"/>',
+ selfdef:'<path d="M12 3.2l7 2.8v5c0 4.9-3.3 8.4-7 9.8-3.7-1.4-7-4.9-7-9.8V6Z"/><path d="M9.4 12.2l1.9 1.9 3.5-3.8"/>',
  cpr:'<path d="M2.5 12.5h3l1.3-3 2.3 6.2 1.6-4.2 1 3h1.3"/><path d="M17.6 6.3a2.8 2.8 0 0 1 4 3.9l-4 4-4-4a2.8 2.8 0 0 1 4-3.9Z"/>',
  choke:'<circle cx="12" cy="6" r="3"/><path d="M9 10.6c-1.7 1-3 2.9-3 5.2V18h12v-2.2c0-2.3-1.3-4.2-3-5.2"/><path d="M9.6 13.6c1.5.8 3.3.8 4.8 0"/>',
  bleed:'<path d="M12 3.4c3 3.7 5 6.5 5 8.9A5 5 0 0 1 7 12.3c0-2.4 2-5.2 5-8.9Z"/><path d="M12 9.4v4M10 11.4h4"/>',
@@ -5360,9 +5428,9 @@ function guidePicto(id,cls){ var p=GUIDE_PICTO[id]; if(!p)return '<span class="'
 /* Per-CATEGORY distinct colour — each emergency is instantly separated at a glance.
    Paired with a unique SHOMER-branded Grok illustration per topic (img/guide/<id>.jpg,
    navy outline + the category accent, airplane-safety-card style). Offline-cached. */
-var GUIDE_CAT={ cpr:'#E5484D', choke:'#12A594', bleed:'#B21D2B', burn:'#E8811C', stroke:'#8E4EC6', heart:'#D6409F', allergy:'#30A46C', seizure:'#D9A21B', drown:'#2E7DD1', shock:'#5B6AD0', faint:'#9B7DF0', bone:'#A87B4F', call:'#0EA5E9' };
+var GUIDE_CAT={ ptsd:'#7C5CFF', selfdef:'#0E8F6E', cpr:'#E5484D', choke:'#12A594', bleed:'#B21D2B', burn:'#E8811C', stroke:'#8E4EC6', heart:'#D6409F', allergy:'#30A46C', seizure:'#D9A21B', drown:'#2E7DD1', shock:'#5B6AD0', faint:'#9B7DF0', bone:'#A87B4F', call:'#0EA5E9' };
 function guideCatColor(id){ return GUIDE_CAT[id]||'var(--g3)'; }
-function guideImg(id,cls){ return '<img class="'+(cls||'gd-pic')+'" src="img/guide/'+id+'.jpg" alt="" loading="lazy" decoding="async">'; }
+function guideImg(id,cls){ return '<img class="'+(cls||'gd-pic')+'" src="img/guide/'+id+'.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display=&quot;none&quot;">'; }
 function guideRenderList(q){ var L=currentLang==='ar'?'ar':currentLang==='en'?'en':'he'; var box=document.getElementById('guide-topics'); if(!box)return;
  q=(q||'').trim().toLowerCase();
  var items=EMERGENCY_GUIDE.filter(function(g){ if(!q)return true; return (g.t[L]+' '+g.s[L]+' '+g.t.en+' '+g.t.he).toLowerCase().indexOf(q)>=0; });
@@ -5516,6 +5584,32 @@ function switchCircle(cid){activeCircleId=cid;renderCircles();}
 /* Build the Circles sheet body (tabs + member list). User data via ESC(). */
 function renderCircles(){
  const he=currentLang==='he';
+ // ── circles-of-trust light list (counts, rename, live) ──
+ const cot=document.getElementById('cot-list');
+ if(cot){
+   cot.innerHTML='';
+   circlesList().forEach(function(cc){
+     const r=document.createElement('div'); r.className='cot';
+     r.innerHTML='<button class="cot-ed" aria-label="'+(he?'שנה שם':'Rename')+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>'
+       +'<span class="cot-nm">'+ESC(cc.name)+'</span>'
+       +'<span class="cot-n">'+membersOf(cc.id).length+'</span>';
+     r.querySelector('.cot-ed').onclick=function(ev){ ev.stopPropagation(); renameCircle(cc.id); };
+     r.querySelector('.cot-nm').onclick=function(){ switchCircle(cc.id); };
+     cot.appendChild(r);
+   });
+ }
+ // ── circle dropdown on the add form ──
+ const sel=document.getElementById('ag-circle');
+ if(sel){
+   const cur=sel.value;
+   sel.innerHTML='';
+   circlesList().forEach(function(cc){
+     const o=document.createElement('option');
+     o.value=cc.id; o.textContent=cc.name;
+     sel.appendChild(o);
+   });
+   sel.value = cur && circlesList().some(function(x){return x.id===cur;}) ? cur : activeCircleId;
+ }
  // Tabs
  const tabs=document.getElementById('circ-tabs');
  if(tabs){
@@ -5577,6 +5671,23 @@ function buildMemberRow(m,he){
  </div>
  <button class="cm-find" aria-label="${he?'אתר/י':'Locate'}"></button>`;
  row.querySelector('.cm-find').onclick=()=>flyToMember(m.id);
+ // inline, always-visible toggles (wireframe): share location + ping-pong
+ const gtr=document.createElement('div'); gtr.className='gt-row';
+ gtr.innerHTML=`
+   <label class="gt"><span>${he?'לשתף מיקום?':'Share location?'}</span><span class="tog ${m.shareTo?'on':''}" data-gk="shareTo" role="switch" tabindex="0"></span></label>
+   <label class="gt"><span>${he?'פינג-פונג?':'Ping-pong?'}</span><span class="tog ${m.ping!==false?'on':''}" data-gk="ping" role="switch" tabindex="0"></span></label>`;
+ gtr.querySelectorAll('.tog').forEach(function(t){
+   t.onclick=function(ev){
+     ev.stopPropagation();
+     const k=t.getAttribute('data-gk');
+     m[k]=(k==='ping') ? !(m.ping!==false) : !m[k];
+     t.classList.toggle('on', k==='ping' ? (m.ping!==false) : !!m[k]);
+     saveStore();
+     if(k==='shareTo'){ try{ gdUpdateMarker(m); }catch(e){} }
+     toast(he?('עודכן · '+ESC(m.name)):'Updated','grn');
+   };
+ });
+ row.querySelector('.cm-main').appendChild(gtr);
  // tapping the row body toggles the privacy panel
  const priv=document.createElement('div');
  priv.className='cm-priv'; priv.style.display='none';
@@ -5660,7 +5771,8 @@ async function addGuardian(){
      }
    }catch(e){ if(typeof fbLog==='function')fbLog('guardian lookup:',(e&&e.message)||e); }
  }
- var m={id:genId('m'),cid:activeCircleId,name:name,rel:'',phoneCanon:validPhone?canon:null,registered:registered,partnerUid:theirUid,pending:(validPhone&&!registered),emoji:'',color:palette[(SS.circleMembers.length)%palette.length],lat:TLV[0]+off(),lng:TLV[1]+off(),moving:registered,shareTo:true,seeThem:true,sos:false};
+ var _selC=(document.getElementById('ag-circle')||{}).value||activeCircleId;
+ var m={id:genId('m'),cid:_selC,name:name,rel:'',phoneCanon:validPhone?canon:null,registered:registered,partnerUid:theirUid,pending:(validPhone&&!registered),emoji:'',color:palette[(SS.circleMembers.length)%palette.length],lat:TLV[0]+off(),lng:TLV[1]+off(),moving:registered,shareTo:true,seeThem:true,sos:false};
  m.baseLat=m.lat;m.baseLng=m.lng;
  SS.circleMembers.push(m);
  // A registered SHOMER also becomes a real map-visible PAIR (so we see them live).
@@ -5709,6 +5821,16 @@ function removeMember(id){
  if(mapLayers.circle[id]){MAP&&MAP.removeLayer(mapLayers.circle[id]);delete mapLayers.circle[id];}
  if(alertMemberId===id)clearCircleAlert();
  saveStore(); renderCircles();
+}
+function renameCircle(id){
+ var he=currentLang==='he';
+ var cc=circlesList().find(function(x){return x.id===id;}); if(!cc)return;
+ var nm=prompt(he?'שם חדש למעגל:':'New circle name:', cc.name);
+ if(nm===null)return;
+ nm=(''+nm).trim().substring(0,20);
+ if(!nm){ toast(he?'שם ריק':'Empty name','amb'); return; }
+ cc.name=nm; saveStore(); renderCircles();
+ toast(he?('✓ שם המעגל עודכן'):'✓ Circle renamed','grn');
 }
 function addCircle(){
  const he=currentLang==='he';
@@ -6953,7 +7075,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v97';
+var APP_VER='v98';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
