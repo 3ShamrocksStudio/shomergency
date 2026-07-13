@@ -1528,7 +1528,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v121 · 13.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v122 · 13.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -5859,7 +5859,7 @@ async function shareInvite(){
 }
 /* ══ INVITE PANEL — the only reliable way the request reaches a human ══ */
 /* Fire the real invite SMS through our Twilio function. */
-async function sendInviteSMS(phone, name, token, code){
+async function sendInviteSMS(phone, name, token){
   var he=currentLang==='he';
   if(!phone || !token) return false;
   try{
@@ -5870,7 +5870,6 @@ async function sendInviteSMS(phone, name, token, code){
           +"&link="+encodeURIComponent(inviteLinkFor(token))
           +"&fromName="+encodeURIComponent((SS.user&&SS.user.name)||'')
           +"&fromPhone="+encodeURIComponent("+"+((SS.user&&SS.user.phone)||''))
-          +"&code="+encodeURIComponent(code||'')
           +"&lang="+(he?'he':'en')
     });
     var d=await r.json(); if(typeof d==='string'){ try{ d=JSON.parse(d); }catch(_){} }
@@ -5992,7 +5991,7 @@ function resendInvite(memberId){
   var g=gdState();
   var p=g.pairs.find(function(x){ return x.id===m.pairId; });
   if(!p||!p.token){ toast(currentLang==='he'?'אין בקשה פעילה':'No pending request','amb'); return; }
-  if(m.phoneCanon) sendInviteSMS(m.phoneCanon, m.name, p.token, p.code);
+  if(m.phoneCanon) sendInviteSMS(m.phoneCanon, m.name, p.token);
   showInvitePanel(m.name, m.phoneCanon||'', p.token, p.code);
 }
 async function addGuardian(){
@@ -6058,7 +6057,7 @@ async function addGuardian(){
    /* The invite now SENDS ITSELF. A Twilio function (/sendInvite) texts the person the
       approval link automatically — verified delivered. The panel stays as a manual
       fallback (WhatsApp / share / copy) in case the SMS is filtered. */
-   sendInviteSMS(canon, name, agToken, agCode);
+   sendInviteSMS(canon, name, agToken);
    showInvitePanel(name, canon, agToken, agCode);
  } else if(validPhone){
    var invMsg=encodeURIComponent(he?('\u05d4\u05d9\u05d9! \u05d4\u05e6\u05d8\u05e8\u05e3/\u05d9 \u05d0\u05dc\u05d9\u05d9 \u05d1-SH\u2721MER \u2014 \u05d0\u05e4\u05dc\u05d9\u05e7\u05e6\u05d9\u05d9\u05ea \u05d1\u05d8\u05d9\u05d7\u05d5\u05ea \u05e7\u05d4\u05d9\u05dc\u05ea\u05d9\u05ea. \u05d7\u05d9\u05e0\u05dd: https://www.shomer-app.co.il/'):('Join me on SH\u2721MER: https://www.shomer-app.co.il/'));
@@ -7445,7 +7444,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v121';
+var APP_VER='v122';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -9228,6 +9227,7 @@ function showSMSCodeScreen(){
   <p style="font-size:15px;font-weight:700;color:var(--gold,#C9A84C);margin-bottom:6px;direction:ltr">+${user.phone}</p>
   <p style="font-size:11px;color:var(--tx3,#5a6a8a);margin-bottom:20px">${lbl.valid}</p>
   <div id="ob-sms-status" style="font-size:13px;color:var(--tx2,#8c9bbd);min-height:22px;margin-bottom:14px">${lbl.status}</div>
+ <div id="ob-sms-confirm" dir="ltr" style="text-align:center;font-size:12.5px;color:var(--g3);font-weight:800;margin-top:5px"></div>
   <input id="ob-code-inp" type="tel" inputmode="numeric" maxlength="6" autocomplete="one-time-code"
    placeholder="••••••"
    onkeyup="if(this.value.replace(/\D/g,'').length===6)verifyTwilioCode()"
