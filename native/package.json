@@ -1,0 +1,30 @@
+{
+  "name": "shomer-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SH✡MER — Citizens for Citizens. Community safety app.",
+  "scripts": {
+    "sync:web": "node scripts/copy-web.js",
+    "build": "npm run sync:web && npx cap sync",
+    "android": "npm run build && npx cap open android",
+    "ios": "npm run build && npx cap open ios",
+    "apk": "npm run build && cd android && ./gradlew assembleRelease",
+    "bundle": "npm run build && cd android && ./gradlew bundleRelease"
+  },
+  "dependencies": {
+    "@capacitor/core": "^6.1.2",
+    "@capacitor/android": "^6.1.2",
+    "@capacitor/ios": "^6.1.2",
+    "@capacitor/geolocation": "^6.0.1",
+    "@capacitor/push-notifications": "^6.0.2",
+    "@capacitor/local-notifications": "^6.1.0",
+    "@capacitor/haptics": "^6.0.1",
+    "@capacitor/app": "^6.0.1",
+    "@capacitor/status-bar": "^6.0.1",
+    "@capacitor/splash-screen": "^6.0.2",
+    "@capacitor-community/background-geolocation": "^1.2.20"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.1.2"
+  }
+}
