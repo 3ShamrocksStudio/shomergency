@@ -1545,7 +1545,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v105 · 13.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v106 · 13.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -1582,6 +1582,10 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
   <span id="dd-rep" data-he="דיווח SH✡MER" data-en="SH✡MER Report" style="color:#E05020;font-weight:700">דיווח SH✡MER</span>
  </button>
  <div class="dd-sep"></div>
+ <button class="ddr ddr-circ" onclick="op('sh-circles');closeDD()" role="menuitem">
+  <div class="dd-ic c-circ" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="10" cy="7" r="3.4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M21 21v-2a4 4 0 0 0-3-3.87M17.5 3.4a4 4 0 0 1 0 7.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+  <span id="dd-circ" data-he="השומרים שלי" data-en="My SHOMER" data-ar="حُرّاسي">השומרים שלי</span>
+ </button>
  <button class="ddr" onclick="op('sh-prof');closeDD()" role="menuitem">
   <div class="dd-ic c-prof" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
   <span id="dd-prof" data-he="פרופיל SH✡MER" data-en="SH✡MER Profile">פרופיל SH✡MER</span>
@@ -2062,7 +2066,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="sec-cap mb12" id="prof-prof-cap">תפקיד מקצועי (מתנדב/ת מגיב/ה)</div>
  <p class="sr-sb" id="prof-prof-hint" style="margin:-4px 2px 12px;line-height:1.6">בחר/י תפקיד אם את/ה מגיב/ה מקצועי/ת — סמל יוצג בפרופיל ועל הסמן שלך במפה.</p>
  <div class="prof-grid mb20" id="prof-grid" role="group" aria-label="תפקיד מקצועי">
- <div class="prof-opt" data-prof="police" onclick="selectProfession('police')" role="button" tabindex="0"><span class="pic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.2 1.6L17 4l.4 2.8L20 8l-1 2.6L20 13l-2.6 1.2L17 17l-2.8-.6L12 18l-2.2-1.6L7 17l-.4-2.8L4 13l1-2.4L4 8l2.6-1.2L7 4l2.8.6Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9.5 11.5l1.8 1.8 3.4-3.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="pl" data-pl="police">משטרה</span></div>
+ <div class="prof-opt" data-prof="police" onclick="selectProfession('police')" role="button" tabindex="0"><span class="pic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6l7 2.6v5.2c0 4.6-3 8.1-7 9.9-4-1.8-7-5.3-7-9.9V5.2Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 7.4l1.15 2.33 2.57.37-1.86 1.81.44 2.56L12 13.26l-2.3 1.21.44-2.56-1.86-1.81 2.57-.37Z" fill="currentColor" stroke="none"/></svg></span><span class="pl" data-pl="police">משטרה</span></div>
  <div class="prof-opt" data-prof="doctor" onclick="selectProfession('doctor')" role="button" tabindex="0"><span class="pic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4v4a4 4 0 0 0 8 0V4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9 12v2a5 5 0 0 0 10 0v-1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="19" cy="11" r="2" fill="none" stroke="currentColor" stroke-width="2"/></svg></span><span class="pl" data-pl="doctor">רופא/ה (MD)</span></div>
  <div class="prof-opt" data-prof="fire" onclick="selectProfession('fire')" role="button" tabindex="0"><span class="pic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3s5 4 5 9a5 5 0 0 1-10 0c0-1.6.7-2.8 1.5-3.6C8.7 10.2 9 12 10 12.5c0-2.2 1-4 2-6 .2 1.4 0 2.5 0 2.5S12 5 12 3Z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg></span><span class="pl" data-pl="fire">כבאי/ת</span></div>
  <div class="prof-opt" data-prof="para" onclick="selectProfession('para')" role="button" tabindex="0"><span class="pic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17V9a2 2 0 0 1 2-2h7l4 3.5V17" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="8" cy="18" r="2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="16" cy="18" r="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10.5 11v3M9 12.5h3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span class="pl" data-pl="para">פרמדיק/ית</span></div>
@@ -2928,9 +2932,11 @@ function purgeStalePositions(){
       if(m.lat!=null||m.lng!=null){ m.lat=null; m.lng=null; m.live=false; m.moving=false; n++; }
       delete m.baseLat; delete m.baseLng; delete m.simLat; delete m.simLng;
     });
-    (((SS.gd||{}).pairs)||[]).forEach(function(p){
-      if(!p.demo){ p.lat=null; p.lng=null; p.live=false; delete p.simLat; delete p.simLng; }
+    (((SS.guardian||{}).pairs)||[]).forEach(function(p){   /* SS.guardian — NOT SS.gd (this is why Tel Aviv survived) */
+      if(!p.demo){ p.lat=null; p.lng=null; p.live=false; p.ts=0; delete p.simLat; delete p.simLng; }
     });
+    try{ if(window.mapLayers&&mapLayers.circle){ Object.keys(mapLayers.circle).forEach(function(id){ try{MAP.removeLayer(mapLayers.circle[id]);}catch(e){} delete mapLayers.circle[id]; }); } }catch(e){}
+    try{ if(window.mapLayers&&mapLayers.gd){ Object.keys(mapLayers.gd).forEach(function(id){ try{MAP.removeLayer(mapLayers.gd[id]);}catch(e){} delete mapLayers.gd[id]; }); } }catch(e){}
     saveStore();
   }catch(e){}
 }
@@ -5275,8 +5281,8 @@ function openUpdates(){
 function syncSheetState(){ document.body.classList.toggle('sheet-open', !!document.querySelector('.sheet.open')); }
 function op(id){closeAll();const el=document.getElementById(id);if(el)el.classList.add('open');syncSheetState();
  if(id==='sh-set'){try{renderSetContacts();}catch(e){}}
- if(id==='sh-circles'){ try{renderCircles();}catch(e){} try{gdRenderList();}catch(e){} }   // was never re-rendered → circles list + toggles appeared empty
- if(id==='sh-prof'){ try{renderProfile();}catch(e){} try{renderCircles();}catch(e){} }
+ if(id==='sh-circles'){ try{syncPairsToCircles();}catch(e){} try{renderCircles();}catch(e){} try{gdRenderList();}catch(e){} }   // was never re-rendered → circles list + toggles appeared empty
+ if(id==='sh-prof'){ try{syncPairsToCircles();}catch(e){} try{renderProfile();}catch(e){} try{renderCircles();}catch(e){} }
 }
 /* Settings → "Emergency contacts" renders the user's REAL paired SHOMERs (name + link status),
    or a clear empty state. No phone numbers are shown (pairing is privacy-first: name + uid only). */
@@ -5794,30 +5800,37 @@ function buildMemberRow(m,he){
  <div class="cm-rel">${ESC(m.rel||'')}</div>
  <span class="cm-status ${st.cls}">${st.txt}</span>
  </div>
- <button class="cm-find" aria-label="${he?'אתר/י':'Locate'}"></button>
- <button class="cm-del" aria-label="${he?'הסר/י':'Remove'}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg></button>`;
- row.querySelector('.cm-find').onclick=()=>flyToMember(m.id);
- row.querySelector('.cm-del').onclick=function(ev){
-   ev.stopPropagation();
-   if(confirm(he?('להסיר את '+(m.name||'')+' מהמעגל?'):('Remove '+(m.name||'')+' from this circle?'))) removeMember(m.id);
- };
- // inline, always-visible toggles (wireframe): share location + ping-pong
- const gtr=document.createElement('div'); gtr.className='gt-row';
- gtr.innerHTML=`
-   <label class="gt"><span>${he?'לשתף מיקום?':'Share location?'}</span><span class="tog ${m.shareTo?'on':''}" data-gk="shareTo" role="switch" tabindex="0"></span></label>
-   <label class="gt"><span>${he?'פינג-פונג?':'Ping-pong?'}</span><span class="tog ${m.ping!==false?'on':''}" data-gk="ping" role="switch" tabindex="0"></span></label>`;
- gtr.querySelectorAll('.tog').forEach(function(t){
-   t.onclick=function(ev){
+ <button class="cm-find" aria-label="${he?'אתר/י':'Locate'}" style="display:none"></button>`;
+ /* ── clean action row: four clear buttons, no toggle-soup ── */
+ const acts=document.createElement('div'); acts.className='cm-acts';
+ const shareOn = m.shareTo!==false, pingOn = m.ping!==false;
+ acts.innerHTML=`
+  <button class="cm-act ${shareOn?'on':''}" data-a="share">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.4"/></svg>
+    <span>${he?'מיקום':'Location'}</span></button>
+  <button class="cm-act ${pingOn?'on':''}" data-a="ping">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 8-3 8h18s-3-1-3-8"/><path d="M10.3 21a2 2 0 0 0 3.4 0"/></svg>
+    <span>${he?'פינג':'Ping'}</span></button>
+  <button class="cm-act" data-a="locate">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="7"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+    <span>${he?'אתר/י':'Find'}</span></button>
+  <button class="cm-act danger" data-a="del">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg>
+    <span>${he?'הסר/י':'Remove'}</span></button>`;
+ acts.querySelectorAll('.cm-act').forEach(function(b){
+   b.onclick=function(ev){
      ev.stopPropagation();
-     const k=t.getAttribute('data-gk');
-     m[k]=(k==='ping') ? !(m.ping!==false) : !m[k];
-     t.classList.toggle('on', k==='ping' ? (m.ping!==false) : !!m[k]);
-     saveStore();
-     if(k==='shareTo'){ try{ gdUpdateMarker(m); }catch(e){} }
-     toast(he?('עודכן · '+ESC(m.name)):'Updated','grn');
+     const a=b.getAttribute('data-a');
+     if(a==='share'){ m.shareTo=!(m.shareTo!==false); b.classList.toggle('on',m.shareTo!==false); saveStore();
+       toast(he?((m.shareTo!==false?'משתף/ת מיקום עם ':'הפסקת לשתף מיקום עם ')+ESC(m.name)):'Updated', m.shareTo!==false?'grn':'amb');
+       try{ gdRenderMarkers(); }catch(e){} return; }
+     if(a==='ping'){ m.ping=!(m.ping!==false); b.classList.toggle('on',m.ping!==false); saveStore();
+       toast(he?((m.ping!==false?'פינג-פונג פעיל':'פינג-פונג כבוי')+' · '+ESC(m.name)):'Updated', m.ping!==false?'grn':'amb'); return; }
+     if(a==='locate'){ flyToMember(m.id); return; }
+     if(a==='del'){ if(confirm(he?('להסיר את '+(m.name||'')+' מהמעגל?'):('Remove '+(m.name||'')+'?'))) removeMember(m.id); return; }
    };
  });
- row.querySelector('.cm-main').appendChild(gtr);
+ row.querySelector('.cm-main').appendChild(acts);
  // tapping the row body toggles the privacy panel
  const priv=document.createElement('div');
  priv.className='cm-priv'; priv.style.display='none';
@@ -7335,7 +7348,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v105';
+var APP_VER='v106';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -8183,8 +8196,11 @@ function ensureMemberForPair(p, cid){
   var m=arr.find(function(x){ return x.pairId===p.id || (p.partnerUid && x.partnerUid===p.partnerUid); });
   if(m){ if(cid) m.cid=cid; m.registered=true; m.pending=!!p.pending; return m; }
   var palette=['#C9A84C','#2962FF','#00C853','#E91E8C','#9C27B0','#FF6A00'];
-  var first=(circlesList()[0]||{}).id||'fam';
-  m={id:genId('m'), cid:(cid||p.cid||activeCircleId||first),
+  var list=circlesList();
+  if(!list.length) return null;                       // circles not seeded yet — retry later
+  var valid=function(id){ return id && list.some(function(x){return x.id===id;}); };
+  var target = valid(cid)?cid : (valid(p.cid)?p.cid : (valid(activeCircleId)?activeCircleId : list[0].id));
+  m={id:genId('m'), cid:target,
      name:p.name||'', rel:'', phoneCanon:p.phoneCanon||null, registered:true,
      partnerUid:p.partnerUid||null, pairId:p.id, pending:!!p.pending,
      emoji:'', color:p.color||palette[arr.length%palette.length],
@@ -8194,8 +8210,12 @@ function ensureMemberForPair(p, cid){
 }
 function syncPairsToCircles(){
   try{
+    if(!circlesList().length) return;                 // wait until circles exist
     var g=gdState(), changed=false;
-    g.pairs.forEach(function(p){ if(p.linked||!p.pending){ if(ensureMemberForPair(p)) changed=true; } });
+    g.pairs.forEach(function(p){ if(ensureMemberForPair(p)) changed=true; });   // pending ones too — you must see who you invited
+    // repair any member sitting in a circle that no longer exists
+    var ids={}; circlesList().forEach(function(x){ids[x.id]=1;});
+    (SS.circleMembers||[]).forEach(function(m){ if(!ids[m.cid]){ m.cid=circlesList()[0].id; changed=true; } });
     if(changed){ saveStore(); try{ renderCircles(); }catch(e){} }
   }catch(e){}
 }
@@ -9048,6 +9068,21 @@ async function getOrCreateDeviceId(){
 .cm-del:hover{opacity:1}
 .cm-del svg{width:16px;height:16px}
 .invite-cta{width:100%;margin-top:12px;padding:13px;border-radius:14px;border:1.5px dashed rgba(224,168,40,.5);background:rgba(224,168,40,.08);color:var(--g3);font-weight:800;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit}
+
+.dd-ic.c-circ{background:rgba(224,168,40,.16);color:#E0A828}
+/* ── member card: clean, scannable, no toggle-soup ── */
+.cm-row{background:var(--n2);border:1px solid var(--b2);border-radius:14px;padding:12px;margin-bottom:10px}
+.cm-top{display:flex;align-items:center;gap:11px}
+.cm-name{font-size:15px;font-weight:800;color:var(--tx0);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cm-state{font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.cm-state.live{background:rgba(14,143,110,.18);color:#3DDC97}
+.cm-state.wait{background:rgba(224,168,40,.16);color:#E0A828}
+.cm-acts{display:flex;gap:7px;margin-top:11px}
+.cm-act{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 4px;border-radius:11px;border:1px solid var(--b2);background:rgba(255,255,255,.03);color:var(--tx2);font-size:10.5px;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s}
+.cm-act svg{width:17px;height:17px}
+.cm-act.on{background:rgba(61,187,102,.14);border-color:rgba(61,187,102,.45);color:#3DDC97}
+.cm-act.danger{color:#E5484D;border-color:rgba(229,72,77,.3)}
+.cm-act:active{transform:scale(.96)}
 </style>
 </body>
 </html>
