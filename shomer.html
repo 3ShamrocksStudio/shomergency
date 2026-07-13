@@ -826,11 +826,12 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
 .tiles-base{filter:brightness(.85) sepia(.75) hue-rotate(192deg) saturate(2) brightness(.4) contrast(.9);}
 .tiles-labels{filter:brightness(1.12) saturate(.6);}
 .leaflet-container{background:#20242b;font-family:var(--font-main);outline:none;}
-.leaflet-control-attribution{background:rgba(8,18,36,.72)!important;color:var(--tx3)!important;font-size:8.5px!important;backdrop-filter:blur(6px);border-radius:0 6px 0 0;padding:1px 5px!important;line-height:1.35;max-width:52vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.7}
+.leaflet-control-attribution{background:rgba(8,18,36,.6)!important;color:rgba(136,152,184,.55)!important;font-size:8px!important;backdrop-filter:blur(4px);border-radius:5px;padding:1px 5px!important;line-height:1.3;opacity:.65}
+.leaflet-control-attribution a{color:rgba(136,152,184,.6)!important;text-decoration:none}
+/* sit it in the bottom-LEFT, lifted clear of the bottom nav — never under the SOS button */
+.leaflet-bottom.leaflet-right{right:auto!important;left:6px!important;bottom:calc(var(--nav,74px) + 6px)!important}
 .leaflet-control-attribution a{color:var(--tx3)!important}
-/* keep it OUT of the SOS button's zone — bottom-left, never under the button */
-.leaflet-bottom.leaflet-right{bottom:auto!important;right:auto!important;left:0!important;bottom:0!important}
-.leaflet-bottom.leaflet-right .leaflet-control-attribution{margin:0!important}
+
 .leaflet-control-attribution a{color:var(--g2)!important;}
 .leaflet-bar,.leaflet-control-zoom{display:none!important;} /* we use our own brand controls */
 /* 3D marker index */
@@ -1471,7 +1472,10 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <!-- Data-source banner -->
  <!-- statistical-overview banner removed; the legend now occupies the top-left. Sources remain cited in marker popups + Settings > Data & sources. -->
  <!-- Legend -->
- <div class="map-count" id="map-count" aria-live="polite"><span class="mc-dot"></span><b id="mc-n">0</b> <span id="mc-l">שומרים</span></div>
+ <div class="map-credit" aria-hidden="true">
+   <span class="mc-badge"><img src="3shamrocks.png" alt="3Shamrocks Studio" width="78" height="12" loading="lazy"></span>
+  </div>
+  <div class="map-count" id="map-count" aria-live="polite"><span class="mc-dot"></span><b id="mc-n">0</b> <span id="mc-l">שומרים</span></div>
  <div class="map-legend collapsed" id="map-legend" aria-label="מקרא מפה">
  <button class="legend-hd" onclick="toggleLegend()" aria-expanded="false" aria-controls="legend-body"><span aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span><span id="legend-ttl-txt">מקרא מפה</span><span class="legend-chev" id="legend-chev" aria-hidden="true">▸</span></button>
  <div class="legend-body" id="legend-body">
@@ -1547,7 +1551,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v127 · 13.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v128 · 13.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -1798,6 +1802,19 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </nav>
 
  <!-- ═══ UPDATES ═══ -->
+ <!-- ═══ תזכורות הגעה ═══ -->
+ <div class="sheet" id="sh-arrivals" role="dialog" aria-modal="true" aria-labelledby="arr-ttl">
+  <div class="sh-pill" aria-hidden="true"></div>
+  <div class="sh-head">
+   <span class="sh-ttl" id="arr-ttl">תזכורות הגעה</span>
+   <button class="sh-x" onclick="cl('sh-arrivals')" aria-label="סגור">✕</button>
+  </div>
+  <div class="sh-body">
+   <p class="desc" id="arr-cap" style="font-size:11.5px;color:var(--tx3);margin-bottom:12px"></p>
+   <div id="arr-list"></div>
+  </div>
+ </div>
+
  <div class="sheet" id="sh-upd" role="dialog" aria-modal="true" aria-labelledby="upd-ttl">
  <div class="sh-pill" aria-hidden="true"></div>
  <div class="sh-head">
@@ -5682,61 +5699,155 @@ function paintMapCount(){
     if(l) l.textContent=(currentLang==='he')?'שומרים':(n===1?'guardian':'guardians');
   }catch(e){}
 }
+/* ══ תזכורות הגעה ══
+   5 guardians × 4 places = 20 — exactly iOS's hard ceiling of 20 monitored regions per app.
+   Go past it and iOS silently stops firing. A safety feature that fails quietly is the worst
+   kind, so the limit is enforced here rather than discovered in an emergency. */
+var ARR_MAX_G=5, ARR_MAX_P=4;
+function arrState(){ if(!SS.arrivals) SS.arrivals={}; return SS.arrivals; }
+function openArrivals(){ op('sh-arrivals'); renderArrivals(); }
+function renderArrivals(){
+  var he=currentLang==='he';
+  var host=document.getElementById('arr-list'); if(!host) return;
+  host.innerHTML='';
+  var A=arrState();
+  var members=(SS.circleMembers||[]).filter(function(m){return !m.pending;});
+
+  for(var i=0;i<ARR_MAX_G;i++){
+    var slot=document.createElement('div');
+    slot.className='arr-slot';
+    var sel=A['g'+i]||{};
+    var opts='<option value="">'+(he?'בחר שומר':'Choose guardian')+'</option>'
+      + members.map(function(m){
+          return '<option value="'+m.id+'"'+(sel.mid===m.id?' selected':'')+'>'+ESC(m.name||'')+'</option>';
+        }).join('');
+    var rows='';
+    for(var p=0;p<ARR_MAX_P;p++){
+      var pl=(sel.places&&sel.places[p])||{};
+      rows+='<div class="arr-row">'
+          + '<span class="arr-n">'+(he?('מיקום '+(p+1)):('Place '+(p+1)))+'</span>'
+          + '<input class="arr-in" data-g="'+i+'" data-p="'+p+'" data-f="label" placeholder="'+(he?'תווית':'Label')+'" value="'+ESC(pl.label||'')+'">'
+          + '<input class="arr-in" data-g="'+i+'" data-p="'+p+'" data-f="addr" placeholder="'+(he?'כתובת':'Address')+'" value="'+ESC(pl.addr||'')+'">'
+          + '</div>';
+    }
+    slot.innerHTML='<div class="arr-h">'+(he?('שומר '+(i+1)):('Guardian '+(i+1)))+'</div>'
+      +'<select class="arr-sel" data-g="'+i+'">'+opts+'</select>'
+      +'<div class="arr-rows">'+rows+'</div>';
+    host.appendChild(slot);
+  }
+
+  host.querySelectorAll('.arr-sel').forEach(function(s){
+    s.onchange=function(){
+      var g=s.getAttribute('data-g');
+      var A2=arrState();
+      A2['g'+g]=A2['g'+g]||{places:[]};
+      A2['g'+g].mid=s.value;
+      saveStore();
+    };
+  });
+  host.querySelectorAll('.arr-in').forEach(function(inp){
+    inp.onchange=function(){
+      var g=inp.getAttribute('data-g'), p=+inp.getAttribute('data-p'), f=inp.getAttribute('data-f');
+      var A2=arrState();
+      A2['g'+g]=A2['g'+g]||{places:[]};
+      A2['g'+g].places=A2['g'+g].places||[];
+      A2['g'+g].places[p]=A2['g'+g].places[p]||{};
+      A2['g'+g].places[p][f]=inp.value;
+      saveStore();
+    };
+  });
+
+  var cap=document.getElementById('arr-cap');
+  if(cap) cap.textContent = he
+    ? ('עד '+ARR_MAX_G+' שומרים · עד '+ARR_MAX_P+' מיקומים לכל אחד (מגבלת המערכת: 20)')
+    : ('Up to '+ARR_MAX_G+' guardians · '+ARR_MAX_P+' places each (system limit: 20)');
+}
 function renderCircles(){
   try{ paintMapCount(); }catch(e){}
   var he=currentLang==='he';
   var cot=document.getElementById('cot-list');
+  var CIRCLE_MAX=6;                 /* 20 guardians / 6 circles — fewer is a freeze in a panic */
+  var COLORS=['#CC1426','#1D6FD6','#CC1426','#8A9099','#8A9099','#1D6FD6'];
+
   if(cot){
     cot.innerHTML='';
-    circlesList().forEach(function(cc){
+    var wrap=document.createElement('div');
+    wrap.className='bub-grid';
+    var list=circlesList();
+
+    list.forEach(function(cc,i){
       var ms=membersOf(cc.id);
-      var open = (COT_OPEN===cc.id);
+      var b=document.createElement('button');
+      b.className='bub'+(activeCircleId===cc.id?' bub-on':'');
+      b.style.background=COLORS[i%COLORS.length];
+      b.innerHTML='<b>'+ms.length+'</b><span>'+ESC(cc.name)+'</span>';
+      b.onclick=function(){
+        activeCircleId=cc.id;
+        COT_OPEN = (COT_OPEN===cc.id) ? null : cc.id;
+        renderCircles();
+      };
+      wrap.appendChild(b);
+    });
 
-      var r=document.createElement('div');
-      r.className='cot'+(open?' cot-open':'');
-      r.innerHTML='<button class="cot-ed" aria-label="'+(he?'שנה שם':'Rename')+'">'
-        +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>'
-        +'<span class="cot-nm">'+ESC(cc.name)+'</span>'
-        +'<span class="cot-n">'+ms.length+'</span>';
-      r.querySelector('.cot-ed').onclick=function(ev){ ev.stopPropagation(); renameCircle(cc.id); };
-      r.onclick=function(){ COT_OPEN = open ? null : cc.id; activeCircleId=cc.id; renderCircles(); };
-      cot.appendChild(r);
+    /* room for more? show the add bubbles */
+    for(var k=list.length; k<CIRCLE_MAX; k++){
+      var a=document.createElement('button');
+      a.className='bub bub-add';
+      a.innerHTML='<b>+</b><span>'+(he?'חדש':'new')+'</span>';
+      a.onclick=function(){ addCircle(); renderCircles(); };
+      wrap.appendChild(a);
+    }
+    cot.appendChild(wrap);
 
+    /* tapping a circle expands its members inline, each with ✕ */
+    if(COT_OPEN){
+      var open=list.filter(function(x){return x.id===COT_OPEN;})[0];
       if(open){
+        var ms2=membersOf(open.id);
         var sub=document.createElement('div');
         sub.className='cot-sub';
-        if(!ms.length){
-          sub.innerHTML='<div class="cot-empty">'+(he?'אין שומרים במעגל הזה':'No guardians in this circle')+'</div>';
-        } else {
-          ms.forEach(function(mm){
-            var row=document.createElement('div');
-            row.className='cot-mrow';
-            row.innerHTML='<span class="cot-mn">'+ESC(mm.name||'')+'</span>'
-              +(mm.pending?'<span class="cot-pend">'+(he?'ממתין':'pending')+'</span>':'')
-              +'<button class="cot-x" aria-label="'+(he?'הסר':'Remove')+'">✕</button>';
-            row.querySelector('.cot-x').onclick=function(ev){
-              ev.stopPropagation();
-              if(confirm(he?('להסיר את '+(mm.name||'')+' מהמעגל?'):('Remove '+(mm.name||'')+'?'))) removeMember(mm.id);
-            };
-            sub.appendChild(row);
-          });
+        var hd=document.createElement('div');
+        hd.className='cot-subh';
+        hd.innerHTML='<span>'+ESC(open.name)+'</span>'
+          +'<button class="cot-ren" aria-label="'+(he?'שנה שם':'Rename')+'">'
+          +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>';
+        hd.querySelector('.cot-ren').onclick=function(){ renameCircle(open.id); renderCircles(); };
+        sub.appendChild(hd);
+        if(!ms2.length){
+          var e=document.createElement('div');
+          e.className='cot-empty';
+          e.textContent=he?'אין שומרים במעגל הזה':'No guardians in this circle';
+          sub.appendChild(e);
         }
+        ms2.forEach(function(mm){
+          var row=document.createElement('div');
+          row.className='cot-mrow';
+          row.innerHTML='<span class="cot-mn">'+ESC(mm.name||'')+'</span>'
+            +(mm.pending?'<span class="cot-pend">'+(he?'ממתין':'pending')+'</span>':'')
+            +'<button class="cot-x" aria-label="'+(he?'הסר':'Remove')+'">✕</button>';
+          row.querySelector('.cot-x').onclick=function(ev){
+            ev.stopPropagation();
+            if(confirm(he?('להסיר את '+(mm.name||'')+'?'):('Remove '+(mm.name||'')+'?'))) removeMember(mm.id);
+          };
+          sub.appendChild(row);
+        });
         cot.appendChild(sub);
       }
-    });
+    }
   }
-  /* השומרים שלי — one compact row per guardian of the ACTIVE circle */
+
+  /* השומרים שלי — one compact row per guardian */
   var host=document.getElementById('circ-members');
   if(host){
     host.innerHTML='';
-    var ms=membersOf(activeCircleId);
-    if(!ms.length){
-      var e=document.createElement('div');
-      e.style.cssText='text-align:center;color:var(--tx3);font-size:12.5px;padding:18px';
-      e.textContent=he?'עדיין אין שומרים כאן — הוסף/י אנשים שאת/ה סומכ/ת עליהם.':'No guardians yet — add people you trust.';
-      host.appendChild(e);
+    var ms3=(SS.circleMembers||[]);
+    if(!ms3.length){
+      var e2=document.createElement('div');
+      e2.style.cssText='text-align:center;color:var(--tx3);font-size:12.5px;padding:18px';
+      e2.textContent=he?'עדיין אין שומרים — הוסף/י אנשים שאת/ה סומכ/ת עליהם.':'No guardians yet — add people you trust.';
+      host.appendChild(e2);
     } else {
-      ms.forEach(function(mm){
+      ms3.forEach(function(mm){
         try{ var row=buildMemberRow(mm, he); if(row) host.appendChild(row); }catch(err){}
       });
     }
@@ -6157,6 +6268,11 @@ function renameCircle(id){
  toast(he?('✓ שם המעגל עודכן'):'✓ Circle renamed','grn');
 }
 function addCircle(){
+  var _he=currentLang==='he';
+  if(circlesList().length>=6){
+    toast(_he?'6 מעגלים זה המקסימום — שנה/י שם או מזג/י מעגל קיים':'6 circles is the max — rename or merge one','amb');
+    return;
+  }
  const he=currentLang==='he';
  const n=circlesList().length;
  const c={id:genId('c'),name:(he?'מעגל ':'Circle ')+(n+1),type:n%2?'friends':'family'};
@@ -7501,7 +7617,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v127';
+var APP_VER='v128';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -10117,9 +10233,40 @@ body.aed-placing #map{cursor:crosshair}
 .in-sos.acked{animation:none;background:linear-gradient(135deg,#0E8F6E,#0B7355);border-color:rgba(61,220,151,.6);box-shadow:0 10px 30px rgba(0,0,0,.5)}
 .in-sos.acked .in-sos-h{color:#CFF7E7}
 .in-b.stand{background:rgba(0,0,0,.25)}
-/* the copyright line must never sit near the SOS button */
-.foot,.copyright,#app-foot{position:static!important;margin-top:18px;text-align:center;font-size:10px;color:var(--tx3)}
-#map .foot,#map .copyright,#screen-map .foot{display:none!important}
+
+/* branded 3Shamrocks credit — bottom-right of the map, above the nav, clear of SOS */
+.map-credit{position:absolute;right:10px;bottom:calc(var(--nav,74px) + 8px);z-index:401;pointer-events:none;opacity:.55}
+.mc-badge{display:inline-flex;align-items:center;background:rgba(8,18,36,.66);border:1px solid rgba(136,152,184,.14);border-radius:6px;padding:3px 7px;backdrop-filter:blur(6px)}
+.mc-badge img{height:12px;width:auto;display:block}
+
+/* ── circles as bubbles (wireframe) ── */
+.bub-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:6px 2px 12px}
+.bub{aspect-ratio:1;border-radius:50%;border:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;cursor:pointer;font-family:inherit;color:#fff;box-shadow:0 6px 18px rgba(0,0,0,.35);transition:transform .12s ease,box-shadow .12s ease}
+.bub:active{transform:scale(.94)}
+.bub-on{box-shadow:0 0 0 3px var(--g3),0 6px 18px rgba(0,0,0,.4)}
+.bub b{font-size:26px;font-weight:900;line-height:1}
+.bub span{font-size:10.5px;font-weight:800;opacity:.95;padding:0 6px;text-align:center;line-height:1.15}
+.bub-add{background:#8A9099!important;opacity:.5}
+.bub-add b{font-size:24px}
+.cot-sub{background:rgba(255,255,255,.05);border:1px solid var(--b2);border-radius:12px;padding:6px 10px;margin-bottom:10px}
+.cot-subh{display:flex;align-items:center;justify-content:space-between;padding:6px 2px;border-bottom:1px solid rgba(255,255,255,.08);font-size:13px;font-weight:900;color:var(--g3)}
+.cot-ren{background:none;border:0;color:var(--tx3);cursor:pointer;padding:2px;display:flex}
+.cot-ren svg{width:14px;height:14px}
+.cot-mrow{display:flex;align-items:center;gap:8px;padding:9px 2px;border-bottom:1px solid rgba(255,255,255,.05)}
+.cot-mrow:last-child{border-bottom:0}
+.cot-mn{flex:1;font-size:13.5px;font-weight:700;color:var(--tx1)}
+.cot-pend{font-size:10px;font-weight:800;color:#E0A828;background:rgba(224,168,40,.15);padding:2px 7px;border-radius:999px}
+.cot-x{background:none;border:0;color:#E5484D;font-size:14px;font-weight:900;cursor:pointer;padding:2px 6px;line-height:1}
+.cot-empty{font-size:12px;color:var(--tx3);text-align:center;padding:12px}
+
+.arr-slot{background:var(--n2);border:1px solid var(--b2);border-radius:14px;padding:12px;margin-bottom:12px}
+.arr-h{font-size:11px;font-weight:900;color:var(--tx3);letter-spacing:.06em;margin-bottom:7px}
+.arr-sel{width:100%;padding:10px;border-radius:10px;border:1px solid var(--b2);background:var(--n3);color:var(--tx1);font-family:inherit;font-size:13.5px;font-weight:700;margin-bottom:8px}
+.arr-rows{display:flex;flex-direction:column;gap:6px}
+.arr-row{display:grid;grid-template-columns:52px 1fr 1fr;gap:6px;align-items:center}
+.arr-n{font-size:10px;color:var(--tx3);font-weight:800}
+.arr-in{padding:8px;border-radius:9px;border:1px solid var(--b2);background:var(--n3);color:var(--tx1);font-family:inherit;font-size:12px;min-width:0}
+.arr-in::placeholder{color:var(--tx3)}
 </style>
 <script src="native-bridge.js"></script>
 </body>
