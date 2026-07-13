@@ -1553,7 +1553,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v110 · 13.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v111 · 13.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -7412,7 +7412,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v110';
+var APP_VER='v111';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -8379,10 +8379,46 @@ var ESS_TYPES={
 var ESS={data:{}, layer:{}, on:{aed:true}, fetched:0};
 var ESS_TTL=24*60*60*1000;
 
+/* ══ COMMUNITY AED SHARING ══
+   Adding an AED locally only helps YOU. The point is that it helps everyone standing
+   near it. These two functions push your contributions up and pull everyone else's down.
+   They silently no-op until the DB rules allow `aeds/` (pending the rules deploy). */
+function myAeds(){ SS.myAeds = SS.myAeds || []; return SS.myAeds; }
+function aedSyncUp(){
+  if(!FB.ready||!FB.uid) return;
+  myAeds().forEach(function(a){
+    if(a.synced) return;
+    try{
+      var p=fbRestWrite('PUT','aeds/'+a.id,{lat:a.lat,lng:a.lng,name:a.name||'',by:FB.uid,ts:a.ts});
+      if(p&&p.then) p.then(function(){ a.synced=true; try{saveStore();}catch(e){} }).catch(function(){});
+    }catch(e){}
+  });
+}
+async function aedPullCommunity(){
+  if(!FB.ready) return;
+  try{
+    var snap=await fbRestGet('aeds');
+    var v=snap && snap.val && snap.val();
+    if(!v) return;
+    var extra=Object.keys(v).map(function(k){
+      var a=v[k]||{};
+      return {id:'c_'+k, kind:'aed', lat:a.lat, lng:a.lng, name:a.name||'', community:true, ts:a.ts};
+    }).filter(function(a){ return a.lat!=null && a.lng!=null; });
+    if(!extra.length) return;
+    var seen={};
+    ESS.data.aed=(ESS.data.aed||[]).concat(extra).filter(function(a){
+      var k=(+a.lat).toFixed(5)+','+(+a.lng).toFixed(5);
+      if(seen[k]) return false; seen[k]=1; return true;
+    });
+    essSave();
+    if(ESS.on.aed){ try{ essRender('aed'); essLegPaint(); }catch(e){} }
+  }catch(e){}
+}
 function essLoad(){
   try{
     var raw=localStorage.getItem('shomer_ess');
     if(raw){ var o=JSON.parse(raw); if(o && (Date.now()-o.t)<ESS_TTL){ ESS.data=o.d||{}; ESS.fetched=o.t; } }
+    if(SS.myAeds && SS.myAeds.length){ ESS.data.aed=(ESS.data.aed||[]).concat(SS.myAeds); }
     var on=localStorage.getItem('shomer_ess_on');
     ESS.on = on ? JSON.parse(on) : {aed:true};
   }catch(e){ ESS.on={aed:true}; }
@@ -8563,6 +8599,7 @@ function aedAddHere(){
   essSave(); essRender(); essLegPaint();
   try{ if(FB.ready && FB.uid) fbRestWrite('PUT','aeds/'+rec.id,{lat:rec.lat,lng:rec.lng,desc:rec.desc,by:FB.uid,ts:Date.now()}); }catch(e){}
   toast(he?'\u2713 תודה — הדפיברילטור נוסף למפה. אולי תציל/י חיים':'\u2713 Thank you — AED added to the map','grn');
+  try{ myAeds().push(a); saveStore(); aedSyncUp(); }catch(e){}
 }
 
 function fbApplyPeerPresence(all){
