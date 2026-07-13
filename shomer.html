@@ -1545,7 +1545,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v104 · 12.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v105 · 13.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -1800,11 +1800,11 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </div>
  <div class="sh-body">
  <div class="chip-row" role="group" aria-label="סנן עדכונים">
- <button class="chip on" onclick="chipOn(this)">הכל</button>
- <button class="chip" onclick="chipOn(this)">SOS פעיל</button>
- <button class="chip" onclick="chipOn(this)">קרוב אליי</button>
- <button class="chip" onclick="chipOn(this)">תקיפה</button>
- <button class="chip" onclick="chipOn(this)">נסגר ✓</button>
+ <button class="chip on" data-f="all" onclick="chipOn(this)">הכל</button>
+ <button class="chip" data-f="sos" onclick="chipOn(this)">SOS פעיל</button>
+ <button class="chip" data-f="near" onclick="chipOn(this)">קרוב אליי</button>
+ <button class="chip" data-f="assault" onclick="chipOn(this)">תקיפה</button>
+ <button class="chip" data-f="closed" onclick="chipOn(this)">נסגר ✓</button>
  </div>
  <div id="upd-list" role="list"></div>
  <div class="mini-credit" dir="ltr">SH✡MER<span class="tm"></span> · 2026 3Shamrocks Studio</div>
@@ -2252,6 +2252,10 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
      <select class="ob-f" id="ag-circle" aria-label="בחר מעגל" style="flex:1;margin-bottom:0"></select>
    </div>
    <div id="ag-hint" style="font-size:11px;color:var(--tx3);min-height:14px;margin-bottom:8px;text-align:center"></div>
+   <button class="invite-cta" onclick="shareInvite()">
+     <svg viewBox="0 0 24 24" width="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M16 6l-4-4-4 4"/><path d="M12 2v14"/></svg>
+     <span id="ag-share-lbl">שתף/י הזמנה — כל אחד יכול להצטרף</span>
+   </button>
    <button class="cta-gold" id="ag-go" style="width:100%;padding:13px;font-size:15px;font-weight:800" onclick="addGuardian()">
      <svg class="ic" viewBox="0 0 24 24" width="17" style="margin-inline-end:6px"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
      <span id="ag-go-lbl">שלח/י בקשה</span>
@@ -2914,6 +2918,22 @@ function deepMerge(base,o){
  return out;
 }
 function loadStore(){try{const r=localStorage.getItem(SKEY);if(r)SS=deepMerge(SS,JSON.parse(r));}catch(e){}}
+/* ══ MIGRATION (v105): purge stale/simulated positions ══
+   Members added before v103 still carry fake Tel Aviv coordinates in localStorage, so the
+   map kept pinning them there. A guardian's position may ONLY come from live presence. */
+function purgeStalePositions(){
+  try{
+    var n=0;
+    (SS.circleMembers||[]).forEach(function(m){
+      if(m.lat!=null||m.lng!=null){ m.lat=null; m.lng=null; m.live=false; m.moving=false; n++; }
+      delete m.baseLat; delete m.baseLng; delete m.simLat; delete m.simLng;
+    });
+    (((SS.gd||{}).pairs)||[]).forEach(function(p){
+      if(!p.demo){ p.lat=null; p.lng=null; p.live=false; delete p.simLat; delete p.simLng; }
+    });
+    saveStore();
+  }catch(e){}
+}
 function saveStore(){try{
  // Strip transient fields (_detIdx) before persisting.
  const clean={...SS,reports:SS.reports.map(r=>{const c={...r};delete c._detIdx;return c;})};
@@ -4925,7 +4945,15 @@ function openDetail(idx){
  const canNav=(d.lat!=null&&d.lng!=null&&d.status!=='טופל');
  const navBtn=canNav?`<button class="dcta pr" style="width:100%;margin-bottom:8px;background:linear-gradient(135deg,#0E8840,#14A857)" onclick="navigateToEvent()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:18px;height:18px;vertical-align:-3px;margin-inline-end:6px"><path d="M3 11l18-8-8 18-2-8-8-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>${currentLang==='he'?'נווט לאירוע · מסלול חי':'Navigate to event · live route'}</button>`:'';
  if(['sos','viol','stalk','med'].includes(d.type)){
- ctas=navBtn+`<div class="det-ctas"><button class="dcta pr" onclick="respondDet(this)" id="det-respond-btn">${T('respond')}</button><button class="dcta gd" onclick="callNum(policeNum())">${T('call100')}</button><button class="dcta sc" onclick="cl('det-sheet')">${T('close')}</button></div>`;
+ /* ONE primary action. "Navigate" and "I'm on my way" were two buttons for what the
+    user experiences as a single decision — so responding now also starts the route. */
+ const he2=currentLang==='he';
+ const goLbl = canNav
+   ? (he2?'אני בדרך · פתח/י ניווט':'On my way · start navigation')
+   : (he2?'אני בדרך':'I am on my way');
+ ctas=`<button class="dcta pr" style="width:100%;margin-bottom:8px;background:linear-gradient(135deg,#0E8840,#14A857)" onclick="respondAndGo(this)" id="det-respond-btn">
+   <svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:18px;height:18px;vertical-align:-3px;margin-inline-end:6px"><path d="M3 11l18-8-8 18-2-8-8-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>${goLbl}</button>
+   <div class="det-ctas"><button class="dcta gd" onclick="callNum(policeNum())">${T('call100')}</button><button class="dcta sc" onclick="cl('det-sheet')">${T('close')}</button></div>`;
  } else { ctas=navBtn; }
  // Use innerHTML only for trusted static HTML, user data only via textContent/ESC
  const body=document.getElementById('det-body');
@@ -4954,6 +4982,11 @@ function openDetail(idx){
  body.querySelector('.det-status').textContent=d.status;
  body.querySelector('.det-desc-txt').textContent=d.desc;
  op('det-sheet');
+}
+/* Declaring you are on the way and navigating there are one decision — do both. */
+function respondAndGo(btn){
+  try{ respondDet(btn); }catch(e){}
+  try{ if(_curDetail && _curDetail.lat!=null && _curDetail.lng!=null) navigateToEvent(); }catch(e){}
 }
 function respondDet(btn){
  if(btn.disabled) return;
@@ -5038,6 +5071,8 @@ function injectCard(d,silent){
  const div=document.createElement('div');
  div.className=`ucard ${d.cls}`;
  div.setAttribute('role','listitem');
+ div.setAttribute('data-kind', (d.cls||'') + ' ' + (d.kind||'') + ' ' + (d.title||''));
+ div.setAttribute('data-dist', (d.distKm!=null? d.distKm : ''));
  div.setAttribute('tabindex','0');
  if(d.detIdx>=0){div.onclick=()=>openDetail(d.detIdx);}
  const inner=document.createElement('div');inner.className='uc-in';
@@ -5056,7 +5091,38 @@ function injectCard(d,silent){
  l.insertBefore(div,l.firstChild);
  if(!silent){newUpd++;updBdg();}
 }
-function chipOn(btn){document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));btn.classList.add('on');}
+var UPD_FILTER='all';
+function chipOn(btn){
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+  btn.classList.add('on');
+  UPD_FILTER = btn.getAttribute('data-f') || 'all';
+  applyUpdFilter();
+}
+/* Really filters the feed — these chips used to do nothing at all. */
+function applyUpdFilter(){
+  var l=document.getElementById('upd-list'); if(!l)return;
+  var he=currentLang==='he', shown=0;
+  [].slice.call(l.children).forEach(function(el){
+    if(el.id==='upd-empty') return;
+    var k=(el.getAttribute('data-kind')||'').toLowerCase();
+    var d=parseFloat(el.getAttribute('data-dist'));
+    var show=true;
+    if(UPD_FILTER==='sos')      show=/sos|urgent|red/.test(k);
+    else if(UPD_FILTER==='near')show=(!isNaN(d) && d<=3);
+    else if(UPD_FILTER==='assault') show=/assault|תקיפה|attack/.test(k);
+    else if(UPD_FILTER==='closed')  show=/closed|נסגר|resolved/.test(k);
+    el.style.display = show ? '' : 'none';
+    if(show) shown++;
+  });
+  var empty=document.getElementById('upd-empty');
+  if(!empty){
+    empty=document.createElement('div'); empty.id='upd-empty';
+    empty.style.cssText='text-align:center;color:var(--tx3);font-size:12.5px;padding:22px 8px';
+    l.appendChild(empty);
+  }
+  empty.textContent = shown ? '' : (he?'אין עדכונים בסינון הזה':'Nothing matches this filter');
+  empty.style.display = shown ? 'none' : '';
+}
 function updBdg(){
  const b=document.getElementById('bell-dot');
  if(b){b.classList.toggle('on',newUpd>0);}
@@ -5299,43 +5365,41 @@ var EMERGENCY_GUIDE=[
   dont:{he:'אל תאמר/י "תירגע/י" או "זה לא נורא" · אל תיגע/י בלי רשות · אל תשאיר/י אדם במצוקה חריפה לבד. במחשבות אובדניות — חייג/י 1201 (ער"ן) או 101.',en:'Never say "calm down" or "it is not a big deal" · do not touch without permission · do not leave someone in acute distress alone. For suicidal thoughts call 1201 (ERAN) or 101.',ar:'لا تقل "اهدأ" · لا تلمس دون إذن · لا تترك شخصًا في ضائقة حادّة وحيدًا. عند وجود أفكار انتحارية اتصل بـ1201 أو 101.'},
   src:'ער"ן 1201 · משרד הבריאות · NCPTSD · WHO Psychological First Aid'},
 
- {id:'selfdef',e:'',t:{he:'בטיחות ברחוב — מה באמת עובד',en:'Street safety — what actually works',ar:'السلامة في الشارع — ما ينجح فعلاً'},
-  s:{he:'מניעה · מרחק · קול · בריחה',en:'Prevent · distance · voice · escape',ar:'المنع · المسافة · الصوت · الهروب'},
+ {id:'selfdef',e:'',t:{he:'בטיחות ברחוב',en:'Street safety',ar:'السلامة في الشارع'},
+  s:{he:'להימנע · להרתיע · לברוח',en:'Avoid · deter · escape',ar:'تجنّب · اردع · اهرب'},
   steps:{he:[
-   'האמת קודם: טכניקה לא נלמדת מטקסט. מי שקורא „שחרור מחניקה” ומאמין שהוא יודע — ישאר להילחם במקום לברוח, וייפגע. הדף הזה מלמד את מה שבאמת מציל: להימנע, להרתיע ולברוח. לטכניקה — לך/י לשיעור קרב מגע אמיתי.',
-   '1) מודעות מנצחת כוח. ראש מורם, אוזניות בחוץ, טלפון בכיס. תוקפים בוחרים מי שנראה מוסח — לא מי שנראה חזק.',
-   '2) תחושת בטן היא מודיעין. משהו מרגיש לא בסדר? עצור/י, חצה/י כביש, היכנס/י לחנות מוארת. אל תתבייש/י לטעות. עדיף מביך מאשר פגוע.',
-   '3) מרחק הוא ההגנה. שני צעדים. ידיים פתוחות בגובה החזה, כפות קדימה. זו לא תנוחת קרב — היא שומרת מרחק ונראית לא-תוקפנית לעדים ולמצלמות.',
-   '4) הקול הוא הנשק הראשון והיעיל ביותר. „אחורה! אל תתקרב!” — חזק, נמוך, פקודה. מרתיע, מושך עדים, ומעיר את הגוף שלך.',
-   '5) שוד? תן/י את הארנק. תזרוק/י אותו לכיוון אחד ותברח/י לשני. רכוש מתחלף — את/ה לא.',
-   '6) אם אין ברירה — קצר ובזק, ואז לברוח. נקודות רכות בלבד: עיניים, גרון, מפשעה, ברך. בלי אגרופים לפנים (שוברים יד). כל מגע נועד לקנות שנייה אחת כדי לרוץ.',
-   '7) לרוץ זה לנצח. לכיוון אור, אנשים, חנות פתוחה, כביש ראשי. לא הביתה אם עוקבים אחריך.',
-   '8) אחרי: 100 (משטרה). SOS ב-SH✡MER — השומרים שלך רואים איפה את/ה. שמור/י בגדים, אל תתקלח/י אחרי תקיפה, ורשום/י פרטים מיד (גובה, לבוש, כיוון בריחה).',
-   'רוצה באמת לדעת להגן על עצמך? שיעור אחד בקרב מגע שווה יותר ממאה מדריכים כתובים. הגוף לומד בלחץ — לא במסך.'],
+   'ראש מורם. אוזניות בחוץ, טלפון בכיס. תוקף בוחר מי שמוסח — לא מי שחלש.',
+   'משהו מרגיש לא בסדר? עצור/י. חצה/י כביש. היכנס/י לחנות מוארת. עדיף מביך מפגוע.',
+   'שמור/י שני צעדים. ידיים פתוחות בגובה החזה, כפות קדימה — זה מגן, שומר מרחק, ונראה לא-תוקפני.',
+   'הקול הוא הנשק הכי יעיל: „אחורה!” חזק וברור. מרתיע, מושך עדים, ומעיר את הגוף.',
+   'שוד? תן/י את הארנק. תזרוק/י אותו לצד אחד — ותברח/י לצד השני.',
+   'אין ברירה? מכה אחת קצרה לנקודה רכה — עיניים, גרון, מפשעה, ברך — ומיד לרוץ. המכה קונה שנייה, לא ניצחון.',
+   'לרוץ זה לנצח. לכיוון אור, אנשים, חנות פתוחה. לא הביתה אם עוקבים אחריך.',
+   'אחרי: התקשר/י למשטרה. לחץ/י SOS — השומרים שלך יראו איפה את/ה. רשום/י פרטים מיד.',
+   'טכניקה לא נלמדת מטקסט. רוצה באמת לדעת? שיעור קרב מגע אחד שווה יותר ממאה מדריכים.'],
    en:[
-   'The truth first: technique cannot be learned from text. Someone who reads "choke release" and believes they know it will stay and fight instead of running — and get hurt. This page teaches what actually saves you: avoid, deter, escape. For technique, take a real Krav Maga class.',
-   '1) Awareness beats strength. Head up, earphones out, phone pocketed. Attackers pick people who look distracted — not people who look weak.',
-   '2) Your gut is intelligence. Something feels wrong? Stop, cross the street, step into a lit shop. Never be embarrassed to be wrong. Awkward beats injured.',
-   '3) Distance is the defence. Two steps. Open hands at chest height, palms out. Not a fighting stance — it keeps distance and looks non-aggressive to witnesses and cameras.',
-   '4) Your voice is the first and most effective weapon. "BACK OFF! DO NOT COME CLOSER!" — loud, low, a command. It deters, draws witnesses, and wakes your body up.',
-   '5) Robbery? Give the wallet. Throw it one way, run the other. Property is replaceable — you are not.',
-   '6) If there is no choice — short, explosive, then run. Soft targets only: eyes, throat, groin, knee. No punches to the face (you break your hand). Every strike buys one second to run.',
-   '7) Running is winning. Toward light, people, an open shop, a main road. Not home if you are being followed.',
-   '8) Afterwards: call 100. Press SOS in SH✡MER — your guardians see where you are. Keep your clothes, do not shower after an assault, write down details immediately.',
-   'Actually want to defend yourself? One Krav Maga class beats a hundred written guides. The body learns under pressure, not on a screen.'],
+   'Head up. Earphones out, phone pocketed. Attackers pick the distracted — not the weak.',
+   'Something feels wrong? Stop. Cross the street. Step into a lit shop. Awkward beats injured.',
+   'Keep two steps. Open hands at chest height, palms out — it protects, keeps distance, looks non-aggressive.',
+   'Your voice is the most effective weapon: "BACK OFF!" — loud and clear. Deters, draws witnesses, wakes your body.',
+   'Robbery? Give the wallet. Throw it one way — run the other.',
+   'No choice? One short strike to a soft target — eyes, throat, groin, knee — then run. It buys a second, not a victory.',
+   'Running is winning. Toward light, people, an open shop. Not home if you are followed.',
+   'Afterwards: call the police. Press SOS — your guardians see where you are. Write down details immediately.',
+   'Technique cannot be learned from text. Want to really know? One Krav Maga class beats a hundred guides.'],
    ar:[
-   'الحقيقة أولًا: التقنية لا تُتعلَّم من نص. من يقرأ "التحرّر من الخنق" ويظن أنه يعرف، سيبقى ليقاتل بدل أن يهرب — وسيُصاب. هذه الصفحة تعلّم ما ينقذ فعلاً: التجنّب والردع والهروب.',
-   '1) الوعي يتفوّق على القوة. ارفع رأسك، انزع السمّاعات، ضع الهاتف في جيبك.',
-   '2) حدسك معلومة. شعرت أن شيئًا خاطئ؟ توقّف، اعبر الشارع، ادخل متجرًا مضاءً.',
-   '3) المسافة هي الدفاع. خطوتان. يدان مفتوحتان عند الصدر.',
-   '4) صوتك هو السلاح الأول: "ابتعد! لا تقترب!" — عالٍ وحازم.',
-   '5) سرقة؟ أعطِ المحفظة. ارمها في اتجاه واهرب في الآخر.',
-   '6) إن لم يكن هناك خيار — ضربة قصيرة على نقطة رخوة ثم اركض.',
-   '7) الركض هو الانتصار. نحو الضوء والناس. ليس إلى البيت إن كنت مُتَتبَّعًا.',
-   '8) بعدها: اتصل بـ100. اضغط SOS في SH✡MER.',
-   'تريد أن تتعلّم حقًا؟ درس واحد أفضل من مئة دليل مكتوب.']},
-  dont:{he:'אל תילחם/י על רכוש · אל תרדוף/י אחרי תוקף · אל תיקח/י תוקף הביתה · אל תסמוך/כי על טכניקה שלמדת מטקסט. אין חובה להילחם — יש זכות לברוח.',en:'Never fight over property · never chase an attacker · never lead one home · never trust technique you learned from text. No duty to fight — you have the right to flee.',ar:'لا تقاتل من أجل الممتلكات · لا تطارد المهاجم · لا تثق بتقنية تعلّمتها من نص.'},
-  src:'משטרת ישראל — מניעה והגנה עצמית · עקרונות קרב מגע (IKMF/KMG) · 100'},
+   'ارفع رأسك. انزع السمّاعات، ضع الهاتف في جيبك. المهاجم يختار المشتّت لا الضعيف.',
+   'شعرت أن شيئًا خاطئ؟ توقّف. اعبر الشارع. ادخل متجرًا مضاءً.',
+   'حافظ على خطوتين. يدان مفتوحتان عند الصدر — تحمي وتُبقي المسافة.',
+   'صوتك أقوى سلاح: "ابتعد!" بصوت عالٍ وواضح.',
+   'سرقة؟ أعطِ المحفظة. ارمها في اتجاه واهرب في الآخر.',
+   'لا خيار؟ ضربة قصيرة على نقطة رخوة — العين، الحلق، المغبن، الركبة — ثم اركض.',
+   'الركض هو الانتصار. نحو الضوء والناس. ليس إلى البيت إن كنت مُتَتبَّعًا.',
+   'بعدها: اتصل بالشرطة. اضغط SOS. سجّل التفاصيل فورًا.',
+   'التقنية لا تُتعلَّم من نص. درس واحد أفضل من مئة دليل.']},
+  dont:{he:'אל תילחם/י על רכוש · אל תרדוף/י · אל תיקח/י תוקף הביתה · אל תסמוך/כי על טכניקה מטקסט. אין חובה להילחם — יש זכות לברוח.',en:'Never fight over property · never chase · never lead an attacker home · never trust technique learned from text. No duty to fight — you have the right to flee.',ar:'لا تقاتل من أجل الممتلكات · لا تطارد · لا تثق بتقنية من نص.'},
+  src:'משטרת ישראל — מניעה והגנה עצמית · IKMF/KMG'},
+
 
 
 
@@ -5640,8 +5704,10 @@ function renderCircles(){
      r.innerHTML='<button class="cot-ed" aria-label="'+(he?'שנה שם':'Rename')+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>'
        +'<span class="cot-nm">'+ESC(cc.name)+'</span>'
        +'<span class="cot-n">'+membersOf(cc.id).length+'</span>';
+     if(cc.id===activeCircleId) r.classList.add('cot-active');
      r.querySelector('.cot-ed').onclick=function(ev){ ev.stopPropagation(); renameCircle(cc.id); };
-     r.querySelector('.cot-nm').onclick=function(){ switchCircle(cc.id); };
+     r.onclick=function(){ switchCircle(cc.id); renderCircles(); };   // tap a circle → see its members
+     r.style.cursor='pointer';
      cot.appendChild(r);
    });
  }
@@ -5728,8 +5794,13 @@ function buildMemberRow(m,he){
  <div class="cm-rel">${ESC(m.rel||'')}</div>
  <span class="cm-status ${st.cls}">${st.txt}</span>
  </div>
- <button class="cm-find" aria-label="${he?'אתר/י':'Locate'}"></button>`;
+ <button class="cm-find" aria-label="${he?'אתר/י':'Locate'}"></button>
+ <button class="cm-del" aria-label="${he?'הסר/י':'Remove'}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg></button>`;
  row.querySelector('.cm-find').onclick=()=>flyToMember(m.id);
+ row.querySelector('.cm-del').onclick=function(ev){
+   ev.stopPropagation();
+   if(confirm(he?('להסיר את '+(m.name||'')+' מהמעגל?'):('Remove '+(m.name||'')+' from this circle?'))) removeMember(m.id);
+ };
  // inline, always-visible toggles (wireframe): share location + ping-pong
  const gtr=document.createElement('div'); gtr.className='gt-row';
  gtr.innerHTML=`
@@ -5797,6 +5868,32 @@ function agPickContact(){
    var np=document.getElementById('ag-phone'); if(np)np.focus();
  }
 }
+/* ══ WILDFIRE: one tap to invite anyone, anywhere ══
+   Creates a real pairing invite and hands it to the OS share sheet (WhatsApp, SMS,
+   anything). Whoever taps it lands in SH✡MER with an approve screen. */
+async function shareInvite(){
+  var he=currentLang==='he';
+  var tok='g'+Math.random().toString(36).slice(2,8)+Math.random().toString(36).slice(2,6);
+  try{
+    var myName=(SS.user&&SS.user.name)||(SS.user&&SS.user.username)||'';
+    if(FB.ready&&FB.uid){
+      await fbRestWrite('PUT','invites/'+tok,{fromUid:FB.uid,name:myName,ts:Date.now()});
+      var g=gdState();
+      g.pairs.push({id:genId('g'),token:tok,name:'',rel:'',shareToThem:true,seeThem:true,addedTs:Date.now(),initiator:true,pending:true,partnerUid:null,linked:false,cid:activeCircleId,color:'#C9A84C',lat:null,lng:null,ts:0,live:false,via:'link'});
+      saveStore();
+      fbWatchApproval(tok, null);
+    }
+  }catch(e){}
+  var link='https://www.shomer-app.co.il/shomer.html?g='+encodeURIComponent(tok);
+  var txt=he
+    ? ('הצטרף/י למעגל השומרים שלי ב-SH\u2721MER — אפליקציית בטיחות קהילתית חינמית. אם יקרה לי משהו, תדע/י איפה אני.\n'+link)
+    : ('Join my SH\u2721MER guardian circle — a free community safety app. If something happens to me, you will know where I am.\n'+link);
+  try{
+    if(navigator.share){ await navigator.share({title:'SH\u2721MER', text:txt}); return; }
+  }catch(e){ return; }
+  try{ window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank'); }
+  catch(e){ try{ navigator.clipboard.writeText(link); toast(he?'הקישור הועתק':'Link copied','grn'); }catch(_){} }
+}
 async function addGuardian(){
  var he=currentLang==='he';
  var nmEl=document.getElementById('ag-name'), phEl=document.getElementById('ag-phone'), go=document.getElementById('ag-go');
@@ -5844,7 +5941,7 @@ async function addGuardian(){
  if(registered && theirUid){
    var g=gdState();
    if(!g.pairs.some(function(p){return p.partnerUid===theirUid;})){
-     g.pairs.push({id:genId('g'),token:agToken,name:name,rel:'',shareToThem:true,seeThem:true,addedTs:Date.now(),initiator:true,pending:true,partnerUid:theirUid,linked:false,color:m.color,lat:null,lng:null,ts:0,live:false,via:'phone',simLat:null,simLng:null});
+     g.pairs.push({id:genId('g'),token:agToken,name:name,rel:'',shareToThem:true,seeThem:true,addedTs:Date.now(),initiator:true,pending:true,partnerUid:theirUid,linked:false,cid:_selC,color:m.color,lat:null,lng:null,ts:0,live:false,via:'phone',simLat:null,simLng:null});
      m.pairId=g.pairs[g.pairs.length-1].id;
    }
    m.pending=true;                                  // stays pending until THEY approve
@@ -5940,6 +6037,27 @@ function clearCircleMarkers(){
  Object.keys(mapLayers.circle).forEach(id=>{if(MAP)MAP.removeLayer(mapLayers.circle[id]);});
  mapLayers.circle={};
 }
+/* ══ MAP INTERACTIONS — tapping a guardian actually does something now ══ */
+function pingMember(id){
+  var m=memberById(id); if(!m)return;
+  var he=currentLang==='he';
+  if(m.ping===false){ toast(he?'פינג-פונג כבוי עבור '+ESC(m.name):'Ping-pong is off for '+m.name,'amb'); return; }
+  try{ if(m.partnerUid&&FB.ready) fbRestWrite('PUT','ping/'+m.partnerUid+'/'+FB.uid,{name:(SS.user&&SS.user.name)||'',ts:Date.now()}); }catch(e){}
+  try{ pushNotify('SH\u2721MER', (he?'שלחת פינג ל-':'Ping sent to ')+(m.name||''),'gd-ping'); }catch(e){}
+  toast(he?('\u2713 פינג נשלח ל-'+ESC(m.name)+' — „את/ה בסדר?”'):('\u2713 Ping sent to '+m.name),'grn');
+}
+function msgMember(id){
+  var m=memberById(id); if(!m)return;
+  var he=currentLang==='he';
+  var txt=he?('היי '+(m.name||'')+', את/ה בסדר?'):('Hi '+(m.name||'')+', are you OK?');
+  if(m.phoneCanon){ try{ window.open('https://wa.me/'+m.phoneCanon+'?text='+encodeURIComponent(txt),'_blank'); return; }catch(e){} }
+  toast(he?'אין מספר שמור לאיש/ה הזה':'No phone number saved for this person','amb');
+}
+function callMember(id){
+  var m=memberById(id); if(!m)return;
+  if(m.phoneCanon){ try{ callNum('+'+m.phoneCanon); return; }catch(e){} }
+  toast(currentLang==='he'?'אין מספר שמור':'No phone number saved','amb');
+}
 function memberPopupHtml(id){
  const m=memberById(id); if(!m)return '';
  const he=currentLang==='he';
@@ -5948,6 +6066,12 @@ function memberPopupHtml(id){
  return `<div style="font-family:inherit;min-width:170px" dir="${he?'rtl':'ltr'}">
   <div style="font-weight:800;font-size:14px;margin-bottom:2px">${ESC(m.name)}</div>
   <div style="font-size:11px;color:#8c9bbd;margin-bottom:4px">${he?'מעגל':'Circle'}: <b style="color:#C9A84C">${ESC(circ.name||'-')}</b> · ${st.txt}</div>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:8px">
+   <button onclick="flyToMember('${m.id}')" style="background:#1670E0;border:none;border-radius:9px;color:#fff;font-weight:800;font-size:11.5px;padding:8px 6px;cursor:pointer;font-family:inherit">${he?'אתר/י':'Locate'}</button>
+   <button onclick="pingMember('${m.id}')" style="background:#0E8F6E;border:none;border-radius:9px;color:#fff;font-weight:800;font-size:11.5px;padding:8px 6px;cursor:pointer;font-family:inherit">${he?'פינג':'Ping'}</button>
+   <button onclick="msgMember('${m.id}')" style="background:#23324E;border:none;border-radius:9px;color:#E8EEF7;font-weight:800;font-size:11.5px;padding:8px 6px;cursor:pointer;font-family:inherit">${he?'הודעה':'Message'}</button>
+   <button onclick="callMember('${m.id}')" style="background:#23324E;border:none;border-radius:9px;color:#E8EEF7;font-weight:800;font-size:11.5px;padding:8px 6px;cursor:pointer;font-family:inherit">${he?'חיוג':'Call'}</button>
+  </div>
   <div style="display:flex;gap:6px;margin-top:6px">
    <button onclick="openMemberEdit('${m.id}')" style="flex:1;background:linear-gradient(135deg,#C09020,#E0A828,#F5C840);border:none;border-radius:8px;padding:7px 10px;font-weight:800;font-size:11.5px;color:#23170a;cursor:pointer">${he?'עריכה / My SH✡MER':'Edit / My SH✡MER'}</button>
   </div></div>`;
@@ -7211,7 +7335,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v104';
+var APP_VER='v105';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -7699,6 +7823,8 @@ function fbOnAuthed(uid){
   try{ fbStartPresence(); }catch(e){}
   try{ fbListenSOS(); }catch(e){}
   try{ fbListenPairs(); }catch(e){}
+  try{ purgeStalePositions(); }catch(e){}
+  try{ syncPairsToCircles(); }catch(e){}
   try{ fbListenAllPeerLocs(); }catch(e){}
   try{ gdState().pairs.forEach(function(p){ if(p&&p.pending&&!p.linked&&p.token&&p.partnerUid) fbWatchApproval(p.token,p.partnerUid); }); }catch(e){}     // subscribe to every paired partner's live location
   try{ fbStartLocPublish(); }catch(e){}       // start writing my own live location
@@ -8038,14 +8164,39 @@ function fbWatchApproval(token, theirUid){
       try{ fbRestWrite('PUT','pairs/'+FB.uid+'/'+puid,{name:p.name||'',token:token,ts:Date.now(),via:'phone'}); }catch(e){}
       p.pending=false; p.linked=true; p.partnerUid=puid;
       if(inv.acceptedName&&!p.name)p.name=inv.acceptedName;
-      var mm=(SS.circleMembers||[]).find(function(x){return x.pairId===p.id;});
-      if(mm){ mm.pending=false; mm.partnerUid=puid; mm.moving=true; }
+      var mm=ensureMemberForPair(p, p.cid);
+      if(mm){ mm.pending=false; mm.partnerUid=puid; }
       saveStore();
       try{ fbListenPeerLoc(puid); }catch(e){}
       try{ gdRenderMarkers(); renderCircles(); }catch(e){}
       toast(he?('\u2713 '+(p.name||'')+' \u05d0\u05d9\u05e9\u05e8/\u05d4 \u2014 \u05ea\u05e8\u05d0\u05d5 \u05d6\u05d4 \u05d0\u05ea \u05d6\u05d4 \u05e2\u05dc \u05d4\u05de\u05e4\u05d4'):('\u2713 '+(p.name||'')+' approved \u2014 you can see each other'),'grn');
       try{ pushNotify('SHOMER', he?((p.name||'')+' \u05d0\u05d9\u05e9\u05e8/\u05d4 \u05d0\u05ea \u05d4\u05d1\u05e7\u05e9\u05d4'):((p.name||'')+' approved your request'),'gd-appr'); }catch(e){}
     }, function(){});
+  }catch(e){}
+}
+/* ══ ONE PERSON, ONE RECORD ══
+   Connected people used to live only in gd.pairs, so they appeared in NO circle
+   (family showed 0) and could not be managed. Every linked pair now has a member. */
+function ensureMemberForPair(p, cid){
+  if(!p) return null;
+  var arr=(SS.circleMembers=SS.circleMembers||[]);
+  var m=arr.find(function(x){ return x.pairId===p.id || (p.partnerUid && x.partnerUid===p.partnerUid); });
+  if(m){ if(cid) m.cid=cid; m.registered=true; m.pending=!!p.pending; return m; }
+  var palette=['#C9A84C','#2962FF','#00C853','#E91E8C','#9C27B0','#FF6A00'];
+  var first=(circlesList()[0]||{}).id||'fam';
+  m={id:genId('m'), cid:(cid||p.cid||activeCircleId||first),
+     name:p.name||'', rel:'', phoneCanon:p.phoneCanon||null, registered:true,
+     partnerUid:p.partnerUid||null, pairId:p.id, pending:!!p.pending,
+     emoji:'', color:p.color||palette[arr.length%palette.length],
+     lat:null, lng:null, live:false, moving:false, shareTo:true, seeThem:true, sos:false};
+  arr.push(m); saveStore();
+  return m;
+}
+function syncPairsToCircles(){
+  try{
+    var g=gdState(), changed=false;
+    g.pairs.forEach(function(p){ if(p.linked||!p.pending){ if(ensureMemberForPair(p)) changed=true; } });
+    if(changed){ saveStore(); try{ renderCircles(); }catch(e){} }
   }catch(e){}
 }
 function fbApplyPeerPresence(all){
@@ -8873,6 +9024,30 @@ async function getOrCreateDeviceId(){
 /* Settings compact */
 #sh-set .sh-body{padding-top:8px;}
 #sh-set .set-grp + .sec-cap{margin-top:16px;}
+
+/* ══ v105 LATE OVERRIDES (must win — earlier muted .pic rules were overriding these) ══ */
+.prof-opt[data-prof] .pic{border:0!important;box-shadow:0 6px 16px rgba(0,0,0,.42)!important;padding:9px!important;border-radius:14px!important}
+.prof-opt[data-prof] .pic .ic{color:#fff!important;width:26px!important;height:26px!important}
+.prof-opt[data-prof="police"]   .pic{background:linear-gradient(150deg,#5CB0FF,#1670E0 55%,#0B4491)!important}
+.prof-opt[data-prof="doctor"]   .pic{background:linear-gradient(150deg,#4BE7AB,#12A594 55%,#0A6E62)!important}
+.prof-opt[data-prof="fire"]     .pic{background:linear-gradient(150deg,#FFC157,#E8811C 55%,#A9500A)!important}
+.prof-opt[data-prof="para"]     .pic{background:linear-gradient(150deg,#FF5C6E,#E0182C 55%,#9A0F1E)!important}
+.prof-opt[data-prof="security"] .pic{background:linear-gradient(135deg,#C09020,#E0A828 60%,#F5C840)!important}
+.prof-opt[data-prof="security"] .pic .ic{color:#23170a!important}
+.prof-opt[data-prof=""]         .pic{background:linear-gradient(150deg,#9AA9C4,#5A6B87 60%,#3A465C)!important}
+.prof-opt.sel{border-color:var(--g3)!important;background:rgba(224,168,40,.10)!important}
+.prof-opt.sel .pic{box-shadow:0 0 0 3px rgba(245,200,64,.6),0 6px 16px rgba(0,0,0,.45)!important}
+/* profile identity: no heavy gold frame — it ate the screen for nothing */
+#sh-prof .p-hero,#sh-prof .prof-id,#sh-prof .p-idcard{border:0!important;background:transparent!important;padding:4px 0 8px!important;box-shadow:none!important}
+
+.cot.cot-active{background:rgba(29,111,214,.10);border-radius:10px;box-shadow:inset 3px 0 0 #1D6FD6}
+.cot.cot-active .cot-nm{color:#0B4491}
+.circ-now{display:flex;align-items:center;justify-content:space-between;margin:14px 0 8px;font-size:13px;font-weight:800;color:var(--tx0)}
+.circ-now .cn-n{color:var(--g3)}
+.cm-del{background:none;border:0;color:#E5484D;cursor:pointer;padding:6px;display:flex;opacity:.75}
+.cm-del:hover{opacity:1}
+.cm-del svg{width:16px;height:16px}
+.invite-cta{width:100%;margin-top:12px;padding:13px;border-radius:14px;border:1.5px dashed rgba(224,168,40,.5);background:rgba(224,168,40,.08);color:var(--g3);font-weight:800;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit}
 </style>
 </body>
 </html>
