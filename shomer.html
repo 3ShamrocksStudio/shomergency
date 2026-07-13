@@ -1496,11 +1496,14 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="map-legend collapsed" id="map-legend" aria-label="מקרא מפה">
  <button class="legend-hd" onclick="toggleLegend()" aria-expanded="false" aria-controls="legend-body"><span aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span><span id="legend-ttl-txt">מקרא מפה</span><span class="legend-chev" id="legend-chev" aria-hidden="true">▸</span></button>
  <div class="legend-body" id="legend-body">
- <button class="leg" id="leg-aed" onclick="aedToggle();aedLegPaint()" style="width:100%;border:0;background:none;padding:0;cursor:pointer;font-family:inherit;text-align:start;display:flex;align-items:center;gap:8px">
-   <div class="ldc" style="background:#0E8F6E;border-radius:5px" aria-hidden="true"></div>
-   <span id="l-aed" data-he="דפיברילטורים" data-en="Defibrillators (AED)" data-ar="مزيل الرجفان">דפיברילטורים</span>
-   <span id="l-aed-state" style="margin-inline-start:auto;font-size:10px;font-weight:800;color:var(--tx3)">הצג</span>
- </button>
+ <div class="leg-sec" id="leg-ess">
+   <div class="leg-sec-h">שירותי חירום · ESSENTIALS</div>
+   <div class="ess-chips" id="ess-chips"></div>
+   <button class="ess-add" onclick="aedAddHere()">
+     <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+     <span>ראית דפיברילטור? הוסף/י אותו למפה</span>
+   </button>
+ </div>
  <div class="leg"><div class="ldc" style="background:#FF1A40;box-shadow:0 0 8px #FF1A40" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3h8l5 5v8l-5 5H8l-5-5V8Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 7.5v5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="16" r="1.2" fill="currentColor"/></svg></div><span id="l7">SOS חי</span></div>
  <div class="leg"><div class="ldc" style="background:#E5468E" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V11m0-1V4.5a1.5 1.5 0 0 1 3 0V11m0-.5V6a1.5 1.5 0 0 1 3 0v7a6 6 0 0 1-6 6h-1.2a5 5 0 0 1-3.7-1.7L4 14.5a1.6 1.6 0 0 1 2.3-2.2L9 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span id="l1">עבירת מין</span></div>
  <div class="leg"><div class="ldc" style="background:#FF7A1A" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V9a1.6 1.6 0 0 1 3.2 0v1.6m0-.6V7.5a1.6 1.6 0 0 1 3.2 0V11m0-1V8a1.6 1.6 0 0 1 3.2 0v5a6 6 0 0 1-6 6h-1.1a5 5 0 0 1-3.6-1.5L4 16a1.6 1.6 0 0 1 2.3-2.2L7 14.5Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span id="l2">תקיפה / אלימות</span></div>
@@ -1550,7 +1553,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v109 · 13.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v110 · 13.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -7409,7 +7412,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v109';
+var APP_VER='v110';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -7898,8 +7901,8 @@ function fbOnAuthed(uid){
   try{ fbListenSOS(); }catch(e){}
   try{ fbListenPairs(); }catch(e){}
   try{ purgeStalePositions(); }catch(e){}
-  try{ aedLoad(); }catch(e){}
-  try{ setTimeout(function(){ aedFetch(false).then(function(){ if(AED.shown) aedRender(); aedLegPaint(); }); }, 4000); }catch(e){}
+  try{ essLoad(); essChipsBuild(); }catch(e){}
+  try{ setTimeout(function(){ essFetch(false).then(function(){ essRender(); essLegPaint(); }); }, 3500); }catch(e){}
   try{ watchPaint(); }catch(e){}
   try{ syncPairsToCircles(); }catch(e){}
   try{ fbListenAllPeerLocs(); }catch(e){}
@@ -8346,122 +8349,222 @@ function watchPaint(){
     b.onclick=function(){ watchStart(30); };
   }
 }
-/* ══ DEFIBRILLATORS (AED) ══
-   Cardiac arrest survival is ~10% without a defibrillator and >50% if one reaches the person
-   within 3 minutes. The AED is almost always already there — nobody knows where. That gap is
-   exactly what a map is for, so SH✡MER shows it.
-   Source: OpenStreetMap (emergency=defibrillator) via Overpass. Free, global, no key —
-   which means this works in every country we just opened the gates to. Cached 24h. */
-var AED={list:[], fetched:0, layer:{}, shown:false};
-var AED_TTL=24*60*60*1000;
+/* ══ ESSENTIALS LAYER ══
+   Static, life-saving infrastructure: defibrillators, police, hospitals, fire, pharmacies.
+   These are NOT events. An SOS is a scream; a defibrillator is a signpost. They must never
+   look alike, or the map becomes noise and people miss the scream.
+   3SDS shape language:
+     EVENT     -> teardrop pin, saturated, glowing, animated   (something is HAPPENING)
+     ESSENTIAL -> rounded-square badge, muted, flat, quiet     (something IS HERE)
+   Every glyph is an international standard (ISO 7010 / Star of Life), so it reads in any
+   language - or none. */
 
-function aedLoad(){
+var AED_GLYPH='<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">'
+ +'<path d="M12 21s-7.4-4.8-7.4-10.2A4.5 4.5 0 0 1 12 7.7a4.5 4.5 0 0 1 7.4 3.1C19.4 16.2 12 21 12 21Z" fill="#fff"/>'
+ +'<path d="M12.9 9.4l-3.2 4.4h2.1l-.6 3.5 3.3-4.6h-2.2Z" fill="#0E8F6E"/></svg>';
+
+var ESS_TYPES={
+  aed:      {q:'["emergency"="defibrillator"]', col:'#0E8F6E', he:'דפיברילטור', en:'Defibrillator', ar:'مزيل الرجفان',
+             g:'<path d="M12 21s-7.4-4.8-7.4-10.2A4.5 4.5 0 0 1 12 7.7a4.5 4.5 0 0 1 7.4 3.1C19.4 16.2 12 21 12 21Z" fill="#fff"/><path d="M12.9 9.4l-3.2 4.4h2.1l-.6 3.5 3.3-4.6h-2.2Z" fill="#0E8F6E"/>'},
+  police:   {q:'["amenity"="police"]', col:'#1670E0', he:'משטרה', en:'Police', ar:'شرطة',
+             g:'<path d="M12 4l6 2.2v4.6c0 4-2.6 7.1-6 8.6-3.4-1.5-6-4.6-6-8.6V6.2Z" fill="none" stroke="#fff" stroke-width="1.7"/><path d="M12 8.2l.95 1.93 2.13.3-1.54 1.5.36 2.12L12 13.05l-1.9 1 .36-2.12L8.2 10.43l2.13-.3Z" fill="#fff"/>'},
+  hospital: {q:'["amenity"="hospital"]', col:'#E5484D', he:'בית חולים', en:'Hospital', ar:'مستشفى',
+             g:'<path d="M10.4 5h3.2v3.4H17v3.2h-3.4V15h-3.2v-3.4H7V8.4h3.4Z" fill="#fff"/><path d="M7 18.4h10" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/>'},
+  fire:     {q:'["amenity"="fire_station"]', col:'#E8811C', he:'תחנת כיבוי', en:'Fire station', ar:'إطفاء',
+             g:'<path d="M12 4.2c1.4 2.2 3.9 3.6 3.9 6.9A3.9 3.9 0 0 1 12 15a3.9 3.9 0 0 1-3.9-3.9c0-3.3 2.5-4.7 3.9-6.9Z" fill="#fff"/><path d="M7 18.6h10" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/>'},
+  pharmacy: {q:'["amenity"="pharmacy"]', col:'#12A594', he:'בית מרקחת', en:'Pharmacy', ar:'صيدلية',
+             g:'<path d="M10.5 5.5h3v4h4v3h-4v4h-3v-4h-4v-3h4Z" fill="#fff"/>'}
+};
+
+var ESS={data:{}, layer:{}, on:{aed:true}, fetched:0};
+var ESS_TTL=24*60*60*1000;
+
+function essLoad(){
   try{
-    var raw=localStorage.getItem('shomer_aed');
-    if(raw){ var o=JSON.parse(raw); if(o && (Date.now()-o.t)<AED_TTL){ AED.list=o.d||[]; AED.fetched=o.t; } }
+    var raw=localStorage.getItem('shomer_ess');
+    if(raw){ var o=JSON.parse(raw); if(o && (Date.now()-o.t)<ESS_TTL){ ESS.data=o.d||{}; ESS.fetched=o.t; } }
+    var on=localStorage.getItem('shomer_ess_on');
+    ESS.on = on ? JSON.parse(on) : {aed:true};
+  }catch(e){ ESS.on={aed:true}; }
+}
+function essSave(){
+  try{
+    localStorage.setItem('shomer_ess', JSON.stringify({t:Date.now(), d:ESS.data}));
+    localStorage.setItem('shomer_ess_on', JSON.stringify(ESS.on));
   }catch(e){}
 }
-function aedSave(){
-  try{ localStorage.setItem('shomer_aed', JSON.stringify({t:Date.now(), d:AED.list})); }catch(e){}
-}
-function aedDist(a){
+function essDist(a){
   if(userLat==null||userLng==null) return null;
   var R=6371, dLat=(a.lat-userLat)*Math.PI/180, dLng=(a.lng-userLng)*Math.PI/180;
   var s=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(userLat*Math.PI/180)*Math.cos(a.lat*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2);
   return R*2*Math.atan2(Math.sqrt(s),Math.sqrt(1-s));
 }
-async function aedFetch(force){
-  if(userLat==null||userLng==null) return AED.list;
-  if(!force && AED.list.length && (Date.now()-AED.fetched)<AED_TTL) return AED.list;
-  var d=0.09;  // ~10km box
-  var q='[out:json][timeout:20];(node["emergency"="defibrillator"]('
-       +(userLat-d).toFixed(4)+','+(userLng-d).toFixed(4)+','
-       +(userLat+d).toFixed(4)+','+(userLng+d).toFixed(4)+'););out body 200;';
-  try{
-    var r=await fetch('https://overpass-api.de/api/interpreter',{method:'POST',body:'data='+encodeURIComponent(q),headers:{'Content-Type':'application/x-www-form-urlencoded'}});
-    var j=await r.json();
-    AED.list=(j.elements||[]).map(function(e){
-      var t=e.tags||{};
-      return {id:e.id, lat:e.lat, lng:e.lon,
-              name:t.name||t.operator||'',
-              indoor:t.indoor==='yes',
-              access:t.access||'',
-              desc:t['defibrillator:location']||t.description||''};
-    });
-    AED.fetched=Date.now(); aedSave();
-  }catch(e){}
-  return AED.list;
-}
-/* ISO 7010 · E010 — the AED symbol printed on every defibrillator cabinet on earth:
-   a white heart with a lightning bolt through it, on safety green. Needs no language. */
-var AED_GLYPH='<svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true">'
- +'<path d="M12 21.2s-7.6-4.9-7.6-10.4A4.6 4.6 0 0 1 12 7.6a4.6 4.6 0 0 1 7.6 3.2c0 5.5-7.6 10.4-7.6 10.4Z" fill="#fff"/>'
- +'<path d="M12.9 9.3l-3.3 4.5h2.2l-.6 3.6 3.4-4.7h-2.3l.6-3.4Z" fill="#0E8F6E"/></svg>';
-function aedIcon(){
-  return window.L.divIcon({className:'', iconSize:[32,32], iconAnchor:[16,16], html:
-    '<div style="width:32px;height:32px;border-radius:6px;background:#0E8F6E;border:2px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center">'
-    +AED_GLYPH+'</div>'});
-}
-function aedLegPaint(){
+function fmtKm(km){
   var he=currentLang==='he';
-  var s=document.getElementById('l-aed-state');
-  if(s) s.textContent = AED.shown ? (he?'מוצג':'shown') : (he?'הצג':'show');
-  var d=document.querySelector('#leg-aed .ldc');
-  if(d && !d.innerHTML.trim()) d.innerHTML=AED_GLYPH;
+  return km<1 ? (Math.round(km*1000)+(he?' מ׳':'m')) : (km.toFixed(1)+(he?' ק״מ':'km'));
 }
-async function aedToggle(){
-  var he=currentLang==='he';
-  if(AED.shown){ aedClear(); AED.shown=false; toast(he?'דפיברילטורים הוסתרו':'Defibrillators hidden',''); return; }
-  toast(he?'מחפש דפיברילטורים בסביבה…':'Finding defibrillators nearby…','');
-  await aedFetch(false);
-  if(!AED.list.length){ toast(he?'לא נמצאו דפיברילטורים רשומים באזור':'No registered defibrillators nearby','amb'); return; }
-  aedRender(); AED.shown=true;
-  var n=aedNearest();
-  toast(he?(AED.list.length+' דפיברילטורים · הקרוב ביותר '+(n?fmtKm(n.d):'')):(AED.list.length+' AEDs nearby'),'grn');
+function essFetch(force){
+  if(userLat==null||userLng==null) return Promise.resolve();
+  if(!force && ESS.fetched && (Date.now()-ESS.fetched)<ESS_TTL) return Promise.resolve();
+  var d=0.10;
+  var bb=(userLat-d).toFixed(4)+','+(userLng-d).toFixed(4)+','+(userLat+d).toFixed(4)+','+(userLng+d).toFixed(4);
+  var parts=[];
+  Object.keys(ESS_TYPES).forEach(function(k){
+    parts.push('node'+ESS_TYPES[k].q+'('+bb+');');
+    parts.push('way'+ESS_TYPES[k].q+'('+bb+');');
+  });
+  var q='[out:json][timeout:25];('+parts.join('')+');out center 300;';
+  return fetch('https://overpass-api.de/api/interpreter',{
+      method:'POST',
+      body:'data='+encodeURIComponent(q),
+      headers:{'Content-Type':'application/x-www-form-urlencoded'}
+    })
+    .then(function(r){ return r.json(); })
+    .then(function(j){
+      var out={};
+      (j.elements||[]).forEach(function(e){
+        var t=e.tags||{}, kind=null;
+        if(t.emergency==='defibrillator') kind='aed';
+        else if(t.amenity==='police') kind='police';
+        else if(t.amenity==='hospital') kind='hospital';
+        else if(t.amenity==='fire_station') kind='fire';
+        else if(t.amenity==='pharmacy') kind='pharmacy';
+        if(!kind) return;
+        var lat=(e.lat!=null)?e.lat:(e.center&&e.center.lat);
+        var lng=(e.lon!=null)?e.lon:(e.center&&e.center.lon);
+        if(lat==null||lng==null) return;
+        if(!out[kind]) out[kind]=[];
+        out[kind].push({id:kind+'-'+e.id, lat:lat, lng:lng, kind:kind,
+          name:t.name||t.operator||'', desc:t['defibrillator:location']||t.description||'', indoor:(t.indoor==='yes')});
+      });
+      var comm=(ESS.data.aed||[]).filter(function(x){ return x.community; });
+      ESS.data=out;
+      if(comm.length){ ESS.data.aed=(ESS.data.aed||[]).concat(comm); }
+      ESS.fetched=Date.now();
+      essSave();
+    })
+    .catch(function(){});
 }
-function aedClear(){
-  try{ Object.keys(AED.layer).forEach(function(k){ MAP.removeLayer(AED.layer[k]); delete AED.layer[k]; }); }catch(e){}
+function essIcon(kind){
+  var T=ESS_TYPES[kind];
+  return window.L.divIcon({className:'ess-mk', iconSize:[26,26], iconAnchor:[13,13], html:
+    '<div style="width:26px;height:26px;border-radius:7px;background:'+T.col+';opacity:.92;border:1.5px solid rgba(255,255,255,.9);box-shadow:0 2px 6px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center">'
+    +'<svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true">'+T.g+'</svg></div>'});
 }
-function fmtKm(km){ return km<1 ? (Math.round(km*1000)+' מ׳') : (km.toFixed(1)+' ק״מ'); }
-function aedRender(){
+function essClearKind(kind){
+  var L=ESS.layer[kind]||{};
+  Object.keys(L).forEach(function(id){ try{ MAP.removeLayer(L[id]); }catch(e){} });
+  ESS.layer[kind]={};
+}
+function essRender(){
   if(!MAP) return;
-  aedClear();
-  var he=currentLang==='he';
-  AED.list.forEach(function(a){
-    var d=aedDist(a);
-    var mk=window.L.marker([a.lat,a.lng],{icon:aedIcon(),zIndexOffset:400});
-    mk.bindPopup(
-      '<div style="font-family:inherit;min-width:180px" dir="'+(he?'rtl':'ltr')+'">'
-      +'<div style="font-weight:800;font-size:14px;color:#0E8F6E">'+(he?'דפיברילטור (AED)':'Defibrillator (AED)')+'</div>'
-      +(a.name?'<div style="font-size:12px;margin-top:2px">'+ESC(a.name)+'</div>':'')
-      +(a.desc?'<div style="font-size:11px;color:#8c9bbd;margin-top:2px">'+ESC(a.desc)+'</div>':'')
-      +(a.indoor?'<div style="font-size:11px;color:#E0A828;margin-top:3px">'+(he?'בתוך מבנה — ייתכן שנדרשת גישה':'Indoors — access may be needed')+'</div>':'')
-      +(d!=null?'<div style="font-size:12px;font-weight:700;margin-top:4px">'+(he?'מרחק: ':'Distance: ')+fmtKm(d)+'</div>':'')
-      +'<button onclick="aedNav('+a.lat+','+a.lng+')" style="width:100%;margin-top:8px;background:linear-gradient(150deg,#3DDC97,#0E8F6E);border:none;border-radius:9px;color:#fff;font-weight:800;font-size:12px;padding:9px;cursor:pointer;font-family:inherit">'+(he?'נווט/י לשם':'Navigate')+'</button>'
-      +'</div>',{maxWidth:240});
-    mk.addTo(MAP); AED.layer[a.id]=mk;
+  var he=(currentLang==='he'), LG=currentLang;
+  Object.keys(ESS_TYPES).forEach(function(kind){
+    essClearKind(kind);
+    if(!ESS.on[kind]) return;
+    var T=ESS_TYPES[kind];
+    var list=ESS.data[kind]||[];
+    list.forEach(function(a){
+      var dist=essDist(a);
+      var mk=window.L.marker([a.lat,a.lng],{icon:essIcon(kind), zIndexOffset:200});
+      var html='<div style="font-family:inherit;min-width:180px" dir="'+(he?'rtl':'ltr')+'">'
+        +'<div style="display:flex;align-items:center;gap:7px;margin-bottom:3px">'
+        +'<span style="width:22px;height:22px;border-radius:6px;background:'+T.col+';display:inline-flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" width="15" height="15">'+T.g+'</svg></span>'
+        +'<b style="font-size:13.5px;color:'+T.col+'">'+(T[LG]||T.en)+'</b></div>'
+        +(a.name?('<div style="font-size:12px">'+ESC(a.name)+'</div>'):'')
+        +(a.desc?('<div style="font-size:11px;color:#8c9bbd">'+ESC(a.desc)+'</div>'):'')
+        +(a.community?('<div style="font-size:10.5px;color:#E0A828;margin-top:2px">'+(he?'נוסף ע״י הקהילה':'Added by the community')+'</div>'):'')
+        +(a.indoor?('<div style="font-size:10.5px;color:#E0A828;margin-top:2px">'+(he?'בתוך מבנה':'Indoors')+'</div>'):'')
+        +((dist!=null)?('<div style="font-size:12px;font-weight:700;margin-top:4px">'+fmtKm(dist)+'</div>'):'')
+        +'<button onclick="essNav('+a.lat+','+a.lng+')" style="width:100%;margin-top:8px;background:'+T.col+';border:none;border-radius:8px;color:#fff;font-weight:800;font-size:12px;padding:8px;cursor:pointer;font-family:inherit">'+(he?'נווט/י':'Navigate')+'</button>'
+        +'</div>';
+      mk.bindPopup(html,{maxWidth:240});
+      mk.addTo(MAP);
+      if(!ESS.layer[kind]) ESS.layer[kind]={};
+      ESS.layer[kind][a.id]=mk;
+    });
   });
 }
-function aedNearest(){
-  var best=null;
-  AED.list.forEach(function(a){ var d=aedDist(a); if(d!=null && (!best||d<best.d)) best={a:a,d:d}; });
-  return best;
-}
-function aedNav(lat,lng){
+function essNav(lat,lng){
   try{ window.open('https://www.google.com/maps/dir/?api=1&destination='+lat+','+lng+'&travelmode=walking','_blank'); }catch(e){}
 }
-/* Used from the CPR card — the moment it actually matters. */
-async function aedFindNearest(){
-  var he=currentLang==='he';
-  toast(he?'מחפש דפיברילטור קרוב…':'Finding the nearest defibrillator…','');
-  await aedFetch(false);
-  var n=aedNearest();
-  if(!n){ toast(he?'לא נמצא דפיברילטור רשום בסביבה — התקשר/י למד״א':'No registered AED nearby — call emergency services','amb'); return; }
-  try{ cl('sh-guide'); }catch(e){}
-  aedRender(); AED.shown=true;
-  try{ MAP.setView([n.a.lat,n.a.lng], 17); AED.layer[n.a.id].openPopup(); }catch(e){}
-  toast(he?('הדפיברילטור הקרוב: '+fmtKm(n.d)+' — שלח/י מישהו להביא אותו!'):('Nearest AED: '+fmtKm(n.d)+' — send someone to fetch it!'),'grn');
+function essToggle(kind){
+  ESS.on[kind]=!ESS.on[kind];
+  essSave();
+  essLegPaint();
+  var he=(currentLang==='he'), T=ESS_TYPES[kind];
+  var done=function(){
+    essRender();
+    essLegPaint();
+    var n=(ESS.data[kind]||[]).length;
+    if(ESS.on[kind]){
+      toast(he ? (n ? (n+' · '+T.he) : ('לא נמצאו ' + T.he + ' באזור')) : (n ? (n+' '+T.en) : ('No '+T.en+' nearby')), n?'grn':'amb');
+    }
+  };
+  if(ESS.on[kind] && !(ESS.data[kind]||[]).length){ essFetch(false).then(done); }
+  else { done(); }
 }
+function essChipsBuild(){
+  var wrap=document.getElementById('ess-chips'); if(!wrap||wrap.children.length)return;
+  var L=currentLang;
+  Object.keys(ESS_TYPES).forEach(function(k){
+    var T=ESS_TYPES[k];
+    var b=document.createElement('button');
+    b.className='ess-chip'; b.id='leg-'+k;
+    b.onclick=function(){ essToggle(k); };
+    b.innerHTML='<span class="ec-ic" style="background:'+T.col+'"><svg viewBox="0 0 24 24" width="13" height="13">'+T.g+'</svg></span>'
+      +'<span class="ec-l">'+(T[L]||T.en)+'</span><span class="ec-n" id="leg-'+k+'-st"></span>';
+    wrap.appendChild(b);
+  });
+  essLegPaint();
+}
+function essLegPaint(){
+  Object.keys(ESS_TYPES).forEach(function(k){
+    var el=document.getElementById('leg-'+k);
+    if(el) el.classList.toggle('leg-on', !!ESS.on[k]);
+    var st=document.getElementById('leg-'+k+'-st');
+    if(st) st.textContent=((ESS.data[k]||[]).length)||'';
+  });
+}
+function aedFindNearest(){
+  var he=(currentLang==='he');
+  toast(he?'מחפש דפיברילטור קרוב…':'Finding the nearest defibrillator…','');
+  essFetch(false).then(function(){
+    var best=null;
+    (ESS.data.aed||[]).forEach(function(a){
+      var d=essDist(a);
+      if(d!=null && (!best || d<best.d)) best={a:a, d:d};
+    });
+    if(!best){
+      toast(he?'לא נמצא דפיברילטור רשום בסביבה — חייג/י 101 והם ינחו אותך':'No registered AED nearby — call emergency services','amb');
+      return;
+    }
+    try{ cl('sh-guide'); }catch(e){}
+    ESS.on.aed=true; essSave(); essRender(); essLegPaint();
+    try{ MAP.setView([best.a.lat,best.a.lng],17); ESS.layer.aed[best.a.id].openPopup(); }catch(e){}
+    toast(he?('הדפיברילטור הקרוב: '+fmtKm(best.d)+' — שלח/י מישהו להביא אותו!'):('Nearest AED: '+fmtKm(best.d)),'grn');
+  });
+}
+/* ══ COMMUNITY AEDs ══
+   OSM lists only ~91 defibrillators in all of Israel. MDA's real national database holds
+   thousands but has no public API. So citizens fill the gap: mark the AED in your lobby,
+   your gym, your shul. This is literally "אזרחים למען אזרחים". */
+function aedAddHere(){
+  var he=(currentLang==='he');
+  if(userLat==null){ toast(he?'אין מיקום זמין':'No location available','amb'); return; }
+  var where=prompt(he?'איפה בדיוק הדפיברילטור? (למשל: לובי הבניין, ליד המעלית)':'Where exactly is the AED? (e.g. lobby, by the lift)');
+  if(where===null) return;
+  var rec={id:'aed-c'+Date.now(), lat:userLat, lng:userLng, kind:'aed',
+           name:(he?'דפיברילטור (קהילה)':'AED (community)'),
+           desc:String(where).substring(0,80), community:true};
+  if(!ESS.data.aed) ESS.data.aed=[];
+  ESS.data.aed.push(rec);
+  ESS.on.aed=true;
+  essSave(); essRender(); essLegPaint();
+  try{ if(FB.ready && FB.uid) fbRestWrite('PUT','aeds/'+rec.id,{lat:rec.lat,lng:rec.lng,desc:rec.desc,by:FB.uid,ts:Date.now()}); }catch(e){}
+  toast(he?'\u2713 תודה — הדפיברילטור נוסף למפה. אולי תציל/י חיים':'\u2713 Thank you — AED added to the map','grn');
+}
+
 function fbApplyPeerPresence(all){
   try{
     if(!all)return;
@@ -9333,6 +9436,21 @@ async function getOrCreateDeviceId(){
 .watch-btn .wt-ic{width:9px;height:9px;border-radius:50%;background:#E0A828}
 @keyframes wpulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,.6)}70%{box-shadow:0 0 0 9px rgba(255,255,255,0)}100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}}
 
+
+/* ══ 3SDS map hierarchy ══
+   EVENTS are teardrops that glow and pulse — they are ALIVE and demand attention.
+   ESSENTIALS are flat, muted, rounded squares that sit quietly BELOW them.
+   Different shape + different weight = the eye never confuses a signpost for a scream. */
+.ess-mk{filter:saturate(.88)}
+.leg-sec{border-top:1px solid var(--b2);margin-top:8px;padding-top:9px}
+.leg-sec-h{font-size:9.5px;font-weight:800;letter-spacing:.6px;color:var(--tx3);margin-bottom:7px;text-transform:uppercase}
+.ess-chips{display:flex;flex-direction:column;gap:5px}
+.ess-chip{display:flex;align-items:center;gap:7px;width:100%;padding:5px 7px;border-radius:9px;border:1px solid transparent;background:rgba(255,255,255,.03);color:var(--tx2);font-family:inherit;font-size:11.5px;font-weight:700;cursor:pointer;opacity:.55;transition:.15s;text-align:start}
+.ess-chip.leg-on{opacity:1;background:rgba(255,255,255,.07);border-color:var(--b2);color:var(--tx0)}
+.ec-ic{width:20px;height:20px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto}
+.ec-l{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ec-n{font-size:10px;font-weight:800;color:var(--tx3)}
+.ess-add{display:flex;align-items:center;gap:6px;width:100%;margin-top:8px;padding:7px;border-radius:9px;border:1px dashed rgba(224,168,40,.45);background:rgba(224,168,40,.07);color:var(--g3);font-family:inherit;font-size:10.5px;font-weight:700;cursor:pointer;text-align:start}
 </style>
 <script src="native-bridge.js"></script>
 </body>
