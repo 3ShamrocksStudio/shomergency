@@ -1553,7 +1553,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v111 · 13.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v112 · 13.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -7412,7 +7412,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v111';
+var APP_VER='v112';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -9119,23 +9119,51 @@ async function founderFastPath(){
   return true;
  }catch(e){ return false; }
 }
-async function sendTwilioOTP(){
+/* ══ VERIFICATION RESILIENCE ══
+   SMS is the least reliable channel on earth. Israeli carriers silently drop messages from
+   unregistered alphanumeric sender IDs; other countries filter foreign long-codes. If SMS is
+   the ONLY door, every delivery failure is a lost user forever — they do not reinstall.
+   So: SMS first, then a VOICE CALL that reads the code aloud, then WhatsApp. */
+var OTP_CHANNEL='sms';
+/* Escape hatches, shown once the first attempt is out the door. */
+function showOtpFallbacks(){
+  var he=currentLang==='he';
+  var host=document.getElementById('ob-sms-status');
+  if(!host || document.getElementById('otp-fallbacks')) return;
+  var d=document.createElement('div');
+  d.id='otp-fallbacks';
+  d.style.cssText='margin-top:12px;display:flex;flex-direction:column;gap:7px';
+  d.innerHTML=
+    '<div style="font-size:11.5px;color:var(--tx3);text-align:center">'+(he?'לא הגיע קוד?':"Didn't get a code?")+'</div>'
+   +'<button id="otp-call" style="padding:11px;border-radius:11px;border:1px solid rgba(224,168,40,.5);background:rgba(224,168,40,.10);color:#E0A828;font-family:inherit;font-weight:800;font-size:13px;cursor:pointer">'
+   +(he?'📞 קבל/י שיחה קולית עם הקוד':'📞 Call me with the code')+'</button>'
+   +'<button id="otp-wa" style="padding:11px;border-radius:11px;border:1px solid rgba(37,211,102,.45);background:rgba(37,211,102,.10);color:#25D366;font-family:inherit;font-weight:800;font-size:13px;cursor:pointer">'
+   +(he?'קבל/י את הקוד ב-WhatsApp':'Send the code on WhatsApp')+'</button>';
+  host.parentNode.insertBefore(d, host.nextSibling);
+  var cb=document.getElementById('otp-call');
+  if(cb) cb.onclick=function(){ _otpSends=Math.max(0,_otpSends-1); sendTwilioOTP('call'); };
+  var wb=document.getElementById('otp-wa');
+  if(wb) wb.onclick=function(){ _otpSends=Math.max(0,_otpSends-1); sendTwilioOTP('whatsapp'); };
+}
+async function sendTwilioOTP(channel){
  if(await founderFastPath())return;
+ OTP_CHANNEL = channel || 'sms';
  const he=currentLang==="he";
  const btn=document.getElementById("ob-resend-btn");
  if(_otpSends>=4){ const st=document.getElementById("ob-sms-status"); if(st)st.textContent=he?"יותר מדי ניסיונות — נסה/י שוב מאוחר יותר (הגנת דיוור)":"Too many attempts — try again later (anti-abuse protection)"; if(btn)btn.disabled=true; return; }
  _otpSends++;
  const statusEl=document.getElementById("ob-sms-status");
  if(btn){btn.disabled=true;btn.textContent=he?"שולח קוד...":"Sending code...";}
- if(statusEl)statusEl.textContent=he?"⏳ שולח קוד SMS...":"⏳ Sending SMS code...";
+ if(statusEl)statusEl.textContent=(OTP_CHANNEL==="call")?(he?"⏳ מתקשרים אליך עם הקוד...":"⏳ Calling you with the code..."):(OTP_CHANNEL==="whatsapp")?(he?"⏳ שולח קוד ב-WhatsApp...":"⏳ Sending code on WhatsApp..."):(he?"⏳ שולח קוד SMS...":"⏳ Sending SMS code...");
  try{
   const r=await fetch(TWILIO_BASE+"/sendOTP",{
    method:"POST",
    headers:{"Content-Type":"application/x-www-form-urlencoded"},
-   body:"phone="+encodeURIComponent("+"+user.phone)
+   body:"phone="+encodeURIComponent("+"+user.phone)+"&channel="+encodeURIComponent(OTP_CHANNEL)+"&locale="+(he?"he":"en")
   });
   let data=await r.json();if(typeof data==="string"){try{data=JSON.parse(data);}catch(_){}}
   if(data.success){
+   showOtpFallbacks();
    if(statusEl)statusEl.textContent=he?"✅ קוד נשלח! בדוק/י את ה-SMS":"✅ Code sent! Check your SMS";
    _otpCooldown(btn,45);
    document.getElementById("ob-code-inp")&&document.getElementById("ob-code-inp").focus();
