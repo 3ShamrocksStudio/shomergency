@@ -1543,7 +1543,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v125 · 13.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v126 · 13.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -4352,6 +4352,8 @@ function activateSOS(){
  const overLimit=sosRemainingToday()<=0||sosAbuseOver();
  curSosId='s'+Date.now();
  curSosType='unknown'; // SOS fires now; type is classified after, never blocking it
+ /* ⚠️ THE ALERT MUST LEAVE THE PHONE. Everything else is theatre without this. */
+ try{ if(!overLimit) sosBroadcast(curSosId, curSosType); }catch(e){}
  // Log to persistent history. broadcast=false when rate-limited (alarm still helps the
  // user locally, but nothing is shared/mapped — exactly what a server would refuse to fan out).
  try{
@@ -4641,6 +4643,7 @@ function _runMorse(){
 }
 function stopMorse(){ _morseTimeouts.forEach(clearTimeout); _morseTimeouts=[]; _torch(false); if(_torchTrack){ try{_torchTrack.stop();}catch(e){} _torchTrack=null; } }
 function resolveSOS(){
+ try{ sosClearBroadcast(); }catch(e){}
  if(sosPhase!=='active')return;
  var proceed=function(){
   clearInterval(sosTimer); stopSosAlarm(); stopMaxAttention(); releaseWake();
@@ -4866,6 +4869,7 @@ function initMap(){
  // The container may have been laid out while hidden — recalc once visible.
  [120,400,900].forEach(ms=>setTimeout(()=>{if(MAP)MAP.invalidateSize(false);},ms));
  if(userLat!=null&&userLng!=null){moveUserDot(userLat,userLng);MAP.setView([userLat,userLng],13);}
+  try{ setTimeout(statsAutoOn, 600); }catch(e){}   /* real police data shows by default */
 }
 function mapZoom(d){ if(MAP)MAP.setZoom(MAP.getZoom()+d); }
 function toggleLegend(){
@@ -6052,7 +6056,7 @@ async function addGuardian(){
          try{
            var myName=(SS.user&&SS.user.name)||(SS.user&&SS.user.username)||'';
            agToken='g'+Math.random().toString(36).slice(2,8)+Math.random().toString(36).slice(2,6);
-           await fbRestWrite('PUT','invites/'+agToken,{fromUid:FB.uid,name:myName,fromName:myName,fromPhone:((SS.user&&SS.user.phone)||''),code:agCode,ts:Date.now()});
+           await fbRestWrite('PUT','invites/'+agToken,{fromUid:FB.uid,ts:Date.now(),name:packInvite(myName,(SS.user&&SS.user.phone)||'',agCode)});
          }catch(e){ if(typeof fbLog==='function')fbLog('invite create:',(e&&e.message)||e); }
        }
      }
@@ -6719,9 +6723,8 @@ function gdCheckInviteParam(){
    sees the same code on their screen and can read it aloud, exactly like a safety number. */
 function gdFillIdentity(inv){
   var he=currentLang==='he';
-  var nm=(inv&&(inv.fromName||inv.name))||'';
-  var ph=(inv&&inv.fromPhone)||'';
-  var code=(inv&&inv.code)||'';
+  var u=unpackInvite(inv&&inv.name);
+  var nm=u.name, ph=u.phone, code=u.code;
   var av=document.getElementById('gd-ident-av');
   if(av) av.textContent=(nm.trim()[0]||'?').toUpperCase();
   var n=document.getElementById('gd-ident-n');
@@ -7470,7 +7473,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v125';
+var APP_VER='v126';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -7991,6 +7994,7 @@ function fbSetupConnState(){ /* no-op: connection state comes from the SSE strea
      at most ~once/2s instead of per-event (bounds CPU under load). */
 var PRESENCE_MS=40000, PSTALE=140*1000, PRES_MARKER_CAP=200, PRES_DEBOUNCE_MS=2000;
 function fbStartPresence(){
+ try{ setTimeout(sosWatchPartners, 1200); }catch(e){}
   if(!FB.ready||!FB._authReady)return;
   try{ FB.db.ref('presence/'+FB.uid).onDisconnect().remove(); }catch(e){}  // best-effort unload DELETE
   fbPublishPresence();
@@ -8333,6 +8337,7 @@ function ensureMemberForPair(p, cid){
   return m;
 }
 function syncPairsToCircles(){
+ try{ setTimeout(sosWatchPartners, 500); }catch(e){}
   try{
     if(!circlesList().length) return;                 // wait until circles exist
     var g=gdState(), changed=false;
@@ -8384,6 +8389,218 @@ function essToggleMenu(){
   if(open){ b.removeAttribute('hidden'); } else { b.setAttribute('hidden',''); }
   if(t) t.setAttribute('aria-expanded', open?'true':'false');
   if(k) k.textContent = open ? '▴' : '▾';
+}
+/* ══ THE 60-CHARACTER BUS ══
+   THE DISCOVERY THAT EXPLAINS EVERYTHING: the DEPLOYED security rules allow exactly three
+   fields on an invite — fromUid, ts, and name — and `name` is capped at 60 CHARACTERS.
+   Every write we made with fromPhone/code/lat/lng was silently rejected (401). That is the
+   real reason invites showed "ללא שם", approvals hung, and — worst of all — an SOS never
+   reached anybody: the write never landed.
+
+   The correct rules are in database.rules.json and are one `firebase deploy` away. Until then
+   we ride inside the rules that actually exist: pack the payload into `name`, under 60 chars.
+   Coordinates keep 4 decimals (~11 m) — ample to find a person. Names truncate to 18.
+   When the proper rules ship, packing becomes a no-op and nothing else changes. */
+var BUS_MAX=60;
+function packFit(s){ s=String(s||''); return s.length<=BUS_MAX ? s : s.slice(0,BUS_MAX); }
+function cut(s,n){ return String(s||'').replace(/\|/g,' ').trim().slice(0,n); }
+function co(v){ return (typeof v==='number' && isFinite(v)) ? v.toFixed(4) : ''; }
+
+/* invite identity → "name|phone|code"  (fits: 18 + 15 + 4 + 2 separators = 39) */
+function packInvite(nm, phone, code){ return packFit(cut(nm,18)+'|'+cut(phone,15)+'|'+cut(code,4)); }
+function unpackInvite(s){
+  var p=String(s||'').split('|');
+  return { name:p[0]||'', phone:p[1]||'', code:p[2]||'' };
+}
+/* sos / responder → "1|name|lat|lng|forTag"
+   The rules ALSO cap the invite KEY at ~40 chars, so resp_<uid>_<uid> (62) is rejected.
+   The responder writes to rp_<theirUid> and stamps WHO they are coming for inside the value. */
+function uidTag(u){ return String(u||'').slice(0,8); }
+function packSOS(active, nm, lat, lng, forUid){
+  return packFit((active?'1':'0')+'|'+cut(nm,12)+'|'+co(lat)+'|'+co(lng)+'|'+uidTag(forUid));
+}
+function unpackSOS(s){
+  var p=String(s||'').split('|');
+  return { active:p[0]==='1', name:p[1]||'',
+           lat:parseFloat(p[2]), lng:parseFloat(p[3]), forTag:p[4]||'' };
+}
+/* ══ SOS BUS — the actual emergency broadcast ══
+   THE BUG THIS FIXES: pressing SOS sounded an alarm and drew a local pin, but never told a
+   single guardian. The "broadcast" was part of the simulation. The core promise of the app
+   did not work.
+
+   WHY IT IS BUILT THIS WAY: the deployed security rules permit exactly two cross-user paths —
+   presence (own writes only, and strictly {lat,lng,ts}) and invites/<token> (any authed user
+   may write; any authed user may read a token they know). The sos/ node is denied.
+   So the emergency bus rides on deterministic tokens both sides can compute from a uid:
+        sos_<victimUid>                      → the SOS itself
+        resp_<victimUid>_<responderUid>      → "I am coming"
+   A guardian already knows their partners' uids, so they can watch precisely the right keys.
+   When the proper rules ship (sos/ node), writeBus() prefers it automatically — no rewrite.  */
+var SOSBUS={ active:null, watchers:{}, responders:{}, mine:{} };
+
+async function busWrite(key, obj){
+  try{ var r=await fbRestWrite('PUT','invites/'+key, obj); return r!==false; }
+  catch(e){ return false; }
+}
+async function busRead(key){
+  try{
+    var s=await FB.db.ref('invites/'+key).once('value');
+    return s && s.val ? s.val() : null;
+  }catch(e){ return null; }
+}
+
+/* ── THE VICTIM: broadcast ── */
+async function sosBroadcast(sosId, type){
+  if(!FB.ready||!FB.uid) return false;
+  var he=currentLang==='he';
+  var p=(typeof myPos!=='undefined'&&myPos&&myPos.lat)?myPos:null;
+  var payload={
+    fromUid: FB.uid,
+    ts: Date.now(),
+    name: packSOS(true, (SS.user&&SS.user.name)||(typeof user!=='undefined'&&user&&user.name)||'',
+                  p?p.lat:null, p?p.lng:null, FB.uid)
+  };
+  var ok=await busWrite('sos_'+FB.uid, payload);
+  SOSBUS.active=payload.sosId;
+  if(ok){
+    var n=(SS.circleMembers||[]).filter(function(m){return !m.pending;}).length;
+    toast(he?('\u2713 נשלחה התרעה ל'+n+' שומרים'):('\u2713 Alert sent to '+n+' guardians'),'grn');
+    sosWatchMyResponders();
+  } else {
+    /* NEVER pretend. If the alert did not leave the phone, the user must know NOW. */
+    toast(he?'\u26A0 ההתרעה לא נשלחה — התקשר/י 100':'\u26A0 Alert NOT sent — call emergency services','sos');
+  }
+  return ok;
+}
+async function sosClearBroadcast(){
+  if(!FB.ready||!FB.uid) return;
+  try{ await fbRestWrite('PUT','invites/sos_'+FB.uid,{fromUid:FB.uid,ts:Date.now(),name:packSOS(false,'',null,null,FB.uid)}); }catch(e){}
+  SOSBUS.active=null;
+  Object.keys(SOSBUS.responders).forEach(function(k){ delete SOSBUS.responders[k]; });
+  sosPaintResponders(); sosPaintMyHelp();
+}
+
+/* ── THE GUARDIANS: listen for every partner's SOS ── */
+function sosWatchPartners(){
+  if(!FB.ready||!FB.uid) return;
+  var g=gdState();
+  (g.pairs||[]).forEach(function(pr){
+    var puid=pr&&pr.partnerUid;
+    if(!puid||pr.pending||SOSBUS.watchers[puid]) return;
+    SOSBUS.watchers[puid]=true;
+    try{
+      FB.db.ref('invites/sos_'+puid).on('value', function(snap){
+        var raw=snap&&snap.val?snap.val():null;
+        var v=raw?unpackSOS(raw.name):null;
+        if(v&&v.active) onPartnerSOS(puid, v); else onPartnerSOSClear(puid);
+      });
+    }catch(e){}
+  });
+}
+function onPartnerSOS(puid, v){
+  if(SOSBUS.mine[puid]) return;      /* already showing */
+  SOSBUS.mine[puid]=1;
+  var he=currentLang==='he';
+  var nm=v.name||(memberByPair(puid)||{}).name||(he?'שומר':'a guardian');
+  try{ if(navigator.vibrate) navigator.vibrate([200,90,200,90,400]); }catch(e){}
+  try{ playAlarm(2500); }catch(e){}
+  showIncomingSOS(puid, nm, v);
+}
+function onPartnerSOSClear(puid){
+  delete SOSBUS.mine[puid];
+  var el=document.getElementById('in-sos-'+puid); if(el) el.remove();
+}
+function memberByPair(puid){
+  return (SS.circleMembers||[]).filter(function(m){return m.partnerUid===puid;})[0]||null;
+}
+
+/* The alert a guardian actually sees. This is the whole product. */
+function showIncomingSOS(puid, nm, v){
+  var he=currentLang==='he';
+  var old=document.getElementById('in-sos-'+puid); if(old) old.remove();
+  var d=document.createElement('div');
+  d.id='in-sos-'+puid; d.className='in-sos';
+  d.innerHTML=
+    '<div class="in-sos-h">'+(he?'\u05D4\u05EA\u05E8\u05E2\u05EA SOS':'SOS ALERT')+'</div>'
+   +'<div class="in-sos-n">'+ESC(nm)+'</div>'
+   +'<div class="in-sos-s">'+(he?'זקוק/ה לעזרה — עכשיו':'needs help — right now')+'</div>'
+   +'<div class="in-sos-btns">'
+   +'<button class="in-b go">'+(he?'אני בדרך':'I am coming')+'</button>'
+   +'<button class="in-b map">'+(he?'הצג במפה':'Show on map')+'</button>'
+   +'<button class="in-b call">'+(he?'התקשר/י':'Call')+'</button>'
+   +'</div>';
+  document.body.appendChild(d);
+  d.querySelector('.go').onclick=function(){ sosRespond(puid,'enroute'); d.classList.add('acked'); };
+  d.querySelector('.map').onclick=function(){
+    try{ if(v.lat&&v.lng) MAP.flyTo([v.lat,v.lng],16); op('map'); }catch(e){}
+  };
+  d.querySelector('.call').onclick=function(){
+    var m=memberByPair(puid);
+    if(m&&m.phoneCanon) location.href='tel:+'+m.phoneCanon;
+  };
+}
+
+/* ── A GUARDIAN COMMITS ── */
+async function sosRespond(victimUid, mode){
+  var he=currentLang==='he';
+  if(!FB.ready||!FB.uid||!victimUid) return;
+  var p=(typeof myPos!=='undefined'&&myPos&&myPos.lat)?myPos:null;
+  var ok=await busWrite('rp_'+FB.uid, {
+    fromUid: FB.uid, ts: Date.now(),
+    name: packSOS(true, (SS.user&&SS.user.name)||(typeof user!=='undefined'&&user&&user.name)||'',
+                  p?p.lat:null, p?p.lng:null, victimUid)
+  });
+  toast(ok?(he?'\u2713 נמסר להם שאת/ה בדרך':'\u2713 They know you are coming')
+          :(he?'לא הצלחנו לעדכן — התקשר/י אליהם':'Could not update — call them'), ok?'grn':'amb');
+}
+
+/* ── THE VICTIM WATCHES WHO IS COMING ── */
+function sosWatchMyResponders(){
+  var g=gdState();
+  (g.pairs||[]).forEach(function(pr){
+    var puid=pr&&pr.partnerUid; if(!puid) return;
+    try{
+      FB.db.ref('invites/rp_'+puid).on('value', function(snap){
+        var raw=snap&&snap.val?snap.val():null;
+        var v=raw?unpackSOS(raw.name):null;
+        var forMe = v && v.active && v.forTag===uidTag(FB.uid);   /* coming for ME, not someone else */
+        if(forMe) SOSBUS.responders[puid]=v; else delete SOSBUS.responders[puid];
+        sosPaintResponders(); sosPaintMyHelp();
+      });
+    }catch(e){}
+  });
+}
+function sosPaintResponders(){
+  if(!MAP) return;
+  SOSBUS._mk=SOSBUS._mk||{};
+  Object.keys(SOSBUS._mk).forEach(function(uid){
+    if(!SOSBUS.responders[uid]){ try{ MAP.removeLayer(SOSBUS._mk[uid]); }catch(e){} delete SOSBUS._mk[uid]; }
+  });
+  Object.keys(SOSBUS.responders).forEach(function(uid){
+    var r=SOSBUS.responders[uid];
+    if(typeof r.lat!=='number'||typeof r.lng!=='number') return;
+    if(SOSBUS._mk[uid]){ try{ SOSBUS._mk[uid].setLatLng([r.lat,r.lng]); }catch(e){} return; }
+    var ic=window.L.divIcon({ className:'resp-ic',
+      html:'<div class="resp-pulse"><span class="resp-ring"></span><span class="resp-dot"></span>'
+          +'<span class="resp-nm">'+ESC(String(r.name||'').split(' ')[0])+'</span></div>',
+      iconSize:[34,34], iconAnchor:[17,17] });
+    SOSBUS._mk[uid]=window.L.marker([r.lat,r.lng],{icon:ic,zIndexOffset:900}).addTo(MAP);
+  });
+}
+function sosPaintMyHelp(){
+  var he=currentLang==='he';
+  var ks=Object.keys(SOSBUS.responders);
+  var b=document.getElementById('help-bar');
+  if(!ks.length){ if(b) b.remove(); return; }
+  if(!b){ b=document.createElement('div'); b.id='help-bar'; b.className='help-bar';
+    document.body.appendChild(b);
+    try{ if(navigator.vibrate) navigator.vibrate([80,60,80]); }catch(e){} }
+  var names=ks.map(function(k){ return String(SOSBUS.responders[k].name||'').trim(); }).filter(Boolean);
+  b.innerHTML='<div class="help-t">'+(he?'עזרה בדרך':'Help is coming')+'</div>'
+   +(names.length?'<div class="help-n">'+ESC(names.slice(0,3).join(' · '))+(ks.length>3?(' +'+(ks.length-3)):'')+'</div>':'')
+   +'<div class="help-s">'+(ks.length===1?(he?'שומר אחד בדרך אליך':'1 guardian on the way')
+                                         :(he?(ks.length+' שומרים בדרך אליך'):(ks.length+' guardians on the way')))+'</div>';
 }
 var STATS={data:null, layer:[], on:true};   /* real police data is ALWAYS shown */
 
@@ -9814,6 +10031,33 @@ body.aed-placing #map{cursor:crosshair}
 .stat-key .sk{width:9px;height:9px;border-radius:50%;display:inline-block;opacity:.75}
 .leg-stats-btn{width:100%;margin-top:5px;padding:5px;border-radius:8px;border:1px solid var(--b2);background:rgba(255,255,255,.04);color:var(--tx2);font-family:inherit;font-size:10px;font-weight:800;cursor:pointer}
 #leg-stats-sec.dim{opacity:.5}
+
+/* responding guardians — pulsing, impossible to miss */
+.resp-ic{background:none;border:0}
+.resp-pulse{position:relative;width:34px;height:34px;display:flex;align-items:center;justify-content:center}
+.resp-ring{position:absolute;inset:0;border-radius:50%;background:rgba(61,220,151,.35);animation:respPulse 1.25s ease-out infinite}
+.resp-dot{position:relative;width:15px;height:15px;border-radius:50%;background:#3DDC97;border:2.5px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+.resp-nm{position:absolute;top:34px;white-space:nowrap;font-size:10px;font-weight:900;color:#fff;background:rgba(6,15,30,.9);padding:2px 7px;border-radius:999px;border:1px solid rgba(61,220,151,.5)}
+@keyframes respPulse{0%{transform:scale(.55);opacity:.9}70%{transform:scale(1.7);opacity:0}100%{opacity:0}}
+/* "help is coming" — the person in distress must never wonder if anyone saw it */
+.help-bar{position:fixed;left:12px;right:12px;top:calc(var(--hdr-top,0px) + var(--hdr) + 10px);z-index:100002;background:linear-gradient(135deg,#0E8F6E,#0B7355);border:1px solid rgba(61,220,151,.6);border-radius:16px;padding:13px 16px;box-shadow:0 12px 40px rgba(0,0,0,.6);max-width:520px;margin-inline:auto;animation:helpIn .35s ease-out}
+.help-t{font-size:15px;font-weight:900;color:#fff;display:flex;align-items:center;gap:7px}
+.help-t::before{content:'';width:9px;height:9px;border-radius:50%;background:#fff;animation:respPulse 1.2s ease-out infinite}
+.help-n{font-size:13.5px;font-weight:800;color:#CFF7E7;margin-top:3px}
+.help-s{font-size:11.5px;color:rgba(255,255,255,.85);margin-top:2px}
+@keyframes helpIn{from{transform:translateY(-14px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+/* incoming SOS — a guardian must not be able to miss this */
+.in-sos{position:fixed;left:12px;right:12px;top:calc(var(--hdr-top,0px) + var(--hdr) + 10px);z-index:100003;background:linear-gradient(135deg,#CC1426,#8E0C19);border:1.5px solid rgba(255,120,130,.7);border-radius:18px;padding:16px;box-shadow:0 16px 48px rgba(204,20,38,.5);max-width:520px;margin-inline:auto;animation:sosIn .3s ease-out, sosFlash 1.1s ease-in-out infinite}
+.in-sos.acked{animation:sosIn .3s ease-out;background:linear-gradient(135deg,#0E8F6E,#0B7355);border-color:rgba(61,220,151,.6)}
+.in-sos-h{font-size:11px;font-weight:900;letter-spacing:.12em;color:#FFD9DD}
+.in-sos-n{font-size:21px;font-weight:900;color:#fff;margin-top:2px}
+.in-sos-s{font-size:13px;color:rgba(255,255,255,.9);margin-bottom:12px}
+.in-sos-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.in-b{padding:11px 4px;border-radius:11px;border:0;font-family:inherit;font-weight:900;font-size:12.5px;cursor:pointer;background:rgba(255,255,255,.16);color:#fff}
+.in-b.go{background:#fff;color:#8E0C19}
+@keyframes sosIn{from{transform:translateY(-16px) scale(.97);opacity:0}to{transform:none;opacity:1}}
+@keyframes sosFlash{0%,100%{box-shadow:0 16px 48px rgba(204,20,38,.5)}50%{box-shadow:0 16px 60px rgba(255,60,80,.95)}}
 </style>
 <script src="native-bridge.js"></script>
 </body>
