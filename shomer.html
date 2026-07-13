@@ -1553,7 +1553,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v113 · 13.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v114 · 13.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -3801,7 +3801,7 @@ function enterApp(returning){
  try{ buildInitialUpdates(); }catch(e){}
  try{ restorePersistedData(); }catch(e){}
  try{ seedCirclesIfEmpty(); startCircleSim(); }catch(e){}
- try{ startSim(); }catch(e){}
+ try{ }catch(e){}
  // Hide lang bar on main screen
  document.getElementById('lang-bar').classList.add('hidden');
  document.body.classList.remove('lb-on');
@@ -4835,18 +4835,15 @@ function statPopup(cat,city){
  return w;
 }
 function buildStatMarkers(){
- if(!MAP)return;
- mapLayers.stats.forEach(m=>MAP.removeLayer(m));mapLayers.stats=[];
- CITY_STATS.forEach(city=>{
- city.cats.forEach(cat=>{
- const ty=TYPES[cat.t]||TYPES.viol;
- const m=window.L.marker([city.lat+cat.off[0],city.lng+cat.off[1]],
- {icon:catIcon(cat.t),alt:ty.label()+' — '+(currentLang==='he'?city.city:city.cityEn)});
- m.bindPopup(()=>statPopup(cat,city),{maxWidth:240,closeButton:true});
- m.addTo(MAP);
- mapLayers.stats.push(m);
- });
- });
+  /* LIVE SYSTEM — statistical crime markers are NOT drawn on the map.
+     They are aggregate police statistics, not incidents, but rendered as pins they are
+     indistinguishable from a live report. Users read them as "something happened here,
+     now". That is a fabricated event by any other name. The map shows only real,
+     current events. (The underlying statistics remain available in the app's data
+     sources section, where they are clearly labelled as statistics.) */
+  if(!MAP) return;
+  try{ (mapLayers.stats||[]).forEach(function(mk){ MAP.removeLayer(mk); }); }catch(e){}
+  mapLayers.stats=[];
 }
 /* buildPins() kept as the public entry point used by enterApp(). */
 function buildPins(){ initMap(); }
@@ -4934,13 +4931,7 @@ window.addEventListener('resize',()=>{if(MAP)MAP.invalidateSize(false);});
 /* ═══════════════════════════════════
  INCIDENT DETAIL
 ═══════════════════════════════════ */
-const DETAILS=[
- {title:'SOS פעיל — סכנה מיידית', type:'sos', time:'לפני 2 דק׳', loc:'ירושלים, רחוב יפו', cx:266,cy:443, lat:31.7836,lng:35.2167, desc:'משתמשת שלחה SOS. מיקום שותף בזמן אמת. שומרים מתבקשים.',responders:[{nm:'אורן ד.',dist:'0.8 ק"מ',st:'בדרך'},{nm:'מיטל כ.',dist:'1.4 ק"מ',st:'בדרך'}],photos:0,status:'דחוף'},
- {title:'מעקב חשוד — שינקין', type:'stalk',time:'לפני 9 דק׳', loc:'ת"א, שינקין/אלנבי', cx:170,cy:299, lat:32.0667,lng:34.7747, desc:'גבר עוקב אחרי נשים. כ-45, חולצה כחולה, ג\'ינס. 3 דיווחים.',responders:[],photos:1,status:'זהירות'},
- {title:'נסגר — תקיפה ✓', type:'med', time:'לפני 34 דק׳', loc:'חיפה, הדר', cx:211,cy:131, lat:32.8120,lng:34.9982, desc:'4 שומרים הגיעו. המטרד הסתלק. הנפגעת בטוחה.',responders:[{nm:'רועי מ.',dist:'הגיע',st:'טיפל'}],photos:0,status:'טופל'},
- {title:'עזרה רפואית', type:'med', time:'לפני 16 דק׳', loc:'ראשון לציון, רחוב הרצל', cx:198,cy:366, lat:31.9640,lng:34.8044, desc:'קשיש, כ-80, נפל ליד הסופרמרקט. מד"א הוזמן.',responders:[{nm:'ריקי א.',dist:'2.1 ק"מ',st:'בדרך'}],photos:0,status:'פעיל'},
- {title:'תקיפה פיזית — פ"ת', type:'viol', time:'לפני 21 דק׳', loc:'פתח תקוה, רחוב הרצל', cx:220,cy:324, lat:32.0840,lng:34.8870, desc:'תקיפה בכניסה לחנות. המשטרה הוזמנה. 2 תמונות.',responders:[],photos:2,status:'דחוף'},
-];
+const DETAILS=[];   /* LIVE — real events only. No demo data. */
 function openDetail(idx){
  if(idx<0||!DETAILS[idx]) return;
  const d=DETAILS[idx];
@@ -5024,35 +5015,23 @@ function navigateToEvent(){
  UPDATES
 ═══════════════════════════════════ */
 function buildInitialUpdates(){
- const cards=[
- {cls:'t-sos', dotC:'#CC1426',title:' SOS פעיל — סכנה מיידית',bdg:'<span class="ubdg"> דחוף</span>',time:'לפני 2 דק׳',loc:'ירושלים, יפו',desc:'משתמשת שלחה SOS. שומרים מתבקשים.',detIdx:0,resp:[{a:'א'},{a:'מ'}],dist:'1.2 ק"מ'},
- {cls:'t-stalk',dotC:'#C07808',title:' מעקב חשוד — שינקין', bdg:'<span class="ubdg"> זהירות</span>',time:'לפני 9 דק׳',loc:'ת"א, שינקין',desc:'גבר עוקב. 3 דיווחים מאשרים.',detIdx:1,resp:[],dist:''},
- {cls:'t-med', dotC:'#0E8840',title:' נסגר — תקיפה מילולית', bdg:'<span class="ubdg">✓ טופל</span>',time:'לפני 34 דק׳',loc:'חיפה, הדר',desc:'4 שומרים הגיעו. האירוע הוסדר.',detIdx:2,resp:[],dist:''},
- {cls:'t-med', dotC:'#0E8840',title:' עזרה רפואית דחופה', bdg:'<span class="ubdg"> פעיל</span>',time:'לפני 16 דק׳',loc:'ראשון לציון',desc:'קשיש נפל. מד"א הוזמן.',detIdx:3,resp:[{a:'ר'}],dist:'3.1 ק"מ'},
- {cls:'t-viol', dotC:'#EA5A00',title:' תקיפה פיזית + תיעוד', bdg:'<span class="ubdg"> דחוף</span>',time:'לפני 21 דק׳',loc:'פתח תקוה',desc:'תקיפה בחנות. 2 תמונות.',detIdx:4,resp:[],dist:''},
- ];
- const l=document.getElementById('upd-list');
- l.innerHTML='';
- cards.forEach(c=>{
- const div=document.createElement('div');
- div.className=`ucard ${c.cls}`;
- div.setAttribute('role','listitem');
- div.setAttribute('tabindex','0');
- if(c.detIdx>=0){div.onclick=()=>openDetail(c.detIdx);div.onkeydown=e=>{if(e.key==='Enter')openDetail(c.detIdx);};}
- div.innerHTML=`<div class="uc-in">
- <div class="uc-top"><div class="uc-hd"><div class="uc-dot" aria-hidden="true"></div><span class="uc-ttl"></span></div>${c.bdg}</div>
- <div class="uc-meta"><span class="uc-time"></span>${c.dist?'<span class="uc-sep"></span><span class="uc-loc"></span>':''}</div>
- <div class="uc-desc"></div>
- ${c.resp.length?`<div class="uc-resp"><div class="avs">${c.resp.map(r=>`<div class="av">${ESC(r.a)}</div>`).join('')}</div><span class="uc-rcount">${c.resp.length} ${currentLang==='he'?'בדרך':'responding'}</span>${c.dist?`<span class="dtag">${ESC(c.dist)}</span>`:''} </div>`:''}
- <div class="uc-hint"> ${arTr(currentLang==='he'?'הקש לפרטים':'Tap for details')}</div>
- </div>`;
- // Set text safely
- div.querySelector('.uc-ttl').textContent=c.title;
- div.querySelector('.uc-time').textContent=c.time;
- if(c.dist) div.querySelector('.uc-loc').textContent=c.loc;
- div.querySelector('.uc-desc').textContent=c.desc;
- l.appendChild(div);
- });
+  /* LIVE SYSTEM — no seeded, demo or simulated events. Ever.
+     This feed shows only real reports from real people. An empty feed is the truth:
+     it means nothing has happened nearby. Fabricating incidents in a safety app
+     causes real fear and destroys the trust the product is built on. */
+  const l=document.getElementById('upd-list');
+  if(!l) return;
+  l.innerHTML='';
+  const he=currentLang==='he', ar=currentLang==='ar';
+  const e=document.createElement('div');
+  e.id='upd-empty';
+  e.style.cssText='text-align:center;color:var(--tx3);font-size:13px;padding:40px 18px;line-height:1.7';
+  e.innerHTML=(he
+    ? '<div style="font-size:15px;font-weight:800;color:var(--tx1);margin-bottom:6px">שקט באזור שלך</div>אין דיווחים פעילים כרגע.<br>כשמישהו בקרבתך ידווח או ישלח SOS — זה יופיע כאן.'
+    : ar
+    ? '<div style="font-size:15px;font-weight:800;color:var(--tx1);margin-bottom:6px">هدوء في منطقتك</div>لا توجد بلاغات نشطة حاليًا.'
+    : '<div style="font-size:15px;font-weight:800;color:var(--tx1);margin-bottom:6px">All quiet near you</div>No active reports right now.<br>Real reports and SOS alerts from people nearby will appear here.');
+  l.appendChild(e);
 }
 function removeSOSCard(id){
  if(!id)return;
@@ -7177,24 +7156,7 @@ function legalApplyI18n(){
 /* ═══════════════════════════════════
  SIMULATION — live feel
 ═══════════════════════════════════ */
-function startSim(){
- const evts=[
- {t:currentLang==='he'?' מעקב חשוד: דיזנגוף, ת"א':' Stalking: Dizengoff, Tel Aviv',c:'amb'},
- {t:currentLang==='he'?' שומר הגיע — נסגר, חיפה':' Guardian arrived — closed, Haifa',c:'grn'},
- {t:currentLang==='he'?' SOS חדש: ראשון לציון':' New SOS: Rishon LeZion',c:'red'},
- {t:currentLang==='he'?' אירוע טופל: ירושלים':' Incident resolved: Jerusalem',c:'grn'},
- {t:currentLang==='he'?' אלימות: פלורנטין, ת"א':' Violence: Florentin, Tel Aviv',c:'amb'},
- {t:currentLang==='he'?' 5 שומרים חדשים הצטרפו':' 5 new guardians joined',c:'grn'},
- ];
- let i=0;
- setInterval(()=>{
- if(Math.random()>.72){
- var _e=evts[i%evts.length]; toast(_e.t,_e.c,function(){try{openUpdates();}catch(_){}}); i++;   // tappable → live updates feed
- const el=document.getElementById('liveN');
- if(el){const n=parseInt(el.textContent)+(Math.random()>.5?1:-1);el.textContent=Math.max(150,n);}
- }
- },55000);
-}
+
 
 /* ═══════════════════════════════════
  KEYBOARD SHORTCUTS
@@ -7418,7 +7380,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v113';
+var APP_VER='v114';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
