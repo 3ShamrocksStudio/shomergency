@@ -1528,7 +1528,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v122 · 13.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v123 · 13.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -7444,7 +7444,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v122';
+var APP_VER='v123';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -9132,18 +9132,10 @@ function _otpCooldown(btn,secs){
  lbl();
  _otpCoolT=setInterval(function(){ s--; if(s<=0){clearInterval(_otpCoolT);_otpCoolT=null;btn.disabled=false;btn.textContent=he?"לא קיבלת/ה קוד? שלח/י שוב":"No code? Send again";}else lbl(); },1000);
 }
-/* ⚠️ PRE-LAUNCH ONLY: founder fast-path — bypasses SMS OTP for the founder phone (Twilio prefix block workaround). REMOVE BEFORE PUBLIC LAUNCH. */
-async function founderFastPath(){
- try{
-  const digits=(user.phone||"").replace(/[^0-9]/g,"");
-  const ph=await sha256Hex(digits);
-  if(ph!==FOUNDER_PH)return false;
-  const st=document.getElementById("ob-sms-status");
-  if(st)st.textContent=currentLang==="he"?"מזוהה כמייסד — מדלג על אימות SMS":"Founder recognized — skipping SMS verification";
-  await completeRegistration();
-  return true;
- }catch(e){ return false; }
-}
+/* founderFastPath REMOVED before public launch — it bypassed SMS verification for one
+   phone hash while Twilio had Dave's prefix blocked. That block is gone, Lookup is enabled,
+   and Fraud Guard is back on. Nobody skips verification. */
+function founderFastPath(){ return Promise.resolve(false); }
 /* ══ VERIFICATION RESILIENCE ══
    SMS is the least reliable channel on earth. Israeli carriers silently drop messages from
    unregistered alphanumeric sender IDs; other countries filter foreign long-codes. If SMS is
@@ -9326,7 +9318,8 @@ async function sha256Hex(str){
  }catch(e){}
  return _sha256JS(str);
 }
-var FOUNDER_PH="ed8e941f0cd44dd2d47d184047fae955420ab062f4a4bb838da7733a68c71d16";
+
+var FOUNDER_PH="ed8e941f0cd44dd2d47d184047fae955420ab062f4a4bb838da7733a68c71d16";  /* vanity handle only — NOT a verification bypass */
 function shomerHandleFromHash(ph){ if(ph===FOUNDER_PH)return "SH✡MER0000"; return "SH✡MER"+String((parseInt(ph.slice(0,8),16)%9999)+1).padStart(4,"0"); }
 async function completeRegistration(){
  const he=currentLang==="he";
