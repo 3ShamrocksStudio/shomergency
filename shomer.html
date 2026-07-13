@@ -1497,7 +1497,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <button class="legend-hd" onclick="toggleLegend()" aria-expanded="false" aria-controls="legend-body"><span aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span><span id="legend-ttl-txt">מקרא מפה</span><span class="legend-chev" id="legend-chev" aria-hidden="true">▸</span></button>
  <div class="legend-body" id="legend-body">
  <div class="leg-sec" id="leg-ess">
-   <div class="leg-sec-h">שירותי חירום · ESSENTIALS</div>
+   <div class="leg-sec-h">שירותי חירום</div>
    <div class="ess-chips" id="ess-chips"></div>
    <button class="ess-add" onclick="aedAddHere()">
      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
@@ -1553,7 +1553,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v115 · 13.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v116 · 13.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -2076,9 +2076,9 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="sec-cap mb12" id="prof-prof-cap">תפקיד מקצועי (מתנדב/ת מגיב/ה)</div>
  <p class="sr-sb" id="prof-prof-hint" style="margin:-4px 2px 12px;line-height:1.6">בחר/י תפקיד אם את/ה מגיב/ה מקצועי/ת — סמל יוצג בפרופיל ועל הסמן שלך במפה.</p>
  <div class="prof-grid mb20" id="prof-grid" role="group" aria-label="תפקיד מקצועי">
- <div class="prof-opt" data-prof="police" onclick="selectProfession('police')" role="button" tabindex="0"><span class="pic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6l7 2.6v5.2c0 4.6-3 8.1-7 9.9-4-1.8-7-5.3-7-9.9V5.2Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 7.4l1.15 2.33 2.57.37-1.86 1.81.44 2.56L12 13.26l-2.3 1.21.44-2.56-1.86-1.81 2.57-.37Z" fill="currentColor" stroke="none"/></svg></span><span class="pl" data-pl="police">משטרה</span></div>
+ <div class="prof-opt" data-prof="police" onclick="selectProfession('police')" role="button" tabindex="0"><span class="pic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l7 2.6v5.1c0 4.5-2.9 8-7 9.7-4.1-1.7-7-5.2-7-9.7V5.4Z" fill="currentColor" stroke="none"/><path d="M12 7.9l1.15 2.33 2.57.37-1.86 1.82.44 2.55L12 13.77l-2.3 1.2.44-2.55-1.86-1.82 2.57-.37Z" fill="#fff" stroke="none"/></svg></span><span class="pl" data-pl="police">משטרה</span></div>
  <div class="prof-opt" data-prof="doctor" onclick="selectProfession('doctor')" role="button" tabindex="0"><span class="pic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5v19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 5.6c2.6 0 2.6 2.6 0 2.6s-2.6 2.6 0 2.6 2.6 2.6 0 2.6-2.6 2.6 0 2.6 2.6 2.6 0 2.6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M9.6 3.6h4.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span class="pl" data-pl="doctor">רופא/ה (MD)</span></div>
- <div class="prof-opt" data-prof="fire" onclick="selectProfession('fire')" role="button" tabindex="0"><span class="pic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 17.5c0-4.7 3.8-8.5 8.5-8.5s8.5 3.8 8.5 8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M2.4 17.5h19.2a1 1 0 0 1 1 1v.6a1.4 1.4 0 0 1-1.4 1.4H2.8a1.4 1.4 0 0 1-1.4-1.4v-.6a1 1 0 0 1 1-1Z" fill="currentColor" stroke="none"/><path d="M12 9V5.2M12 5.2c-1.1 0-2 .5-2 .5s.4-2.2 2-2.2 2 2.2 2 2.2-.9-.5-2-.5Z" fill="currentColor" stroke="none"/></svg></span><span class="pl" data-pl="fire">כבאי/ת</span></div>
+ <div class="prof-opt" data-prof="fire" onclick="selectProfession('fire')" role="button" tabindex="0"><span class="pic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5c.4 3-1.3 4.2-2.7 5.6C7.6 9.7 6 11.3 6 14a6 6 0 0 0 12 0c0-2.4-1-3.9-2.2-5.3-.5 .9-1.2 1.4-2 1.4 1-2.6-.2-5.6-1.8-7.6Z" fill="currentColor" stroke="none"/><path d="M12 20a3 3 0 0 1-3-3c0-1.4 1-2.2 1.7-3 .3 .8 .9 1.2 1.6 1.2-.4-1.3 .2-2.7 .9-3.5 .6 .9 1.8 1.9 1.8 4.3a3 3 0 0 1-3 3Z" fill="#fff" opacity=".55" stroke="none"/></svg></span><span class="pl" data-pl="fire">כבאי/ת</span></div>
  <div class="prof-opt" data-prof="para" onclick="selectProfession('para')" role="button" tabindex="0"><span class="pic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.2l2.4 4.15 4.79.02-2.4 4.13 2.4 4.13-4.79.02L12 18.8l-2.4-4.15-4.79-.02 2.4-4.13-2.4-4.13 4.79-.02Z" fill="currentColor" stroke="none"/><path d="M12 7.2v9.6M8.6 9.2l6.8 5.6M15.4 9.2l-6.8 5.6" stroke="rgba(0,0,0,.35)" stroke-width="1" stroke-linecap="round"/></svg></span><span class="pl" data-pl="para">פרמדיק/ית</span></div>
  <div class="prof-opt" data-prof="security" onclick="selectProfession('security')" role="button" tabindex="0"><span class="pic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6l7.4 2.8v5.4c0 4.8-3.1 8.5-7.4 10.4-4.3-1.9-7.4-5.6-7.4-10.4V5.4Z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="M8.8 12.2l2.2 2.2 4.2-4.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="pl" data-pl="security">אבטחה</span></div>
  <div class="prof-opt sel" data-prof="" onclick="selectProfession('')" role="button" tabindex="0"><span class="pic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6.3 6.3l11.4 11.4" fill="none" stroke="currentColor" stroke-width="2"/></svg></span><span class="pl" data-pl="none">ללא</span></div>
@@ -2092,7 +2092,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
    </div>
    <span style="font-size:14px;font-weight:800;color:#C9A84C">MY SH✡MER</span>
   </div>
-  <button onclick="op('sh-circles')" style="background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);color:#C9A84C;border-radius:10px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">נהל/י</button>
+  <button onclick="op('sh-circles')" style="background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);color:#C9A84C;border-radius:10px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit" onclick="openManage()">נהל/י</button>
  </div>
  <div style="display:flex;flex-direction:column;gap:7px">
   <div style="display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--n3);border-radius:11px;border:1px solid var(--b1)">
@@ -2241,7 +2241,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="sh-body">
  <!-- CIRCLES OF TRUST — light card, live counts, rename, add new -->
  <div class="lt-card" id="cot-card">
-   <div class="lt-h"><span>מעגלי שומרים</span><span class="lt-sub">circles of trust</span></div>
+   <div class="lt-h"><span>מעגלי שומרים</span></div>
    <div id="cot-list"></div>
    <button class="cot-new" onclick="addCircle()">
      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
@@ -2266,10 +2266,6 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
      <select class="ob-f" id="ag-circle" aria-label="בחר מעגל" style="flex:1;margin-bottom:0"></select>
    </div>
    <div id="ag-hint" style="font-size:11px;color:var(--tx3);min-height:14px;margin-bottom:8px;text-align:center"></div>
-   <button class="invite-cta" onclick="shareInvite()">
-     <svg viewBox="0 0 24 24" width="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><path d="M16 6l-4-4-4 4"/><path d="M12 2v14"/></svg>
-     <span id="ag-share-lbl">שתף/י הזמנה — כל אחד יכול להצטרף</span>
-   </button>
    <button class="cta-gold" id="ag-go" style="width:100%;padding:13px;font-size:15px;font-weight:800" onclick="addGuardian()">
      <svg class="ic" viewBox="0 0 24 24" width="17" style="margin-inline-end:6px"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
      <span id="ag-go-lbl">שלח/י בקשה</span>
@@ -5957,6 +5953,30 @@ async function shareInvite(){
   catch(e){ try{ navigator.clipboard.writeText(link); toast(he?'הקישור הועתק':'Link copied','grn'); }catch(_){} }
 }
 /* ══ INVITE PANEL — the only reliable way the request reaches a human ══ */
+/* Fire the real invite SMS through our Twilio function. */
+async function sendInviteSMS(phone, name, token){
+  var he=currentLang==='he';
+  if(!phone || !token) return false;
+  try{
+    var r=await fetch(TWILIO_BASE+"/sendInvite",{
+      method:"POST",
+      headers:{"Content-Type":"application/x-www-form-urlencoded"},
+      body:"phone="+encodeURIComponent("+"+phone)
+          +"&link="+encodeURIComponent(inviteLinkFor(token))
+          +"&fromName="+encodeURIComponent((SS.user&&SS.user.name)||'')
+          +"&lang="+(he?'he':'en')
+    });
+    var d=await r.json(); if(typeof d==='string'){ try{ d=JSON.parse(d); }catch(_){} }
+    if(d && d.success){
+      toast(he?('\u2713 נשלחה בקשה ל'+(name||'')+' ב-SMS'):('\u2713 Invite texted to '+(name||'')),'grn');
+      return true;
+    }
+    toast(he?('ה-SMS לא נשלח — שלח/י ידנית למטה'):('SMS failed — send it manually below'),'amb');
+  }catch(e){
+    toast(he?'ה-SMS לא נשלח — שלח/י ידנית למטה':'SMS failed — send manually below','amb');
+  }
+  return false;
+}
 function inviteLinkFor(token){ return 'https://www.shomer-app.co.il/shomer.html?g='+encodeURIComponent(token||''); }
 function inviteTextFor(name, token){
   var he=currentLang==='he';
@@ -5996,11 +6016,76 @@ function showInvitePanel(name, phone, token){
   if(cl2) cl2.onclick=function(){ p.remove(); };
 }
 /* Re-send from any pending member row. */
+/* ══ ניהול — the management screen from the wireframe ══
+   One place to: rename a circle, see who is in it, move a SHOMER between circles,
+   remove them, and control what each one can see. */
+function openManage(){
+  var he=currentLang==='he';
+  var old=document.getElementById('mng-panel'); if(old) old.remove();
+  var p=document.createElement('div');
+  p.id='mng-panel'; p.className='mng-panel';
+  p.innerHTML='<div class="mng-hd"><span>'+(he?'ניהול מעגלים ושומרים':'Manage circles & guardians')+'</span>'
+    +'<button class="mng-x" onclick="document.getElementById(\'mng-panel\').remove()">✕</button></div>'
+    +'<div class="mng-body" id="mng-body"></div>';
+  document.body.appendChild(p);
+  renderManage();
+}
+function renderManage(){
+  var he=currentLang==='he';
+  var b=document.getElementById('mng-body'); if(!b) return;
+  b.innerHTML='';
+  circlesList().forEach(function(cc){
+    var box=document.createElement('div'); box.className='mng-circ';
+    var ms=membersOf(cc.id);
+    box.innerHTML='<div class="mng-crow">'
+      +'<button class="mng-ed" title="'+(he?'שנה שם':'Rename')+'">'
+      +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>'
+      +'<span class="mng-nm">'+ESC(cc.name)+'</span>'
+      +'<span class="mng-n">'+ms.length+'</span></div>';
+    var list=document.createElement('div'); list.className='mng-list';
+    if(!ms.length){
+      var e=document.createElement('div'); e.className='mng-empty';
+      e.textContent=he?'אין שומרים במעגל זה':'No guardians in this circle';
+      list.appendChild(e);
+    }
+    ms.forEach(function(m){
+      var row=document.createElement('div'); row.className='mng-m';
+      var sel='<select class="mng-move" aria-label="'+(he?'העבר למעגל':'Move to circle')+'">'
+        + circlesList().map(function(x){ return '<option value="'+x.id+'"'+(x.id===m.cid?' selected':'')+'>'+ESC(x.name)+'</option>'; }).join('')
+        + '</select>';
+      row.innerHTML='<span class="mng-mn">'+ESC(m.name||'')+'</span>'
+        + (m.pending?'<span class="mng-p">'+(he?'ממתין':'pending')+'</span>':'')
+        + sel
+        + '<button class="mng-del" title="'+(he?'הסר':'Remove')+'">'
+        + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg></button>';
+      row.querySelector('.mng-move').onchange=function(ev){
+        m.cid=ev.target.value; saveStore(); renderManage();
+        try{ renderCircles(); }catch(e){}
+        toast(he?('\u2713 '+(m.name||'')+' הועבר/ה'):'\u2713 Moved','grn');
+      };
+      row.querySelector('.mng-del').onclick=function(){
+        if(confirm(he?('להסיר את '+(m.name||'')+'?'):('Remove '+(m.name||'')+'?'))){
+          removeMember(m.id); renderManage();
+        }
+      };
+      list.appendChild(row);
+    });
+    box.appendChild(list);
+    box.querySelector('.mng-ed').onclick=function(){ renameCircle(cc.id); renderManage(); };
+    b.appendChild(box);
+  });
+  var add=document.createElement('button');
+  add.className='mng-add';
+  add.textContent=(he?'+ מעגל חדש':'+ New circle');
+  add.onclick=function(){ addCircle(); renderManage(); };
+  b.appendChild(add);
+}
 function resendInvite(memberId){
   var m=memberById(memberId); if(!m) return;
   var g=gdState();
   var p=g.pairs.find(function(x){ return x.id===m.pairId; });
   if(!p||!p.token){ toast(currentLang==='he'?'אין בקשה פעילה':'No pending request','amb'); return; }
+  if(m.phoneCanon) sendInviteSMS(m.phoneCanon, m.name, p.token);
   showInvitePanel(m.name, m.phoneCanon||'', p.token);
 }
 async function addGuardian(){
@@ -6053,7 +6138,7 @@ async function addGuardian(){
      g.pairs.push({id:genId('g'),token:agToken,name:name,rel:'',shareToThem:true,seeThem:true,addedTs:Date.now(),initiator:true,pending:true,partnerUid:theirUid,linked:false,cid:_selC,color:m.color,lat:null,lng:null,ts:0,live:false,via:'phone',simLat:null,simLng:null});
      m.pairId=g.pairs[g.pairs.length-1].id;
    }
-   m.pending=true;                                  // stays pending until THEY approve
+   m.pending=true; m.phoneCanon=canon;                                  // stays pending until THEY approve
    if(agToken) fbWatchApproval(agToken, theirUid);  // completes the pair on approval
  }
  saveStore();
@@ -6062,14 +6147,10 @@ async function addGuardian(){
  renderCircles(); if(mapCircleId===activeCircleId)renderCircleMarkers();
  if(go){go.disabled=false;go.style.opacity='';}
  if(registered){
-   /* ⚠️ THE INVITE IS NOT "SENT" UNTIL THE OTHER PERSON RECEIVES THE LINK.
-      Previously we created the invite, then showed a TOAST claiming "request sent" whose
-      tap-handler opened WhatsApp. If the user did not tap that transient toast (almost
-      nobody does), NOTHING was delivered — and the recipient cannot discover an invite on
-      their own (reading the invites list is permission-denied by design).
-      So: never claim "sent". Show a persistent panel with real, tappable send buttons.
-      Also note window.open() after an await often loses the user-gesture and gets blocked —
-      which is why these must be REAL buttons the user presses, not a programmatic popup. */
+   /* The invite now SENDS ITSELF. A Twilio function (/sendInvite) texts the person the
+      approval link automatically — verified delivered. The panel stays as a manual
+      fallback (WhatsApp / share / copy) in case the SMS is filtered. */
+   sendInviteSMS(canon, name, agToken);
    showInvitePanel(name, canon, agToken);
  } else if(validPhone){
    var invMsg=encodeURIComponent(he?('\u05d4\u05d9\u05d9! \u05d4\u05e6\u05d8\u05e8\u05e3/\u05d9 \u05d0\u05dc\u05d9\u05d9 \u05d1-SH\u2721MER \u2014 \u05d0\u05e4\u05dc\u05d9\u05e7\u05e6\u05d9\u05d9\u05ea \u05d1\u05d8\u05d9\u05d7\u05d5\u05ea \u05e7\u05d4\u05d9\u05dc\u05ea\u05d9\u05ea. \u05d7\u05d9\u05e0\u05dd: https://www.shomer-app.co.il/'):('Join me on SH\u2721MER: https://www.shomer-app.co.il/'));
@@ -7436,7 +7517,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v115';
+var APP_VER='v116';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -9556,6 +9637,29 @@ async function getOrCreateDeviceId(){
 .inv-x{width:100%;margin-top:10px;padding:9px;border-radius:10px;border:0;background:transparent;color:var(--tx3);font-family:inherit;font-weight:700;font-size:12.5px;cursor:pointer}
 
 .cm-act.warn{color:#E0A828;border-color:rgba(224,168,40,.42);background:rgba(224,168,40,.10)}
+
+/* no plated square behind section icons — the glyph stands alone */
+#sh-circles .sec-ic, #sh-prof .sec-ic, .circ-hd .ic-box, .myshomer-ic{background:none!important;border:0!important;box-shadow:none!important;padding:0!important}
+
+.mng-panel{position:fixed;inset:0;z-index:100001;background:linear-gradient(180deg,#0A1628,#060F1E);display:flex;flex-direction:column}
+.mng-hd{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--b2);font-size:16px;font-weight:900;color:var(--g3)}
+.mng-x{background:none;border:0;color:var(--tx2);font-size:20px;cursor:pointer;padding:4px 8px}
+.mng-body{flex:1;overflow-y:auto;padding:16px;padding-bottom:40px}
+.mng-circ{background:var(--n2);border:1px solid var(--b2);border-radius:14px;margin-bottom:12px;overflow:hidden}
+.mng-crow{display:flex;align-items:center;gap:10px;padding:12px 14px;background:rgba(255,255,255,.03)}
+.mng-ed{background:none;border:0;color:var(--tx3);cursor:pointer;padding:2px;display:flex}
+.mng-ed svg{width:15px;height:15px}
+.mng-nm{flex:1;font-size:14.5px;font-weight:800;color:var(--tx0)}
+.mng-n{font-size:14px;font-weight:900;color:var(--g3)}
+.mng-list{padding:4px 8px 8px}
+.mng-m{display:flex;align-items:center;gap:8px;padding:9px 6px;border-top:1px solid rgba(255,255,255,.05)}
+.mng-mn{flex:1;font-size:13.5px;font-weight:700;color:var(--tx1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mng-p{font-size:10px;font-weight:800;color:#E0A828;background:rgba(224,168,40,.14);padding:2px 7px;border-radius:999px}
+.mng-move{background:var(--n3);border:1px solid var(--b2);color:var(--tx1);border-radius:8px;font-size:12px;padding:5px 6px;font-family:inherit}
+.mng-del{background:none;border:0;color:#E5484D;cursor:pointer;padding:4px;display:flex;opacity:.8}
+.mng-del svg{width:15px;height:15px}
+.mng-empty{font-size:12px;color:var(--tx3);padding:10px 6px;text-align:center}
+.mng-add{width:100%;padding:13px;border-radius:12px;border:1px dashed rgba(224,168,40,.5);background:rgba(224,168,40,.08);color:var(--g3);font-family:inherit;font-weight:800;font-size:14px;cursor:pointer}
 </style>
 <script src="native-bridge.js"></script>
 </body>
