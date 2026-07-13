@@ -1528,7 +1528,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v120 · 13.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v121 · 13.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -1772,7 +1772,6 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="sos-ring1" aria-hidden="true"></div>
  <div class="sos-ring2" aria-hidden="true"></div>
  <div class="sos-hold-ring" id="sos-hold-ring" aria-hidden="true"></div>
- <button id="watch-btn" class="watch-btn" aria-label="שמור עליי"></button>
  <button class="sos-btn" id="sos-btn" onclick="onSosTap()" aria-label="שלח SOS חירום" aria-pressed="false">
  <span class="sos-txt">SOS</span>
  </button>
@@ -2058,34 +2057,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="prof-opt sel" data-prof="" onclick="selectProfession('')" role="button" tabindex="0"><span class="pic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6.3 6.3l11.4 11.4" fill="none" stroke="currentColor" stroke-width="2"/></svg></span><span class="pl" data-pl="none">ללא</span></div>
  </div>
 <!-- MY SH✡MER inside profile -->
-<div id="prof-my-shomer-section" style="margin-top:24px;padding-top:20px;border-top:1px solid rgba(201,168,76,.2)">
- <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-  <div style="display:flex;align-items:center;gap:10px">
-   <div style="width:30px;height:30px;border-radius:9px;background:rgba(201,168,76,.15);display:flex;align-items:center;justify-content:center">
-    <svg class="ic" viewBox="0 0 24 24" width="16" style="color:#C9A84C"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2"/></svg>
-   </div>
-   <span style="font-size:14px;font-weight:800;color:#C9A84C">MY SH✡MER</span>
-  </div>
-  <button onclick="op('sh-circles')" style="background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);color:#C9A84C;border-radius:10px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit" onclick="openManage()">נהל/י</button>
- </div>
- <div style="display:flex;flex-direction:column;gap:7px">
-  <div style="display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--n3);border-radius:11px;border:1px solid var(--b1)">
-   <div style="width:9px;height:9px;border-radius:50%;background:#C9A84C;flex-shrink:0"></div>
-   <span style="flex:1;font-size:13px;font-weight:600;color:var(--tx1)">משפחה</span>
-   <span style="font-size:16px;font-weight:800;color:var(--tx0)" id="pcr-fam-n">0</span>
-  </div>
-  <div style="display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--n3);border-radius:11px;border:1px solid var(--b1)">
-   <div style="width:9px;height:9px;border-radius:50%;background:#3B82F6;flex-shrink:0"></div>
-   <span style="flex:1;font-size:13px;font-weight:600;color:var(--tx1)">חברים</span>
-   <span style="font-size:16px;font-weight:800;color:var(--tx0)" id="pcr-frnd-n">0</span>
-  </div>
-  <div style="display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--n3);border-radius:11px;border:1px solid var(--b1)">
-   <div style="width:9px;height:9px;border-radius:50%;background:#10B981;flex-shrink:0"></div>
-   <span style="flex:1;font-size:13px;font-weight:600;color:var(--tx1)">שכנים</span>
-   <span style="font-size:16px;font-weight:800;color:var(--tx0)" id="pcr-nbr-n">0</span>
-  </div>
- </div>
-</div>
+
 
  <div class="sec-cap mb12" id="myrep-cap">הדיווחים שלי</div>
  <div id="my-reports-list" class="mb20" role="list"></div>
@@ -5359,41 +5331,7 @@ var GUIDE_DISC={
  ar:'⚠ إرشادات أساسية فقط — ليست بديلًا عن المساعدة الطبية المهنية. في حالة طوارئ حقيقية اتصل بـ101 (نجمة داوود الحمراء) فورًا.'
 };
 var EMERGENCY_GUIDE=[
- {id:'aed',e:'',t:{he:'דפיברילטור (AED) — איך משתמשים',en:'Defibrillator (AED) — how to use it',ar:'مزيل الرجفان (AED)'},
-  s:{he:'דום לב · כל דקה = 10% סיכוי',en:'Cardiac arrest · every minute counts',ar:'سكتة قلبية'},
-  steps:{he:[
-   'המכשיר מדבר אליך. הוא יגיד לך בדיוק מה לעשות, בעברית. אי אפשר לטעות — הוא לא ייתן שוק למי שלא צריך.',
-   'שלח/י מישהו להביא דפיברילטור בזמן שאת/ה מתחיל/ה עיסויים. אל תעזוב/י את הנפגע כדי להביא אותו לבד.',
-   'הפעל/י את המכשיר (כפתור ON). התחל/י להאזין להוראות.',
-   'חשוף/י את החזה. רטוב? נגב/י. שיער רב? גלח/י באמצעות הסכין שבערכה.',
-   'הדבק/י את המדבקות כמו בציור: אחת מתחת לעצם הבריח הימנית, השנייה בצד שמאל מתחת לבית השחי.',
-   'המכשיר מנתח את קצב הלב — אל תיגע/י בנפגע! „התרחקו”.',
-   'אם הורה לתת שוק: ודא/י שאף אחד לא נוגע, ולחץ/י על הכפתור המהבהב.',
-   'מיד אחרי השוק — חזור/חזרי לעיסויים. 30 עיסויים, 2 הנשמות. אל תעצור/י.',
-   'המשך/י עד שהנפגע נושם, או עד שצוות רפואי מגיע ואומר לך לעצור.'],
-   en:[
-   'The device talks you through it. You cannot get it wrong — it will never shock someone who does not need it.',
-   'Send someone else to fetch the AED while you start compressions. Never leave the person to get it yourself.',
-   'Turn it on. Listen — it gives you every instruction.',
-   'Bare the chest. Wet? Wipe it dry. Very hairy? Shave with the razor in the kit.',
-   'Place the pads exactly as pictured on them: one below the right collarbone, one on the left side below the armpit.',
-   'It analyses the heart rhythm — DO NOT touch the person. "Stand clear."',
-   'If it says shock: make sure nobody is touching, then press the flashing button.',
-   'Immediately resume compressions. 30 compressions, 2 breaths. Do not stop.',
-   'Continue until the person breathes or paramedics take over.'],
-   ar:[
-   'الجهاز يرشدك صوتيًا. لا يمكنك أن تخطئ — لن يصدم شخصًا لا يحتاج.',
-   'أرسل شخصًا آخر لإحضار الجهاز بينما تبدأ أنت بالضغطات.',
-   'شغّل الجهاز واستمع للتعليمات.',
-   'اكشف الصدر. مبلل؟ جففه. كثير الشعر؟ احلقه.',
-   'ضع اللاصقات كما في الرسم: واحدة تحت الترقوة اليمنى، والأخرى يسار أسفل الإبط.',
-   'الجهاز يحلّل النبض — لا تلمس المصاب!',
-   'إذا طلب الصدمة: تأكد أن لا أحد يلمسه، ثم اضغط الزر.',
-   'فورًا بعد الصدمة عُد للضغطات. 30 ضغطة و2 نفس.',
-   'استمر حتى يتنفس المصاب أو يصل المسعفون.']},
-  dont:{he:'אל תיגע/י בנפגע בזמן ניתוח או שוק · אל תדביק/י מדבקות על עור רטוב · אל תעצור/י עיסויים כדי „לבדוק” · אל תחכה/י לדפיברילטור במקום להתחיל עיסויים.',en:'Never touch the person during analysis or shock · never place pads on a wet chest · never stop compressions to "check" · never wait for the AED instead of starting compressions.',ar:'لا تلمس المصاب أثناء التحليل أو الصدمة · لا تضع اللاصقات على جلد مبلل.'},
-  src:'AHA/ERC 2021 · מד״א · איחוד הצלה'},
-
+ 
  {id:'ptsd',e:'',t:{he:'מצוקה נפשית / חרדה ופוסט-טראומה',en:'Emotional distress / PTSD',ar:'ضائقة نفسية / اضطراب ما بعد الصدمة'},
   s:{he:'התקף חרדה, הלם, פלאשבק',en:'Panic, shock, flashback',ar:'ذعر، صدمة، ذكريات اقتحامية'},
   steps:{he:['זהה/י את הסימנים: נשימה מהירה ורדודה, רעד, הזעה, מבט "קפוא", בלבול, ניתוק, בכי בלתי נשלט, או תחושת "זה קורה עכשיו שוב" (פלאשבק).','גש/י בשקט. הצג/י את עצמך בשם. אל תיגע/י בלי לבקש רשות — מגע פתאומי עלול להחמיר.','דבר/י לאט, במשפטים קצרים: "אני כאן. את/ה בטוח/ה. זה יעבור."','עגן/י במציאות (Grounding 5-4-3-2-1): בקש/י שיציין/תציין 5 דברים שרואה, 4 שנוגע/ת, 3 ששומע/ת, 2 שמריח/ה, 1 שטועם/ת.','ויסות נשימה: נשימה פנימה 4 שניות, החזקה 4, החוצה 6. נשום/נשמי יחד איתו/ה — קצב מדבק.','הסר/י גירויים: אורות, רעש, קהל. הצע/י מקום שקט וישיבה.','אל תתווכח/י עם מה שהוא/היא מרגיש/ה ואל תאמר/י "תירגע/י" — זה מגביר מצוקה.','שאל/י ישירות: "יש לך מחשבות לפגוע בעצמך?" — לשאול לא מכניס רעיון לראש; זה מציל חיים.','הישאר/י עד שהמצוקה שוככת או עד שמגיע גורם מקצועי.'],
@@ -5402,47 +5340,13 @@ var EMERGENCY_GUIDE=[
   dont:{he:'אל תאמר/י "תירגע/י" או "זה לא נורא" · אל תיגע/י בלי רשות · אל תשאיר/י אדם במצוקה חריפה לבד. במחשבות אובדניות — חייג/י 1201 (ער"ן) או 101.',en:'Never say "calm down" or "it is not a big deal" · do not touch without permission · do not leave someone in acute distress alone. For suicidal thoughts call 1201 (ERAN) or 101.',ar:'لا تقل "اهدأ" · لا تلمس دون إذن · لا تترك شخصًا في ضائقة حادّة وحيدًا. عند وجود أفكار انتحارية اتصل بـ1201 أو 101.'},
   src:'ער"ן 1201 · משרד הבריאות · NCPTSD · WHO Psychological First Aid'},
 
- {id:'selfdef',e:'',t:{he:'בטיחות ברחוב',en:'Street safety',ar:'السلامة في الشارع'},
-  s:{he:'להימנע · להרתיע · לברוח',en:'Avoid · deter · escape',ar:'تجنّب · اردع · اهرب'},
-  steps:{he:[
-   'ראש מורם. אוזניות בחוץ, טלפון בכיס. תוקף בוחר מי שמוסח — לא מי שחלש.',
-   'משהו מרגיש לא בסדר? עצור/י. חצה/י כביש. היכנס/י לחנות מוארת. עדיף מביך מפגוע.',
-   'שמור/י שני צעדים. ידיים פתוחות בגובה החזה, כפות קדימה — זה מגן, שומר מרחק, ונראה לא-תוקפני.',
-   'הקול הוא הנשק הכי יעיל: „אחורה!” חזק וברור. מרתיע, מושך עדים, ומעיר את הגוף.',
-   'שוד? תן/י את הארנק. תזרוק/י אותו לצד אחד — ותברח/י לצד השני.',
-   'אין ברירה? מכה אחת קצרה לנקודה רכה — עיניים, גרון, מפשעה, ברך — ומיד לרוץ. המכה קונה שנייה, לא ניצחון.',
-   'לרוץ זה לנצח. לכיוון אור, אנשים, חנות פתוחה. לא הביתה אם עוקבים אחריך.',
-   'אחרי: התקשר/י למשטרה. לחץ/י SOS — השומרים שלך יראו איפה את/ה. רשום/י פרטים מיד.',
-   'טכניקה לא נלמדת מטקסט. רוצה באמת לדעת? שיעור קרב מגע אחד שווה יותר ממאה מדריכים.'],
-   en:[
-   'Head up. Earphones out, phone pocketed. Attackers pick the distracted — not the weak.',
-   'Something feels wrong? Stop. Cross the street. Step into a lit shop. Awkward beats injured.',
-   'Keep two steps. Open hands at chest height, palms out — it protects, keeps distance, looks non-aggressive.',
-   'Your voice is the most effective weapon: "BACK OFF!" — loud and clear. Deters, draws witnesses, wakes your body.',
-   'Robbery? Give the wallet. Throw it one way — run the other.',
-   'No choice? One short strike to a soft target — eyes, throat, groin, knee — then run. It buys a second, not a victory.',
-   'Running is winning. Toward light, people, an open shop. Not home if you are followed.',
-   'Afterwards: call the police. Press SOS — your guardians see where you are. Write down details immediately.',
-   'Technique cannot be learned from text. Want to really know? One Krav Maga class beats a hundred guides.'],
-   ar:[
-   'ارفع رأسك. انزع السمّاعات، ضع الهاتف في جيبك. المهاجم يختار المشتّت لا الضعيف.',
-   'شعرت أن شيئًا خاطئ؟ توقّف. اعبر الشارع. ادخل متجرًا مضاءً.',
-   'حافظ على خطوتين. يدان مفتوحتان عند الصدر — تحمي وتُبقي المسافة.',
-   'صوتك أقوى سلاح: "ابتعد!" بصوت عالٍ وواضح.',
-   'سرقة؟ أعطِ المحفظة. ارمها في اتجاه واهرب في الآخر.',
-   'لا خيار؟ ضربة قصيرة على نقطة رخوة — العين، الحلق، المغبن، الركبة — ثم اركض.',
-   'الركض هو الانتصار. نحو الضوء والناس. ليس إلى البيت إن كنت مُتَتبَّعًا.',
-   'بعدها: اتصل بالشرطة. اضغط SOS. سجّل التفاصيل فورًا.',
-   'التقنية لا تُتعلَّم من نص. درس واحد أفضل من مئة دليل.']},
-  dont:{he:'אל תילחם/י על רכוש · אל תרדוף/י · אל תיקח/י תוקף הביתה · אל תסמוך/כי על טכניקה מטקסט. אין חובה להילחם — יש זכות לברוח.',en:'Never fight over property · never chase · never lead an attacker home · never trust technique learned from text. No duty to fight — you have the right to flee.',ar:'لا تقاتل من أجل الممتلكات · لا تطارد · لا تثق بتقنية من نص.'},
-  src:'משטרת ישראל — מניעה והגנה עצמית · IKMF/KMG'},
-
+ 
 
 
 
  {id:'cpr',e:'❤️',t:{he:'החייאה (CPR)',en:'CPR',ar:'الإنعاش القلبي (CPR)'},
   s:{he:'אדם לא מגיב ואינו נושם',en:'Unresponsive, not breathing',ar:'لا يستجيب ولا يتنفّس'},
-  steps:{he:['ודא/י שהאדם אינו מגיב ואינו נושם תקין (או רק נושף נשיפות בודדות).','חייג/י 101 מיד ובקש/י דפיברילטור (AED). הפעל/י רמקול.','הנח/י כף יד במרכז בית החזה (חצי תחתון של עצם החזה), יד שנייה מעליה.','לחץ/י חזק ומהר: קצב 100–120 לדקה, עומק 5–6 ס״מ.','תן/י לחזה לחזור למצב מלא בין הלחיצות — אל תישען/י עליו.','אם הוכשרת: 30 לחיצות ל-2 הנשמות (הטיית ראש, הרמת סנטר, סתימת אף, נשיפה עד שהחזה עולה).','לא הוכשרת? בצע/י לחיצות חזה רצופות בלבד, ללא הפסקה.','כשמגיע AED — הפעל/י ועקוב/י אחר ההוראות הקוליות.','המשך/י עד שמגיע צוות רפואי או שהאדם מתעורר.'],
+  steps:{he:['אל תחכה/י לדפיברילטור כדי להתחיל — עיסויים עכשיו. שלח/י מישהו אחר להביא אותו.','ודא/י שהאדם אינו מגיב ואינו נושם תקין (או רק נושף נשיפות בודדות).','חייג/י 101 מיד ובקש/י דפיברילטור (AED). הפעל/י רמקול.','הנח/י כף יד במרכז בית החזה (חצי תחתון של עצם החזה), יד שנייה מעליה.','לחץ/י חזק ומהר: קצב 100–120 לדקה, עומק 5–6 ס״מ.','תן/י לחזה לחזור למצב מלא בין הלחיצות — אל תישען/י עליו.','אם הוכשרת: 30 לחיצות ל-2 הנשמות (הטיית ראש, הרמת סנטר, סתימת אף, נשיפה עד שהחזה עולה).','לא הוכשרת? בצע/י לחיצות חזה רצופות בלבד, ללא הפסקה.','כשמגיע AED — הפעל/י ועקוב/י אחר ההוראות הקוליות.','המשך/י עד שמגיע צוות רפואי או שהאדם מתעורר.'],
    en:['Confirm the person is unresponsive and not breathing normally (or only gasping).','Call 101 now and ask for an AED. Put the phone on speaker.','Place the heel of your hand on the center of the chest (lower half of the breastbone), other hand on top.','Push hard and fast: 100–120 per minute, depth 5–6 cm (2–2.4 in).','Let the chest fully recoil between compressions — do not lean on it.','If trained: 30 chest compressions at 100/min (MDA standard) to 2 rescue breaths (tilt head, lift chin, pinch nose, breathe until the chest rises).','Not trained? Do continuous chest compressions only, without stopping.','When an AED arrives, turn it on and follow the voice prompts.','Continue until EMS arrives or the person wakes up.'],
    ar:['تأكّد أن الشخص لا يستجيب ولا يتنفّس بشكل طبيعي (أو يلهث فقط).','اتصل بـ101 فورًا واطلب جهاز صدمات (AED). شغّل مكبّر الصوت.','ضع كعب يدك في منتصف الصدر (النصف السفلي من عظم القص)، واليد الأخرى فوقها.','اضغط بقوة وسرعة: 100–120 ضغطة في الدقيقة، بعمق 5–6 سم.','اترك الصدر يعود كاملًا بين الضغطات — لا تتّكئ عليه.','إذا كنت مدرَّبًا: 30 ضغطة مقابل نفَسين (إمالة الرأس، رفع الذقن، إغلاق الأنف، نفخ حتى يرتفع الصدر).','غير مدرَّب؟ اكتفِ بالضغطات المتواصلة دون توقف.','عند وصول جهاز AED، شغّله واتبع التعليمات الصوتية.','استمر حتى وصول الإسعاف أو استيقاظ الشخص.']},
   dont:{he:'אל תפסיק/י לחיצות שלא לצורך · אל תבדק/י דופק לפני התחלה · עומק לא יותר מ-6 ס״מ.',en:'Do not interrupt compressions unnecessarily · do not delay to check a pulse · depth no more than 6 cm.',ar:'لا توقف الضغطات دون داعٍ · لا تتأخر لفحص النبض · العمق لا يزيد عن 6 سم.'},
@@ -5744,77 +5648,68 @@ function paintMapCount(){
     if(l) l.textContent=(currentLang==='he')?'שומרים':(n===1?'guardian':'guardians');
   }catch(e){}
 }
-function renderCircles(){ try{ paintMapCount(); }catch(e){}
- const he=currentLang==='he';
- // ── circles-of-trust light list (counts, rename, live) ──
- const cot=document.getElementById('cot-list');
- if(cot){
-   cot.innerHTML='';
-   circlesList().forEach(function(cc){
-     const r=document.createElement('div'); r.className='cot';
-     r.innerHTML='<button class="cot-ed" aria-label="'+(he?'שנה שם':'Rename')+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>'
-       +'<span class="cot-nm">'+ESC(cc.name)+'</span>'
-       +'<span class="cot-n">'+membersOf(cc.id).length+'</span>';
-     if(cc.id===activeCircleId) r.classList.add('cot-active');
-     r.querySelector('.cot-ed').onclick=function(ev){ ev.stopPropagation(); renameCircle(cc.id); };
-     r.onclick=function(){ switchCircle(cc.id); renderCircles(); };   // tap a circle → see its members
-     r.style.cursor='pointer';
-     cot.appendChild(r);
-   });
- }
- // ── country-code picker (global) ──
- const ccs=document.getElementById('ag-cc'); fillCC(ccs);
- // ── circle dropdown on the add form ──
- const sel=document.getElementById('ag-circle');
- if(sel){
-   const cur=sel.value;
-   sel.innerHTML='';
-   circlesList().forEach(function(cc){
-     const o=document.createElement('option');
-     o.value=cc.id; o.textContent=cc.name;
-     sel.appendChild(o);
-   });
-   sel.value = cur && circlesList().some(function(x){return x.id===cur;}) ? cur : activeCircleId;
- }
- // Tabs
- const tabs=document.getElementById('circ-tabs');
- if(tabs){
- tabs.innerHTML='';
- circlesList().forEach(c=>{
- const b=document.createElement('button');
- b.className='circ-tab'+(c.id===activeCircleId?' on':'');
- b.setAttribute('role','tab'); b.onclick=()=>switchCircle(c.id);
- b.innerHTML=`<span class="ct-ic" aria-hidden="true">${c.type==='family'?'':''}</span><span>${ESC(c.name)} · ${membersOf(c.id).length}</span>`;
- tabs.appendChild(b);
- });
- const add=document.createElement('button');
- add.className='circ-tab add'; add.onclick=()=>addCircle();
- add.innerHTML=`<span class="ct-ic" aria-hidden="true"></span><span>${he?'מעגל חדש':currentLang==='ar'?'دائرة جديدة':'New circle'}</span>`;
- tabs.appendChild(add);
- }
- // Members
- const list=document.getElementById('circ-members');
- if(list){
- list.innerHTML='';
- const ms=membersOf(activeCircleId);
- if(!ms.length){
- const e=document.createElement('div');
- e.style.cssText='text-align:center;color:var(--tx3);font-size:12px;padding:18px 0;';
- e.textContent=he?'אין חברים במעגל זה עדיין. הוסף/י חבר/ה.':'No members yet. Add someone.';
- list.appendChild(e);
- }
- ms.forEach(m=>list.appendChild(buildMemberRow(m,he)));
- }
- // Leave button visibility
- const lv=document.getElementById('circ-leave-btn');
- if(lv)lv.style.display=circlesList().length>1?'':'none';
- // Ghost toggle
- const gt=document.getElementById('ghost-tog'),gr=document.getElementById('ghost-row');
- if(gt)gt.classList.toggle('on',!!SS.circleGhost);
- if(gr)gr.classList.toggle('on',!!SS.circleGhost);
- // If this circle is the one on the map, keep markers fresh
- if(mapCircleId===activeCircleId) renderCircleMarkers();
+function renderCircles(){
+  try{ paintMapCount(); }catch(e){}
+  var he=currentLang==='he';
+  var cot=document.getElementById('cot-list');
+  if(cot){
+    cot.innerHTML='';
+    circlesList().forEach(function(cc){
+      var ms=membersOf(cc.id);
+      var open = (COT_OPEN===cc.id);
+
+      var r=document.createElement('div');
+      r.className='cot'+(open?' cot-open':'');
+      r.innerHTML='<button class="cot-ed" aria-label="'+(he?'שנה שם':'Rename')+'">'
+        +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>'
+        +'<span class="cot-nm">'+ESC(cc.name)+'</span>'
+        +'<span class="cot-n">'+ms.length+'</span>';
+      r.querySelector('.cot-ed').onclick=function(ev){ ev.stopPropagation(); renameCircle(cc.id); };
+      r.onclick=function(){ COT_OPEN = open ? null : cc.id; activeCircleId=cc.id; renderCircles(); };
+      cot.appendChild(r);
+
+      if(open){
+        var sub=document.createElement('div');
+        sub.className='cot-sub';
+        if(!ms.length){
+          sub.innerHTML='<div class="cot-empty">'+(he?'אין שומרים במעגל הזה':'No guardians in this circle')+'</div>';
+        } else {
+          ms.forEach(function(mm){
+            var row=document.createElement('div');
+            row.className='cot-mrow';
+            row.innerHTML='<span class="cot-mn">'+ESC(mm.name||'')+'</span>'
+              +(mm.pending?'<span class="cot-pend">'+(he?'ממתין':'pending')+'</span>':'')
+              +'<button class="cot-x" aria-label="'+(he?'הסר':'Remove')+'">✕</button>';
+            row.querySelector('.cot-x').onclick=function(ev){
+              ev.stopPropagation();
+              if(confirm(he?('להסיר את '+(mm.name||'')+' מהמעגל?'):('Remove '+(mm.name||'')+'?'))) removeMember(mm.id);
+            };
+            sub.appendChild(row);
+          });
+        }
+        cot.appendChild(sub);
+      }
+    });
+  }
+  /* השומרים שלי — one compact row per guardian of the ACTIVE circle */
+  var host=document.getElementById('circ-members');
+  if(host){
+    host.innerHTML='';
+    var ms=membersOf(activeCircleId);
+    if(!ms.length){
+      var e=document.createElement('div');
+      e.style.cssText='text-align:center;color:var(--tx3);font-size:12.5px;padding:18px';
+      e.textContent=he?'עדיין אין שומרים כאן — הוסף/י אנשים שאת/ה סומכ/ת עליהם.':'No guardians yet — add people you trust.';
+      host.appendChild(e);
+    } else {
+      ms.forEach(function(mm){
+        try{ var row=buildMemberRow(mm, he); if(row) host.appendChild(row); }catch(err){}
+      });
+    }
+  }
+  try{ if(mapCircleId===activeCircleId) renderCircleMarkers(); }catch(e){}
 }
+var COT_OPEN=null;
 function agoTxt(ts,he){
   if(!ts) return he?'טרם שותף מיקום':'never shared';
   var s=Math.max(0,Math.round((Date.now()-ts)/1000));
@@ -7550,7 +7445,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v120';
+var APP_VER='v121';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -8041,7 +7936,6 @@ function fbOnAuthed(uid){
   try{ purgeStalePositions(); }catch(e){}
   try{ essLoad(); essChipsBuild(); }catch(e){}
   try{ setTimeout(function(){ essFetch(false).then(function(){ essRender(); essLegPaint(); }); }, 3500); }catch(e){}
-  try{ watchPaint(); }catch(e){}
   try{ syncPairsToCircles(); }catch(e){}
   try{ fbListenAllPeerLocs(); }catch(e){}
   try{ gdState().pairs.forEach(function(p){ if(p&&p.pending&&!p.linked&&p.token) fbWatchApproval(p.token,p.partnerUid||null); });   /* watch EVERY pending invite — a missing partnerUid must not silently kill the watcher */ }catch(e){}     // subscribe to every paired partner's live location
@@ -8430,63 +8324,10 @@ function syncPairsToCircles(){
    the moment that actually matters: the walk home. The user starts a session, we hold a
    screen wake-lock, publish high-accuracy presence continuously, and tell their guardians.
    When they arrive safely they end it — or it auto-expires. This is the real use case. */
-var WATCH={on:false, until:0, wl:null, timer:null, hi:null};
-async function watchStart(mins){
-  var he=currentLang==='he';
-  mins = mins || 30;
-  if(!SS.consent||!SS.consent.share){
-    toast(he?'צריך לאשר שיתוף מיקום קודם':'Enable location sharing first','amb'); return;
-  }
-  WATCH.on=true; WATCH.until=Date.now()+mins*60000;
-  try{ if('wakeLock' in navigator){ WATCH.wl=await navigator.wakeLock.request('screen'); } }catch(e){}
-  // high-accuracy continuous fix while the session runs
-  try{
-    if(WATCH.hi!=null) navigator.geolocation.clearWatch(WATCH.hi);
-    WATCH.hi=navigator.geolocation.watchPosition(function(pos){
-      userLat=pos.coords.latitude; userLng=pos.coords.longitude;
-      try{ fbPublishPresence(); }catch(e){}
-      try{ gdBroadcast(); }catch(e){}
-    }, function(){}, {enableHighAccuracy:true, maximumAge:5000, timeout:20000});
-  }catch(e){}
-  if(WATCH.timer) clearInterval(WATCH.timer);
-  WATCH.timer=setInterval(function(){
-    if(Date.now()>WATCH.until){ watchStop(true); return; }
-    try{ fbPublishPresence(); }catch(e){}
-    watchPaint();
-  }, 10000);
-  // tell the guardians a watch has started
-  try{
-    var nm=(SS.user&&SS.user.name)||'';
-    (SS.circleMembers||[]).filter(function(m){return m.shareTo!==false && m.partnerUid;}).forEach(function(m){
-      try{ fbRestWrite('PUT','ping/'+m.partnerUid+'/'+FB.uid,{name:nm,kind:'watch',ts:Date.now()}); }catch(e){}
-    });
-  }catch(e){}
-  watchPaint();
-  toast(he?('\u2713 שמירה פעילה ל-'+mins+' דקות — השומרים שלך רואים אותך עכשיו'):('\u2713 Watch on for '+mins+' min — your guardians can see you now'),'grn');
-}
-function watchStop(auto){
-  var he=currentLang==='he';
-  WATCH.on=false; WATCH.until=0;
-  try{ if(WATCH.wl){ WATCH.wl.release(); WATCH.wl=null; } }catch(e){}
-  try{ if(WATCH.hi!=null){ navigator.geolocation.clearWatch(WATCH.hi); WATCH.hi=null; } }catch(e){}
-  if(WATCH.timer){ clearInterval(WATCH.timer); WATCH.timer=null; }
-  watchPaint();
-  toast(he?(auto?'זמן השמירה הסתיים':'הגעת בשלום \u2713 — השמירה הסתיימה'):(auto?'Watch expired':'Arrived safely \u2713'),'grn');
-}
-function watchPaint(){
-  var b=document.getElementById('watch-btn'); if(!b)return;
-  var he=currentLang==='he';
-  if(WATCH.on){
-    var left=Math.max(0,Math.round((WATCH.until-Date.now())/60000));
-    b.classList.add('on');
-    b.innerHTML='<span class="wt-dot"></span>'+(he?('שמירה פעילה · '+left+' דק׳ — הגעתי בשלום'):('Watching · '+left+'m — I arrived safely'));
-    b.onclick=function(){ watchStop(false); };
-  } else {
-    b.classList.remove('on');
-    b.innerHTML='<span class="wt-ic"></span>'+(he?'שמור/י עליי — אני בדרך':'Watch me — I am on my way');
-    b.onclick=function(){ watchStart(30); };
-  }
-}
+
+
+
+
 /* ══ ESSENTIALS LAYER ══
    Static, life-saving infrastructure: defibrillators, police, hospitals, fire, pharmacies.
    These are NOT events. An SOS is a scream; a defibrillator is a signpost. They must never
@@ -9681,11 +9522,11 @@ async function getOrCreateDeviceId(){
 .cm-act.danger{color:#E5484D;border-color:rgba(229,72,77,.3)}
 .cm-act:active{transform:scale(.96)}
 
-.watch-btn{position:absolute;left:50%;transform:translateX(-50%);bottom:150px;z-index:520;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;border-radius:999px;border:1.5px solid rgba(224,168,40,.55);background:rgba(10,22,40,.92);backdrop-filter:blur(10px);color:#E0A828;font-family:inherit;font-weight:800;font-size:13.5px;cursor:pointer;box-shadow:0 8px 26px rgba(0,0,0,.5);white-space:nowrap}
-.watch-btn.on{background:linear-gradient(135deg,#0E8F6E,#14A857);border-color:rgba(61,187,102,.6);color:#fff}
-.watch-btn .wt-dot{width:9px;height:9px;border-radius:50%;background:#fff;animation:wpulse 1.6s infinite}
-.watch-btn .wt-ic{width:9px;height:9px;border-radius:50%;background:#E0A828}
-@keyframes wpulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,.6)}70%{box-shadow:0 0 0 9px rgba(255,255,255,0)}100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}}
+
+
+
+
+70%{box-shadow:0 0 0 9px rgba(255,255,255,0)}100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}}
 
 
 /* ══ 3SDS map hierarchy ══
@@ -9800,6 +9641,21 @@ body.aed-placing #map{cursor:crosshair}
   font-size:12px;font-weight:800;color:var(--tx1);box-shadow:var(--e2);pointer-events:none}
 .map-count b{color:var(--g3)}
 .map-count .mc-dot{width:7px;height:7px;border-radius:50%;background:#3DDC97;flex:0 0 auto}
+
+/* ── מעגלי שומרים — wireframe layout ── */
+.cot{display:flex;align-items:center;gap:10px;padding:12px 4px;border-bottom:1px solid rgba(0,0,0,.07);cursor:pointer}
+.cot-open{background:rgba(29,111,214,.06)}
+.cot-ed{background:none;border:0;color:#8c9bbd;cursor:pointer;padding:2px;display:flex;flex:0 0 auto}
+.cot-ed svg{width:15px;height:15px}
+.cot-nm{flex:1;font-size:15px;font-weight:800;color:#101E34}
+.cot-n{font-size:15px;font-weight:900;color:#101E34;min-width:22px;text-align:end}
+.cot-sub{background:rgba(0,0,0,.04);border-radius:10px;margin:0 0 8px;padding:4px 8px}
+.cot-mrow{display:flex;align-items:center;gap:8px;padding:8px 4px;border-bottom:1px solid rgba(0,0,0,.06)}
+.cot-mrow:last-child{border-bottom:0}
+.cot-mn{flex:1;font-size:13.5px;font-weight:700;color:#101E34}
+.cot-pend{font-size:10px;font-weight:800;color:#9a6a00;background:rgba(224,168,40,.2);padding:2px 7px;border-radius:999px}
+.cot-x{background:none;border:0;color:#E5484D;font-size:15px;font-weight:900;cursor:pointer;padding:2px 6px;line-height:1}
+.cot-empty{font-size:12px;color:#6b7a95;text-align:center;padding:10px}
 </style>
 <script src="native-bridge.js"></script>
 </body>
