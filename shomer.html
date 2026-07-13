@@ -1472,16 +1472,21 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <button class="legend-hd" onclick="toggleLegend()" aria-expanded="false" aria-controls="legend-body"><span aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span><span id="legend-ttl-txt">מקרא מפה</span><span class="legend-chev" id="legend-chev" aria-hidden="true">▸</span></button>
  <div class="legend-body" id="legend-body">
  <div class="leg-sec" id="leg-stats-sec">
-   <div class="leg-sec-h">נתוני פשיעה — משטרת ישראל</div>
-   <button class="leg" id="leg-stats" onclick="statsToggle()" style="width:100%;border:0;background:none;padding:6px 0;cursor:pointer;font-family:inherit;text-align:start;display:flex;align-items:center;gap:8px">
-     <span class="stat-swatch" aria-hidden="true"></span>
-     <span>עבירות שנרשמו · 2025</span>
-     <span id="leg-stats-st" style="margin-inline-start:auto;font-size:11px;color:var(--tx3)">○</span>
-   </button>
-   <div class="leg-src">מקור: data.gov.il · 395,294 רשומות · סטטיסטיקה, לא אירועים חיים</div>
+   <div class="leg-sec-h">נתוני פשיעה · משטרת ישראל 2025</div>
+   <div class="stat-key">
+     <span><i class="sk" style="background:#E5484D"></i>נגד גוף</span>
+     <span><i class="sk" style="background:#2962FF"></i>רכוש</span>
+     <span><i class="sk" style="background:#E0A828"></i>סדר ציבורי</span>
+   </div>
+   <div class="leg-src">הצבע = סוג העבירה הנפוץ ביותר באזור. הגודל = כמות.<br>מקור: data.gov.il · 395,294 רשומות · סטטיסטיקה, לא אירועים חיים</div>
+   <button class="leg-stats-btn" id="leg-stats" onclick="statsToggle()"><span id="leg-stats-st">הסתר</span></button>
   </div>
   <div class="leg-sec" id="leg-ess">
-   <div class="leg-sec-h">שירותי חירום</div>
+   <button class="leg-sec-tog" id="ess-tog" onclick="essToggleMenu()" aria-expanded="false">
+     <span>שירותי חירום</span>
+     <span class="leg-caret" id="ess-caret">▾</span>
+   </button>
+   <div class="leg-sec-body" id="ess-body" hidden>
    <div class="ess-chips" id="ess-chips"></div>
    <button class="ess-add" onclick="aedPlaceMode()">
      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
@@ -1498,6 +1503,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="leg"><div class="ldc" style="background:#19A8FF;border-color:#fff" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4 L17 18.5 L12 15.2 L7 18.5 Z" fill="#fff"/></svg></div><span id="l8">המיקום שלי</span></div>
  <div class="legend-foot" id="legend-foot">צבעים = קטגוריה. סמני ערים = סקירה סטטיסטית מצרפית, לא אירוע ספציפי.</div>
  </div>
+   </div>
  </div>
  <!-- Controls -->
  <div class="map-controls" role="group" aria-label="שליטה במפה">
@@ -1537,7 +1543,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v124 · 13.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v125 · 13.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -2195,7 +2201,9 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="sh-head"><span class="sh-ttl" id="circ-ttl">השומרים שלי</span><button class="sh-x" onclick="cl('sh-circles')" aria-label="סגור"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button></div>
  <div class="sh-body">
  <!-- CIRCLES OF TRUST — light card, live counts, rename, add new -->
- <div class="lt-card" id="cot-card">
+ 
+   <!-- 1. מעגלי שומרים -->
+   <div class="lt-card" id="cot-card">
    <div class="lt-h"><span>מעגלי שומרים</span></div>
    <div id="cot-list"></div>
    <button class="cot-new" onclick="addCircle()">
@@ -2204,8 +2212,16 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
    </button>
  </div>
 
- <!-- ADD A GUARDIAN — unified always-visible form -->
- <div style="padding:4px 0 8px">
+   <!-- 2. השומרים שלי (wireframe: the people come BEFORE the form) -->
+   <div class="shm-sec">
+    <div class="shm-h">השומרים שלי</div>
+    <div id="circ-members" role="list"></div>
+   </div>
+
+   <!-- 3. הוספה לשומרים שלי -->
+   <div class="shm-sec">
+    <div class="shm-h">הוספה לשומרים שלי</div>
+    <div style="padding:4px 0 8px">
  <p style="font-size:13px;color:var(--tx2);line-height:1.6;margin-bottom:14px">הוסף/י אנשים שאת/ה סומכים עליהם. אם הם כבר ב-SH✡MER — תראו זה את זה על המפה. אם לא — נשלח להם הזמנה.</p>
  <div style="background:var(--n3);border:1px solid var(--b2);border-radius:16px;padding:14px">
    <input class="ob-f" id="ag-name" type="text" maxlength="24" autocomplete="name" placeholder="שם (למשל: אמא, יעקב)" aria-label="שם" style="margin-bottom:10px">
@@ -2227,7 +2243,9 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
    </button>
  </div>
 </div>
- <div id="gd-list" role="list" style="margin-top:10px"></div>
+   </div>
+
+   <div id="gd-list" role="list" style="margin-top:10px"></div>
  <div class="ghost-row" id="ghost-row">
  <div class="ghost-l">
  <div class="ghost-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4l16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9.5 9.6A3 3 0 0 0 14.4 14M6.3 6.7C3.7 8.3 2 12 2 12s3.6 6.5 10 6.5c1.6 0 3-.4 4.3-1M10 5.6c.6-.1 1.3-.1 2-.1 6.4 0 10 6.5 10 6.5a18 18 0 0 1-2.4 3.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
@@ -2239,8 +2257,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="circ-tabs" id="circ-tabs" role="tablist" aria-label="מעגלים"></div>
  
  <button class="row-btn" style="width:100%;margin-bottom:12px;justify-content:flex-start;gap:9px" onclick="cl('sh-circles');openGeoRemind()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="color:var(--g3)"><path d="M12 22s7-6.4 7-12a7 7 0 1 0-14 0c0 5.6 7 12 7 12Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.6" fill="currentColor"/></svg><span data-he="תזכורת הגעה (כשמישהו מגיע למקום)" data-en="Arrival reminder (when someone reaches a place)">תזכורת הגעה</span></button>
- 
- <div id="circ-members" role="list"></div>
+
  <button class="cm-act danger" style="width:100%;padding:12px;margin-top:6px" onclick="leaveCircle()" id="circ-leave-btn"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6.3 6.3l11.4 11.4" fill="none" stroke="currentColor" stroke-width="2"/></svg><span id="circ-leave-lbl">עזוב מעגל זה</span></button>
  <div class="mini-credit" dir="ltr"><img class="footer-3s" src="3shamrocks.png" alt="3Shamrocks Studio"></div>
  </div>
@@ -4868,7 +4885,7 @@ function moveUserDot(lat,lng){
  // Responder navigation: distance updates every tick; route redraw throttled (OSRM-friendly).
  if(respTarget){ updateResponderDistance(); const now=Date.now(); if(now-_respRedrawTs>4000){_respRedrawTs=now;drawResponderRoute();} }
 }
-function locMe(){
+function locMe(){ try{ setTimeout(essRefreshNear, 900); }catch(e){}
  if(!navigator.geolocation){toast('Geolocation '+T('geo_err'),'amb');return;}
  const fab=document.getElementById('loc-fab');if(fab)fab.classList.add('locating');
  toast(currentLang==='he'?' מאתר מיקום...':' Locating...','');
@@ -7453,7 +7470,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v124';
+var APP_VER='v125';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -8360,7 +8377,15 @@ var AED_GLYPH='<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true
      • STATISTICS = translucent HALOS  → an area fact about the past year. Not an incident.
    A statistic drawn as a pin is a fabricated event. That is why these are halos, sized by
    volume, always beneath everything else, and always labelled with the source and period. */
-var STATS={data:null, layer:[], on:false};
+function essToggleMenu(){
+  var b=document.getElementById('ess-body'), t=document.getElementById('ess-tog'), k=document.getElementById('ess-caret');
+  if(!b) return;
+  var open=b.hasAttribute('hidden');
+  if(open){ b.removeAttribute('hidden'); } else { b.setAttribute('hidden',''); }
+  if(t) t.setAttribute('aria-expanded', open?'true':'false');
+  if(k) k.textContent = open ? '▴' : '▾';
+}
+var STATS={data:null, layer:[], on:true};   /* real police data is ALWAYS shown */
 
 async function statsLoad(){
   if(STATS.data) return STATS.data;
@@ -8428,7 +8453,17 @@ function statsRender(){
     STATS.layer.push(circ);
   });
 }
+function statsAutoOn(){
+  /* Real police data is a credibility feature — it shows by default, not hidden behind a toggle. */
+  statsLoad().then(function(d){ if(d && STATS.on) statsRender(); statsLegPaint(); });
+}
 function statsLegPaint(){
+  var b=document.getElementById('leg-stats-st');
+  if(b) b.textContent = STATS.on ? 'הסתר' : 'הצג';
+  var sec=document.getElementById('leg-stats-sec');
+  if(sec) sec.classList.toggle('dim', !STATS.on);
+}
+function _statsLegPaintOld(){
   var el=document.getElementById('leg-stats');
   if(el) el.classList.toggle('leg-on', !!STATS.on);
   var s=document.getElementById('leg-stats-st');
@@ -8563,6 +8598,27 @@ function essClearKind(kind){
   Object.keys(L).forEach(function(id){ try{ MAP.removeLayer(L[id]); }catch(e){} });
   ESS.layer[kind]={};
 }
+/* ══ PROXIMITY FILTER ══
+   An emergency is a "where is the NEAREST one" problem, never a "show me all of them" problem.
+   Rendering every police station and pharmacy in the country buries the one that matters and
+   turns the map into noise. Keep only the closest few of each type, recomputed as you move. */
+var ESS_NEAR={ aed:3, police:2, hospital:2, fire:2, pharmacy:3 };
+function essNearest(list, kind){
+  if(!list || !list.length) return [];
+  var n = ESS_NEAR[kind] || 3;
+  var scored = list.map(function(p){
+    var d = NaN;
+    try{ d = essDist(p); }catch(e){}
+    p._d = (typeof d === 'number' && isFinite(d)) ? d : Infinity;
+    return p;
+  });
+  if(scored.every(function(p){ return p._d === Infinity; })) return list.slice(0, n);
+  return scored.sort(function(a,b){ return a._d - b._d; }).slice(0, n);
+}
+function essRefreshNear(){
+  /* the nearest hospital changes when you move — recompute */
+  try{ if(MAP && ESS && ESS.on) essRender(); }catch(e){}
+}
 function essRender(){
   if(!MAP) return;
   var he=(currentLang==='he'), LG=currentLang;
@@ -8570,7 +8626,7 @@ function essRender(){
     essClearKind(kind);
     if(!ESS.on[kind]) return;
     var T=ESS_TYPES[kind];
-    var list=ESS.data[kind]||[];
+    var list=essNearest(ESS.data[kind]||[], kind);   /* nearest only */
     list.forEach(function(a){
       var dist=essDist(a);
       var mk=window.L.marker([a.lat,a.lng],{icon:essIcon(kind), zIndexOffset:200});
@@ -9746,6 +9802,18 @@ body.aed-placing #map{cursor:crosshair}
 .stat-swatch{width:14px;height:14px;border-radius:50%;flex:0 0 auto;background:radial-gradient(circle,rgba(41,98,255,.45),rgba(41,98,255,.12));border:1px solid rgba(41,98,255,.5)}
 .leg-src{font-size:9.5px;color:var(--tx3);line-height:1.45;margin-top:2px}
 #leg-stats.leg-on{color:var(--g3)}
+
+.shm-sec{margin-top:18px}
+.shm-h{font-size:11px;font-weight:900;letter-spacing:.07em;color:var(--tx3);text-transform:uppercase;margin-bottom:9px;padding-inline-start:2px}
+
+.leg-sec-tog{width:100%;display:flex;align-items:center;justify-content:space-between;background:none;border:0;padding:7px 0;font-family:inherit;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3);cursor:pointer}
+.leg-caret{font-size:11px;color:var(--tx3)}
+.leg-sec-body[hidden]{display:none}
+.stat-key{display:flex;flex-wrap:wrap;gap:7px;margin:4px 0 5px}
+.stat-key span{display:flex;align-items:center;gap:4px;font-size:9.5px;color:var(--tx2);font-weight:700}
+.stat-key .sk{width:9px;height:9px;border-radius:50%;display:inline-block;opacity:.75}
+.leg-stats-btn{width:100%;margin-top:5px;padding:5px;border-radius:8px;border:1px solid var(--b2);background:rgba(255,255,255,.04);color:var(--tx2);font-family:inherit;font-size:10px;font-weight:800;cursor:pointer}
+#leg-stats-sec.dim{opacity:.5}
 </style>
 <script src="native-bridge.js"></script>
 </body>
