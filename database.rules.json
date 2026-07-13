@@ -1,15 +1,18 @@
 {
   "rules": {
-    "registry":  { ".read": false, ".write": "auth != null" },
+    "registry": {
+      ".read": false,
+      ".write": "auth != null"
+    },
     "pairs": {
       "$uid": {
-        ".read":  "auth != null && auth.uid == $uid",
+        ".read": "auth != null && auth.uid == $uid",
         ".write": "auth != null && auth.uid == $uid"
       }
     },
     "invites": {
       "$token": {
-        ".read":  "auth != null",
+        ".read": "auth != null",
         ".write": "auth != null",
         ".validate": "newData.hasChildren(['fromUid','ts'])"
       }
@@ -22,10 +25,17 @@
     },
     "ping": {
       "$uid": {
-        ".read":  "auth != null && auth.uid == $uid",
+        ".read": "auth != null && auth.uid == $uid",
         ".write": "auth != null"
       }
     },
-    "sos": { ".read": "auth != null", ".write": "auth != null" }
+    "sos": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "aeds": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    }
   }
 }
