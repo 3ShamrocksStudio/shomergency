@@ -826,7 +826,11 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
 .tiles-base{filter:brightness(.85) sepia(.75) hue-rotate(192deg) saturate(2) brightness(.4) contrast(.9);}
 .tiles-labels{filter:brightness(1.12) saturate(.6);}
 .leaflet-container{background:#20242b;font-family:var(--font-main);outline:none;}
-.leaflet-control-attribution{background:rgba(8,18,36,.78)!important;color:var(--tx3)!important;font-size:9px!important;backdrop-filter:blur(6px);border-radius:6px 0 0 0;padding:2px 6px!important;}
+.leaflet-control-attribution{background:rgba(8,18,36,.72)!important;color:var(--tx3)!important;font-size:8.5px!important;backdrop-filter:blur(6px);border-radius:0 6px 0 0;padding:1px 5px!important;line-height:1.35;max-width:52vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.7}
+.leaflet-control-attribution a{color:var(--tx3)!important}
+/* keep it OUT of the SOS button's zone — bottom-left, never under the button */
+.leaflet-bottom.leaflet-right{bottom:auto!important;right:auto!important;left:0!important;bottom:0!important}
+.leaflet-bottom.leaflet-right .leaflet-control-attribution{margin:0!important}
 .leaflet-control-attribution a{color:var(--g2)!important;}
 .leaflet-bar,.leaflet-control-zoom{display:none!important;} /* we use our own brand controls */
 /* 3D marker index */
@@ -1543,7 +1547,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v126 · 13.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v127 · 13.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -6112,11 +6116,35 @@ function addMember(){
  toast(he?'✓ '+name+' נוסף/ה למעגל':'✓ '+name+' added','grn');
 }
 function removeMember(id){
- const m=memberById(id);if(!m)return;
- SS.circleMembers=SS.circleMembers.filter(x=>x.id!==id);
- if(mapLayers.circle[id]){MAP&&MAP.removeLayer(mapLayers.circle[id]);delete mapLayers.circle[id];}
- if(alertMemberId===id)clearCircleAlert();
- saveStore(); renderCircles();
+  /* TWO-STORES DISEASE: this used to delete the member from SS.circleMembers only, while the
+     underlying PAIR lived on in SS.guardian.pairs — so syncPairsToCircles() promptly rebuilt
+     the member and they reappeared. Worse: the pair is what grants location access, so a
+     "removed" guardian could STILL SEE THE USER. Removing someone must cut the pair itself. */
+  const m=memberById(id); if(!m) return;
+  const he=currentLang==='he';
+  const puid=m.partnerUid||null;
+
+  // 1. the member row
+  SS.circleMembers=(SS.circleMembers||[]).filter(x=>x.id!==id);
+
+  // 2. the PAIR — the thing that actually grants access
+  try{
+    const g=gdState();
+    g.pairs=(g.pairs||[]).filter(p => !(p.id===m.pairId || (puid && p.partnerUid===puid)));
+  }catch(e){}
+
+  // 3. revoke on the server: they must stop seeing us immediately
+  if(puid && FB.ready && FB.uid){
+    try{ FB.db.ref('pairs/'+FB.uid+'/'+puid).remove(); }catch(e){}
+  }
+
+  // 4. stop listening for their SOS
+  try{ if(puid){ FB.db.ref('invites/sos_'+puid).off(); delete SOSBUS.watchers[puid]; delete SOSBUS.mine[puid]; } }catch(e){}
+
+  if(mapLayers.circle[id]){ MAP&&MAP.removeLayer(mapLayers.circle[id]); delete mapLayers.circle[id]; }
+  if(alertMemberId===id) clearCircleAlert();
+  saveStore(); renderCircles();
+  toast(he?('הוסר/ה '+(m.name||'')+' — כבר לא רואה את המיקום שלך'):((m.name||'Removed')+' — they can no longer see your location'),'');
 }
 function renameCircle(id){
  var he=currentLang==='he';
@@ -7473,7 +7501,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v126';
+var APP_VER='v127';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -8522,23 +8550,48 @@ function showIncomingSOS(puid, nm, v){
   var d=document.createElement('div');
   d.id='in-sos-'+puid; d.className='in-sos';
   d.innerHTML=
-    '<div class="in-sos-h">'+(he?'\u05D4\u05EA\u05E8\u05E2\u05EA SOS':'SOS ALERT')+'</div>'
+    '<button class="in-x" aria-label="'+(he?'סגור':'Dismiss')+'">✕</button>'
+   +'<div class="in-sos-h">'+(he?'התרעת SOS':'SOS ALERT')+'</div>'
    +'<div class="in-sos-n">'+ESC(nm)+'</div>'
    +'<div class="in-sos-s">'+(he?'זקוק/ה לעזרה — עכשיו':'needs help — right now')+'</div>'
    +'<div class="in-sos-btns">'
    +'<button class="in-b go">'+(he?'אני בדרך':'I am coming')+'</button>'
-   +'<button class="in-b map">'+(he?'הצג במפה':'Show on map')+'</button>'
+   +'<button class="in-b map">'+(he?'נווט/י':'Navigate')+'</button>'
    +'<button class="in-b call">'+(he?'התקשר/י':'Call')+'</button>'
    +'</div>';
   document.body.appendChild(d);
-  d.querySelector('.go').onclick=function(){ sosRespond(puid,'enroute'); d.classList.add('acked'); };
-  d.querySelector('.map').onclick=function(){
-    try{ if(v.lat&&v.lng) MAP.flyTo([v.lat,v.lng],16); op('map'); }catch(e){}
-  };
-  d.querySelector('.call').onclick=function(){
+
+  function shrink(){
+    /* Once you have committed, the banner must SHRINK and get out of the way — it used to
+       sit there covering the whole screen, unresponsive. It becomes a small live status. */
+    d.classList.add('acked');
+    d.querySelector('.in-sos-s').textContent = he?'אתה בדרך — הם יודעים':'You are on the way — they know';
+    var btns=d.querySelector('.in-sos-btns');
+    btns.innerHTML='<button class="in-b map">'+(he?'נווט/י':'Navigate')+'</button>'
+                  +'<button class="in-b call">'+(he?'התקשר/י':'Call')+'</button>'
+                  +'<button class="in-b stand">'+(he?'לא יכול/ה':'Stand down')+'</button>';
+    wire();
+  }
+  function nav(){
+    try{
+      if(v.lat&&v.lng){
+        window.open('https://www.google.com/maps/dir/?api=1&destination='+v.lat+','+v.lng,'_blank','noopener');
+      }
+    }catch(e){}
+  }
+  function callThem(){
     var m=memberByPair(puid);
     if(m&&m.phoneCanon) location.href='tel:+'+m.phoneCanon;
-  };
+    else toast(he?'אין מספר שמור':'No number saved','amb');
+  }
+  function wire(){
+    var g=d.querySelector('.go');   if(g) g.onclick=function(){ sosRespond(puid,'enroute'); shrink(); };
+    var mp=d.querySelector('.map'); if(mp) mp.onclick=nav;
+    var cl=d.querySelector('.call'); if(cl) cl.onclick=callThem;
+    var st=d.querySelector('.stand'); if(st) st.onclick=function(){ sosStandDown(); d.remove(); };
+  }
+  wire();
+  d.querySelector('.in-x').onclick=function(){ d.remove(); };   /* ALWAYS dismissible */
 }
 
 /* ── A GUARDIAN COMMITS ── */
@@ -10058,6 +10111,15 @@ body.aed-placing #map{cursor:crosshair}
 .in-b.go{background:#fff;color:#8E0C19}
 @keyframes sosIn{from{transform:translateY(-16px) scale(.97);opacity:0}to{transform:none;opacity:1}}
 @keyframes sosFlash{0%,100%{box-shadow:0 16px 48px rgba(204,20,38,.5)}50%{box-shadow:0 16px 60px rgba(255,60,80,.95)}}
+
+.in-sos{position:fixed;left:12px;right:12px;top:calc(var(--hdr-top,0px) + var(--hdr) + 10px);z-index:100003;max-width:520px;margin-inline:auto;padding:16px 16px 14px}
+.in-x{position:absolute;inset-inline-end:10px;top:10px;background:rgba(255,255,255,.2);border:0;color:#fff;width:26px;height:26px;border-radius:50%;font-size:13px;font-weight:900;cursor:pointer;line-height:1}
+.in-sos.acked{animation:none;background:linear-gradient(135deg,#0E8F6E,#0B7355);border-color:rgba(61,220,151,.6);box-shadow:0 10px 30px rgba(0,0,0,.5)}
+.in-sos.acked .in-sos-h{color:#CFF7E7}
+.in-b.stand{background:rgba(0,0,0,.25)}
+/* the copyright line must never sit near the SOS button */
+.foot,.copyright,#app-foot{position:static!important;margin-top:18px;text-align:center;font-size:10px;color:var(--tx3)}
+#map .foot,#map .copyright,#screen-map .foot{display:none!important}
 </style>
 <script src="native-bridge.js"></script>
 </body>
