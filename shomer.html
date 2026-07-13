@@ -1545,7 +1545,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v106 · 13.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v107 · 13.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -1789,6 +1789,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="sos-ring1" aria-hidden="true"></div>
  <div class="sos-ring2" aria-hidden="true"></div>
  <div class="sos-hold-ring" id="sos-hold-ring" aria-hidden="true"></div>
+ <button id="watch-btn" class="watch-btn" aria-label="שמור עליי"></button>
  <button class="sos-btn" id="sos-btn" onclick="onSosTap()" aria-label="שלח SOS חירום" aria-pressed="false">
  <span class="sos-txt">SOS</span>
  </button>
@@ -5780,8 +5781,21 @@ function renderCircles(){
  // If this circle is the one on the map, keep markers fresh
  if(mapCircleId===activeCircleId) renderCircleMarkers();
 }
+function agoTxt(ts,he){
+  if(!ts) return he?'טרם שותף מיקום':'never shared';
+  var s=Math.max(0,Math.round((Date.now()-ts)/1000));
+  if(s<60)  return he?'לפני רגע':'just now';
+  if(s<3600)return (he?'לפני ':'')+Math.round(s/60)+(he?' דק׳':'m ago');
+  if(s<86400)return (he?'לפני ':'')+Math.round(s/3600)+(he?' שע׳':'h ago');
+  return (he?'לפני ':'')+Math.round(s/86400)+(he?' ימים':'d ago');
+}
 function statusOf(m,he){
  if(m.sos)return{cls:'sos',txt:he?' SOS פעיל':' SOS active'};
+ /* Honest state: if they are not live, say when they were last seen — not "waiting". */
+ if(m.registered && !m.live){
+   var seen=agoTxt(m.ts, he);
+   return {cls:'wait', txt: (he?('נראתה/נראה לאחרונה: '+seen):('last seen: '+seen))};
+ }
  if(SS.circleGhost&&m.shareTo)return{cls:'paused',txt:he?' שיתוף מושהה':' sharing paused'};
  if(m.shareTo&&m.seeThem)return{cls:'mutual',txt:he?'הדדי':currentLang==='ar'?'متبادل':'Mutual'};
  if(m.shareTo&&!m.seeThem)return{cls:'oneway',txt:he?'אני משתף/ת בלבד':currentLang==='ar'?'أنا أشارك فقط':'I share only'};
@@ -7059,7 +7073,7 @@ function gdRequireConsent(cb){
 }
 function gdConsentAgree(){
  if(!SS.consent)SS.consent={share:false,tos:false,ts:0,ver:''};
- SS.consent.share=true; SS.consent.tos=true; SS.consent.ts=Date.now(); SS.consent.ver=LEGAL_VER; saveStore();
+ SS.consent.share=true; try{ if(window.nativeStartTracking) nativeStartTracking(); }catch(e){} SS.consent.tos=true; SS.consent.ts=Date.now(); SS.consent.ver=LEGAL_VER; saveStore();
  gdClose('gd-consent');
  toast(currentLang==='he'?'✓ הסכמת לשיתוף מיקום — ניתן לבטל בכל עת':'✓ Location sharing on — you can stop anytime','grn');
  const cb=_consentCb; _consentCb=null; if(cb)cb();
@@ -7348,7 +7362,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v106';
+var APP_VER='v107';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -7837,6 +7851,7 @@ function fbOnAuthed(uid){
   try{ fbListenSOS(); }catch(e){}
   try{ fbListenPairs(); }catch(e){}
   try{ purgeStalePositions(); }catch(e){}
+  try{ watchPaint(); }catch(e){}
   try{ syncPairsToCircles(); }catch(e){}
   try{ fbListenAllPeerLocs(); }catch(e){}
   try{ gdState().pairs.forEach(function(p){ if(p&&p.pending&&!p.linked&&p.token&&p.partnerUid) fbWatchApproval(p.token,p.partnerUid); }); }catch(e){}     // subscribe to every paired partner's live location
@@ -8218,6 +8233,69 @@ function syncPairsToCircles(){
     (SS.circleMembers||[]).forEach(function(m){ if(!ids[m.cid]){ m.cid=circlesList()[0].id; changed=true; } });
     if(changed){ saveStore(); try{ renderCircles(); }catch(e){} }
   }catch(e){}
+}
+/* ══ WATCH SESSION ("שמור עליי") ══
+   A PWA cannot track in the background — the geolocation API only runs on a visible page
+   and service workers have no geolocation access at all. So instead of pretending, we give
+   the moment that actually matters: the walk home. The user starts a session, we hold a
+   screen wake-lock, publish high-accuracy presence continuously, and tell their guardians.
+   When they arrive safely they end it — or it auto-expires. This is the real use case. */
+var WATCH={on:false, until:0, wl:null, timer:null, hi:null};
+async function watchStart(mins){
+  var he=currentLang==='he';
+  mins = mins || 30;
+  if(!SS.consent||!SS.consent.share){
+    toast(he?'צריך לאשר שיתוף מיקום קודם':'Enable location sharing first','amb'); return;
+  }
+  WATCH.on=true; WATCH.until=Date.now()+mins*60000;
+  try{ if('wakeLock' in navigator){ WATCH.wl=await navigator.wakeLock.request('screen'); } }catch(e){}
+  // high-accuracy continuous fix while the session runs
+  try{
+    if(WATCH.hi!=null) navigator.geolocation.clearWatch(WATCH.hi);
+    WATCH.hi=navigator.geolocation.watchPosition(function(pos){
+      userLat=pos.coords.latitude; userLng=pos.coords.longitude;
+      try{ fbPublishPresence(); }catch(e){}
+      try{ gdBroadcast(); }catch(e){}
+    }, function(){}, {enableHighAccuracy:true, maximumAge:5000, timeout:20000});
+  }catch(e){}
+  if(WATCH.timer) clearInterval(WATCH.timer);
+  WATCH.timer=setInterval(function(){
+    if(Date.now()>WATCH.until){ watchStop(true); return; }
+    try{ fbPublishPresence(); }catch(e){}
+    watchPaint();
+  }, 10000);
+  // tell the guardians a watch has started
+  try{
+    var nm=(SS.user&&SS.user.name)||'';
+    (SS.circleMembers||[]).filter(function(m){return m.shareTo!==false && m.partnerUid;}).forEach(function(m){
+      try{ fbRestWrite('PUT','ping/'+m.partnerUid+'/'+FB.uid,{name:nm,kind:'watch',ts:Date.now()}); }catch(e){}
+    });
+  }catch(e){}
+  watchPaint();
+  toast(he?('\u2713 שמירה פעילה ל-'+mins+' דקות — השומרים שלך רואים אותך עכשיו'):('\u2713 Watch on for '+mins+' min — your guardians can see you now'),'grn');
+}
+function watchStop(auto){
+  var he=currentLang==='he';
+  WATCH.on=false; WATCH.until=0;
+  try{ if(WATCH.wl){ WATCH.wl.release(); WATCH.wl=null; } }catch(e){}
+  try{ if(WATCH.hi!=null){ navigator.geolocation.clearWatch(WATCH.hi); WATCH.hi=null; } }catch(e){}
+  if(WATCH.timer){ clearInterval(WATCH.timer); WATCH.timer=null; }
+  watchPaint();
+  toast(he?(auto?'זמן השמירה הסתיים':'הגעת בשלום \u2713 — השמירה הסתיימה'):(auto?'Watch expired':'Arrived safely \u2713'),'grn');
+}
+function watchPaint(){
+  var b=document.getElementById('watch-btn'); if(!b)return;
+  var he=currentLang==='he';
+  if(WATCH.on){
+    var left=Math.max(0,Math.round((WATCH.until-Date.now())/60000));
+    b.classList.add('on');
+    b.innerHTML='<span class="wt-dot"></span>'+(he?('שמירה פעילה · '+left+' דק׳ — הגעתי בשלום'):('Watching · '+left+'m — I arrived safely'));
+    b.onclick=function(){ watchStop(false); };
+  } else {
+    b.classList.remove('on');
+    b.innerHTML='<span class="wt-ic"></span>'+(he?'שמור/י עליי — אני בדרך':'Watch me — I am on my way');
+    b.onclick=function(){ watchStart(30); };
+  }
 }
 function fbApplyPeerPresence(all){
   try{
@@ -9083,6 +9161,13 @@ async function getOrCreateDeviceId(){
 .cm-act.on{background:rgba(61,187,102,.14);border-color:rgba(61,187,102,.45);color:#3DDC97}
 .cm-act.danger{color:#E5484D;border-color:rgba(229,72,77,.3)}
 .cm-act:active{transform:scale(.96)}
+
+.watch-btn{position:absolute;left:50%;transform:translateX(-50%);bottom:150px;z-index:520;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;border-radius:999px;border:1.5px solid rgba(224,168,40,.55);background:rgba(10,22,40,.92);backdrop-filter:blur(10px);color:#E0A828;font-family:inherit;font-weight:800;font-size:13.5px;cursor:pointer;box-shadow:0 8px 26px rgba(0,0,0,.5);white-space:nowrap}
+.watch-btn.on{background:linear-gradient(135deg,#0E8F6E,#14A857);border-color:rgba(61,187,102,.6);color:#fff}
+.watch-btn .wt-dot{width:9px;height:9px;border-radius:50%;background:#fff;animation:wpulse 1.6s infinite}
+.watch-btn .wt-ic{width:9px;height:9px;border-radius:50%;background:#E0A828}
+@keyframes wpulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,.6)}70%{box-shadow:0 0 0 9px rgba(255,255,255,0)}100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}}
 </style>
+<script src="native-bridge.js"></script>
 </body>
 </html>
