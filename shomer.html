@@ -878,7 +878,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
 /* Responder profession badge on the live "me" marker */
 .mk-me-badge{position:absolute;left:60%;top:-4px;width:16px;height:16px;border-radius:50%;background:#0A1628;border:1.5px solid #F5C840;display:flex;align-items:center;justify-content:center;font-size:9px;line-height:1;z-index:3;box-shadow:0 1px 4px rgba(0,0,0,.6);}
 /* Legend — compact, collapsible card */
-.map-legend{position:absolute;top:calc(var(--hdr-top,0px) + var(--hdr) + 10px);left:10px;z-index:400;background:rgba(10,16,26,.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--b3);border-radius:var(--r12);box-shadow:var(--e2);max-width:172px;overflow:hidden;}
+.map-legend{position:absolute;top:calc(var(--hdr-top,0px) + var(--hdr) + 52px);left:10px;z-index:400;background:rgba(10,16,26,.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--b3);border-radius:var(--r12);box-shadow:var(--e2);max-width:172px;overflow:hidden;}
 .legend-hd{display:flex;align-items:center;gap:6px;width:100%;padding:8px 11px;font-size:9.5px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;color:var(--g3);cursor:pointer;text-align:start;}
 .legend-chev{margin-inline-start:auto;font-size:9px;color:var(--tx2);transition:transform .2s;}
 .map-legend:not(.collapsed) .legend-chev{transform:rotate(90deg);}
@@ -1467,6 +1467,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <!-- Data-source banner -->
  <!-- statistical-overview banner removed; the legend now occupies the top-left. Sources remain cited in marker popups + Settings > Data & sources. -->
  <!-- Legend -->
+ <div class="map-count" id="map-count" aria-live="polite"><span class="mc-dot"></span><b id="mc-n">0</b> <span id="mc-l">שומרים</span></div>
  <div class="map-legend collapsed" id="map-legend" aria-label="מקרא מפה">
  <button class="legend-hd" onclick="toggleLegend()" aria-expanded="false" aria-controls="legend-body"><span aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span><span id="legend-ttl-txt">מקרא מפה</span><span class="legend-chev" id="legend-chev" aria-hidden="true">▸</span></button>
  <div class="legend-body" id="legend-body">
@@ -1527,7 +1528,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v119 · 13.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v120 · 13.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -1771,8 +1772,6 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="sos-ring1" aria-hidden="true"></div>
  <div class="sos-ring2" aria-hidden="true"></div>
  <div class="sos-hold-ring" id="sos-hold-ring" aria-hidden="true"></div>
- 
- <div class="map-count" id="map-count" aria-live="polite"><span class="mc-dot"></span><b id="mc-n">0</b> <span id="mc-l">שומרים</span></div>
  <button id="watch-btn" class="watch-btn" aria-label="שמור עליי"></button>
  <button class="sos-btn" id="sos-btn" onclick="onSosTap()" aria-label="שלח SOS חירום" aria-pressed="false">
  <span class="sos-txt">SOS</span>
@@ -7551,7 +7550,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v119';
+var APP_VER='v120';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -9777,7 +9776,7 @@ async function getOrCreateDeviceId(){
 body.aed-placing #map{cursor:crosshair}
 /* header no longer squeezes the connection pill — the guardian count moves onto the map */
 #hdr-count,.hdr-gd-count{display:none!important}
-.map-count{position:absolute;left:16px;top:16px;z-index:515;display:flex;align-items:center;gap:6px;background:rgba(10,22,40,.9);backdrop-filter:blur(8px);border:1px solid var(--b2);border-radius:999px;padding:7px 12px;font-size:12px;font-weight:800;color:var(--tx1)}
+
 .map-count b{color:var(--g3)}
 .map-count .mc-dot{width:7px;height:7px;border-radius:50%;background:#3DDC97}
 /* the 'later — to the map' link must look like a button */
@@ -9793,6 +9792,14 @@ body.aed-placing #map{cursor:crosshair}
 .ob-agree-row input{margin-top:3px;width:18px;height:18px;flex:0 0 auto}
 .ob-agree-row label{font-size:12.5px;color:var(--tx2);line-height:1.6}
 .ob-agree-row a{color:var(--g3)}
+
+/* guardian count — TOP-LEFT, directly above the map legend. Never near the SOS button. */
+.map-count{position:absolute;top:calc(var(--hdr-top,0px) + var(--hdr) + 10px);left:10px;z-index:401;
+  display:flex;align-items:center;gap:6px;background:rgba(10,16,26,.94);backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);border:1px solid var(--b3);border-radius:999px;padding:6px 11px;
+  font-size:12px;font-weight:800;color:var(--tx1);box-shadow:var(--e2);pointer-events:none}
+.map-count b{color:var(--g3)}
+.map-count .mc-dot{width:7px;height:7px;border-radius:50%;background:#3DDC97;flex:0 0 auto}
 </style>
 <script src="native-bridge.js"></script>
 </body>
