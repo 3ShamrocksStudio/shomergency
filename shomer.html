@@ -1471,7 +1471,16 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="map-legend collapsed" id="map-legend" aria-label="מקרא מפה">
  <button class="legend-hd" onclick="toggleLegend()" aria-expanded="false" aria-controls="legend-body"><span aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span><span id="legend-ttl-txt">מקרא מפה</span><span class="legend-chev" id="legend-chev" aria-hidden="true">▸</span></button>
  <div class="legend-body" id="legend-body">
- <div class="leg-sec" id="leg-ess">
+ <div class="leg-sec" id="leg-stats-sec">
+   <div class="leg-sec-h">נתוני פשיעה — משטרת ישראל</div>
+   <button class="leg" id="leg-stats" onclick="statsToggle()" style="width:100%;border:0;background:none;padding:6px 0;cursor:pointer;font-family:inherit;text-align:start;display:flex;align-items:center;gap:8px">
+     <span class="stat-swatch" aria-hidden="true"></span>
+     <span>עבירות שנרשמו · 2025</span>
+     <span id="leg-stats-st" style="margin-inline-start:auto;font-size:11px;color:var(--tx3)">○</span>
+   </button>
+   <div class="leg-src">מקור: data.gov.il · 395,294 רשומות · סטטיסטיקה, לא אירועים חיים</div>
+  </div>
+  <div class="leg-sec" id="leg-ess">
    <div class="leg-sec-h">שירותי חירום</div>
    <div class="ess-chips" id="ess-chips"></div>
    <button class="ess-add" onclick="aedPlaceMode()">
@@ -1528,7 +1537,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v123 · 13.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v124 · 13.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -7444,7 +7453,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v123';
+var APP_VER='v124';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -8341,6 +8350,90 @@ var AED_GLYPH='<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true
  +'<path d="M12 21s-7.4-4.8-7.4-10.2A4.5 4.5 0 0 1 12 7.7a4.5 4.5 0 0 1 7.4 3.1C19.4 16.2 12 21 12 21Z" fill="#fff"/>'
  +'<path d="M12.9 9.4l-3.2 4.4h2.1l-.6 3.5 3.3-4.6h-2.2Z" fill="#0E8F6E"/></svg>';
 
+/* ══ REAL POLICE STATISTICS ══
+   Source: משטרת ישראל — נתוני פשיעה, via data.gov.il. 395,294 recorded offences, 2025 Q1–Q4,
+   60 cities. Every number below is an official police record. Nothing here is invented.
+
+   THE VISUAL LAW — THREE LANGUAGES, NEVER MIXED:
+     • EVENTS     = teardrop PINS      → something is happening NOW. Act.
+     • ESSENTIALS = square TILES       → infrastructure that is always there.
+     • STATISTICS = translucent HALOS  → an area fact about the past year. Not an incident.
+   A statistic drawn as a pin is a fabricated event. That is why these are halos, sized by
+   volume, always beneath everything else, and always labelled with the source and period. */
+var STATS={data:null, layer:[], on:false};
+
+async function statsLoad(){
+  if(STATS.data) return STATS.data;
+  try{
+    var r=await fetch('crime-stats.json?v=1', {cache:'force-cache'});
+    STATS.data=await r.json();
+  }catch(e){ STATS.data=null; }
+  return STATS.data;
+}
+function statsColor(cats){
+  /* colour by the DOMINANT real category in that city */
+  var top=Object.keys(cats||{})[0]||'';
+  if(/גוף|מין/.test(top))   return '#E5484D';   // violent
+  if(/רכוש|מרמה/.test(top)) return '#2962FF';   // property
+  if(/סדר/.test(top))       return '#E0A828';   // public order
+  return '#7E8CA0';
+}
+function statsRadius(total, max){
+  var t=Math.sqrt(total)/Math.sqrt(max||1);
+  return 900 + t*5200;                          // metres — an AREA, not a point
+}
+async function statsToggle(){
+  var he=currentLang==='he';
+  if(STATS.on){ statsClear(); STATS.on=false; statsLegPaint(); return; }
+  var d=await statsLoad();
+  if(!d||!d.cities||!d.cities.length){
+    toast(he?'לא ניתן לטעון נתוני משטרה':'Could not load police data','amb'); return;
+  }
+  statsRender(); STATS.on=true; statsLegPaint();
+  toast(he?('נתוני משטרת ישראל · '+d.period):('Israel Police · '+d.period),'grn');
+}
+function statsClear(){
+  try{ STATS.layer.forEach(function(l){ MAP.removeLayer(l); }); }catch(e){}
+  STATS.layer=[];
+}
+function statsRender(){
+  if(!MAP||!STATS.data) return;
+  statsClear();
+  var he=currentLang==='he';
+  var d=STATS.data;
+  var max=Math.max.apply(null, d.cities.map(function(x){return x.total;}));
+  d.cities.forEach(function(ct){
+    var col=statsColor(ct.cats);
+    var circ=window.L.circle([ct.lat,ct.lng],{
+      radius: statsRadius(ct.total,max),
+      color: col, weight:1, opacity:.35,
+      fillColor: col, fillOpacity:.10,
+      interactive:true, pane:'tilePane'      /* BENEATH every event and essential */
+    });
+    var rows=Object.keys(ct.cats).map(function(k){
+      return '<div style="display:flex;justify-content:space-between;gap:10px;font-size:11.5px;padding:2px 0">'
+        +'<span style="color:#8c9bbd">'+ESC(k)+'</span><b>'+ct.cats[k].toLocaleString()+'</b></div>';
+    }).join('');
+    circ.bindPopup(
+      '<div style="font-family:inherit;min-width:210px" dir="'+(he?'rtl':'ltr')+'">'
+      +'<div style="font-weight:900;font-size:15px">'+ESC(ct.city)+'</div>'
+      +'<div style="font-size:11px;color:#8c9bbd;margin-bottom:6px">'+(he?'עבירות שנרשמו':'Recorded offences')+' · '+ESC(d.period)+'</div>'
+      +'<div style="font-size:24px;font-weight:900;color:'+col+';margin-bottom:6px">'+ct.total.toLocaleString()+'</div>'
+      +rows
+      +'<div style="margin-top:8px;padding-top:7px;border-top:1px solid rgba(255,255,255,.1);font-size:10px;color:#8c9bbd;line-height:1.5">'
+      +(he?'מקור: משטרת ישראל · data.gov.il':'Source: Israel Police · data.gov.il')+'<br>'
+      +(he?'נתונים סטטיסטיים — אינם אירועים חיים':'Statistics — not live incidents')+'</div>'
+      +'</div>',{maxWidth:260});
+    circ.addTo(MAP);
+    STATS.layer.push(circ);
+  });
+}
+function statsLegPaint(){
+  var el=document.getElementById('leg-stats');
+  if(el) el.classList.toggle('leg-on', !!STATS.on);
+  var s=document.getElementById('leg-stats-st');
+  if(s) s.textContent = STATS.on ? '●' : '○';
+}
 var ESS_TYPES={
   aed:      {q:'["emergency"="defibrillator"]', col:'#0E8F6E', he:'דפיברילטור', en:'Defibrillator', ar:'مزيل الرجفان',
              g:'<path d="M12 21s-7.4-4.8-7.4-10.2A4.5 4.5 0 0 1 12 7.7a4.5 4.5 0 0 1 7.4 3.1C19.4 16.2 12 21 12 21Z" fill="#fff"/><path d="M12.9 9.4l-3.2 4.4h2.1l-.6 3.5 3.3-4.6h-2.2Z" fill="#0E8F6E"/>'},
@@ -9649,6 +9742,10 @@ body.aed-placing #map{cursor:crosshair}
 .cot-pend{font-size:10px;font-weight:800;color:#9a6a00;background:rgba(224,168,40,.2);padding:2px 7px;border-radius:999px}
 .cot-x{background:none;border:0;color:#E5484D;font-size:15px;font-weight:900;cursor:pointer;padding:2px 6px;line-height:1}
 .cot-empty{font-size:12px;color:#6b7a95;text-align:center;padding:10px}
+
+.stat-swatch{width:14px;height:14px;border-radius:50%;flex:0 0 auto;background:radial-gradient(circle,rgba(41,98,255,.45),rgba(41,98,255,.12));border:1px solid rgba(41,98,255,.5)}
+.leg-src{font-size:9.5px;color:var(--tx3);line-height:1.45;margin-top:2px}
+#leg-stats.leg-on{color:var(--g3)}
 </style>
 <script src="native-bridge.js"></script>
 </body>
