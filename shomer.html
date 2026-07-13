@@ -1383,8 +1383,8 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
 <div id="name-err" style="display:none;font-size:11px;color:#ef4444;margin-top:3px"></div>
  <p class="name-hint" id="name-hint"><span id="name-hint-txt">נוצר אוטומטית — אפשר לערוך</span></p>
  <div style="display:flex;gap:8px;margin-bottom:10px">
- <select class="ob-f" id="ob-cc" aria-label="Country code" dir="ltr" style="flex:0 0 auto;width:104px;margin-bottom:0;text-align:left"></select>
  <input class="ob-f" id="ob-phone" style="flex:1;margin-bottom:0;text-align:start" type="tel" autocomplete="tel" maxlength="18" placeholder="50 000 0000" inputmode="tel" dir="ltr" aria-label="מספר טלפון">
+     <select class="ob-f" id="ob-cc" aria-label="Country code" dir="ltr" style="flex:0 0 auto;width:104px;margin-bottom:0;text-align:left"></select>
 </div>
  <p style="font-size:11px;color:var(--tx3);margin:-4px 0 12px;line-height:1.6" id="ob-why">מספר הטלפון משמש לשליחת עזרה בעת חירום.</p>
  <div class="disclaimer" id="ob-disclaimer" style="margin-bottom:12px">
@@ -1553,7 +1553,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v117 · 13.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v118 · 13.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -1965,7 +1965,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="set-grp"><div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4 L17 18.5 L12 15.2 L7 18.5 Z" fill="currentColor"/></svg></div><div><div class="sr-nm" id="resp-tog-lbl" data-he="ניווט מגיב/ה (הצטרפות)" data-en="Responder navigation (opt-in)">ניווט מגיב/ה (הצטרפות)</div><div class="sr-sb" id="resp-tog-sub" data-he="הצג מסלול חי ומרחק כשמגיבים ל-SOS. מיועד למגיבים מאומתים ולשומרים — לא תחליף לחיוג 100/101/102." data-en="Show a live route + distance when responding to an SOS. For verified responders/guardians — not a replacement for 100/101/102.">הצג מסלול חי ומרחק כשמגיבים ל-SOS.</div></div></div><div class="tog" id="resp-tog" onclick="toggleRespond(this)" role="switch"></div></div></div>
  <div class="set-grp"><div class="set-row" onclick="openSetPin()" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><div><div class="sr-nm" data-he="קוד לביטול SOS (PIN)" data-en="SOS cancel code (PIN)">קוד לביטול SOS (PIN)</div><div class="sr-sb" data-he="נדרש לביטול SOS פעיל — לעולם לא טביעת אצבע." data-en="Required to cancel an active SOS — never a fingerprint.">נדרש לביטול SOS פעיל — לעולם לא טביעת אצבע.</div></div></div><span id="pin-set-state" style="font-size:12px;font-weight:700;color:var(--amb);white-space:nowrap">לא הוגדר</span></div></div>
  <div class="set-grp">
- <div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="13.5" r="3.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 7l1.5-2h3L15 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div><div><div class="sr-nm" id="selfie-tog-lbl" data-he="הגנת גנב — סלפי" data-en="Theft protection — selfie" data-ar="حماية السرقة — سيلفي">הגנת גנב — סלפי</div><div class="sr-sb" id="selfie-tog-sub" data-he="אחרי 3 קודים שגויים: צילום סלפי של מי שמחזיק את הטלפון + שליחת מיקום חי לשומרים שלך. דורש הרשאת מצלמה. פועל רק כשהאפליקציה פתוחה." data-en="After 3 wrong codes: snap a selfie of whoever holds the phone + send live location to your SHOMERs. Needs camera permission. Works only while the app is open.">אחרי 3 קודים שגויים: סלפי + מיקום חי לשומרים שלך.</div></div></div><div class="tog" id="selfie-tog" onclick="toggleSelfie(this)" role="switch" aria-label="הגנת גנב סלפי"></div></div>
+ <div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="13.5" r="3.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 7l1.5-2h3L15 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div><div><div class="sr-nm" id="selfie-tog-lbl" data-he="הגנת גנב — סלפי" data-en="Theft protection — selfie" data-ar="حماية السرقة — سيلفي">הגנת גנב — סלפי</div><div class="sr-sb" id="selfie-tog-sub" data-he="אחרי 3 קודים שגויים: צילום סלפי של מי שמחזיק את הטלפון + שליחת מיקום חי לשומרים שלך. דורש הרשאת מצלמה. פועל רק כשהאפליקציה פתוחה." data-en="After 3 wrong codes: snap a selfie of whoever holds the phone + send live location to your SHOMERs. Needs camera permission. Works only while the app is open.">אחרי 3 קודים שגויים: סלפי + מיקום חי לשומרים שלך.</div></div></div><div class="tog" id="selfie-tog" onclick="toggleSelfie(this)" role="switch" aria-label="הגנה מפני גניבת מכשיר — צילום סלפי אוטומטי"></div></div>
  <div class="set-row" onclick="openTheftEvidence()" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><div><div class="sr-nm" data-he="ראיות גניבה" data-en="Theft evidence" data-ar="أدلة السرقة">ראיות גניבה</div><div class="sr-sb" data-he="סלפי ומיקום שנלכדו — ראיה מתועדת למשטרה." data-en="Captured selfies + locations — documented proof for police.">סלפי ומיקום שנלכדו — ראיה למשטרה.</div></div></div><span id="theft-ev-state" style="font-size:12px;font-weight:700;color:var(--g3);white-space:nowrap"></span></div>
  </div>
  <div class="set-grp"><div class="set-row" onclick="op('sh-checkin')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="sr-nm" data-he="צ׳ק-אין הדדי (עם שומר/ת)" data-en="Mutual check-in (with a guardian)">צ׳ק-אין הדדי</div><div class="sr-sb" data-he="„הכל בסדר?” תקופתי — אם לא תאשר/י, השומר/ת מקבל/ה אזעקה." data-en="Periodic 'Are you OK?' — if you don't confirm, your guardian is alerted.">„הכל בסדר?” תקופתי.</div></div></div><span id="ci-set-state" style="font-size:12px;font-weight:700;color:var(--tx3);white-space:nowrap">כבוי</span></div></div>
@@ -2255,8 +2255,8 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div style="background:var(--n3);border:1px solid var(--b2);border-radius:16px;padding:14px">
    <input class="ob-f" id="ag-name" type="text" maxlength="24" autocomplete="name" placeholder="שם (למשל: אמא, יעקב)" aria-label="שם" style="margin-bottom:10px">
    <div style="display:flex;gap:8px;margin-bottom:10px">
-     <select class="ob-f" id="ag-cc" aria-label="קידומת מדינה" style="flex:0 0 auto;width:96px;margin-bottom:0;text-align:left" dir="ltr"></select>
      <input class="ob-f" id="ag-phone" type="tel" inputmode="tel" autocomplete="tel" dir="ltr" placeholder="+972 · +81 · +1 …" aria-label="מספר נייד" style="flex:1;margin-bottom:0;text-align:left" oninput="agPhoneHint()" onkeydown="if(event.key==='Enter')addGuardian()">
+     <select class="ob-f" id="ag-cc" aria-label="קידומת מדינה" style="flex:0 0 auto;width:96px;margin-bottom:0;text-align:left" dir="ltr"></select>
      <button onclick="agPickContact()" title="מאנשי הקשר" aria-label="מאנשי הקשר" style="flex:0 0 auto;width:46px;background:var(--n2);color:var(--g3);border:1px solid var(--b2);border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center">
        <svg class="ic" viewBox="0 0 24 24" width="20"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="7" r="4" fill="none" stroke="currentColor" stroke-width="2"/></svg>
      </button>
@@ -2375,8 +2375,9 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
     <div class="gd-ident-p" id="gd-ident-p" dir="ltr"></div>
     <div class="gd-ident-hint" id="gd-ident-hint">מכיר/ה את המספר הזה?</div>
     <div class="gd-code-wrap">
-      <div class="gd-code-lbl" id="gd-code-lbl">קוד אימות — בקש/י מהם להקריא אותו</div>
-      <div class="gd-code" id="gd-code" dir="ltr">----</div>
+      <div class="gd-code-lbl" id="gd-code-lbl">לא בטוח/ה מי זה? התקשר/י אליהם ובקש/י את קוד האימות</div>
+      <input class="gd-code-in" id="gd-code-in" dir="ltr" inputmode="numeric" maxlength="4" placeholder="----" aria-label="קוד אימות">
+      <div class="gd-code-st" id="gd-code-st"></div>
     </div>
    </div>
    <p class="gd-warn" id="gd-accept-warn">⚠️ אשר/י <b>רק</b> אם את/ה מזהה את האדם הזה. באישור הם יוכלו לראות את מיקומך בזמן אמת.</p>
@@ -5754,17 +5755,7 @@ function renderCircles(){
    });
  }
  // ── country-code picker (global) ──
- const ccs=document.getElementById('ag-cc');
- if(ccs && !ccs.options.length){
-   const seen={};
-   Object.keys(DIAL).sort().forEach(function(k){
-     const dv=DIAL[k]; if(seen[k])return; seen[k]=1;
-     const o=document.createElement('option');
-     o.value=dv; o.textContent=k+' +'+dv;
-     ccs.appendChild(o);
-   });
-   ccs.value=myDial();
- }
+ const ccs=document.getElementById('ag-cc'); fillCC(ccs);
  // ── circle dropdown on the add form ──
  const sel=document.getElementById('ag-circle');
  if(sel){
@@ -5944,7 +5935,7 @@ async function shareInvite(){
   var linkCode=String(Math.floor(1000+Math.random()*9000));
   var tok='g'+Math.random().toString(36).slice(2,8)+Math.random().toString(36).slice(2,6);
   try{
-    var myName=(SS.user&&SS.user.name)||(SS.user&&SS.user.username)||'';
+    var myName=(SS.user&&SS.user.name)||(typeof user!=='undefined'&&user&&user.name)||(SS.user&&SS.user.username)||'';   /* the name lives in the global `user` too — read BOTH */
     if(FB.ready&&FB.uid){
       await fbRestWrite('PUT','invites/'+tok,{fromUid:FB.uid,name:myName,fromName:myName,fromPhone:((SS.user&&SS.user.phone)||''),code:linkCode,ts:Date.now()});
       var g=gdState();
@@ -6813,10 +6804,25 @@ function gdFillIdentity(inv){
   if(h) h.textContent = ph
     ? (he?'מכיר/ה את המספר הזה? בדוק/בדקי באנשי הקשר שלך.':'Do you know this number? Check your contacts.')
     : (he?'⚠️ אין מספר מאומת — היזהר/י.':'⚠️ No verified number — be careful.');
-  var cd=document.getElementById('gd-code');
-  if(cd) cd.textContent=code||'----';
-  var cl=document.getElementById('gd-code-lbl');
-  if(cl) cl.textContent = he?'קוד אימות — בקש/י מהם להקריא אותו':'Match code — ask them to read it out';
+  var inp=document.getElementById('gd-code-in');
+  var st=document.getElementById('gd-code-st');
+  if(st) st.textContent='';
+  if(inp){
+    inp.value='';
+    inp.oninput=function(){
+      var v=(inp.value||'').replace(/\D/g,'').slice(0,4);
+      inp.value=v;
+      if(!st) return;
+      if(v.length<4){ st.textContent=''; st.className='gd-code-st'; return; }
+      if(code && v===String(code)){
+        st.textContent=he?'\u2713 מאומת — זה באמת הם':'\u2713 Verified — it really is them';
+        st.className='gd-code-st ok';
+      } else {
+        st.textContent=he?'\u2717 הקוד לא תואם — אל תאשר/י':'\u2717 Code does not match — do NOT approve';
+        st.className='gd-code-st bad';
+      }
+    };
+  }
 }
 function gdLoadInvite(token){
   try{
@@ -6951,42 +6957,11 @@ function gdStatusOf(p){
  return {cls:'sim',txt:he?'ממתין למיקום חי':ar?'بانتظار الموقع المباشر':'Waiting for live location'};
 }
 function gdRenderList(){
- const list=document.getElementById('gd-list'); if(!list)return;
- const he=currentLang==='he'; const g=gdState(); list.innerHTML='';
- if(!g.pairs.length){
- const e=document.createElement('div'); e.style.cssText='text-align:center;color:var(--tx3);font-size:12px;padding:14px 4px;line-height:1.6';
- e.textContent=he?'עדיין אין שומרים מחוברים. הזמן/י מישהו שאת/ה סומך/ת עליו.':currentLang==='ar'?'لا يوجد حُرّاس مرتبطون بعد. ادعُ شخصاً تثق به.':'No guardians connected yet. Invite someone you trust.';
- list.appendChild(e); return;
- }
- g.pairs.forEach(p=>{
- const st=gdStatusOf(p);
- const wrap=document.createElement('div');
- const row=document.createElement('div'); row.className='gd-row'+(st.cls==='live'?' live':''); row.setAttribute('role','listitem');
- row.innerHTML=`<div class="gd-av" style="border-color:${p.color||'#C9A84C'}"></div>
- <div class="gd-main">
- <div class="gd-nm">${ESC(p.name||(he?'שומר/ת':'SHOMER'))}</div>
- <div class="gd-rel">${ESC(p.rel||(p.initiator?(he?'הזמנתי':'I invited'):(he?'מחובר/ת':'connected')))}</div>
- <span class="gd-stat ${st.cls}"><span class="ld" aria-hidden="true"></span>${st.txt}</span>
- </div>
- <button class="gd-find" aria-label="${he?'אתר/י':'Locate'}"></button>`;
- row.querySelector('.gd-find').onclick=(e)=>{e.stopPropagation();gdFlyTo(p.id);};
- const panel=document.createElement('div'); panel.className='gd-priv'; panel.style.display='none';
- panel.innerHTML=`
- <div class="pv-row"><div><div class="pv-l">${he?'שתף/י את מיקומי':'Share my location'}</div><div class="pv-s">${he?'הם יראו את המיקום החי שלך':'They see your live location'}</div></div><div class="tog ${p.shareToThem?'on':''}" data-f="shareToThem" role="switch"></div></div>
- <div class="pv-row"><div><div class="pv-l">${he?'ראה/י את מיקומם':'See their location'}</div><div class="pv-s">${he?'יופיע/תופיע על המפה שלך':'Shows on your map'}</div></div><div class="tog ${p.seeThem?'on':''}" data-f="seeThem" role="switch"></div></div>
- ${p.initiator&&p.pending?`<div class="pv-row"><div><div class="pv-l">${he?'שלח/י שוב את ההזמנה':'Re-share the invite'}</div><div class="pv-s">${he?'העתק/י את קישור ההזמנה':'Copy the invite link'}</div></div><button class="gd-copy" data-a="reshare" style="padding:8px 12px">${he?'קישור':'Link'}</button></div>`:''}
- <div class="gd-acts">
- <button data-a="locate"> ${he?'אתר/י':'Locate'}</button>
- <button class="danger" data-a="disc">✕ ${he?'נתק/י':'Disconnect'}</button>
- </div>`;
- panel.querySelectorAll('.tog').forEach(t=>{ t.onclick=(e)=>{e.stopPropagation();gdToggleField(p.id,t.getAttribute('data-f'),t);}; });
- const re=panel.querySelector('[data-a="reshare"]'); if(re)re.onclick=(e)=>{e.stopPropagation(); const i=document.getElementById('gd-invite-link'); if(i)i.value=gdInviteLink(p); gdOpen('gd-invite');};
- panel.querySelector('[data-a="locate"]').onclick=(e)=>{e.stopPropagation();gdFlyTo(p.id);};
- panel.querySelector('[data-a="disc"]').onclick=(e)=>{e.stopPropagation();gdDisconnect(p.id);};
- row.querySelector('.gd-main').style.cursor='pointer';
- row.querySelector('.gd-main').onclick=()=>{ panel.style.display=panel.style.display==='none'?'block':'none'; };
- wrap.appendChild(row); wrap.appendChild(panel); list.appendChild(wrap);
- });
+  /* DELIBERATELY EMPTY. Every connected pair is already a circle member and is rendered
+     once, in its circle. Rendering the same people again underneath was pure duplication —
+     the second list Dave saw with the same four buttons. One person, one row. */
+  var el=document.getElementById('gd-list');
+  if(el) el.innerHTML='';
 }
 /* Static-label translations for the guardian UI (he/en; other locales fall back). */
 function gdApplyI18n(){
@@ -7567,7 +7542,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v117';
+var APP_VER='v118';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -8061,7 +8036,7 @@ function fbOnAuthed(uid){
   try{ watchPaint(); }catch(e){}
   try{ syncPairsToCircles(); }catch(e){}
   try{ fbListenAllPeerLocs(); }catch(e){}
-  try{ gdState().pairs.forEach(function(p){ if(p&&p.pending&&!p.linked&&p.token&&p.partnerUid) fbWatchApproval(p.token,p.partnerUid); }); }catch(e){}     // subscribe to every paired partner's live location
+  try{ gdState().pairs.forEach(function(p){ if(p&&p.pending&&!p.linked&&p.token) fbWatchApproval(p.token,p.partnerUid||null); });   /* watch EVERY pending invite — a missing partnerUid must not silently kill the watcher */ }catch(e){}     // subscribe to every paired partner's live location
   try{ fbStartLocPublish(); }catch(e){}       // start writing my own live location
   try{ fbRegisterMe(); }catch(e){}
   try{ statsTrack(); }catch(e){}            // count install + daily-active (first-party, RTDB)
@@ -9238,13 +9213,22 @@ if('serviceWorker' in navigator){
 }
 
 // ── Anonymous auth + phone registry ────────────────────────────────
-async function obFillCC(){
-  var el=document.getElementById('ob-cc'); if(!el||el.options.length)return;
+async /* Flags read faster than letter codes — and they work in any language. */
+function flagOf(cc){
+  try{ return cc.toUpperCase().replace(/./g, function(ch){ return String.fromCodePoint(127397+ch.charCodeAt(0)); }); }
+  catch(e){ return cc; }
+}
+function fillCC(el){
+  if(!el || el.options.length) return;
   Object.keys(DIAL).sort().forEach(function(k){
-    var o=document.createElement('option'); o.value=DIAL[k]; o.textContent=k+' +'+DIAL[k]; el.appendChild(o);
+    var o=document.createElement('option');
+    o.value=DIAL[k];
+    o.textContent=flagOf(k)+' +'+DIAL[k];
+    el.appendChild(o);
   });
   el.value=myDial();
 }
+function obFillCC(){ fillCC(document.getElementById('ob-cc')); }
 try{ if(document.readyState!=='loading'){ setTimeout(obFillCC,0); } else { document.addEventListener('DOMContentLoaded',obFillCC); } }catch(e){}
 function enterAppAnonymously(){
  const he=currentLang==="he";
@@ -9723,6 +9707,23 @@ async function getOrCreateDeviceId(){
 .inv-code span{display:block;font-size:11px;color:var(--tx3)}
 .inv-code b{display:block;font-size:24px;font-weight:900;letter-spacing:6px;color:#fff;margin:2px 0}
 .inv-code i{display:block;font-size:10.5px;color:var(--tx2);font-style:normal}
+
+.gd-code-in{width:120px;margin:6px auto 0;display:block;text-align:center;font-size:22px;font-weight:900;letter-spacing:7px;padding:8px;border-radius:10px;border:1px solid var(--b2);background:rgba(0,0,0,.3);color:#fff;font-family:inherit}
+.gd-code-st{font-size:12px;font-weight:800;margin-top:6px;min-height:16px}
+.gd-code-st.ok{color:#3DDC97}
+.gd-code-st.bad{color:#FF7080}
+.cc-sel{background:var(--n3);border:1px solid var(--b2);color:var(--tx1);border-radius:10px;font-size:14px;padding:0 6px;font-family:inherit}
+
+/* ── My SHOMER rows: compact, one person = one line (per Dave's wireframe) ── */
+.cm-row{padding:9px 11px!important;margin-bottom:7px!important;border-radius:11px!important}
+.cm-top{gap:9px!important}
+.cm-name{font-size:14px!important}
+.cm-state{font-size:10px!important;padding:2px 7px!important}
+.cm-acts{margin-top:8px!important;gap:5px!important}
+.cm-act{padding:6px 3px!important;font-size:9.5px!important;border-radius:9px!important;gap:2px!important}
+.cm-act svg{width:14px!important;height:14px!important}
+.cm-av{width:32px!important;height:32px!important}
+#gd-list{display:none!important}
 </style>
 <script src="native-bridge.js"></script>
 </body>
