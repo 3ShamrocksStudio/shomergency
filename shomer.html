@@ -1553,7 +1553,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v112 · 13.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v113 · 13.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -6477,16 +6477,22 @@ function ambulanceNum(){ return emergencyNums().a; }
 function fireNum(){ return emergencyNums().f; }
 /* Convert any human input into E.164 digits. Handles +, 00, national 0-prefix, or bare. */
 function phoneCanon(raw, cc){
+  /* ⚠️ CRITICAL — DO NOT reintroduce dial-code guessing from bare digits.
+     The previous version tried to be clever: if bare digits *started with* a known dial code
+     and were "long enough", it trusted them as already-international. An Israeli who typed
+     their mobile without the leading zero — 52 781 7733 — matched Mexico's dial code (+52),
+     so the number was silently shipped to +527817733 (Mexico, 7 digits, invalid).
+     Twilio rejected it with error 21614 and NO SMS WAS EVER SENT. The user just saw silence.
+     Rule now: the country picker is the single source of truth. Only an explicit "+" or "00"
+     means the user is giving us an international number. Never guess a country. */
   var s=String(raw||'').trim();
-  var intl = /^\+/.test(s) || /^00/.test(s);
   var d=s.replace(/\D/g,'');
   if(!d) return '';
-  if(/^00/.test(s)) d=d.replace(/^00/,'');
-  if(intl) return d;                                  // already international
-  var dial = cc || myDial();
-  if(d.charAt(0)==='0') return dial + d.replace(/^0+/,'');   // national format 05x / 090…
-  // bare digits: if it already starts with a known dial code and is long enough, trust it
-  for(var k in DIAL){ if(DIAL[k] && d.indexOf(DIAL[k])===0 && d.length>=(DIAL[k].length+7)) return d; }
+  if(/^\+/.test(s)) return d;                        // explicit international
+  if(/^00/.test(s)) return d.replace(/^00/,'');       // explicit international (00 prefix)
+  var dial = cc || myDial();                          // otherwise: the SELECTED country. Always.
+  d = d.replace(/^0+/,'');                            // national trunk zero (05x, 09x…)
+  if(d.indexOf(dial)===0 && d.length > dial.length + 6) return d;  // already includes own dial code
   return dial + d;
 }
 /* E.164: 7–15 digits, no leading zero. Deliberately permissive — the world is messy. */
@@ -7412,7 +7418,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v112';
+var APP_VER='v113';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -9163,7 +9169,9 @@ async function sendTwilioOTP(channel){
   });
   let data=await r.json();if(typeof data==="string"){try{data=JSON.parse(data);}catch(_){}}
   if(data.success){
-   showOtpFallbacks();
+   try{ showOtpFallbacks(); }catch(e){}
+   var cf=document.getElementById("ob-sms-confirm");
+   if(cf) cf.textContent=(he?"נשלח אל ":"Sent to ")+"+"+user.phone;
    if(statusEl)statusEl.textContent=he?"✅ קוד נשלח! בדוק/י את ה-SMS":"✅ Code sent! Check your SMS";
    _otpCooldown(btn,45);
    document.getElementById("ob-code-inp")&&document.getElementById("ob-code-inp").focus();
