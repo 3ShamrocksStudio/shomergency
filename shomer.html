@@ -256,8 +256,8 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 
 /* ══════════ HEADER ══════════ */
 /* ══ LIGHT SURFACES — break the navy for wayfinding ══ */
-.lt-card{background:linear-gradient(180deg,#F5F8FD,#E9F0F9);border:1px solid #CBD8EA;border-radius:16px;padding:14px;color:#0A1628;box-shadow:0 6px 20px rgba(0,0,0,.28);margin-bottom:14px}
-.lt-card .lt-h{font-size:13px;font-weight:800;color:#0A1628;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+.lt-card{background:linear-gradient(180deg,var(--n2),var(--n1));border:1px solid rgba(201,168,76,.28);border-radius:16px;padding:14px;color:var(--tx0);box-shadow:0 8px 26px rgba(0,0,0,.45);margin-bottom:14px}
+.lt-card .lt-h{display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:900;color:var(--g3);margin-bottom:10px}
 .lt-card .lt-sub{font-size:11.5px;color:#5B6B85;font-weight:600}
 .lt-card input,.lt-card select{background:#fff;border:1px solid #C3D2E6;color:#0A1628}
 .lt-card input::placeholder{color:#8C9BB2}
@@ -369,7 +369,7 @@ input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(224,168,
 .ddr{display:flex;align-items:center;gap:12px;padding:13px 15px;font-size:13px;font-weight:500;color:var(--tx1);border-bottom:1px solid var(--b1);width:100%;text-align:right;transition:background .12s;cursor:pointer;}
 .ddr:last-child{border-bottom:none;}
 .ddr:hover{background:var(--n4);}
-.dd-ic{width:34px;height:34px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.dd-ic{display:flex;align-items:center;justify-content:center;width:20px;height:20px;flex:0 0 auto;background:none!important;border:0!important;border-radius:0!important;box-shadow:none!important;padding:0!important}
 .dd-ic.c-rep{color:#FF7A1A;}
 .dd-ic.c-guard{color:#16A06A;}
 .dd-ic.c-circ{color:#18C29C;}
@@ -829,7 +829,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
 .leaflet-control-attribution{background:rgba(8,18,36,.6)!important;color:rgba(136,152,184,.55)!important;font-size:8px!important;backdrop-filter:blur(4px);border-radius:5px;padding:1px 5px!important;line-height:1.3;opacity:.65}
 .leaflet-control-attribution a{color:rgba(136,152,184,.6)!important;text-decoration:none}
 /* sit it in the bottom-LEFT, lifted clear of the bottom nav — never under the SOS button */
-.leaflet-bottom.leaflet-right{right:auto!important;left:6px!important;bottom:calc(var(--nav,74px) + 6px)!important}
+
 .leaflet-control-attribution a{color:var(--tx3)!important}
 
 .leaflet-control-attribution a{color:var(--g2)!important;}
@@ -1551,7 +1551,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v128 · 13.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v129 · 13.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -1715,7 +1715,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="sh-pill" aria-hidden="true"></div>
  <div class="sh-head"><span class="sh-ttl" id="ci-ttl" data-he="צ׳ק-אין הדדי" data-en="Mutual check-in">צ׳ק-אין הדדי</span><button class="sh-x" onclick="cl('sh-checkin')" aria-label="close"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button></div>
  <div class="sh-body">
- <p class="set-help" data-he="מתג-מת חברתי דו-כיווני: האפליקציה תשאל אותך מדי פעם „הכל בסדר?”. אם לא תאשר/י בזמן — השומר/ת המקושר/ת מקבל/ת אזעקה ויכול/ה לשלוח SOS בשמך." data-en="A two-way social Dead Man's Switch: the app periodically asks 'Are you OK?'. If you don't confirm in time, your paired guardian is alerted and can send an SOS on your behalf.">מתג-מת חברתי דו-כיווני.</p><p id="obv-cap-note" style="font-size:11px;color:var(--tx3);text-align:center;margin:4px 0 0" data-he="אשר/י שאינך רובוט, ואז תשלח לך SMS" data-en="Verify you're human, then SMS is sent">אשר/י שאינך רובוט, ואז תשלח לך SMS</p>
+ <p class="set-help" data-he="מתג-מת חברתי דו-כיווני: האפליקציה תשאל אותך מדי פעם „הכל טוב??”. אם לא תאשר/י בזמן — השומר/ת המקושר/ת מקבל/ת אזעקה ויכול/ה לשלוח SOS בשמך." data-en="A two-way social שומר אוטומטי: the app periodically asks 'Are you OK?'. If you don't confirm in time, your paired guardian is alerted and can send an SOS on your behalf.">מתג-מת חברתי דו-כיווני.</p><p id="obv-cap-note" style="font-size:11px;color:var(--tx3);text-align:center;margin:4px 0 0" data-he="אשר/י שאינך רובוט, ואז תשלח לך SMS" data-en="Verify you're human, then SMS is sent">אשר/י שאינך רובוט, ואז תשלח לך SMS</p>
  <div class="sec-cap mb12" data-he="שומר/ת מקושר/ת" data-en="Paired guardian">שומר/ת מקושר/ת</div>
  <input class="ob-f" id="ci-guardian" type="text" maxlength="40" placeholder="שם השומר/ת" aria-label="guardian">
  <div class="sec-cap mb12" style="margin-top:6px" data-he="תדירות" data-en="Frequency">תדירות</div>
@@ -1762,7 +1762,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="sos-cd" id="checkin-prompt" role="alertdialog" aria-modal="true" aria-hidden="true">
  <div class="sos-cd-card">
  <div class="rc-ic" style="margin:0 auto 13px;background:linear-gradient(160deg,rgba(14,136,64,.2),rgba(14,136,64,.05));border-color:rgba(14,136,64,.4);color:#3FD27E"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
- <div class="sos-cd-ttl" data-he="הכל בסדר?" data-en="Are you OK?">הכל בסדר?</div>
+ <div class="sos-cd-ttl" data-he="הכל טוב??" data-en="Are you OK?">הכל טוב??</div>
  <div class="sos-cd-sub" id="ci-prompt-sub"></div>
  <button class="cta-gold" style="margin-top:8px;background:linear-gradient(135deg,#0E8840,#16A06A)" onclick="checkinOk()" data-he="✓ כן, אני בסדר" data-en="✓ Yes, I'm OK">✓ כן, אני בסדר</button>
  </div>
@@ -1782,10 +1782,10 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <!-- DMS STRIP -->
  <div class="dms-strip" id="dms-strip" role="alert" aria-live="assertive">
  <div class="dms-bar">
- <div class="dms-t" id="dms-strip-t" data-he=" Dead Man's Switch פעיל" data-en=" Dead Man's Switch active"> Dead Man's Switch פעיל</div>
+ <div class="dms-t" id="dms-strip-t" data-he=" שומר אוטומטי פעיל" data-en=" Auto-guardian active"> שומר אוטומטי פעיל</div>
  <div class="dms-s" id="dms-strip-s">בדיקה הבאה בעוד 5:00</div>
  </div>
- <button class="dms-ok" onclick="dmsConfirm()" id="dms-ok-btn" data-he="✓ הכל בסדר" data-en="✓ I'm OK">✓ הכל בסדר</button>
+ <button class="dms-ok" onclick="dmsConfirm()" id="dms-ok-btn" data-he="✓ הכל טוב?" data-en="✓ I'm OK">✓ הכל טוב?</button>
  <div class="dms-prog"><div class="dms-prog-fill" id="dms-prog-fill" style="width:100%"></div></div>
  </div>
 
@@ -1900,10 +1900,10 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <!-- ═══ DEAD MAN'S SWITCH ═══ -->
  <div class="sheet" id="sh-dms" role="dialog" aria-modal="true" aria-labelledby="dms-ttl">
  <div class="sh-pill" aria-hidden="true"></div>
- <div class="sh-head"><span class="sh-ttl" id="dms-ttl" data-he="Dead Man's Switch" data-en="Dead Man's Switch" data-ar="مفتاح الأمان الميت">Dead Man's Switch</span><button class="sh-x" onclick="cl('sh-dms')" aria-label="סגור"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button></div>
+ <div class="sh-head"><span class="sh-ttl" id="dms-ttl" data-he="שומר אוטומטי" data-en="שומר אוטומטי" data-ar="مفتاح الأمان الميت">שומר אוטומטי</span><button class="sh-x" onclick="cl('sh-dms')" aria-label="סגור"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button></div>
  <div class="sh-body">
  <div style="background:var(--rb);border:1px solid var(--b4);border-radius:var(--r12);padding:14px;margin-bottom:16px;font-size:13px;color:var(--tx1);line-height:1.7" id="dms-intro-txt">
- <strong style="color:#FF7080">כיצד זה עובד:</strong> הפעל לפני הליכה לבד בלילה. כל X דקות תקבל שאלה "הכל בסדר?" — אם לא ענית תוך 60 שניות, המערכת שולחת SOS אוטומטי עם מיקומך האחרון.
+ <strong style="color:#FF7080">כיצד זה עובד:</strong> הפעל לפני הליכה לבד בלילה. כל X דקות תקבל שאלה "הכל טוב??" — אם לא ענית תוך 60 שניות, המערכת שולחת SOS אוטומטי עם מיקומך האחרון.
  </div>
  <div class="sec-cap mb12" id="dms-interval-lbl" data-he="בחר מרווח זמן" data-en="Choose interval">בחר מרווח זמן</div>
  <div class="dms-intervals" id="dms-intervals" role="group">
@@ -1914,9 +1914,9 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div id="dms-status-card" style="display:none;background:var(--n3);border:1px solid var(--b1);border-radius:var(--r12);padding:20px;text-align:center;margin-bottom:14px">
  <div class="dms-timer-display" id="dms-display" aria-live="polite">5:00</div>
  <div class="dms-status" id="dms-status-txt" data-he="עד הבדיקה הבאה" data-en="Until next check">עד הבדיקה הבאה</div>
- <button class="dms-ok" style="margin-top:12px;padding:10px 28px;border-radius:var(--r12);font-size:14px;cursor:pointer;border:none" onclick="dmsConfirm()" id="dms-ok-big" data-he="✓ הכל בסדר" data-en="✓ I'm OK">✓ הכל בסדר</button>
+ <button class="dms-ok" style="margin-top:12px;padding:10px 28px;border-radius:var(--r12);font-size:14px;cursor:pointer;border:none" onclick="dmsConfirm()" id="dms-ok-big" data-he="✓ הכל טוב?" data-en="✓ I'm OK">✓ הכל טוב?</button>
  </div>
- <button class="cta-gold mb16" id="dms-toggle-btn" onclick="toggleDMS()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5l12 7-12 7Z" fill="currentColor"/></svg><span data-he="הפעל Dead Man's Switch" data-en="Activate Dead Man's Switch">הפעל Dead Man's Switch</span></button>
+ <button class="cta-gold mb16" id="dms-toggle-btn" onclick="toggleDMS()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5l12 7-12 7Z" fill="currentColor"/></svg><span data-he="הפעל שומר אוטומטי" data-en="Activate שומר אוטומטי">הפעל שומר אוטומטי</span></button>
  <div style="background:var(--n3);border:1px solid var(--b1);border-radius:var(--r12);padding:13px;font-size:12px;color:var(--tx2);line-height:1.75" id="dms-tips-txt" data-i18n-html="1" data-he=" <strong>מומלץ לשימוש:</strong> הליכות לבד בלילה · כניסה לחניון מבודד · מפגש עם זר · ריצה בשעות חשוכות" data-en=" <strong>Best used for:</strong> walking alone at night · entering an isolated car park · meeting a stranger · running after dark">
  <strong>מומלץ לשימוש:</strong> הליכות לבד בלילה · כניסה לחניון מבודד · מפגש עם זר · ריצה בשעות חשוכות
  </div>
@@ -1970,14 +1970,14 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 6a8 8 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div><div class="sr-nm" id="n-snd-nm">צלילי אירועים חיים</div><div class="sr-sb" id="n-snd-sb">צליל עדין כששומר/ת מצטרף/ת, באירוע חדש או בעדכון</div></div></div><div class="tog on" data-skey="snd_cues" onclick="this.classList.toggle('on');saveToggle(this);if(this.classList.contains('on'))playCue('join')" role="switch"></div></div>
  </div>
  <div class="set-cat"><div class="set-cat-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div><div class="set-cat-t" data-he="בטיחות" data-en="Safety features">בטיחות</div></div>
- <div class="set-grp"><div class="set-row" onclick="op('sh-dms');cl('sh-set')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="sr-nm" data-he="Dead Man's Switch" data-en="Dead Man's Switch" data-ar="مفتاح الأمان الميت">Dead Man's Switch</div></div><span style="color:var(--tx3);font-size:18px">›</span></div><div class="set-row" onclick="op('sh-alarm');cl('sh-set')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18v-5a5 5 0 0 1 10 0v5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><rect x="5" y="18" width="14" height="3" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3v2M4.5 7l1.5 1.3M19.5 7L18 8.3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div class="sr-nm" data-he="הגדרות אזעקה" data-en="Alarm settings">הגדרות אזעקה</div></div><span style="color:var(--tx3);font-size:18px">›</span></div></div>
+ <div class="set-grp"><div class="set-row" onclick="op('sh-dms');cl('sh-set')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="sr-nm" data-he="שומר אוטומטי" data-en="שומר אוטומטי" data-ar="مفتاح الأمان الميت">שומר אוטומטי</div></div><span style="color:var(--tx3);font-size:18px">›</span></div><div class="set-row" onclick="op('sh-alarm');cl('sh-set')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18v-5a5 5 0 0 1 10 0v5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><rect x="5" y="18" width="14" height="3" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3v2M4.5 7l1.5 1.3M19.5 7L18 8.3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div class="sr-nm" data-he="הגדרות אזעקה" data-en="Alarm settings">הגדרות אזעקה</div></div><span style="color:var(--tx3);font-size:18px">›</span></div></div>
  <div class="set-grp"><div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4 L17 18.5 L12 15.2 L7 18.5 Z" fill="currentColor"/></svg></div><div><div class="sr-nm" id="resp-tog-lbl" data-he="ניווט מגיב/ה (הצטרפות)" data-en="Responder navigation (opt-in)">ניווט מגיב/ה (הצטרפות)</div><div class="sr-sb" id="resp-tog-sub" data-he="הצג מסלול חי ומרחק כשמגיבים ל-SOS. מיועד למגיבים מאומתים ולשומרים — לא תחליף לחיוג 100/101/102." data-en="Show a live route + distance when responding to an SOS. For verified responders/guardians — not a replacement for 100/101/102.">הצג מסלול חי ומרחק כשמגיבים ל-SOS.</div></div></div><div class="tog" id="resp-tog" onclick="toggleRespond(this)" role="switch"></div></div></div>
  <div class="set-grp"><div class="set-row" onclick="openSetPin()" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><div><div class="sr-nm" data-he="קוד לביטול SOS (PIN)" data-en="SOS cancel code (PIN)">קוד לביטול SOS (PIN)</div><div class="sr-sb" data-he="נדרש לביטול SOS פעיל — לעולם לא טביעת אצבע." data-en="Required to cancel an active SOS — never a fingerprint.">נדרש לביטול SOS פעיל — לעולם לא טביעת אצבע.</div></div></div><span id="pin-set-state" style="font-size:12px;font-weight:700;color:var(--amb);white-space:nowrap">לא הוגדר</span></div></div>
  <div class="set-grp">
  <div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="13.5" r="3.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 7l1.5-2h3L15 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div><div><div class="sr-nm" id="selfie-tog-lbl" data-he="הגנת גנב — סלפי" data-en="Theft protection — selfie" data-ar="حماية السرقة — سيلفي">הגנת גנב — סלפי</div><div class="sr-sb" id="selfie-tog-sub" data-he="אחרי 3 קודים שגויים: צילום סלפי של מי שמחזיק את הטלפון + שליחת מיקום חי לשומרים שלך. דורש הרשאת מצלמה. פועל רק כשהאפליקציה פתוחה." data-en="After 3 wrong codes: snap a selfie of whoever holds the phone + send live location to your SHOMERs. Needs camera permission. Works only while the app is open.">אחרי 3 קודים שגויים: סלפי + מיקום חי לשומרים שלך.</div></div></div><div class="tog" id="selfie-tog" onclick="toggleSelfie(this)" role="switch" aria-label="הגנה מפני גניבת מכשיר — צילום סלפי אוטומטי"></div></div>
  <div class="set-row" onclick="openTheftEvidence()" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><div><div class="sr-nm" data-he="ראיות גניבה" data-en="Theft evidence" data-ar="أدلة السرقة">ראיות גניבה</div><div class="sr-sb" data-he="סלפי ומיקום שנלכדו — ראיה מתועדת למשטרה." data-en="Captured selfies + locations — documented proof for police.">סלפי ומיקום שנלכדו — ראיה למשטרה.</div></div></div><span id="theft-ev-state" style="font-size:12px;font-weight:700;color:var(--g3);white-space:nowrap"></span></div>
  </div>
- <div class="set-grp"><div class="set-row" onclick="op('sh-checkin')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="sr-nm" data-he="צ׳ק-אין הדדי (עם שומר/ת)" data-en="Mutual check-in (with a guardian)">צ׳ק-אין הדדי</div><div class="sr-sb" data-he="„הכל בסדר?” תקופתי — אם לא תאשר/י, השומר/ת מקבל/ה אזעקה." data-en="Periodic 'Are you OK?' — if you don't confirm, your guardian is alerted.">„הכל בסדר?” תקופתי.</div></div></div><span id="ci-set-state" style="font-size:12px;font-weight:700;color:var(--tx3);white-space:nowrap">כבוי</span></div></div>
+ <div class="set-grp"><div class="set-row" onclick="op('sh-checkin')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="sr-nm" data-he="צ׳ק-אין הדדי (עם שומר/ת)" data-en="Mutual check-in (with a guardian)">צ׳ק-אין הדדי</div><div class="sr-sb" data-he="„הכל טוב??” תקופתי — אם לא תאשר/י, השומר/ת מקבל/ה אזעקה." data-en="Periodic 'Are you OK?' — if you don't confirm, your guardian is alerted.">„הכל טוב??” תקופתי.</div></div></div><span id="ci-set-state" style="font-size:12px;font-weight:700;color:var(--tx3);white-space:nowrap">כבוי</span></div></div>
  <div class="sec-cap mb12" id="shake-set-lbl">Shake-to-SOS</div>
  <div class="set-grp">
  <div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 14h6l-1 8 9-12h-6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div><div><div class="sr-nm" id="shake-tog-lbl">הפעל Shake-to-SOS</div><div class="sr-sb" id="shake-tog-sub">5 ניעורים חזקים → SOS</div></div></div><div class="tog on" id="shake-tog" onclick="toggleShake(this)" role="switch"></div></div>
@@ -2464,12 +2464,12 @@ const LANGS={
  al1:'אזעקת SOS · שומר',al1d:'צליל החירום הייחודי — סירנה מתגברת, דיסוננטית ובלתי-נשכחת',al2:'',al2d:'',al3:'',al3d:'',
  vol:'עוצמת קול',test:'בדוק אזעקה',finish:'✓ כניסה לשומר',back:'← חזרה',
  shake:'<strong>Shake-to-SOS:</strong> 5 ניעורים חזקים מפעילים SOS אוטומטי.',
- dms_ob:'<strong>Dead Man\'s Switch:</strong> אם לא אישרת "הכל בסדר" תוך X דק׳ — SOS אוטומטי.',
+ dms_ob:'<strong>Dead Man\'s Switch:</strong> אם לא אישרת "הכל טוב?" תוך X דק׳ — SOS אוטומטי.',
  nav_map:'מפה',nav_sos:'חירום מיידי',nav_upd:'עדכונים',
- dd_rep:'דיווח אירוע',dd_dms:"Dead Man's Switch",dd_alarm:'הגדרות אזעקה',dd_prof:'פרופיל',dd_set:'הגדרות',dd_em:'מספרי חירום',
+ dd_rep:'דיווח אירוע',dd_dms:"שומר אוטומטי",dd_alarm:'הגדרות אזעקה',dd_prof:'פרופיל',dd_set:'הגדרות',dd_em:'מספרי חירום',
  ss_t:'SOS פעיל — אזעקה פועלת',ss_wait:'ממתין לתגובה...',
- cancel:'בטל SOS',ok_all:'✓ הכל בסדר',
- upd_ttl:'עדכונים',rep_ttl:'דיווח אירוע',dms_ttl:" Dead Man's Switch",
+ cancel:'בטל SOS',ok_all:'✓ הכל טוב?',
+ upd_ttl:'עדכונים',rep_ttl:'דיווח אירוע',dms_ttl:" שומר אוטומטי",
  set_ttl:'הגדרות',prof_ttl:'הפרופיל שלי',em_ttl:'מספרי חירום',alarm_ttl:'הגדרות אזעקה',
  l1:'עבירת מין',l2:'תקיפה',l3:'מעקב',l4:'גנבה',l5:'סמים',l6:'רפואי',l7:'SOS חי',
  saved:'✓ הגדרות נשמרו',sent:' דיווח נשלח!',dms_on:'DMS פעיל',dms_off:'DMS כבוי',
@@ -2477,7 +2477,7 @@ const LANGS={
  share_loc:'שתף מיקום נוכחי',loc_ok:' מיקום נקלט ✓',
  send:' שלח דיווח לכל השומרים',
  open_det:'פתח פרטים מלאים ←',respond:' אני בדרך לעזור',call100:' התקשר ל-100',close:'סגור',responded:' תגובה נרשמה',
- dms_how:'<strong style="color:#FF7080">כיצד זה עובד:</strong> הפעל לפני הליכה לבד. כל X דקות — "הכל בסדר?" — אם לא ענית תוך 60 שניות, SOS אוטומטי.',
+ dms_how:'<strong style="color:#FF7080">כיצד זה עובד:</strong> הפעל לפני הליכה לבד. כל X דקות — "הכל טוב??" — אם לא ענית תוך 60 שניות, SOS אוטומטי.',
  dms_start:' הפעל',dms_stop:' הפסק',dms_next:'בדיקה הבאה בעוד',dms_min:'דק׳',
  dms_on_badge:'פעיל',dms_off_badge:'כבוי',
  em_intro:'הקש לחיוג ישיר. אם אינך מסוגל לדבר — השאר הקו פתוח.',
@@ -2497,12 +2497,12 @@ const LANGS={
  al1:'SHOMER SOS alarm',al1d:'Our signature emergency sound — escalating, dissonant, unmistakable',al2:'',al2d:'',al3:'',al3d:'',
  vol:'Volume',test:'Test alarm',finish:'✓ Enter Shomer',back:'← Back',
  shake:'<strong>Shake-to-SOS:</strong> 5 hard shakes trigger automatic SOS.',
- dms_ob:"<strong>Dead Man's Switch:</strong> If you don't confirm 'All OK' in X min — auto SOS.",
+ dms_ob:"<strong>Auto-guardian:</strong> We ask "All good?" every X min. No answer — we alert your guardians.",
  nav_map:'Map',nav_sos:'Emergency',nav_upd:'Updates',
- dd_rep:'Report incident',dd_dms:"Dead Man's Switch",dd_alarm:'Alarm settings',dd_prof:'Profile',dd_set:'Settings',dd_em:'Emergency numbers',
+ dd_rep:'Report incident',dd_dms:"שומר אוטומטי",dd_alarm:'Alarm settings',dd_prof:'Profile',dd_set:'Settings',dd_em:'Emergency numbers',
  ss_t:'SOS active — alarm firing',ss_wait:'Waiting for response...',
  cancel:'Cancel SOS',ok_all:'✓ I\'m OK',
- upd_ttl:'Updates',rep_ttl:'Report incident',dms_ttl:" Dead Man's Switch",
+ upd_ttl:'Updates',rep_ttl:'Report incident',dms_ttl:" שומר אוטומטי",
  set_ttl:'Settings',prof_ttl:'My profile',em_ttl:'Emergency numbers',alarm_ttl:' Alarm settings',
  l1:'Sexual assault',l2:'Violence',l3:'Stalking',l4:'Theft',l5:'Drugs',l6:'Medical',l7:'Live SOS',
  saved:'✓ Settings saved',sent:' Report sent!',dms_on:'DMS active',dms_off:'DMS off',
@@ -2596,12 +2596,12 @@ const LANGS={
  al1:'የፖሊስ ሳይረን',al1d:'440→1800Hz — በቀላሉ ይታወቃል',al2:'አደጋ ጊዜ ቀንድ',al2d:'1200Hz — ትኩረት ይስባል',al3:'ፈጣን ምቶች',al3d:'2800Hz — በጣም ጎርጓሪ',
  vol:'ድምፅ ደረጃ',test:'ማንቂያ ሙከራ',finish:'✓ ወደ Shomer ግባ',back:'← ተመለስ',
  shake:'<strong>ወዝ-ወዝ ለ SOS:</strong> 5 ጠንካራ ወዝ-ወዝ SOS ያስጀምራል።',
- dms_ob:'<strong>Dead Man Switch:</strong> X ደቂቃ ውስጥ ካልተረጋገጠ — SOS ይላካል።',
+ dms_ob:'<strong>שומר אוטומטי:</strong> X ደቂቃ ውስጥ ካልተረጋገጠ — SOS ይላካል።',
  nav_map:'ካርታ',nav_sos:'አደጋ',nav_upd:'ዜናዎች',
- dd_rep:'ክስተት ሪፖርት',dd_dms:'Dead Man Switch',dd_alarm:'የማንቂያ ቅንጅቶች',dd_prof:'መገለጫ',dd_set:'ቅንጅቶች',dd_em:'አደጋ ጊዜ ቁጥሮች',
+ dd_rep:'ክስተት ሪፖርት',dd_dms:'שומר אוטומטי',dd_alarm:'የማንቂያ ቅንጅቶች',dd_prof:'መገለጫ',dd_set:'ቅንጅቶች',dd_em:'አደጋ ጊዜ ቁጥሮች',
  ss_t:'SOS ንቁ — ማንቂያ እየሰራ ነው',ss_wait:'ምላሽ በመጠበቅ ላይ...',
  cancel:'SOS ሰርዝ',ok_all:'✓ ሁሉም ደህና ነው',
- upd_ttl:'ዜናዎች',rep_ttl:'ክስተት ሪፖርት',dms_ttl:' Dead Man Switch',
+ upd_ttl:'ዜናዎች',rep_ttl:'ክስተት ሪፖርት',dms_ttl:' שומר אוטומטי',
  set_ttl:'ቅንጅቶች',prof_ttl:'መገለጫዬ',em_ttl:'አደጋ ጊዜ ቁጥሮች',alarm_ttl:' የማንቂያ ቅንጅቶች',
  l1:'ወሲባዊ ጥቃት',l2:'ኃይል',l3:'መከታተል',l4:'ስርቆት',l5:'አደንዛዥ',l6:'ህክምና',l7:'ቀጥታ SOS',
  saved:'✓ ቅንጅቶች ተቀምጠዋል',sent:' ሪፖርት ተልኳል!',dms_on:'DMS ንቁ',dms_off:'DMS ዝግ',
@@ -2629,12 +2629,12 @@ const LANGS={
  al1:'Sirène de police',al1d:'440→1800Hz — la plus reconnaissable',al2:'Klaxon d\'urgence',al2d:'1200Hz — capteur d\'attention',al3:'Impulsions rapides',al3d:'2800Hz — le plus agressif',
  vol:'Volume',test:'Tester l\'alarme',finish:'✓ Entrer dans Shomer',back:'← Retour',
  shake:'<strong>Secouer pour SOS:</strong> 5 secousses fortes déclenchent un SOS automatique.',
- dms_ob:"<strong>Dead Man's Switch:</strong> Si pas de confirmation en X min — SOS automatique.",
+ dms_ob:"<strong>שומר אוטומטי:</strong> Si pas de confirmation en X min — SOS automatique.",
  nav_map:'Carte',nav_sos:'Urgence',nav_upd:'Mises à jour',
- dd_rep:'Signaler un incident',dd_dms:"Dead Man's Switch",dd_alarm:"Paramètres d'alarme",dd_prof:'Profil',dd_set:'Paramètres',dd_em:"Numéros d'urgence",
+ dd_rep:'Signaler un incident',dd_dms:"שומר אוטומטי",dd_alarm:"Paramètres d'alarme",dd_prof:'Profil',dd_set:'Paramètres',dd_em:"Numéros d'urgence",
  ss_t:'SOS actif — alarme déclenchée',ss_wait:'En attente de réponse...',
  cancel:'Annuler SOS',ok_all:"✓ Tout va bien",
- upd_ttl:'Mises à jour',rep_ttl:'Signaler un incident',dms_ttl:" Dead Man's Switch",
+ upd_ttl:'Mises à jour',rep_ttl:'Signaler un incident',dms_ttl:" שומר אוטומטי",
  set_ttl:'Paramètres',prof_ttl:'Mon profil',em_ttl:"Numéros d'urgence",alarm_ttl:" Paramètres d'alarme",
  l1:'Agression sexuelle',l2:'Violence',l3:'Filature',l4:'Vol',l5:'Drogues',l6:'Médical',l7:'SOS en direct',
  saved:'✓ Paramètres sauvegardés',sent:' Signalement envoyé!',dms_on:'DMS actif',dms_off:'DMS inactif',
@@ -2882,7 +2882,7 @@ let SS={
     not have their alert force-cancelled with their own finger). + phone-verification flag. */
  security:{pin:'',phoneVerified:false},
  geoReminders:[], // {id,memberId,memberName,label,lat,lng,radius,done} — My SHOMER arrival reminders
- /* Mutual "Are you OK?" check-in — two-way social Dead Man's Switch with a paired guardian.
+ /* Mutual "Are you OK?" check-in — two-way social שומר אוטומטי with a paired guardian.
     Cross-DEVICE alarm to the guardian needs the realtime backend (Firebase) — flagged. */
  checkin:{enabled:false,guardian:'',freqMin:30,windowSec:120,due:0,awaiting:false},
  /* ── SOS anti-abuse / safety config (front-end sim — server must enforce for real) ── */
@@ -4015,7 +4015,7 @@ function dmsTick(){
  if(dmsCountdown<=60&&!dmsWarning){
  dmsWarning=true;
  document.getElementById('dms-strip').classList.add('warn');
- pushNotify('שומר — Dead Man\'s Switch',currentLang==='he'?'האם הכל בסדר? לחץ לאישור':'Are you OK? Tap to confirm','dms');
+ pushNotify('שומר — Dead Man\'s Switch',currentLang==='he'?'האם הכל טוב?? לחץ לאישור':'Are you OK? Tap to confirm','dms');
  toast(currentLang==='he'?' DMS — 60 שניות לאישור!':' DMS — 60 seconds to confirm!','amb');
  }
  if(dmsCountdown<=0){
@@ -4604,7 +4604,7 @@ function stopMaxAttention(){
    continue). Fully stopping requires the cancel code (never biometric). */
 function minimizeStrobe(){ var ov=document.getElementById('sos-strobe'); if(ov){ov.classList.remove('on');ov.setAttribute('aria-hidden','true');} }
 
-/* ── MUTUAL "ARE YOU OK?" CHECK-IN — two-way social Dead Man's Switch with a paired guardian.
+/* ── MUTUAL "ARE YOU OK?" CHECK-IN — two-way social שומר אוטומטי with a paired guardian.
    On-device demo works now; the cross-DEVICE alarm to the guardian needs the realtime backend
    (Firebase). Stopping/answering is consent-paired and configurable. ── */
 let _ciTimer=null, _ciCountdown=null;
@@ -4622,15 +4622,15 @@ function checkinStop(){ if(_ciTimer){clearTimeout(_ciTimer);_ciTimer=null;} if(_
 function checkinPrompt(){ if(!SS.checkin.enabled)return; var he=currentLang==='he';
  SS.checkin.awaiting=true; saveStore();
  var ov=document.getElementById('checkin-prompt'); if(ov){ov.classList.add('on');ov.setAttribute('aria-hidden','false');}
- try{pushNotify(he?'שומר — הכל בסדר?':'SHOMER — Are you OK?',he?'אשר/י אחרת תישלח התראה לשומר/ת':'Confirm, or your guardian is alerted','checkin');}catch(e){}
+ try{pushNotify(he?'שומר — הכל טוב??':'SHOMER — Are you OK?',he?'אשר/י אחרת תישלח התראה לשומר/ת':'Confirm, or your guardian is alerted','checkin');}catch(e){}
  var left=SS.checkin.windowSec||120;
  var upd=function(){ setText('ci-prompt-sub',(he?'אשר/י תוך ':'Confirm within ')+Math.max(0,left)+(he?' שנ׳ — אחרת '+SS.checkin.guardian+' יקבל/ה אזעקה':'s — or '+SS.checkin.guardian+' is alerted')); };
  upd(); if(_ciCountdown)clearInterval(_ciCountdown);
  _ciCountdown=setInterval(function(){ left--; upd(); if(left<=0){ clearInterval(_ciCountdown); checkinMiss(); } },1000);
 }
-function checkinOk(){ var he=currentLang==='he'; SS.checkin.awaiting=false; saveStore(); if(_ciCountdown){clearInterval(_ciCountdown);_ciCountdown=null;} cl2('checkin-prompt'); toast(he?'✓ נרשם — הכל בסדר':'✓ Logged — you are OK','grn'); checkinSchedule(); }
+function checkinOk(){ var he=currentLang==='he'; SS.checkin.awaiting=false; saveStore(); if(_ciCountdown){clearInterval(_ciCountdown);_ciCountdown=null;} cl2('checkin-prompt'); toast(he?'✓ נרשם — הכל טוב?':'✓ Logged — you are OK','grn'); checkinSchedule(); }
 function checkinMiss(){ var he=currentLang==='he'; SS.checkin.awaiting=false; saveStore(); cl2('checkin-prompt');
- setText('ci-miss-sub',(he?'לא אישרת „הכל בסדר”. '+SS.checkin.guardian+' קיבל/ה התראה.':'You didn\'t confirm. '+SS.checkin.guardian+' was alerted.'));
+ setText('ci-miss-sub',(he?'לא אישרת „הכל טוב?”. '+SS.checkin.guardian+' קיבל/ה התראה.':'You didn\'t confirm. '+SS.checkin.guardian+' was alerted.'));
  var ov=document.getElementById('checkin-miss'); if(ov){ov.classList.add('on');ov.setAttribute('aria-hidden','false');}
  try{pushNotify(he?'שומר — '+SS.checkin.guardian+' לא הגיב/ה':'SHOMER — '+SS.checkin.guardian+' missed check-in',he?'אפשר לשלוח SOS עבורם':'You can send an SOS on their behalf','checkin-miss');}catch(e){}
 }
@@ -5767,7 +5767,16 @@ function renderCircles(){
   var he=currentLang==='he';
   var cot=document.getElementById('cot-list');
   var CIRCLE_MAX=6;                 /* 20 guardians / 6 circles — fewer is a freeze in a panic */
-  var COLORS=['#CC1426','#1D6FD6','#CC1426','#8A9099','#8A9099','#1D6FD6'];
+  /* one brand colour per circle — gold leads (primary brand), then the family palette */
+  var COLORS=[
+    'linear-gradient(135deg,#C09020,#E0A828 60%,#F5C840)',   /* משפחה — the gold */
+    'linear-gradient(135deg,#1D6FD6,#2962FF)',               /* חברים */
+    'linear-gradient(135deg,#0E8F6E,#12B085)',               /* שכנים */
+    'linear-gradient(135deg,#B01020,#E0182C)',               /* קהילה */
+    'linear-gradient(135deg,#5B3FBF,#7A4FD6)',               /* עבודה */
+    'linear-gradient(135deg,#0E7F98,#12A3C0)'                /* לימודים */
+  ];
+  var INK=['#23170a','#fff','#fff','#fff','#fff','#fff'];
 
   if(cot){
     cot.innerHTML='';
@@ -5780,6 +5789,7 @@ function renderCircles(){
       var b=document.createElement('button');
       b.className='bub'+(activeCircleId===cc.id?' bub-on':'');
       b.style.background=COLORS[i%COLORS.length];
+      b.style.color=INK[i%INK.length];
       b.innerHTML='<b>'+ms.length+'</b><span>'+ESC(cc.name)+'</span>';
       b.onclick=function(){
         activeCircleId=cc.id;
@@ -7617,7 +7627,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v128';
+var APP_VER='v129';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -10235,9 +10245,9 @@ body.aed-placing #map{cursor:crosshair}
 .in-b.stand{background:rgba(0,0,0,.25)}
 
 /* branded 3Shamrocks credit — bottom-right of the map, above the nav, clear of SOS */
-.map-credit{position:absolute;right:10px;bottom:calc(var(--nav,74px) + 8px);z-index:401;pointer-events:none;opacity:.55}
-.mc-badge{display:inline-flex;align-items:center;background:rgba(8,18,36,.66);border:1px solid rgba(136,152,184,.14);border-radius:6px;padding:3px 7px;backdrop-filter:blur(6px)}
-.mc-badge img{height:12px;width:auto;display:block}
+
+
+
 
 /* ── circles as bubbles (wireframe) ── */
 .bub-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:6px 2px 12px}
@@ -10267,6 +10277,38 @@ body.aed-placing #map{cursor:crosshair}
 .arr-n{font-size:10px;color:var(--tx3);font-weight:800}
 .arr-in{padding:8px;border-radius:9px;border:1px solid var(--b2);background:var(--n3);color:var(--tx1);font-family:inherit;font-size:12px;min-width:0}
 .arr-in::placeholder{color:var(--tx3)}
+
+/* ── THE BOTTOM LINE — measured against the real geometry ──
+   .nav sits 34px from the bottom and is 94px tall, so the SOS button owns 34px–128px.
+   Everything down here must live BELOW 34px, or beside the button. Never inside its zone. */
+.leaflet-bottom.leaflet-right{
+  right:auto!important; left:4px!important;
+  bottom:2px!important;                       /* UNDER the SOS button's zone, in the corner */
+  z-index:400!important;
+}
+.leaflet-control-attribution{
+  background:rgba(8,18,36,.55)!important;color:rgba(136,152,184,.5)!important;
+  font-size:7.5px!important;padding:1px 4px!important;border-radius:4px;
+  line-height:1.25;opacity:.6;margin:0!important;
+}
+.leaflet-control-attribution a{color:rgba(136,152,184,.55)!important;text-decoration:none}
+/* the branded 3Shamrocks line — bottom-RIGHT corner, same height, out of the button's way */
+.map-credit{position:absolute;right:6px;bottom:3px;z-index:400;pointer-events:none;opacity:.5}
+.mc-badge{display:inline-flex;align-items:center;background:rgba(8,18,36,.55);border-radius:5px;padding:2px 6px}
+.mc-badge img{height:11px;width:auto;display:block}
+
+/* no plated squares anywhere behind a glyph — the icon stands alone */
+.dd-ic,.dd-ic.c-circ,.dd-ic.c-guide,.dd-ic.c-rep,.sec-ic,.ic-box{background:none!important;border:0!important;border-radius:0!important;box-shadow:none!important;padding:0!important}
+.dd-ic svg,.dd-ic .ic{width:19px;height:19px}
+
+/* השומרים שלי — compact rows, not giant cards */
+.cm-row{padding:10px 12px!important;margin-bottom:8px!important;border-radius:12px!important;background:var(--n2)!important;border:1px solid var(--b2)!important}
+.cm-name{font-size:14px!important;font-weight:800!important}
+.cm-sb,.cm-state{font-size:10.5px!important}
+.cm-acts{margin-top:8px!important;gap:6px!important;display:grid!important;grid-template-columns:repeat(4,1fr)!important}
+.cm-act{padding:7px 2px!important;font-size:9.5px!important;border-radius:9px!important;flex-direction:column!important;gap:3px!important}
+.cm-act svg{width:14px!important;height:14px!important}
+.cm-av{width:34px!important;height:34px!important}
 </style>
 <script src="native-bridge.js"></script>
 </body>
