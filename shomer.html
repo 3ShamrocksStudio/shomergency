@@ -1553,7 +1553,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v116 · 13.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v117 · 13.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -2369,8 +2369,18 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <span class="ff-pick-ttl" id="gd-accept-ttl"> הזמנה לשמירה</span>
  <button class="sh-x" onclick="gdDeclineInvite()" aria-label="סגור"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
  </div>
- <p style="font-size:13px;color:var(--tx1);line-height:1.7;margin-bottom:6px" id="gd-accept-body">מישהו מזמין אותך להיות השומר/ת שלו.</p>
- <p style="font-size:11.5px;color:var(--tx2);line-height:1.6;margin-bottom:14px" id="gd-accept-sub">באישור: תראו זה את מיקומו החי של זה. ניתן לעצור בכל רגע מתוך "מעגלים".</p>
+ <div id="gd-ident" class="gd-ident">
+    <div class="gd-ident-av" id="gd-ident-av">?</div>
+    <div class="gd-ident-n" id="gd-ident-n">—</div>
+    <div class="gd-ident-p" id="gd-ident-p" dir="ltr"></div>
+    <div class="gd-ident-hint" id="gd-ident-hint">מכיר/ה את המספר הזה?</div>
+    <div class="gd-code-wrap">
+      <div class="gd-code-lbl" id="gd-code-lbl">קוד אימות — בקש/י מהם להקריא אותו</div>
+      <div class="gd-code" id="gd-code" dir="ltr">----</div>
+    </div>
+   </div>
+   <p class="gd-warn" id="gd-accept-warn">⚠️ אשר/י <b>רק</b> אם את/ה מזהה את האדם הזה. באישור הם יוכלו לראות את מיקומך בזמן אמת.</p>
+   <p style="font-size:11.5px;color:var(--tx2);line-height:1.6;margin-bottom:14px" id="gd-accept-sub">אפשר לעצור את השיתוף בכל רגע מתוך „השומרים שלי”.</p>
  <button class="cta-gold" onclick="gdAcceptInvite()" id="gd-accept-yes">✓ <span id="gd-accept-yes-lbl">אשר/י וחבר/י</span></button>
  <button class="row-btn" style="margin-top:10px;justify-content:center;color:#FF7080" onclick="gdDeclineInvite()" id="gd-accept-no">דחה/י</button>
  </div>
@@ -5931,11 +5941,12 @@ function agPickContact(){
    anything). Whoever taps it lands in SH✡MER with an approve screen. */
 async function shareInvite(){
   var he=currentLang==='he';
+  var linkCode=String(Math.floor(1000+Math.random()*9000));
   var tok='g'+Math.random().toString(36).slice(2,8)+Math.random().toString(36).slice(2,6);
   try{
     var myName=(SS.user&&SS.user.name)||(SS.user&&SS.user.username)||'';
     if(FB.ready&&FB.uid){
-      await fbRestWrite('PUT','invites/'+tok,{fromUid:FB.uid,name:myName,ts:Date.now()});
+      await fbRestWrite('PUT','invites/'+tok,{fromUid:FB.uid,name:myName,fromName:myName,fromPhone:((SS.user&&SS.user.phone)||''),code:linkCode,ts:Date.now()});
       var g=gdState();
       g.pairs.push({id:genId('g'),token:tok,name:'',rel:'',shareToThem:true,seeThem:true,addedTs:Date.now(),initiator:true,pending:true,partnerUid:null,linked:false,cid:activeCircleId,color:'#C9A84C',lat:null,lng:null,ts:0,live:false,via:'link'});
       saveStore();
@@ -5954,7 +5965,7 @@ async function shareInvite(){
 }
 /* ══ INVITE PANEL — the only reliable way the request reaches a human ══ */
 /* Fire the real invite SMS through our Twilio function. */
-async function sendInviteSMS(phone, name, token){
+async function sendInviteSMS(phone, name, token, code){
   var he=currentLang==='he';
   if(!phone || !token) return false;
   try{
@@ -5964,6 +5975,8 @@ async function sendInviteSMS(phone, name, token){
       body:"phone="+encodeURIComponent("+"+phone)
           +"&link="+encodeURIComponent(inviteLinkFor(token))
           +"&fromName="+encodeURIComponent((SS.user&&SS.user.name)||'')
+          +"&fromPhone="+encodeURIComponent("+"+((SS.user&&SS.user.phone)||''))
+          +"&code="+encodeURIComponent(code||'')
           +"&lang="+(he?'he':'en')
     });
     var d=await r.json(); if(typeof d==='string'){ try{ d=JSON.parse(d); }catch(_){} }
@@ -5985,7 +5998,7 @@ function inviteTextFor(name, token){
     ? ('היי '+(name||'')+', הוספתי אותך למעגל השומרים שלי ב-SH\u2721MER — אפליקציית בטיחות חינמית. אשר/י כדי שנוכל לראות זה את זה במקרה חירום:\n'+link)
     : ('Hi '+(name||'')+", I added you to my SH\u2721MER guardian circle — a free safety app. Approve so we can see each other in an emergency:\n"+link);
 }
-function showInvitePanel(name, phone, token){
+function showInvitePanel(name, phone, token, code){
   var he=currentLang==='he';
   var link=inviteLinkFor(token), txt=inviteTextFor(name, token);
   var old=document.getElementById('inv-panel'); if(old) old.remove();
@@ -5993,7 +6006,7 @@ function showInvitePanel(name, phone, token){
   p.id='inv-panel'; p.className='inv-panel';
   p.innerHTML=
     '<div class="inv-h">'+(he?('שלח/י את הבקשה ל'+ESC(name||'')):('Send the request to '+ESC(name||'')))+'</div>'
-   +'<div class="inv-sub">'+(he?'הבקשה לא נשלחת מעצמה — היא צריכה להגיע אליהם. בחר/י איך:':'The request does not send itself — choose how to deliver it:')+'</div>'
+   +'<div class="inv-sub">'+(he?'נשלחה אליהם בקשה ב-SMS. הם יראו את השם והמספר שלך.':'They were texted a request. They will see your name and number.')+'</div>'+(code?('<div class="inv-code"><span>'+(he?'קוד האימות שלך':'Your match code')+'</span><b dir="ltr">'+ESC(code)+'</b><i>'+(he?'אם הם לא בטוחים מי את/ה — תגיד/י להם את הקוד הזה':'If they are unsure who you are — tell them this code')+'</i></div>'):'')
    +'<div class="inv-btns">'
    + (phone ? '<a class="inv-b wa" target="_blank" rel="noopener" href="https://wa.me/'+encodeURIComponent(phone)+'?text='+encodeURIComponent(txt)+'">WhatsApp</a>' : '')
    + (phone ? '<a class="inv-b sms" href="sms:+'+phone+'?&body='+encodeURIComponent(txt)+'">SMS</a>' : '')
@@ -6085,8 +6098,8 @@ function resendInvite(memberId){
   var g=gdState();
   var p=g.pairs.find(function(x){ return x.id===m.pairId; });
   if(!p||!p.token){ toast(currentLang==='he'?'אין בקשה פעילה':'No pending request','amb'); return; }
-  if(m.phoneCanon) sendInviteSMS(m.phoneCanon, m.name, p.token);
-  showInvitePanel(m.name, m.phoneCanon||'', p.token);
+  if(m.phoneCanon) sendInviteSMS(m.phoneCanon, m.name, p.token, p.code);
+  showInvitePanel(m.name, m.phoneCanon||'', p.token, p.code);
 }
 async function addGuardian(){
  var he=currentLang==='he';
@@ -6106,6 +6119,7 @@ async function addGuardian(){
  var palette=['#C9A84C','#2962FF','#00C853','#E91E8C','#9C27B0','#FF6A00'];
  var off=function(){return (Math.random()-0.5)*0.02;};
  var registered=false, theirUid=null, agToken=null;
+ var agCode=String(Math.floor(1000+Math.random()*9000));   /* the match code both sides see */
  if(validPhone){
    try{
      var h=await sha256Hex(canon);
@@ -6119,7 +6133,7 @@ async function addGuardian(){
          try{
            var myName=(SS.user&&SS.user.name)||(SS.user&&SS.user.username)||'';
            agToken='g'+Math.random().toString(36).slice(2,8)+Math.random().toString(36).slice(2,6);
-           await fbRestWrite('PUT','invites/'+agToken,{fromUid:FB.uid,name:myName,ts:Date.now()});
+           await fbRestWrite('PUT','invites/'+agToken,{fromUid:FB.uid,name:myName,fromName:myName,fromPhone:((SS.user&&SS.user.phone)||''),code:agCode,ts:Date.now()});
          }catch(e){ if(typeof fbLog==='function')fbLog('invite create:',(e&&e.message)||e); }
        }
      }
@@ -6135,7 +6149,7 @@ async function addGuardian(){
  if(registered && theirUid){
    var g=gdState();
    if(!g.pairs.some(function(p){return p.partnerUid===theirUid;})){
-     g.pairs.push({id:genId('g'),token:agToken,name:name,rel:'',shareToThem:true,seeThem:true,addedTs:Date.now(),initiator:true,pending:true,partnerUid:theirUid,linked:false,cid:_selC,color:m.color,lat:null,lng:null,ts:0,live:false,via:'phone',simLat:null,simLng:null});
+     g.pairs.push({id:genId('g'),token:agToken,name:name,rel:'',shareToThem:true,seeThem:true,addedTs:Date.now(),initiator:true,pending:true,partnerUid:theirUid,linked:false,cid:_selC,code:agCode,color:m.color,lat:null,lng:null,ts:0,live:false,via:'phone',simLat:null,simLng:null});
      m.pairId=g.pairs[g.pairs.length-1].id;
    }
    m.pending=true; m.phoneCanon=canon;                                  // stays pending until THEY approve
@@ -6150,8 +6164,8 @@ async function addGuardian(){
    /* The invite now SENDS ITSELF. A Twilio function (/sendInvite) texts the person the
       approval link automatically — verified delivered. The panel stays as a manual
       fallback (WhatsApp / share / copy) in case the SMS is filtered. */
-   sendInviteSMS(canon, name, agToken);
-   showInvitePanel(name, canon, agToken);
+   sendInviteSMS(canon, name, agToken, agCode);
+   showInvitePanel(name, canon, agToken, agCode);
  } else if(validPhone){
    var invMsg=encodeURIComponent(he?('\u05d4\u05d9\u05d9! \u05d4\u05e6\u05d8\u05e8\u05e3/\u05d9 \u05d0\u05dc\u05d9\u05d9 \u05d1-SH\u2721MER \u2014 \u05d0\u05e4\u05dc\u05d9\u05e7\u05e6\u05d9\u05d9\u05ea \u05d1\u05d8\u05d9\u05d7\u05d5\u05ea \u05e7\u05d4\u05d9\u05dc\u05ea\u05d9\u05ea. \u05d7\u05d9\u05e0\u05dd: https://www.shomer-app.co.il/'):('Join me on SH\u2721MER: https://www.shomer-app.co.il/'));
    toast(he?('\u2713 '+name+' \u05e0\u05d5\u05e1\u05e3/\u05d4. \u05d8\u05e8\u05dd \u05d1-SH\u2721MER \u2014 \u05d4\u05e7\u05e9/\u05d9 \u05dc\u05d4\u05d6\u05de\u05e0\u05d4'):('\u2713 '+name+' added. Tap to invite'),'amb',function(){ try{ window.open('https://wa.me/'+canon+'?text='+invMsg,'_blank'); }catch(e){} });
@@ -6773,8 +6787,44 @@ function gdCheckInviteParam(){
  return;
  }
  gdAcceptInvite._tok=tok; gdAcceptInvite._nm=nm;
- setText('gd-accept-body', currentLang==='he'?((nm||'מישהו')+' מזמין/ה אותך להיות השומר/ת שלו/ה.'):((nm||'Someone')+' invites you to be their guardian.'));
+ gdFillIdentity(null);              /* clear any previous identity before showing */
  gdOpen('gd-accept');
+ gdLoadInvite(tok);                 /* fetch WHO is asking — name, verified phone, match code */
+}
+/* ══ TRUST HANDSHAKE ══
+   "Someone wants to add you" is worse than useless — it trains people to approve strangers
+   or to ignore every request. Both are fatal for a safety app.
+   A human verifies another human by their PHONE NUMBER ("that's Yossi's number"), so the
+   invite carries the inviter's VERIFIED number (verified by the same OTP they registered
+   with — it cannot be casually faked). The 4-digit code is the second factor: the inviter
+   sees the same code on their screen and can read it aloud, exactly like a safety number. */
+function gdFillIdentity(inv){
+  var he=currentLang==='he';
+  var nm=(inv&&(inv.fromName||inv.name))||'';
+  var ph=(inv&&inv.fromPhone)||'';
+  var code=(inv&&inv.code)||'';
+  var av=document.getElementById('gd-ident-av');
+  if(av) av.textContent=(nm.trim()[0]||'?').toUpperCase();
+  var n=document.getElementById('gd-ident-n');
+  if(n) n.textContent=nm||(he?'ללא שם':'No name');
+  var p=document.getElementById('gd-ident-p');
+  if(p) p.textContent=ph?('+'+String(ph).replace(/^\+/,'')):'';
+  var h=document.getElementById('gd-ident-hint');
+  if(h) h.textContent = ph
+    ? (he?'מכיר/ה את המספר הזה? בדוק/בדקי באנשי הקשר שלך.':'Do you know this number? Check your contacts.')
+    : (he?'⚠️ אין מספר מאומת — היזהר/י.':'⚠️ No verified number — be careful.');
+  var cd=document.getElementById('gd-code');
+  if(cd) cd.textContent=code||'----';
+  var cl=document.getElementById('gd-code-lbl');
+  if(cl) cl.textContent = he?'קוד אימות — בקש/י מהם להקריא אותו':'Match code — ask them to read it out';
+}
+function gdLoadInvite(token){
+  try{
+    if(!FB.ready||!token){ gdFillIdentity(null); return; }
+    FB.db.ref('invites/'+token).once('value').then(function(s){
+      gdFillIdentity(s && s.val && s.val());
+    }).catch(function(){ gdFillIdentity(null); });
+  }catch(e){ gdFillIdentity(null); }
 }
 function gdAcceptInvite(){ gdClose('gd-accept'); gdConnect(gdAcceptInvite._tok,gdAcceptInvite._nm,true); }
 function gdDeclineInvite(){ gdClose('gd-accept'); }
@@ -7517,7 +7567,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v116';
+var APP_VER='v117';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -9659,6 +9709,20 @@ async function getOrCreateDeviceId(){
 .mng-del svg{width:15px;height:15px}
 .mng-empty{font-size:12px;color:var(--tx3);padding:10px 6px;text-align:center}
 .mng-add{width:100%;padding:13px;border-radius:12px;border:1px dashed rgba(224,168,40,.5);background:rgba(224,168,40,.08);color:var(--g3);font-family:inherit;font-weight:800;font-size:14px;cursor:pointer}
+
+.gd-ident{background:rgba(255,255,255,.04);border:1px solid var(--b2);border-radius:16px;padding:16px;text-align:center;margin-bottom:12px}
+.gd-ident-av{width:56px;height:56px;border-radius:50%;margin:0 auto 10px;background:linear-gradient(135deg,#C09020,#E0A828 60%,#F5C840);color:#23170a;font-size:24px;font-weight:900;display:flex;align-items:center;justify-content:center}
+.gd-ident-n{font-size:18px;font-weight:900;color:var(--tx0)}
+.gd-ident-p{font-size:15px;font-weight:800;color:var(--g3);margin-top:3px;letter-spacing:.5px}
+.gd-ident-hint{font-size:11.5px;color:var(--tx2);margin-top:6px}
+.gd-code-wrap{margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.08)}
+.gd-code-lbl{font-size:11px;color:var(--tx3);margin-bottom:4px}
+.gd-code{font-size:26px;font-weight:900;letter-spacing:7px;color:#fff;font-variant-numeric:tabular-nums}
+.gd-warn{font-size:12.5px;line-height:1.6;color:#FFCF7A;background:rgba(224,168,40,.10);border:1px solid rgba(224,168,40,.35);border-radius:12px;padding:10px 12px;margin-bottom:10px}
+.inv-code{margin-top:12px;background:rgba(255,255,255,.05);border:1px solid var(--b2);border-radius:12px;padding:10px;text-align:center}
+.inv-code span{display:block;font-size:11px;color:var(--tx3)}
+.inv-code b{display:block;font-size:24px;font-weight:900;letter-spacing:6px;color:#fff;margin:2px 0}
+.inv-code i{display:block;font-size:10.5px;color:var(--tx2);font-style:normal}
 </style>
 <script src="native-bridge.js"></script>
 </body>
