@@ -1553,7 +1553,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v114 · 13.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v115 · 13.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -5820,6 +5820,8 @@ function agoTxt(ts,he){
 }
 function statusOf(m,he){
  if(m.sos)return{cls:'sos',txt:he?' SOS פעיל':' SOS active'};
+ /* An invite that has not been delivered is NOT "pending approval" — it is not sent. Say so. */
+ if(m.pending) return {cls:'wait', txt: he?'לא נשלח עדיין — הקש/י „שלח/י בקשה”':'Not sent yet — tap "Send request"'};
  /* Honest state: if they are not live, say when they were last seen — not "waiting". */
  if(m.registered && !m.live){
    var seen=agoTxt(m.ts, he);
@@ -5857,6 +5859,9 @@ function buildMemberRow(m,he){
   <button class="cm-act" data-a="locate">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="7"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
     <span>${he?'אתר/י':'Find'}</span></button>
+  ${m.pending ? `<button class="cm-act warn" data-a="resend">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4Z"/></svg>
+    <span>${he?'שלח/י בקשה':'Send request'}</span></button>` : ''}
   <button class="cm-act danger" data-a="del">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg>
     <span>${he?'הסר/י':'Remove'}</span></button>`;
@@ -5869,6 +5874,7 @@ function buildMemberRow(m,he){
        try{ gdRenderMarkers(); }catch(e){} return; }
      if(a==='ping'){ m.ping=!(m.ping!==false); b.classList.toggle('on',m.ping!==false); saveStore();
        toast(he?((m.ping!==false?'פינג-פונג פעיל':'פינג-פונג כבוי')+' · '+ESC(m.name)):'Updated', m.ping!==false?'grn':'amb'); return; }
+     if(a==='resend'){ resendInvite(m.id); return; }
      if(a==='locate'){ flyToMember(m.id); return; }
      if(a==='del'){ if(confirm(he?('להסיר את '+(m.name||'')+' מהמעגל?'):('Remove '+(m.name||'')+'?'))) removeMember(m.id); return; }
    };
@@ -5950,6 +5956,53 @@ async function shareInvite(){
   try{ window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank'); }
   catch(e){ try{ navigator.clipboard.writeText(link); toast(he?'הקישור הועתק':'Link copied','grn'); }catch(_){} }
 }
+/* ══ INVITE PANEL — the only reliable way the request reaches a human ══ */
+function inviteLinkFor(token){ return 'https://www.shomer-app.co.il/shomer.html?g='+encodeURIComponent(token||''); }
+function inviteTextFor(name, token){
+  var he=currentLang==='he';
+  var link=inviteLinkFor(token);
+  return he
+    ? ('היי '+(name||'')+', הוספתי אותך למעגל השומרים שלי ב-SH\u2721MER — אפליקציית בטיחות חינמית. אשר/י כדי שנוכל לראות זה את זה במקרה חירום:\n'+link)
+    : ('Hi '+(name||'')+", I added you to my SH\u2721MER guardian circle — a free safety app. Approve so we can see each other in an emergency:\n"+link);
+}
+function showInvitePanel(name, phone, token){
+  var he=currentLang==='he';
+  var link=inviteLinkFor(token), txt=inviteTextFor(name, token);
+  var old=document.getElementById('inv-panel'); if(old) old.remove();
+  var p=document.createElement('div');
+  p.id='inv-panel'; p.className='inv-panel';
+  p.innerHTML=
+    '<div class="inv-h">'+(he?('שלח/י את הבקשה ל'+ESC(name||'')):('Send the request to '+ESC(name||'')))+'</div>'
+   +'<div class="inv-sub">'+(he?'הבקשה לא נשלחת מעצמה — היא צריכה להגיע אליהם. בחר/י איך:':'The request does not send itself — choose how to deliver it:')+'</div>'
+   +'<div class="inv-btns">'
+   + (phone ? '<a class="inv-b wa" target="_blank" rel="noopener" href="https://wa.me/'+encodeURIComponent(phone)+'?text='+encodeURIComponent(txt)+'">WhatsApp</a>' : '')
+   + (phone ? '<a class="inv-b sms" href="sms:+'+phone+'?&body='+encodeURIComponent(txt)+'">SMS</a>' : '')
+   +'<button class="inv-b sh" id="inv-share">'+(he?'שיתוף…':'Share…')+'</button>'
+   +'<button class="inv-b cp" id="inv-copy">'+(he?'העתק/י קישור':'Copy link')+'</button>'
+   +'</div>'
+   +'<div class="inv-link" dir="ltr">'+ESC(link)+'</div>'
+   +'<button class="inv-x" id="inv-close">'+(he?'סגור':'Close')+'</button>';
+  document.body.appendChild(p);
+  var sh=document.getElementById('inv-share');
+  if(sh) sh.onclick=function(){
+    if(navigator.share){ navigator.share({title:'SH\u2721MER', text:txt}).catch(function(){}); }
+    else { try{ navigator.clipboard.writeText(txt); toast(he?'הועתק':'Copied','grn'); }catch(e){} }
+  };
+  var cp=document.getElementById('inv-copy');
+  if(cp) cp.onclick=function(){
+    try{ navigator.clipboard.writeText(link); toast(he?'\u2713 הקישור הועתק':'\u2713 Link copied','grn'); }catch(e){}
+  };
+  var cl2=document.getElementById('inv-close');
+  if(cl2) cl2.onclick=function(){ p.remove(); };
+}
+/* Re-send from any pending member row. */
+function resendInvite(memberId){
+  var m=memberById(memberId); if(!m) return;
+  var g=gdState();
+  var p=g.pairs.find(function(x){ return x.id===m.pairId; });
+  if(!p||!p.token){ toast(currentLang==='he'?'אין בקשה פעילה':'No pending request','amb'); return; }
+  showInvitePanel(m.name, m.phoneCanon||'', p.token);
+}
 async function addGuardian(){
  var he=currentLang==='he';
  var nmEl=document.getElementById('ag-name'), phEl=document.getElementById('ag-phone'), go=document.getElementById('ag-go');
@@ -6009,12 +6062,15 @@ async function addGuardian(){
  renderCircles(); if(mapCircleId===activeCircleId)renderCircleMarkers();
  if(go){go.disabled=false;go.style.opacity='';}
  if(registered){
-   // Send the approval request — they must tap Approve before anything is shared.
-   var reqLink='https://www.shomer-app.co.il/shomer.html?g='+encodeURIComponent(agToken||'');
-   var reqMsg=encodeURIComponent(he
-     ? ('\u05d4\u05d9\u05d9 '+name+', \u05d4\u05d5\u05e1\u05e4\u05ea\u05d9 \u05d0\u05d5\u05ea\u05da \u05dc\u05de\u05e2\u05d2\u05dc \u05d4\u05e9\u05d5\u05de\u05e8\u05d9\u05dd \u05e9\u05dc\u05d9 \u05d1-SH\u2721MER. \u05de\u05d0\u05e9\u05e8/\u05ea? '+reqLink)
-     : ('Hi '+name+', I added you to my SH\u2721MER guardian circle. Approve? '+reqLink));
-   toast(he?('\u05d1\u05e7\u05e9\u05d4 \u05e0\u05e9\u05dc\u05d7\u05d4 \u2014 \u05de\u05de\u05ea\u05d9\u05df \u05dc\u05d0\u05d9\u05e9\u05d5\u05e8 \u05e9\u05dc '+name+'. \u05d4\u05e7\u05e9/\u05d9 \u05dc\u05e9\u05dc\u05d5\u05d7 \u05d1-WhatsApp'):('Request sent \u2014 awaiting '+name+"'s approval. Tap to send on WhatsApp"),'amb',function(){ try{ window.open('https://wa.me/'+canon+'?text='+reqMsg,'_blank'); }catch(e){} });
+   /* ⚠️ THE INVITE IS NOT "SENT" UNTIL THE OTHER PERSON RECEIVES THE LINK.
+      Previously we created the invite, then showed a TOAST claiming "request sent" whose
+      tap-handler opened WhatsApp. If the user did not tap that transient toast (almost
+      nobody does), NOTHING was delivered — and the recipient cannot discover an invite on
+      their own (reading the invites list is permission-denied by design).
+      So: never claim "sent". Show a persistent panel with real, tappable send buttons.
+      Also note window.open() after an await often loses the user-gesture and gets blocked —
+      which is why these must be REAL buttons the user presses, not a programmatic popup. */
+   showInvitePanel(name, canon, agToken);
  } else if(validPhone){
    var invMsg=encodeURIComponent(he?('\u05d4\u05d9\u05d9! \u05d4\u05e6\u05d8\u05e8\u05e3/\u05d9 \u05d0\u05dc\u05d9\u05d9 \u05d1-SH\u2721MER \u2014 \u05d0\u05e4\u05dc\u05d9\u05e7\u05e6\u05d9\u05d9\u05ea \u05d1\u05d8\u05d9\u05d7\u05d5\u05ea \u05e7\u05d4\u05d9\u05dc\u05ea\u05d9\u05ea. \u05d7\u05d9\u05e0\u05dd: https://www.shomer-app.co.il/'):('Join me on SH\u2721MER: https://www.shomer-app.co.il/'));
    toast(he?('\u2713 '+name+' \u05e0\u05d5\u05e1\u05e3/\u05d4. \u05d8\u05e8\u05dd \u05d1-SH\u2721MER \u2014 \u05d4\u05e7\u05e9/\u05d9 \u05dc\u05d4\u05d6\u05de\u05e0\u05d4'):('\u2713 '+name+' added. Tap to invite'),'amb',function(){ try{ window.open('https://wa.me/'+canon+'?text='+invMsg,'_blank'); }catch(e){} });
@@ -7380,7 +7436,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v114';
+var APP_VER='v115';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -9486,6 +9542,20 @@ async function getOrCreateDeviceId(){
 .ec-l{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ec-n{font-size:10px;font-weight:800;color:var(--tx3)}
 .ess-add{display:flex;align-items:center;gap:6px;width:100%;margin-top:8px;padding:7px;border-radius:9px;border:1px dashed rgba(224,168,40,.45);background:rgba(224,168,40,.07);color:var(--g3);font-family:inherit;font-size:10.5px;font-weight:700;cursor:pointer;text-align:start}
+
+.inv-panel{position:fixed;left:12px;right:12px;bottom:14px;z-index:100000;background:linear-gradient(160deg,#101E34,#0A1628);border:1px solid rgba(224,168,40,.42);border-radius:18px;padding:16px;box-shadow:0 18px 50px rgba(0,0,0,.65);max-width:520px;margin-inline:auto}
+.inv-h{font-size:15.5px;font-weight:900;color:var(--g3);margin-bottom:4px}
+.inv-sub{font-size:12px;color:var(--tx2);margin-bottom:12px;line-height:1.5}
+.inv-btns{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.inv-b{display:flex;align-items:center;justify-content:center;padding:12px;border-radius:12px;font-weight:800;font-size:13.5px;text-decoration:none;cursor:pointer;border:0;font-family:inherit}
+.inv-b.wa{background:#25D366;color:#06301A}
+.inv-b.sms{background:#1670E0;color:#fff}
+.inv-b.sh{background:var(--n3);color:var(--tx1);border:1px solid var(--b2)}
+.inv-b.cp{background:var(--n3);color:var(--tx1);border:1px solid var(--b2)}
+.inv-link{margin-top:10px;font-size:10.5px;color:var(--tx3);background:rgba(0,0,0,.3);border-radius:8px;padding:8px;word-break:break-all;text-align:left}
+.inv-x{width:100%;margin-top:10px;padding:9px;border-radius:10px;border:0;background:transparent;color:var(--tx3);font-family:inherit;font-weight:700;font-size:12.5px;cursor:pointer}
+
+.cm-act.warn{color:#E0A828;border-color:rgba(224,168,40,.42);background:rgba(224,168,40,.10)}
 </style>
 <script src="native-bridge.js"></script>
 </body>
