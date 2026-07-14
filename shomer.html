@@ -1516,7 +1516,8 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <header class="hdr" role="banner" id="main-content">
  <div class="hdr-left">
  <button class="hdr-menu" id="menu-btn" onclick="toggleDD()" aria-label="תפריט" aria-expanded="false" aria-haspopup="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
- <button class="hdr-guide" onclick="openGuide()" aria-label="מדריך חירום" title="מדריך חירום">
+ <span id="hdr-founder-slot"></span>
+   <button class="hdr-guide" onclick="openGuide()" aria-label="מדריך חירום" title="מדריך חירום">
  <svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6V4.8A1.8 1.8 0 0 1 10.8 3h2.4A1.8 1.8 0 0 1 15 4.8V6"/><rect x="3" y="6" width="18" height="14" rx="2.4"/><path d="M12 10.2v5.6M9.2 13h5.6" stroke-width="2.3"/></svg>
  </button>
  <!-- REAL "guardians nearby" — live count from RTDB presence (shown only when connected). -->
@@ -6527,7 +6528,7 @@ function toggleGhost(){
 /* ── Circle member map markers (pulsing avatar dots) ── */
 function circleIcon(m){
  return window.L.divIcon({className:'shomer-marker',
- html:`<div class="mk-circle${m.sos?' sos':''}" style="--cc:${m.color}"><div class="pulse"></div><div class="av">${m.emoji||''}</div><div class="nm">${ESC(m.name)}${m.sos?' ':''}</div></div>`,
+ html:`<div class="mk-circle${m.sos?' sos':''}${isFounder()?' founder':''}" style="--cc:${m.color}">${isFounder()?('<span class="mk-founder-crown">'+founderCrestSVG(26)+'</span>'):''}<div class="pulse"></div><div class="av">${m.emoji||''}</div><div class="nm">${ESC(m.name)}${m.sos?' ':''}</div></div>`,
  iconSize:[38,38],iconAnchor:[19,19],popupAnchor:[0,-20]});
 }
 function clearCircleMarkers(){
@@ -7002,7 +7003,7 @@ function gdPos(p){ if(gdIsLive(p)) return [p.lat,p.lng]; if(p.lat!=null&&p.lng!=
 /* ── Map markers ── */
 function guardianIcon(p,live){
  return window.L.divIcon({className:'shomer-marker',
- html:`<div class="mk-circle${live?' live':''}" style="--cc:${p.color||'#C9A84C'}">${live?'<div class="tag">LIVE</div>':''}<div class="pulse"></div><div class="av"></div><div class="nm">${ESC(p.name||(currentLang==='he'?'שומר/ת':'SHOMER'))}</div></div>`,
+ html:`<div class="mk-circle${live?' live':''}${uidIsFounder(p)?' founder':''}" style="--cc:${p.color||'#C9A84C'}">${uidIsFounder(p)?('<span class="mk-founder-crown">'+founderCrestSVG(26)+'</span>'):''}${live?'<div class="tag">LIVE</div>':''}<div class="pulse"></div><div class="av"></div><div class="nm">${ESC(p.name||(currentLang==='he'?'שומר/ת':'SHOMER'))}</div></div>`,
  iconSize:[38,38],iconAnchor:[19,19],popupAnchor:[0,-20]});
 }
 function gdUpdateMarker(p){
@@ -7845,7 +7846,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v146';
+var APP_VER='v147';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -8245,7 +8246,7 @@ async function fbInit(){
 
     if(!window.firebase.apps.length)window.firebase.initializeApp(window.SHOMER_FB);
     try{ fbInitAppCheck(); }catch(e){}   // defense-in-depth, DORMANT until a site key is configured
-    FB.ready=true; FB.listening=true;    // shell/transport ready; FB.connected follows SSE stream health
+    FB.ready=true; try{ founderPublishSelf(); founderWatchList(); }catch(e){} FB.listening=true;    // shell/transport ready; FB.connected follows SSE stream health
     renderFbStatus();
 
     // Anonymous auth → ID token → fbOnAuthed starts the SSE streams (presence/SOS/pairs).
@@ -8913,18 +8914,72 @@ function phoneIsFounder(ph){
   return !!f && !!p && (p===f || p.slice(-9)===f.slice(-9));
 }
 function isFounder(){ try{ return phoneIsFounder((SS.user&&SS.user.phone)||''); }catch(e){ return false; } }
-function uidIsFounder(rec){ try{ return rec && (phoneIsFounder(rec.phone||'') || rec.founder===true); }catch(e){ return false; } }
+var FOUNDER_UIDS={}; try{ var _fu=localStorage.getItem('shomer_founder_uid'); if(_fu) FOUNDER_UIDS[_fu]=true; }catch(e){}   /* cache of known founder uids, populated from the public 'founders' node */
+function uidIsFounder(rec){
+  try{
+    if(!rec) return false;
+    if(rec.founder===true) return true;
+    if(rec.phone && phoneIsFounder(rec.phone)) return true;
+    var uid=rec.uid||rec.partnerUid||rec.by||'';
+    return !!uid && FOUNDER_UIDS[uid]===true;
+  }catch(e){ return false; }
+}
+/* the founder publishes their own uid once (self-write); everyone caches the public list */
+function founderPublishSelf(){
+  /* self-capture: when the founder opens the app, cache their uid locally so their own crest
+     and map crown render immediately — no console action required. Also attempts the public
+     founders node (works once its rule is published; harmless if not). */
+  try{
+    if(isFounder() && FB.uid){
+      FOUNDER_UIDS[FB.uid]=true;
+      try{ localStorage.setItem('shomer_founder_uid', FB.uid); }catch(e){}
+    }
+  }catch(e){}
+  try{
+    if(isFounder() && FB.ready && FB.uid){
+      fbRestWrite('PUT','founders/'+FB.uid, {ts:Date.now()}).catch(function(){});
+    }
+  }catch(e){}
+}
+function founderWatchList(){
+  try{
+    if(!FB.db) return;
+    FB.db.ref('founders').on('value', function(snap){
+      var v=snap&&snap.val?snap.val():null;
+      FOUNDER_UIDS = v || {};
+      try{ if(typeof repaintMarkers==='function') repaintMarkers(); }catch(e){}
+    });
+  }catch(e){}
+}
+function founderCrestSVG(size){
+  var s=size||22;
+  return '<svg class="fc-svg" viewBox="0 0 32 34" width="'+s+'" height="'+(s*34/32)+'" aria-hidden="true">'
+    +'<defs><linearGradient id="fcGold" x1="0" y1="0" x2="1" y2="1">'
+    +'<stop offset="0" stop-color="#F7D66A"/><stop offset=".5" stop-color="#E0A828"/><stop offset="1" stop-color="#A9741A"/></linearGradient>'
+    +'<linearGradient id="fcCrown" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FCE38A"/><stop offset="1" stop-color="#D69A1E"/></linearGradient></defs>'
+    /* crown */
+    +'<path d="M8 7.5L11 3.5L16 6.5L21 3.5L24 7.5L22.5 11H9.5Z" fill="url(#fcCrown)" stroke="#7A4E12" stroke-width=".5" stroke-linejoin="round"/>'
+    +'<circle cx="11" cy="3.5" r="1.4" fill="#FCE38A" stroke="#7A4E12" stroke-width=".4"/>'
+    +'<circle cx="16" cy="6.2" r="1.5" fill="#FCE38A" stroke="#7A4E12" stroke-width=".4"/>'
+    +'<circle cx="21" cy="3.5" r="1.4" fill="#FCE38A" stroke="#7A4E12" stroke-width=".4"/>'
+    /* star of david */
+    +'<path d="M16 12.5L19.6 18.7H12.4ZM16 26.5L12.4 20.3H19.6Z" fill="url(#fcGold)" stroke="#7A4E12" stroke-width=".7" stroke-linejoin="round"/>'
+    +'<path d="M11 15.6H21L16 24.4ZM11 22.9H21L16 14.1Z" fill="none" stroke="url(#fcGold)" stroke-width="1.7" stroke-linejoin="round"/></svg>';
+}
 function founderBadgeHTML(rec){
   var show = rec ? uidIsFounder(rec) : isFounder();
   if(!show) return '';
   var he=currentLang==='he';
   return '<span class="founder-crest" title="'+(he?'מייסד SH✡MER':'Founder of SH✡MER')+'" aria-label="'+(he?'מייסד':'Founder')+'">'
-    +'<svg viewBox="0 0 24 24" aria-hidden="true">'
-    +'<defs><linearGradient id="fcg" x1="0" y1="0" x2="1" y2="1">'
-    +'<stop offset="0" stop-color="#F5C840"/><stop offset=".55" stop-color="#E0A828"/><stop offset="1" stop-color="#B8791A"/></linearGradient></defs>'
-    +'<path d="M12 1.6l8.4 3v6.1c0 5.3-3.6 9-8.4 10.9C7.2 19.7 3.6 16 3.6 10.7V4.6Z" fill="url(#fcg)" stroke="#7A4E12" stroke-width=".5"/>'
-    +'<path d="M12 6.2l1.7 3 3.4.1-2 2.8 1 3.2-3.1-1.4-3.1 1.4 1-3.2-2-2.8 3.4-.1Z" fill="none" stroke="#3A2708" stroke-width="1" stroke-linejoin="round"/></svg>'
-    +'<span class="founder-word">'+(he?'מייסד':'FOUNDER')+'</span></span>';
+    + founderCrestSVG(20)
+    + '<span class="founder-word">'+(he?'מייסד':'FOUNDER')+'</span></span>';
+}
+/* compact crest for the header (icon only) */
+function paintHdrFounder(){ var s=document.getElementById('hdr-founder-slot'); if(s) s.innerHTML=founderHeaderHTML(); }
+function founderHeaderHTML(){
+  if(!isFounder()) return '';
+  var he=currentLang==='he';
+  return '<button class="hdr-founder" title="'+(he?'מייסד SH✡MER':'Founder')+'" aria-label="'+(he?'מייסד':'Founder')+'" onclick="op(\'sh-profile\')">'+founderCrestSVG(24)+'</button>';
 }
 /* ══ COMMUNITY EVENTS — safe by design ══
    A community report is the most abusable surface in the app: one bad actor could spark panic
@@ -11191,6 +11246,25 @@ html[dir="rtl"] .sh-back svg{transform:scaleX(-1)}
 .ess-chip:not(.on):not(.leg-on){opacity:.42}
 .ess-chip.on,.ess-chip.leg-on{opacity:1}
 .ess-chip.on .ec-ic,.ess-chip.leg-on .ec-ic{box-shadow:0 2px 6px rgba(0,0,0,.3)}
+
+.founder-crest{display:inline-flex;align-items:center;gap:6px;padding:4px 12px 4px 6px;border-radius:999px;
+  background:linear-gradient(135deg,rgba(224,168,40,.18),rgba(16,30,52,.92));border:1px solid rgba(224,168,40,.55);
+  box-shadow:0 2px 12px rgba(224,168,40,.28);vertical-align:middle}
+.fc-svg{filter:drop-shadow(0 1px 3px rgba(0,0,0,.5))}
+.founder-word{font-size:10.5px;font-weight:900;letter-spacing:.08em;font-family:'Cinzel',serif;
+  background:linear-gradient(135deg,#F7D66A,#E0A828);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+/* header founder button */
+.hdr-founder{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(circle,rgba(224,168,40,.2),rgba(10,22,40,.9));border:1px solid rgba(224,168,40,.6);
+  cursor:pointer;padding:0;flex:0 0 auto;box-shadow:0 0 14px rgba(224,168,40,.35),inset 0 1px 0 rgba(255,255,255,.15);
+  animation:fcGlow 3s ease-in-out infinite}
+@keyframes fcGlow{0%,100%{box-shadow:0 0 12px rgba(224,168,40,.3),inset 0 1px 0 rgba(255,255,255,.15)}50%{box-shadow:0 0 20px rgba(224,168,40,.55),inset 0 1px 0 rgba(255,255,255,.2)}}
+/* founder crown ON THE MAP MARKER — visible to everyone */
+.mk-circle.founder .av{position:relative}
+.mk-founder-crown{position:absolute;top:-16px;left:50%;transform:translateX(-50%);z-index:5;
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,.6));animation:fcGlow 3s ease-in-out infinite}
+.mk-circle.founder{--cc:#E0A828}
+.mk-circle.founder .pulse{background:rgba(224,168,40,.4)!important}
 </style>
 <script src="native-bridge.js"></script>
 </body>
