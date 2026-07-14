@@ -885,12 +885,8 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
 /* Legend — compact, collapsible card */
 
 
-.legend-chev{margin-inline-start:auto;font-size:9px;color:var(--tx2);transition:transform .2s;}
-.map-legend:not(.collapsed) .legend-chev{transform:rotate(90deg);}
 
-.map-legend.collapsed 
-.leg{display:flex;align-items:center;gap:8px;font-size:10.5px;font-weight:600;color:var(--tx1);margin-bottom:5px;}
-.leg:last-child{margin-bottom:0;}
+
 .ldc{width:18px;height:18px;border-radius:50%;flex-shrink:0;border:1.5px solid rgba(255,255,255,.85);box-shadow:0 1px 3px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;font-size:9px;line-height:1;}
 
 .map-controls{position:absolute;top:calc(var(--hdr-top,0px) + var(--hdr) + 10px);right:10px;z-index:400;display:flex;flex-direction:column;gap:6px;}
@@ -1275,17 +1271,16 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
      it can never trap the user. ═══ -->
 <div id="splash" aria-hidden="true">
   <img id="splash-logo" src="SHOMER_logo_big.png" alt="SH✡MER" decoding="async">
-  <div id="splash-bar"><i></i></div>
-</div>
+ </div>
 <style>
-#splash{position:fixed;inset:0;z-index:100001;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;background:radial-gradient(ellipse at 50% 38%,rgba(224,168,40,.10),transparent 62%),linear-gradient(rgba(6,15,30,.55),rgba(4,10,22,.9)),url("SHOMER-bg.jpg") center/cover no-repeat #0A1628;transition:opacity .55s ease;opacity:1;}
+#splash{position:fixed;inset:0;z-index:100001;display:flex;align-items:center;justify-content:center;background:linear-gradient(rgba(6,15,30,.5),rgba(4,10,22,.85)),url("SHOMER-bg.jpg") center/cover no-repeat #0A1628;transition:opacity .5s ease;}
 #splash.gone{opacity:0;pointer-events:none;}
-#splash-logo{width:min(58vw,248px);height:auto;filter:drop-shadow(0 10px 34px rgba(0,0,0,.6));animation:splashPulse 2.4s ease-in-out infinite;}
-#splash-bar{width:134px;height:3px;border-radius:3px;background:rgba(245,203,69,.16);overflow:hidden;}
-#splash-bar i{display:block;height:100%;width:38%;border-radius:3px;background:linear-gradient(90deg,#C09020,#E0A828,#F5C840);animation:splashSlide 1.1s ease-in-out infinite;}
+#splash-logo{width:min(58vw,270px);height:auto;filter:drop-shadow(0 12px 40px rgba(0,0,0,.6));animation:splashIn .8s cubic-bezier(.2,.8,.2,1) both;}
+
+
 @keyframes splashPulse{0%,100%{transform:scale(1);opacity:.95}50%{transform:scale(1.045);opacity:1}}
 @keyframes splashSlide{0%{transform:translateX(-130%)}100%{transform:translateX(330%)}}
-@media (prefers-reduced-motion:reduce){#splash-logo,#splash-bar i{animation:none}}
+@media (prefers-reduced-motion:reduce){#splash-logo,}
 </style>
 <script>
 (function(){
@@ -1472,7 +1467,6 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <!-- Data-source banner -->
  <!-- statistical-overview banner removed; the legend now occupies the top-left. Sources remain cited in marker popups + Settings > Data & sources. -->
  <!-- Legend -->
- <div class="map-count" id="map-count" aria-live="polite"><span class="mc-dot"></span><b id="mc-n">0</b> <span id="mc-l">שומרים</span></div>
  <div class="map-legend collapsed" id="map-legend" aria-label="מקרא מפה">
  <button class="legend-hd" onclick="toggleLegend()" aria-expanded="false" aria-controls="legend-body"><span aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span><span id="legend-ttl-txt">מקרא מפה</span><span class="legend-chev" id="legend-chev" aria-hidden="true">▸</span></button>
  <div class="legend-body" id="legend-body">
@@ -1548,7 +1542,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v134 · 14.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v135 · 14.07.26</div>
 
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -1962,7 +1956,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 6a8 8 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div><div class="sr-nm" id="n-snd-nm">צלילי אירועים חיים</div><div class="sr-sb" id="n-snd-sb">צליל עדין כששומר/ת מצטרף/ת, באירוע חדש או בעדכון</div></div></div><div class="tog on" data-skey="snd_cues" onclick="this.classList.toggle('on');saveToggle(this);if(this.classList.contains('on'))playCue('join')" role="switch"></div></div>
  </div>
  <div class="set-cat"><div class="set-cat-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div><div class="set-cat-t" data-he="בטיחות" data-en="Safety features">בטיחות</div></div>
- <div class="set-grp"><div class="set-row" onclick="op('sh-dms');cl('sh-set')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="sr-nm" data-he="שומר אוטומטי" data-en="שומר אוטומטי" data-ar="مفتاح الأمان الميت">שומר אוטומטי</div></div><span style="color:var(--tx3);font-size:18px">›</span></div><div class="set-row" onclick="op('sh-alarm');cl('sh-set')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18v-5a5 5 0 0 1 10 0v5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><rect x="5" y="18" width="14" height="3" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3v2M4.5 7l1.5 1.3M19.5 7L18 8.3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div class="sr-nm" data-he="הגדרות אזעקה" data-en="Alarm settings">הגדרות אזעקה</div></div><span style="color:var(--tx3);font-size:18px">›</span></div></div>
+ <div class="set-grp"><div class="set-row" onclick="opFrom('sh-dms','sh-set');cl('sh-set')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="sr-nm" data-he="שומר אוטומטי" data-en="שומר אוטומטי" data-ar="مفتاح الأمان الميت">שומר אוטומטי</div></div><span style="color:var(--tx3);font-size:18px">›</span></div><div class="set-row" onclick="opFrom('sh-alarm','sh-set');cl('sh-set')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18v-5a5 5 0 0 1 10 0v5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><rect x="5" y="18" width="14" height="3" rx="1.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3v2M4.5 7l1.5 1.3M19.5 7L18 8.3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div class="sr-nm" data-he="הגדרות אזעקה" data-en="Alarm settings">הגדרות אזעקה</div></div><span style="color:var(--tx3);font-size:18px">›</span></div></div>
  <div class="set-grp"><div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4 L17 18.5 L12 15.2 L7 18.5 Z" fill="currentColor"/></svg></div><div><div class="sr-nm" id="resp-tog-lbl" data-he="ניווט מגיב/ה (הצטרפות)" data-en="Responder navigation (opt-in)">ניווט מגיב/ה (הצטרפות)</div><div class="sr-sb" id="resp-tog-sub" data-he="הצג מסלול חי ומרחק כשמגיבים ל-SOS. מיועד למגיבים מאומתים ולשומרים — לא תחליף לחיוג 100/101/102." data-en="Show a live route + distance when responding to an SOS. For verified responders/guardians — not a replacement for 100/101/102.">הצג מסלול חי ומרחק כשמגיבים ל-SOS.</div></div></div><div class="tog" id="resp-tog" onclick="toggleRespond(this)" role="switch"></div></div></div>
  <div class="set-grp"><div class="set-row" onclick="openSetPin()" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><div><div class="sr-nm" data-he="קוד לביטול SOS (PIN)" data-en="SOS cancel code (PIN)">קוד לביטול SOS (PIN)</div><div class="sr-sb" data-he="נדרש לביטול SOS פעיל — לעולם לא טביעת אצבע." data-en="Required to cancel an active SOS — never a fingerprint.">נדרש לביטול SOS פעיל — לעולם לא טביעת אצבע.</div></div></div><span id="pin-set-state" style="font-size:12px;font-weight:700;color:var(--amb);white-space:nowrap">לא הוגדר</span></div></div>
  <div class="set-grp">
@@ -2043,7 +2037,15 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <button style="width:100%;padding:14px;background:var(--rb);border:none;font-size:14px;font-weight:800;color:#FF7080;display:flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;" onclick="deleteAccount()" id="delete-account-btn"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7M6.5 7l.8 12a2 2 0 0 0 2 1.9h5.4a2 2 0 0 0 2-1.9L17.5 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-he="מחיקת חשבון" data-en="Delete account" data-ar="حذف الحساب">מחיקת חשבון</span></button>
  </div>
  <div class="sr-sb" id="delete-hint" style="margin:8px 2px 16px;line-height:1.6" data-he="מחיקה מלאה וסופית: מוחק את כל הנתונים מהשרת (נוכחות, SOS, פרופיל, הגדרות), מסיר אותך ממעגלי השומרים המשויכים, ומבטל את שם המשתמש שנוצר אוטומטית. פתיחה מחדש יוצרת זהות חדשה לגמרי." data-en="Full, permanent erase: removes all your data from the server (presence, SOS, profile, settings), removes you from any paired SHOMERs' circles, and discards your auto-generated username. Reopening creates a brand-new identity.">מחיקה מלאה וסופית: מוחק את כל הנתונים מהשרת (נוכחות, SOS, פרופיל, הגדרות), מסיר אותך ממעגלי השומרים המשויכים, ומבטל את שם המשתמש שנוצר אוטומטית. פתיחה מחדש יוצרת זהות חדשה לגמרי.</div>
- <div class="legal-links" id="set-legal-links">
+ <div class="set-row" onclick="toggleUpdSms(this.querySelector('.tog'))" role="button" tabindex="0">
+    <div class="sr-l">
+     <div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H7l-3 3Z"/><path d="M8 9h8M8 12.5h5"/></svg></div>
+     <div><div class="sr-nm">עדכוני מערכת ב-SMS</div><div class="sr-sb">תכונות חדשות והודעות חשובות. התרעות חירום נשלחות תמיד, ללא קשר.</div></div>
+    </div>
+    <div class="tog" role="switch" aria-checked="false"></div>
+   </div>
+
+   <div class="legal-links" id="set-legal-links">
  <button onclick="openLegal('tos')" id="set-ll-tos">תנאי שימוש</button><span class="sep">·</span>
  <button onclick="openLegal('privacy')" id="set-ll-priv">מדיניות פרטיות</button><span class="sep">·</span>
  <button onclick="openLegal('disclaimer')" id="set-ll-disc">כתב ויתור חירום</button>
@@ -2227,7 +2229,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
 
    <!-- 2. השומרים שלי (wireframe: the people come BEFORE the form) -->
    <div class="shm-sec">
-    <div class="shm-h">השומרים שלי</div>
+    <div class="shm-h">השומרים שלי<span class="shm-live" id="shm-live"></span></div>
     <div id="circ-members" role="list"></div>
    </div>
 
@@ -5789,24 +5791,21 @@ function switchCircle(cid){activeCircleId=cid;renderCircles();}
 
 /* Build the Circles sheet body (tabs + member list). User data via ESC(). */
 function paintMapCount(){
-  /* This used to say "2 שומרים", which read like "2 guardians near you" — it was actually
-     just your own list. Misleading in the one place accuracy matters. Now it says exactly
-     what it is: how many of YOUR guardians are currently sharing their location with you. */
+  /* Removed from the map: guardians are already visible as pins there, and a counter on top of
+     the map is noise in the one screen that must stay instantly scannable. The number now lives
+     in השומרים שלי, where you actually act on it. */
   var he=currentLang==='he';
-  var el=document.getElementById('map-count'); if(!el) return;
+  var el=document.getElementById('shm-live'); if(!el) return;
   var live=0;
   try{
-    var peers=(FB && FB._peer) || {};
-    var now=Date.now();
+    var peers=(FB && FB._peer)||{}, now=Date.now();
     Object.keys(peers).forEach(function(k){
       var p=peers[k];
       if(p && typeof p.lat==='number' && (now-(p.ts||0) < 15*60000)) live++;
     });
   }catch(e){}
   var total=((SS.circleMembers||[]).filter(function(m){return !m.pending;})).length;
-  if(!total){ el.style.display='none'; return; }
-  el.style.display='';
-  el.innerHTML='<b>'+live+'</b><span>'+(he?('מתוך '+total+' שומרים משתפים מיקום'):(live+' of '+total+' sharing location'))+'</span>';
+  el.textContent = total ? (he?(live+' מתוך '+total+' משתפים מיקום'):(live+' of '+total+' sharing location')) : '';
 }
 /* ══ תזכורות הגעה ══
    5 guardians x 4 places = 20 = the iOS ceiling on monitored regions. Past 20 iOS silently
@@ -5861,6 +5860,71 @@ function renderArrivals(){
   if(cap) cap.textContent = he
     ? ('עד '+ARR_G+' שומרים · '+ARR_P+' מיקומים לכל אחד — מגבלת מערכת ההפעלה היא 20.')
     : (ARR_G+' guardians x '+ARR_P+' places — the OS limit is 20.');
+}
+/* ══ SYSTEM UPDATES + STRANGER PROTECTION ══
+   Two separate things, deliberately kept apart:
+
+   1. UPDATES — opt-in, and opt-in ONLY. Israeli law (Communications Law amendment 40) makes
+      unsolicited commercial SMS illegal without prior consent, with statutory damages per
+      message. So: default OFF, explicit consent, and every send carries an opt-out. Safety
+      alerts are transactional and unaffected — this switch never touches SOS.
+
+   2. STRANGER PROTECTION — the real safety feature. A pairing request from someone NOT in
+      your contacts is marked as such and requires a spoken match code before it is accepted.
+      This is what stops a stranger talking their way into your location. */
+function updState(){ if(!SS.updates) SS.updates={sms:false, inapp:true}; return SS.updates; }
+function toggleUpdSms(el){
+  var he=currentLang==='he';
+  var u=updState();
+  u.sms=!u.sms;
+  el.classList.toggle('on', u.sms);
+  saveStore();
+  if(u.sms){
+    toast(he?'תקבל/י עדכוני מערכת ב-SMS. ניתן לבטל בכל רגע.':'You will get system updates by SMS. Opt out anytime.','grn');
+  } else {
+    toast(he?'עדכוני SMS כובו':'SMS updates off','');
+  }
+}
+/* Is this pairing request from someone the user actually knows? */
+function isKnownContact(phoneCanon){
+  try{
+    return (SS.circleMembers||[]).some(function(m){ return m.phoneCanon===phoneCanon; })
+        || (SS.knownContacts||[]).indexOf(phoneCanon)>=0;
+  }catch(e){ return false; }
+}
+function strangerWarning(nm, phoneCanon){
+  var he=currentLang==='he';
+  if(isKnownContact(phoneCanon)) return '';
+  return '<div class="stranger-warn">'
+    +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>'
+    +'<div><b>'+(he?'לא מאנשי הקשר שלך':'Not in your contacts')+'</b>'
+    +'<span>'+(he?'אשר/י רק אם את/ה מכיר/ה אותם באמת. בקש/י מהם להקריא את קוד ההתאמה בקול.':'Only approve if you truly know them. Ask them to read the match code aloud.')+'</span></div>'
+    +'</div>';
+}
+/* ══ CIRCLE RULE ══
+   A guardian must never silently appear inside a circle. You open (or create) a circle first,
+   then add people to it. If someone adds a guardian with no circle in existence, we finish the
+   guardian first, then ask — once — whether they want to create their first circle. */
+function circlesNamed(){ return circlesList().filter(function(x){ return x.named && x.name; }); }
+function needsFirstCircle(){ return circlesNamed().length===0; }
+function askFirstCircle(){
+  var he=currentLang==='he';
+  var old=document.getElementById('cot-ask'); if(old) old.remove();
+  var d=document.createElement('div');
+  d.id='cot-ask'; d.className='cot-ask';
+  d.innerHTML='<div class="cot-ask-c">'
+    +'<div class="cot-ask-t">'+(he?'ליצור מעגל אמון ראשון?':'Create your first Circle of Trust?')+'</div>'
+    +'<div class="cot-ask-s">'+(he?'מעגלים עוזרים לך לבחור למי לשלוח מה — משפחה, שכנים, חברים.':'Circles let you choose who gets what — family, neighbours, friends.')+'</div>'
+    +'<button class="btn-primary cot-ask-y">'+(he?'צור מעגל':'Create circle')+'</button>'
+    +'<button class="btn-ghost cot-ask-n">'+(he?'לא עכשיו':'Not now')+'</button>'
+    +'</div>';
+  document.body.appendChild(d);
+  d.querySelector('.cot-ask-y').onclick=function(){
+    d.remove();
+    var id=addCircle(); if(id) renameCircle(id);
+    renderCircles();
+  };
+  d.querySelector('.cot-ask-n').onclick=function(){ d.remove(); try{ cl('sh-circles'); }catch(e){} };
 }
 function renderCircles(){
   try{ agFillSelects(); }catch(e){}
@@ -6027,9 +6091,7 @@ function buildMemberRow(m,he){
   ${m.pending ? `<button class="cm-act warn" data-a="resend">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4Z"/></svg>
     <span>${he?'שלח/י בקשה':'Send request'}</span></button>` : ''}
-  <button class="cm-act danger" data-a="del">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg>
-    <span>${he?'הסר/י':'Remove'}</span></button>`;
+`;
  acts.querySelectorAll('.cm-act').forEach(function(b){
    b.onclick=function(ev){
      ev.stopPropagation();
@@ -6051,18 +6113,21 @@ function buildMemberRow(m,he){
  priv.innerHTML=`
  <div class="pv-row"><div><div class="pv-l">${he?'שתף/י את מיקומי עם '+ESC(m.name):'Share my location with '+ESC(m.name)}</div><div class="pv-s">${he?'הם יוכלו לראות אותך':'They can see you'}</div></div><div class="tog ${m.shareTo?'on':''}" data-k="shareTo" role="switch"></div></div>
  <div class="pv-row"><div><div class="pv-l">${he?'ראה/י את המיקום של '+ESC(m.name):'See '+ESC(m.name)+"'s location"}</div><div class="pv-s">${he?'יופיע/תופיע על המפה שלך':'Shows on your map'}</div></div><div class="tog ${m.seeThem?'on':''}" data-k="seeThem" role="switch"></div></div>
- <div class="pv-row" style="align-items:center"><div class="pv-l">${he?'מעגל:':'Circle:'}</div><div class="cm-circ-move" style="display:flex;gap:6px;flex-wrap:wrap">${circlesList().map(cc=>`<button class="cm-act${cc.id===m.cid?' cur':''}" data-mv="${cc.id}" style="${cc.id===m.cid?'border-color:var(--gold,#C9A84C);color:var(--gold,#C9A84C);':''}">${ESC(cc.name)}</button>`).join('')}</div></div>
+ <div class="pv-row" style="align-items:flex-start;flex-direction:column;gap:8px">
+  <div class="pv-l">${he?'מעגל אמון:':'Circle of trust:'}</div>
+  <div class="cm-circ-move">${circlesNamed().length
+    ? circlesNamed().map(cc=>`<button class="circ-chip${cc.id===m.cid?' cur':''}" data-mv="${cc.id}">${ESC(cc.name)}</button>`).join('')
+    : `<span class="circ-none">${he?'עדיין אין מעגלים':'No circles yet'}</span>`}</div>
+ </div>
  <div class="cm-actions">
- <button class="cm-act" data-a="rename">✏️ ${he?'שנה/י שם':'Rename'}</button>
- <button class="cm-act" data-a="sos"> ${he?'הדמה SOS':'Simulate SOS'}</button>
- <button class="cm-act danger" data-a="remove"> ${he?'הסר/י':'Remove'}</button>
+  <button class="btn-secondary" data-a="rename">${he?'שנה/י שם':'Rename'}</button>
+  <button class="btn-danger" data-a="remove">${he?'הסר/י שומר':'Remove guardian'}</button>
  </div>`;
  priv.querySelectorAll('.tog').forEach(t=>{
  t.onclick=(e)=>{e.stopPropagation();const k=t.getAttribute('data-k');m[k]=!m[k];t.classList.toggle('on',m[k]);saveStore();renderCircles();};
  });
  priv.querySelector('[data-a="rename"]').onclick=(e)=>{e.stopPropagation();const nn=prompt(he?'שם חדש עבור '+m.name+':':'New name for '+m.name+':',m.name);if(nn&&nn.trim()){m.name=nn.trim().substring(0,40);saveStore();renderCircles();toast(he?'✓ השם עודכן':'✓ Renamed','grn');}};
  priv.querySelectorAll('[data-mv]').forEach(b=>{b.onclick=(e)=>{e.stopPropagation();const tc=b.getAttribute('data-mv');if(tc===m.cid)return;m.cid=tc;saveStore();renderCircles();toast(he?'✓ הועבר/ה למעגל אחר':'✓ Moved to another circle','grn');};});
- priv.querySelector('[data-a="sos"]').onclick=(e)=>{e.stopPropagation();memberSOS(m.id);};
  priv.querySelector('[data-a="remove"]').onclick=(e)=>{e.stopPropagation();removeMember(m.id);};
  row.querySelector('.cm-main').onclick=()=>{priv.style.display=priv.style.display==='none'?'block':'none';};
  row.querySelector('.cm-main').style.cursor='pointer';
@@ -7041,6 +7106,10 @@ function gdFillIdentity(inv){
       }
     };
   }
+  try{
+    var host=document.getElementById('gd-stranger');
+    if(host) host.innerHTML=strangerWarning(nm, ph);
+  }catch(e){}
 }
 function gdLoadInvite(token){
   try{
@@ -7760,7 +7829,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v134';
+var APP_VER='v135';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -9051,14 +9120,9 @@ function statsRadius(total, max){
   return 900 + t*5200;                          // metres — an AREA, not a point
 }
 async function statsToggle(){
-  var he=currentLang==='he';
-  if(STATS.on){ statsClear(); STATS.on=false; statsLegPaint(); return; }
-  var d=await statsLoad();
-  if(!d||!d.cities||!d.cities.length){
-    toast(he?'לא ניתן לטעון נתוני משטרה':'Could not load police data','amb'); return;
-  }
-  statsRender(); STATS.on=true; statsLegPaint();
-  toast(he?('נתוני משטרת ישראל · '+d.period):('Israel Police · '+d.period),'grn');
+  STATS.on=!STATS.on;
+  try{ if(STATS.on){ statsRender(); } else { statsClear(); } }catch(e){}
+  statsLegPaint();
 }
 function statsClear(){
   try{ STATS.layer.forEach(function(l){ MAP.removeLayer(l); }); }catch(e){}
@@ -9101,10 +9165,14 @@ function statsAutoOn(){
   statsLoad().then(function(d){ if(d && STATS.on) statsRender(); statsLegPaint(); });
 }
 function statsLegPaint(){
-  var b=document.getElementById('leg-stats-st');
-  if(b){ b.innerHTML = STATS.on ? "<svg class=\"eye\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linecap=\"round\"><path d=\"M2 12s3.6-6.5 10-6.5c1.5 0 2.9.35 4.1.9M22 12s-3.6 6.5-10 6.5c-1.5 0-2.9-.35-4.1-.9\"/><path d=\"M4 4l16 16\"/></svg>" : "<svg class=\"eye\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linecap=\"round\"><path d=\"M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12Z\"/><circle cx=\"12\" cy=\"12\" r=\"2.6\"/></svg>"; b.setAttribute("aria-label", STATS.on ? (currentLang==="he"?"הסתר":"Hide") : (currentLang==="he"?"הצג":"Show")); }
-  var sec=document.getElementById('leg-stats-sec');
-  if(sec) sec.classList.toggle('dim', !STATS.on);
+  var b=document.getElementById('leg-stats-st'); if(!b) return;
+  var he=currentLang==='he';
+  b.className='leg-eye'+(STATS.on?' on':'');
+  b.innerHTML = STATS.on
+    ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.7-6.6 10-6.6S22 12 22 12s-3.7 6.6-10 6.6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.7"/></svg>'
+    : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.6 6.1A9.7 9.7 0 0 1 12 6c6.3 0 10 6 10 6a17 17 0 0 1-2.6 3.3M6.2 6.9A17 17 0 0 0 2 12s3.7 6.6 10 6.6c1.6 0 3-.3 4.2-.8"/><path d="M4 4l16 16"/></svg>';
+  b.setAttribute('aria-label', STATS.on ? (he?'הסתר נתונים':'Hide data') : (he?'הצג נתונים':'Show data'));
+  b.setAttribute('aria-pressed', STATS.on ? 'true' : 'false');
 }
 function _statsLegPaintOld(){
   var el=document.getElementById('leg-stats');
@@ -10421,10 +10489,7 @@ body.aed-placing #map{cursor:crosshair}
 .ob-agree-row a{color:var(--g3)}
 
 /* guardian count — TOP-LEFT, directly above the map legend. Never near the SOS button. */
-.map-count{position:absolute;top:calc(var(--hdr-top,0px) + var(--hdr) + 10px);left:10px;z-index:401;
-  display:flex;align-items:center;gap:6px;background:rgba(10,16,26,.94);backdrop-filter:blur(16px);
-  -webkit-backdrop-filter:blur(16px);border:1px solid var(--b3);border-radius:999px;padding:6px 11px;
-  font-size:12px;font-weight:800;color:var(--tx1);box-shadow:var(--e2);pointer-events:none}
+
 .map-count b{color:var(--g3)}
 .map-count .mc-dot{width:7px;height:7px;border-radius:50%;background:#3DDC97;flex:0 0 auto}
 
@@ -10595,7 +10660,7 @@ body.aed-placing #map{cursor:crosshair}
 
 /* legend must never reach the SOS button zone (bottom 34-128px) */
 
-.map-legend.collapsed{max-height:44px!important;overflow:hidden!important}
+
 .map-legend::-webkit-scrollbar{width:3px}
 .map-legend::-webkit-scrollbar-thumb{background:rgba(201,168,76,.4);border-radius:3px}
 
@@ -10652,31 +10717,121 @@ html[dir="rtl"] .sh-back svg{transform:scaleX(-1)}
 /* ══ MAP INDEX ══
    Was a tall column down the side. Now a WIDE panel across the top of the map: three columns,
    scannable at a glance, centred in every language, and nowhere near the SOS button. */
-.map-legend{position:absolute;top:calc(var(--hdr-top,0px) + var(--hdr) + 46px);left:8px;right:8px;
-  z-index:600;background:rgba(10,22,40,.93);border:1px solid rgba(201,168,76,.28);border-radius:14px;
-  backdrop-filter:blur(10px);box-shadow:0 10px 30px rgba(0,0,0,.5);max-width:620px;margin-inline:auto;overflow:hidden}
-.legend-hd{width:100%;display:flex;align-items:center;gap:8px;padding:10px 12px;background:none;border:0;
-  color:var(--g3);font-family:inherit;font-weight:900;font-size:12.5px;cursor:pointer}
+
+
 .legend-hd .ic{width:16px;height:16px}
-.legend-chev{margin-inline-start:auto;transition:transform .2s;font-size:12px;color:var(--tx3)}
-.map-legend:not(.collapsed) .legend-chev{transform:rotate(90deg)}
-.map-legend.collapsed .legend-body{display:none}
-.legend-body{padding:0 12px 12px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.leg-sec{min-width:0}
-.leg-sec-h{font-size:9.5px;font-weight:900;color:var(--tx3);letter-spacing:.03em;margin-bottom:6px;
-  padding-bottom:4px;border-bottom:1px solid rgba(255,255,255,.07);line-height:1.3}
-.stat-key{display:flex;flex-direction:column;gap:4px}
-.stat-key span{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--tx2);white-space:nowrap}
-.sk{width:9px;height:9px;border-radius:50%;flex:0 0 auto}
-.legend-foot{grid-column:1/-1;font-size:8px;color:var(--tx3);margin-top:2px;padding-top:6px;
-  border-top:1px solid rgba(255,255,255,.07);line-height:1.45;text-align:center}
+
+
+
 @media(max-width:560px){
-  .legend-body{grid-template-columns:repeat(2,1fr)}
-  .map-legend{top:calc(var(--hdr-top,0px) + var(--hdr) + 42px)}
+  
+  
 }
 /* guardian count banner — centred in every language */
-.map-count{left:0!important;right:0!important;margin-inline:auto!important;width:max-content!important;
-  max-width:90vw;text-align:center}
+
+
+/* ══ MAP INDEX ══
+   CLOSED: a small centred pill — it must not span the screen or cover the map controls.
+   OPEN:   a compact panel capped at 25% of the map height, scrollable inside. */
+.map-legend{position:absolute;top:calc(var(--hdr-top,0px) + var(--hdr) + 8px);
+  left:50%;transform:translateX(-50%);z-index:600;
+  background:rgba(10,22,40,.94);border:1px solid rgba(201,168,76,.3);border-radius:12px;
+  backdrop-filter:blur(10px);box-shadow:0 8px 24px rgba(0,0,0,.5);overflow:hidden;
+  width:max-content;max-width:min(560px,calc(100% - 76px))}
+.map-legend.collapsed{width:max-content}
+.legend-hd{display:flex;align-items:center;gap:6px;padding:7px 12px;background:none;border:0;
+  color:var(--g3);font-family:inherit;font-weight:800;font-size:11.5px;cursor:pointer;white-space:nowrap}
+.legend-hd .ic{width:13px;height:13px;flex:0 0 auto}
+.legend-chev{margin-inline-start:2px;font-size:10px;color:var(--tx3);transition:transform .2s}
+.map-legend:not(.collapsed) .legend-chev{transform:rotate(90deg)}
+.map-legend:not(.collapsed){width:min(560px,calc(100% - 76px))}
+.map-legend.collapsed .legend-body{display:none}
+.legend-body{padding:0 10px 9px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;
+  max-height:22vh;overflow-y:auto}
+.leg-sec{min-width:0}
+.leg-sec-h{font-size:8.5px;font-weight:900;color:var(--g3);letter-spacing:.02em;margin-bottom:4px;
+  padding-bottom:3px;border-bottom:1px solid rgba(201,168,76,.2);line-height:1.25}
+.stat-key{display:flex;flex-direction:column;gap:3px}
+.stat-key span{display:flex;align-items:center;gap:4px;font-size:9px;color:var(--tx2);line-height:1.2}
+.sk{width:7px;height:7px;border-radius:50%;flex:0 0 auto}
+.legend-foot{grid-column:1/-1;font-size:7.5px;color:var(--tx3);margin-top:1px;padding-top:5px;
+  border-top:1px solid rgba(255,255,255,.06);line-height:1.4;text-align:center}
+@media(max-width:560px){ .legend-body{grid-template-columns:repeat(2,1fr);max-height:24vh} }
+
+.shm-live{margin-inline-start:auto;font-size:10px;font-weight:700;color:var(--tx3)}
+.shm-h{display:flex;align-items:center}
+
+.leg-eye{background:var(--n3);border:1px solid var(--b2);border-radius:50%;width:24px;height:24px;
+  display:inline-flex;align-items:center;justify-content:center;color:var(--tx3);cursor:pointer;padding:0;flex:0 0 auto}
+.leg-eye.on{background:rgba(224,168,40,.14);border-color:rgba(224,168,40,.5);color:var(--g3)}
+.leg-eye svg{width:13px;height:13px}
+
+.cot-ask{position:fixed;inset:0;z-index:100010;background:rgba(3,8,18,.72);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:20px}
+.cot-ask-c{background:linear-gradient(160deg,#101E34,#0A1628);border:1px solid rgba(201,168,76,.35);border-radius:20px;padding:22px;max-width:340px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.7)}
+.cot-ask-t{font-size:17px;font-weight:900;color:var(--g3);margin-bottom:8px}
+.cot-ask-s{font-size:13px;color:var(--tx2);line-height:1.6;margin-bottom:18px}
+
+/* ══ 3SDS BUTTON SYSTEM — one look, everywhere. No exceptions. ══ */
+.btn-primary{width:100%;padding:14px;border-radius:999px;border:0;
+  background:linear-gradient(135deg,#C09020 0%,#E0A828 60%,#F5C840 100%);color:#23170a;
+  font-family:inherit;font-weight:900;font-size:15px;cursor:pointer;transition:transform .1s}
+.btn-primary:active{transform:scale(.98)}
+.btn-secondary{width:100%;padding:13px;border-radius:999px;border:1px solid var(--b2);
+  background:var(--n3);color:var(--tx1);font-family:inherit;font-weight:800;font-size:14px;cursor:pointer}
+.btn-ghost{width:100%;padding:12px;border-radius:999px;border:0;background:transparent;
+  color:var(--tx3);font-family:inherit;font-weight:700;font-size:13.5px;cursor:pointer;margin-top:6px}
+.btn-danger{width:100%;padding:13px;border-radius:999px;border:1px solid rgba(229,72,77,.4);
+  background:rgba(229,72,77,.1);color:#E5484D;font-family:inherit;font-weight:800;font-size:14px;cursor:pointer}
+/* icon buttons — always a circle, always the same */
+.ibtn{width:38px;height:38px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
+  background:var(--n3);border:1px solid var(--b2);color:var(--tx2);cursor:pointer;padding:0;flex:0 0 auto;transition:.12s}
+.ibtn:active{transform:scale(.92)}
+.ibtn svg{width:17px;height:17px}
+.ibtn.on{background:rgba(224,168,40,.14);border-color:rgba(224,168,40,.5);color:var(--g3)}
+.ibtn.danger{color:#E5484D;border-color:rgba(229,72,77,.35)}
+/* the add-guardian button inherits the system */
+.agf-add{width:100%;padding:14px;border-radius:999px;border:0;
+  background:linear-gradient(135deg,#C09020 0%,#E0A828 60%,#F5C840 100%);color:#23170a;
+  font-family:inherit;font-weight:900;font-size:15px;cursor:pointer}
+
+.cm-circ-move{display:flex;gap:6px;flex-wrap:wrap;width:100%}
+.circ-chip{padding:7px 13px;border-radius:999px;border:1px solid var(--b2);background:var(--n3);
+  color:var(--tx2);font-family:inherit;font-weight:800;font-size:12px;cursor:pointer;transition:.12s}
+.circ-chip.cur{background:linear-gradient(135deg,#C09020,#E0A828 60%,#F5C840);border-color:transparent;color:#23170a}
+.circ-none{font-size:12px;color:var(--tx3)}
+.cm-actions{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+
+/* ══ SETTINGS — compact. Every row smaller, less scrolling, no wasted vertical space. ══ */
+#sh-set .set-row{padding:10px 12px!important;margin-bottom:6px!important;border-radius:11px!important;
+  background:var(--n2)!important;border:1px solid var(--b2)!important;min-height:0!important}
+#sh-set .sr{padding:10px 12px!important;margin-bottom:6px!important;border-radius:11px!important;min-height:0!important}
+#sh-set .sr-nm{font-size:13px!important;font-weight:700!important;line-height:1.25!important}
+#sh-set .sr-sb{font-size:10.5px!important;line-height:1.35!important;margin-top:1px!important}
+#sh-set .sr-ic{width:30px!important;height:30px!important;flex:0 0 30px!important;
+  background:none!important;border:0!important;border-radius:0!important}
+#sh-set .sr-ic .ic,#sh-set .sr-ic svg{width:18px!important;height:18px!important;color:var(--g3)!important}
+#sh-set .set-sec-h{font-size:10px!important;font-weight:900!important;letter-spacing:.06em!important;
+  color:var(--g3)!important;margin:14px 0 6px!important;padding:0!important;border:0!important}
+#sh-set .sh-body{padding-bottom:24px!important}
+#sh-set .set-note,#sh-set .desc{font-size:11px!important;line-height:1.45!important;color:var(--tx3)!important;margin:4px 0 8px!important}
+#sh-set .tog{transform:scale(.88)}
+
+/* ══ ICON SYSTEM — one look for every icon in the app ══ */
+.ddr{display:flex!important;align-items:center!important;gap:13px!important;padding:12px 15px!important}
+.ddr svg,.ddr .ic,.ddr .dd-ic{width:19px!important;height:19px!important;flex:0 0 19px!important;
+  color:var(--g3)!important;stroke-width:1.8!important;fill:none!important;
+  background:none!important;border:0!important;border-radius:0!important;padding:0!important;box-shadow:none!important}
+.ddr span{font-size:13.5px!important;font-weight:600!important}
+.sr-ic,.dd-ic,.sec-ic,.ic-box{background:none!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+
+@keyframes splashIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+#splash.gone{opacity:0;pointer-events:none}
+
+.stranger-warn{display:flex;gap:10px;align-items:flex-start;background:rgba(224,168,40,.1);
+  border:1px solid rgba(224,168,40,.45);border-radius:13px;padding:12px;margin:10px 0}
+.stranger-warn svg{width:18px;height:18px;color:#E0A828;flex:0 0 auto;margin-top:1px}
+.stranger-warn b{display:block;font-size:12.5px;font-weight:900;color:#F5C840;margin-bottom:2px}
+.stranger-warn span{display:block;font-size:11.5px;color:var(--tx2);line-height:1.5}
 </style>
 <script src="native-bridge.js"></script>
 </body>
