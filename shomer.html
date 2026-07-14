@@ -7831,7 +7831,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v136';
+var APP_VER='v137';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -8859,6 +8859,169 @@ function showSignalTicker(s){
   document.body.appendChild(t);
   try{ if(navigator.vibrate) navigator.vibrate(120); }catch(e){}
   setTimeout(function(){ t.classList.add('out'); setTimeout(function(){t.remove();}, 400); }, 6000);
+}
+/* the report sheet */
+function openReport(){
+  var he=currentLang==='he';
+  var old=document.getElementById('rep-sheet'); if(old) old.remove();
+  var d=document.createElement('div'); d.id='rep-sheet'; d.className='rep-sheet';
+  var btns=Object.keys(EVT.TYPES).map(function(k){
+    var t=EVT.TYPES[k];
+    return '<button class="rep-type" data-t="'+k+'"><span class="rep-ic">'+t.ic+'</span><span>'+t.he+'</span></button>';
+  }).join('');
+  d.innerHTML='<div class="rep-card">'
+    +'<div class="rep-h">'+(he?'דיווח על אירוע':'Report an event')+'</div>'
+    +'<div class="rep-sub">'+(he?'הדיווח נשלח קודם לשומרים שלך. יתפרסם לאזור רק אחרי שכנים שיאשרו.':'Goes to your guardians first. Area-wide only after neighbours confirm.')+'</div>'
+    +'<div class="rep-grid">'+btns+'</div>'
+    +'<textarea class="rep-note" id="rep-note" maxlength="140" placeholder="'+(he?'פרטים (לא חובה)':'Details (optional)')+'"></textarea>'
+    +'<button class="btn-ghost rep-close">'+(he?'ביטול':'Cancel')+'</button>'
+    +'</div>';
+  document.body.appendChild(d);
+  var chosen=null;
+  d.querySelectorAll('.rep-type').forEach(function(b){
+    b.onclick=function(){
+      chosen=b.getAttribute('data-t');
+      var note=(document.getElementById('rep-note')||{}).value||'';
+      evtCreate(chosen, note).then(function(ok){ if(ok) d.remove(); });
+    };
+  });
+  d.querySelector('.rep-close').onclick=function(){ d.remove(); };
+}
+function evtRenderMine(){ /* re-render map events layer if present */ try{ if(typeof renderEvents==='function') renderEvents(); }catch(e){} }
+
+/* founder badge — verifiable, and only ever on the founder's own profile */
+var FOUNDER_UID='';   /* set once, server-side value; empty = nobody shows the badge */
+function isFounder(){ return FOUNDER_UID && FB.uid===FOUNDER_UID; }
+function founderBadgeHTML(){
+  if(!isFounder()) return '';
+  var he=currentLang==='he';
+  return '<span class="founder-badge" title="'+(he?'מייסד SH✡MER':'Founder of SH✡MER')+'">'
+    +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 6.9H21l-5.6 4.1 2.2 6.9L12 15.8 6.4 20l2.2-6.9L3 8.9h6.6Z"/></svg>'
+    +(he?'מייסד':'Founder')+'</span>';
+}
+/* ══ COMMUNITY EVENTS — safe by design ══
+   A community report is the most abusable surface in the app: one bad actor could spark panic
+   or dispatch. So a report is NOT a broadcast. It is a claim that must EARN its reach.
+
+   Trust ladder (reach grows only with corroboration + reputation):
+     • A new report is PRIVATE to the reporter's own guardians. Nobody else sees it.
+     • It goes NEIGHBOURHOOD-WIDE only after N independent nearby users CONFIRM it.
+     • High-severity types (weapon / active threat) require MORE confirmations, never fewer.
+     • Every event can be DISPUTED; disputes throttle reach and flag the reporter.
+     • Reputation costs TIME: new accounts have low reach; confirmed-accurate reports raise it,
+       confirmed-false reports shadow-limit it (reach only — never the reporter's own SOS).
+     • Rate limits + cooldowns stop flooding.
+   This is enforced on read (who is shown what) as well as on write. */
+var EVT = {
+  TYPES: {
+    suspicious: {he:'אדם חשוד',      sev:1, ic:'👁', need:3},
+    harass:     {he:'הטרדה',         sev:2, ic:'⚠', need:3},
+    theft:      {he:'גניבה / פריצה', sev:2, ic:'🔓', need:2},
+    violence:   {he:'אלימות',        sev:3, ic:'✊', need:3},
+    weapon:     {he:'נשק / איום',    sev:4, ic:'🔴', need:4},
+    hazard:     {he:'מפגע / סכנה',   sev:1, ic:'△', need:2},
+    fire:       {he:'שריפה',         sev:3, ic:'🔥', need:2},
+    medical:    {he:'מצוקה רפואית',  sev:3, ic:'✚', need:1}
+  },
+  NEIGH_M: 1500          /* a confirmation only counts if the confirmer is within 1.5 km */
+};
+
+/* ── reputation: a time-earned score, never a paywall ── */
+function repState(){ if(!SS.rep) SS.rep={score:0, made:0, confirmedTrue:0, confirmedFalse:0, since:Date.now()}; return SS.rep; }
+function repTier(){
+  var r=repState();
+  var ageDays=(Date.now()-r.since)/86400000;
+  /* new accounts start low; trust accrues with clean history AND time */
+  if(r.confirmedFalse>=3) return 0;                       /* shadow-limited */
+  if(r.confirmedTrue>=5 && ageDays>=14) return 3;         /* trusted */
+  if(r.confirmedTrue>=2 && ageDays>=3)  return 2;         /* established */
+  if(ageDays>=1) return 1;                                /* basic */
+  return 0;                                               /* brand new */
+}
+function evtCanPost(){
+  var r=repState();
+  var now=Date.now();
+  r._posts=(r._posts||[]).filter(function(t){return now-t<3600000;});   /* 1h window */
+  var cap = [1,3,6,10][repTier()];                        /* tier caps hourly reports */
+  return r._posts.length < cap;
+}
+function evtCooldownLeft(){
+  var r=repState(); var last=(r._posts&&r._posts.length)?r._posts[r._posts.length-1]:0;
+  var cd=[300,120,60,30][repTier()]*1000;                 /* seconds between reports by tier */
+  return Math.max(0, cd-(Date.now()-last));
+}
+
+/* ── create a report (private first — reach is earned) ── */
+async function evtCreate(type, note){
+  var he=currentLang==='he';
+  if(!FB.ready||!FB.uid){ toast(he?'אין חיבור':'No connection','amb'); return; }
+  if(!SS.user||!SS.user.phoneVerified){ toast(he?'צריך אימות טלפון כדי לדווח':'Phone verification required','amb'); return; }
+  if(!evtCanPost()){ toast(he?'הגעת למכסת הדיווחים לשעה':'Hourly report limit reached','amb'); return; }
+  var cd=evtCooldownLeft();
+  if(cd>0){ toast(he?('המתן/י '+Math.ceil(cd/1000)+' שניות'):('Wait '+Math.ceil(cd/1000)+'s'),'amb'); return; }
+  var p=(typeof myPos!=='undefined'&&myPos&&myPos.lat)?myPos:null;
+  if(!p){ toast(he?'צריך מיקום כדי לדווח':'Location needed to report','amb'); return; }
+  var spec=EVT.TYPES[type]||EVT.TYPES.suspicious;
+  var id='e_'+FB.uid.slice(0,10)+'_'+Date.now().toString(36);
+  var ev={
+    by:FB.uid, byName:(SS.user&&SS.user.name)||'', ts:Date.now(),
+    type:type, sev:spec.sev, lat:+p.lat.toFixed(4), lng:+p.lng.toFixed(4),
+    note:String(note||'').slice(0,140),
+    need:spec.need,            /* confirmations required to go community-wide */
+    tier:repTier(),
+    status:'pending'           /* pending → confirmed → (or) disputed */
+  };
+  var ok=false;
+  try{ var w=await fbRestWrite('PUT','events/'+id, ev); ok=(w!==false); }catch(e){}
+  if(ok){
+    var r=repState(); r.made=(r.made||0)+1; r._posts=(r._posts||[]); r._posts.push(Date.now()); saveStore();
+    toast(he?'הדיווח נשלח לשומרים שלך. יתפרסם לאזור רק לאחר אישור של שכנים.':'Sent to your guardians. Goes area-wide only after neighbours confirm.','grn');
+    try{ evtRenderMine(); }catch(e){}
+  } else {
+    toast(he?'הדיווח לא נשלח':'Report not sent','amb');
+  }
+  return ok;
+}
+
+/* ── confirm / dispute (only counts from a real nearby neighbour) ── */
+async function evtConfirm(id, ev){
+  var he=currentLang==='he';
+  if(!FB.ready||!FB.uid) return;
+  if(ev && ev.by===FB.uid){ toast(he?'אי אפשר לאשר דיווח שלך':'Cannot confirm your own report','amb'); return; }
+  var p=(typeof myPos!=='undefined'&&myPos&&myPos.lat)?myPos:null;
+  if(!p || !ev || haversineM(p.lat,p.lng,ev.lat,ev.lng)>EVT.NEIGH_M){
+    toast(he?'צריך להיות קרוב לאירוע כדי לאשר':'You must be near the event to confirm','amb'); return;
+  }
+  try{ await fbRestWrite('PUT','events/'+id+'/confirms/'+FB.uid,{ts:Date.now(),lat:+p.lat.toFixed(3),lng:+p.lng.toFixed(3)}); }catch(e){}
+  toast(he?'✓ אישרת':'✓ Confirmed','grn');
+}
+async function evtDispute(id, ev){
+  var he=currentLang==='he';
+  if(!FB.ready||!FB.uid) return;
+  if(ev && ev.by===FB.uid) return;
+  try{ await fbRestWrite('PUT','events/'+id+'/disputes/'+FB.uid,{ts:Date.now()}); }catch(e){}
+  toast(he?'סומן כלא מדויק':'Marked as inaccurate','');
+}
+
+/* ── the gate: is this event allowed to be shown to me? ── */
+function evtVisibleToMe(ev, id){
+  if(!ev) return false;
+  if(ev.by===FB.uid) return true;                       /* my own report — always */
+  if(isGuardianOf(ev.by)) return true;                  /* the reporter's guardian — always */
+  var confirms=ev.confirms?Object.keys(ev.confirms).length:0;
+  var disputes=ev.disputes?Object.keys(ev.disputes).length:0;
+  if(disputes>=confirms && disputes>0) return false;    /* contested → suppressed */
+  var need=ev.need||3;
+  return confirms>=need;                                /* community-wide only once corroborated */
+}
+function isGuardianOf(uid){
+  try{ return (gdState().pairs||[]).some(function(p){return p.partnerUid===uid && !p.pending;}); }catch(e){ return false; }
+}
+function haversineM(la1,lo1,la2,lo2){
+  var R=6371000,r=Math.PI/180;
+  var dLa=(la2-la1)*r,dLo=(lo2-lo1)*r;
+  var a=Math.sin(dLa/2)*Math.sin(dLa/2)+Math.cos(la1*r)*Math.cos(la2*r)*Math.sin(dLo/2)*Math.sin(dLo/2);
+  return 2*R*Math.asin(Math.min(1,Math.sqrt(a)));
 }
 /* ══ ROTATING SOS CHANNEL ══
    The SOS broadcast key is sos_<uid>_<salt>. The salt is a per-victim secret held only by the
@@ -10884,6 +11047,19 @@ html[dir="rtl"] .sh-back svg{transform:scaleX(-1)}
 .stranger-warn svg{width:18px;height:18px;color:#E0A828;flex:0 0 auto;margin-top:1px}
 .stranger-warn b{display:block;font-size:12.5px;font-weight:900;color:#F5C840;margin-bottom:2px}
 .stranger-warn span{display:block;font-size:11.5px;color:var(--tx2);line-height:1.5}
+
+.rep-sheet{position:fixed;inset:0;z-index:100010;background:rgba(3,8,18,.75);backdrop-filter:blur(4px);display:flex;align-items:flex-end;justify-content:center;padding:0}
+.rep-card{background:linear-gradient(160deg,#101E34,#0A1628);border:1px solid rgba(201,168,76,.3);border-radius:22px 22px 0 0;padding:22px 18px calc(22px + env(safe-area-inset-bottom,0px));max-width:520px;width:100%;box-shadow:0 -12px 40px rgba(0,0,0,.6)}
+.rep-h{font-size:18px;font-weight:900;color:var(--g3);margin-bottom:5px}
+.rep-sub{font-size:12px;color:var(--tx2);line-height:1.5;margin-bottom:16px}
+.rep-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:14px}
+.rep-type{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 4px;border-radius:13px;border:1px solid var(--b2);background:var(--n2);color:var(--tx1);font-family:inherit;font-weight:800;font-size:10.5px;cursor:pointer;transition:.12s}
+.rep-type:active{transform:scale(.95);border-color:var(--g3)}
+.rep-ic{font-size:22px}
+.rep-note{width:100%;padding:12px;border-radius:12px;border:1px solid var(--b2);background:var(--n3);color:var(--tx0);font-family:inherit;font-size:13.5px;resize:none;height:64px;margin-bottom:10px}
+.rep-note::placeholder{color:var(--tx3)}
+.founder-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:900;color:#23170a;background:linear-gradient(135deg,#C09020,#E0A828 60%,#F5C840);padding:4px 11px;border-radius:999px;letter-spacing:.02em}
+.founder-badge svg{width:13px;height:13px}
 </style>
 <script src="native-bridge.js"></script>
 </body>
