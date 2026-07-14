@@ -4853,9 +4853,9 @@ function meIcon(){
  // Ghost mode (sharing paused) takes visual priority over the profession badge.
  const badge=SS.circleGhost?`<div class="mk-me-badge" title="ghost">${ic('eye-off')}</div>`:(p?`<div class="mk-me-badge" title="${p.icon}">${ic(p.icon)}</div>`:'');
  return window.L.divIcon({className:'shomer-marker mk3',
- html:`<div class="mk-me-wrap">${markerSVG('me')}${badge}</div>`,iconSize:[42,42],iconAnchor:[21,21]});}
+ html:`<div class="mk-me-wrap">${markerSVG('me')}${badge}${isFounder()?('<span class="mk-emb">'+founderCrestSVG(30)+'</span>'):''}</div>`,iconSize:[42,42],iconAnchor:[21,21]});}
 /* Refresh the live "me" marker icon (e.g. after a profession change). */
-function refreshMeMarker(){if(mapLayers.meMarker)mapLayers.meMarker.setIcon(meIcon());}
+function refreshMeMarker(){ try{ paintHdrFounder(); }catch(e){}if(mapLayers.meMarker)mapLayers.meMarker.setIcon(meIcon());}
 
 const STAT_NOTE_EN={
  theft:'Property crime & theft is among the most-reported categories in this district (Israel Police, data.gov.il).',
@@ -7003,7 +7003,7 @@ function gdPos(p){ if(gdIsLive(p)) return [p.lat,p.lng]; if(p.lat!=null&&p.lng!=
 /* ── Map markers ── */
 function guardianIcon(p,live){
  return window.L.divIcon({className:'shomer-marker',
- html:`<div class="mk-circle${live?' live':''}${uidIsFounder(p)?' founder':''}" style="--cc:${p.color||'#C9A84C'}">${uidIsFounder(p)?('<span class="mk-founder-crown">'+founderCrestSVG(26)+'</span>'):''}${live?'<div class="tag">LIVE</div>':''}<div class="pulse"></div><div class="av"></div><div class="nm">${ESC(p.name||(currentLang==='he'?'שומר/ת':'SHOMER'))}</div></div>`,
+ html:`<div class="mk-circle${live?' live':''}${uidIsFounder(p)?' founder':''}" style="--cc:${p.color||'#C9A84C'}">${uidIsFounder(p)?('<span class="mk-emb">'+founderCrestSVG(28)+'</span>'):''}${live?'<div class="tag">LIVE</div>':''}<div class="pulse"></div><div class="av"></div><div class="nm">${ESC(p.name||(currentLang==='he'?'שומר/ת':'SHOMER'))}</div></div>`,
  iconSize:[38,38],iconAnchor:[19,19],popupAnchor:[0,-20]});
 }
 function gdUpdateMarker(p){
@@ -7846,7 +7846,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v147';
+var APP_VER='v148';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -8952,26 +8952,37 @@ function founderWatchList(){
   }catch(e){}
 }
 function founderCrestSVG(size){
-  var s=size||22;
-  return '<svg class="fc-svg" viewBox="0 0 32 34" width="'+s+'" height="'+(s*34/32)+'" aria-hidden="true">'
-    +'<defs><linearGradient id="fcGold" x1="0" y1="0" x2="1" y2="1">'
-    +'<stop offset="0" stop-color="#F7D66A"/><stop offset=".5" stop-color="#E0A828"/><stop offset="1" stop-color="#A9741A"/></linearGradient>'
-    +'<linearGradient id="fcCrown" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FCE38A"/><stop offset="1" stop-color="#D69A1E"/></linearGradient></defs>'
-    /* crown */
-    +'<path d="M8 7.5L11 3.5L16 6.5L21 3.5L24 7.5L22.5 11H9.5Z" fill="url(#fcCrown)" stroke="#7A4E12" stroke-width=".5" stroke-linejoin="round"/>'
-    +'<circle cx="11" cy="3.5" r="1.4" fill="#FCE38A" stroke="#7A4E12" stroke-width=".4"/>'
-    +'<circle cx="16" cy="6.2" r="1.5" fill="#FCE38A" stroke="#7A4E12" stroke-width=".4"/>'
-    +'<circle cx="21" cy="3.5" r="1.4" fill="#FCE38A" stroke="#7A4E12" stroke-width=".4"/>'
-    /* star of david */
-    +'<path d="M16 12.5L19.6 18.7H12.4ZM16 26.5L12.4 20.3H19.6Z" fill="url(#fcGold)" stroke="#7A4E12" stroke-width=".7" stroke-linejoin="round"/>'
-    +'<path d="M11 15.6H21L16 24.4ZM11 22.9H21L16 14.1Z" fill="none" stroke="url(#fcGold)" stroke-width="1.7" stroke-linejoin="round"/></svg>';
+  var s=size||64;
+  return '<svg class="fc-emb" viewBox="0 0 64 64" width="'+s+'" height="'+s+'" aria-hidden="true">'
+    +'<defs>'
+    +'<radialGradient id="fcAura" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#F7D66A" stop-opacity=".55"/><stop offset="55%" stop-color="#E0A828" stop-opacity=".18"/><stop offset="100%" stop-color="#E0A828" stop-opacity="0"/></radialGradient>'
+    +'<linearGradient id="fcRim" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FCE79A"/><stop offset=".5" stop-color="#D69A1E"/><stop offset="1" stop-color="#8A5D12"/></linearGradient>'
+    +'<linearGradient id="fcStar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FDEBA6"/><stop offset=".5" stop-color="#E7B434"/><stop offset="1" stop-color="#B8801C"/></linearGradient>'
+    +'</defs>'
+    /* aura */
+    +'<circle cx="32" cy="32" r="31" fill="url(#fcAura)"/>'
+    /* medallion rim */
+    +'<circle cx="32" cy="32" r="24" fill="#0A1628" stroke="url(#fcRim)" stroke-width="2.4"/>'
+    +'<circle cx="32" cy="32" r="20.5" fill="none" stroke="rgba(224,168,40,.35)" stroke-width=".7"/>'
+    /* laurel — left + right sprigs */
+    +'<g stroke="url(#fcRim)" stroke-width="1.4" fill="none" stroke-linecap="round" opacity=".9">'
+    +'<path d="M15 44 Q12 34 16 25"/><path d="M15.5 40 Q12.5 40 11 37"/><path d="M15 36 Q12 36 10.5 33"/><path d="M15 32 Q12.2 32 11 29"/><path d="M15.5 28 Q13 28 12 25.5"/>'
+    +'<path d="M49 44 Q52 34 48 25"/><path d="M48.5 40 Q51.5 40 53 37"/><path d="M49 36 Q52 36 53.5 33"/><path d="M49 32 Q51.8 32 53 29"/><path d="M48.5 28 Q51 28 52 25.5"/>'
+    +'</g>'
+    /* Star of David — two interlaced triangles */
+    +'<g fill="none" stroke="url(#fcStar)" stroke-width="2.6" stroke-linejoin="round">'
+    +'<path d="M32 19 L43 38 L21 38 Z"/>'
+    +'<path d="M32 45 L21 26 L43 26 Z"/>'
+    +'</g>'
+    +'<circle cx="32" cy="32" r="3.1" fill="url(#fcStar)"/>'
+    +'</svg>';
 }
 function founderBadgeHTML(rec){
   var show = rec ? uidIsFounder(rec) : isFounder();
   if(!show) return '';
   var he=currentLang==='he';
-  return '<span class="founder-crest" title="'+(he?'מייסד SH✡MER':'Founder of SH✡MER')+'" aria-label="'+(he?'מייסד':'Founder')+'">'
-    + founderCrestSVG(20)
+  return '<span class="founder-crest" title="'+(he?'מייסד SH✡MER':'Founder of SH✡MER')+'">'
+    + founderCrestSVG(46)
     + '<span class="founder-word">'+(he?'מייסד':'FOUNDER')+'</span></span>';
 }
 /* compact crest for the header (icon only) */
@@ -8979,7 +8990,7 @@ function paintHdrFounder(){ var s=document.getElementById('hdr-founder-slot'); i
 function founderHeaderHTML(){
   if(!isFounder()) return '';
   var he=currentLang==='he';
-  return '<button class="hdr-founder" title="'+(he?'מייסד SH✡MER':'Founder')+'" aria-label="'+(he?'מייסד':'Founder')+'" onclick="op(\'sh-profile\')">'+founderCrestSVG(24)+'</button>';
+  return '<button class="hdr-founder" title="'+(he?'מייסד SH✡MER':'Founder')+'" aria-label="'+(he?'מייסד':'Founder')+'" onclick="op(\'sh-profile\')">'+founderCrestSVG(40)+'</button>';
 }
 /* ══ COMMUNITY EVENTS — safe by design ══
    A community report is the most abusable surface in the app: one bad actor could spark panic
@@ -11265,6 +11276,15 @@ html[dir="rtl"] .sh-back svg{transform:scaleX(-1)}
   filter:drop-shadow(0 2px 4px rgba(0,0,0,.6));animation:fcGlow 3s ease-in-out infinite}
 .mk-circle.founder{--cc:#E0A828}
 .mk-circle.founder .pulse{background:rgba(224,168,40,.4)!important}
+
+.founder-crest{display:inline-flex;flex-direction:column;align-items:center;gap:4px;padding:0;background:none;border:0;box-shadow:none}
+.founder-word{font-family:'Cinzel',serif;font-size:11px;font-weight:700;letter-spacing:.14em;
+  background:linear-gradient(135deg,#FDEBA6,#E0A828);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hdr-founder{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:none;border:0;cursor:pointer;padding:0;flex:0 0 auto;animation:fcFloat 3.5s ease-in-out infinite}
+@keyframes fcFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.5px)}}
+.mk-emb{position:absolute;top:-20px;left:50%;transform:translateX(-50%);z-index:6;pointer-events:none;
+  filter:drop-shadow(0 2px 5px rgba(0,0,0,.55))}
 </style>
 <script src="native-bridge.js"></script>
 </body>
