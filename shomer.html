@@ -2086,7 +2086,16 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="prof-opt" data-prof="security" onclick="selectProfession('security')" role="button" tabindex="0"><span class="pic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6l7.4 2.8v5.4c0 4.8-3.1 8.5-7.4 10.4-4.3-1.9-7.4-5.6-7.4-10.4V5.4Z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="M8.8 12.2l2.2 2.2 4.2-4.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="pl" data-pl="security">אבטחה</span></div>
  <div class="prof-opt sel" data-prof="" onclick="selectProfession('')" role="button" tabindex="0"><span class="pic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6.3 6.3l11.4 11.4" fill="none" stroke="currentColor" stroke-width="2"/></svg></span><span class="pl" data-pl="none">ללא</span></div>
  </div>
-<!-- MY SH✡MER inside profile -->
+<!-- defib incentive: responders likely have/know a defib — invite them to add it -->
+   <div class="defib-prompt" id="defib-prompt">
+     <div class="defib-l">
+       <span class="defib-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4.5 13H11l-1 9 8.5-11H12l1-9Z"/></svg></span>
+       <div><div class="defib-t">יש לך גישה לדפיברילטור?</div><div class="defib-s">הוסף/י אותו למפה — כל שנייה קובעת בעצירת לב. יופיע לכל השומרים באזור.</div></div>
+     </div>
+     <button class="btn-secondary defib-add" onclick="cl('sh-profile'); setTimeout(function(){ try{ aedPlaceMode(); }catch(e){} }, 300);">הוסף דפיברילטור למפה</button>
+   </div>
+
+   <!-- MY SH✡MER inside profile -->
 
 
  <div class="sec-cap mb12" id="myrep-cap">הדיווחים שלי</div>
@@ -7832,7 +7841,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v139';
+var APP_VER='v140';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -10952,10 +10961,7 @@ html[dir="rtl"] .sh-back svg{transform:scaleX(-1)}
 
 
 
-@media(max-width:560px){
-  
-  
-}
+
 /* guardian count banner — centred in every language */
 
 
@@ -10969,15 +10975,7 @@ html[dir="rtl"] .sh-back svg{transform:scaleX(-1)}
 
 .map-legend:not(.collapsed) 
 
-.map-legend.collapsed 
 
-
-
-
-
-
-
-@media(max-width:560px){  }
 
 .shm-live{margin-inline-start:auto;font-size:10px;font-weight:700;color:var(--tx3)}
 .shm-h{display:flex;align-items:center}
@@ -11081,7 +11079,7 @@ html[dir="rtl"] .sh-back svg{transform:scaleX(-1)}
 .legend-chev{margin-inline-start:2px;font-size:9px;color:var(--tx3);transition:transform .2s}
 .map-legend:not(.collapsed) .legend-chev{transform:rotate(90deg)}
 .map-legend:not(.collapsed){width:min(520px,calc(100% - 76px))}
-.map-legend.collapsed .legend-body{display:none}
+.map-legend.collapsed 
 /* the open panel: its own darker brand surface, clearly separated from the header */
 .legend-body{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;
   padding:9px 11px 10px;margin-top:2px;
@@ -11119,6 +11117,26 @@ html[dir="rtl"] .sh-back svg{transform:scaleX(-1)}
 .founder-crest svg{width:20px;height:20px;flex:0 0 auto;filter:drop-shadow(0 1px 2px rgba(0,0,0,.4))}
 .founder-word{font-size:10.5px;font-weight:900;letter-spacing:.08em;
   background:linear-gradient(135deg,#F5C840,#E0A828);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+
+/* legend body hidden ONLY when collapsed (not unconditionally) */
+.map-legend.collapsed .legend-body{display:none!important}
+/* emergency-service chips — compact, matches wireframe (was unstyled → giant tiles) */
+.ess-chip{width:100%;display:flex;align-items:center;gap:5px;padding:5px 6px;margin:0;
+  background:rgba(16,30,52,.5);border:1px solid var(--b2);border-radius:8px;
+  color:var(--tx1);font-family:inherit;font-size:8.5px;font-weight:700;cursor:pointer;line-height:1.15;text-align:start}
+.ess-chip.on{border-color:var(--g3);background:rgba(224,168,40,.1)}
+.ec-ic{width:15px;height:15px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;flex:0 0 15px}
+.ec-ic svg{width:9px;height:9px}
+.ec-l{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0}
+.ec-n{font-size:8px;color:var(--tx3);flex:0 0 auto}
+
+.defib-prompt{background:linear-gradient(160deg,rgba(61,187,102,.1),rgba(16,30,52,.6));border:1px solid rgba(61,187,102,.3);border-radius:14px;padding:14px;margin-bottom:20px}
+.defib-l{display:flex;gap:11px;align-items:flex-start;margin-bottom:12px}
+.defib-ic{width:34px;height:34px;border-radius:10px;background:rgba(61,187,102,.15);border:1px solid rgba(61,187,102,.4);display:flex;align-items:center;justify-content:center;color:#3DBB66;flex:0 0 auto}
+.defib-ic svg{width:18px;height:18px}
+.defib-t{font-size:14px;font-weight:900;color:var(--tx0);margin-bottom:3px}
+.defib-s{font-size:11.5px;color:var(--tx2);line-height:1.55}
+.defib-add{background:rgba(61,187,102,.14)!important;border-color:rgba(61,187,102,.45)!important;color:#3DBB66!important}
 </style>
 <script src="native-bridge.js"></script>
 </body>
