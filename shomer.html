@@ -7831,7 +7831,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v137';
+var APP_VER='v138';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -10734,8 +10734,8 @@ body.aed-placing #map{cursor:crosshair}
 .leg-caret{font-size:11px;color:var(--tx3)}
 .leg-sec-body[hidden]{display:none}
 
-.stat-key span{display:flex;align-items:center;gap:4px;font-size:9.5px;color:var(--tx2);font-weight:700}
-.stat-key .sk{width:9px;height:9px;border-radius:50%;display:inline-block;opacity:.75}
+
+.stat-key 
 .leg-stats-btn{width:100%;margin-top:5px;padding:5px;border-radius:8px;border:1px solid var(--b2);background:rgba(255,255,255,.04);color:var(--tx2);font-family:inherit;font-size:10px;font-weight:800;cursor:pointer}
 #leg-stats-sec.dim{opacity:.5}
 
@@ -10876,8 +10876,8 @@ body.aed-placing #map{cursor:crosshair}
 /* legend must never reach the SOS button zone (bottom 34-128px) */
 
 
-.map-legend::-webkit-scrollbar{width:3px}
-.map-legend::-webkit-scrollbar-thumb{background:rgba(201,168,76,.4);border-radius:3px}
+
+
 
 /* the on-screen keyboard used to sit over the results — dismiss it as soon as you scroll */
 #sh-guide .sh-body{ -webkit-overflow-scrolling:touch }
@@ -10934,7 +10934,7 @@ html[dir="rtl"] .sh-back svg{transform:scaleX(-1)}
    scannable at a glance, centred in every language, and nowhere near the SOS button. */
 
 
-.legend-hd .ic{width:16px;height:16px}
+
 
 
 
@@ -10948,30 +10948,22 @@ html[dir="rtl"] .sh-back svg{transform:scaleX(-1)}
 /* ══ MAP INDEX ══
    CLOSED: a small centred pill — it must not span the screen or cover the map controls.
    OPEN:   a compact panel capped at 25% of the map height, scrollable inside. */
-.map-legend{position:absolute;top:calc(var(--hdr-top,0px) + var(--hdr) + 8px);
-  left:50%;transform:translateX(-50%);z-index:600;
-  background:rgba(10,22,40,.94);border:1px solid rgba(201,168,76,.3);border-radius:12px;
-  backdrop-filter:blur(10px);box-shadow:0 8px 24px rgba(0,0,0,.5);overflow:hidden;
-  width:max-content;max-width:min(560px,calc(100% - 76px))}
-.map-legend.collapsed{width:max-content}
-.legend-hd{display:flex;align-items:center;gap:6px;padding:7px 12px;background:none;border:0;
-  color:var(--g3);font-family:inherit;font-weight:800;font-size:11.5px;cursor:pointer;white-space:nowrap}
-.legend-hd .ic{width:13px;height:13px;flex:0 0 auto}
-.legend-chev{margin-inline-start:2px;font-size:10px;color:var(--tx3);transition:transform .2s}
-.map-legend:not(.collapsed) .legend-chev{transform:rotate(90deg)}
-.map-legend:not(.collapsed){width:min(560px,calc(100% - 76px))}
-.map-legend.collapsed .legend-body{display:none}
-.legend-body{padding:0 10px 9px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;
-  max-height:22vh;overflow-y:auto}
-.leg-sec{min-width:0}
-.leg-sec-h{font-size:8.5px;font-weight:900;color:var(--g3);letter-spacing:.02em;margin-bottom:4px;
-  padding-bottom:3px;border-bottom:1px solid rgba(201,168,76,.2);line-height:1.25}
-.stat-key{display:flex;flex-direction:column;gap:3px}
-.stat-key span{display:flex;align-items:center;gap:4px;font-size:9px;color:var(--tx2);line-height:1.2}
-.sk{width:7px;height:7px;border-radius:50%;flex:0 0 auto}
-.legend-foot{grid-column:1/-1;font-size:7.5px;color:var(--tx3);margin-top:1px;padding-top:5px;
-  border-top:1px solid rgba(255,255,255,.06);line-height:1.4;text-align:center}
-@media(max-width:560px){ .legend-body{grid-template-columns:repeat(2,1fr);max-height:24vh} }
+
+
+
+
+
+.map-legend:not(.collapsed) 
+
+.map-legend.collapsed 
+
+
+
+
+
+
+
+@media(max-width:560px){  }
 
 .shm-live{margin-inline-start:auto;font-size:10px;font-weight:700;color:var(--tx3)}
 .shm-h{display:flex;align-items:center}
@@ -11060,6 +11052,37 @@ html[dir="rtl"] .sh-back svg{transform:scaleX(-1)}
 .rep-note::placeholder{color:var(--tx3)}
 .founder-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:900;color:#23170a;background:linear-gradient(135deg,#C09020,#E0A828 60%,#F5C840);padding:4px 11px;border-radius:999px;letter-spacing:.02em}
 .founder-badge svg{width:13px;height:13px}
+
+/* ══ MAP INDEX — compact, no scroll, brand-separated ══
+   CLOSED: a small centred pill. OPEN: a low panel that fits WITHOUT scrolling; the extra
+   info sits on its own darker brand surface so it's visually distinct from the header. */
+.map-legend{position:absolute;top:calc(var(--hdr-top,0px) + var(--hdr) + 8px);
+  left:50%;transform:translateX(-50%);z-index:600;
+  background:rgba(10,22,40,.95);border:1px solid rgba(201,168,76,.3);border-radius:11px;
+  backdrop-filter:blur(10px);box-shadow:0 8px 22px rgba(0,0,0,.5);overflow:hidden;
+  width:max-content;max-width:min(520px,calc(100% - 76px))}
+.legend-hd{display:flex;align-items:center;gap:5px;padding:6px 11px;background:none;border:0;
+  color:var(--g3);font-family:inherit;font-weight:800;font-size:10.5px;cursor:pointer;white-space:nowrap}
+.legend-hd .ic{width:12px;height:12px;flex:0 0 auto}
+.legend-chev{margin-inline-start:2px;font-size:9px;color:var(--tx3);transition:transform .2s}
+.map-legend:not(.collapsed) .legend-chev{transform:rotate(90deg)}
+.map-legend:not(.collapsed){width:min(520px,calc(100% - 76px))}
+.map-legend.collapsed .legend-body{display:none}
+/* the open panel: its own darker brand surface, clearly separated from the header */
+.legend-body{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;
+  padding:9px 11px 10px;margin-top:2px;
+  background:rgba(6,15,30,.6);border-top:1px solid rgba(201,168,76,.22)}
+.leg-sec{min-width:0;background:rgba(16,30,52,.5);border:1px solid rgba(201,168,76,.12);
+  border-radius:8px;padding:7px 8px}
+.leg-sec-h{font-size:8px;font-weight:900;color:var(--g3);letter-spacing:.02em;margin-bottom:4px;
+  line-height:1.2}
+.stat-key{display:flex;flex-direction:column;gap:3px}
+.stat-key span{display:flex;align-items:center;gap:4px;font-size:8.5px;color:var(--tx2);
+  font-weight:600;line-height:1.2;white-space:nowrap}
+.sk{width:6px;height:6px;border-radius:50%;flex:0 0 auto}
+.legend-foot{grid-column:1/-1;font-size:7px;color:var(--tx3);padding-top:5px;
+  border-top:1px solid rgba(255,255,255,.06);line-height:1.35;text-align:center}
+@media(max-width:520px){ .legend-body{grid-template-columns:repeat(3,1fr);gap:5px;padding:8px} }
 </style>
 <script src="native-bridge.js"></script>
 </body>
