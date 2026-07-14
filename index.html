@@ -219,6 +219,26 @@ nav{gap:10px;min-width:0}
   .nav-cta{padding:7px 10px;font-size:11.5px}
 }
 </style>
+
+<style>
+#scenarios .section-sub{text-align:center;color:var(--tx2,#8898B8);font-size:14px;margin:-6px 0 22px}
+.scn-tabs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:20px}
+.scn-tab{padding:9px 16px;border-radius:999px;border:1px solid rgba(136,152,184,.28);background:transparent;color:#8898B8;font-family:inherit;font-weight:800;font-size:13px;cursor:pointer;transition:.15s}
+.scn-tab.active{background:var(--warm,#E8663B);border-color:var(--warm,#E8663B);color:#fff}
+.scn-stage{--warm:#E8663B;display:grid;grid-template-columns:300px 1fr;gap:24px;align-items:center;background:linear-gradient(135deg,rgba(232,102,59,.06),rgba(10,22,40,.4));border:1px solid rgba(136,152,184,.16);border-radius:20px;padding:24px}
+.scn-art{background:radial-gradient(circle at 50% 40%, rgba(255,255,255,.04), transparent);border-radius:16px}
+.scn-art svg{width:100%;height:auto;display:block}
+.scn-title{font-size:20px;font-weight:900;color:#fff;line-height:1.3;margin-bottom:8px}
+.scn-text{font-size:14.5px;color:#B8C4D8;line-height:1.7;margin-bottom:16px}
+.scn-steps{display:flex;flex-direction:column;gap:9px;margin-bottom:16px}
+.scn-step{display:flex;align-items:center;gap:10px;font-size:13.5px;color:#6B7A95;font-weight:700;opacity:.4;transform:translateX(6px);transition:.4s}
+.scn-step.on{opacity:1;transform:none;color:#E8EEF6}
+.scn-dot{width:9px;height:9px;border-radius:50%;background:var(--warm,#E8663B);flex:0 0 auto;box-shadow:0 0 0 0 var(--warm)}
+.scn-step.on .scn-dot{animation:scnpulse 1s ease-out}
+@keyframes scnpulse{from{box-shadow:0 0 0 0 var(--warm)}to{box-shadow:0 0 0 8px transparent}}
+.scn-play{padding:11px 20px;border-radius:11px;border:0;background:var(--warm,#E8663B);color:#fff;font-family:inherit;font-weight:800;font-size:14px;cursor:pointer}
+@media(max-width:640px){.scn-stage{grid-template-columns:1fr;text-align:center}.scn-steps{text-align:start}}
+</style>
 </head>
 <body>
 
@@ -297,6 +317,116 @@ nav{gap:10px;min-width:0}
   </div>
 </section>
 
+<!-- INTERACTIVE SCENARIOS -->
+<section class="bg-surface fi" id="scenarios">
+  <div class="wrap">
+    <h2 class="section-title">רגעים אמיתיים</h2>
+    <p class="section-sub">SH✡MER הוא אנשים ששומרים אחד על השני. לחצו על סצנה כדי לראות איך.</p>
+
+    <div class="scn-tabs" id="scn-tabs">
+      <button class="scn-tab active" data-s="0">מצוקה</button>
+      <button class="scn-tab" data-s="1">הגנה</button>
+      <button class="scn-tab" data-s="2">רדיפה</button>
+      <button class="scn-tab" data-s="3">החייאה</button>
+      <button class="scn-tab" data-s="4">ילד אבוד</button>
+    </div>
+
+    <div class="scn-stage" id="scn-stage">
+      <div class="scn-art" id="scn-art"></div>
+      <div class="scn-body">
+        <div class="scn-title" id="scn-title"></div>
+        <div class="scn-text" id="scn-text"></div>
+        <div class="scn-steps" id="scn-steps"></div>
+        <button class="scn-play" id="scn-play">הצג/י את הרצף ▸</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  var SCN=[
+    { key:'distress', warm:'#E8663B',
+      title:'קשיש במצוקה — ושלושה נערים שעצרו',
+      text:'אישה מבוגרת מעדה ברחוב. שלושה נערים בקרבת מקום קיבלו התרעה — ובמקום לחלוף על פניה, נשארו איתה עד שהגיעה עזרה.',
+      steps:['היא לחצה SOS','שומרים בקרבת מקום קיבלו התרעה','שלושה נערים הגיעו תוך דקה','„פרמדיק בדרך” — כולם מעודכנים'] },
+    { key:'defend', warm:'#3B82C4',
+      title:'ילד מוקף — וגבר אחד שעמד בּיניהם',
+      text:'ילד הוקף בדרך הביתה. אבא ששמר על האזור קיבל דיווח, הגיע, ועמד בּינו לבין הקבוצה עד שהתפזרו.',
+      steps:['דיווח „הטרדה” נשלח','שומר מאומת בקרבת מקום','הוא הגיע ונעמד ביניהם','„המצב תחת שליטה”'] },
+    { key:'chase', warm:'#8B5CF6',
+      title:'גבר חשוד מטריד — ושלוש נשים שלא ויתרו',
+      text:'גבר עקב אחרי נערות ברחוב. שלוש נשים ראו את הדיווח, התאגדו, וליוו את הנערות עד הבית — הנוכחות הרתיעה אותו.',
+      steps:['נערה דיווחה „מעקב חשוד”','שלושה אישורים עצמאיים בקרבת מקום','הן התאגדו והגיעו','„המשטרה עודכנה”'] },
+    { key:'cpr', warm:'#E5484D',
+      title:'דום לב — וקבוצה שידעה איפה הדפיברילטור',
+      text:'גבר קרס. אחד השומרים ידע בדיוק איפה הדפיברילטור הקרוב — כי מישהו מיפה אותו באפליקציה. הם התחילו החייאה עד שהגיע צוות רפואי.',
+      steps:['התרעה „דום לב”','„הדפיברילטור 80 מ׳ מכאן”','„צריך פרמדיק” — נשלח לכולם','„אמבולנס הגיע”'] },
+    { key:'lost', warm:'#0E9F6E',
+      title:'ילד אבוד — ושכונה שלמה שחיפשה',
+      text:'ילד לא חזר מבית ספר. ההורים שיתפו מיקום אחרון עם מעגל השומרים — עשרות עיניים באזור, לא אחת.',
+      steps:['שיתוף „מיקום אחרון נראה”','מעגל השכונה קיבל התרעה','הוא נמצא תוך דקות','„הילד נמצא — תודה”'] }
+  ];
+
+  var art=document.getElementById('scn-art');
+  var titleEl=document.getElementById('scn-title');
+  var textEl=document.getElementById('scn-text');
+  var stepsEl=document.getElementById('scn-steps');
+  var stage=document.getElementById('scn-stage');
+  var playBtn=document.getElementById('scn-play');
+  var cur=0, timer=null;
+
+  function render(i){
+    cur=i;
+    var s=SCN[i];
+    stage.style.setProperty('--warm', s.warm);
+    document.querySelectorAll('.scn-tab').forEach(function(t,ix){ t.classList.toggle('active', ix===i); });
+    art.className='scn-art scn-'+s.key;
+    art.innerHTML=sceneSVG(s.key, s.warm);
+    titleEl.textContent=s.title;
+    textEl.textContent=s.text;
+    stepsEl.innerHTML=s.steps.map(function(st,ix){
+      return '<div class="scn-step" data-i="'+ix+'"><span class="scn-dot"></span><span>'+st+'</span></div>';
+    }).join('');
+    playBtn.textContent='הצג/י את הרצף ▸';
+  }
+  function play(){
+    if(timer){ clearInterval(timer); timer=null; }
+    var rows=stepsEl.querySelectorAll('.scn-step');
+    rows.forEach(function(r){ r.classList.remove('on'); });
+    var k=0;
+    rows[0] && rows[0].classList.add('on');
+    timer=setInterval(function(){
+      k++;
+      if(k>=rows.length){ clearInterval(timer); timer=null; return; }
+      rows[k].classList.add('on');
+    }, 900);
+  }
+  function sceneSVG(key,warm){
+    // simple, warm, human silhouettes — not blue, not clinical
+    var g='<defs><linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+warm+'"/><stop offset="1" stop-color="#0A1628"/></linearGradient></defs>';
+    var ring='<circle cx="150" cy="95" r="52" fill="none" stroke="'+warm+'" stroke-width="2" opacity=".5"><animate attributeName="r" values="46;60;46" dur="2.4s" repeatCount="indefinite"/><animate attributeName="opacity" values=".6;0;.6" dur="2.4s" repeatCount="indefinite"/></circle>';
+    function person(x,s,c){ return '<g transform="translate('+x+',70) scale('+s+')"><circle cx="0" cy="0" r="11" fill="'+(c||warm)+'"/><rect x="-10" y="13" width="20" height="30" rx="9" fill="'+(c||warm)+'"/></g>'; }
+    var people={
+      distress: person(150,1.5,warm)+person(95,1,'#F5C840')+person(120,1,'#F5C840')+person(180,1,'#F5C840'),
+      defend:   person(150,1.2,'#F5C840')+person(110,1.3,warm)+person(185,1,'#8898B8')+person(205,1,'#8898B8'),
+      chase:    person(120,1,'#F5C840')+person(150,1.1,warm)+person(172,1.1,warm)+person(194,1.1,warm),
+      cpr:      person(150,1.4,'#F5C840')+person(110,1,warm)+person(185,1,warm),
+      lost:     person(150,1,'#F5C840')+person(95,1,warm)+person(125,1,warm)+person(180,1,warm)+person(210,1,warm)
+    };
+    return '<svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">'+g+ring+(people[key]||'')+'</svg>';
+  }
+
+  document.getElementById('scn-tabs').addEventListener('click', function(e){
+    var b=e.target.closest('.scn-tab'); if(!b) return;
+    render(+b.getAttribute('data-s')); play();
+  });
+  playBtn.addEventListener('click', play);
+  render(0);
+})();
+</script>
+
+
 <!-- APP SHOWCASE (branded feature cards — no placeholder imagery) -->
 <section class="bg-surface fi">
   <div class="wrap">
@@ -349,32 +479,7 @@ nav{gap:10px;min-width:0}
   </div>
 </section>
 
-<!-- STORE (COMING SOON) -->
-<section class="bg-surface fi">
-  <div class="wrap">
-    <div class="store-head">
-      <div class="store-pill">בקרוב · COMING SOON</div>
-      <h2 class="section-title">חנות SH✡MER</h2>
-      <p class="section-sub" style="margin:0 auto">לא מרצ׳נדייז — ציוד. גאווה קהילתית שאפשר ללבוש, ונראות שמצילה חיים.</p>
-    </div>
-    <div class="store-grid store-grid-2">
-      <div class="merch-card placeholder-card">
-        <div class="ph-visual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4l3-1 2 1 2-1 3 1v3l-2 1v11a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1V8L7 7Z"/></svg></div>
-        <span class="merch-soon">בקרוב</span>
-        <div class="merch-info"><div class="merch-name">Armed Citizen — Sleeve</div><div class="merch-desc">שרוול ממותג SH✡MER · מחזיר אור לבטיחות</div></div>
-      </div>
-      <div class="merch-card placeholder-card">
-        <div class="ph-visual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13a9 9 0 0 1 18 0"/><path d="M2 13h20l-1 3H3Z"/></svg></div>
-        <span class="merch-soon">בקרוב</span>
-        <div class="merch-info"><div class="merch-name">Armed Citizen — Cap</div><div class="merch-desc">כובע ממותג SH✡MER · גזרה נקייה</div></div>
-      </div>
-    </div>
-    <div class="store-cta">
-      <p class="store-note">אנחנו מעצבים את הקולקציה הראשונה. השאירו מייל ותהיו הראשונים לדעת כשהחנות נפתחת.</p>
-      <a href="mailto:suport@shomer-app.co.il?subject=SHOMER%20Store%20-%20עדכנו%20אותי" class="btn-primary" style="display:inline-block;margin-top:16px">עדכנו אותי כשנפתח</a>
-    </div>
-  </div>
-</section>
+
 
 <!-- CTA -->
 <section class="cta-band fi">
