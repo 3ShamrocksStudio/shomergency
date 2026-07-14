@@ -6314,10 +6314,10 @@ function clearCircleMarkers(){
 function pingMember(id){
   var m=memberById(id); if(!m)return;
   var he=currentLang==='he';
-  if(m.ping===false){ toast(he?'פינג-פונג כבוי עבור '+ESC(m.name):'Ping-pong is off for '+m.name,'amb'); return; }
+  if(m.ping===false){ toast(he?'בדיקה כבויה עבור '+ESC(m.name):'Ping-pong is off for '+m.name,'amb'); return; }
   try{ if(m.partnerUid&&FB.ready) fbRestWrite('PUT','ping/'+m.partnerUid+'/'+FB.uid,{name:(SS.user&&SS.user.name)||'',ts:Date.now()}); }catch(e){}
   try{ pushNotify('SH\u2721MER', (he?'שלחת בקשת בדיקה ל-':'Check-in sent to ')+(m.name||''),'gd-ping'); }catch(e){}
-  toast(he?('\u2713 פינג נשלח ל-'+ESC(m.name)+' — „את/ה בסדר?”'):('\u2713 Ping sent to '+m.name),'grn');
+  toast(he?('\u2713 בקשת בדיקה נשלחה ל-'+ESC(m.name)+' — „את/ה בסדר?”'):('\u2713 Ping sent to '+m.name),'grn');
 }
 function msgMember(id){
   var m=memberById(id); if(!m)return;
@@ -6341,7 +6341,7 @@ function memberPopupHtml(id){
   <div style="font-size:11px;color:#8c9bbd;margin-bottom:4px">${he?'מעגל':'Circle'}: <b style="color:#C9A84C">${ESC(circ.name||'-')}</b> · ${st.txt}</div>
   <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:8px">
    <button onclick="flyToMember('${m.id}')" style="background:#1670E0;border:none;border-radius:9px;color:#fff;font-weight:800;font-size:11.5px;padding:8px 6px;cursor:pointer;font-family:inherit">${he?'אתר/י':'Locate'}</button>
-   <button onclick="pingMember('${m.id}')" style="background:#0E8F6E;border:none;border-radius:9px;color:#fff;font-weight:800;font-size:11.5px;padding:8px 6px;cursor:pointer;font-family:inherit">${he?'פינג':'Ping'}</button>
+   <button onclick="pingMember('${m.id}')" style="background:#0E8F6E;border:none;border-radius:9px;color:#fff;font-weight:800;font-size:11.5px;padding:8px 6px;cursor:pointer;font-family:inherit">${he?'בדיקה':'Check-in'}</button>
    <button onclick="msgMember('${m.id}')" style="background:#23324E;border:none;border-radius:9px;color:#E8EEF7;font-weight:800;font-size:11.5px;padding:8px 6px;cursor:pointer;font-family:inherit">${he?'הודעה':'Message'}</button>
    <button onclick="callMember('${m.id}')" style="background:#23324E;border:none;border-radius:9px;color:#E8EEF7;font-weight:800;font-size:11.5px;padding:8px 6px;cursor:pointer;font-family:inherit">${he?'חיוג':'Call'}</button>
   </div>
