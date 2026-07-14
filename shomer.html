@@ -7840,7 +7840,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v142';
+var APP_VER='v143';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -11078,7 +11078,6 @@ html[dir="rtl"] .sh-back svg{transform:scaleX(-1)}
 .legend-chev{margin-inline-start:2px;font-size:9px;color:var(--tx3);transition:transform .2s}
 .map-legend:not(.collapsed) .legend-chev{transform:rotate(90deg)}
 .map-legend:not(.collapsed){width:min(520px,calc(100% - 76px))}
-.map-legend.collapsed 
 /* the open panel: its own darker brand surface, clearly separated from the header */
 
 
@@ -11112,7 +11111,6 @@ html[dir="rtl"] .sh-back svg{transform:scaleX(-1)}
   background:linear-gradient(135deg,#F5C840,#E0A828);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 
 /* legend body hidden ONLY when collapsed (not unconditionally) */
-.map-legend.collapsed 
 /* emergency-service chips — compact, matches wireframe (was unstyled → giant tiles) */
 
 
@@ -11173,6 +11171,9 @@ html[dir="rtl"] .sh-back svg{transform:scaleX(-1)}
 /* active service = ring on the icon circle only — no grey square behind the chip */
 .ess-chip.on .ec-ic,.ess-chip.leg-on .ec-ic{box-shadow:0 0 0 2px var(--g3),0 2px 8px rgba(0,0,0,.35)}
 .ess-chip.on,.ess-chip.leg-on{background:none!important;border:0!important}
+
+/* collapse: hide the panel body when the legend is closed */
+.map-legend.collapsed .legend-body{display:none!important}
 </style>
 <script src="native-bridge.js"></script>
 </body>
