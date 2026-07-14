@@ -7850,7 +7850,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v150';
+var APP_VER='v151';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -8959,26 +8959,18 @@ function founderCrestSVG(size){
   var s=size||64;
   return '<svg class="fc-emb" viewBox="0 0 64 64" width="'+s+'" height="'+s+'" aria-hidden="true">'
     +'<defs>'
-    +'<radialGradient id="fcAura" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#F7D66A" stop-opacity=".55"/><stop offset="55%" stop-color="#E0A828" stop-opacity=".18"/><stop offset="100%" stop-color="#E0A828" stop-opacity="0"/></radialGradient>'
+    +'<radialGradient id="fcAura" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#F7D66A" stop-opacity=".55"/><stop offset="60%" stop-color="#E0A828" stop-opacity=".16"/><stop offset="100%" stop-color="#E0A828" stop-opacity="0"/></radialGradient>'
     +'<linearGradient id="fcRim" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FCE79A"/><stop offset=".5" stop-color="#D69A1E"/><stop offset="1" stop-color="#8A5D12"/></linearGradient>'
     +'<linearGradient id="fcStar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FDEBA6"/><stop offset=".5" stop-color="#E7B434"/><stop offset="1" stop-color="#B8801C"/></linearGradient>'
     +'</defs>'
-    /* aura */
     +'<circle cx="32" cy="32" r="31" fill="url(#fcAura)"/>'
-    /* medallion rim */
-    +'<circle cx="32" cy="32" r="24" fill="#0A1628" stroke="url(#fcRim)" stroke-width="2.4"/>'
-    +'<circle cx="32" cy="32" r="20.5" fill="none" stroke="rgba(224,168,40,.35)" stroke-width=".7"/>'
-    /* laurel — left + right sprigs */
-    +'<g stroke="url(#fcRim)" stroke-width="1.4" fill="none" stroke-linecap="round" opacity=".9">'
-    +'<path d="M15 44 Q12 34 16 25"/><path d="M15.5 40 Q12.5 40 11 37"/><path d="M15 36 Q12 36 10.5 33"/><path d="M15 32 Q12.2 32 11 29"/><path d="M15.5 28 Q13 28 12 25.5"/>'
-    +'<path d="M49 44 Q52 34 48 25"/><path d="M48.5 40 Q51.5 40 53 37"/><path d="M49 36 Q52 36 53.5 33"/><path d="M49 32 Q51.8 32 53 29"/><path d="M48.5 28 Q51 28 52 25.5"/>'
+    +'<circle cx="32" cy="32" r="23" fill="#0A1628" stroke="url(#fcRim)" stroke-width="2.4"/>'
+    +'<circle cx="32" cy="32" r="19.5" fill="none" stroke="rgba(224,168,40,.3)" stroke-width=".7"/>'
+    /* interlaced Magen David — two triangles, clean */
+    +'<g fill="none" stroke="url(#fcStar)" stroke-width="3" stroke-linejoin="round">'
+    +'<path d="M32 15 L46 39 L18 39 Z"/>'
+    +'<path d="M32 49 L18 25 L46 25 Z"/>'
     +'</g>'
-    /* Star of David — two interlaced triangles */
-    +'<g fill="none" stroke="url(#fcStar)" stroke-width="2.6" stroke-linejoin="round">'
-    +'<path d="M32 19 L43 38 L21 38 Z"/>'
-    +'<path d="M32 45 L21 26 L43 26 Z"/>'
-    +'</g>'
-    +'<circle cx="32" cy="32" r="3.1" fill="url(#fcStar)"/>'
     +'</svg>';
 }
 function founderBadgeHTML(rec){
@@ -9493,7 +9485,7 @@ function _statsLegPaintOld(){
   if(s) s.textContent = STATS.on ? '●' : '○';
 }
 var ESS_TYPES={
-  aed:      {q:'["emergency"="defibrillator"]', col:'#0E8F6E', he:'דפיברילטור', en:'Defibrillator', ar:'مزيل الرجفان',
+  aed:      {q:'["emergency"="defibrillator"]', col:'#16A34A', he:'דפיברילטור', en:'Defibrillator', ar:'مزيل الرجفان',
              g:'<path d="M12 21s-7.4-4.8-7.4-10.2A4.5 4.5 0 0 1 12 7.7a4.5 4.5 0 0 1 7.4 3.1C19.4 16.2 12 21 12 21Z" fill="#fff"/><path d="M12.9 9.4l-3.2 4.4h2.1l-.6 3.5 3.3-4.6h-2.2Z" fill="#0E8F6E"/>'},
   police:   {q:'["amenity"="police"]', col:'#1670E0', he:'משטרה', en:'Police', ar:'شرطة',
              g:'<path d="M12 4l6 2.2v4.6c0 4-2.6 7.1-6 8.6-3.4-1.5-6-4.6-6-8.6V6.2Z" fill="none" stroke="#fff" stroke-width="1.7"/><path d="M12 8.2l.95 1.93 2.13.3-1.54 1.5.36 2.12L12 13.05l-1.9 1 .36-2.12L8.2 10.43l2.13-.3Z" fill="#fff"/>'},
@@ -9501,7 +9493,7 @@ var ESS_TYPES={
              g:'<path d="M10.4 5h3.2v3.4H17v3.2h-3.4V15h-3.2v-3.4H7V8.4h3.4Z" fill="#fff"/><path d="M7 18.4h10" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/>'},
   fire:     {q:'["amenity"="fire_station"]', col:'#E8811C', he:'תחנת כיבוי', en:'Fire station', ar:'إطفاء',
              g:'<path d="M12 4.2c1.4 2.2 3.9 3.6 3.9 6.9A3.9 3.9 0 0 1 12 15a3.9 3.9 0 0 1-3.9-3.9c0-3.3 2.5-4.7 3.9-6.9Z" fill="#fff"/><path d="M7 18.6h10" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/>'},
-  pharmacy: {q:'["amenity"="pharmacy"]', col:'#12A594', he:'בית מרקחת', en:'Pharmacy', ar:'صيدلية',
+  pharmacy: {q:'["amenity"="pharmacy"]', col:'#A78BFA', he:'בית מרקחת', en:'Pharmacy', ar:'صيدلية',
              g:'<path d="M10.5 5.5h3v4h4v3h-4v4h-3v-4h-4v-3h4Z" fill="#fff"/>'}
 };
 
