@@ -7850,7 +7850,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v152';
+var APP_VER='v153';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -8780,7 +8780,7 @@ function syncPairsToCircles(){
 
 var AED_GLYPH='<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">'
  +'<path d="M12 21s-7.4-4.8-7.4-10.2A4.5 4.5 0 0 1 12 7.7a4.5 4.5 0 0 1 7.4 3.1C19.4 16.2 12 21 12 21Z" fill="#fff"/>'
- +'<path d="M12.9 9.4l-3.2 4.4h2.1l-.6 3.5 3.3-4.6h-2.2Z" fill="#0E8F6E"/></svg>';
+ +'<path d="M12.9 9.4l-3.2 4.4h2.1l-.6 3.5 3.3-4.6h-2.2Z" fill="#16A34A"/></svg>';
 
 /* ══ REAL POLICE STATISTICS ══
    Source: משטרת ישראל — נתוני פשיעה, via data.gov.il. 395,294 recorded offences, 2025 Q1–Q4,
@@ -9486,15 +9486,15 @@ function _statsLegPaintOld(){
 }
 var ESS_TYPES={
   aed:      {q:'["emergency"="defibrillator"]', col:'#16A34A', he:'דפיברילטור', en:'Defibrillator', ar:'مزيل الرجفان',
-             g:'<path d="M12 21s-7.4-4.8-7.4-10.2A4.5 4.5 0 0 1 12 7.7a4.5 4.5 0 0 1 7.4 3.1C19.4 16.2 12 21 12 21Z" fill="#fff"/><path d="M12.9 9.4l-3.2 4.4h2.1l-.6 3.5 3.3-4.6h-2.2Z" fill="#0E8F6E"/>'},
+             g:'<path d="M12 21s-7.4-4.8-7.4-10.2A4.5 4.5 0 0 1 12 7.7a4.5 4.5 0 0 1 7.4 3.1C19.4 16.2 12 21 12 21Z" fill="#fff"/><path d="M12.9 9.4l-3.2 4.4h2.1l-.6 3.5 3.3-4.6h-2.2Z" fill="#16A34A"/>'},
   police:   {q:'["amenity"="police"]', col:'#1670E0', he:'משטרה', en:'Police', ar:'شرطة',
-             g:'<path d="M12 4l6 2.2v4.6c0 4-2.6 7.1-6 8.6-3.4-1.5-6-4.6-6-8.6V6.2Z" fill="none" stroke="#fff" stroke-width="1.7"/><path d="M12 8.2l.95 1.93 2.13.3-1.54 1.5.36 2.12L12 13.05l-1.9 1 .36-2.12L8.2 10.43l2.13-.3Z" fill="#fff"/>'},
+             g:'<path d="M12 3.6l6.6 2.5v4.9c0 4.3-2.8 7.6-6.6 9.2-3.8-1.6-6.6-4.9-6.6-9.2V6.1Z" fill="#fff"/><path d="M12 8.1l1.1 2.2 2.4.35-1.75 1.7.41 2.4L12 13.6l-2.16 1.15.41-2.4-1.75-1.7 2.4-.35Z" fill="#1670E0"/>'},
   hospital: {q:'["amenity"="hospital"]', col:'#E5484D', he:'בית חולים', en:'Hospital', ar:'مستشفى',
              g:'<path d="M10.4 5h3.2v3.4H17v3.2h-3.4V15h-3.2v-3.4H7V8.4h3.4Z" fill="#fff"/><path d="M7 18.4h10" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/>'},
   fire:     {q:'["amenity"="fire_station"]', col:'#E8811C', he:'תחנת כיבוי', en:'Fire station', ar:'إطفاء',
-             g:'<path d="M12 4.2c1.4 2.2 3.9 3.6 3.9 6.9A3.9 3.9 0 0 1 12 15a3.9 3.9 0 0 1-3.9-3.9c0-3.3 2.5-4.7 3.9-6.9Z" fill="#fff"/><path d="M7 18.6h10" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/>'},
+             g:'<path d="M12 3c.5 3.4-1.5 4.8-3 6.4C7.5 11 6 12.7 6 15.4A6 6 0 0 0 18 15.4c0-2.6-1.1-4.3-2.4-5.8-.6 1-1.4 1.6-2.3 1.6 1.2-3-.2-6.3-1.3-8.2Z" fill="#fff"/>'},
   pharmacy: {q:'["amenity"="pharmacy"]', col:'#A78BFA', he:'בית מרקחת', en:'Pharmacy', ar:'صيدلية',
-             g:'<path d="M10.5 5.5h3v4h4v3h-4v4h-3v-4h-4v-3h4Z" fill="#fff"/>'}
+             g:'<path d="M12.4 5.6a4.1 4.1 0 0 1 5.8 5.8l-6.6 6.6a4.1 4.1 0 0 1-5.8-5.8Z" fill="#fff"/><path d="M9.1 8.9l5.8 5.8" stroke="#A78BFA" stroke-width="1.7" stroke-linecap="round"/>'}
 };
 
 var ESS={data:{}, layer:{}, on:{aed:true}, fetched:0};
