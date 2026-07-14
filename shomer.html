@@ -8887,7 +8887,12 @@ function setGuardianSalt(puid, salt){
 }
 /* rotate my salt and re-issue to every remaining guardian's inbox */
 async function sosRotateSalt(){
+  var oldSalt=SS.sosSalt;
   var ns=sosNewSalt(); SS.sosSalt=ns; saveStore();
+  /* actively wipe any SOS sitting on the OLD channel so a removed guardian can never read
+     a lingering broadcast — belt and suspenders on top of them not knowing the new salt */
+  if(oldSalt){ try{ await fbRestWrite('PUT','invites/'+sosChan(FB.uid, oldSalt),
+    {fromUid:FB.uid, ts:Date.now(), name:packSOS(false,'',null,null,FB.uid)}); }catch(e){} }
   var g=gdState();
   var me=(SS.user&&SS.user.name)||'';
   await Promise.all((g.pairs||[]).filter(function(p){return !p.pending && p.partnerUid;}).map(function(p){
