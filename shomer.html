@@ -7840,7 +7840,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v143';
+var APP_VER='v144';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -11165,7 +11165,7 @@ html[dir="rtl"] .sh-back svg{transform:scaleX(-1)}
 .map-legend:not(.collapsed){width:min(560px,calc(100% - 40px))}
 
 /* active service = ring on the icon circle only — no grey square behind the chip */
-.ess-chip.on .ec-ic,.ess-chip.leg-on .ec-ic{box-shadow:0 0 0 2px var(--g3),0 2px 8px rgba(0,0,0,.35)}
+.ess-chip.on 
 .ess-chip.on,.ess-chip.leg-on{background:none!important;border:0!important}
 
 /* collapse: hide the panel body when the legend is closed */
@@ -11178,6 +11178,11 @@ html[dir="rtl"] .sh-back svg{transform:scaleX(-1)}
 
 #leg-stats-sec{text-align:center}
 #leg-stats-st{margin-inline:auto!important}
+
+/* service icons: clean circles, on-brand. Active = gold ring (only then). */
+.ec-ic{width:34px;height:34px;border-radius:50%!important;display:flex;align-items:center;justify-content:center;color:#fff;flex:0 0 auto;box-shadow:0 2px 6px rgba(0,0,0,.3);overflow:hidden}
+.ec-ic svg{width:17px;height:17px}
+.ess-chip.on .ec-ic,.ess-chip.leg-on .ec-ic{box-shadow:0 0 0 2px var(--g3),0 2px 6px rgba(0,0,0,.35)}
 </style>
 <script src="native-bridge.js"></script>
 </body>
