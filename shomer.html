@@ -6156,42 +6156,59 @@ function buildMemberRow(m,he){
 function toggleAddMember(){const f=document.getElementById('cm-add-form');if(f)f.style.display=f.style.display==='none'?'block':'none';}
 function agFillSelects(){
   var he=currentLang==='he';
-  /* country list — drives the dial code, so the user never has to know it */
+  /* COUNTRY — SH✡MER is for communities worldwide, not Israel only.
+     The <option> value is the DIAL CODE, so the number is always built as explicit E.164. */
   var sel=document.getElementById('ag-country');
   if(sel && !sel.options.length){
-    var list=(typeof DIAL_CODES!=='undefined'&&DIAL_CODES)?DIAL_CODES:[];
-    if(!list.length && typeof CC_LIST!=='undefined') list=CC_LIST;
-    var html='';
-    (list||[]).forEach(function(d){
-      var name = d.name || d.n || d.country || '';
-      var code = d.code || d.dial || d.c || '';
-      var flag = d.flag || d.f || '';
-      if(!code) return;
-      html+='<option value="'+code+'">'+(flag?flag+' ':'')+name+'</option>';
+    var keys=Object.keys(DIAL).sort(function(a,b){
+      if(a==='IL') return -1; if(b==='IL') return 1;      /* Israel first */
+      return cname(a).localeCompare(cname(b));
     });
-    sel.innerHTML=html || '<option value="972">🇮🇱 ישראל</option>';
-    try{ sel.value='972'; }catch(e){}
+    var html='';
+    keys.forEach(function(k){
+      html+='<option value="'+DIAL[k]+'" data-iso="'+k+'">'+flagOf(k)+' '+cname(k)+'</option>';
+    });
+    sel.innerHTML=html;
+    try{ sel.value=myDial(); }catch(e){}
   }
-  /* circle picker */
+  /* DIAL CODE — this select was rendering EMPTY because it had no options at all. */
+  var cc=document.getElementById('ag-cc');
+  if(cc && !cc.options.length){ fillCC(cc); }
+  try{ agSyncCountry(); }catch(e){}
+  try{ agPhoneHint(); }catch(e){}
+  /* circle picker — unchanged from the original */
   var cs=document.getElementById('ag-circle');
   if(cs){
     var cur=cs.value;
-    cs.innerHTML=circlesList().map(function(x){
-      return '<option value="'+x.id+'">'+ESC(x.name)+'</option>';
-    }).join('');
+    cs.innerHTML=circlesList().map(function(x){ return '<option value="'+x.id+'">'+ESC(x.name)+'</option>'; }).join('');
     if(cur) try{ cs.value=cur; }catch(e){}
   }
 }
+/* keep dial code + placeholder in sync with the chosen country */
+function agSyncCountry(){
+  var s=document.getElementById('ag-country'),
+      cc=document.getElementById('ag-cc'),
+      ph=document.getElementById('ag-phone');
+  var dial=(s&&s.value)||myDial();
+  if(cc){ try{ cc.value=dial; }catch(e){} }
+  var iso=(s&&s.selectedOptions&&s.selectedOptions[0]&&s.selectedOptions[0].getAttribute('data-iso')) || isoForDial(dial);
+  if(ph){ ph.placeholder=mobEx(iso); }
+}
 function agCountryPick(){
-  var s=document.getElementById('ag-country'), cc=document.getElementById('ag-cc');
-  if(s&&cc){ try{ cc.value=s.value; }catch(e){} }
+  try{ agSyncCountry(); }catch(e){}
   try{ agPhoneHint(); }catch(e){}
 }
 function agPhoneHint(){
  var he=currentLang==='he';
  var raw=(document.getElementById('ag-phone')||{}).value||'';
  var hint=document.getElementById('ag-hint'); if(!hint)return;
- if(!raw.trim()){ hint.textContent=''; return; }
+ if(!raw.trim()){
+    /* guardians are reached by SMS — make it obvious a MOBILE number is required */
+    hint.style.color='var(--tx3)';
+    hint.textContent = he ? 'מספר נייד בלבד — השומר/ת מקבל/ת הזמנה ב-SMS'
+                          : 'Mobile numbers only — your SHOMER is invited by SMS';
+    return;
+  }
  var cc=(document.getElementById('ag-cc')||{}).value||myDial();
  var canon=phoneCanon(raw,cc);
  var ok=phoneIsValid(canon);
@@ -6856,7 +6873,45 @@ function gdBaseUrl(){ return location.origin+location.pathname.replace(/index\.h
    SH✡MER is worldwide. Numbers are stored as pure E.164 digits (no +), which is what
    the hashed registry keys on — so a user in Tokyo and a user in Tel Aviv hash the
    same way and can find each other. */
-var DIAL={IL:'972',JP:'81',US:'1',CA:'1',GB:'44',AU:'61',NZ:'64',IE:'353',DE:'49',FR:'33',ES:'34',IT:'39',PT:'351',NL:'31',BE:'32',CH:'41',AT:'43',SE:'46',NO:'47',DK:'45',FI:'358',PL:'48',CZ:'420',GR:'30',RO:'40',HU:'36',UA:'380',RU:'7',TR:'90',IN:'91',CN:'86',KR:'82',TH:'66',VN:'84',PH:'63',ID:'62',MY:'60',SG:'65',HK:'852',TW:'886',BR:'55',MX:'52',AR:'54',CL:'56',CO:'57',PE:'51',ZA:'27',NG:'234',KE:'254',EG:'20',MA:'212',AE:'971',SA:'966',QA:'974',JO:'962',CY:'357'};
+var DIAL={IL:'972',US:'1',CA:'1',GB:'44',FR:'33',AU:'61',NZ:'64',IE:'353',DE:'49',ES:'34',IT:'39',PT:'351',NL:'31',BE:'32',CH:'41',AT:'43',SE:'46',NO:'47',DK:'45',FI:'358',IS:'354',LU:'352',MT:'356',PL:'48',CZ:'420',SK:'421',SI:'386',HR:'385',RS:'381',BG:'359',GR:'30',RO:'40',HU:'36',UA:'380',BY:'375',MD:'373',LV:'371',LT:'370',EE:'372',RU:'7',GE:'995',AM:'374',AZ:'994',UZ:'998',TR:'90',CY:'357',BR:'55',MX:'52',AR:'54',CL:'56',CO:'57',PE:'51',UY:'598',PY:'595',BO:'591',EC:'593',VE:'58',PA:'507',CR:'506',GT:'502',ZA:'27',MA:'212',TN:'216',DZ:'213',EG:'20',ET:'251',NG:'234',KE:'254',AE:'971',SA:'966',QA:'974',JO:'962',IN:'91',JP:'81',CN:'86',KR:'82',TH:'66',VN:'84',PH:'63',ID:'62',MY:'60',SG:'65',HK:'852',TW:'886'}
+
+/* Country names + a real MOBILE example per country, so people can see at a glance that
+   SH✡MER expects a mobile number (guardians are reached by SMS — a landline can't work). */
+var CNAME={
+ IL:['ישראל','Israel'],US:['ארצות הברית','United States'],CA:['קנדה','Canada'],GB:['בריטניה','United Kingdom'],
+ FR:['צרפת','France'],AU:['אוסטרליה','Australia'],NZ:['ניו זילנד','New Zealand'],IE:['אירלנד','Ireland'],
+ DE:['גרמניה','Germany'],ES:['ספרד','Spain'],IT:['איטליה','Italy'],PT:['פורטוגל','Portugal'],
+ NL:['הולנד','Netherlands'],BE:['בלגיה','Belgium'],CH:['שווייץ','Switzerland'],AT:['אוסטריה','Austria'],
+ SE:['שוודיה','Sweden'],NO:['נורווגיה','Norway'],DK:['דנמרק','Denmark'],FI:['פינלנד','Finland'],
+ IS:['איסלנד','Iceland'],LU:['לוקסמבורג','Luxembourg'],MT:['מלטה','Malta'],
+ PL:['פולין','Poland'],CZ:['צ׳כיה','Czechia'],SK:['סלובקיה','Slovakia'],SI:['סלובניה','Slovenia'],
+ HR:['קרואטיה','Croatia'],RS:['סרביה','Serbia'],BG:['בולגריה','Bulgaria'],GR:['יוון','Greece'],
+ RO:['רומניה','Romania'],HU:['הונגריה','Hungary'],UA:['אוקראינה','Ukraine'],BY:['בלארוס','Belarus'],
+ MD:['מולדובה','Moldova'],LV:['לטביה','Latvia'],LT:['ליטא','Lithuania'],EE:['אסטוניה','Estonia'],
+ RU:['רוסיה','Russia'],GE:['גאורגיה','Georgia'],AM:['ארמניה','Armenia'],AZ:['אזרבייג׳ן','Azerbaijan'],
+ UZ:['אוזבקיסטן','Uzbekistan'],TR:['טורקיה','Turkey'],CY:['קפריסין','Cyprus'],
+ BR:['ברזיל','Brazil'],MX:['מקסיקו','Mexico'],AR:['ארגנטינה','Argentina'],CL:['צ׳ילה','Chile'],
+ CO:['קולומביה','Colombia'],PE:['פרו','Peru'],UY:['אורוגוואי','Uruguay'],PY:['פרגוואי','Paraguay'],
+ BO:['בוליביה','Bolivia'],EC:['אקוודור','Ecuador'],VE:['ונצואלה','Venezuela'],PA:['פנמה','Panama'],
+ CR:['קוסטה ריקה','Costa Rica'],GT:['גואטמלה','Guatemala'],
+ ZA:['דרום אפריקה','South Africa'],MA:['מרוקו','Morocco'],TN:['תוניסיה','Tunisia'],DZ:['אלג׳יריה','Algeria'],
+ EG:['מצרים','Egypt'],ET:['אתיופיה','Ethiopia'],NG:['ניגריה','Nigeria'],KE:['קניה','Kenya'],
+ AE:['איחוד האמירויות','UAE'],SA:['ערב הסעודית','Saudi Arabia'],QA:['קטאר','Qatar'],JO:['ירדן','Jordan'],
+ IN:['הודו','India'],JP:['יפן','Japan'],CN:['סין','China'],KR:['דרום קוריאה','South Korea'],
+ TH:['תאילנד','Thailand'],VN:['וייטנאם','Vietnam'],PH:['פיליפינים','Philippines'],ID:['אינדונזיה','Indonesia'],
+ MY:['מלזיה','Malaysia'],SG:['סינגפור','Singapore'],HK:['הונג קונג','Hong Kong'],TW:['טאיוואן','Taiwan']
+};
+/* example MOBILE number (national format, no dial code) */
+var MOBEX={IL:'50 123 4567',US:'201 555 0123',CA:'204 555 0123',GB:'7400 123456',FR:'6 12 34 56 78',
+ AU:'412 345 678',DE:'151 2345678',RU:'912 345 6789',UA:'50 123 4567',AR:'11 2345 6789',
+ BR:'11 91234 5678',MX:'55 1234 5678',ZA:'71 123 4567',IT:'312 345 6789',ES:'612 345 678',
+ NL:'6 12345678',BE:'470 12 34 56',CH:'78 123 45 67',SE:'70 123 45 67',PL:'512 345 678',
+ HU:'20 123 4567',TR:'532 123 45 67',IN:'98765 43210',CA_:'',default:'50 123 4567'};
+function cname(k){ var he=currentLang==='he'; var n=CNAME[k]; return n?(he?n[0]:n[1]):k; }
+function mobEx(k){ return MOBEX[k]||MOBEX['default']; }
+/* find the ISO key for a dial code (first match) */
+function isoForDial(dial){ var ks=Object.keys(DIAL); for(var i=0;i<ks.length;i++){ if(DIAL[ks[i]]===String(dial)) return ks[i]; } return 'IL'; }
+;
 /* Emergency numbers by country. 112 is the GSM universal fallback and works on almost
    any network on earth, even with no SIM. */
 var EMERG={
@@ -7850,7 +7905,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v153';
+var APP_VER='v154';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
