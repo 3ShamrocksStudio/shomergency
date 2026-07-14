@@ -1551,7 +1551,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v129 · 13.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v130 · 14.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -7627,7 +7627,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v129';
+var APP_VER='v130';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -8149,6 +8149,7 @@ function fbSetupConnState(){ /* no-op: connection state comes from the SSE strea
 var PRESENCE_MS=40000, PSTALE=140*1000, PRES_MARKER_CAP=200, PRES_DEBOUNCE_MS=2000;
 function fbStartPresence(){
  try{ setTimeout(sosWatchPartners, 1200); }catch(e){}
+ try{ setTimeout(watchSignals, 1400); }catch(e){}
   if(!FB.ready||!FB._authReady)return;
   try{ FB.db.ref('presence/'+FB.uid).onDisconnect().remove(); }catch(e){}  // best-effort unload DELETE
   fbPublishPresence();
@@ -8159,11 +8160,42 @@ function fbStartPresence(){
   // GRACEFUL DEGRADATION: the raw stream can fire thousands of events/sec under the global
   // fan-out. Never re-scan on every event — stash the latest snapshot and process it on a
   // debounced schedule so the SOS path + UI stay responsive even when presence is hammered.
-  FB.db.ref('presence').on('value',function(snap){
-    FB._presSnap=snap;
-    if(FB._presPending)return; FB._presPending=true;
-    setTimeout(function(){ FB._presPending=false; try{ fbProcessPresence(FB._presSnap); }catch(e){} }, PRES_DEBOUNCE_MS);
-  }, function(e){ FB.permErr=(e&&e.code)||'denied'; fbLog('presence READ denied:', FB.permErr, e); renderFbStatus(); });
+  /* PRIVACY: never read the whole presence tree — subscribe ONLY to approved guardians.
+     This closes the leak (a stranger could read everyone) at the app layer and works cleanly
+     under the strict rule once it is published. */
+  fbWatchGuardianPresence();
+}
+function fbWatchGuardianPresence(){
+  if(!FB.ready||!FB.uid) return;
+  FB._presRefs=FB._presRefs||{};
+  var want={};
+  var g=gdState();
+  (g.pairs||[]).forEach(function(pr){
+    var puid=pr&&pr.partnerUid;
+    if(!puid||pr.pending) return;
+    want[puid]=true;
+    if(FB._presRefs[puid]) return;                 /* already watching */
+    var ref=FB.db.ref('presence/'+puid);
+    FB._presRefs[puid]=ref;
+    ref.on('value', function(snap){
+      var v=snap&&snap.val?snap.val():null;
+      FB._peer=FB._peer||{};
+      if(v){ FB._peer[puid]=v; } else { delete FB._peer[puid]; }
+      if(FB._presPending)return; FB._presPending=true;
+      setTimeout(function(){ FB._presPending=false; try{ fbProcessPeer(); }catch(e){} }, PRES_DEBOUNCE_MS);
+    }, function(e){ FB.permErr=(e&&e.code)||'denied'; renderFbStatus(); });
+  });
+  /* stop watching anyone no longer a guardian */
+  Object.keys(FB._presRefs).forEach(function(puid){
+    if(!want[puid]){ try{ FB._presRefs[puid].off(); }catch(e){} delete FB._presRefs[puid];
+      if(FB._peer) delete FB._peer[puid]; }
+  });
+}
+function fbProcessPeer(){
+  /* hand the collected guardian positions to the existing renderer as a synthetic snapshot */
+  var all=FB._peer||{};
+  try{ fbApplyPeerPresence(all); }catch(e){}
+  try{ fbRenderPeerMarkers(all); }catch(e){}
 }
 function fbProcessPresence(snap){
   if(!snap)return;
@@ -8491,6 +8523,7 @@ function ensureMemberForPair(p, cid){
   return m;
 }
 function syncPairsToCircles(){
+  try{ setTimeout(fbWatchGuardianPresence, 400); }catch(e){}
  try{ setTimeout(sosWatchPartners, 500); }catch(e){}
   try{
     if(!circlesList().length) return;                 // wait until circles exist
@@ -8543,6 +8576,85 @@ function essToggleMenu(){
   if(open){ b.removeAttribute('hidden'); } else { b.setAttribute('hidden',''); }
   if(t) t.setAttribute('aria-expanded', open?'true':'false');
   if(k) k.textContent = open ? '▴' : '▾';
+}
+/* ══ RESPONDER STATUS SIGNALS ══
+   Once a guardian is on-scene they hold information everyone else needs — is a medic needed,
+   have the authorities arrived, is it over. These broadcast on the same bus, key rs_<uid>,
+   payload "code|name" (e.g. "medic|Yossi"). Any paired guardian watching the incident sees it. */
+var SIGNALS={
+  medic:   {he:'צריך פרמדיק',       en:'Medic needed',        ic:'✚', c:'#E5484D'},
+  defib:   {he:'צריך דפיברילטור',    en:'Defibrillator now',   ic:'⚡', c:'#E5484D'},
+  police:  {he:'המשטרה הגיעה',       en:'Police arrived',      ic:'🛡', c:'#2962FF'},
+  ambul:   {he:'אמבולנס הגיע',       en:'Ambulance arrived',   ic:'🚑', c:'#2962FF'},
+  safe:    {he:'המצב תחת שליטה',      en:'Under control',       ic:'✓', c:'#0E8F6E'},
+  ended:   {he:'האירוע הסתיים',      en:'Event ended',         ic:'✓', c:'#0E8F6E'}
+};
+function packSig(code, nm){ return (String(code||'')+'|'+String(nm||'').slice(0,18)).slice(0,60); }
+function unpackSig(s){ var p=String(s||'').split('|'); return {code:p[0]||'', name:p[1]||''}; }
+
+async function sendSignal(code){
+  var he=currentLang==='he';
+  if(!FB.ready||!FB.uid) return;
+  var me=(SS.user&&SS.user.name)||(typeof user!=='undefined'&&user&&user.name)||'';
+  try{
+    await fbRestWrite('PUT','invites/rs_'+FB.uid,{fromUid:FB.uid,ts:Date.now(),name:packSig(code,me)});
+    var sg=SIGNALS[code];
+    toast((he?'נשלח: ':'Sent: ')+(sg?(he?sg.he:sg.en):code),'grn');
+  }catch(e){ toast(he?'לא נשלח':'Not sent','amb'); }
+}
+
+/* the on-scene action sheet a responder opens */
+function openSignalSheet(){
+  var he=currentLang==='he';
+  var old=document.getElementById('sig-sheet'); if(old) old.remove();
+  var d=document.createElement('div');
+  d.id='sig-sheet'; d.className='sig-sheet';
+  var btns=Object.keys(SIGNALS).map(function(k){
+    var s=SIGNALS[k];
+    return '<button class="sig-b" data-k="'+k+'" style="border-color:'+s.c+'44">'
+      +'<span class="sig-ic" style="color:'+s.c+'">'+s.ic+'</span>'
+      +'<span>'+(he?s.he:s.en)+'</span></button>';
+  }).join('');
+  d.innerHTML='<div class="sig-h">'+(he?'עדכן/י את השומרים':'Update the guardians')+'</div>'
+    +'<div class="sig-grid">'+btns+'</div>'
+    +'<button class="sig-close">'+(he?'סגור':'Close')+'</button>';
+  document.body.appendChild(d);
+  d.querySelectorAll('.sig-b').forEach(function(b){
+    b.onclick=function(){ sendSignal(b.getAttribute('data-k')); d.remove(); };
+  });
+  d.querySelector('.sig-close').onclick=function(){ d.remove(); };
+}
+
+/* watch paired guardians' signals; surface as a small ticker */
+function watchSignals(){
+  if(!FB.ready||!FB.uid) return;
+  var g=gdState();
+  (g.pairs||[]).forEach(function(pr){
+    var puid=pr&&pr.partnerUid; if(!puid||SOSBUS.sigwatch&&SOSBUS.sigwatch[puid]) return;
+    SOSBUS.sigwatch=SOSBUS.sigwatch||{}; SOSBUS.sigwatch[puid]=true;
+    try{
+      FB.db.ref('invites/rs_'+puid).on('value',function(snap){
+        var raw=snap&&snap.val?snap.val():null;
+        if(!raw||!raw.name) return;
+        var s=unpackSig(raw.name);
+        if(!s.code||!SIGNALS[s.code]) return;
+        if(Date.now()-(raw.ts||0) > 3600000) return;   /* ignore stale > 1h */
+        showSignalTicker(s);
+      });
+    }catch(e){}
+  });
+}
+function showSignalTicker(s){
+  var he=currentLang==='he';
+  var sg=SIGNALS[s.code]; if(!sg) return;
+  var t=document.createElement('div');
+  t.className='sig-tick';
+  t.style.borderColor=sg.c;
+  t.innerHTML='<span class="sig-ic" style="color:'+sg.c+'">'+sg.ic+'</span>'
+    +'<span><b>'+ESC(s.name||'')+'</b> · '+(he?sg.he:sg.en)+'</span>';
+  document.body.appendChild(t);
+  try{ if(navigator.vibrate) navigator.vibrate(120); }catch(e){}
+  setTimeout(function(){ t.classList.add('out'); setTimeout(function(){t.remove();}, 400); }, 6000);
 }
 /* ══ THE 60-CHARACTER BUS ══
    THE DISCOVERY THAT EXPLAINS EVERYTHING: the DEPLOYED security rules allow exactly three
@@ -8693,7 +8805,8 @@ function showIncomingSOS(puid, nm, v){
     d.classList.add('acked');
     d.querySelector('.in-sos-s').textContent = he?'אתה בדרך — הם יודעים':'You are on the way — they know';
     var btns=d.querySelector('.in-sos-btns');
-    btns.innerHTML='<button class="in-b map">'+(he?'נווט/י':'Navigate')+'</button>'
+    btns.innerHTML='<button class="in-b sig">'+(he?'עדכון':'Update')+'</button>'
+                  +'<button class="in-b map">'+(he?'נווט/י':'Navigate')+'</button>'
                   +'<button class="in-b call">'+(he?'התקשר/י':'Call')+'</button>'
                   +'<button class="in-b stand">'+(he?'לא יכול/ה':'Stand down')+'</button>';
     wire();
@@ -8715,6 +8828,7 @@ function showIncomingSOS(puid, nm, v){
     var mp=d.querySelector('.map'); if(mp) mp.onclick=nav;
     var cl=d.querySelector('.call'); if(cl) cl.onclick=callThem;
     var st=d.querySelector('.stand'); if(st) st.onclick=function(){ sosStandDown(); d.remove(); };
+    var sg=d.querySelector('.sig'); if(sg) sg.onclick=openSignalSheet;
   }
   wire();
   d.querySelector('.in-x').onclick=function(){ d.remove(); };   /* ALWAYS dismissible */
@@ -9163,6 +9277,7 @@ function aedAddHere(){
   try{ myAeds().push(a); saveStore(); aedSyncUp(); }catch(e){}
 }
 
+function fbRenderPeerMarkers(all){ try{ fbProcessPresence({val:function(){return all;}}); }catch(e){} }
 function fbApplyPeerPresence(all){
   try{
     if(!all)return;
@@ -10309,6 +10424,18 @@ body.aed-placing #map{cursor:crosshair}
 .cm-act{padding:7px 2px!important;font-size:9.5px!important;border-radius:9px!important;flex-direction:column!important;gap:3px!important}
 .cm-act svg{width:14px!important;height:14px!important}
 .cm-av{width:34px!important;height:34px!important}
+
+.sig-sheet{position:fixed;left:12px;right:12px;bottom:16px;z-index:100004;background:linear-gradient(160deg,#101E34,#0A1628);border:1px solid rgba(224,168,40,.4);border-radius:18px;padding:16px;box-shadow:0 18px 50px rgba(0,0,0,.7);max-width:520px;margin-inline:auto}
+.sig-h{font-size:15px;font-weight:900;color:var(--g3);margin-bottom:12px;text-align:center}
+.sig-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.sig-b{display:flex;align-items:center;gap:9px;padding:14px 12px;border-radius:13px;border:1.5px solid var(--b2);background:var(--n2);color:var(--tx0);font-family:inherit;font-weight:800;font-size:13px;cursor:pointer;text-align:start}
+.sig-ic{font-size:18px;flex:0 0 auto}
+.sig-close{width:100%;margin-top:11px;padding:11px;border-radius:11px;border:0;background:transparent;color:var(--tx3);font-family:inherit;font-weight:700;cursor:pointer}
+.sig-tick{position:fixed;left:12px;right:12px;top:calc(var(--hdr-top,0px) + var(--hdr) + 62px);z-index:100002;display:flex;align-items:center;gap:10px;background:rgba(10,22,40,.97);border:1px solid;border-radius:13px;padding:12px 14px;font-size:13px;color:var(--tx1);box-shadow:0 10px 30px rgba(0,0,0,.6);max-width:520px;margin-inline:auto;animation:sigIn .3s ease-out}
+.sig-tick.out{animation:sigOut .4s ease-in forwards}
+@keyframes sigIn{from{transform:translateY(-12px);opacity:0}to{transform:none;opacity:1}}
+@keyframes sigOut{to{transform:translateY(-12px);opacity:0}}
+.in-b.sig{background:#E0A828;color:#23170a}
 </style>
 <script src="native-bridge.js"></script>
 </body>
