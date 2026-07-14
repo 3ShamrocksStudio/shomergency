@@ -883,16 +883,16 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
 /* Responder profession badge on the live "me" marker */
 .mk-me-badge{position:absolute;left:60%;top:-4px;width:16px;height:16px;border-radius:50%;background:#0A1628;border:1.5px solid #F5C840;display:flex;align-items:center;justify-content:center;font-size:9px;line-height:1;z-index:3;box-shadow:0 1px 4px rgba(0,0,0,.6);}
 /* Legend — compact, collapsible card */
-.map-legend{position:absolute;top:calc(var(--hdr-top,0px) + var(--hdr) + 52px);left:10px;z-index:400;background:rgba(10,16,26,.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--b3);border-radius:var(--r12);box-shadow:var(--e2);max-width:172px;overflow:hidden;}
-.legend-hd{display:flex;align-items:center;gap:6px;width:100%;padding:8px 11px;font-size:9.5px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;color:var(--g3);cursor:pointer;text-align:start;}
+
+
 .legend-chev{margin-inline-start:auto;font-size:9px;color:var(--tx2);transition:transform .2s;}
 .map-legend:not(.collapsed) .legend-chev{transform:rotate(90deg);}
-.legend-body{padding:0 11px 9px;}
-.map-legend.collapsed .legend-body{display:none;}
+
+.map-legend.collapsed 
 .leg{display:flex;align-items:center;gap:8px;font-size:10.5px;font-weight:600;color:var(--tx1);margin-bottom:5px;}
 .leg:last-child{margin-bottom:0;}
 .ldc{width:18px;height:18px;border-radius:50%;flex-shrink:0;border:1.5px solid rgba(255,255,255,.85);box-shadow:0 1px 3px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;font-size:9px;line-height:1;}
-.legend-foot{font-size:8.5px;color:var(--tx3);margin-top:8px;padding-top:7px;border-top:1px solid var(--b1);line-height:1.5;}
+
 .map-controls{position:absolute;top:calc(var(--hdr-top,0px) + var(--hdr) + 10px);right:10px;z-index:400;display:flex;flex-direction:column;gap:6px;}
 .mc{width:42px;height:42px;border-radius:50%;background:rgba(8,18,36,.92);backdrop-filter:blur(12px);border:1px solid var(--b2);box-shadow:var(--e2);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:var(--p3);transition:all .15s;}
 .mc:hover{background:rgba(16,30,52,.96);transform:translateY(-1px);}
@@ -1548,7 +1548,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v133 · 14.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v134 · 14.07.26</div>
 
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -1789,6 +1789,21 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
   <div class="sh-body">
    <p class="desc" id="arr-cap" style="font-size:11.5px;color:var(--tx3);margin-bottom:12px"></p>
    <div id="arr-list"></div>
+  </div>
+ </div>
+
+ <!-- ═══ תזכורות הגעה (wireframe) ═══ -->
+ <div class="sheet" id="sh-arrivals" role="dialog" aria-modal="true" aria-labelledby="arr-ttl">
+  <div class="sh-pill" aria-hidden="true"></div>
+  <div class="sh-head">
+   <span class="sh-ttl" id="arr-ttl">תזכורות הגעה</span>
+   <button class="sh-x" onclick="cl('sh-arrivals')" aria-label="סגור">
+    <svg class="ic" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+   </button>
+  </div>
+  <div class="sh-body">
+   <div id="arr-list"></div>
+   <p class="arr-cap" id="arr-cap"></p>
   </div>
  </div>
 
@@ -2217,30 +2232,48 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
    </div>
 
    <!-- 3. הוספה לשומרים שלי -->
+   <button class="arr-open" onclick="openArrivals()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+    <span>תזכורות הגעה</span>
+    <span class="arr-chev">›</span>
+   </button>
+
    <div class="shm-sec">
     <div class="shm-h">הוספה לשומרים שלי</div>
-    <div style="padding:4px 0 8px">
- <p style="font-size:12px;color:var(--tx3);margin-bottom:12px">אם הם כבר ב-SH✡MER — תראו זה את זה. אם לא — תישלח הזמנה.</p>
- <div style="background:var(--n3);border:1px solid var(--b2);border-radius:16px;padding:14px">
-   <input class="ob-f" id="ag-name" type="text" maxlength="24" autocomplete="name" placeholder="שם (למשל: אמא, יעקב)" aria-label="שם" style="margin-bottom:10px">
-   <div style="display:flex;gap:8px;margin-bottom:10px">
-     <input class="ob-f" id="ag-phone" type="tel" inputmode="tel" autocomplete="tel" dir="ltr" placeholder="+972 · +81 · +1 …" aria-label="מספר נייד" style="flex:1;margin-bottom:0;text-align:left" oninput="agPhoneHint()" onkeydown="if(event.key==='Enter')addGuardian()">
-     <select class="ob-f" id="ag-cc" aria-label="קידומת מדינה" style="flex:0 0 auto;width:96px;margin-bottom:0;text-align:left" dir="ltr"></select>
-     <button onclick="agPickContact()" title="מאנשי הקשר" aria-label="מאנשי הקשר" style="flex:0 0 auto;width:46px;background:var(--n2);color:var(--g3);border:1px solid var(--b2);border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center">
-       <svg class="ic" viewBox="0 0 24 24" width="20"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="7" r="4" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+
+    <div class="agf">
+     <!-- number · dial code · country -->
+     <div class="agf-row3">
+      <input class="agf-in" id="ag-phone" type="tel" inputmode="tel" dir="ltr" autocomplete="tel"
+             placeholder="הקלד מספר" aria-label="מספר נייד"
+             oninput="agPhoneHint()" onkeydown="if(event.key==='Enter')addGuardian()">
+      <select class="agf-sel" id="ag-cc" aria-label="קידומת" dir="ltr"></select>
+      <select class="agf-sel" id="ag-country" aria-label="מדינה" onchange="agCountryPick()"></select>
+     </div>
+
+     <!-- contacts -->
+     <button class="agf-contacts" onclick="agPickContact()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+       <path d="M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9.5" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg>
+      <span>בחר מתוך אנשי קשר</span>
      </button>
-   </div>
-   <div style="display:flex;align-items:center;gap:9px;margin-bottom:10px">
-     <label for="ag-circle" style="font-size:12.5px;color:var(--tx2);font-weight:700;white-space:nowrap">הוסף למעגל:</label>
-     <select class="ob-f" id="ag-circle" aria-label="בחר מעגל" style="flex:1;margin-bottom:0"></select>
-   </div>
-   <div id="ag-hint" style="font-size:11px;color:var(--tx3);min-height:14px;margin-bottom:8px;text-align:center"></div>
-   <button class="cta-gold" id="ag-go" style="width:100%;padding:13px;font-size:15px;font-weight:800" onclick="addGuardian()">
-     <svg class="ic" viewBox="0 0 24 24" width="17" style="margin-inline-end:6px"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
-     <span id="ag-go-lbl">שלח/י בקשה</span>
-   </button>
- </div>
-</div>
+
+     <!-- my name for them -->
+     <div class="agf-field">
+      <label for="ag-name">שם השומר שלי:</label>
+      <input class="agf-in" id="ag-name" type="text" maxlength="24" placeholder="סבא" aria-label="שם השומר">
+     </div>
+
+     <!-- which circle -->
+     <div class="agf-field">
+      <label for="ag-circle">הוסף לקבוצה:</label>
+      <select class="agf-sel wide" id="ag-circle" aria-label="קבוצה"></select>
+     </div>
+
+     <div id="ag-hint" class="agf-hint" aria-live="polite"></div>
+
+     <button class="agf-add" onclick="addGuardian()">הוסף שומר</button>
+    </div>
    </div>
 
    <div id="gd-list" role="list" style="margin-top:10px"></div>
@@ -5776,69 +5809,61 @@ function paintMapCount(){
   el.innerHTML='<b>'+live+'</b><span>'+(he?('מתוך '+total+' שומרים משתפים מיקום'):(live+' of '+total+' sharing location'))+'</span>';
 }
 /* ══ תזכורות הגעה ══
-   5 guardians × 4 places = 20 — exactly iOS's hard ceiling of 20 monitored regions per app.
-   Go past it and iOS silently stops firing. A safety feature that fails quietly is the worst
-   kind, so the limit is enforced here rather than discovered in an emergency. */
-var ARR_MAX_G=5, ARR_MAX_P=4;
+   5 guardians x 4 places = 20 = the iOS ceiling on monitored regions. Past 20 iOS silently
+   stops firing, so the limit is enforced here rather than discovered in an emergency. */
+var ARR_G=5, ARR_P=4;
 function arrState(){ if(!SS.arrivals) SS.arrivals={}; return SS.arrivals; }
-function openArrivals(){ op('sh-arrivals'); renderArrivals(); }
+function openArrivals(){ opFrom('sh-arrivals','sh-circles'); renderArrivals(); }
 function renderArrivals(){
   var he=currentLang==='he';
   var host=document.getElementById('arr-list'); if(!host) return;
-  host.innerHTML='';
   var A=arrState();
   var members=(SS.circleMembers||[]).filter(function(m){return !m.pending;});
-
-  for(var i=0;i<ARR_MAX_G;i++){
-    var slot=document.createElement('div');
-    slot.className='arr-slot';
+  var html='';
+  for(var i=0;i<ARR_G;i++){
     var sel=A['g'+i]||{};
     var opts='<option value="">'+(he?'בחר שומר':'Choose guardian')+'</option>'
       + members.map(function(m){
           return '<option value="'+m.id+'"'+(sel.mid===m.id?' selected':'')+'>'+ESC(m.name||'')+'</option>';
         }).join('');
     var rows='';
-    for(var p=0;p<ARR_MAX_P;p++){
+    for(var p=0;p<ARR_P;p++){
       var pl=(sel.places&&sel.places[p])||{};
       rows+='<div class="arr-row">'
-          + '<span class="arr-n">'+(he?('מיקום '+(p+1)):('Place '+(p+1)))+'</span>'
-          + '<input class="arr-in" data-g="'+i+'" data-p="'+p+'" data-f="label" placeholder="'+(he?'תווית':'Label')+'" value="'+ESC(pl.label||'')+'">'
-          + '<input class="arr-in" data-g="'+i+'" data-p="'+p+'" data-f="addr" placeholder="'+(he?'כתובת':'Address')+'" value="'+ESC(pl.addr||'')+'">'
-          + '</div>';
+         +  '<span class="arr-n">'+(he?('מיקום '+(p+1)):('Place '+(p+1)))+'</span>'
+         +  '<input class="arr-in" data-g="'+i+'" data-p="'+p+'" data-f="addr" placeholder="'+(he?'תן כתובת':'Address')+'" value="'+ESC(pl.addr||'')+'">'
+         +  '</div>';
     }
-    slot.innerHTML='<div class="arr-h">'+(he?('שומר '+(i+1)):('Guardian '+(i+1)))+'</div>'
-      +'<select class="arr-sel" data-g="'+i+'">'+opts+'</select>'
-      +'<div class="arr-rows">'+rows+'</div>';
-    host.appendChild(slot);
+    html+='<div class="arr-slot">'
+       +  '<div class="arr-hd"><span class="arr-lbl">'+(he?('שומר '+(i+1)):('Guardian '+(i+1)))+'</span>'
+       +  '<select class="arr-sel" data-g="'+i+'">'+opts+'</select></div>'
+       +  '<div class="arr-rows">'+rows+'</div>'
+       +  '</div>';
   }
-
+  host.innerHTML=html;
   host.querySelectorAll('.arr-sel').forEach(function(s){
     s.onchange=function(){
-      var g=s.getAttribute('data-g');
-      var A2=arrState();
+      var g=s.getAttribute('data-g'), A2=arrState();
       A2['g'+g]=A2['g'+g]||{places:[]};
-      A2['g'+g].mid=s.value;
-      saveStore();
+      A2['g'+g].mid=s.value; saveStore();
     };
   });
   host.querySelectorAll('.arr-in').forEach(function(inp){
     inp.onchange=function(){
-      var g=inp.getAttribute('data-g'), p=+inp.getAttribute('data-p'), f=inp.getAttribute('data-f');
-      var A2=arrState();
+      var g=inp.getAttribute('data-g'), p=+inp.getAttribute('data-p'), A2=arrState();
       A2['g'+g]=A2['g'+g]||{places:[]};
       A2['g'+g].places=A2['g'+g].places||[];
       A2['g'+g].places[p]=A2['g'+g].places[p]||{};
-      A2['g'+g].places[p][f]=inp.value;
-      saveStore();
+      A2['g'+g].places[p].addr=inp.value; saveStore();
     };
   });
-
   var cap=document.getElementById('arr-cap');
   if(cap) cap.textContent = he
-    ? ('עד '+ARR_MAX_G+' שומרים · עד '+ARR_MAX_P+' מיקומים לכל אחד (מגבלת המערכת: 20)')
-    : ('Up to '+ARR_MAX_G+' guardians · '+ARR_MAX_P+' places each (system limit: 20)');
+    ? ('עד '+ARR_G+' שומרים · '+ARR_P+' מיקומים לכל אחד — מגבלת מערכת ההפעלה היא 20.')
+    : (ARR_G+' guardians x '+ARR_P+' places — the OS limit is 20.');
 }
 function renderCircles(){
+  try{ agFillSelects(); }catch(e){}
   try{ paintMapCount(); }catch(e){}
   var he=currentLang==='he';
   var cot=document.getElementById('cot-list');
@@ -6045,6 +6070,39 @@ function buildMemberRow(m,he){
  return wrap;
 }
 function toggleAddMember(){const f=document.getElementById('cm-add-form');if(f)f.style.display=f.style.display==='none'?'block':'none';}
+function agFillSelects(){
+  var he=currentLang==='he';
+  /* country list — drives the dial code, so the user never has to know it */
+  var sel=document.getElementById('ag-country');
+  if(sel && !sel.options.length){
+    var list=(typeof DIAL_CODES!=='undefined'&&DIAL_CODES)?DIAL_CODES:[];
+    if(!list.length && typeof CC_LIST!=='undefined') list=CC_LIST;
+    var html='';
+    (list||[]).forEach(function(d){
+      var name = d.name || d.n || d.country || '';
+      var code = d.code || d.dial || d.c || '';
+      var flag = d.flag || d.f || '';
+      if(!code) return;
+      html+='<option value="'+code+'">'+(flag?flag+' ':'')+name+'</option>';
+    });
+    sel.innerHTML=html || '<option value="972">🇮🇱 ישראל</option>';
+    try{ sel.value='972'; }catch(e){}
+  }
+  /* circle picker */
+  var cs=document.getElementById('ag-circle');
+  if(cs){
+    var cur=cs.value;
+    cs.innerHTML=circlesList().map(function(x){
+      return '<option value="'+x.id+'">'+ESC(x.name)+'</option>';
+    }).join('');
+    if(cur) try{ cs.value=cur; }catch(e){}
+  }
+}
+function agCountryPick(){
+  var s=document.getElementById('ag-country'), cc=document.getElementById('ag-cc');
+  if(s&&cc){ try{ cc.value=s.value; }catch(e){} }
+  try{ agPhoneHint(); }catch(e){}
+}
 function agPhoneHint(){
  var he=currentLang==='he';
  var raw=(document.getElementById('ag-phone')||{}).value||'';
@@ -7702,7 +7760,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v133';
+var APP_VER='v134';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -10262,8 +10320,8 @@ async function getOrCreateDeviceId(){
    ESSENTIALS are flat, muted, rounded squares that sit quietly BELOW them.
    Different shape + different weight = the eye never confuses a signpost for a scream. */
 .ess-mk{filter:saturate(.88)}
-.leg-sec{border-top:1px solid var(--b2);margin-top:8px;padding-top:9px}
-.leg-sec-h{font-size:9.5px;font-weight:800;letter-spacing:.6px;color:var(--tx3);margin-bottom:7px;text-transform:uppercase}
+
+
 .ess-chips{display:flex;flex-direction:column;gap:5px}
 .ess-chip{display:flex;align-items:center;gap:7px;width:100%;padding:5px 7px;border-radius:9px;border:1px solid transparent;background:rgba(255,255,255,.03);color:var(--tx2);font-family:inherit;font-size:11.5px;font-weight:700;cursor:pointer;opacity:.55;transition:.15s;text-align:start}
 .ess-chip.leg-on{opacity:1;background:rgba(255,255,255,.07);border-color:var(--b2);color:var(--tx0)}
@@ -10395,7 +10453,7 @@ body.aed-placing #map{cursor:crosshair}
 .leg-sec-tog{width:100%;display:flex;align-items:center;justify-content:space-between;background:none;border:0;padding:7px 0;font-family:inherit;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3);cursor:pointer}
 .leg-caret{font-size:11px;color:var(--tx3)}
 .leg-sec-body[hidden]{display:none}
-.stat-key{display:flex;flex-wrap:wrap;gap:7px;margin:4px 0 5px}
+
 .stat-key span{display:flex;align-items:center;gap:4px;font-size:9.5px;color:var(--tx2);font-weight:700}
 .stat-key .sk{width:9px;height:9px;border-radius:50%;display:inline-block;opacity:.75}
 .leg-stats-btn{width:100%;margin-top:5px;padding:5px;border-radius:8px;border:1px solid var(--b2);background:rgba(255,255,255,.04);color:var(--tx2);font-family:inherit;font-size:10px;font-weight:800;cursor:pointer}
@@ -10536,7 +10594,7 @@ body.aed-placing #map{cursor:crosshair}
 .ddr-circ .dd-ic{color:#E0A828!important}
 
 /* legend must never reach the SOS button zone (bottom 34-128px) */
-.map-legend{max-height:calc(100vh - var(--hdr) - var(--nav) - 130px)!important;overflow-y:auto!important;overscroll-behavior:contain;width:min(74vw,262px)}
+
 .map-legend.collapsed{max-height:44px!important;overflow:hidden!important}
 .map-legend::-webkit-scrollbar{width:3px}
 .map-legend::-webkit-scrollbar-thumb{background:rgba(201,168,76,.4);border-radius:3px}
@@ -10559,6 +10617,66 @@ html[dir="ltr"] .dd{left:10px!important;right:auto!important;transform-origin:to
 html[dir="rtl"] .sh-back svg{transform:scaleX(-1)}
 
 .eye{width:16px;height:16px;display:block}
+
+/* add-guardian form — wireframe layout */
+.agf{background:var(--n2);border:1px solid var(--b2);border-radius:16px;padding:14px}
+.agf-row3{display:grid;grid-template-columns:1fr 88px 96px;gap:7px;margin-bottom:10px}
+.agf-in{width:100%;padding:12px;border-radius:11px;border:1px solid var(--b2);background:var(--n3);color:var(--tx0);font-family:inherit;font-size:14px;min-width:0}
+.agf-in::placeholder{color:var(--tx3)}
+.agf-sel{width:100%;padding:12px 8px;border-radius:11px;border:1px solid var(--b2);background:var(--n3);color:var(--tx0);font-family:inherit;font-size:13px;min-width:0}
+.agf-sel.wide{width:100%}
+.agf-contacts{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;border-radius:11px;border:1px solid var(--b2);background:var(--n3);color:var(--g3);font-family:inherit;font-weight:800;font-size:13.5px;cursor:pointer;margin-bottom:12px}
+.agf-contacts svg{width:17px;height:17px}
+.agf-field{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.agf-field label{flex:0 0 auto;font-size:13px;font-weight:700;color:var(--tx2);white-space:nowrap}
+.agf-field .agf-in,.agf-field .agf-sel{flex:1}
+.agf-hint{font-size:11.5px;color:var(--tx3);min-height:14px;margin-bottom:8px;text-align:center}
+.agf-add{width:100%;padding:14px;border-radius:999px;border:0;background:var(--gold-grad,linear-gradient(135deg,#C09020,#E0A828 60%,#F5C840));color:#23170a;font-family:inherit;font-weight:900;font-size:15px;cursor:pointer}
+.agf-add:active{transform:scale(.98)}
+@media(max-width:380px){.agf-row3{grid-template-columns:1fr 76px 82px}}
+
+.arr-open{width:100%;display:flex;align-items:center;gap:10px;padding:14px;margin-bottom:14px;border-radius:14px;border:1px solid var(--b2);background:var(--n2);color:var(--tx1);font-family:inherit;font-weight:800;font-size:13.5px;cursor:pointer}
+.arr-open svg{width:18px;height:18px;color:var(--g3)}
+.arr-chev{margin-inline-start:auto;color:var(--tx3);font-size:18px}
+.arr-slot{background:var(--n2);border:1px solid var(--b2);border-radius:14px;padding:12px;margin-bottom:11px}
+.arr-hd{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.arr-lbl{flex:0 0 auto;font-size:12px;font-weight:900;color:var(--tx3)}
+.arr-sel{flex:1;padding:10px;border-radius:10px;border:1px solid var(--b2);background:var(--n3);color:var(--tx0);font-family:inherit;font-size:13px;font-weight:700}
+.arr-rows{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.arr-row{display:flex;align-items:center;gap:6px}
+.arr-n{flex:0 0 auto;font-size:9.5px;color:var(--tx3);font-weight:800;white-space:nowrap}
+.arr-in{flex:1;min-width:0;padding:9px;border-radius:9px;border:1px solid var(--b2);background:var(--n3);color:var(--tx0);font-family:inherit;font-size:12px}
+.arr-in::placeholder{color:var(--tx3)}
+.arr-cap{font-size:11px;color:var(--tx3);text-align:center;margin-top:8px;line-height:1.5}
+
+/* ══ MAP INDEX ══
+   Was a tall column down the side. Now a WIDE panel across the top of the map: three columns,
+   scannable at a glance, centred in every language, and nowhere near the SOS button. */
+.map-legend{position:absolute;top:calc(var(--hdr-top,0px) + var(--hdr) + 46px);left:8px;right:8px;
+  z-index:600;background:rgba(10,22,40,.93);border:1px solid rgba(201,168,76,.28);border-radius:14px;
+  backdrop-filter:blur(10px);box-shadow:0 10px 30px rgba(0,0,0,.5);max-width:620px;margin-inline:auto;overflow:hidden}
+.legend-hd{width:100%;display:flex;align-items:center;gap:8px;padding:10px 12px;background:none;border:0;
+  color:var(--g3);font-family:inherit;font-weight:900;font-size:12.5px;cursor:pointer}
+.legend-hd .ic{width:16px;height:16px}
+.legend-chev{margin-inline-start:auto;transition:transform .2s;font-size:12px;color:var(--tx3)}
+.map-legend:not(.collapsed) .legend-chev{transform:rotate(90deg)}
+.map-legend.collapsed .legend-body{display:none}
+.legend-body{padding:0 12px 12px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.leg-sec{min-width:0}
+.leg-sec-h{font-size:9.5px;font-weight:900;color:var(--tx3);letter-spacing:.03em;margin-bottom:6px;
+  padding-bottom:4px;border-bottom:1px solid rgba(255,255,255,.07);line-height:1.3}
+.stat-key{display:flex;flex-direction:column;gap:4px}
+.stat-key span{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--tx2);white-space:nowrap}
+.sk{width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+.legend-foot{grid-column:1/-1;font-size:8px;color:var(--tx3);margin-top:2px;padding-top:6px;
+  border-top:1px solid rgba(255,255,255,.07);line-height:1.45;text-align:center}
+@media(max-width:560px){
+  .legend-body{grid-template-columns:repeat(2,1fr)}
+  .map-legend{top:calc(var(--hdr-top,0px) + var(--hdr) + 42px)}
+}
+/* guardian count banner — centred in every language */
+.map-count{left:0!important;right:0!important;margin-inline:auto!important;width:max-content!important;
+  max-width:90vw;text-align:center}
 </style>
 <script src="native-bridge.js"></script>
 </body>
