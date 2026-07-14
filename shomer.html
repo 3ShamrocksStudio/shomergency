@@ -509,7 +509,7 @@ body.sheet-open .diag-panel{display:none;}
 .sos-rs-opt:active{transform:scale(.98);}
 .sos-rs-opt.real{background:linear-gradient(100deg,rgba(232,34,52,.18),rgba(232,34,52,.04));border-color:rgba(232,34,52,.5);color:#FF8089;}
 .sos-rs-opt .rs-ic{font-size:22px;flex-shrink:0;}
-/* Hold-to-arm progress ring around the SOS button */
+/* Prevent accidental SOS progress ring around the SOS button */
 .sos-hold-ring{position:absolute;top:50%;left:50%;transform:translate(-50%,-58%);width:106px;height:106px;border-radius:50%;background:conic-gradient(var(--g3) 0deg, transparent 0deg);opacity:0;transition:opacity .15s;pointer-events:none;z-index:0;-webkit-mask:radial-gradient(circle, transparent 46px, #000 47px);mask:radial-gradient(circle, transparent 46px, #000 47px);}
 .sos-hold-ring.on{opacity:1;}
 
@@ -1484,7 +1484,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
      <span><i class="sk" style="background:#E0A828"></i>סדר ציבורי</span>
    </div>
    <div class="leg-src">הצבע = סוג העבירה הנפוץ ביותר באזור. הגודל = כמות.<br>מקור: data.gov.il · 395,294 רשומות · סטטיסטיקה, לא אירועים חיים</div>
-   <button class="leg-stats-btn" id="leg-stats" onclick="statsToggle()"><span id="leg-stats-st">הסתר</span></button>
+   <button class="leg-stats-btn" id="leg-stats" onclick="statsToggle()"><span id="leg-stats-st"><svg class="eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg></span></button>
   </div>
   <div class="leg-sec" id="leg-ess">
    <button class="leg-sec-tog" id="ess-tog" onclick="essToggleMenu()" aria-expanded="false">
@@ -1524,7 +1524,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="hdr-left">
  <button class="hdr-menu" id="menu-btn" onclick="toggleDD()" aria-label="תפריט" aria-expanded="false" aria-haspopup="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
  <button class="hdr-guide" onclick="openGuide()" aria-label="מדריך חירום" title="מדריך חירום">
- <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 9v6M9 12h6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+ <svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6V4.8A1.8 1.8 0 0 1 10.8 3h2.4A1.8 1.8 0 0 1 15 4.8V6"/><rect x="3" y="6" width="18" height="14" rx="2.4"/><path d="M12 10.2v5.6M9.2 13h5.6" stroke-width="2.3"/></svg>
  </button>
  <!-- REAL "guardians nearby" — live count from RTDB presence (shown only when connected). -->
  <button class="hdr-near" id="hdr-near" style="display:none" onclick="explainNearby()" aria-live="polite">
@@ -1807,7 +1807,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <button class="chip" data-f="closed" onclick="chipOn(this)">נסגר ✓</button>
  </div>
  <div id="upd-list" role="list"></div>
- <div class="mini-credit" dir="ltr">SH✡MER<span class="tm"></span> · 2026 3Shamrocks Studio</div>
+ 
  </div>
  </div>
 
@@ -1954,7 +1954,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="13.5" r="3.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 7l1.5-2h3L15 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div><div><div class="sr-nm" id="selfie-tog-lbl" data-he="הגנת גנב — סלפי" data-en="Theft protection — selfie" data-ar="حماية السرقة — سيلفي">הגנת גנב — סלפי</div><div class="sr-sb" id="selfie-tog-sub" data-he="אחרי 3 קודים שגויים: צילום סלפי של מי שמחזיק את הטלפון + שליחת מיקום חי לשומרים שלך. דורש הרשאת מצלמה. פועל רק כשהאפליקציה פתוחה." data-en="After 3 wrong codes: snap a selfie of whoever holds the phone + send live location to your SHOMERs. Needs camera permission. Works only while the app is open.">אחרי 3 קודים שגויים: סלפי + מיקום חי לשומרים שלך.</div></div></div><div class="tog" id="selfie-tog" onclick="toggleSelfie(this)" role="switch" aria-label="הגנה מפני גניבת מכשיר — צילום סלפי אוטומטי"></div></div>
  <div class="set-row" onclick="openTheftEvidence()" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><div><div class="sr-nm" data-he="ראיות גניבה" data-en="Theft evidence" data-ar="أدلة السرقة">ראיות גניבה</div><div class="sr-sb" data-he="סלפי ומיקום שנלכדו — ראיה מתועדת למשטרה." data-en="Captured selfies + locations — documented proof for police.">סלפי ומיקום שנלכדו — ראיה למשטרה.</div></div></div><span id="theft-ev-state" style="font-size:12px;font-weight:700;color:var(--g3);white-space:nowrap"></span></div>
  </div>
- <div class="set-grp"><div class="set-row" onclick="op('sh-checkin')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="sr-nm" data-he="צ׳ק-אין הדדי (עם שומר/ת)" data-en="Mutual check-in (with a guardian)">צ׳ק-אין הדדי</div><div class="sr-sb" data-he="„הכל טוב??” תקופתי — אם לא תאשר/י, השומר/ת מקבל/ה אזעקה." data-en="Periodic 'Are you OK?' — if you don't confirm, your guardian is alerted.">„הכל טוב??” תקופתי.</div></div></div><span id="ci-set-state" style="font-size:12px;font-weight:700;color:var(--tx3);white-space:nowrap">כבוי</span></div></div>
+ <div class="set-grp"><div class="set-row" onclick="opFrom('sh-checkin','dd')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="sr-nm" data-he="צ׳ק-אין הדדי (עם שומר/ת)" data-en="Mutual check-in (with a guardian)">צ׳ק-אין הדדי</div><div class="sr-sb" data-he="„הכל טוב??” תקופתי — אם לא תאשר/י, השומר/ת מקבל/ה אזעקה." data-en="Periodic 'Are you OK?' — if you don't confirm, your guardian is alerted.">„הכל טוב??” תקופתי.</div></div></div><span id="ci-set-state" style="font-size:12px;font-weight:700;color:var(--tx3);white-space:nowrap">כבוי</span></div></div>
  <div class="sec-cap mb12" id="shake-set-lbl">Shake-to-SOS</div>
  <div class="set-grp">
  <div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 14h6l-1 8 9-12h-6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div><div><div class="sr-nm" id="shake-tog-lbl">הפעל Shake-to-SOS</div><div class="sr-sb" id="shake-tog-sub">5 ניעורים חזקים → SOS</div></div></div><div class="tog on" id="shake-tog" onclick="toggleShake(this)" role="switch"></div></div>
@@ -1976,7 +1976,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </div>
  </div>
  <div class="set-grp">
- <div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><div><div class="sr-nm" id="hold-arm-lbl">החזק-לחימוש</div><div class="sr-sb" id="hold-arm-sub">לחיצה ארוכה 2 שניות — מונע חיוג בכיס</div></div></div><div class="tog" id="hold-arm-tog" onclick="toggleHoldArm(this)" role="switch"></div></div>
+ <div class="set-row"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><div><div class="sr-nm" id="hold-arm-lbl">מניעת לחיצה בטעות</div><div class="sr-sb" id="hold-arm-sub">לחיצה ארוכה של 2 שניות תפעיל SOS — כדי שלא יישלח מהכיס</div></div></div><div class="tog" id="hold-arm-tog" onclick="toggleHoldArm(this)" role="switch"></div></div>
  </div>
  <div class="set-cat"><div class="set-cat-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><div class="set-cat-t" data-he="מיקום ופרטיות" data-en="Location &amp; Privacy">מיקום ופרטיות</div></div>
  <div class="sec-cap mb12" id="set-priv-lbl">פרטיות</div>
@@ -2012,9 +2012,9 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <button class="test-alarm-btn" style="margin-top:12px" onclick="updCheck(true)" id="set-upd-btn"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-.6 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 4v5h-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-he="בדיקת עדכונים" data-en="Check for updates" data-ar="التحقق من التحديثات">בדיקת עדכונים</span></button>
  <div class="sec-cap mb12" style="margin-top:18px" id="set-legal-cap">בטיחות ומשפט</div>
  <div class="set-grp mb20">
- <div class="set-row" onclick="openLegal('disclaimer')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l9 16H3Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17" r="1.2" fill="currentColor"/></svg></div><div class="sr-nm" id="set-disc-row">כתב ויתור חירום</div></div><span style="color:var(--tx3);font-size:18px">›</span></div>
- <div class="set-row" onclick="openLegal('tos')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l4 4v14H7Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 3v4h4M9 13h6M9 16.5h6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div class="sr-nm" id="set-tos-row">תנאי שימוש</div></div><span style="color:var(--tx3);font-size:18px">›</span></div>
- <div class="set-row" onclick="openLegal('privacy')" role="button" tabindex="0"><div class="sr-l"><div class="sr-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><div class="sr-nm" id="set-priv-row">מדיניות פרטיות</div></div><span style="color:var(--tx3);font-size:18px">›</span></div>
+ 
+ 
+ 
  </div>
  <div class="sec-cap mb12" style="margin-top:18px" id="datasrc-cap">נתונים ומקורות</div>
  <div class="set-grp surf-light" style="padding:13px 14px;">
@@ -2182,10 +2182,10 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
     <button class="gd-call" onclick="callNum(policeNum())"><b>100</b><span id="gd-c100">משטרה</span></button>
     <button class="gd-call" onclick="callNum(fireNum())"><b>102</b><span id="gd-c102">כבאות</span></button>
    </div>
-   <input class="gd-search" id="guide-search" type="text" oninput="guideFilter()" placeholder="חיפוש נושא…" aria-label="חיפוש נושא">
+   <input class="gd-search" id="guide-search" type="text" oninput="guideFilter()" enterkeyhint="search" onkeydown="if(event.key==='Enter'){this.blur();event.preventDefault();}" placeholder="חיפוש נושא…" aria-label="חיפוש נושא">
    <div id="guide-topics" role="list"></div>
    <div id="gd-verified" style="font-size:10.5px;color:var(--tx3);line-height:1.55;margin-top:14px;padding-top:11px;border-top:1px solid var(--b1);text-align:center"></div>
-   <div class="gd-foot"><img src="3shamrocks.png" alt="3Shamrocks Studio"><span>© 2026 3Shamrocks Studio</span></div>
+   
   </div>
   <div id="guide-detail-view" style="display:none">
    <button class="gd-back" onclick="guideBackToList()"><svg class="ic" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="gd-back-lbl">חזרה לרשימה</span></button>
@@ -2257,7 +2257,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  
 
  
- <div class="mini-credit" dir="ltr"><img class="footer-3s" src="3shamrocks.png" alt="3Shamrocks Studio"></div>
+ 
  </div>
  </div>
 
@@ -2699,7 +2699,7 @@ const AR={
  'Every SOS near you — most urgent, best left on':'كل نداء استغاثة قربك — الأكثر إلحاحاً، يُفضّل إبقاؤه مُفعّلاً'/*SAFETY*/,
  'Harassment/stalking reports near you':'بلاغات تحرّش/مطاردة قربك','Medical-help requests nearby':'طلبات مساعدة طبية في الجوار',
  'A heads-up when a nearby incident is closed':'تنبيه عند إغلاق حادثة قريبة','A soft chime when a SHOMER joins, on a new event or an update':'نغمة خفيفة عند انضمام حارس أو عند حدث جديد أو تحديث',
- 'Background location sharing':'مشاركة الموقع في الخلفية','Show name on updates':'إظهار الاسم في التحديثات','Hold-to-arm':'الضغط المطوّل للتفعيل',
+ 'Background location sharing':'مشاركة الموقع في الخلفية','Show name on updates':'إظهار الاسم في التحديثات','Prevent accidental SOS':'الضغط المطوّل للتفعيل',
  'SOS cancel code (PIN)':'رمز إلغاء الاستغاثة (PIN)','Mutual check-in':'تفقّد متبادل','Responder navigation (opt-in)':'توجيه المُستجيب (اختياري)',
  'Reset app':'إعادة ضبط التطبيق','Reset':'إعادة تعيين','Sign out':'تسجيل الخروج','Metric · m / km':'متري · م / كم','Imperial · ft / mi':'إمبراطوري · قدم / ميل',
  'Shake-to-SOS':'الهزّ للاستغاثة','SOS safety':'سلامة الاستغاثة','Cancel window before broadcast':'مهلة الإلغاء قبل البثّ','Alarm settings':'إعدادات الإنذار',
@@ -4731,8 +4731,8 @@ function refreshSosSafetyUI(){
  setText('sos-cd-lbl',he?'חלון ביטול לפני שידור':'Cancel window before broadcast');
  setText('sos-cd-sub',he?'זמן לבטל אזעקת שווא לפני שה-SOS משודר. קצר יותר = למצבי סיכון גבוה.'
  :'Time to cancel a false alarm before the SOS broadcasts. Shorter = high-risk situations.');
- setText('hold-arm-lbl',he?'החזק-לחימוש':'Hold-to-arm');
- setText('hold-arm-sub',he?'לחיצה ארוכה 2 שניות — מונע חיוג בכיס':'Press & hold 2s — prevents pocket-dials');
+ setText('hold-arm-lbl',he?'מניעת לחיצה בטעות':'Prevent accidental SOS');
+ setText('hold-arm-sub',he?'לחיצה ארוכה של 2 שניות תפעיל SOS — כדי שלא יישלח מהכיס':'Press & hold 2s — prevents pocket-dials');
  document.querySelectorAll('#sos-cd-presets .dms-iv-l').forEach(l=>l.textContent=he?'שניות':'sec');
  setText('sos-cd-val',(SS.sos.countdown||10)+'s');
  const ht=document.getElementById('hold-arm-tog');if(ht)ht.classList.toggle('on',!!SS.sos.holdToArm);
@@ -4751,8 +4751,8 @@ function toggleHoldArm(el){
  el.classList.toggle('on');
  SS.sos.holdToArm=el.classList.contains('on');saveStore();
  toast(SS.sos.holdToArm
- ?(currentLang==='he'?' החזק-לחימוש פעיל — מונע חיוג בכיס':' Hold-to-arm on — prevents pocket-dials')
- :(currentLang==='he'?'החזק-לחימוש כבוי — הקשה אחת שולחת':'Hold-to-arm off — single tap sends'),
+ ?(currentLang==='he'?' מניעת לחיצה בטעות פעיל — מונע חיוג בכיס':' Prevent accidental SOS on — prevents pocket-dials')
+ :(currentLang==='he'?'מניעת לחיצה בטעות כבוי — הקשה אחת שולחת':'Prevent accidental SOS off — single tap sends'),
  SS.sos.holdToArm?'grn':'');
 }
 function addSOSPin(){
@@ -4925,7 +4925,7 @@ window.addEventListener('DOMContentLoaded',()=>{
  // Textarea char count
  const ta=document.getElementById('rep-ta');
  if(ta)ta.addEventListener('input',()=>{document.getElementById('char-c').textContent=ta.value.length+' / 1000';});
- // Hold-to-arm: press & hold the SOS button ~2s to fire (only when enabled in Settings).
+ // Prevent accidental SOS: press & hold the SOS button ~2s to fire (only when enabled in Settings).
  const sb=document.getElementById('sos-btn');
  if(sb){
  sb.addEventListener('pointerdown',e=>{if(SS.sos.holdToArm&&sosPhase==='idle'){e.preventDefault();sosHoldStart();}});
@@ -5275,6 +5275,34 @@ function openUpdates(){
 }
 /* Mirror "any full sheet open" onto <body> so CSS can hide the floating SOS/FABs reliably (no :has dependency). */
 function syncSheetState(){ document.body.classList.toggle('sheet-open', !!document.querySelector('.sheet.open')); }
+/* ══ SCREEN STACK ══
+   Sub-screens used to have only an ✕, which threw the user back to the map. If you came
+   from the menu you expect to go BACK to the menu. Keep a stack; ✕ still exits fully. */
+var SCR_STACK=[];
+function opFrom(id, parent){
+  if(parent) SCR_STACK.push(parent);
+  op(id);
+  paintBack(id);
+}
+function goBack(id){
+  try{ cl(id); }catch(e){}
+  var prev=SCR_STACK.pop();
+  if(prev){ op(prev); paintBack(prev); }
+  else { try{ toggleDD(); }catch(e){} }
+}
+function paintBack(id){
+  var sheet=document.getElementById(id); if(!sheet) return;
+  var head=sheet.querySelector('.sh-head'); if(!head) return;
+  var has=head.querySelector('.sh-back');
+  if(SCR_STACK.length && !has){
+    var b=document.createElement('button');
+    b.className='sh-back';
+    b.setAttribute('aria-label', currentLang==='he'?'חזור':'Back');
+    b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>';
+    b.onclick=function(){ goBack(id); };
+    head.insertBefore(b, head.firstChild);
+  } else if(!SCR_STACK.length && has){ has.remove(); }
+}
 function op(id){closeAll();const el=document.getElementById(id);if(el)el.classList.add('open');syncSheetState();
  if(id==='sh-set'){try{renderSetContacts();}catch(e){}}
  if(id==='sh-circles'){ try{syncPairsToCircles();}catch(e){} try{renderCircles();}catch(e){} try{gdRenderList();}catch(e){} }   // was never re-rendered → circles list + toggles appeared empty
@@ -5512,16 +5540,75 @@ function guidePicto(id,cls){ var p=GUIDE_PICTO[id]; if(!p)return '<span class="'
 var GUIDE_CAT={ aed:'#0E8F6E', ptsd:'#7C5CFF', selfdef:'#0E8F6E', cpr:'#E5484D', choke:'#12A594', bleed:'#B21D2B', burn:'#E8811C', stroke:'#8E4EC6', heart:'#D6409F', allergy:'#30A46C', seizure:'#D9A21B', drown:'#2E7DD1', shock:'#5B6AD0', faint:'#9B7DF0', bone:'#A87B4F', call:'#0EA5E9' };
 function guideCatColor(id){ return GUIDE_CAT[id]||'var(--g3)'; }
 function guideImg(id,cls){ return '<img class="'+(cls||'gd-pic')+'" src="img/guide/'+id+'.jpg" alt="" loading="lazy" decoding="async" onerror="this.style.display=&quot;none&quot;">'; }
-function guideRenderList(q){ var L=currentLang==='ar'?'ar':currentLang==='en'?'en':'he'; var box=document.getElementById('guide-topics'); if(!box)return;
+function guideRenderList(q){
+  /* widen the query with the words a frightened person would actually type */
+  var _exp='';
+  try{ _exp=guideExpand(q); }catch(e){}
+  var _q=String(q||'').trim().toLowerCase(); var L=currentLang==='ar'?'ar':currentLang==='en'?'en':'he'; var box=document.getElementById('guide-topics'); if(!box)return;
  q=(q||'').trim().toLowerCase();
- var items=EMERGENCY_GUIDE.filter(function(g){ if(!q)return true; return (g.t[L]+' '+g.s[L]+' '+g.t.en+' '+g.t.he).toLowerCase().indexOf(q)>=0; });
+ var items=EMERGENCY_GUIDE.filter(function(g){
+   if(!q) return true;
+   var hay=(g.t[L]+' '+g.s[L]+' '+g.t.en+' '+g.t.he+' '+(g.id||'')).toLowerCase();
+   if(hay.indexOf(q)>=0) return true;
+   /* synonym net: someone typing "תחבושת" or "חובש" must still reach the bleeding page */
+   if(_exp){
+     var words=_exp.toLowerCase().split(/\s+/);
+     for(var i=0;i<words.length;i++){
+       if(words[i] && words[i].length>1 && hay.indexOf(words[i])>=0) return true;
+     }
+   }
+   return false;
+ });
  box.innerHTML='';
- if(!items.length){ var e=document.createElement('div'); e.className='gd-row-s'; e.style.padding='14px 4px'; e.textContent=(L==='he'?'לא נמצא נושא':L==='ar'?'لا يوجد موضوع':'No topic found'); box.appendChild(e); return; }
+ if(!items.length){ var e=document.createElement('div'); e.className='gd-row-s'; e.style.padding='14px 4px'; e.textContent=(L==='he'?'לא נמצא — נסה/י: דימום · החייאה · חנק · כוויה · שבר':L==='ar'?'لا يوجد موضوع':'Try: bleeding · CPR · choking · burn'); box.appendChild(e); return; }
  items.forEach(function(g){ var col=guideCatColor(g.id); var b=document.createElement('button'); b.className='gd-row'; b.setAttribute('role','listitem'); b.onclick=function(){ openGuideTopic(g.id); };
   b.style.borderInlineStart='4px solid '+col;
   b.innerHTML='<span class="gd-picwrap" style="border-color:'+col+'">'+guideImg(g.id,'gd-pic')+'</span><span style="flex:1"><span class="gd-row-t" style="color:'+col+'">'+ESC(g.t[L])+'</span><span class="gd-row-s">'+ESC(g.s[L])+'</span></span><span class="gd-chev" aria-hidden="true">›</span>';
   box.appendChild(b); }); }
-function guideFilter(){ var s=document.getElementById('guide-search'); guideRenderList(s?s.value:''); }
+/* ══ SEARCH SYNONYMS ══
+   In an emergency nobody recalls the textbook term. Someone bleeding types "דם" or "תחבושת"
+   or "חובש" — not "דימום מאסיבי". Every topic carries a wide net of the words a frightened
+   person actually types. Missing the right word must never cost someone the right page. */
+var GUIDE_SYN = {
+  bleed:   ['דימום','דם','מדמם','לעצור דם','חבישה','תחבושת','תחבושות','לחבוש','חובש','חוסם עורקים','טורניקט','פצע','חתך','דקירה','ירי','כדור','נשיכה','שטף'],
+  cpr:     ['החייאה','דום לב','לב','לא נושם','לא מגיב','עיסוי','עיסויים','לחיצות','הנשמה','דפיברילטור','דפיברילאטור','AED','מכת חשמל','התעלף','קרס','חסר הכרה','דופק','אין דופק'],
+  choke:   ['חנק','נחנק','נתקע','תקוע בגרון','לא יכול לנשום','היימליך','המליך','בליעה','שאיפה','משתנק','כחול'],
+  burn:    ['כוויה','כוויות','נשרף','שריפה','אש','חם','רותח','כימי','חשמל','שמש'],
+  fracture:['שבר','שברים','נקע','עצם','יד שבורה','רגל שבורה','לא זז','נפיחות','סד','קיבוע'],
+  shock:   ['הלם','חיוור','קר','מזיע','חלש','סחרחורת','מבולבל','נמוך','לחץ דם'],
+  seizure: ['פרכוס','פרכוסים','אפילפסיה','התקף','רועד','מתעווית','נשיכת לשון'],
+  stroke:  ['שבץ','שבץ מוחי','פנים נפולות','לא מדבר','חצי גוף','חולשה בצד','דיבור משובש','FAST'],
+  heart:   ['התקף לב','כאב בחזה','לחץ בחזה','קוצר נשימה','כאב ביד שמאל','לב','אוטם'],
+  allergy: ['אלרגיה','אנפילקסיס','אנפילקטי','אפיפן','epipen','נפיחות בגרון','עקיצה','צרעה','דבורה','אלרגי'],
+  heat:    ['מכת חום','התייבשות','חום','מיובש','לא מזיע','בלבול','שמש'],
+  poison:  ['הרעלה','בלע','רעל','כימיקל','תרופות','מנת יתר','סמים','ניקוי'],
+  drown:   ['טביעה','טבע','מים','ים','בריכה','לא נושם','שאב מים'],
+  child:   ['ילד','תינוק','פעוט','ילדים','חנק בילד','החייאת ילדים']
+};
+function guideExpand(q){
+  var s=String(q||'').trim().toLowerCase();
+  if(!s) return '';
+  var hits=[];
+  Object.keys(GUIDE_SYN).forEach(function(k){
+    if(GUIDE_SYN[k].some(function(w){ return w.toLowerCase().indexOf(s)>=0 || s.indexOf(w.toLowerCase())>=0; })){
+      hits.push(k);
+      hits=hits.concat(GUIDE_SYN[k]);
+    }
+  });
+  return hits.join(' ');
+}
+function guideFilter(){
+  /* dismiss the keyboard the moment the user scrolls the results */
+  try{
+    var body=document.querySelector('#sh-guide .sh-body');
+    if(body && !body._blurHook){
+      body._blurHook=1;
+      body.addEventListener('scroll', function(){
+        var s=document.getElementById('guide-search');
+        if(s && document.activeElement===s) s.blur();
+      }, {passive:true});
+    }
+  }catch(e){} var s=document.getElementById('guide-search'); guideRenderList(s?s.value:''); }
 function openGuideTopic(id){ var L=currentLang==='ar'?'ar':currentLang==='en'?'en':'he', he=L==='he'; var g=EMERGENCY_GUIDE.find(function(x){return x.id===id;}); if(!g)return;
  var d=document.getElementById('guide-detail'); if(!d)return;
  var col=guideCatColor(g.id);
@@ -5669,12 +5756,24 @@ function switchCircle(cid){activeCircleId=cid;renderCircles();}
 
 /* Build the Circles sheet body (tabs + member list). User data via ESC(). */
 function paintMapCount(){
+  /* This used to say "2 שומרים", which read like "2 guardians near you" — it was actually
+     just your own list. Misleading in the one place accuracy matters. Now it says exactly
+     what it is: how many of YOUR guardians are currently sharing their location with you. */
+  var he=currentLang==='he';
+  var el=document.getElementById('map-count'); if(!el) return;
+  var live=0;
   try{
-    var n=(SS.circleMembers||[]).filter(function(m){return !m.pending;}).length;
-    var el=document.getElementById('mc-n'); if(el) el.textContent=n;
-    var l=document.getElementById('mc-l');
-    if(l) l.textContent=(currentLang==='he')?'שומרים':(n===1?'guardian':'guardians');
+    var peers=(FB && FB._peer) || {};
+    var now=Date.now();
+    Object.keys(peers).forEach(function(k){
+      var p=peers[k];
+      if(p && typeof p.lat==='number' && (now-(p.ts||0) < 15*60000)) live++;
+    });
   }catch(e){}
+  var total=((SS.circleMembers||[]).filter(function(m){return !m.pending;})).length;
+  if(!total){ el.style.display='none'; return; }
+  el.style.display='';
+  el.innerHTML='<b>'+live+'</b><span>'+(he?('מתוך '+total+' שומרים משתפים מיקום'):(live+' of '+total+' sharing location'))+'</span>';
 }
 /* ══ תזכורות הגעה ══
    5 guardians × 4 places = 20 — exactly iOS's hard ceiling of 20 monitored regions per app.
@@ -5763,16 +5862,23 @@ function renderCircles(){
 
     list.forEach(function(cc,i){
       var ms=membersOf(cc.id);
+      var isNew = !cc.named;                    /* never renamed → still a blank slot */
+      var isOn  = ms.length>0;                  /* has guardians → always ON */
       var b=document.createElement('button');
-      var active=(activeCircleId===cc.id);
-      b.className='bub'+(active?' bub-on':'');
-      /* greyscale until activated — colour is the ON state, not the default */
-      b.style.background = active ? COLORS[i%COLORS.length] : 'linear-gradient(135deg,#3a4763,#2a3448)';
-      b.style.color = active ? INK[i%INK.length] : '#c3cede';
-      b.innerHTML='<b>'+ms.length+'</b><span>'+ESC(cc.name)+'</span>';
+      b.className='bub'+(isNew?' bub-new':(isOn?' bub-on':' bub-off'));
+      if(isOn){
+        b.style.background=COLORS[i%COLORS.length];
+        b.style.color=INK[i%INK.length];
+      } else {
+        b.style.background=''; b.style.color='';
+      }
+      b.innerHTML = isNew
+        ? '<b>+</b><span>'+(he?'חדש':'new')+'</span>'
+        : '<b>'+ms.length+'</b><span>'+ESC(cc.name)+'</span>';
       b.onclick=function(){
+        if(isNew){ renameCircle(cc.id); renderCircles(); return; }   /* name it first */
         activeCircleId=cc.id;
-        COT_OPEN = (COT_OPEN===cc.id) ? null : cc.id;
+        COT_OPEN=(COT_OPEN===cc.id)?null:cc.id;
         renderCircles();
       };
       wrap.appendChild(b);
@@ -5781,9 +5887,9 @@ function renderCircles(){
     /* room for more? show the add bubbles */
     for(var k=list.length; k<CIRCLE_MAX; k++){
       var a=document.createElement('button');
-      a.className='bub bub-add';
+      a.className='bub bub-new';
       a.innerHTML='<b>+</b><span>'+(he?'חדש':'new')+'</span>';
-      a.onclick=function(){ addCircle(); renderCircles(); };
+      a.onclick=function(){ var id=addCircle(); if(id) renameCircle(id); renderCircles(); };
       wrap.appendChild(a);
     }
     cot.appendChild(wrap);
@@ -5889,7 +5995,7 @@ function buildMemberRow(m,he){
     <span>${he?'שיתוף מיקום':'Location'}</span></button>
   <button class="cm-act ${pingOn?'on':''}" data-a="ping">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 8-3 8h18s-3-1-3-8"/><path d="M10.3 21a2 2 0 0 0 3.4 0"/></svg>
-    <span>${he?'בדיקה':'Check-in'}</span></button>
+    <span>${he?'הכל טוב?':'All good?'}</span></button>
   <button class="cm-act" data-a="locate">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="7"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
     <span>${he?'אתר/י':'Find'}</span></button>
@@ -5907,7 +6013,7 @@ function buildMemberRow(m,he){
        toast(he?((m.shareTo!==false?'משתף/ת מיקום עם ':'הפסקת לשתף מיקום עם ')+ESC(m.name)):'Updated', m.shareTo!==false?'grn':'amb');
        try{ gdRenderMarkers(); }catch(e){} return; }
      if(a==='ping'){ m.ping=!(m.ping!==false); b.classList.toggle('on',m.ping!==false); saveStore();
-       toast(he?((m.ping!==false?'בדיקה פעילה':'בדיקה כבויה')+' · '+ESC(m.name)):'Updated', m.ping!==false?'grn':'amb'); return; }
+       toast(he?((m.ping!==false?'„הכל טוב?” פעיל':'„הכל טוב?” כבוי')+' · '+ESC(m.name)):'Updated', m.ping!==false?'grn':'amb'); return; }
      if(a==='resend'){ resendInvite(m.id); return; }
      if(a==='locate'){ flyToMember(m.id); return; }
      if(a==='del'){ if(confirm(he?('להסיר את '+(m.name||'')+' מהמעגל?'):('Remove '+(m.name||'')+'?'))) removeMember(m.id); return; }
@@ -6253,7 +6359,7 @@ function renameCircle(id){
  if(nm===null)return;
  nm=(''+nm).trim().substring(0,20);
  if(!nm){ toast(he?'שם ריק':'Empty name','amb'); return; }
- cc.name=nm; saveStore(); renderCircles();
+ cc.name=nm; cc.named=true; saveStore(); renderCircles();
  toast(he?('✓ שם המעגל עודכן'):'✓ Circle renamed','grn');
 }
 function addCircle(){
@@ -6294,10 +6400,10 @@ function clearCircleMarkers(){
 function pingMember(id){
   var m=memberById(id); if(!m)return;
   var he=currentLang==='he';
-  if(m.ping===false){ toast(he?'בדיקה כבויה עבור '+ESC(m.name):'Ping-pong is off for '+m.name,'amb'); return; }
+  if(m.ping===false){ toast(he?'בדיקת שלום כבויה עבור '+ESC(m.name):'Ping-pong is off for '+m.name,'amb'); return; }
   try{ if(m.partnerUid&&FB.ready) fbRestWrite('PUT','ping/'+m.partnerUid+'/'+FB.uid,{name:(SS.user&&SS.user.name)||'',ts:Date.now()}); }catch(e){}
-  try{ pushNotify('SH\u2721MER', (he?'שלחת בקשת בדיקה ל-':'Check-in sent to ')+(m.name||''),'gd-ping'); }catch(e){}
-  toast(he?('\u2713 בקשת בדיקה נשלחה ל-'+ESC(m.name)+' — „את/ה בסדר?”'):('\u2713 Ping sent to '+m.name),'grn');
+  try{ pushNotify('SH\u2721MER', (he?'נשלחה שאלת „הכל טוב?” ל-':'Asked \'All good?\' — ')+(m.name||''),'gd-ping'); }catch(e){}
+  toast(he?('\u2713 נשאלו „הכל טוב?” — '+ESC(m.name)+' — „את/ה בסדר?”'):('\u2713 Ping sent to '+m.name),'grn');
 }
 function msgMember(id){
   var m=memberById(id); if(!m)return;
@@ -6321,7 +6427,7 @@ function memberPopupHtml(id){
   <div style="font-size:11px;color:#8c9bbd;margin-bottom:4px">${he?'מעגל':'Circle'}: <b style="color:#C9A84C">${ESC(circ.name||'-')}</b> · ${st.txt}</div>
   <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:8px">
    <button onclick="flyToMember('${m.id}')" style="background:#1670E0;border:none;border-radius:9px;color:#fff;font-weight:800;font-size:11.5px;padding:8px 6px;cursor:pointer;font-family:inherit">${he?'אתר/י':'Locate'}</button>
-   <button onclick="pingMember('${m.id}')" style="background:#0E8F6E;border:none;border-radius:9px;color:#fff;font-weight:800;font-size:11.5px;padding:8px 6px;cursor:pointer;font-family:inherit">${he?'בדיקה':'Check-in'}</button>
+   <button onclick="pingMember('${m.id}')" style="background:#0E8F6E;border:none;border-radius:9px;color:#fff;font-weight:800;font-size:11.5px;padding:8px 6px;cursor:pointer;font-family:inherit">${he?'הכל טוב?':'All good?'}</button>
    <button onclick="msgMember('${m.id}')" style="background:#23324E;border:none;border-radius:9px;color:#E8EEF7;font-weight:800;font-size:11.5px;padding:8px 6px;cursor:pointer;font-family:inherit">${he?'הודעה':'Message'}</button>
    <button onclick="callMember('${m.id}')" style="background:#23324E;border:none;border-radius:9px;color:#E8EEF7;font-weight:800;font-size:11.5px;padding:8px 6px;cursor:pointer;font-family:inherit">${he?'חיוג':'Call'}</button>
   </div>
@@ -8938,7 +9044,7 @@ function statsAutoOn(){
 }
 function statsLegPaint(){
   var b=document.getElementById('leg-stats-st');
-  if(b) b.textContent = STATS.on ? 'הסתר' : 'הצג';
+  if(b){ b.innerHTML = STATS.on ? "<svg class=\"eye\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linecap=\"round\"><path d=\"M2 12s3.6-6.5 10-6.5c1.5 0 2.9.35 4.1.9M22 12s-3.6 6.5-10 6.5c-1.5 0-2.9-.35-4.1-.9\"/><path d=\"M4 4l16 16\"/></svg>" : "<svg class=\"eye\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.9\" stroke-linecap=\"round\"><path d=\"M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12Z\"/><circle cx=\"12\" cy=\"12\" r=\"2.6\"/></svg>"; b.setAttribute("aria-label", STATS.on ? (currentLang==="he"?"הסתר":"Hide") : (currentLang==="he"?"הצג":"Show")); }
   var sec=document.getElementById('leg-stats-sec');
   if(sec) sec.classList.toggle('dim', !STATS.on);
 }
@@ -10434,6 +10540,25 @@ body.aed-placing #map{cursor:crosshair}
 .map-legend.collapsed{max-height:44px!important;overflow:hidden!important}
 .map-legend::-webkit-scrollbar{width:3px}
 .map-legend::-webkit-scrollbar-thumb{background:rgba(201,168,76,.4);border-radius:3px}
+
+/* the on-screen keyboard used to sit over the results — dismiss it as soon as you scroll */
+#sh-guide .sh-body{ -webkit-overflow-scrolling:touch }
+
+/* circle states: NEW = grey outline only · OFF = solid grey · ON = brand colour */
+.bub-new{background:transparent!important;border:2px dashed rgba(136,152,184,.45)!important;color:rgba(136,152,184,.75)!important;box-shadow:none!important}
+.bub-new b{font-size:22px!important}
+.bub-off{background:linear-gradient(135deg,#3a4763,#2a3448)!important;color:#c3cede!important}
+.bub-on{box-shadow:0 0 0 3px var(--g3),0 6px 18px rgba(0,0,0,.4)!important}
+
+/* the menu must open on the same side as its button */
+html[dir="rtl"] .dd{right:10px!important;left:auto!important;transform-origin:top right}
+html[dir="ltr"] .dd{left:10px!important;right:auto!important;transform-origin:top left}
+
+.sh-back{background:none;border:0;color:var(--tx2);cursor:pointer;padding:6px;display:flex;align-items:center;margin-inline-end:4px}
+.sh-back svg{width:20px;height:20px}
+html[dir="rtl"] .sh-back svg{transform:scaleX(-1)}
+
+.eye{width:16px;height:16px;display:block}
 </style>
 <script src="native-bridge.js"></script>
 </body>
