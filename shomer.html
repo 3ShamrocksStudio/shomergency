@@ -6473,6 +6473,7 @@ function removeMember(id){
   if(mapLayers.circle[id]){ MAP&&MAP.removeLayer(mapLayers.circle[id]); delete mapLayers.circle[id]; }
   if(alertMemberId===id) clearCircleAlert();
   saveStore(); renderCircles();
+  try{ sosRotateSalt(); }catch(e){}   /* removed guardian can no longer compute the SOS channel */
   toast(he?('הוסר/ה '+(m.name||'')+' — כבר לא רואה את המיקום שלך'):((m.name||'Removed')+' — they can no longer see your location'),'');
 }
 function renameCircle(id){
@@ -7076,6 +7077,7 @@ function gdCheckInviteParam(){
 function gdFillIdentity(inv){
   var he=currentLang==='he';
   var u=unpackInvite(inv&&inv.name);
+  try{ if(u.salt && inv && inv.fromUid) setGuardianSalt(inv.fromUid, u.salt); }catch(e){}
   var nm=u.name, ph=u.phone, code=u.code;
   var av=document.getElementById('gd-ident-av');
   if(av) av.textContent=(nm.trim()[0]||'?').toUpperCase();
@@ -8858,6 +8860,43 @@ function showSignalTicker(s){
   try{ if(navigator.vibrate) navigator.vibrate(120); }catch(e){}
   setTimeout(function(){ t.classList.add('out'); setTimeout(function(){t.remove();}, 400); }, 6000);
 }
+/* ══ ROTATING SOS CHANNEL ══
+   The SOS broadcast key is sos_<uid>_<salt>. The salt is a per-victim secret held only by the
+   victim and their CURRENT guardians (delivered in the approved invite). If a guardian is
+   removed, the victim rotates the salt and re-issues it to the remaining guardians, so the
+   removed guardian can no longer compute the channel — closing the ex-guardian residual read. */
+function sosSalt(){
+  if(!SS.sosSalt){ SS.sosSalt=sosNewSalt(); saveStore(); }
+  return SS.sosSalt;
+}
+function sosNewSalt(){
+  var a=new Uint8Array(6);
+  try{ (crypto||window.crypto).getRandomValues(a); }
+  catch(e){ for(var i=0;i<6;i++) a[i]=Math.floor(Math.random()*256); }
+  return Array.prototype.map.call(a,function(b){return ('0'+b.toString(16)).slice(-2);}).join('');
+}
+/* my own SOS channel key */
+function sosChan(uid, salt){ return 'sos_'+String(uid||'').slice(0,20)+'_'+(salt||''); }
+/* a guardian stores each partner's salt (learned at approval) so they can watch the right key */
+function guardianSalt(puid){
+  try{ return (SS.partnerSalts||{})[puid]||''; }catch(e){ return ''; }
+}
+function setGuardianSalt(puid, salt){
+  if(!SS.partnerSalts) SS.partnerSalts={};
+  SS.partnerSalts[puid]=salt; saveStore();
+}
+/* rotate my salt and re-issue to every remaining guardian's inbox */
+async function sosRotateSalt(){
+  var ns=sosNewSalt(); SS.sosSalt=ns; saveStore();
+  var g=gdState();
+  var me=(SS.user&&SS.user.name)||'';
+  await Promise.all((g.pairs||[]).filter(function(p){return !p.pending && p.partnerUid;}).map(function(p){
+    /* deliver the new salt to the guardian on a key only they poll: salt_<theirUid> */
+    return fbRestWrite('PUT','invites/salt_'+FB.uid.slice(0,16)+'_'+p.partnerUid.slice(0,16),
+      {fromUid:FB.uid, ts:Date.now(), name:'S|'+me.slice(0,16)+'|'+ns}).catch(function(){});
+  }));
+  return ns;
+}
 /* ══ THE 60-CHARACTER BUS ══
    THE DISCOVERY THAT EXPLAINS EVERYTHING: the DEPLOYED security rules allow exactly three
    fields on an invite — fromUid, ts, and name — and `name` is capped at 60 CHARACTERS.
@@ -8875,10 +8914,10 @@ function cut(s,n){ return String(s||'').replace(/\|/g,' ').trim().slice(0,n); }
 function co(v){ return (typeof v==='number' && isFinite(v)) ? v.toFixed(4) : ''; }
 
 /* invite identity → "name|phone|code"  (fits: 18 + 15 + 4 + 2 separators = 39) */
-function packInvite(nm, phone, code){ return packFit(cut(nm,18)+'|'+cut(phone,15)+'|'+cut(code,4)); }
+function packInvite(nm, phone, code){ return packFit(cut(nm,14)+'|'+cut(phone,14)+'|'+cut(code,4)+'|'+sosSalt()); }
 function unpackInvite(s){
   var p=String(s||'').split('|');
-  return { name:p[0]||'', phone:p[1]||'', code:p[2]||'' };
+  return { name:p[0]||'', phone:p[1]||'', code:p[2]||'', salt:p[3]||'' };
 }
 /* sos / responder → "1|name|lat|lng|forTag"
    The rules ALSO cap the invite KEY at ~40 chars, so resp_<uid>_<uid> (62) is rejected.
@@ -8929,7 +8968,7 @@ async function sosBroadcast(sosId, type){
     name: packSOS(true, (SS.user&&SS.user.name)||(typeof user!=='undefined'&&user&&user.name)||'',
                   p?p.lat:null, p?p.lng:null, FB.uid)
   };
-  var ok=await busWrite('sos_'+FB.uid, payload);
+  var ok=await busWrite(sosChan(FB.uid, sosSalt()), payload);
   SOSBUS.active=payload.sosId;
   if(ok){
     var n=(SS.circleMembers||[]).filter(function(m){return !m.pending;}).length;
@@ -8943,7 +8982,7 @@ async function sosBroadcast(sosId, type){
 }
 async function sosClearBroadcast(){
   if(!FB.ready||!FB.uid) return;
-  try{ await fbRestWrite('PUT','invites/sos_'+FB.uid,{fromUid:FB.uid,ts:Date.now(),name:packSOS(false,'',null,null,FB.uid)}); }catch(e){}
+  try{ await fbRestWrite('PUT','invites/'+sosChan(FB.uid, sosSalt()),{fromUid:FB.uid,ts:Date.now(),name:packSOS(false,'',null,null,FB.uid)}); }catch(e){}
   SOSBUS.active=null;
   Object.keys(SOSBUS.responders).forEach(function(k){ delete SOSBUS.responders[k]; });
   sosPaintResponders(); sosPaintMyHelp();
@@ -8958,10 +8997,18 @@ function sosWatchPartners(){
     if(!puid||pr.pending||SOSBUS.watchers[puid]) return;
     SOSBUS.watchers[puid]=true;
     try{
-      FB.db.ref('invites/sos_'+puid).on('value', function(snap){
+      var gsalt=guardianSalt(puid);
+      FB.db.ref('invites/'+sosChan(puid, gsalt)).on('value', function(snap){
         var raw=snap&&snap.val?snap.val():null;
         var v=raw?unpackSOS(raw.name):null;
         if(v&&v.active) onPartnerSOS(puid, v); else onPartnerSOSClear(puid);
+      });
+      /* also watch for a rotated salt from this partner, and re-subscribe when it changes */
+      FB.db.ref('invites/salt_'+puid.slice(0,16)+'_'+FB.uid.slice(0,16)).on('value', function(snap){
+        var raw=snap&&snap.val?snap.val():null;
+        if(raw&&raw.name){ var np=String(raw.name).split('|'); if(np[0]==='S'&&np[2]){
+          if(np[2]!==guardianSalt(puid)){ setGuardianSalt(puid, np[2]); delete SOSBUS.watchers[puid]; sosWatchPartners(); }
+        }}
       });
     }catch(e){}
   });
