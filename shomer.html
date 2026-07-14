@@ -2294,7 +2294,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </div>
  <div class="tog" id="ghost-tog" onclick="toggleGhost()" role="switch" aria-label="מצב רפאים"></div>
  </div>
- <div class="sec-cap mb12" style="margin-top:20px" id="circ-demo-cap">השומרים שלי</div>
+ 
  <div class="circ-tabs" id="circ-tabs" role="tablist" aria-label="מעגלים"></div>
  
  
@@ -7845,7 +7845,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v145';
+var APP_VER='v146';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -11073,8 +11073,7 @@ html[dir="rtl"] .sh-back svg{transform:scaleX(-1)}
   background:rgba(10,22,40,.95);border:1px solid rgba(201,168,76,.3);border-radius:11px;
   backdrop-filter:blur(10px);box-shadow:0 8px 22px rgba(0,0,0,.5);overflow:hidden;
   width:max-content;max-width:min(520px,calc(100% - 76px))}
-.legend-hd{display:flex;align-items:center;gap:5px;padding:6px 11px;background:none;border:0;
-  color:var(--g3);font-family:inherit;font-weight:800;font-size:10.5px;cursor:pointer;white-space:nowrap}
+.legend-hd{display:flex;align-items:center;justify-content:center;gap:5px;padding:6px 11px;background:none;border:0;color:var(--g3);font-family:inherit;font-weight:800;font-size:10.5px;cursor:pointer;width:100%;text-align:center}
 .legend-hd .ic{width:12px;height:12px;flex:0 0 auto}
 .legend-chev{margin-inline-start:2px;font-size:9px;color:var(--tx3);transition:transform .2s}
 .map-legend:not(.collapsed) .legend-chev{transform:rotate(90deg)}
