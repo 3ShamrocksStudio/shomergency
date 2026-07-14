@@ -826,13 +826,13 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
 .tiles-base{filter:brightness(.85) sepia(.75) hue-rotate(192deg) saturate(2) brightness(.4) contrast(.9);}
 .tiles-labels{filter:brightness(1.12) saturate(.6);}
 .leaflet-container{background:#20242b;font-family:var(--font-main);outline:none;}
-.leaflet-control-attribution{background:rgba(8,18,36,.6)!important;color:rgba(136,152,184,.55)!important;font-size:8px!important;backdrop-filter:blur(4px);border-radius:5px;padding:1px 5px!important;line-height:1.3;opacity:.65}
-.leaflet-control-attribution a{color:rgba(136,152,184,.6)!important;text-decoration:none}
+
+
 /* sit it in the bottom-LEFT, lifted clear of the bottom nav — never under the SOS button */
 
-.leaflet-control-attribution a{color:var(--tx3)!important}
 
-.leaflet-control-attribution a{color:var(--g2)!important;}
+
+
 .leaflet-bar,.leaflet-control-zoom{display:none!important;} /* we use our own brand controls */
 /* 3D marker index */
 .shomer-marker.mk3 svg{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 4px 5px rgba(0,0,0,.55));}
@@ -1472,10 +1472,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <!-- Data-source banner -->
  <!-- statistical-overview banner removed; the legend now occupies the top-left. Sources remain cited in marker popups + Settings > Data & sources. -->
  <!-- Legend -->
- <div class="map-credit" aria-hidden="true">
-   <span class="mc-badge"><img src="3shamrocks.png" alt="3Shamrocks Studio" width="78" height="12" loading="lazy"></span>
-  </div>
-  <div class="map-count" id="map-count" aria-live="polite"><span class="mc-dot"></span><b id="mc-n">0</b> <span id="mc-l">שומרים</span></div>
+ <div class="map-count" id="map-count" aria-live="polite"><span class="mc-dot"></span><b id="mc-n">0</b> <span id="mc-l">שומרים</span></div>
  <div class="map-legend collapsed" id="map-legend" aria-label="מקרא מפה">
  <button class="legend-hd" onclick="toggleLegend()" aria-expanded="false" aria-controls="legend-body"><span aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span><span id="legend-ttl-txt">מקרא מפה</span><span class="legend-chev" id="legend-chev" aria-hidden="true">▸</span></button>
  <div class="legend-body" id="legend-body">
@@ -1551,7 +1548,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  </button>
  </div>
  </header>
-<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v130 · 14.07.26</div>
+<div id="app-ver" style="position:fixed;bottom:4px;left:4px;font-size:9px;color:rgba(255,255,255,.3);z-index:401;pointer-events:none">v131 · 14.07.26</div>
 <div id="app-copyright" dir="ltr" style="position:fixed;bottom:calc(var(--nav,94px) + env(safe-area-inset-bottom,0px) + 4px);left:0;right:0;text-align:center;font-size:9.5px;letter-spacing:.4px;color:rgba(255,255,255,.42);z-index:401;pointer-events:none;text-shadow:0 1px 3px rgba(0,0,0,.8)">© 2026 3Shamrocks Studio · SH✡MER.app</div>
 
  <!-- LIVE CONNECTION STATUS — so each device SHOWS whether it's connected + listening for SOS -->
@@ -2243,7 +2240,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
    <div class="shm-sec">
     <div class="shm-h">הוספה לשומרים שלי</div>
     <div style="padding:4px 0 8px">
- <p style="font-size:13px;color:var(--tx2);line-height:1.6;margin-bottom:14px">הוסף/י אנשים שאת/ה סומכים עליהם. אם הם כבר ב-SH✡MER — תראו זה את זה על המפה. אם לא — נשלח להם הזמנה.</p>
+ <p style="font-size:12px;color:var(--tx3);margin-bottom:12px">אם הם כבר ב-SH✡MER — תראו זה את זה. אם לא — תישלח הזמנה.</p>
  <div style="background:var(--n3);border:1px solid var(--b2);border-radius:16px;padding:14px">
    <input class="ob-f" id="ag-name" type="text" maxlength="24" autocomplete="name" placeholder="שם (למשל: אמא, יעקב)" aria-label="שם" style="margin-bottom:10px">
    <div style="display:flex;gap:8px;margin-bottom:10px">
@@ -2279,7 +2276,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  
  <button class="row-btn" style="width:100%;margin-bottom:12px;justify-content:flex-start;gap:9px" onclick="cl('sh-circles');openGeoRemind()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="color:var(--g3)"><path d="M12 22s7-6.4 7-12a7 7 0 1 0-14 0c0 5.6 7 12 7 12Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.6" fill="currentColor"/></svg><span data-he="תזכורת הגעה (כשמישהו מגיע למקום)" data-en="Arrival reminder (when someone reaches a place)">תזכורת הגעה</span></button>
 
- <button class="cm-act danger" style="width:100%;padding:12px;margin-top:6px" onclick="leaveCircle()" id="circ-leave-btn"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M6.3 6.3l11.4 11.4" fill="none" stroke="currentColor" stroke-width="2"/></svg><span id="circ-leave-lbl">עזוב מעגל זה</span></button>
+ 
  <div class="mini-credit" dir="ltr"><img class="footer-3s" src="3shamrocks.png" alt="3Shamrocks Studio"></div>
  </div>
  </div>
@@ -5787,9 +5784,11 @@ function renderCircles(){
     list.forEach(function(cc,i){
       var ms=membersOf(cc.id);
       var b=document.createElement('button');
-      b.className='bub'+(activeCircleId===cc.id?' bub-on':'');
-      b.style.background=COLORS[i%COLORS.length];
-      b.style.color=INK[i%INK.length];
+      var active=(activeCircleId===cc.id);
+      b.className='bub'+(active?' bub-on':'');
+      /* greyscale until activated — colour is the ON state, not the default */
+      b.style.background = active ? COLORS[i%COLORS.length] : 'linear-gradient(135deg,#3a4763,#2a3448)';
+      b.style.color = active ? INK[i%INK.length] : '#c3cede';
       b.innerHTML='<b>'+ms.length+'</b><span>'+ESC(cc.name)+'</span>';
       b.onclick=function(){
         activeCircleId=cc.id;
@@ -5907,10 +5906,10 @@ function buildMemberRow(m,he){
  acts.innerHTML=`
   <button class="cm-act ${shareOn?'on':''}" data-a="share">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.4"/></svg>
-    <span>${he?'מיקום':'Location'}</span></button>
+    <span>${he?'שיתוף מיקום':'Location'}</span></button>
   <button class="cm-act ${pingOn?'on':''}" data-a="ping">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 8-3 8h18s-3-1-3-8"/><path d="M10.3 21a2 2 0 0 0 3.4 0"/></svg>
-    <span>${he?'פינג':'Ping'}</span></button>
+    <span>${he?'בדיקה':'Check-in'}</span></button>
   <button class="cm-act" data-a="locate">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="7"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
     <span>${he?'אתר/י':'Find'}</span></button>
@@ -5928,7 +5927,7 @@ function buildMemberRow(m,he){
        toast(he?((m.shareTo!==false?'משתף/ת מיקום עם ':'הפסקת לשתף מיקום עם ')+ESC(m.name)):'Updated', m.shareTo!==false?'grn':'amb');
        try{ gdRenderMarkers(); }catch(e){} return; }
      if(a==='ping'){ m.ping=!(m.ping!==false); b.classList.toggle('on',m.ping!==false); saveStore();
-       toast(he?((m.ping!==false?'פינג-פונג פעיל':'פינג-פונג כבוי')+' · '+ESC(m.name)):'Updated', m.ping!==false?'grn':'amb'); return; }
+       toast(he?((m.ping!==false?'בדיקה פעילה':'בדיקה כבויה')+' · '+ESC(m.name)):'Updated', m.ping!==false?'grn':'amb'); return; }
      if(a==='resend'){ resendInvite(m.id); return; }
      if(a==='locate'){ flyToMember(m.id); return; }
      if(a==='del'){ if(confirm(he?('להסיר את '+(m.name||'')+' מהמעגל?'):('Remove '+(m.name||'')+'?'))) removeMember(m.id); return; }
@@ -6289,17 +6288,7 @@ function addCircle(){
  SS.circles.push(c); activeCircleId=c.id; saveStore(); renderCircles();
  toast(he?'✓ מעגל חדש נוצר':'✓ New circle created','grn');
 }
-function leaveCircle(){
- const he=currentLang==='he';
- if(circlesList().length<=1){toast(he?'חייב להישאר מעגל אחד':'Keep at least one circle','amb');return;}
- const cid=activeCircleId;
- SS.circleMembers=SS.circleMembers.filter(m=>m.cid!==cid);
- SS.circles=SS.circles.filter(c=>c.id!==cid);
- if(mapCircleId===cid){clearCircleMarkers();mapCircleId=null;}
- activeCircleId=(SS.circles[0]||{}).id||null;
- saveStore(); renderCircles();
- toast(he?'עזבת את המעגל':'Left the circle','');
-}
+function leaveCircle(){}
 function toggleGhost(){
  SS.circleGhost=!SS.circleGhost; saveStore();
  const gt=document.getElementById('ghost-tog'),gr=document.getElementById('ghost-row');
@@ -6327,7 +6316,7 @@ function pingMember(id){
   var he=currentLang==='he';
   if(m.ping===false){ toast(he?'פינג-פונג כבוי עבור '+ESC(m.name):'Ping-pong is off for '+m.name,'amb'); return; }
   try{ if(m.partnerUid&&FB.ready) fbRestWrite('PUT','ping/'+m.partnerUid+'/'+FB.uid,{name:(SS.user&&SS.user.name)||'',ts:Date.now()}); }catch(e){}
-  try{ pushNotify('SH\u2721MER', (he?'שלחת פינג ל-':'Ping sent to ')+(m.name||''),'gd-ping'); }catch(e){}
+  try{ pushNotify('SH\u2721MER', (he?'שלחת בקשת בדיקה ל-':'Check-in sent to ')+(m.name||''),'gd-ping'); }catch(e){}
   toast(he?('\u2713 פינג נשלח ל-'+ESC(m.name)+' — „את/ה בסדר?”'):('\u2713 Ping sent to '+m.name),'grn');
 }
 function msgMember(id){
@@ -7627,7 +7616,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v130';
+var APP_VER='v131';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -10396,21 +10385,13 @@ body.aed-placing #map{cursor:crosshair}
 /* ── THE BOTTOM LINE — measured against the real geometry ──
    .nav sits 34px from the bottom and is 94px tall, so the SOS button owns 34px–128px.
    Everything down here must live BELOW 34px, or beside the button. Never inside its zone. */
-.leaflet-bottom.leaflet-right{
-  right:auto!important; left:4px!important;
-  bottom:2px!important;                       /* UNDER the SOS button's zone, in the corner */
-  z-index:400!important;
-}
-.leaflet-control-attribution{
-  background:rgba(8,18,36,.55)!important;color:rgba(136,152,184,.5)!important;
-  font-size:7.5px!important;padding:1px 4px!important;border-radius:4px;
-  line-height:1.25;opacity:.6;margin:0!important;
-}
-.leaflet-control-attribution a{color:rgba(136,152,184,.55)!important;text-decoration:none}
+
+
+
 /* the branded 3Shamrocks line — bottom-RIGHT corner, same height, out of the button's way */
-.map-credit{position:absolute;right:6px;bottom:3px;z-index:400;pointer-events:none;opacity:.5}
-.mc-badge{display:inline-flex;align-items:center;background:rgba(8,18,36,.55);border-radius:5px;padding:2px 6px}
-.mc-badge img{height:11px;width:auto;display:block}
+
+
+
 
 /* no plated squares anywhere behind a glyph — the icon stands alone */
 .dd-ic,.dd-ic.c-circ,.dd-ic.c-guide,.dd-ic.c-rep,.sec-ic,.ic-box{background:none!important;border:0!important;border-radius:0!important;box-shadow:none!important;padding:0!important}
@@ -10436,6 +10417,21 @@ body.aed-placing #map{cursor:crosshair}
 @keyframes sigIn{from{transform:translateY(-12px);opacity:0}to{transform:none;opacity:1}}
 @keyframes sigOut{to{transform:translateY(-12px);opacity:0}}
 .in-b.sig{background:#E0A828;color:#23170a}
+
+/* attribution pinned to the TOP-LEFT of the map — nowhere near the SOS button at the bottom */
+.leaflet-bottom.leaflet-right{top:calc(var(--hdr-top,0px) + var(--hdr) + 6px)!important;bottom:auto!important;left:6px!important;right:auto!important}
+.leaflet-control-attribution{background:rgba(8,18,36,.5)!important;color:rgba(136,152,184,.45)!important;font-size:7.5px!important;padding:1px 4px!important;border-radius:4px;opacity:.55}
+.leaflet-control-attribution a{color:rgba(136,152,184,.5)!important;text-decoration:none}
+
+/* member action buttons — circular, on-brand */
+.cm-acts{display:flex!important;gap:14px!important;justify-content:space-around!important;margin-top:10px!important}
+.cm-act{display:flex!important;flex-direction:column!important;align-items:center!important;gap:5px!important;
+  background:none!important;border:0!important;padding:0!important;font-size:10px!important;color:var(--tx2)!important;cursor:pointer}
+.cm-act svg{width:20px!important;height:20px!important;padding:11px;border-radius:50%!important;
+  background:var(--n3)!important;border:1px solid var(--b2)!important;box-sizing:content-box;transition:.15s}
+.cm-act.on svg{background:rgba(224,168,40,.14)!important;border-color:rgba(224,168,40,.5)!important;color:var(--g3)!important}
+.cm-act.danger svg{color:#E5484D!important;border-color:rgba(229,72,77,.4)!important}
+.cm-act:active svg{transform:scale(.9)}
 </style>
 <script src="native-bridge.js"></script>
 </body>
