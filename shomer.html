@@ -5264,7 +5264,7 @@ function snapPhoto(){
 }
 function handleFiles(files){
  Array.from(files).forEach(f=>{
- if(!f.type.startsWith('image/')||f.size>10*1024*1024) return;
+ if(!f.type.startsWith('image/')||f.size>8*1024*1024){ toast(currentLang==='he'?'קובץ לא תקין (תמונה עד 8MB)':'Invalid file (image up to 8MB)','amb'); return; }
  const r=new FileReader();
  r.onload=e=>addPhoto(e.target.result);
  r.readAsDataURL(f);
@@ -5272,6 +5272,14 @@ function handleFiles(files){
  document.getElementById('file-in').value='';
 }
 function addPhoto(src){
+  try{
+    if(!sessionStorage.getItem('shomerImgAgreed')){
+      var he=currentLang==='he';
+      var okc=confirm(he?'אני מאשר/ת שהתמונה הולמת, אינה פוגענית, מזיקה, מפורשת מינית או מזהה אדם ללא רשות. תוכן לא הולם עלול להסיר את המשתמש.':'I confirm this image is appropriate — not offensive, harmful, sexually explicit, or identifying a person without consent. Inappropriate content may remove the user.');
+      if(!okc) return;
+      sessionStorage.setItem('shomerImgAgreed','1');
+    }
+  }catch(e){}
  if(photos.length>=5){toast(currentLang==='he'?'מקסימום 5 תמונות':'Max 5 photos','amb');return;}
  photos.push(src);
  const grid=document.getElementById('cam-grid');
@@ -7994,7 +8002,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v177';
+var APP_VER='v178';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -9159,6 +9167,44 @@ var EVT = {
   NEIGH_M: 1500          /* a confirmation only counts if the confirmer is within 1.5 km */
 };
 
+/* ═══════════════════════════════════════════════════════════════════════
+   CONTENT MODERATION & USER-PROTECTION LAYER
+   Protects users from: abusive language, inappropriate images, harassment.
+   Client-side first line of defence (server rules are the hard gate).
+   ═══════════════════════════════════════════════════════════════════════ */
+var MOD = (function(){
+  /* Multilingual profanity / abuse patterns (HE + EN + AR common). Kept minimal &
+     pattern-based; the goal is to block obvious abuse, not to be a perfect filter. */
+  var BAD = [
+    /\bf+u+c+k+/i, /\bs+h+i+t+/i, /\bb+i+t+c+h+/i, /\bc+u+n+t+/i, /\ba+s+s+h+o+l+e+/i,
+    /\bn+i+g+/i, /\bf+a+g+/i, /\bwhore\b/i, /\bslut\b/i, /\brape\b/i,
+    /זונה/, /זין/, /כוס/, /שרמוטה/, /בן\s*זונה/, /מניאק/, /זבל/, /מפגר/, /חרא/, /בהמה/, /מטומטם/, /דביל/, /טמבל/, /נבלה/, /לך\s*תמות/, /פסיכי/,
+    /كس/, /عاهرة/, /شرموطة/
+  ];
+  function hasAbuse(txt){
+    if(!txt) return false;
+    var t=String(txt);
+    for(var i=0;i<BAD.length;i++){ if(BAD[i].test(t)) return true; }
+    return false;
+  }
+  /* Clean text: reject if abusive. Returns {ok, reason} */
+  function checkText(txt){
+    if(hasAbuse(txt)) return {ok:false, reason:'abuse'};
+    return {ok:true};
+  }
+  /* Image gate: enforce type + size, and require the user to affirm the image is
+     appropriate (no graphic/explicit/identifying content). True moderation of pixels
+     needs a server model; this is the honest client-side guard + an accountability gate. */
+  function checkImage(file){
+    if(!file) return {ok:false, reason:'none'};
+    if(!/^image\//.test(file.type||'')) return {ok:false, reason:'type'};
+    if(file.size > 8*1024*1024) return {ok:false, reason:'size'};
+    return {ok:true};
+  }
+  return { checkText:checkText, checkImage:checkImage, hasAbuse:hasAbuse };
+})();
+
+
 /* ── reputation: a time-earned score, never a paywall ── */
 function repState(){ if(!SS.rep) SS.rep={score:0, made:0, confirmedTrue:0, confirmedFalse:0, since:Date.now()}; return SS.rep; }
 function repTier(){
@@ -9187,6 +9233,7 @@ function evtCooldownLeft(){
 /* ── create a report (private first — reach is earned) ── */
 async function evtCreate(type, note){
   var he=currentLang==='he';
+  try{ if(typeof MOD!=='undefined' && note){ var _mt=MOD.checkText(note); if(!_mt.ok){ toast(he?'הדיווח מכיל שפה לא הולמת. אנא נסח/י מחדש בכבוד.':'Your report contains inappropriate language. Please rephrase respectfully.','amb'); return; } } }catch(e){}
   if(!FB.ready||!FB.uid){ toast(he?'אין חיבור':'No connection','amb'); return; }
   if(!SS.user||!SS.user.phoneVerified){ toast(he?'צריך אימות טלפון כדי לדווח':'Phone verification required','amb'); return; }
   if(!evtCanPost()){ toast(he?'הגעת למכסת הדיווחים לשעה':'Hourly report limit reached','amb'); return; }
@@ -9395,6 +9442,8 @@ async function busRead(key){
 
 /* ── THE VICTIM: broadcast ── */
 async function sosBroadcast(sosId, type){
+  /* accidental double-fire guard: swallow repeats within 3s (never blocks a real re-alert) */
+  try{ var _now=Date.now(); if(window._sosLastFire && (_now-window._sosLastFire)<3000){ return false; } window._sosLastFire=_now; }catch(e){}
   if(!FB.ready||!FB.uid) return false;
   var he=currentLang==='he';
   var p=(typeof myPos!=='undefined'&&myPos&&myPos.lat)?myPos:null;
