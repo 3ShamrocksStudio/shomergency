@@ -10156,7 +10156,7 @@ function updShowBanner(pubV){
   if(document.getElementById('upd-banner')) return;
   var he=currentLang==='he', ar=currentLang==='ar';
   var b=document.createElement('div'); b.id='upd-banner';
-  b.setAttribute('style','position:fixed;left:50%;transform:translateX(-50%);bottom:calc(64px + env(safe-area-inset-bottom));z-index:99998;display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:14px;background:linear-gradient(135deg,#C09020,#E0A828 60%,#F5C840);color:#23170a;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-weight:800;font-size:13.5px;box-shadow:0 10px 30px rgba(0,0,0,.45);max-width:92vw');
+  b.setAttribute('style','position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:99998;display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:14px;background:linear-gradient(135deg,#C09020,#E0A828 60%,#F5C840);color:#23170a;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-weight:800;font-size:13.5px;box-shadow:0 10px 30px rgba(0,0,0,.45);max-width:92vw');
   b.innerHTML='<span>'+(he?'עדכון זמין':ar?'تحديث متاح':'Update available')+' · '+pubV+'</span>'
     +'<button id="upd-refresh" style="border:none;background:#23170a;color:#F5C840;font-weight:800;font-size:13px;padding:7px 13px;border-radius:10px;cursor:pointer">'+(he?'רענן':ar?'تحديث':'Refresh')+'</button>'
     +'<span id="upd-x" style="cursor:pointer;font-weight:700;opacity:.65;padding:0 4px">✕</span>';
@@ -10174,7 +10174,7 @@ function updCheck(manual){
       .then(function(d){
         if(!d||!d.v||typeof APP_VER==='undefined') return;
         var pub=updNum(d.v), cur=updNum(APP_VER), stale=pub>cur;
-        updSetBadge(stale?(APP_VER+' → '+d.v):APP_VER, stale);
+        updSetBadge('v0.9 · beta', stale);
         if(stale){ try{fbLog('UPDATE available: '+APP_VER+' → '+d.v);}catch(e){} updShowBanner(d.v); }
         else if(manual){ try{ toast((currentLang==='he'?'✓ מעודכן — ':'✓ Up to date — ')+APP_VER,'grn'); }catch(e){} }
       }).catch(function(){ if(manual){ try{ toast(currentLang==='he'?'בדיקת עדכון נכשלה':'Update check failed','amb'); }catch(e){} } });
