@@ -24,14 +24,31 @@
 <style>
 /* ── 3SDS TOKENS ── */
 :root{
-  --n0:#060F1E; --n1:#0A1628; --n2:#101E34; --n3:#162440; --n4:#1C2C4E;
-  --g1:#9A6C1A; --g2:#C09020; --g3:#E0A828; --g4:#F5C840;
+  /* ── SH✡MER core: navy foundation ── */
+  --n0:#060F1E; --n1:#0A1628; --n2:#101E34; --n3:#162440; --n4:#1C2C4E; --n5:#24365E;
+  /* ── gold (primary brand) ── */
+  --g1:#9A6C1A; --g2:#C09020; --g3:#E0A828; --g4:#F5C840; --g5:#FCE79A;
   --gold-grad:linear-gradient(135deg,#C09020 0%,#E0A828 60%,#F5C840 100%);
-  --p2:#8392AB; --p3:#B6C2D6;
+  --gold-soft:rgba(224,168,40,.14);
+  /* ── harmonious SECONDARIES (pulled straight from the app's service palette) ── */
+  --acc-red:#FF1A40;      /* SOS / urgent */
+  --acc-crimson:#E5484D;  /* medical / hospital */
+  --acc-blue:#1670E0;     /* police / trust */
+  --acc-ink:#2962FF;      /* data / property */
+  --acc-orange:#E8811C;   /* fire */
+  --acc-purple:#A78BFA;   /* pharmacy */
+  --acc-green:#16A34A;    /* aed / safe-positive */
+  --acc-teal:#0E8840;     /* safe state */
+  /* ── warm light surfaces (for alternating sections) ── */
+  --l0:#F7F4ED; --l1:#F1ECE0; --l2:#E8E1CF; --l3:#DED4BC;
+  /* ── text ── */
   --tx0:#F0F4FF; --tx1:#C8D4E8; --tx2:#8898B8; --tx3:#506080;
+  --ink0:#101E34; --ink1:#33436A; --ink2:#5A6A88;  /* text on light bg */
+  /* ── misc ── */
+  --p2:#8392AB; --p3:#B6C2D6;
   --danger:#DC2626; --safe:#0E8840;
-  --border:rgba(140,155,189,.18);
-  --r:14px;
+  --border:rgba(140,155,189,.18); --border-l:rgba(22,36,64,.1);
+  --r:14px; --r-lg:20px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;overflow-x:hidden}
@@ -220,8 +237,7 @@ nav{gap:10px;min-width:0}
 }
 
 /* ══ SHOWCASE — elevated app section (replaces the old beige block) ══ */
-.showcase{position:relative;overflow:hidden;background:
-  linear-gradient(160deg,#F4F1EA 0%,#ECE6D8 45%,#E4DcC8 100%)}
+.showcase{position:relative;overflow:hidden;background:linear-gradient(160deg,var(--l0) 0%,var(--l1) 45%,var(--l2) 100%)}
 /* layered depth: gold aura + topographic map lines echoing the app itself */
 .showcase-bg{position:absolute;inset:0;pointer-events:none;background:
    radial-gradient(46% 52% at 78% 40%, rgba(224,168,40,.20) 0%, rgba(224,168,40,0) 62%),
@@ -300,6 +316,26 @@ nav{gap:10px;min-width:0}
 .showcase-grid{direction:ltr}
 .phone-col{grid-column:1}   /* left */
 .feat-col{grid-column:2;direction:rtl}  /* right, keep Hebrew RTL inside */
+
+/* ══ BRAND SECTION SYSTEM ══ */
+section{position:relative}
+/* deep navy sections get a subtle gold-dust texture + top hairline */
+.sec-dark{background:radial-gradient(120% 80% at 50% 0%, var(--n2) 0%, var(--n1) 55%, var(--n0) 100%);color:var(--tx1)}
+.sec-dark::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(224,168,40,.5),transparent)}
+/* warm light sections */
+.sec-light{background:linear-gradient(160deg,var(--l0) 0%,var(--l1) 55%,var(--l2) 100%);color:var(--ink1)}
+.sec-light .section-title{color:var(--ink0)}
+.sec-light .section-sub{color:var(--ink2)}
+.sec-light::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(224,168,40,.4),transparent)}
+/* a mid navy-2 section for contrast */
+.sec-navy2{background:var(--n2);color:var(--tx1)}
+.sec-navy2::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:var(--border)}
+/* how-it-works cards get brand accent per step */
+.how .step:nth-child(1) .step-num{background:linear-gradient(135deg,var(--acc-red),#B01530)}
+.how .step:nth-child(2) .step-num{background:var(--gold-grad)}
+.how .step:nth-child(3) .step-num{background:linear-gradient(135deg,var(--acc-blue),#0E4FA0)}
 </style>
 </head>
 <body>
@@ -406,7 +442,7 @@ nav{gap:10px;min-width:0}
   </section>
 
 <!-- HOW IT WORKS -->
-<section class="fi" id="how">
+<section class="fi sec-dark" id="how">
   <div class="wrap">
     <h2 class="section-title">איך זה עובד</h2>
     <div class="steps">
@@ -419,7 +455,7 @@ nav{gap:10px;min-width:0}
 </section>
 
 <!-- APP SHOWCASE (branded feature cards — no placeholder imagery) -->
-<section class="bg-surface fi">
+<section class="fi sec-light">
   <div class="wrap">
     <h2 class="section-title">מה יש בפנים</h2>
     <p class="section-sub" style="text-align:center;margin:0 auto 34px">כל מה שצריך כדי לשמור ולהישמר — במסך אחד.</p>
@@ -466,8 +502,8 @@ nav{gap:10px;min-width:0}
     <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(61,187,102,.15);border:1.5px solid rgba(61,187,102,.4);color:#5FD57F;padding:6px 16px;border-radius:999px;font-size:12px;font-weight:800;margin-bottom:16px">בקרוב · COMING SOON</div>
     <h2 class="section-title" style="margin-bottom:10px">SH✡MER <span style="background:linear-gradient(135deg,#3DBB66,#8AE89A);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Nature</span></h2>
     <p class="section-sub" style="margin:0 auto 20px">אותה רשת שמירה — הפעם בשביל היער, החוף, החי והסביבה.</p>
-    <div style="position:relative;width:100%;max-width:100%;margin:0 0 4px;border-radius:0;overflow:hidden;aspect-ratio:1920/399;min-height:180px">
-     <img src="SHOMERNature_Banner.jpg" alt="SH✡MER Nature — שומרים על מה שאין לו קול" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">
+    <div style="position:relative;width:100vw;max-width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);margin:0 0 4px;border-radius:0;overflow:hidden;aspect-ratio:1920/399;min-height:200px;max-height:420px">
+     <img src="SHOMERNature_Banner.jpg" alt="SH✡MER Nature — שומרים על מי שאין לו קול" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block">
      <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%, rgba(4,20,11,.72) 0%, rgba(4,20,11,.35) 45%, transparent 72%)"></div>
      <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 20px">
       <div style="display:inline-flex;align-items:center;gap:7px;background:rgba(61,187,102,.18);border:1.5px solid rgba(61,187,102,.5);color:#7CEB9B;padding:5px 15px;border-radius:999px;font-size:11px;font-weight:800;margin-bottom:12px;backdrop-filter:blur(4px)">בקרוב · COMING SOON</div>
