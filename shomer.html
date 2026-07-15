@@ -7905,7 +7905,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v154';
+var APP_VER='v155';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -9034,7 +9034,7 @@ function founderBadgeHTML(rec){
   var he=currentLang==='he';
   return '<span class="founder-crest" title="'+(he?'מייסד SH✡MER':'Founder of SH✡MER')+'">'
     + founderCrestSVG(46)
-    + '<span class="founder-word">'+(he?'מייסד':'FOUNDER')+'</span></span>';
+    + '<span class="founder-word">'+(he?'מייסד':'FOUNDER')+'</span>'+ (!rec && FB && FB.uid ? '<span class="founder-uid-readout" style="display:block;font-size:9px;color:var(--tx3);margin-top:4px;letter-spacing:.02em;direction:ltr" onclick="try{navigator.clipboard.writeText(FB.uid);toast&&toast(\'uid copied\',\'ok\');}catch(e){}">id: '+FB.uid+'</span>' : '')+ '</span>';
 }
 /* compact crest for the header (icon only) */
 function paintHdrFounder(){ var s=document.getElementById('hdr-founder-slot'); if(s) s.innerHTML=founderHeaderHTML(); }
