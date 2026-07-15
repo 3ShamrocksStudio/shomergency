@@ -7994,7 +7994,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v176';
+var APP_VER='v177';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -9215,6 +9215,41 @@ async function evtCreate(type, note){
   }
   return ok;
 }
+
+/* ═══ FOUNDER-ONLY TEST EVENT — local preview, stored nowhere, seen by nobody else.
+   Activated with ?testevent=1. Renders a real-looking user-report pin so the founder
+   can preview how an event looks & interacts, without touching the live event system. ═══ */
+var _testEvMarker=null;
+function showTestEvent(){
+  try{
+    if(typeof MAP==='undefined' || !MAP || !window.L) { setTimeout(showTestEvent, 800); return; }
+    if(_testEvMarker) return;
+    var he=(typeof currentLang!=='undefined' && currentLang==='he');
+    /* place near map centre so the founder sees it immediately */
+    var ctr = MAP.getCenter ? MAP.getCenter() : {lat:32.08,lng:34.78};
+    var ll=[ctr.lat, ctr.lng];
+    var icon = (typeof catIcon==='function') ? catIcon('violence')
+             : window.L.divIcon({className:'shomer-marker evpin',html:(typeof eventPinHTML==='function'?eventPinHTML('viol'):'●'),iconSize:[40,50],iconAnchor:[20,50]});
+    _testEvMarker = window.L.marker(ll,{icon:icon}).addTo(MAP);
+    var pop='<div style="font:600 13px Heebo,sans-serif;color:#111;max-width:230px">'
+      + '<div style="display:inline-block;background:#E5484D;color:#fff;font-size:10px;font-weight:800;padding:2px 7px;border-radius:6px;margin-bottom:6px">'
+      + (he?'אירוע לדוגמה · תצוגה למייסד':'Sample event · founder preview')+'</div><br>'
+      + (he?'<b>אלימות קטלנית</b><br>גבר צעיר הותקף ונרצח על ידי קבוצת בני נוער במרחב ציבורי. האירוע זעזע את הקהילה והדגיש את הצורך ברשת שמירה הדדית.'
+           :'<b>Fatal violence</b><br>A young man was attacked and killed by a group of youths in a public space. The case shocked the community and underscored the need for a mutual-watch network.')
+      + '<div style="font-size:10.5px;color:#888;margin-top:6px">'
+      + (he?'דוגמה בלבד — אינו אירוע חי. גלוי רק לך.':'Sample only — not a live event. Visible only to you.')+'</div></div>';
+    _testEvMarker.bindPopup(pop).openPopup();
+    try{ MAP.setView(ll, Math.max(MAP.getZoom?MAP.getZoom():14, 15)); }catch(e){}
+    try{ if(typeof toast==='function') toast(he?'אירוע לדוגמה נוסף (רק לך)':'Sample event added (only you)',''); }catch(e){}
+  }catch(e){}
+}
+try{
+  if(location.search.indexOf('testevent=1')>=0){
+    if(document.readyState!=='loading') setTimeout(showTestEvent, 1500);
+    else document.addEventListener('DOMContentLoaded', function(){ setTimeout(showTestEvent, 1500); });
+  }
+}catch(e){}
+
 
 /* ── confirm / dispute (only counts from a real nearby neighbour) ── */
 async function evtConfirm(id, ev){
