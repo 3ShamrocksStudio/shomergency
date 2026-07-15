@@ -1378,8 +1378,137 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <p class="desc" id="ob-d0">מפת בטיחות חיה · SOS + אזעקה מיידית · עזרה הדדית</p>
  <div class="name-field-wrap">
  <input class="ob-f" id="ob-name" type="text" autocomplete="given-name" maxlength="24" placeholder="שם פרטי" aria-label="שם פרטי" style="margin-bottom:6px">
- <span class="name-edit-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.3-7-11a7 7 0 0 1 14 0c0 4.7-7 11-7 11Z"/><circle cx="12" cy="10" r="3.2"/><path d="M12 8.3v1.7l1.2.8"/></svg><span class="past-fab-lbl">עבר</span></button>
+ <span class="name-edit-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9a2 2 0 0 0-3-3L5 17Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 7l3 3" fill="none" stroke="currentColor" stroke-width="2"/></svg></span>
+ </div>
+<div id="name-err" style="display:none;font-size:11px;color:#ef4444;margin-top:3px"></div>
+ <p class="name-hint" id="name-hint"><span id="name-hint-txt">נוצר אוטומטית — אפשר לערוך</span></p>
+ <div style="display:flex;gap:8px;margin-bottom:10px">
+ <input class="ob-f" id="ob-phone" style="flex:1;margin-bottom:0;text-align:start" type="tel" autocomplete="tel" maxlength="18" placeholder="50 000 0000" inputmode="tel" dir="ltr" aria-label="מספר טלפון">
+     <select class="ob-f" id="ob-cc" aria-label="Country code" dir="ltr" style="flex:0 0 auto;width:104px;margin-bottom:0;text-align:left"></select>
+</div>
+ <p style="font-size:11px;color:var(--tx3);margin:-4px 0 12px;line-height:1.6" id="ob-why">מספר הטלפון משמש לשליחת עזרה בעת חירום.</p>
+ <div class="disclaimer" id="ob-disclaimer" style="margin-bottom:12px">
+ <span class="dc-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l9 16H3Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17" r="1.2" fill="currentColor"/></svg></span>
+ <span id="ob-disclaimer-txt"><strong>שומר אינו תחליף לשירותי חירום.</strong> זהו כלי לבטיחות אישית ושיתוף מיקום. במצב חירום אמיתי חייגו <b>100</b> (משטרה) · <b>101</b> (מד״א) · <b>102</b> (כבאות). שומר אינו מתקשר לרשויות עבורך.</span>
+ </div>
 
+ <button class="ob-cta" id="ob-submit-btn" onclick="obStep0()"><span id="ob-cta0-t">המשך</span></button>
+ </div>
+ </div>
+
+ <!-- STEP 1: Geolocation -->
+ <div class="ob-panel" id="step1">
+ <div class="ob-card">
+ <h3 id="ob-h1">אישור מיקום</h3>
+ <p class="desc" id="ob-d1">נדרש לשליחת SOS מיידי לשומרים בקרבתך ולמיפוי אירועים.</p>
+ <div class="geo-box" id="geo-box">
+ <div class="geo-ic" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.4 7-12a7 7 0 1 0-14 0c0 5.6 7 12 7 12Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.6" fill="currentColor"/></svg></div>
+ <div class="geo-t" id="geo-t">נדרש אישור מיקום</div>
+ <div class="geo-s" id="geo-s">לחץ 'אפשר' ואשר בחלון שיפתח.<br>המיקום משמש אך ורק לצורכי בטיחות.</div>
+ </div>
+ <button class="ob-cta" id="geo-btn" onclick="requestGeo()"><span id="geo-btn-t">שתף מיקום</span></button>
+ <button class="ob-cta" style="background:var(--n4);color:var(--tx1);box-shadow:none;margin-top:8px;border:1px solid var(--b2);" onclick="goStep(2)" id="geo-skip-btn"><span id="geo-skip-t">דלג – המשך בלי שיתוף מיקום</span></button>
+ <button class="ob-back" onclick="goStep(0)" id="ob-back1"><svg class="ic ob-bk" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M10 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="ob-back1-t">חזרה</span></button>
+ </div>
+ </div>
+
+ <!-- STEP 2: terms only. The alarm and the SOS cancel code are taught ON THE MAP,
+       in context, where the user can actually see the button they refer to. -->
+  <div class="ob-panel" id="step2">
+   <div class="ob-card">
+    <h3 id="ob-h2">כמעט שם</h3>
+    <p class="desc" id="ob-d2">SH✡MER חינמי, לתמיד. המיקום שלך משותף רק עם השומרים שאת/ה מאשר/ת — ולעולם לא נמכר.</p>
+    <div class="ob-agree-row" id="ob-agree-row">
+     <input type="checkbox" id="ob-agree-chk" aria-labelledby="ob-agree-lbl">
+     <label id="ob-agree-lbl" for="ob-agree-chk"><span id="ob-agree-txt">קראתי ואני מסכים/ה ל<a href="terms.html" target="_blank" rel="noopener">תנאי השימוש</a> ול<a href="privacy.html" target="_blank" rel="noopener">מדיניות הפרטיות</a></span></label>
+    </div>
+    <button class="cta-gold" id="ob-finish-btn" onclick="obFinish()" style="width:100%;margin-top:14px"><span id="ob-finish-t">כניסה למפה</span></button>
+   </div>
+  </div>
+
+ <!-- Studio credit / copyright footer -->
+ <div class="legal-links" id="ob-legal-links">
+ <button onclick="openLegal('tos')" id="ob-ll-tos">תנאי שימוש</button><span class="sep">·</span>
+ <button onclick="openLegal('privacy')" id="ob-ll-priv">מדיניות פרטיות</button><span class="sep">·</span>
+ <button onclick="openLegal('disclaimer')" id="ob-ll-disc">כתב ויתור חירום</button>
+ </div>
+ <footer class="studio-credit">
+ <span class="sc-badge"><img src="3shamrocks.png" alt="3Shamrocks Studio" width="92" height="14"></span>
+ <span class="cr">© 2026 3Shamrocks Studio</span>
+ </footer>
+
+ <!-- PHONE VERIFICATION (identity for My SHOMER / live location) -->
+ <div class="resp-consent" id="ob-verify" style="z-index:10000" role="alertdialog" aria-modal="true" aria-labelledby="obv-ttl" aria-hidden="true">
+ <div class="rc-card">
+ <div class="rc-ic" style="background:linear-gradient(160deg,rgba(224,168,40,.2),rgba(224,168,40,.05));border-color:var(--b3);color:var(--g3)"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h3.5l1.5 4-2 1.5a11 11 0 0 0 5 5l1.5-2 4 1.5V19a2 2 0 0 1-2.2 2A16 16 0 0 1 4 6.2 2 2 0 0 1 5 4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div>
+ <div class="rc-t" id="obv-ttl" data-he="אימות מספר טלפון" data-en="Verify your phone">אימות מספר טלפון</div>
+ <div class="rc-b" id="obv-sub"></div>
+ <div id="obv-demo" style="background:rgba(33,230,255,.10);border:1px dashed rgba(33,230,255,.5);border-radius:var(--r12);padding:9px 11px;font-size:12px;color:#bfeefb;line-height:1.5;margin-bottom:12px"></div>
+ <input class="ob-f" id="obv-code" type="text" inputmode="numeric" maxlength="6" pattern="[0-9]*" dir="ltr" style="text-align:center;letter-spacing:12px;font-size:24px" placeholder="••••••" autocomplete="one-time-code" aria-label="verification code">
+ <div class="pin-err" id="obv-err" role="alert" style="text-align:center"></div>
+ <div class="rc-actions">
+ <button class="cta-gold" onclick="obvVerify()" data-he="אמת/י והמשך" data-en="Verify & continue">אמת/י והמשך</button>
+ <button class="ob-back" onclick="obvResend()" data-he="שלח/י קוד שוב" data-en="Resend code">שלח/י קוד שוב</button>
+ <button class="ob-back" onclick="obvCancel()" data-he="חזרה" data-en="Back">חזרה</button>
+ </div>
+ <div id="recaptcha-container" style="margin:12px auto;display:flex;justify-content:center"></div>
+ </div>
+ </div>
+</div>
+
+<!-- ═══════════════════════════════
+ APP
+═══════════════════════════════ -->
+<div id="app" role="application" aria-label="שומר">
+
+ <!-- REAL MAP — Leaflet + OpenStreetMap -->
+ <div id="map-wrap" role="region" aria-label="מפת בטיחות חיה">
+ <div id="map" role="application" aria-label="מפה אינטראקטיבית"></div>
+ <!-- Data-source banner -->
+ <!-- statistical-overview banner removed; the legend now occupies the top-left. Sources remain cited in marker popups + Settings > Data & sources. -->
+ <!-- Legend -->
+ <div class="map-legend collapsed" id="map-legend" aria-label="מקרא מפה">
+ <button class="legend-hd" onclick="toggleLegend()" aria-expanded="false" aria-controls="legend-body"><span aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span><span id="legend-ttl-txt">מקרא מפה</span><span class="legend-chev" id="legend-chev" aria-hidden="true">▸</span></button>
+ <div class="legend-body" id="legend-body">
+ 
+  <div class="leg-sec" id="leg-events-sec"><div class="leg-sec-h">אירועים במפה</div><div class="leg-key"><div class="leg"><div class="ldc" style="background:#FF1A40;box-shadow:0 0 8px #FF1A40" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3h8l5 5v8l-5 5H8l-5-5V8Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 7.5v5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="16" r="1.2" fill="currentColor"/></svg></div><span id="l7">SOS חי</span></div>
+ <div class="leg"><div class="ldc" style="background:#E5468E" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V11m0-1V4.5a1.5 1.5 0 0 1 3 0V11m0-.5V6a1.5 1.5 0 0 1 3 0v7a6 6 0 0 1-6 6h-1.2a5 5 0 0 1-3.7-1.7L4 14.5a1.6 1.6 0 0 1 2.3-2.2L9 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span id="l1">עבירת מין</span></div>
+ <div class="leg"><div class="ldc" style="background:#FF7A1A" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 11V9a1.6 1.6 0 0 1 3.2 0v1.6m0-.6V7.5a1.6 1.6 0 0 1 3.2 0V11m0-1V8a1.6 1.6 0 0 1 3.2 0v5a6 6 0 0 1-6 6h-1.1a5 5 0 0 1-3.6-1.5L4 16a1.6 1.6 0 0 1 2.3-2.2L7 14.5Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span id="l2">תקיפה / אלימות</span></div>
+ <div class="leg"><div class="ldc" style="background:#F2B705" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg></div><span id="l3">הטרדה / מעקב</span></div>
+ <div class="leg"><div class="ldc" style="background:#2962FF" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 11V8a4 4 0 0 1 7.5-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><span id="l4">גנבה / רכוש</span></div>
+ <div class="leg"><div class="ldc" style="background:#18C29C" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="8" width="18" height="8" rx="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 8v8" fill="none" stroke="currentColor" stroke-width="2"/></svg></div><span id="l5">סמים</span></div>
+ <div class="leg"><div class="ldc" style="background:#16A06A" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 8v8M8 12h8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></div><span id="l6">רפואי</span></div>
+ <div class="leg"><div class="ldc" style="background:#19A8FF;border-color:#fff" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4 L17 18.5 L12 15.2 L7 18.5 Z" fill="#fff"/></svg></div><span id="l8">המיקום שלי</span></div>
+ <div class="legend-foot" id="legend-foot">צבעים = קטגוריה. סמני ערים = סקירה סטטיסטית מצרפית, לא אירוע ספציפי.</div></div></div>
+     <div class="leg-sec" id="leg-ess">
+   <button class="leg-sec-tog" id="ess-tog" onclick="essToggleMenu()" aria-expanded="false">
+     <span>שירותי חירום</span>
+     <span class="leg-caret" id="ess-caret">▾</span>
+   </button>
+   <div class="leg-sec-body" id="ess-body" hidden>
+   <div class="ess-chips" id="ess-chips"></div>
+   
+ </div>
+ 
+ </div>
+     <div class="leg-sec" id="leg-stats-sec">
+   <div class="leg-sec-h">נתוני פשיעה · משטרת ישראל 2025</div>
+   <div class="stat-key">
+     <span><i class="sk" style="background:#E5484D"></i>נגד גוף</span>
+     <span><i class="sk" style="background:#2962FF"></i>רכוש</span>
+     <span><i class="sk" style="background:#E0A828"></i>סדר ציבורי</span>
+   </div>
+   <div class="leg-src">הצבע = סוג העבירה הנפוץ ביותר באזור. הגודל = כמות.<br>מקור: data.gov.il · 395,294 רשומות · סטטיסטיקה, לא אירועים חיים</div>
+   <button class="leg-stats-btn" id="leg-stats" onclick="statsToggle()"><span id="leg-stats-st"><svg class="eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12Z"/><circle cx="12" cy="12" r="2.6"/></svg></span></button>
+  </div>
+   </div>
+ </div>
+ <!-- Controls -->
+ <div class="map-controls" role="group" aria-label="שליטה במפה">
+ <button class="mc" onclick="mapZoom(1)" aria-label="הגדל">+</button>
+ <button class="mc" onclick="mapZoom(-1)" aria-label="הקטן">−</button>
+ </div>
+ <button class="loc-fab" id="loc-fab" onclick="locMe()" aria-label="מיקומי על המפה" title="מיקומי"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.4" fill="currentColor"/><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
  <button class="ff-fab" id="ff-fab" onclick="findFriendOpen()" aria-label="מצא חבר/ה" title="מצא חבר/ה"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16.5 16.5L21 21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
  </div>
 
@@ -2686,87 +2815,6 @@ let sosPhase='idle', sosCdTimer=null, sosCdLeft=0, curSosId=null;
    The SOS always fires first; type is async metadata layered on top. Default = unknown. */
 let curSosType='unknown', sosFallbackTimer=null;
 const SOS_TYPES=[['viol','fist'],['med','medcross'],['sex','hand'],['stalk','eye'],['theft','unlock'],['new','clipboard']];
-
-/* ═══════════════════════════════════════════════════════════════════════
-   PAST EVENTS LAYER — awareness/education, NOT live incidents.
-   Design law compliance: EVENTS=teardrop(now), ESSENTIALS=tiles, STATS=halos.
-   Past events are none of these — they get a DISTINCT muted, dated "history"
-   marker (a desaturated circle with the YEAR on it) that can never be mistaken
-   for a live teardrop pin. On by default, but visually + textually flagged as
-   historical awareness data. Anonymized (no names). Sources labeled.
-   ═══════════════════════════════════════════════════════════════════════ */
-var PAST_EVENTS=[
-  /* Anonymized notable public cases (no names; general location; real dates; factual).
-     src:'public' = based on public reporting. Drafted for awareness. */
-  {lat:32.0853,lng:34.7818,yr:2023,cat:'viol',he:'גבר צעיר נדקר למוות בקטטה אלימה במרחב ציבורי.',src:'public'},
-  {lat:32.0180,lng:34.7460,yr:2024,cat:'viol',he:'עימות אלים בין קבוצות שהסתיים בפצוע אנוש.',src:'public'},
-  {lat:31.7683,lng:35.2137,yr:2023,cat:'stab',he:'אירוע דקירה במרחב עירוני; נפגע פונה לבית חולים.',src:'public'},
-  {lat:32.1660,lng:34.8433,yr:2024,cat:'viol',he:'ניסיון חטיפה מדווח באזור מגורים; המשטרה נקראה למקום.',src:'public'},
-  /* Real CBS severe road-accident points (data.gov.il, geolocated) */
-  {lat:32.16272,lng:34.75145,yr:2024,cat:'road',he:'תאונת דרכים עם נפגע קשה (נתוני הלמ״ס).',src:'cbs'},
-  {lat:32.20462,lng:34.82387,yr:2024,cat:'road',he:'תאונת דרכים עם נפגע קשה (נתוני הלמ״ס).',src:'cbs'},
-  {lat:32.07752,lng:34.75034,yr:2024,cat:'road',he:'תאונת דרכים עם נפגע קשה (נתוני הלמ״ס).',src:'cbs'},
-  {lat:32.20076,lng:34.79188,yr:2024,cat:'road',he:'תאונת דרכים עם נפגע קשה (נתוני הלמ״ס).',src:'cbs'}
-];
-var PAST_EVT_COLOR='#5B8CA8'; /* distinct archival slate-blue — not used by any live event/service */
-var PAST_CAT={ viol:{c:PAST_EVT_COLOR,lbl:function(){return currentLang==='he'?'אלימות':'Violence';}}, stab:{c:PAST_EVT_COLOR,lbl:function(){return currentLang==='he'?'דקירה':'Stabbing';}}, road:{c:PAST_EVT_COLOR,lbl:function(){return currentLang==='he'?'תאונת דרכים':'Road accident';}} };
-var _pastLayer=null, _pastOn=false;
-function pastMarkerHTML(ev){
-  var cat=PAST_CAT[ev.cat]||PAST_CAT.viol;
-  /* pin+clock (same icon language as the FAB) with the YEAR — animated, archival slate-blue */
-  return '<div class="past-mk" style="position:relative;width:40px;height:50px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))">'
-       + '<svg viewBox="0 0 40 50" width="40" height="50">'
-       +   '<path d="M20 2C11 2 4 9 4 18c0 12 16 30 16 30s16-18 16-30C36 9 29 2 20 2Z" fill="'+cat.c+'" stroke="#0A1628" stroke-width="2"/>'
-       +   '<circle cx="20" cy="17" r="8.5" fill="none" stroke="#fff" stroke-width="2"/>'
-       +   '<path d="M20 12v5l3 2" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>'
-       + '</svg>'
-       + '<span style="position:absolute;top:-4px;right:-4px;background:#0A1628;color:#fff;font:800 9px/1 Heebo,sans-serif;padding:2px 4px;border-radius:6px;border:1px solid '+cat.c+'">'+ev.yr+'</span>'
-       + '</div>';
-}
-function renderPastEvents(){
-  if(typeof MAP==='undefined' || !MAP) return;
-  if(_pastLayer && !_pastOn){
-    try{ document.querySelectorAll('.past-mk').forEach(function(m){ m.classList.add('leaving'); }); }catch(e){}
-    var _lyr=_pastLayer; _pastLayer=null;
-    setTimeout(function(){ try{ MAP.removeLayer(_lyr); }catch(e){} }, 260);
-    return;
-  }
-  if(_pastLayer){ try{ MAP.removeLayer(_pastLayer); }catch(e){} _pastLayer=null; }
-  if(!_pastOn) return;
-  _pastLayer=L.layerGroup();
-  var he=currentLang==='he';
-  PAST_EVENTS.forEach(function(ev){
-    var cat=PAST_CAT[ev.cat]||PAST_CAT.viol;
-    var icon=L.divIcon({html:pastMarkerHTML(ev),className:'past-div',iconSize:[34,34],iconAnchor:[17,17]});
-    var srcTxt = ev.src==='cbs' ? (he?'מקור: הלשכה המרכזית לסטטיסטיקה':'Source: CBS')
-                                : (he?'מבוסס על דיווחים ציבוריים':'Based on public reports');
-    var pop='<div style="font:600 13px Heebo,sans-serif;color:#111;max-width:220px">'
-          + '<div style="display:inline-block;background:#5B8CA8;color:#0A1628;font-size:10px;padding:2px 7px;border-radius:6px;margin-bottom:6px">'
-          + (he?'אירוע עבר · '+ev.yr:'Past event · '+ev.yr)+'</div><br>'
-          + ev.he + '<div style="font-size:10.5px;color:#888;margin-top:6px">'+srcTxt
-          + ' · '+(he?'למודעות בלבד — אינו אירוע חי':'awareness only — not a live event')+'</div></div>';
-    L.marker([ev.lat,ev.lng],{icon:icon}).bindPopup(pop).addTo(_pastLayer);
-  });
-  _pastLayer.addTo(MAP);
-}
-function togglePastEvents(on){
-  _pastOn=(on!==undefined)?on:!_pastOn;
-  renderPastEvents();
-  var el=document.getElementById('past-fab'); if(el) el.setAttribute('aria-pressed', _pastOn?'true':'false');
-  var he=currentLang==='he';
-  if(_pastOn){
-    try{ if(typeof toast==='function') toast(he?'אירועי עבר מוצגים — למודעות בלבד':'Past events shown — awareness only',''); }catch(e){}
-    try{
-      if(typeof MAP!=='undefined' && MAP && window.L && PAST_EVENTS.length){
-        var pts=PAST_EVENTS.map(function(e){return [e.lat,e.lng];});
-        MAP.fitBounds(L.latLngBounds(pts).pad(0.3), {maxZoom:12, animate:true});
-      }
-    }catch(e){}
-  } else {
-    try{ if(typeof toast==='function') toast(he?'אירועי עבר הוסתרו':'Past events hidden',''); }catch(e){}
-  }
-}
-
 function sosTypeLabel(t){const he=currentLang==='he',ar=currentLang==='ar';if(!t||t==='unknown')return he?'לא ידוע':ar?'غير معروف':'Unknown';return (TYPES[t]&&TYPES[t].label())||(he?'אחר':ar?'أخرى':'Other');}
 function sosTypeColor(t){return (TYPES[t]&&TYPES[t].color)||'#FF1A40';}
 function buildSosTypeBar(){
@@ -4861,7 +4909,7 @@ function initMap(){
  window.L.tileLayer(TILE_BASE,{maxZoom:20,subdomains:'abcd',className:'tiles-base',
  attribution:' <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> · <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>'}).addTo(MAP);
  window.L.tileLayer(TILE_LABELS,{maxZoom:20,subdomains:'abcd',className:'tiles-labels'}).addTo(MAP);
- buildStatMarkers(); try{ renderPastEvents(); }catch(e){}
+ buildStatMarkers();
  // The container may have been laid out while hidden — recalc once visible.
  [120,400,900].forEach(ms=>setTimeout(()=>{if(MAP)MAP.invalidateSize(false);},ms));
  if(userLat!=null&&userLng!=null){moveUserDot(userLat,userLng);MAP.setView([userLat,userLng],15);_centeredOnOpen=true;}
@@ -7895,7 +7943,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v171';
+var APP_VER='v172';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -11361,32 +11409,6 @@ html[dir="rtl"] .sh-back svg{transform:scaleX(-1)}
 .agf-row2 .agf-in{width:100%;padding:13px 12px;border-radius:12px;border:1px solid var(--b2);background:var(--n3);color:var(--tx0);font-family:inherit;font-size:15px;text-align:start}
 .agf-row2 .agf-sel{width:100%;padding:13px 10px;border-radius:12px;border:1px solid var(--b2);background:var(--n3);color:var(--tx0);font-family:inherit;font-size:13px}
 @media(max-width:360px){ .agf-row2{grid-template-columns:1fr 128px} }
-
-/* Past-events toggle — standalone map control, separate from the legend */
-.past-fab{position:absolute;bottom:calc(var(--nav) + 126px);left:12px;z-index:401;width:48px;height:48px;border-radius:50%;border:1px solid var(--border,rgba(140,155,189,.18));
-  background:rgba(8,18,36,.92);backdrop-filter:blur(12px);color:#8A93A8;display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 12px rgba(0,0,0,.4);cursor:pointer}
-.past-fab .ic{width:22px;height:22px}
-.past-fab[aria-pressed="true"]{background:#5B8CA8;color:#0A1628;box-shadow:0 0 0 2px rgba(91,140,168,.45),0 4px 14px rgba(91,140,168,.4)}
-.past-fab{flex-direction:column;gap:1px}
-.past-fab .ic{width:20px;height:20px}
-.past-fab-lbl{font:800 8px/1 Heebo,sans-serif;letter-spacing:.3px;color:inherit}
-
-/* Past-events markers: reset Leaflet's default white div-icon box + entrance animation */
-.past-div{background:transparent!important;border:0!important}
-.past-mk{animation:pastDrop .4s cubic-bezier(.34,1.4,.64,1) both}
-@keyframes pastDrop{0%{transform:translateY(-18px) scale(.4);opacity:0}60%{transform:translateY(2px) scale(1.05);opacity:1}100%{transform:translateY(0) scale(1);opacity:1}}100%{transform:scale(1) translateY(0);opacity:.72}}
-.past-mk.leaving{animation:pastLeave .25s ease-in forwards}
-@keyframes pastLeave{to{transform:translateY(-12px) scale(0);opacity:0}}}
-
-/* ═══ Past-events FAB — two clear on-brand states ═══ */
-.past-fab{transition:background .2s,color .2s,box-shadow .2s,transform .15s}
-/* OFF: muted/neutral (navy surface, dim icon) */
-.past-fab[aria-pressed="false"]{background:rgba(8,18,36,.92);color:var(--tx2,#8898B8)}
-/* ON: brand gold, active glow */
-.past-fab[aria-pressed="true"]{background:var(--gold-grad,linear-gradient(135deg,#C09020,#E0A828,#F5C840));color:var(--n0,#060F1E);
-  box-shadow:0 0 0 2px rgba(224,168,40,.45),0 4px 14px rgba(224,168,40,.35)}
-.past-fab:active{transform:scale(.92)}
 </style>
 <script src="native-bridge.js"></script>
 
@@ -11416,30 +11438,6 @@ html[dir="rtl"] .sh-back svg{transform:scaleX(-1)}
   }
   setInterval(tag, 1000);
 }catch(e){} })();
-
-/* Blank-screen watchdog: if the app fails to render (e.g. a corrupted SW cache served a
-   half-broken state), auto-recover once by clearing caches + SW and hard-reloading. */
-(function(){
-  try{
-    if(sessionStorage.getItem('shomerRecovered')==='1') return;
-    setTimeout(function(){
-      try{
-        var splash=document.getElementById('splash');
-        var ob=document.getElementById('ob-cc')||document.querySelector('[id*=onboard]');
-        var mapEl=document.getElementById('map');
-        var hasContent = (mapEl && mapEl.children && mapEl.children.length>0) || (ob) ||
-                         (document.body && document.body.innerText && document.body.innerText.trim().length>40);
-        if(!hasContent){
-          sessionStorage.setItem('shomerRecovered','1');
-          if('serviceWorker' in navigator){ navigator.serviceWorker.getRegistrations().then(function(rs){ rs.forEach(function(r){r.unregister();}); }); }
-          if(window.caches && caches.keys){ caches.keys().then(function(ks){ ks.forEach(function(k){caches.delete(k);}); }).then(function(){ location.reload(true); }); }
-          else { location.reload(true); }
-        }
-      }catch(e){}
-    }, 5000);
-  }catch(e){}
-})();
-
 </script>
 </body>
 </html>
