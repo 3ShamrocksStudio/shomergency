@@ -7741,11 +7741,12 @@ loadStore();
    deployed, the device is on a stale shell — clear SW + caches and reload to the latest.
    Numeric compare (only reload when published > running, so a CDN-lagged version.json
    can't trigger it) + once-per-session guard → no loop. Protects every build from here on. */
-(function(){
+function _checkForUpdate(){
   try{
-    if(sessionStorage.getItem('shomerVerChecked')==='1') return;
-    if(!navigator.onLine) return;   // offline: skip the update check (it can't succeed; avoids a console network error)
-    sessionStorage.setItem('shomerVerChecked','1');
+    if(!navigator.onLine) return;
+    var _now=Date.now(), _last=parseInt(sessionStorage.getItem('shomerVerCheckedAt')||'0',10);
+    if(_now-_last < 20000) return;                 /* throttle: at most once / 20s */
+    sessionStorage.setItem('shomerVerCheckedAt', String(_now));   // offline: skip the update check (it can't succeed; avoids a console network error)
     fetch('version.json?cb='+(window.performance&&performance.now?Math.floor(performance.now()):Math.random()), {cache:'no-store'})
       .then(function(r){ return r.ok?r.json():null; })
       .then(function(d){
@@ -7754,7 +7755,14 @@ loadStore();
         if(pub&&cur&&pub>cur){ try{fbLog('STALE BUILD: running '+APP_VER+' · published '+d.v+' → force-updating');}catch(e){} if(typeof forceFreshReload==='function') forceFreshReload(); }
       }).catch(function(){});
   }catch(e){}
-})();
+}
+/* run on load */
+_checkForUpdate();
+/* re-check whenever the app returns to the foreground — the common stale-version case */
+try{
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden) _checkForUpdate(); });
+  window.addEventListener('focus', function(){ _checkForUpdate(); });
+}catch(e){}
 applyStoredSettings();
 /* First launch: detect the device language (he/ar/en); fall back to Hebrew (primary
    audience). Once the user picks a language it's persisted in SS.lang and wins. */
@@ -7935,7 +7943,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v163';
+var APP_VER='v164';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
