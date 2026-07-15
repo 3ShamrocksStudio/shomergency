@@ -6967,7 +6967,7 @@ function geoCountry(){
 
 function myCountry(){
   try{
-    if(SS && SS.country) return SS.country;
+    var _g=geoCountry(); if(_g) return _g; if(SS && SS.country) return SS.country;
     var r=(navigator.language||navigator.userLanguage||'').split('-')[1];
     if(r && /^[A-Za-z]{2}$/.test(r)) return r.toUpperCase();
     var tz=(Intl.DateTimeFormat().resolvedOptions().timeZone||'');
@@ -7933,7 +7933,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v157';
+var APP_VER='v158';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
