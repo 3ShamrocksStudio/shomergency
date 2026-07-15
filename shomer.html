@@ -2856,6 +2856,12 @@ function pastMarkerHTML(ev){
 }
 function renderPastEvents(){
   if(typeof MAP==='undefined' || !MAP) return;
+  if(_pastLayer && !_pastOn){
+    try{ document.querySelectorAll('.past-mk').forEach(function(m){ m.classList.add('leaving'); }); }catch(e){}
+    var _lyr=_pastLayer; _pastLayer=null;
+    setTimeout(function(){ try{ MAP.removeLayer(_lyr); }catch(e){} }, 260);
+    return;
+  }
   if(_pastLayer){ try{ MAP.removeLayer(_pastLayer); }catch(e){} _pastLayer=null; }
   if(!_pastOn) return;
   _pastLayer=L.layerGroup();
@@ -8020,7 +8026,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v168';
+var APP_VER='v169';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -11496,6 +11502,22 @@ html[dir="rtl"] .sh-back svg{transform:scaleX(-1)}
 .past-fab{flex-direction:column;gap:1px}
 .past-fab .ic{width:20px;height:20px}
 .past-fab-lbl{font:800 8px/1 Heebo,sans-serif;letter-spacing:.3px;color:inherit}
+
+/* Past-events markers: reset Leaflet's default white div-icon box + entrance animation */
+.past-div{background:transparent!important;border:0!important}
+.past-mk{animation:pastDrop .35s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes pastDrop{0%{transform:scale(0) translateY(-8px);opacity:0}100%{transform:scale(1) translateY(0);opacity:.72}}
+.past-mk.leaving{animation:pastLeave .25s ease-in forwards}
+@keyframes pastLeave{to{transform:scale(0);opacity:0}}
+
+/* ═══ Past-events FAB — two clear on-brand states ═══ */
+.past-fab{transition:background .2s,color .2s,box-shadow .2s,transform .15s}
+/* OFF: muted/neutral (navy surface, dim icon) */
+.past-fab[aria-pressed="false"]{background:rgba(8,18,36,.92);color:var(--tx2,#8898B8)}
+/* ON: brand gold, active glow */
+.past-fab[aria-pressed="true"]{background:var(--gold-grad,linear-gradient(135deg,#C09020,#E0A828,#F5C840));color:var(--n0,#060F1E);
+  box-shadow:0 0 0 2px rgba(224,168,40,.45),0 4px 14px rgba(224,168,40,.35)}
+.past-fab:active{transform:scale(.92)}
 </style>
 <script src="native-bridge.js"></script>
 
