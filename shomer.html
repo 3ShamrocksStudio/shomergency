@@ -7943,7 +7943,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v164';
+var APP_VER='v165';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -10432,10 +10432,10 @@ function showOtpFallbacks(){
   d.id='otp-fallbacks';
   d.style.cssText='margin-top:12px;display:flex;flex-direction:column;gap:7px';
   d.innerHTML=
-    '<div style="font-size:11.5px;color:var(--tx3);text-align:center">'+(he?'לא הגיע קוד?':"Didn't get a code?")+'</div>'
+    '<div style="font-size:11.5px;color:var(--tx3);text-align:center">'+(he?'לא הגיע קוד ב-SMS? (מומלץ בחו״ל / ברומינג)':"No SMS? (best abroad / roaming)")+'</div>'
    +'<button id="otp-call" style="padding:11px;border-radius:11px;border:1px solid rgba(224,168,40,.5);background:rgba(224,168,40,.10);color:#E0A828;font-family:inherit;font-weight:800;font-size:13px;cursor:pointer">'
    +(he?'📞 קבל/י שיחה קולית עם הקוד':'📞 Call me with the code')+'</button>'
-   +'<button id="otp-wa" style="padding:11px;border-radius:11px;border:1px solid rgba(37,211,102,.45);background:rgba(37,211,102,.10);color:#25D366;font-family:inherit;font-weight:800;font-size:13px;cursor:pointer">'
+   +'<button id="otp-wa" style="padding:13px;border-radius:11px;border:0;background:#25D366;color:#04240F;font-family:inherit;font-weight:800;font-size:14px;cursor:pointer">'
    +(he?'קבל/י את הקוד ב-WhatsApp':'Send the code on WhatsApp')+'</button>';
   host.parentNode.insertBefore(d, host.nextSibling);
   var cb=document.getElementById('otp-call');
