@@ -1509,6 +1509,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <button class="mc" onclick="mapZoom(-1)" aria-label="הקטן">−</button>
  </div>
  <button class="loc-fab" id="loc-fab" onclick="locMe()" aria-label="מיקומי על המפה" title="מיקומי"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.4" fill="currentColor"/><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+<button class="past-fab" id="past-fab" onclick="togglePastEvents()" aria-pressed="false" aria-label="אירועי עבר" title="אירועי עבר · למודעות בלבד"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.3-7-11a7 7 0 0 1 14 0c0 4.7-7 11-7 11Z"/><circle cx="12" cy="10" r="3.2"/><path d="M12 8.3v1.7l1.2.8"/></svg><span class="past-fab-lbl">עבר</span></button>
  <button class="ff-fab" id="ff-fab" onclick="findFriendOpen()" aria-label="מצא חבר/ה" title="מצא חבר/ה"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16.5 16.5L21 21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
  </div>
 
@@ -2815,6 +2816,56 @@ let sosPhase='idle', sosCdTimer=null, sosCdLeft=0, curSosId=null;
    The SOS always fires first; type is async metadata layered on top. Default = unknown. */
 let curSosType='unknown', sosFallbackTimer=null;
 const SOS_TYPES=[['viol','fist'],['med','medcross'],['sex','hand'],['stalk','eye'],['theft','unlock'],['new','clipboard']];
+
+/* ═══ PAST EVENTS — awareness layer (historical, NOT live). Off by default. ═══ */
+var PAST_EVT_COLOR='#5B8CA8'; /* distinct archival slate-blue */
+var PAST_EVENTS=[
+  {lat:32.0853,lng:34.7818,yr:2023,he:'גבר צעיר נדקר למוות בקטטה אלימה במרחב ציבורי.',src:'public'},
+  {lat:32.0180,lng:34.7460,yr:2024,he:'עימות אלים בין קבוצות שהסתיים בפצוע אנוש.',src:'public'},
+  {lat:31.7683,lng:35.2137,yr:2023,he:'אירוע דקירה במרחב עירוני; נפגע פונה לבית חולים.',src:'public'},
+  {lat:32.1660,lng:34.8433,yr:2024,he:'ניסיון חטיפה מדווח באזור מגורים; המשטרה נקראה למקום.',src:'public'},
+  {lat:32.16272,lng:34.75145,yr:2024,he:'תאונת דרכים עם נפגע קשה (נתוני הלמ״ס).',src:'cbs'},
+  {lat:32.20462,lng:34.82387,yr:2024,he:'תאונת דרכים עם נפגע קשה (נתוני הלמ״ס).',src:'cbs'},
+  {lat:32.07752,lng:34.75034,yr:2024,he:'תאונת דרכים עם נפגע קשה (נתוני הלמ״ס).',src:'cbs'},
+  {lat:32.20076,lng:34.79188,yr:2024,he:'תאונת דרכים עם נפגע קשה (נתוני הלמ״ס).',src:'cbs'}
+];
+var _pastLayer=null, _pastOn=false;
+function pastMarkerHTML(ev){
+  return '<div style="position:relative;width:38px;height:48px">'
+    + '<svg viewBox="0 0 40 50" width="38" height="48">'
+    +   '<path d="M20 2C11 2 4 9 4 18c0 12 16 30 16 30s16-18 16-30C36 9 29 2 20 2Z" fill="'+PAST_EVT_COLOR+'" stroke="#0A1628" stroke-width="2"/>'
+    +   '<circle cx="20" cy="17" r="8.5" fill="none" stroke="#fff" stroke-width="2"/>'
+    +   '<path d="M20 12v5l3 2" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>'
+    + '</svg>'
+    + '<span style="position:absolute;top:-3px;right:-3px;background:#0A1628;color:#fff;font:800 9px/1 Heebo,sans-serif;padding:2px 4px;border-radius:6px;border:1px solid '+PAST_EVT_COLOR+'">'+ev.yr+'</span>'
+    + '</div>';
+}
+function renderPastEvents(){
+  if(typeof MAP==='undefined' || !MAP){ return; }
+  if(_pastLayer){ try{ MAP.removeLayer(_pastLayer); }catch(e){} _pastLayer=null; }
+  if(!_pastOn){ return; }
+  _pastLayer=L.layerGroup();
+  var he=(typeof currentLang!=='undefined' && currentLang==='he');
+  PAST_EVENTS.forEach(function(ev){
+    var icon=L.divIcon({html:pastMarkerHTML(ev),className:'past-div',iconSize:[38,48],iconAnchor:[19,48]});
+    var srcTxt = ev.src==='cbs' ? (he?'מקור: הלמ״ס':'Source: CBS') : (he?'מבוסס על דיווחים ציבוריים':'Based on public reports');
+    var pop='<div style="font:600 13px Heebo,sans-serif;color:#111;max-width:220px">'
+      + '<div style="display:inline-block;background:'+PAST_EVT_COLOR+';color:#0A1628;font-size:10px;font-weight:800;padding:2px 7px;border-radius:6px;margin-bottom:6px">'
+      + (he?'אירוע עבר · '+ev.yr:'Past event · '+ev.yr)+'</div><br>'
+      + ev.he + '<div style="font-size:10.5px;color:#888;margin-top:6px">'+srcTxt+' · '+(he?'למודעות בלבד — אינו אירוע חי':'awareness only')+'</div></div>';
+    L.marker([ev.lat,ev.lng],{icon:icon}).bindPopup(pop).addTo(_pastLayer);
+  });
+  _pastLayer.addTo(MAP);
+}
+function togglePastEvents(){
+  _pastOn=!_pastOn;
+  renderPastEvents();
+  var el=document.getElementById('past-fab'); if(el) el.setAttribute('aria-pressed', _pastOn?'true':'false');
+  var he=(typeof currentLang!=='undefined' && currentLang==='he');
+  try{ if(typeof toast==='function') toast(_pastOn?(he?'אירועי עבר מוצגים':'Past events shown'):(he?'אירועי עבר הוסתרו':'Past events hidden'),''); }catch(e){}
+  if(_pastOn){ try{ if(MAP && window.L){ var pts=PAST_EVENTS.map(function(e){return [e.lat,e.lng];}); MAP.fitBounds(L.latLngBounds(pts).pad(0.3),{maxZoom:12,animate:true}); } }catch(e){} }
+}
+
 function sosTypeLabel(t){const he=currentLang==='he',ar=currentLang==='ar';if(!t||t==='unknown')return he?'לא ידוע':ar?'غير معروف':'Unknown';return (TYPES[t]&&TYPES[t].label())||(he?'אחר':ar?'أخرى':'Other');}
 function sosTypeColor(t){return (TYPES[t]&&TYPES[t].color)||'#FF1A40';}
 function buildSosTypeBar(){
@@ -4909,7 +4960,7 @@ function initMap(){
  window.L.tileLayer(TILE_BASE,{maxZoom:20,subdomains:'abcd',className:'tiles-base',
  attribution:' <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> · <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>'}).addTo(MAP);
  window.L.tileLayer(TILE_LABELS,{maxZoom:20,subdomains:'abcd',className:'tiles-labels'}).addTo(MAP);
- buildStatMarkers();
+ buildStatMarkers(); try{ renderPastEvents(); }catch(e){}
  // The container may have been laid out while hidden — recalc once visible.
  [120,400,900].forEach(ms=>setTimeout(()=>{if(MAP)MAP.invalidateSize(false);},ms));
  if(userLat!=null&&userLng!=null){moveUserDot(userLat,userLng);MAP.setView([userLat,userLng],15);_centeredOnOpen=true;}
@@ -11409,6 +11460,12 @@ html[dir="rtl"] .sh-back svg{transform:scaleX(-1)}
 .agf-row2 .agf-in{width:100%;padding:13px 12px;border-radius:12px;border:1px solid var(--b2);background:var(--n3);color:var(--tx0);font-family:inherit;font-size:15px;text-align:start}
 .agf-row2 .agf-sel{width:100%;padding:13px 10px;border-radius:12px;border:1px solid var(--b2);background:var(--n3);color:var(--tx0);font-family:inherit;font-size:13px}
 @media(max-width:360px){ .agf-row2{grid-template-columns:1fr 128px} }
+
+.past-div{background:transparent!important;border:0!important}
+.past-fab{position:absolute;bottom:calc(var(--nav) + 126px);left:12px;z-index:401;width:48px;height:48px;border-radius:50%;border:1px solid rgba(140,155,189,.18);background:rgba(8,18,36,.92);backdrop-filter:blur(12px);color:var(--tx2,#8898B8);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;box-shadow:0 4px 12px rgba(0,0,0,.4);cursor:pointer;transition:background .2s,color .2s,box-shadow .2s}
+.past-fab .ic{width:20px;height:20px}
+.past-fab-lbl{font:800 8px/1 Heebo,sans-serif;letter-spacing:.3px}
+.past-fab[aria-pressed="true"]{background:#5B8CA8;color:#0A1628;box-shadow:0 0 0 2px rgba(91,140,168,.45),0 4px 14px rgba(91,140,168,.4)}
 </style>
 <script src="native-bridge.js"></script>
 
