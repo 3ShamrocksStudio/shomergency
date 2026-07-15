@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>SH✡MER Nature — שומרים על מה שאין לו קול</title>
+<title>SH✡MER Nature — שומרים על מי שאין לו קול</title>
 <meta name="description" content="אותה רשת שמירה — הפעם ליער, לחוף, לחי ולסביבה. דיווח מפגע, חילוץ בעל חיים, מפת סכנות חיה. מאת 3Shamrocks Studio.">
 <meta name="theme-color" content="#04140B">
 <meta property="og:title" content="SH✡MER Nature">
@@ -19,12 +19,31 @@
    steps, family band, CTA band, footer. Only the palette shifts — navy+gold becomes deep
    forest + living green. One system, two worlds. If it doesn't feel like SH✡MER, it isn't. */
 :root{
-  --n0:#04140B; --n1:#071C10; --n2:#0C2818; --n3:#123726; --n4:#184A32;
-  --g1:#1E7A44; --g2:#2E9D57; --g3:#3DBB66; --g4:#5FD57F;
+  /* ── SH✡MER Nature: forest foundation ── */
+  --n0:#04140B; --n1:#071C10; --n2:#0C2818; --n3:#123726; --n4:#184A32; --n5:#1F5E40;
+  /* ── green (primary) ── */
+  --g1:#1E7A44; --g2:#2E9D57; --g3:#3DBB66; --g4:#5FD57F; --g5:#9CEDB5;
   --green-grad:linear-gradient(135deg,#1E7A44 0%,#3DBB66 60%,#7CEB9B 100%);
-  --tx0:#EAF6EE; --tx1:#BFD6C7; --tx2:#7FA090; --tx3:#4E6A5A;
-  --border:rgba(125,175,145,.18);
-  --r:14px;
+  --gold-grad:var(--green-grad);
+  /* ── harmonious nature SECONDARIES ── */
+  --acc-ocean:#1C7FB8;    /* sea / water life */
+  --acc-sky:#4FB0E0;      /* sky / air */
+  --acc-earth:#B07A3C;    /* forest floor / animals */
+  --acc-coral:#E8734A;    /* reef / marine alert */
+  --acc-sun:#E8C24A;      /* warmth / sunlight */
+  --acc-teal:#1FA8A0;     /* wetland / coast */
+  --acc-moss:#6FA03C;     /* moss / vegetation */
+  /* family mark stays SH✡MER gold, so the two apps read as one family */
+  --family-gold:#E0A828;
+  /* ── warm light surfaces ── */
+  --l0:#F2F6EF; --l1:#E8F0E2; --l2:#DCE8D2; --l3:#CADCBC;
+  /* ── text ── */
+  --tx0:#EAF6EE; --tx1:#C2D9CC; --tx2:#84A896; --tx3:#4A6858;
+  --ink0:#0C2818; --ink1:#2A4A38; --ink2:#4A6858;
+  --p2:#84A896; --p3:#B0CCBE;
+  --danger:#DC2626; --safe:#16A34A;
+  --border:rgba(93,155,120,.2); --border-l:rgba(12,40,24,.12);
+  --r:14px; --r-lg:20px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -119,6 +138,17 @@ section{padding:72px 0}
 .fi{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
 .fi.in{opacity:1;transform:none}
 @media(max-width:640px){section{padding:56px 0}.family{grid-template-columns:1fr}.notify-form{flex-direction:column}}
+
+/* ══ NATURE BRAND SECTION SYSTEM ══ */
+section{position:relative}
+.sec-dark{background:radial-gradient(120% 80% at 50% 0%, var(--n2) 0%, var(--n1) 55%, var(--n0) 100%);color:var(--tx1)}
+.sec-dark::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(61,187,102,.5),transparent)}
+.sec-light{background:linear-gradient(160deg,var(--l0) 0%,var(--l1) 55%,var(--l2) 100%);color:var(--ink1)}
+.sec-light .section-title,.sec-light h2{color:var(--ink0)}
+.sec-light .section-sub{color:var(--ink2)}
+.sec-light::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(61,187,102,.4),transparent)}
 </style>
 </head>
 <body>
@@ -164,7 +194,7 @@ section{padding:72px 0}
   </div>
 </section>
 
-<section class="bg-surface fi">
+<section class="fi sec-light">
   <div class="wrap">
     <h2 class="section-title">מה SH✡MER <span class="grn">Nature</span> עושה</h2>
     <p class="section-sub">הטבע לא מתקשר למוקד. אנחנו כן.</p>
@@ -224,7 +254,7 @@ section{padding:72px 0}
   </div>
 </section>
 
-<section class="bg-surface fi">
+<section class="fi sec-light">
   <div class="wrap">
     <h2 class="section-title">משפחת <span class="grn">SH✡MER</span></h2>
     <p class="section-sub">שתי אפליקציות. אותה רשת אנושית.</p>
