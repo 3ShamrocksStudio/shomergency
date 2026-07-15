@@ -2254,13 +2254,11 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
 
     <div class="agf">
      <!-- number · dial code · country -->
-     <div class="agf-row3">
-      <input class="agf-in" id="ag-phone" type="tel" inputmode="tel" dir="ltr" autocomplete="tel"
-             placeholder="הקלד מספר" aria-label="מספר נייד"
-             oninput="agPhoneHint()" onkeydown="if(event.key==='Enter')addGuardian()">
-      <select class="agf-sel" id="ag-cc" aria-label="קידומת" dir="ltr"></select>
-      <select class="agf-sel" id="ag-country" aria-label="מדינה" onchange="agCountryPick()"></select>
-     </div>
+     <div class="agf-row2">
+       <input class="agf-in" id="ag-phone" type="tel" inputmode="tel" dir="ltr" autocomplete="tel" placeholder="הקלד מספר" aria-label="מספר נייד" oninput="agPhoneHint()" onkeydown="if(event.key==='Enter')addGuardian()">
+       <select class="agf-sel" id="ag-country" aria-label="מדינה וקידומת" onchange="agCountryPick()"></select>
+       <input type="hidden" id="ag-cc">
+      </div>
 
      <!-- contacts -->
      <button class="agf-contacts" onclick="agPickContact()">
@@ -6166,14 +6164,13 @@ function agFillSelects(){
     });
     var html='';
     keys.forEach(function(k){
-      html+='<option value="'+DIAL[k]+'" data-iso="'+k+'">'+flagOf(k)+' '+cname(k)+'</option>';
+      html+='<option value="'+DIAL[k]+'" data-iso="'+k+'">'+flagOf(k)+' '+cname(k)+' (+'+DIAL[k]+')</option>';
     });
     sel.innerHTML=html;
     try{ sel.value=myDial(); }catch(e){}
   }
   /* DIAL CODE — this select was rendering EMPTY because it had no options at all. */
-  var cc=document.getElementById('ag-cc');
-  if(cc && !cc.options.length){ fillCC(cc); }
+  /* ag-cc is now a hidden input; agSyncCountry sets its value directly */
   try{ agSyncCountry(); }catch(e){}
   try{ agPhoneHint(); }catch(e){}
   /* circle picker — unchanged from the original */
@@ -7905,7 +7902,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v155';
+var APP_VER='v156';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -11338,6 +11335,12 @@ html[dir="rtl"] .sh-back svg{transform:scaleX(-1)}
 
 .mk-me-founder{display:flex;align-items:center;justify-content:center;width:46px;height:46px;filter:drop-shadow(0 0 8px rgba(224,168,40,.5)) drop-shadow(0 2px 5px rgba(0,0,0,.6));animation:fcFloat 3.5s ease-in-out infinite}
 .mk-me-founder .fc-emb{width:40px!important;height:40px!important}
+
+/* merged guardian phone row — number + single country/dial select */
+.agf-row2{display:grid;grid-template-columns:1fr 150px;gap:8px;margin-bottom:12px}
+.agf-row2 .agf-in{width:100%;padding:13px 12px;border-radius:12px;border:1px solid var(--b2);background:var(--n3);color:var(--tx0);font-family:inherit;font-size:15px;text-align:start}
+.agf-row2 .agf-sel{width:100%;padding:13px 10px;border-radius:12px;border:1px solid var(--b2);background:var(--n3);color:var(--tx0);font-family:inherit;font-size:13px}
+@media(max-width:360px){ .agf-row2{grid-template-columns:1fr 128px} }
 </style>
 <script src="native-bridge.js"></script>
 </body>
