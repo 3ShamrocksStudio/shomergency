@@ -7895,7 +7895,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v170';
+var APP_VER='v171';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -11416,6 +11416,30 @@ html[dir="rtl"] .sh-back svg{transform:scaleX(-1)}
   }
   setInterval(tag, 1000);
 }catch(e){} })();
+
+/* Blank-screen watchdog: if the app fails to render (e.g. a corrupted SW cache served a
+   half-broken state), auto-recover once by clearing caches + SW and hard-reloading. */
+(function(){
+  try{
+    if(sessionStorage.getItem('shomerRecovered')==='1') return;
+    setTimeout(function(){
+      try{
+        var splash=document.getElementById('splash');
+        var ob=document.getElementById('ob-cc')||document.querySelector('[id*=onboard]');
+        var mapEl=document.getElementById('map');
+        var hasContent = (mapEl && mapEl.children && mapEl.children.length>0) || (ob) ||
+                         (document.body && document.body.innerText && document.body.innerText.trim().length>40);
+        if(!hasContent){
+          sessionStorage.setItem('shomerRecovered','1');
+          if('serviceWorker' in navigator){ navigator.serviceWorker.getRegistrations().then(function(rs){ rs.forEach(function(r){r.unregister();}); }); }
+          if(window.caches && caches.keys){ caches.keys().then(function(ks){ ks.forEach(function(k){caches.delete(k);}); }).then(function(){ location.reload(true); }); }
+          else { location.reload(true); }
+        }
+      }catch(e){}
+    }, 5000);
+  }catch(e){}
+})();
+
 </script>
 </body>
 </html>
