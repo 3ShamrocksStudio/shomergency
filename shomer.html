@@ -7935,7 +7935,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v159';
+var APP_VER='v160';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -11376,5 +11376,33 @@ html[dir="rtl"] .sh-back svg{transform:scaleX(-1)}
 @media(max-width:360px){ .agf-row2{grid-template-columns:1fr 128px} }
 </style>
 <script src="native-bridge.js"></script>
+
+<script>
+/* Founder debug: add ?dbg=1 to the URL to outline+label every fixed/absolute element on screen.
+   Zero effect without the param. Lets us identify a mis-positioned element from a screenshot. */
+(function(){ try{
+  if(!/[?&]dbg=1/.test(location.search)) return;
+  var DBG_OUTLINE=true;
+  function tag(){
+    document.querySelectorAll('*').forEach(function(el){
+      var cs=getComputedStyle(el);
+      if((cs.position==='fixed'||cs.position==='absolute') && el.offsetHeight>0 && el.offsetWidth>0){
+        var r=el.getBoundingClientRect();
+        if(r.top<260 && r.top>-20){
+          el.style.outline='2px solid #FF00FF';
+          if(!el.querySelector('.dbg-lbl')){
+            var l=document.createElement('div');
+            l.className='dbg-lbl';
+            l.textContent='#'+(el.id||'')+' .'+(typeof el.className==='string'?el.className.split(' ')[0]:'')+' z'+cs.zIndex;
+            l.style.cssText='position:absolute;top:0;left:0;background:#FF00FF;color:#fff;font-size:9px;padding:1px 4px;z-index:99999;pointer-events:none;direction:ltr';
+            el.appendChild(l);
+          }
+        }
+      }
+    });
+  }
+  setInterval(tag, 1000);
+}catch(e){} })();
+</script>
 </body>
 </html>
