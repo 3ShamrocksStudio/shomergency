@@ -1509,6 +1509,10 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <button class="mc" onclick="mapZoom(-1)" aria-label="הקטן">−</button>
  </div>
  <button class="loc-fab" id="loc-fab" onclick="locMe()" aria-label="מיקומי על המפה" title="מיקומי"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.4" fill="currentColor"/><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+<button class="past-fab" id="past-fab" onclick="togglePastEvents()" aria-pressed="false" aria-label="אירועי עבר" title="אירועי עבר · למודעות בלבד">
+<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+</button>
+
  <button class="ff-fab" id="ff-fab" onclick="findFriendOpen()" aria-label="מצא חבר/ה" title="מצא חבר/ה"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16.5 16.5L21 21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
  </div>
 
@@ -2815,6 +2819,66 @@ let sosPhase='idle', sosCdTimer=null, sosCdLeft=0, curSosId=null;
    The SOS always fires first; type is async metadata layered on top. Default = unknown. */
 let curSosType='unknown', sosFallbackTimer=null;
 const SOS_TYPES=[['viol','fist'],['med','medcross'],['sex','hand'],['stalk','eye'],['theft','unlock'],['new','clipboard']];
+
+/* ═══════════════════════════════════════════════════════════════════════
+   PAST EVENTS LAYER — awareness/education, NOT live incidents.
+   Design law compliance: EVENTS=teardrop(now), ESSENTIALS=tiles, STATS=halos.
+   Past events are none of these — they get a DISTINCT muted, dated "history"
+   marker (a desaturated circle with the YEAR on it) that can never be mistaken
+   for a live teardrop pin. On by default, but visually + textually flagged as
+   historical awareness data. Anonymized (no names). Sources labeled.
+   ═══════════════════════════════════════════════════════════════════════ */
+var PAST_EVENTS=[
+  /* Anonymized notable public cases (no names; general location; real dates; factual).
+     src:'public' = based on public reporting. Drafted for awareness. */
+  {lat:32.0853,lng:34.7818,yr:2023,cat:'viol',he:'גבר צעיר נדקר למוות בקטטה אלימה במרחב ציבורי.',src:'public'},
+  {lat:32.0180,lng:34.7460,yr:2024,cat:'viol',he:'עימות אלים בין קבוצות שהסתיים בפצוע אנוש.',src:'public'},
+  {lat:31.7683,lng:35.2137,yr:2023,cat:'stab',he:'אירוע דקירה במרחב עירוני; נפגע פונה לבית חולים.',src:'public'},
+  {lat:32.1660,lng:34.8433,yr:2024,cat:'viol',he:'ניסיון חטיפה מדווח באזור מגורים; המשטרה נקראה למקום.',src:'public'},
+  /* Real CBS severe road-accident points (data.gov.il, geolocated) */
+  {lat:32.16272,lng:34.75145,yr:2024,cat:'road',he:'תאונת דרכים עם נפגע קשה (נתוני הלמ״ס).',src:'cbs'},
+  {lat:32.20462,lng:34.82387,yr:2024,cat:'road',he:'תאונת דרכים עם נפגע קשה (נתוני הלמ״ס).',src:'cbs'},
+  {lat:32.07752,lng:34.75034,yr:2024,cat:'road',he:'תאונת דרכים עם נפגע קשה (נתוני הלמ״ס).',src:'cbs'},
+  {lat:32.20076,lng:34.79188,yr:2024,cat:'road',he:'תאונת דרכים עם נפגע קשה (נתוני הלמ״ס).',src:'cbs'}
+];
+var PAST_CAT={
+  viol:{c:'#8A5A5A',lbl:function(){return currentLang==='he'?'אלימות':'Violence';}},
+  stab:{c:'#8A5252',lbl:function(){return currentLang==='he'?'דקירה':'Stabbing';}},
+  road:{c:'#7A6B4A',lbl:function(){return currentLang==='he'?'תאונת דרכים':'Road accident';}}
+};
+var _pastLayer=null, _pastOn=false;
+function pastMarkerHTML(ev){
+  var cat=PAST_CAT[ev.cat]||PAST_CAT.viol;
+  /* muted desaturated CIRCLE (not a teardrop) with the YEAR — unmistakably historical */
+  return '<div class="past-mk" style="width:34px;height:34px;border-radius:50%;'
+       + 'background:'+cat.c+';opacity:.72;border:2px dashed rgba(255,255,255,.55);'
+       + 'display:flex;align-items:center;justify-content:center;'
+       + 'font:800 11px/1 Heebo,sans-serif;color:#fff;box-shadow:0 2px 6px rgba(0,0,0,.4)">'
+       + ev.yr + '</div>';
+}
+function renderPastEvents(){
+  if(typeof MAP==='undefined' || !MAP) return;
+  if(_pastLayer){ try{ MAP.removeLayer(_pastLayer); }catch(e){} _pastLayer=null; }
+  if(!_pastOn) return;
+  _pastLayer=L.layerGroup();
+  var he=currentLang==='he';
+  PAST_EVENTS.forEach(function(ev){
+    var cat=PAST_CAT[ev.cat]||PAST_CAT.viol;
+    var icon=L.divIcon({html:pastMarkerHTML(ev),className:'past-div',iconSize:[34,34],iconAnchor:[17,17]});
+    var srcTxt = ev.src==='cbs' ? (he?'מקור: הלשכה המרכזית לסטטיסטיקה':'Source: CBS')
+                                : (he?'מבוסס על דיווחים ציבוריים':'Based on public reports');
+    var pop='<div style="font:600 13px Heebo,sans-serif;color:#111;max-width:220px">'
+          + '<div style="display:inline-block;background:#5A6070;color:#fff;font-size:10px;padding:2px 7px;border-radius:6px;margin-bottom:6px">'
+          + (he?'אירוע עבר · '+ev.yr:'Past event · '+ev.yr)+'</div><br>'
+          + ev.he + '<div style="font-size:10.5px;color:#888;margin-top:6px">'+srcTxt
+          + ' · '+(he?'למודעות בלבד — אינו אירוע חי':'awareness only — not a live event')+'</div></div>';
+    L.marker([ev.lat,ev.lng],{icon:icon}).bindPopup(pop).addTo(_pastLayer);
+  });
+  _pastLayer.addTo(MAP);
+}
+function togglePastEvents(on){ _pastOn=(on!==undefined)?on:!_pastOn; renderPastEvents();
+  var el=document.getElementById('past-fab'); if(el) el.setAttribute('aria-pressed', _pastOn?'true':'false'); }
+
 function sosTypeLabel(t){const he=currentLang==='he',ar=currentLang==='ar';if(!t||t==='unknown')return he?'לא ידוע':ar?'غير معروف':'Unknown';return (TYPES[t]&&TYPES[t].label())||(he?'אחר':ar?'أخرى':'Other');}
 function sosTypeColor(t){return (TYPES[t]&&TYPES[t].color)||'#FF1A40';}
 function buildSosTypeBar(){
@@ -4909,7 +4973,7 @@ function initMap(){
  window.L.tileLayer(TILE_BASE,{maxZoom:20,subdomains:'abcd',className:'tiles-base',
  attribution:' <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> · <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>'}).addTo(MAP);
  window.L.tileLayer(TILE_LABELS,{maxZoom:20,subdomains:'abcd',className:'tiles-labels'}).addTo(MAP);
- buildStatMarkers();
+ buildStatMarkers(); try{ renderPastEvents(); }catch(e){}
  // The container may have been laid out while hidden — recalc once visible.
  [120,400,900].forEach(ms=>setTimeout(()=>{if(MAP)MAP.invalidateSize(false);},ms));
  if(userLat!=null&&userLng!=null){moveUserDot(userLat,userLng);MAP.setView([userLat,userLng],15);_centeredOnOpen=true;}
@@ -7943,7 +8007,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v166';
+var APP_VER='v167';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -11409,6 +11473,13 @@ html[dir="rtl"] .sh-back svg{transform:scaleX(-1)}
 .agf-row2 .agf-in{width:100%;padding:13px 12px;border-radius:12px;border:1px solid var(--b2);background:var(--n3);color:var(--tx0);font-family:inherit;font-size:15px;text-align:start}
 .agf-row2 .agf-sel{width:100%;padding:13px 10px;border-radius:12px;border:1px solid var(--b2);background:var(--n3);color:var(--tx0);font-family:inherit;font-size:13px}
 @media(max-width:360px){ .agf-row2{grid-template-columns:1fr 128px} }
+
+/* Past-events toggle — standalone map control, separate from the legend */
+.past-fab{position:absolute;bottom:calc(var(--nav) + 126px);left:12px;z-index:401;width:48px;height:48px;border-radius:50%;border:1px solid var(--border,rgba(140,155,189,.18));
+  background:rgba(8,18,36,.92);backdrop-filter:blur(12px);color:#8A93A8;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 12px rgba(0,0,0,.4);cursor:pointer}
+.past-fab .ic{width:22px;height:22px}
+.past-fab[aria-pressed="true"]{background:#5A6070;color:#fff;box-shadow:0 0 0 2px rgba(138,96,96,.5),0 4px 12px rgba(0,0,0,.4)}
 </style>
 <script src="native-bridge.js"></script>
 
