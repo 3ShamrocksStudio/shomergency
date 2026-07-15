@@ -7935,7 +7935,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v162';
+var APP_VER='v163';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -10942,6 +10942,10 @@ body.aed-placing #map{cursor:crosshair}
 .resp-ring{position:absolute;inset:0;border-radius:50%;background:rgba(61,220,151,.35);animation:respPulse 1.25s ease-out infinite}
 .resp-dot{position:relative;width:15px;height:15px;border-radius:50%;background:#3DDC97;border:2.5px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.5)}
 .resp-nm{position:absolute;top:34px;white-space:nowrap;font-size:10px;font-weight:900;color:#fff;background:rgba(6,15,30,.9);padding:2px 7px;border-radius:999px;border:1px solid rgba(61,220,151,.5)}
+/* SOS history rows reuse the .resp-nm class for text, but must NOT inherit the map marker's
+   absolute positioning (that was floating the timestamp over the profile header). Reset it. */
+#sos-hist-list .resp-nm{position:static;top:auto;white-space:normal;background:transparent;border:0;padding:0;color:var(--tx1);font-weight:700;}
+#sos-hist-list .resp-row{position:relative;}
 @keyframes respPulse{0%{transform:scale(.55);opacity:.9}70%{transform:scale(1.7);opacity:0}100%{opacity:0}}
 /* "help is coming" — the person in distress must never wonder if anyone saw it */
 .help-bar{position:fixed;left:12px;right:12px;top:calc(var(--hdr-top,0px) + var(--hdr) + 10px);z-index:100002;background:linear-gradient(135deg,#0E8F6E,#0B7355);border:1px solid rgba(61,220,151,.6);border-radius:16px;padding:13px 16px;box-shadow:0 12px 40px rgba(0,0,0,.6);max-width:520px;margin-inline:auto;animation:helpIn .35s ease-out}
