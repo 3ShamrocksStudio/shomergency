@@ -1509,9 +1509,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <button class="mc" onclick="mapZoom(-1)" aria-label="הקטן">−</button>
  </div>
  <button class="loc-fab" id="loc-fab" onclick="locMe()" aria-label="מיקומי על המפה" title="מיקומי"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.4" fill="currentColor"/><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
-<button class="past-fab" id="past-fab" onclick="togglePastEvents()" aria-pressed="false" aria-label="אירועי עבר" title="אירועי עבר · למודעות בלבד">
-<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-</button>
+<button class="past-fab" id="past-fab" onclick="togglePastEvents()" aria-pressed="false" aria-label="אירועי עבר" title="אירועי עבר · למודעות בלבד"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v5h5"/><path d="M3.05 13a9 9 0 1 0 2.5-6.5L3 8"/><path d="M12 8v4l3 2"/></svg><span class="past-fab-lbl">עבר</span></button>
 
  <button class="ff-fab" id="ff-fab" onclick="findFriendOpen()" aria-label="מצא חבר/ה" title="מצא חבר/ה"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16.5 16.5L21 21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
  </div>
@@ -2876,8 +2874,23 @@ function renderPastEvents(){
   });
   _pastLayer.addTo(MAP);
 }
-function togglePastEvents(on){ _pastOn=(on!==undefined)?on:!_pastOn; renderPastEvents();
-  var el=document.getElementById('past-fab'); if(el) el.setAttribute('aria-pressed', _pastOn?'true':'false'); }
+function togglePastEvents(on){
+  _pastOn=(on!==undefined)?on:!_pastOn;
+  renderPastEvents();
+  var el=document.getElementById('past-fab'); if(el) el.setAttribute('aria-pressed', _pastOn?'true':'false');
+  var he=currentLang==='he';
+  if(_pastOn){
+    try{ if(typeof toast==='function') toast(he?'אירועי עבר מוצגים — למודעות בלבד':'Past events shown — awareness only',''); }catch(e){}
+    try{
+      if(typeof MAP!=='undefined' && MAP && window.L && PAST_EVENTS.length){
+        var pts=PAST_EVENTS.map(function(e){return [e.lat,e.lng];});
+        MAP.fitBounds(L.latLngBounds(pts).pad(0.3), {maxZoom:12, animate:true});
+      }
+    }catch(e){}
+  } else {
+    try{ if(typeof toast==='function') toast(he?'אירועי עבר הוסתרו':'Past events hidden',''); }catch(e){}
+  }
+}
 
 function sosTypeLabel(t){const he=currentLang==='he',ar=currentLang==='ar';if(!t||t==='unknown')return he?'לא ידוע':ar?'غير معروف':'Unknown';return (TYPES[t]&&TYPES[t].label())||(he?'אחר':ar?'أخرى':'Other');}
 function sosTypeColor(t){return (TYPES[t]&&TYPES[t].color)||'#FF1A40';}
@@ -8007,7 +8020,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v167';
+var APP_VER='v168';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -11480,6 +11493,9 @@ html[dir="rtl"] .sh-back svg{transform:scaleX(-1)}
   box-shadow:0 4px 12px rgba(0,0,0,.4);cursor:pointer}
 .past-fab .ic{width:22px;height:22px}
 .past-fab[aria-pressed="true"]{background:#5A6070;color:#fff;box-shadow:0 0 0 2px rgba(138,96,96,.5),0 4px 12px rgba(0,0,0,.4)}
+.past-fab{flex-direction:column;gap:1px}
+.past-fab .ic{width:20px;height:20px}
+.past-fab-lbl{font:800 8px/1 Heebo,sans-serif;letter-spacing:.3px;color:inherit}
 </style>
 <script src="native-bridge.js"></script>
 
