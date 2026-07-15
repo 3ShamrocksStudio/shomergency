@@ -1,0 +1,41 @@
+// ═══════════════════════════════════════════════════════════════════
+// SH✡MER — Release signing config
+// Add to native/android/app/build.gradle inside android { }
+// ═══════════════════════════════════════════════════════════════════
+
+android {
+    // ... existing config ...
+
+    signingConfigs {
+        release {
+            storeFile file(System.getenv("SHOMER_KEYSTORE") ?: "shomer-release.keystore")
+            storePassword System.getenv("SHOMER_KEYSTORE_PW")
+            keyAlias "shomer"
+            keyPassword System.getenv("SHOMER_KEY_PW")
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    defaultConfig {
+        applicationId "il.co.shomerapp"
+        minSdkVersion 23        // Android 6.0 — background location needs 23+
+        targetSdkVersion 34     // Android 14 — required by Play Store
+        versionCode 1
+        versionName "1.0"
+    }
+}
+
+// Generate the keystore ONCE (keep it + passwords safe forever — losing it = can't update the app):
+//   keytool -genkey -v -keystore shomer-release.keystore -alias shomer -keyalg RSA -keysize 2048 -validity 10000
+//
+// Then set env vars before building:
+//   export SHOMER_KEYSTORE=/absolute/path/shomer-release.keystore
+//   export SHOMER_KEYSTORE_PW='your-store-password'
+//   export SHOMER_KEY_PW='your-key-password'
