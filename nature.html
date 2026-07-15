@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>SH✡MER Nature — שומרים על מי שאין לו קול</title>
 <meta name="description" content="אותה רשת שמירה — הפעם ליער, לחוף, לחי ולסביבה. דיווח מפגע, חילוץ בעל חיים, מפת סכנות חיה. מאת 3Shamrocks Studio.">
-<meta name="theme-color" content="#04140B">
+<meta name="theme-color" content="#0E121C">
 <meta property="og:title" content="SH✡MER Nature">
 <meta property="og:description" content="אותה רשת שמירה — הפעם ליער, לחוף, לחי ולסביבה.">
-<meta property="og:image" content="nature-badge.png">
-<link rel="icon" href="nature-badge-sm.png">
+<meta property="og:image" content="nature-assets/nature-logo-white.png">
+<link rel="icon" href="nature-assets/shomerNature_W.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
@@ -19,30 +19,29 @@
    steps, family band, CTA band, footer. Only the palette shifts — navy+gold becomes deep
    forest + living green. One system, two worlds. If it doesn't feel like SH✡MER, it isn't. */
 :root{
-  /* ── SH✡MER Nature: forest foundation ── */
-  --n0:#04140B; --n1:#071C10; --n2:#0C2818; --n3:#123726; --n4:#184A32; --n5:#1F5E40;
-  /* ── green (primary) ── */
-  --g1:#1E7A44; --g2:#2E9D57; --g3:#3DBB66; --g4:#5FD57F; --g5:#9CEDB5;
-  --green-grad:linear-gradient(135deg,#1E7A44 0%,#3DBB66 60%,#7CEB9B 100%);
-  --gold-grad:var(--green-grad);
-  /* ── harmonious nature SECONDARIES ── */
-  --acc-ocean:#1C7FB8;    /* sea / water life */
-  --acc-sky:#4FB0E0;      /* sky / air */
-  --acc-earth:#B07A3C;    /* forest floor / animals */
-  --acc-coral:#E8734A;    /* reef / marine alert */
-  --acc-sun:#E8C24A;      /* warmth / sunlight */
-  --acc-teal:#1FA8A0;     /* wetland / coast */
-  --acc-moss:#6FA03C;     /* moss / vegetation */
-  /* family mark stays SH✡MER gold, so the two apps read as one family */
-  --family-gold:#E0A828;
-  /* ── warm light surfaces ── */
-  --l0:#F2F6EF; --l1:#E8F0E2; --l2:#DCE8D2; --l3:#CADCBC;
-  /* ── text ── */
-  --tx0:#EAF6EE; --tx1:#C2D9CC; --tx2:#84A896; --tx3:#4A6858;
-  --ink0:#0C2818; --ink1:#2A4A38; --ink2:#4A6858;
-  --p2:#84A896; --p3:#B0CCBE;
-  --danger:#DC2626; --safe:#16A34A;
-  --border:rgba(93,155,120,.2); --border-l:rgba(12,40,24,.12);
+  /* ── SH✡MER Nature — official brand palette ── */
+  /* foundation: deep ink navy (matches logo bg) */
+  --n0:#0E121C; --n1:#171d2b; --n2:#1E2536; --n3:#273044; --n4:#333E56; --n5:#42506E;
+  /* primary: neon green */
+  --g1:#2E8A0A; --g2:#3DB40D; --g3:#50db0f; --g4:#74E63F; --g5:#A8F27D;
+  --green-grad:linear-gradient(135deg,#2E8A0A 0%,#50db0f 55%,#8CF04A 100%);
+  /* the SOS button lives in neon green */
+  --sos:#50db0f; --sos-glow:#8CF04A;
+  /* accents */
+  --acc-amber:#faac22;   /* warmth / sunlight / secondary CTA */
+  --acc-teal:#0b5a5f;    /* water / coast / depth */
+  --acc-teal-lt:#12888F;
+  --amber-grad:linear-gradient(135deg,#F08E12 0%,#faac22 60%,#FFCB5E 100%);
+  /* the logo's signature sweep */
+  --brand-grad:linear-gradient(135deg,#faac22 0%,#50db0f 55%,#0b5a5f 100%);
+  /* warm light surfaces */
+  --l0:#F3F6F0; --l1:#E9EFE4; --l2:#DCE6D4; --l3:#C9D8BE;
+  /* text */
+  --tx0:#EEF3EA; --tx1:#C4D2C0; --tx2:#849688; --tx3:#4E6156;
+  --ink0:#171d2b; --ink1:#2A3548; --ink2:#4E6156;
+  --p2:#849688; --p3:#B0C4B4;
+  --danger:#E0492A; --safe:#50db0f;
+  --border:rgba(80,219,15,.18); --border-l:rgba(23,29,43,.12);
   --r:14px; --r-lg:20px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
@@ -67,25 +66,25 @@ a{text-decoration:none;color:inherit}
     radial-gradient(ellipse at 30% 18%, rgba(61,187,102,.22), transparent 55%),
     radial-gradient(ellipse at 78% 62%, rgba(31,168,160,.16), transparent 58%),
     radial-gradient(circle at 50% 105%, rgba(124,235,155,.12), transparent 62%),
-    linear-gradient(170deg,#0C2818 0%,#04140B 100%)}
+    linear-gradient(170deg,#1E2536 0%,#0E121C 100%)}
 .hero-fallback::after{content:'';position:absolute;inset:0;opacity:.35;
   background-image:
     repeating-linear-gradient(115deg, rgba(255,255,255,.03) 0 2px, transparent 2px 7px),
     repeating-linear-gradient(65deg, rgba(0,0,0,.10) 0 3px, transparent 3px 9px)}
 .hero-media::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg, rgba(4,20,11,.35) 0%, transparent 30%, rgba(4,20,11,.94) 100%)}
-.hero-logo{position:relative;z-index:3;display:block;width:clamp(140px,38vw,200px);height:auto;margin:calc(clamp(140px,38vw,200px) / -2) auto 0;filter:drop-shadow(0 12px 30px rgba(0,0,0,.7)) drop-shadow(0 0 34px rgba(61,187,102,.22))}
+.hero-logo{position:relative;z-index:3;display:block;width:min(560px,86vw);height:auto;margin:0 auto 8px;filter:drop-shadow(0 8px 30px rgba(80,219,15,.25))}
 .hero-content{position:relative;z-index:2;padding:14px 24px 46px;display:flex;flex-direction:column;align-items:center;text-align:center}
 .hero-title{font-size:clamp(32px,9vw,58px);font-weight:900;line-height:1.12;letter-spacing:-1px;color:var(--tx0);margin-bottom:10px}
 .grn{background:var(--green-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .hero-sub{font-size:clamp(14px,3.8vw,17px);color:var(--tx1);line-height:1.65;margin-bottom:24px;max-width:500px}
 .hero-cta-row{display:flex;flex-direction:column;gap:12px;margin-bottom:34px;width:100%;max-width:380px}
-.btn-primary{background:var(--green-grad);color:#04140B;padding:17px 32px;border-radius:var(--r);font-weight:900;font-size:17px;text-align:center;display:block;transition:transform .15s;box-shadow:0 10px 30px rgba(61,187,102,.26)}
+.btn-primary{background:var(--green-grad);color:#0E121C;padding:17px 32px;border-radius:var(--r);font-weight:900;font-size:17px;text-align:center;display:block;transition:transform .15s;box-shadow:0 10px 30px rgba(61,187,102,.26)}
 .btn-primary:active{transform:scale(.98)}
 .btn-ghost{border:1px solid var(--border);color:var(--tx1);padding:16px 32px;border-radius:var(--r);font-weight:800;font-size:15px;text-align:center;display:block}
 
 .hero-stats{display:flex;gap:8px;justify-content:center;align-items:flex-start;width:100%;max-width:500px;margin:0 auto}
 .stat{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;gap:7px}
-.stat-ic{width:52px;height:52px;border-radius:50%;background:var(--green-grad);display:flex;align-items:center;justify-content:center;color:#04140B;box-shadow:0 8px 22px rgba(61,187,102,.32),inset 0 1px 0 rgba(255,255,255,.35)}
+.stat-ic{width:52px;height:52px;border-radius:50%;background:var(--green-grad);display:flex;align-items:center;justify-content:center;color:#0E121C;box-shadow:0 8px 22px rgba(61,187,102,.32),inset 0 1px 0 rgba(255,255,255,.35)}
 .stat-ic svg{width:24px;height:24px}
 .stat-n{display:block;font-size:22px;font-weight:900;color:var(--g3);font-family:'Cinzel',serif;line-height:1}
 .stat-l{display:block;font-size:11px;color:var(--tx1);line-height:1.45;max-width:112px}
@@ -107,28 +106,28 @@ section{padding:72px 0}
 
 .steps{display:flex;flex-direction:column;gap:26px;max-width:620px;margin-inline:auto}
 .step{display:flex;gap:16px;align-items:flex-start}
-.step-num{flex:0 0 auto;width:38px;height:38px;border-radius:50%;background:var(--green-grad);color:#04140B;font-weight:900;font-size:16px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(61,187,102,.25)}
+.step-num{flex:0 0 auto;width:38px;height:38px;border-radius:50%;background:var(--green-grad);color:#0E121C;font-weight:900;font-size:16px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(61,187,102,.25)}
 .step-t{font-size:16px;font-weight:900;color:var(--tx0);margin-bottom:4px}
 .step-s{font-size:13.5px;color:var(--tx2);line-height:1.7}
 
 .family{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:720px;margin:0 auto}
 .fam{border-radius:18px;padding:26px 20px;text-align:center;border:1px solid var(--border);display:block}
 .fam-urban{background:linear-gradient(160deg,#101E34,#0A1628);border-color:rgba(224,168,40,.28)}
-.fam-nature{background:linear-gradient(160deg,#0C2818,#071C10);border-color:rgba(61,187,102,.35)}
+.fam-nature{background:linear-gradient(160deg,#1E2536,#171d2b);border-color:rgba(61,187,102,.35)}
 .fam img{height:34px;width:auto;margin-bottom:12px}
 .fam-t{font-size:15px;font-weight:900;margin-bottom:5px}
 .fam-urban .fam-t{color:#E0A828}
-.fam-nature .fam-t{color:#3DBB66}
+.fam-nature .fam-t{color:#50db0f}
 .fam-s{font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:14px}
 .fam-b{display:inline-block;font-size:12.5px;font-weight:800;padding:9px 18px;border-radius:999px}
 .fam-urban .fam-b{background:linear-gradient(135deg,#C09020,#E0A828 60%,#F5C840);color:#23170a}
-.fam-nature .fam-b{background:var(--green-grad);color:#04140B}
+.fam-nature .fam-b{background:var(--green-grad);color:#0E121C}
 
-.cta-band{background:linear-gradient(135deg,rgba(31,122,68,.16),rgba(12,40,24,.92));border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:70px 24px;text-align:center}
+.cta-band{background:linear-gradient(135deg,rgba(80,219,15,.14),rgba(23,29,43,.94));border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:70px 24px;text-align:center}
 .notify-form{display:flex;gap:9px;max-width:420px;margin:22px auto 0}
 .notify-form input{flex:1;padding:15px 16px;border-radius:var(--r);border:1px solid var(--border);background:rgba(4,20,11,.6);color:var(--tx0);font-family:inherit;font-size:14.5px}
 .notify-form input::placeholder{color:var(--tx3)}
-.notify-form button{padding:15px 24px;border-radius:var(--r);border:0;background:var(--green-grad);color:#04140B;font-family:inherit;font-weight:900;font-size:14.5px;cursor:pointer;white-space:nowrap}
+.notify-form button{padding:15px 24px;border-radius:var(--r);border:0;background:var(--green-grad);color:#0E121C;font-family:inherit;font-weight:900;font-size:14.5px;cursor:pointer;white-space:nowrap}
 .notify-note{font-size:11.5px;color:var(--tx3);margin-top:12px}
 
 .site-foot{padding:40px 24px;text-align:center;border-top:1px solid var(--border)}
@@ -155,7 +154,7 @@ section{position:relative}
 
 <div class="topbar">
   <a class="brandmark" href="index.html">
-    <img src="nature-badge-sm.png" alt="">
+    <img src="nature-assets/shomerNature_W.svg" alt="">
     <span>SH✡MER <span class="n">Nature</span></span>
   </a>
   <a class="tb-back" href="index.html">
@@ -169,7 +168,7 @@ section{position:relative}
     <div class="hero-fallback"></div>
     <img class="hero-bg" src="nature-hero.jpg" alt="" onerror="this.style.display='none'">
   </div>
-  <img class="hero-logo" src="nature-badge.png" alt="SH✡MER Nature">
+  <img class="hero-logo" src="nature-assets/shomerNature_W.svg" alt="SH✡MER Nature">
   <div class="hero-content">
     <h1 class="hero-title">שומרים על<br><span class="grn">מה שאין לו קול</span></h1>
     <p class="hero-sub">אותה רשת שמירה — הפעם ליער, לחוף, לחי ולסביבה. חיה פצועה, שריפה מתחילה, מפגע בשמורה: מישהו קרוב תמיד רואה ראשון.</p>
