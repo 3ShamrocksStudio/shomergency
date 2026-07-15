@@ -7935,7 +7935,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v160';
+var APP_VER='v161';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -10373,6 +10373,15 @@ function enterAppAnonymously(){
 }
 
 const TWILIO_BASE="https://shomer-verify-8701-prod.twil.io";
+function fetchTimeout(url, opts, ms){
+  ms=ms||12000;
+  return new Promise(function(resolve,reject){
+    var done=false;
+    var t=setTimeout(function(){ if(!done){ done=true; reject(new Error('timeout')); } }, ms);
+    fetch(url,opts).then(function(r){ if(!done){ done=true; clearTimeout(t); resolve(r); } })
+                   .catch(function(e){ if(!done){ done=true; clearTimeout(t); reject(e); } });
+  });
+}
 
 var _otpSends=0,_otpCoolT=null;
 function _otpCooldown(btn,secs){
@@ -10423,7 +10432,7 @@ async function sendTwilioOTP(channel){
  if(btn){btn.disabled=true;btn.textContent=he?"שולח קוד...":"Sending code...";}
  if(statusEl)statusEl.textContent=(OTP_CHANNEL==="call")?(he?"⏳ מתקשרים אליך עם הקוד...":"⏳ Calling you with the code..."):(OTP_CHANNEL==="whatsapp")?(he?"⏳ שולח קוד ב-WhatsApp...":"⏳ Sending code on WhatsApp..."):(he?"⏳ שולח קוד SMS...":"⏳ Sending SMS code...");
  try{
-  const r=await fetch(TWILIO_BASE+"/sendOTP",{
+  const r=await fetchTimeout(TWILIO_BASE+"/sendOTP",{
    method:"POST",
    headers:{"Content-Type":"application/x-www-form-urlencoded"},
    body:"phone="+encodeURIComponent("+"+user.phone)+"&channel="+encodeURIComponent(OTP_CHANNEL)+"&locale="+(he?"he":"en")
@@ -10441,7 +10450,7 @@ async function sendTwilioOTP(channel){
    if(btn){btn.disabled=false;btn.textContent=he?"לא קיבלת/ה קוד? שלח/י שוב":"No code? Send again";}
   }
  }catch(e){
-  if(statusEl)statusEl.textContent=he?"❌ בעיית רשת":"❌ Network error";
+  if(statusEl)statusEl.textContent=he?"❌ בעיית חיבור. בדוק/י אינטרנט ונסה/י שוב. בחו״ל? ייתכן שהרשת חוסמת — נסה/י Wi-Fi אחר או כבה/י VPN":"❌ Connection problem. Check your internet and retry. Abroad? Your network may block it — try another Wi-Fi or turn off VPN";
   if(btn){btn.disabled=false;btn.textContent=he?"לא קיבלת/ה קוד? שלח/י שוב":"No code? Send again";}
  }
 }
@@ -10497,7 +10506,7 @@ async function verifyTwilioCode(){
  if(btn){btn.disabled=true;btn.textContent=he?"מאמת...":"Verifying...";}
  if(errEl)errEl.textContent="";
  try{
-  const r=await fetch(TWILIO_BASE+"/verifyOTP",{
+  const r=await fetchTimeout(TWILIO_BASE+"/verifyOTP",{
    method:"POST",
    headers:{"Content-Type":"application/x-www-form-urlencoded"},
    body:"phone="+encodeURIComponent("+"+user.phone)+"&code="+encodeURIComponent(code)
