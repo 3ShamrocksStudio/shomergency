@@ -2807,7 +2807,7 @@ function arTr(s){
 }
 function T(k){ if(currentLang==='ar'){ return (LANGS.ar&&LANGS.ar[k]!=null)?LANGS.ar[k]:arTr(LANGS.en[k]!=null?LANGS.en[k]:k); } return L[k]||LANGS.he[k]||k; }
 
-let sosActive=false, sosTimer=null;
+let sosActive=false, sosTimer=null; let _centeredOnOpen=false;
 /* SOS state machine: 'idle' → 'countdown' (alarm on, NOT yet broadcast) → 'active' (broadcast+mapped).
  sosActive stays true through countdown+active so shake/DMS guards (if(!sosActive)) keep working. */
 let sosPhase='idle', sosCdTimer=null, sosCdLeft=0, curSosId=null;
@@ -4912,7 +4912,7 @@ function initMap(){
  buildStatMarkers();
  // The container may have been laid out while hidden — recalc once visible.
  [120,400,900].forEach(ms=>setTimeout(()=>{if(MAP)MAP.invalidateSize(false);},ms));
- if(userLat!=null&&userLng!=null){moveUserDot(userLat,userLng);MAP.setView([userLat,userLng],13);}
+ if(userLat!=null&&userLng!=null){moveUserDot(userLat,userLng);MAP.setView([userLat,userLng],15);_centeredOnOpen=true;}
   try{ setTimeout(statsAutoOn, 600); }catch(e){}   /* real police data shows by default */
 }
 function mapZoom(d){ if(MAP)MAP.setZoom(MAP.getZoom()+d); }
@@ -4959,6 +4959,8 @@ function startGeoWatch(){
  pos=>{
  userLat=pos.coords.latitude; userLng=pos.coords.longitude;
  moveUserDot(userLat,userLng);
+ /* On every app open, center the map on the user's own location the first time we get a fix. */
+ if(!_centeredOnOpen && MAP){ try{ MAP.setView([userLat,userLng], Math.max(MAP.getZoom(),15), {animate:true}); }catch(e){} _centeredOnOpen=true; }
  if(sosActive) addSOSPin(); // keep the live SOS pin on the user
  try{ gdBroadcast(); }catch(e){} // share my real position with paired guardians
  },
@@ -7933,7 +7935,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v158';
+var APP_VER='v159';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
