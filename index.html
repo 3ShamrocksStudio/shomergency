@@ -221,21 +221,18 @@ nav{gap:10px;min-width:0}
 
 /* ══ SHOWCASE — elevated app section (replaces the old beige block) ══ */
 .showcase{position:relative;overflow:hidden;background:
-  radial-gradient(120% 90% at 20% 0%, #12233F 0%, #0A1628 55%, #060F1E 100%)}
+  linear-gradient(160deg,#F4F1EA 0%,#ECE6D8 45%,#E4DcC8 100%)}
 /* layered depth: gold aura + topographic map lines echoing the app itself */
-.showcase-bg{position:absolute;inset:0;pointer-events:none;
-  background:
-   radial-gradient(50% 55% at 22% 42%, rgba(224,168,40,.16) 0%, rgba(224,168,40,0) 60%),
-   radial-gradient(40% 40% at 85% 15%, rgba(41,98,255,.10) 0%, rgba(41,98,255,0) 70%);
-  opacity:1}
-.showcase-bg::before{content:"";position:absolute;inset:0;opacity:.5;
-  background-image:
-   repeating-linear-gradient(60deg, rgba(140,155,189,.05) 0 1px, transparent 1px 46px),
-   repeating-linear-gradient(-60deg, rgba(140,155,189,.05) 0 1px, transparent 1px 46px);
-  mask-image:radial-gradient(70% 70% at 50% 45%, #000 0%, transparent 80%)}
+.showcase-bg{position:absolute;inset:0;pointer-events:none;background:
+   radial-gradient(46% 52% at 78% 40%, rgba(224,168,40,.20) 0%, rgba(224,168,40,0) 62%),
+   radial-gradient(40% 44% at 15% 80%, rgba(22,36,64,.10) 0%, rgba(22,36,64,0) 70%)}
+.showcase-bg::before{content:"";position:absolute;inset:0;opacity:.5;background-image:
+   repeating-linear-gradient(60deg, rgba(22,36,64,.05) 0 1px, transparent 1px 46px),
+   repeating-linear-gradient(-60deg, rgba(22,36,64,.05) 0 1px, transparent 1px 46px);
+  mask-image:radial-gradient(75% 75% at 60% 45%, #000 0%, transparent 82%)}
 .showcase .wrap{position:relative;z-index:2}
 .showcase .section-title,.showcase .section-sub{text-align:center}
-.showcase-grid{display:grid;grid-template-columns:minmax(280px,42%) 1fr;gap:clamp(28px,5vw,64px);
+.showcase-grid{display:grid;grid-template-columns:minmax(300px,46%) 1fr;gap:clamp(28px,5vw,64px);
   align-items:center;margin-top:44px}
 
 /* phone column */
@@ -243,7 +240,7 @@ nav{gap:10px;min-width:0}
 .phone-glow{position:absolute;width:120%;height:70%;top:15%;left:-10%;pointer-events:none;
   background:radial-gradient(ellipse at center, rgba(224,168,40,.28) 0%, rgba(224,168,40,0) 65%);
   filter:blur(20px)}
-.phone{position:relative;width:min(300px,78vw);aspect-ratio:1080/2146;
+.phone{position:relative;width:min(340px,82vw);aspect-ratio:1080/2146;
   background:linear-gradient(160deg,#20304E,#0C1526);border-radius:40px;padding:11px;
   box-shadow:0 40px 80px -20px rgba(0,0,0,.75), 0 0 0 1.5px rgba(224,168,40,.35),
              inset 0 1px 2px rgba(255,255,255,.15);z-index:2}
@@ -288,6 +285,21 @@ nav{gap:10px;min-width:0}
   .feat-row{padding:13px 15px}
 }
 
+
+/* light-background variants for the showcase */
+.showcase .section-title{color:#101E34}
+.showcase .section-sub{color:#4A5A78}
+.showcase .feat-row{background:rgba(255,255,255,.72);border:1px solid rgba(22,36,64,.1);
+  box-shadow:0 6px 18px -10px rgba(22,36,64,.25)}
+.showcase .feat-row:hover{background:#fff;border-color:rgba(224,168,40,.45)}
+.showcase .feat-row.active{background:linear-gradient(120deg,rgba(224,168,40,.16),rgba(255,255,255,.9));
+  border-color:rgba(224,168,40,.6);box-shadow:0 10px 26px -10px rgba(224,168,40,.35)}
+.showcase .feat-title{color:#101E34}
+.showcase .feat-text{color:#5A6A88}
+/* 3. LAYOUT — phone on the LEFT, text on the RIGHT (page is RTL, so pin explicitly) */
+.showcase-grid{direction:ltr}
+.phone-col{grid-column:1}   /* left */
+.feat-col{grid-column:2;direction:rtl}  /* right, keep Hebrew RTL inside */
 </style>
 </head>
 <body>
