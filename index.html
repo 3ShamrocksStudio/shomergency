@@ -82,17 +82,17 @@ section{padding:72px 0}
 
 /* FEATURES — light brand section, compact */
 .bg-surface{background:var(--n2)}
-.bg-light{background:linear-gradient(180deg,#FBF4E3 0%,#F5EAD0 100%)}
+
 .bg-light .section-title{color:#23170a}
 .bg-light .section-title .gold-line{background:linear-gradient(135deg,#9A6C1A,#C09020);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .bg-light .section-sub{color:#5A4A28;font-weight:800}
-.features-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:30px}
-.feat-card{background:rgba(255,255,255,.6);border-radius:var(--r);padding:16px 12px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;box-shadow:0 3px 14px rgba(154,108,26,.1)}
-.feat-icon{flex-shrink:0;width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--gold-grad);color:#23170a;box-shadow:0 6px 16px rgba(192,144,32,.28),inset 0 1px 0 rgba(255,255,255,.35)}
+
+
+
 .feat-icon svg{width:22px;height:22px}
-.feat-icon.red{background:linear-gradient(135deg,#B91C1C,#DC2626,#EF4444);color:#fff}
-.feat-title{font-size:14px;font-weight:800;color:#23170a}
-.feat-text{font-size:11.5px;color:#5A4A28;line-height:1.55}
+
+
+
 
 /* HOW IT WORKS */
 .steps{display:flex;flex-direction:column;gap:28px;margin-top:44px}
@@ -193,8 +193,8 @@ footer{background:linear-gradient(180deg,var(--n2) 0%,var(--n0) 100%);border-top
   .hero-content{max-width:760px;margin:0 auto;padding:16px 48px 70px}
   .hero-cta-row{flex-direction:row;justify-content:center;max-width:520px}
   .btn-primary,.btn-ghost{display:inline-block;width:auto;flex:1}
-  .features-grid{grid-template-columns:repeat(3,1fr);gap:14px}
-  .feat-card{padding:22px 16px}
+  
+  
   .scenarios-grid{grid-template-columns:repeat(3,1fr)}
   .scenario{aspect-ratio:3/4}
 }
@@ -218,6 +218,76 @@ nav{gap:10px;min-width:0}
 @media(max-width:380px){
   .nav-cta{padding:7px 10px;font-size:11.5px}
 }
+
+/* ══ SHOWCASE — elevated app section (replaces the old beige block) ══ */
+.showcase{position:relative;overflow:hidden;background:
+  radial-gradient(120% 90% at 20% 0%, #12233F 0%, #0A1628 55%, #060F1E 100%)}
+/* layered depth: gold aura + topographic map lines echoing the app itself */
+.showcase-bg{position:absolute;inset:0;pointer-events:none;
+  background:
+   radial-gradient(50% 55% at 22% 42%, rgba(224,168,40,.16) 0%, rgba(224,168,40,0) 60%),
+   radial-gradient(40% 40% at 85% 15%, rgba(41,98,255,.10) 0%, rgba(41,98,255,0) 70%);
+  opacity:1}
+.showcase-bg::before{content:"";position:absolute;inset:0;opacity:.5;
+  background-image:
+   repeating-linear-gradient(60deg, rgba(140,155,189,.05) 0 1px, transparent 1px 46px),
+   repeating-linear-gradient(-60deg, rgba(140,155,189,.05) 0 1px, transparent 1px 46px);
+  mask-image:radial-gradient(70% 70% at 50% 45%, #000 0%, transparent 80%)}
+.showcase .wrap{position:relative;z-index:2}
+.showcase .section-title,.showcase .section-sub{text-align:center}
+.showcase-grid{display:grid;grid-template-columns:minmax(280px,42%) 1fr;gap:clamp(28px,5vw,64px);
+  align-items:center;margin-top:44px}
+
+/* phone column */
+.phone-col{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.phone-glow{position:absolute;width:120%;height:70%;top:15%;left:-10%;pointer-events:none;
+  background:radial-gradient(ellipse at center, rgba(224,168,40,.28) 0%, rgba(224,168,40,0) 65%);
+  filter:blur(20px)}
+.phone{position:relative;width:min(300px,78vw);aspect-ratio:1080/2146;
+  background:linear-gradient(160deg,#20304E,#0C1526);border-radius:40px;padding:11px;
+  box-shadow:0 40px 80px -20px rgba(0,0,0,.75), 0 0 0 1.5px rgba(224,168,40,.35),
+             inset 0 1px 2px rgba(255,255,255,.15);z-index:2}
+.phone-notch{position:absolute;top:16px;left:50%;transform:translateX(-50%);
+  width:34%;height:20px;background:#050C18;border-radius:0 0 14px 14px;z-index:5}
+.phone-screen{position:relative;width:100%;height:100%;border-radius:30px;overflow:hidden;
+  background:#0A1628;box-shadow:inset 0 0 0 1px rgba(0,0,0,.6)}
+.phone-screen .shot{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  opacity:0;transition:opacity .6s ease, transform .6s ease;transform:scale(1.02)}
+.phone-screen .shot.active{opacity:1;transform:scale(1)}
+.phone-dots{display:flex;gap:8px;justify-content:center;margin-top:22px}
+.pdot{width:8px;height:8px;border-radius:50%;border:0;cursor:pointer;padding:0;
+  background:rgba(200,212,232,.28);transition:all .25s}
+.pdot.active{background:var(--g3);width:22px;border-radius:99px;
+  box-shadow:0 0 10px rgba(224,168,40,.6)}
+
+/* feature list */
+.feat-col{display:flex;flex-direction:column;gap:8px}
+.feat-row{display:flex;align-items:flex-start;gap:14px;width:100%;text-align:start;cursor:pointer;
+  background:rgba(16,30,52,.5);border:1px solid var(--border);border-radius:16px;
+  padding:16px 18px;font-family:inherit;transition:all .28s;position:relative;overflow:hidden}
+.feat-row::before{content:"";position:absolute;inset-inline-start:0;top:0;bottom:0;width:3px;
+  background:var(--gold-grad);transform:scaleY(0);transform-origin:top;transition:transform .3s}
+.feat-row:hover{background:rgba(28,44,78,.6);border-color:rgba(224,168,40,.3)}
+.feat-row.active{background:linear-gradient(120deg,rgba(224,168,40,.12),rgba(16,30,52,.6));
+  border-color:rgba(224,168,40,.45);box-shadow:0 8px 24px -8px rgba(224,168,40,.25)}
+.feat-row.active::before{transform:scaleY(1)}
+.feat-ic{flex:0 0 auto;width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,rgba(224,168,40,.16),rgba(16,30,52,.8));
+  border:1px solid rgba(224,168,40,.3);color:var(--g3)}
+.feat-ic svg{width:23px;height:23px}
+.feat-ic.red{background:linear-gradient(135deg,rgba(220,38,38,.18),rgba(16,30,52,.8));
+  border-color:rgba(220,38,38,.4);color:#FF6B6B}
+.feat-body{display:flex;flex-direction:column;gap:3px}
+.feat-title{font-size:16px;font-weight:800;color:var(--tx0);line-height:1.2}
+.feat-text{font-size:13px;color:var(--tx2);line-height:1.55}
+
+@media(max-width:820px){
+  .showcase-grid{grid-template-columns:1fr;gap:36px}
+  .phone-col{order:-1}
+  .feat-col{gap:7px}
+  .feat-row{padding:13px 15px}
+}
+
 </style>
 </head>
 <body>
@@ -269,20 +339,59 @@ nav{gap:10px;min-width:0}
 </section>
 
 <!-- FEATURES -->
-<section class="bg-light fi" id="features">
-  <div class="wrap">
+<section class="fi showcase" id="features">
+   <div class="showcase-bg" aria-hidden="true"></div>
+   <div class="wrap">
     <h2 class="section-title">ממשק אחד.<span class="gold-line">כל מה שצריך.</span></h2>
     <p class="section-sub">מורידים, מצטרפים ועוזרים!</p>
-    <div class="features-grid">
-      <div class="feat-card"><div class="feat-icon red"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3h8l5 5v8l-5 5H8l-5-5V8Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 7.5v5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="16" r="1.2" fill="currentColor"/></svg></div><div><div class="feat-title">אזעקת SOS</div><div class="feat-text">לחיצה אחת. אזעקה שלא ניתן להשתיק, מיקומך מגיע לשומרים מיד.</div></div></div>
-      <div class="feat-card"><div class="feat-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4L3 6.5v13L9 17l6 2.5 6-2.5v-13L15 6.5 9 4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 4v13M15 6.5v13" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></div><div><div class="feat-title">מפת אירועים חיה</div><div class="feat-text">אירועי ביטחון ורפואה באזורך בזמן אמת. תמיד מעודכן.</div></div></div>
-      <div class="feat-card"><div class="feat-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="feat-title">מעגלי שומרים</div><div class="feat-text">משפחה, חברים, שכנים. הם רואים אותך ומגיבים כשצריך.</div></div></div>
-      <div class="feat-card"><div class="feat-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 9v6M9 12h6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></div><div><div class="feat-title">מדריך חירום</div><div class="feat-text">CPR, מחנק, דימום, שבץ — לפי מד"א. זמין ללא אינטרנט.</div></div></div>
-      <div class="feat-card"><div class="feat-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.4 7-12a7 7 0 1 0-14 0c0 5.6 7 12 7 12Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.6" fill="currentColor"/></svg></div><div><div class="feat-title">שיתוף מיקום חי</div><div class="feat-text">השומרים שלך יודעים איפה את/ה — רק כשאת/ה מאשר/ת.</div></div></div>
-      <div class="feat-card"><div class="feat-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M13.7 21a2 2 0 0 1-3.4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div><div class="feat-title">דיווח אירועים</div><div class="feat-text">דווח/י על אירועים בשכונה. בנה/י מפה קהילתית אמיתית.</div></div></div>
+    <div class="showcase-grid">
+     <!-- LEFT: phone mockup carousel -->
+     <div class="phone-col">
+      <div class="phone-glow" aria-hidden="true"></div>
+      <div class="phone" role="group" aria-label="צילומי מסך מהאפליקציה">
+       <div class="phone-notch" aria-hidden="true"></div>
+       <div class="phone-screen">
+        <img class="shot active" src="site-assets/app-map.jpg" alt="מפת אירועים חיה של SH✡MER" loading="lazy">
+        <img class="shot" src="site-assets/app-guardians.jpg" alt="הוספת שומרים ומעגלים" loading="lazy">
+        <img class="shot" src="site-assets/app-profile.jpg" alt="פרופיל שומר ותפקיד מקצועי" loading="lazy">
+       </div>
+      </div>
+      <div class="phone-dots" role="tablist" aria-label="בחירת מסך">
+       <button class="pdot active" data-i="0" aria-label="מפה"></button>
+       <button class="pdot" data-i="1" aria-label="שומרים"></button>
+       <button class="pdot" data-i="2" aria-label="פרופיל"></button>
+      </div>
+     </div>
+     <!-- RIGHT: feature list -->
+     <div class="feat-col">
+      <button class="feat-row active" data-screen="0">
+       <span class="feat-ic red"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3h8l5 5v8l-5 5H8l-5-5V8Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 7.5v5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="16" r="1.2" fill="currentColor"/></svg></span>
+       <span class="feat-body"><span class="feat-title">אזעקת SOS</span><span class="feat-text">לחיצה אחת. אזעקה שלא ניתן להשתיק, מיקומך מגיע לשומרים מיד.</span></span>
+      </button>
+      <button class="feat-row active" data-screen="0">
+       <span class="feat-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4L3 6.5v13L9 17l6 2.5 6-2.5v-13L15 6.5 9 4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 4v13M15 6.5v13" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></span>
+       <span class="feat-body"><span class="feat-title">מפת אירועים חיה</span><span class="feat-text">אירועי ביטחון ורפואה באזורך בזמן אמת. תמיד מעודכן.</span></span>
+      </button>
+      <button class="feat-row" data-screen="1">
+       <span class="feat-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="9" cy="10" r="1.6" fill="currentColor"/><circle cx="15" cy="10" r="1.6" fill="currentColor"/></svg></span>
+       <span class="feat-body"><span class="feat-title">מעגלי שומרים</span><span class="feat-text">משפחה, חברים, שכנים. הם רואים אותך ומגיבים כשצריך.</span></span>
+      </button>
+      <button class="feat-row" data-screen="2">
+       <span class="feat-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6V4.8A1.8 1.8 0 0 1 10.8 3h2.4A1.8 1.8 0 0 1 15 4.8V6M4 8h16v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 11v5M9.5 13.5h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+       <span class="feat-body"><span class="feat-title">מדריך חירום</span><span class="feat-text">CPR, מחנק, דימום, שבץ — לפי מד&quot;א. זמין ללא אינטרנט.</span></span>
+      </button>
+      <button class="feat-row" data-screen="0">
+       <span class="feat-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.9-7-10.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 7 3.5C19 16.1 12 21 12 21Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.2" fill="currentColor"/></svg></span>
+       <span class="feat-body"><span class="feat-title">שיתוף מיקום חי</span><span class="feat-text">השומרים שלך יודעים איפה את/ה — רק כשאת/ה מאשר/ת.</span></span>
+      </button>
+      <button class="feat-row" data-screen="0">
+       <span class="feat-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H7l-3 3Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M8 9h8M8 12h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+       <span class="feat-body"><span class="feat-title">דיווח אירועים</span><span class="feat-text">דווח/י על אירועים בשכונה. בנה/י מפה קהילתית אמיתית.</span></span>
+      </button>
+     </div>
     </div>
-  </div>
-</section>
+   </div>
+  </section>
 
 <!-- HOW IT WORKS -->
 <section class="fi" id="how">
@@ -494,5 +603,27 @@ function setLangLanding(l){
 }
 try{ var saved=localStorage.getItem('shomer-landing-lang'); if(saved&&saved!=='he')setLangLanding(saved); }catch(e){}
 </script>
+
+<script>
+(function(){
+  var shots=[].slice.call(document.querySelectorAll('#features .shot'));
+  var dots=[].slice.call(document.querySelectorAll('#features .pdot'));
+  var rows=[].slice.call(document.querySelectorAll('#features .feat-row'));
+  if(!shots.length) return;
+  var cur=0, timer=null;
+  function show(i){
+    cur=(i+shots.length)%shots.length;
+    shots.forEach(function(s,n){ s.classList.toggle('active', n===cur); });
+    dots.forEach(function(d,n){ d.classList.toggle('active', n===cur); });
+    rows.forEach(function(r){ r.classList.toggle('active', +r.getAttribute('data-screen')===cur); });
+  }
+  function auto(){ timer=setInterval(function(){ show(cur+1); }, 3800); }
+  function reset(){ if(timer) clearInterval(timer); auto(); }
+  dots.forEach(function(d){ d.addEventListener('click', function(){ show(+d.getAttribute('data-i')); reset(); }); });
+  rows.forEach(function(r){ r.addEventListener('click', function(){ show(+r.getAttribute('data-screen')); reset(); }); });
+  auto();
+})();
+</script>
+
 </body>
 </html>
