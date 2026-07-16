@@ -8164,7 +8164,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v185';
+var APP_VER='v186';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -10767,13 +10767,17 @@ function showOtpFallbacks(){
   if(wb) wb.onclick=function(){ _otpSends=Math.max(0,_otpSends-1); sendTwilioOTP('whatsapp'); };
 }
 async function sendTwilioOTP(channel){
- if(await founderFastPath())return;
- /* Guard: never fire two sends within 8s of each other. A duplicate send creates a new
-    Twilio code that silently invalidates the one the user is mid-typing — which felt like
-    "the code expires in 10 seconds". One code at a time. */
+ /* SYNCHRONOUS guard FIRST — before any await. The previous version placed this after
+    'await founderFastPath()'; because await yields the event loop, two rapid calls both
+    passed the guard before either set the flag, so BOTH sent → the SAME code arrived twice
+    and drained the SMS balance. Setting the flag synchronously on the first line makes a
+    second call in the same tick return immediately. */
  var _now=Date.now();
- if(window._lastOtpSend && (_now - window._lastOtpSend) < 8000){ return; }
+ if(window._otpSending) return;                                    // a send is in flight
+ if(window._lastOtpSend && (_now - window._lastOtpSend) < 8000) return;  // sent <8s ago
+ window._otpSending=true;
  window._lastOtpSend=_now;
+ if(await founderFastPath()){ window._otpSending=false; return; }
  OTP_CHANNEL = channel || 'sms';
  const he=currentLang==="he";
  const btn=document.getElementById("ob-resend-btn");
@@ -10789,8 +10793,10 @@ async function sendTwilioOTP(channel){
    body:"phone="+encodeURIComponent("+"+user.phone)+"&channel="+encodeURIComponent(OTP_CHANNEL)+"&locale="+(he?"he":"en")
   });
   let data=await r.json();if(typeof data==="string"){try{data=JSON.parse(data);}catch(_){}}
+  window._otpSending=false;   // send completed — the 8s _lastOtpSend timer now guards
   if(data.success){
-   try{ showOtpFallbacks(); }catch(e){}
+   try{ showOtpFallbacks(); }catch(e){
+  window._otpSending=false;}
    var cf=document.getElementById("ob-sms-confirm");
    if(cf) cf.textContent=(he?"נשלח אל ":"Sent to ")+"+"+user.phone;
    if(statusEl)statusEl.textContent=he?"✅ קוד נשלח! בדוק/י את ה-SMS":"✅ Code sent! Check your SMS";
