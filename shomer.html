@@ -4937,6 +4937,47 @@ function statPopup(cat,city){
  w.append(row,badge,meta,note,src);
  return w;
 }
+function checkInbox(){
+  try{
+    if(typeof FB==='undefined' || !FB.ready || !FB._myPhoneHash) { setTimeout(checkInbox, 1500); return; }
+    if(window._inboxChecked) return; window._inboxChecked=true;
+    fbRestGet('invites/inbox_'+FB._myPhoneHash).then(function(snap){
+      var box = snap && snap.val ? snap.val() : snap;
+      if(!box) return;
+      var he=(typeof currentLang!=='undefined' && currentLang==='he');
+      var keys=Object.keys(box).filter(function(k){ return box[k] && box[k].seen===false; });
+      if(!keys.length) return;
+      /* show a single notification summarising waiting invites */
+      var invites=keys.filter(function(k){ return box[k].type==='invite'; });
+      if(invites.length){
+        var first=box[invites[0]];
+        var msg = he
+          ? (invites.length===1 ? ((first.fromName||'מישהו')+' הזמין/ה אותך להיות שומר/ת') : ('יש לך '+invites.length+' הזמנות ממתינות'))
+          : (invites.length===1 ? ((first.fromName||'Someone')+' invited you to be their guardian') : ('You have '+invites.length+' pending invites'));
+        showInboxBanner(msg, invites, box);
+      }
+    }).catch(function(e){});
+  }catch(e){}
+}
+function showInboxBanner(msg, inviteKeys, box){
+  try{
+    var he=(typeof currentLang!=='undefined' && currentLang==='he');
+    var existing=document.getElementById('inbox-banner'); if(existing) existing.remove();
+    var b=document.createElement('div');
+    b.id='inbox-banner';
+    b.style.cssText='position:fixed;left:50%;top:calc(var(--hdr,64px) + 12px);transform:translateX(-50%);z-index:9500;max-width:92vw;background:linear-gradient(135deg,#C09020,#E0A828,#F5C840);color:#1a1206;padding:13px 16px;border-radius:14px;box-shadow:0 8px 28px rgba(0,0,0,.4);display:flex;align-items:center;gap:12px;font:700 13.5px Heebo,sans-serif;cursor:pointer';
+    b.innerHTML='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="flex-shrink:0"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span style="flex:1">'+msg+'</span><span style="background:rgba(0,0,0,.15);border-radius:8px;padding:5px 10px;font-weight:800">'+(he?'הצג':'View')+'</span>';
+    b.onclick=function(){
+      /* mark seen + open the guardians/circle screen so they can accept */
+      try{ inviteKeys.forEach(function(k){ fbRestWrite('PUT','invites/inbox_'+FB._myPhoneHash+'/'+k+'/seen', true); }); }catch(e){}
+      b.remove();
+      try{ if(typeof openGuardians==='function') openGuardians(); else if(typeof showCircle==='function') showCircle(); }catch(e){}
+    };
+    document.body.appendChild(b);
+    /* auto-dismiss visual only after 12s, but keep unseen until tapped */
+    setTimeout(function(){ try{ b.style.opacity='0'; b.style.transition='opacity .5s'; setTimeout(function(){ if(b.parentNode) b.remove(); }, 500); }catch(e){} }, 12000);
+  }catch(e){}
+}
 function buildStatMarkers(){
   /* LIVE SYSTEM — statistical crime markers are NOT drawn on the map.
      They are aggregate police statistics, not incidents, but rendered as pins they are
@@ -4960,7 +5001,7 @@ function initMap(){
  window.L.tileLayer(TILE_BASE,{maxZoom:20,subdomains:'abcd',className:'tiles-base',
  attribution:' <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> · <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>'}).addTo(MAP);
  window.L.tileLayer(TILE_LABELS,{maxZoom:20,subdomains:'abcd',className:'tiles-labels'}).addTo(MAP);
- buildStatMarkers(); try{ renderPastEvents(); }catch(e){}
+ buildStatMarkers(); try{ checkInbox(); }catch(e){} try{ renderPastEvents(); }catch(e){}
  // The container may have been laid out while hidden — recalc once visible.
  [120,400,900].forEach(ms=>setTimeout(()=>{if(MAP)MAP.invalidateSize(false);},ms));
  if(userLat!=null&&userLng!=null){moveUserDot(userLat,userLng);MAP.setView([userLat,userLng],15);_centeredOnOpen=true;}
@@ -6342,6 +6383,19 @@ async function sendInviteSMS(phone, name, token){
     var d=await r.json(); if(typeof d==='string'){ try{ d=JSON.parse(d); }catch(_){} }
     if(d && d.success){
       toast(he?('\u2713 נשלחה בקשה ל'+(name||'')+' ב-SMS'):('\u2713 Invite texted to '+(name||'')),'grn');
+      /* also drop the invite into the recipient's inbox (indexed by their phone hash) so
+         they see it next time they open the app, even if they never tap the SMS link */
+      try{
+        var digits=String(phone).replace(/[^0-9]/g,'');
+        if(digits && typeof sha256Hex==='function'){
+          sha256Hex(digits).then(function(ph){
+            try{ fbRestWrite('PUT','invites/inbox_'+ph+'/'+token, {
+              fromUid:(FB.uid||''), type:'invite', token:token, fromName:((SS.user&&SS.user.name)||''),
+              fromPhone:((SS.user&&SS.user.phone)||''), ts:Date.now(), seen:false
+            }); }catch(e){}
+          });
+        }
+      }catch(e){}
       return true;
     }
     toast(he?('ה-SMS לא נשלח — שלח/י ידנית למטה'):('SMS failed — send it manually below'),'amb');
@@ -8012,7 +8066,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v180';
+var APP_VER='v181';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
