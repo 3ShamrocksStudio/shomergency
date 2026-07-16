@@ -8002,7 +8002,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v178';
+var APP_VER='v179';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -10540,7 +10540,7 @@ function fetchTimeout(url, opts, ms){
   });
 }
 
-var _otpSends=0,_otpCoolT=null;
+var _otpSends=0,_otpCoolT=null,_autoCallTried=false;
 function _otpCooldown(btn,secs){
  if(!btn)return; var he=currentLang==="he"; btn.disabled=true; var s=secs;
  if(_otpCoolT)clearInterval(_otpCoolT);
@@ -10603,6 +10603,19 @@ async function sendTwilioOTP(channel){
    _otpCooldown(btn,45);
    document.getElementById("ob-code-inp")&&document.getElementById("ob-code-inp").focus();
   }else{
+   /* ═══ WORLDWIDE AUTO-FALLBACK ═══
+      If SMS/WhatsApp is blocked (Twilio fraud prefix-block 60410, carrier filtering, etc.),
+      automatically retry with a VOICE CALL — which uses a different channel and bypasses
+      SMS/WA blocks. This is what makes SHOMER reachable worldwide. Voice never auto-loops. */
+   var errStr=String(data.error||"")+" "+String(data.code||"");
+   var isBlocked=/60410|blocked|fraud|60605|60600|unreachable|60203|landline|60205/i.test(errStr);
+   if(isBlocked && OTP_CHANNEL!=="call" && !_autoCallTried){
+     _autoCallTried=true;
+     if(statusEl)statusEl.textContent=he?"⏳ ה-SMS חסום ברשת שלך — מתקשרים אליך עם הקוד...":"⏳ SMS blocked on your network — calling you with the code...";
+     _otpSends=Math.max(0,_otpSends-1); /* don't count the auto-retry against the user */
+     setTimeout(function(){ try{ sendTwilioOTP("call"); }catch(e){} }, 400);
+     return;
+   }
    if(statusEl)statusEl.textContent="❌ "+(data.error||"Failed");
    if(btn){btn.disabled=false;btn.textContent=he?"לא קיבלת/ה קוד? שלח/י שוב":"No code? Send again";}
   }
