@@ -8164,7 +8164,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v183';
+var APP_VER='v184';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -10711,12 +10711,11 @@ const TWILIO_BASE="https://shomer-verify-8701-prod.twil.io";
    no data exposure — the proxy only relays to the same Twilio function. */
 const OTP_PROXY_BASE = "https://shomer-otp.shomer3s.workers.dev";
 async function otpFetch(path, opts){
-  /* try proxy first; on failure/timeout, fall back to direct Twilio */
-  try{
-    const r = await fetchTimeout(OTP_PROXY_BASE + path, opts, 12000);
-    if(r && r.ok) return r;
-    /* non-ok from proxy: still fall through to direct as a safety net */
-  }catch(e){ /* proxy unreachable — fall through */ }
+  /* Go DIRECT to the Twilio serverless function. It has CORS (Access-Control-Allow-Origin:*)
+     and handles OPTIONS preflight, so the browser can call it with no proxy. The Cloudflare
+     proxy was returning 1010 (bot-integrity block) and the old proxy-first logic then made a
+     SECOND direct call — that double-call was consuming the verification and showing "wrong
+     code" even when Twilio had already approved it. One call, direct, no double-submit. */
   return await fetchTimeout(TWILIO_BASE + path, opts, 12000);
 }
 function fetchTimeout(url, opts, ms){
@@ -11793,6 +11792,7 @@ html[dir="rtl"] .sh-back svg{transform:scaleX(-1)}
   setInterval(tag, 1000);
 }catch(e){} })();
 </script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"cb798ec108614ddcb55eacf0c7b5bf23","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"cb798ec108614ddcb55eacf0c7b5bf23","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
