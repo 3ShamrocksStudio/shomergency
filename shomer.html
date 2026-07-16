@@ -1141,6 +1141,12 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
 .ob-bg::after{content:'';position:absolute;inset:0;opacity:.04;mix-blend-mode:overlay;
  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
 .ob-hero{padding:14px 0 2px;}
+/* When the phone-verification panel is open, compact the hero so the logo is NEVER cut off. */
+body.otp-active .ob-shieldwrap{width:min(30vw,120px)!important;height:min(30vw,120px)!important;}
+body.otp-active .ob-hero{padding:4px 0 0!important;}
+body.otp-active .ob-sub{margin-top:5px!important;margin-bottom:5px!important;font-size:9.5px!important;letter-spacing:2px!important;}
+body.otp-active .ob-lang-pick{margin-bottom:5px!important;}
+body.otp-active .ob-steps{display:none!important;}
 /* The badge IS the wordmark — sized to keep onboarding above the fold (no scroll). */
 .ob-shieldwrap{position:relative;display:flex;align-items:center;justify-content:center;width:min(56vw,224px);height:min(56vw,224px);}
 @media(max-height:700px){
@@ -1432,10 +1438,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <button onclick="openLegal('privacy')" id="ob-ll-priv">מדיניות פרטיות</button><span class="sep">·</span>
  <button onclick="openLegal('disclaimer')" id="ob-ll-disc">כתב ויתור חירום</button>
  </div>
- <footer class="studio-credit">
- <span class="sc-badge"><img src="3shamrocks.png" alt="3Shamrocks Studio" width="92" height="14"></span>
- <span class="cr">© 2026 3Shamrocks Studio</span>
- </footer>
+ <footer class="studio-credit"> <span class="cr">© 2026 3Shamrocks Studio</span> </footer>
 
  <!-- PHONE VERIFICATION (identity for My SHOMER / live location) -->
  <div class="resp-consent" id="ob-verify" style="z-index:10000" role="alertdialog" aria-modal="true" aria-labelledby="obv-ttl" aria-hidden="true">
@@ -2052,7 +2055,7 @@ body.sheet-open .ff-fab{opacity:0;pointer-events:none;}
  <button onclick="openLegal('disclaimer')" id="set-ll-disc">כתב ויתור חירום</button>
  </div>
  <footer class="studio-credit">
- <span class="sc-badge"><img src="3shamrocks.png" alt="3Shamrocks Studio" width="92" height="14"></span>
+ 
  <span class="cr">© 2026 3Shamrocks Studio</span>
  </footer>
  </div>
@@ -4937,6 +4940,69 @@ function statPopup(cat,city){
  w.append(row,badge,meta,note,src);
  return w;
 }
+function communityNudge(){
+  try{
+    if(window._communityNudgeShown) return;
+    // Only nudge occasionally — not every session (respect the user; this is a safety app, not a growth-hack funnel)
+    var last=0; try{ last=parseInt(localStorage.getItem('shomerLastNudge')||'0',10); }catch(e){}
+    var now=Date.now();
+    if(now - last < 3*24*60*60*1000) return;   // at most once every 3 days
+    // Don't nudge during onboarding or if the map isn't ready
+    if(typeof MAP==='undefined' || !MAP) return;
+    if(document.body.classList.contains('otp-active')) return;
+    var he=(typeof currentLang!=='undefined' && currentLang==='he');
+    // Rotate through community-contribution prompts (citizens for citizens)
+    var prompts=[
+      { he:'יש דפיברילטור (AED) בסביבתך? הוסף/י אותו למפה — זה יכול להציל חיים',
+        en:'Know a defibrillator (AED) nearby? Add it to the map — it can save a life',
+        cta_he:'הוסף/י AED', cta_en:'Add AED',
+        act:function(){ try{ if(typeof aedPlaceMode==='function') aedPlaceMode(); }catch(e){} } },
+      { he:'רוצה להזהיר שומרים אחרים מסביבך? דווח/י על אירוע במפה',
+        en:'Want to warn other guardians near you? Report an event on the map',
+        cta_he:'דווח/י', cta_en:'Report',
+        act:function(){ try{ if(typeof openReport==='function') openReport(); }catch(e){} } },
+      { he:'ככל שיותר שומרים סביבך — כך בטוח יותר. הזמן/י שכן או חבר/ה',
+        en:'The more guardians around you, the safer everyone is. Invite a neighbor or friend',
+        cta_he:'הזמן/י', cta_en:'Invite',
+        act:function(){ try{ if(typeof openGuardians==='function') openGuardians(); }catch(e){} } }
+    ];
+    // pick the prompt with a rotating index
+    var idx=0; try{ idx=parseInt(localStorage.getItem('shomerNudgeIdx')||'0',10)%prompts.length; }catch(e){}
+    var pr=prompts[idx];
+    try{ localStorage.setItem('shomerNudgeIdx', String((idx+1)%prompts.length)); }catch(e){}
+    showCommunityNudge(he?pr.he:pr.en, he?pr.cta_he:pr.cta_en, pr.act);
+    window._communityNudgeShown=true;
+    try{ localStorage.setItem('shomerLastNudge', String(now)); }catch(e){}
+  }catch(e){}
+}
+function showCommunityNudge(msg, ctaLabel, action){
+  try{
+    var he=(typeof currentLang!=='undefined' && currentLang==='he');
+    if(document.getElementById('community-nudge')) return;
+    var b=document.createElement('div');
+    b.id='community-nudge';
+    b.style.cssText='position:fixed;left:50%;bottom:calc(var(--nav,64px) + 78px);transform:translateX(-50%);z-index:9400;max-width:90vw;width:340px;background:linear-gradient(160deg,#0F1D33,#132743);border:1px solid rgba(201,168,76,.35);border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.5);padding:15px 16px;font-family:Heebo,sans-serif;direction:'+(he?'rtl':'ltr');
+    b.innerHTML=''
+      +'<div style="display:flex;align-items:flex-start;gap:11px">'
+      +  '<div style="flex-shrink:0;width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#C09020,#E0A828,#F5C840);display:flex;align-items:center;justify-content:center">'
+      +    '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#0a0c12" stroke-width="2.3"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" stroke-linejoin="round"/><path d="M9 12l2 2 4-4"/></svg>'
+      +  '</div>'
+      +  '<div style="flex:1"><div style="font-size:13px;font-weight:600;color:#e8eefc;line-height:1.45;margin-bottom:10px">'+msg+'</div>'
+      +    '<div style="display:flex;gap:8px;align-items:center">'
+      +      '<button id="cn-act" style="background:linear-gradient(135deg,#C09020,#E0A828,#F5C840);color:#0a0c12;border:none;border-radius:9px;padding:7px 15px;font:800 12.5px Heebo,sans-serif;cursor:pointer">'+ctaLabel+'</button>'
+      +      '<button id="cn-dismiss" style="background:transparent;color:#8c9bbd;border:none;padding:7px 10px;font:600 12px Heebo,sans-serif;cursor:pointer">'+(he?'אחר כך':'Later')+'</button>'
+      +    '</div>'
+      +  '</div>'
+      +'</div>';
+    document.body.appendChild(b);
+    var actBtn=document.getElementById('cn-act');
+    if(actBtn) actBtn.onclick=function(){ b.remove(); try{ if(typeof action==='function') action(); }catch(e){} };
+    var dis=document.getElementById('cn-dismiss');
+    if(dis) dis.onclick=function(){ b.remove(); };
+    // auto-dismiss after 15s if ignored
+    setTimeout(function(){ try{ if(b.parentNode){ b.style.opacity='0'; b.style.transition='opacity .5s'; setTimeout(function(){ if(b.parentNode) b.remove(); },500); } }catch(e){} }, 15000);
+  }catch(e){}
+}
 function checkInbox(){
   try{
     if(typeof FB==='undefined' || !FB.ready || !FB._myPhoneHash) { setTimeout(checkInbox, 1500); return; }
@@ -5001,7 +5067,7 @@ function initMap(){
  window.L.tileLayer(TILE_BASE,{maxZoom:20,subdomains:'abcd',className:'tiles-base',
  attribution:' <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> · <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>'}).addTo(MAP);
  window.L.tileLayer(TILE_LABELS,{maxZoom:20,subdomains:'abcd',className:'tiles-labels'}).addTo(MAP);
- buildStatMarkers(); try{ checkInbox(); }catch(e){} try{ renderPastEvents(); }catch(e){}
+ buildStatMarkers(); try{ checkInbox(); }catch(e){} try{ setTimeout(communityNudge, 8000); }catch(e){} try{ renderPastEvents(); }catch(e){}
  // The container may have been laid out while hidden — recalc once visible.
  [120,400,900].forEach(ms=>setTimeout(()=>{if(MAP)MAP.invalidateSize(false);},ms));
  if(userLat!=null&&userLng!=null){moveUserDot(userLat,userLng);MAP.setView([userLat,userLng],15);_centeredOnOpen=true;}
@@ -7751,7 +7817,7 @@ function renderLegal(){
 /* 3Shamrocks Studio brand footer for the legal screens (per 3S branding rule). */
 function legalFooter(){
  return '<div class="legal-3s" style="margin-top:22px;padding-top:14px;border-top:1px solid #e6dcc4;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center">'
-  +'<img src="3shamrocks.png" alt="3Shamrocks Studio" style="height:30px;width:auto;opacity:.92">'
+  
   +'<span style="font-size:11px;color:#8a7a52;font-weight:600">© 2026 3Shamrocks Studio · SH✡MER</span>'
   +'</div>';
 }
@@ -8031,7 +8097,7 @@ function injectSheetCredits(){
  if(b.querySelector('.mini-credit')||b.querySelector('.studio-credit'))return;
  const f=document.createElement('div');
  f.className='mini-credit'; f.setAttribute('dir','ltr');
- f.innerHTML='<img class="footer-3s" src="3shamrocks.png" alt="3Shamrocks Studio">';
+ f.innerHTML='';
  b.appendChild(f);
  });
 }
@@ -8066,7 +8132,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v181';
+var APP_VER='v182';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -10363,7 +10429,7 @@ function updMountBadge(){
   el.title='SHOMER build — tap to check for updates';
   el.onclick=function(){ try{ toast(currentLang==='he'?'בודק עדכונים…':currentLang==='ar'?'جارٍ البحث عن تحديثات…':'Checking for updates…',''); }catch(e){} updCheck(true); };
   document.body.appendChild(el);
-  var sv=document.getElementById('set-ver'); if(sv&&typeof APP_VER!=='undefined') sv.textContent=APP_VER;   // Settings build row
+  var sv=document.getElementById('set-ver'); if(sv) sv.textContent='v0.9 · beta';   // Settings version row (user-facing)
 }
 try{
   if(document.readyState!=='loading'){ updMountBadge(); } else document.addEventListener('DOMContentLoaded',updMountBadge);
@@ -10656,13 +10722,13 @@ function showOtpFallbacks(){
   if(!host || document.getElementById('otp-fallbacks')) return;
   var d=document.createElement('div');
   d.id='otp-fallbacks';
-  d.style.cssText='margin-top:12px;display:flex;flex-direction:column;gap:7px';
+  d.style.cssText='margin-top:8px;display:flex;flex-direction:column;gap:5px';
   d.innerHTML=
-    '<div style="font-size:11.5px;color:var(--tx3);text-align:center">'+(he?'לא הגיע קוד ב-SMS? (מומלץ בחו״ל / ברומינג)':"No SMS? (best abroad / roaming)")+'</div>'
-   +'<button id="otp-call" style="padding:11px;border-radius:11px;border:1px solid rgba(224,168,40,.5);background:rgba(224,168,40,.10);color:#E0A828;font-family:inherit;font-weight:800;font-size:13px;cursor:pointer">'
-   +(he?'📞 קבל/י שיחה קולית עם הקוד':'📞 Call me with the code')+'</button>'
-   +'<button id="otp-wa" style="padding:13px;border-radius:11px;border:0;background:#25D366;color:#04240F;font-family:inherit;font-weight:800;font-size:14px;cursor:pointer">'
-   +(he?'קבל/י את הקוד ב-WhatsApp':'Send the code on WhatsApp')+'</button>';
+    '<div style="font-size:10.5px;color:var(--tx3);text-align:center;margin-bottom:1px">'+(he?'לא הגיע? (בחו״ל / ברומינג)':"No code? (abroad / roaming)")+'</div>'
+   +'<button id="otp-call" style="width:min(210px,66vw);margin:0 auto;padding:8px;border-radius:10px;border:1px solid rgba(224,168,40,.5);background:rgba(224,168,40,.10);color:#E0A828;font-family:inherit;font-weight:800;font-size:11.5px;cursor:pointer">'
+   +(he?'📞 שיחה קולית עם הקוד':'📞 Call me instead')+'</button>'
+   +'<button id="otp-wa" style="width:min(210px,66vw);margin:0 auto;padding:8px;border-radius:10px;border:0;background:#25D366;color:#04240F;font-family:inherit;font-weight:800;font-size:11.5px;cursor:pointer">'
+   +(he?'קבל/י קוד ב-WhatsApp':'Code via WhatsApp')+'</button>';
   host.parentNode.insertBefore(d, host.nextSibling);
   var cb=document.getElementById('otp-call');
   if(cb) cb.onclick=function(){ _otpSends=Math.max(0,_otpSends-1); sendTwilioOTP('call'); };
@@ -10733,24 +10799,24 @@ function showSMSCodeScreen(){
  let panel=document.getElementById("ob-sms-panel");
  if(!panel){panel=document.createElement("div");panel.id="ob-sms-panel";panel.style.cssText="width:100%;max-width:420px;margin:0 auto;";const ll=document.getElementById("ob-legal-links");if(ll)wrap.insertBefore(panel,ll);else wrap.appendChild(panel);}
  panel.style.display="";
- panel.innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 24px 28px;text-align:center;direction:${isRTL?"rtl":"ltr"}">
-  <h2 style="font-size:22px;font-weight:800;color:var(--tx0,#f2f6ff);margin-bottom:6px">${lbl.title}</h2>
-  <p style="font-size:13px;color:var(--tx2,#8c9bbd);margin-bottom:4px">${lbl.sub}</p>
-  <p style="font-size:15px;font-weight:700;color:var(--gold,#C9A84C);margin-bottom:6px;direction:ltr">+${user.phone}</p>
-  <p style="font-size:11px;color:var(--tx3,#5a6a8a);margin-bottom:20px">${lbl.valid}</p>
-  <div id="ob-sms-status" style="font-size:13px;color:var(--tx2,#8c9bbd);min-height:22px;margin-bottom:14px">${lbl.status}</div>
- <div id="ob-sms-confirm" dir="ltr" style="text-align:center;font-size:12.5px;color:var(--g3);font-weight:800;margin-top:5px"></div>
+ try{document.body.classList.add("otp-active");}catch(e){}
+ panel.innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2px 18px 10px;text-align:center;direction:${isRTL?"rtl":"ltr"}">
+  <h2 style="font-size:17px;font-weight:800;color:var(--tx0,#f2f6ff);margin:0 0 2px">${lbl.title}</h2>
+  <p style="font-size:11.5px;color:var(--tx2,#8c9bbd);margin:0 0 1px">${lbl.sub} <span style="font-weight:700;color:var(--gold,#C9A84C);direction:ltr">+${user.phone}</span></p>
+  <p style="font-size:10px;color:var(--tx3,#5a6a8a);margin:0 0 8px">${lbl.valid}</p>
+  <div id="ob-sms-status" style="font-size:11.5px;color:var(--tx2,#8c9bbd);min-height:16px;margin-bottom:6px">${lbl.status}</div>
+  <div id="ob-sms-confirm" dir="ltr" style="text-align:center;font-size:11px;color:var(--g3);font-weight:800;margin-bottom:6px"></div>
   <input id="ob-code-inp" type="tel" inputmode="numeric" maxlength="6" autocomplete="one-time-code"
    placeholder="••••••"
    onkeyup="if(this.value.replace(/\D/g,'').length===6)verifyTwilioCode()"
-   style="font-size:26px;letter-spacing:9px;text-align:center;width:min(300px,84vw);background:rgba(255,255,255,.06);border:2px solid var(--gold,#C9A84C);border-radius:14px;padding:14px;color:var(--tx0,#f2f6ff);font-family:inherit;margin-bottom:16px;direction:ltr">
+   style="font-size:20px;letter-spacing:7px;text-align:center;width:min(200px,64vw);background:rgba(255,255,255,.06);border:2px solid var(--gold,#C9A84C);border-radius:11px;padding:9px;color:var(--tx0,#f2f6ff);font-family:inherit;margin-bottom:9px;direction:ltr">
   <button onclick="verifyTwilioCode()" id="ob-verify-twilio-btn"
-   style="width:100%;max-width:280px;padding:15px;background:linear-gradient(135deg,#C09020 0%,#E0A828 60%,#F5C840 100%);color:#0a0c12;border:none;border-radius:14px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:8px;letter-spacing:.3px">
+   style="width:min(200px,64vw);padding:11px;background:linear-gradient(135deg,#C09020 0%,#E0A828 60%,#F5C840 100%);color:#0a0c12;border:none;border-radius:11px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:4px;letter-spacing:.3px">
    ${lbl.verify}
   </button>
-  <div id="ob-verify-err" style="font-size:12px;color:#ef4444;min-height:18px;margin-bottom:10px"></div>
+  <div id="ob-verify-err" style="font-size:11.5px;color:#ef4444;min-height:14px;margin-bottom:2px"></div>
   <button onclick="sendTwilioOTP()" id="ob-resend-btn"
-   style="background:transparent;border:none;padding:9px 18px;color:var(--gold,#C9A84C);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;text-decoration:underline;text-underline-offset:3px">
+   style="background:transparent;border:none;padding:5px 14px;color:var(--gold,#C9A84C);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;text-decoration:underline;text-underline-offset:3px">
    ${lbl.resend}
   </button>
  </div>`;
@@ -10775,6 +10841,11 @@ async function verifyTwilioCode(){
   let data=await r.json();if(typeof data==="string"){try{data=JSON.parse(data);}catch(_){}}
   if(data.verified){
    await completeRegistration();
+  }else if(data.expired){
+   if(errEl)errEl.textContent=he?"⏳ הקוד פג תוקף — שולחים קוד חדש...":"⏳ Code expired — sending a new one...";
+   if(inp){inp.value="";}
+   if(btn){btn.disabled=false;btn.textContent=he?"אמת/י ✓":"Verify ✓";}
+   setTimeout(function(){ try{ sendTwilioOTP(OTP_CHANNEL||'sms'); }catch(e){} }, 600);
   }else{
    if(errEl)errEl.textContent=he?"❌ קוד שגוי — נסה/י שוב":"❌ Wrong code — try again";
    if(btn){btn.disabled=false;btn.textContent=he?"אמת/י ✓":"Verify ✓";}
@@ -10841,7 +10912,7 @@ async function sha256Hex(str){
 
 var FOUNDER_PH="ed8e941f0cd44dd2d47d184047fae955420ab062f4a4bb838da7733a68c71d16";  /* vanity handle only — NOT a verification bypass */
 function shomerHandleFromHash(ph){ if(ph===FOUNDER_PH)return "SH✡MER0000"; return "SH✡MER"+String((parseInt(ph.slice(0,8),16)%9999)+1).padStart(4,"0"); }
-async function completeRegistration(){
+async function completeRegistration(){ try{document.body.classList.remove("otp-active");}catch(e){}
  const he=currentLang==="he";
  const btn=document.getElementById("ob-verify-twilio-btn");
  const errEl=document.getElementById("ob-verify-err");
