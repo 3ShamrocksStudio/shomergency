@@ -1512,7 +1512,7 @@ body.otp-active .ob-steps{display:none!important;}
  <button class="mc" onclick="mapZoom(-1)" aria-label="הקטן">−</button>
  </div>
  <button class="loc-fab" id="loc-fab" onclick="locMe()" aria-label="מיקומי על המפה" title="מיקומי"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.4" fill="currentColor"/><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
-<button class="past-fab" id="past-fab" onclick="togglePastEvents()" aria-pressed="false" aria-label="אירועי עבר" title="אירועי עבר · למודעות בלבד"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.3-7-11a7 7 0 0 1 14 0c0 4.7-7 11-7 11Z"/><circle cx="12" cy="10" r="3.2"/><path d="M12 8.3v1.7l1.2.8"/></svg><span class="past-fab-lbl">עבר</span></button>
+<button class="past-fab" id="past-fab" onclick="togglePastEvents()" aria-pressed="false" aria-label="אירועי עבר" title="אירועי עבר · למודעות בלבד"><span id="past-fab-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="13" y2="14"/></svg></span><span class="past-fab-lbl">עבר</span></button>
  <button class="ff-fab" id="ff-fab" onclick="findFriendOpen()" aria-label="מצא חבר/ה" title="מצא חבר/ה"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16.5 16.5L21 21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
  </div>
 
@@ -2864,6 +2864,14 @@ function togglePastEvents(){
   _pastOn=!_pastOn;
   renderPastEvents();
   var el=document.getElementById('past-fab'); if(el) el.setAttribute('aria-pressed', _pastOn?'true':'false');
+  /* swap the icon between "bubble" (showing) and "bubble with slash" (hidden), exactly like
+     the crime-stats eye toggle, so the on/off state is unmistakable */
+  var ic=document.getElementById('past-fab-ic');
+  if(ic){
+    ic.innerHTML = _pastOn
+      ? '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="13" y2="14"/></svg>'
+      : '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z" opacity="0.5"/><line x1="4" y1="4" x2="20" y2="20" stroke-width="2.2"/></svg>';
+  }
   var he=(typeof currentLang!=='undefined' && currentLang==='he');
   try{ if(typeof toast==='function') toast(_pastOn?(he?'אירועי עבר מוצגים':'Past events shown'):(he?'אירועי עבר הוסתרו':'Past events hidden'),''); }catch(e){}
   if(_pastOn){ try{ if(MAP && window.L){ var pts=PAST_EVENTS.map(function(e){return [e.lat,e.lng];}); MAP.fitBounds(L.latLngBounds(pts).pad(0.3),{maxZoom:12,animate:true}); } }catch(e){} }
@@ -8164,7 +8172,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v189';
+var APP_VER='v190';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -11818,7 +11826,7 @@ html[dir="rtl"] .sh-back svg{transform:scaleX(-1)}
 .past-fab{position:absolute;bottom:calc(var(--nav) + 126px);left:12px;z-index:401;width:48px;height:48px;border-radius:50%;border:1px solid rgba(140,155,189,.18);background:rgba(8,18,36,.92);backdrop-filter:blur(12px);color:var(--tx2,#8898B8);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;box-shadow:0 4px 12px rgba(0,0,0,.4);cursor:pointer;transition:background .2s,color .2s,box-shadow .2s}
 .past-fab .ic{width:20px;height:20px}
 .past-fab-lbl{font:800 8px/1 Heebo,sans-serif;letter-spacing:.3px}
-.past-fab[aria-pressed="false"]{background:rgba(8,18,36,.92);color:#8898B8;border-color:rgba(140,155,189,.18)}
+.past-fab[aria-pressed="false"]{background:rgba(8,18,36,.85);color:#5a6a8a;border-color:rgba(140,155,189,.15);opacity:.82}
 .past-fab[aria-pressed="true"]{background:#5B8CA8;color:#fff;border-color:#7FB4CC;box-shadow:0 0 0 3px rgba(91,140,168,.55),0 0 18px rgba(91,140,168,.7),0 4px 14px rgba(0,0,0,.4);transform:scale(1.06)}
 </style>
 <script src="native-bridge.js"></script>
