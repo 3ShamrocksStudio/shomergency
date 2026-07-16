@@ -8164,7 +8164,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v184';
+var APP_VER='v185';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -10845,7 +10845,7 @@ function showSMSCodeScreen(){
   <div id="ob-sms-confirm" dir="ltr" style="text-align:center;font-size:11px;color:var(--g3);font-weight:800;margin-bottom:6px"></div>
   <input id="ob-code-inp" type="tel" inputmode="numeric" maxlength="6" autocomplete="one-time-code"
    placeholder="••••••"
-   onkeyup="if(this.value.replace(/\D/g,'').length===6 && !this._v){this._v=true;verifyTwilioCode();}else if(this.value.replace(/\D/g,'').length<6){this._v=false;}"
+   oninput="var v=this.value.replace(/\\D/g,'');if(v!==this.value)this.value=v;"
    style="font-size:20px;letter-spacing:7px;text-align:center;width:min(200px,64vw);background:rgba(255,255,255,.06);border:2px solid var(--gold,#C9A84C);border-radius:11px;padding:9px;color:var(--tx0,#f2f6ff);font-family:inherit;margin-bottom:9px;direction:ltr">
   <button onclick="verifyTwilioCode()" id="ob-verify-twilio-btn"
    style="width:min(200px,64vw);padding:11px;background:linear-gradient(135deg,#C09020 0%,#E0A828 60%,#F5C840 100%);color:#0a0c12;border:none;border-radius:11px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:4px;letter-spacing:.3px">
@@ -10867,6 +10867,17 @@ async function verifyTwilioCode(){
  const errEl=document.getElementById("ob-verify-err");
  const btn=document.getElementById("ob-verify-twilio-btn");
  if(code.length<6){if(errEl)errEl.textContent=he?"הזן/י 6 ספרות":"Enter 6 digits";return;}
+ /* ROOT-CAUSE GUARD for the login loop:
+    onkeyup auto-fired verify the instant 6 digits were present, and a second event could
+    fire a second verify ~1s later. Two verify calls hit Twilio: the first APPROVED the code
+    ("converted"), the second saw it already-used and reported "wrong code" — which cleared
+    the field and made the user retype, looping and burning SMS. Fix: only ONE verify in
+    flight, and never re-verify the same 6 digits. */
+ if(window._otpVerifying) return;                 // a verify is already running
+ if(window._otpLastCode===code && window._otpLastCodeFailed!==true) return; // same code, don't resubmit unless it explicitly failed
+ window._otpVerifying=true;
+ window._otpLastCode=code;
+ window._otpLastCodeFailed=false;
  if(btn){btn.disabled=true;btn.textContent=he?"מאמת...":"Verifying...";}
  if(errEl)errEl.textContent="";
  try{
@@ -10877,17 +10888,21 @@ async function verifyTwilioCode(){
   });
   let data=await r.json();if(typeof data==="string"){try{data=JSON.parse(data);}catch(_){}}
   if(data.verified){
+   window._otpVerifying=false;
    await completeRegistration();
   }else if(data.expired){
+   window._otpVerifying=false; window._otpLastCode=null;
    if(errEl)errEl.textContent=he?"⏳ הקוד פג תוקף — לחצ/י ״שלח/י קוד שוב״":"⏳ Code expired — tap “Resend code”";
    if(inp){inp.value="";inp.focus();}
    if(btn){btn.disabled=false;btn.textContent=he?"אמת/י ✓":"Verify ✓";}
   }else{
+   window._otpVerifying=false; window._otpLastCodeFailed=true;
    if(errEl)errEl.textContent=he?"❌ קוד שגוי — נסה/י שוב":"❌ Wrong code — try again";
    if(btn){btn.disabled=false;btn.textContent=he?"אמת/י ✓":"Verify ✓";}
    if(inp){inp.value="";inp.focus();}
   }
  }catch(e){
+  window._otpVerifying=false; window._otpLastCode=null;
   if(errEl)errEl.textContent=he?"❌ בעיית רשת":"❌ Network error";
   if(btn){btn.disabled=false;btn.textContent=he?"אמת/י ✓":"Verify ✓";}
  }
