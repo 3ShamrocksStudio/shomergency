@@ -8164,7 +8164,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v188';
+var APP_VER='v189';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -10824,6 +10824,21 @@ async function sendTwilioOTP(channel){
    if(statusEl)statusEl.textContent=he?"✅ קוד נשלח! בדוק/י את ה-SMS":"✅ Code sent! Check your SMS";
    _otpCooldown(btn,45);
    document.getElementById("ob-code-inp")&&document.getElementById("ob-code-inp").focus();
+      /* WebOTP progressive enhancement: on supported browsers (Android Chrome), auto-read the
+         incoming SMS code and fill it — user taps nothing. Fully optional; if unsupported or
+         it fails, the manual flow is untouched. Never blocks. */
+      try{
+        if('OTPCredential' in window){
+          var _ac=new AbortController();
+          navigator.credentials.get({otp:{transport:['sms']}, signal:_ac.signal}).then(function(otp){
+            if(otp && otp.code){
+              var ci=document.getElementById('ob-code-inp');
+              if(ci){ ci.value=otp.code.replace(/\D/g,'').slice(0,6); }
+            }
+          }).catch(function(){});
+          setTimeout(function(){ try{_ac.abort();}catch(e){} }, 120000);
+        }
+      }catch(e){}
   }else{
    /* ═══ WORLDWIDE AUTO-FALLBACK ═══
       If SMS/WhatsApp is blocked (Twilio fraud prefix-block 60410, carrier filtering, etc.),
