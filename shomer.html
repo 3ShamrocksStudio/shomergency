@@ -8164,7 +8164,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v186';
+var APP_VER='v187';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -10766,7 +10766,19 @@ function showOtpFallbacks(){
   var wb=document.getElementById('otp-wa');
   if(wb) wb.onclick=function(){ _otpSends=Math.max(0,_otpSends-1); sendTwilioOTP('whatsapp'); };
 }
+/* ══ OTP CHANNEL STRATEGY (cost + reliability) ══
+   Phone number stays the identity (verify-once → device-bound → free on every reopen).
+   For the ONE verification, channel cost order (Israel): WhatsApp (~$0.005) < SMS (~$0.08).
+   PRIMARY_OTP_CHANNEL is 'sms' until the WhatsApp Business sender is approved by Meta —
+   an unapproved WA sender silently drops messages, which is worse than SMS. Flip to
+   'whatsapp' the moment the sender is live; no other code change needed. Users can always
+   pick WhatsApp/voice manually via the fallback buttons regardless. */
+var PRIMARY_OTP_CHANNEL = (window.SHOMER_WA_APPROVED === true) ? 'whatsapp' : 'sms';
 async function sendTwilioOTP(channel){
+ /* VERIFY-ONCE HARD STOP: if this device already completed verification (onboarded with a
+    stored phone), there is no reason to ever send another OTP — the session is device-bound.
+    This is the ultimate cost protection: a returning/verified user can NEVER trigger an SMS. */
+ try{ if(SS && SS.onboarded && SS.user && SS.user.phone && !window._reverifyIntent){ return; } }catch(e){}
  /* SYNCHRONOUS guard FIRST — before any await. The previous version placed this after
     'await founderFastPath()'; because await yields the event loop, two rapid calls both
     passed the guard before either set the flag, so BOTH sent → the SAME code arrived twice
@@ -10778,7 +10790,7 @@ async function sendTwilioOTP(channel){
  window._otpSending=true;
  window._lastOtpSend=_now;
  if(await founderFastPath()){ window._otpSending=false; return; }
- OTP_CHANNEL = channel || 'sms';
+ OTP_CHANNEL = channel || PRIMARY_OTP_CHANNEL || 'sms';
  const he=currentLang==="he";
  const btn=document.getElementById("ob-resend-btn");
  if(_otpSends>=4){ const st=document.getElementById("ob-sms-status"); if(st)st.textContent=he?"יותר מדי ניסיונות — נסה/י שוב מאוחר יותר (הגנת דיוור)":"Too many attempts — try again later (anti-abuse protection)"; if(btn)btn.disabled=true; return; }
