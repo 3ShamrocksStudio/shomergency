@@ -8164,7 +8164,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v182';
+var APP_VER='v183';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -10769,6 +10769,12 @@ function showOtpFallbacks(){
 }
 async function sendTwilioOTP(channel){
  if(await founderFastPath())return;
+ /* Guard: never fire two sends within 8s of each other. A duplicate send creates a new
+    Twilio code that silently invalidates the one the user is mid-typing — which felt like
+    "the code expires in 10 seconds". One code at a time. */
+ var _now=Date.now();
+ if(window._lastOtpSend && (_now - window._lastOtpSend) < 8000){ return; }
+ window._lastOtpSend=_now;
  OTP_CHANNEL = channel || 'sms';
  const he=currentLang==="he";
  const btn=document.getElementById("ob-resend-btn");
@@ -10840,7 +10846,7 @@ function showSMSCodeScreen(){
   <div id="ob-sms-confirm" dir="ltr" style="text-align:center;font-size:11px;color:var(--g3);font-weight:800;margin-bottom:6px"></div>
   <input id="ob-code-inp" type="tel" inputmode="numeric" maxlength="6" autocomplete="one-time-code"
    placeholder="••••••"
-   onkeyup="if(this.value.replace(/\D/g,'').length===6)verifyTwilioCode()"
+   onkeyup="if(this.value.replace(/\D/g,'').length===6 && !this._v){this._v=true;verifyTwilioCode();}else if(this.value.replace(/\D/g,'').length<6){this._v=false;}"
    style="font-size:20px;letter-spacing:7px;text-align:center;width:min(200px,64vw);background:rgba(255,255,255,.06);border:2px solid var(--gold,#C9A84C);border-radius:11px;padding:9px;color:var(--tx0,#f2f6ff);font-family:inherit;margin-bottom:9px;direction:ltr">
   <button onclick="verifyTwilioCode()" id="ob-verify-twilio-btn"
    style="width:min(200px,64vw);padding:11px;background:linear-gradient(135deg,#C09020 0%,#E0A828 60%,#F5C840 100%);color:#0a0c12;border:none;border-radius:11px;font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:4px;letter-spacing:.3px">
@@ -10874,10 +10880,9 @@ async function verifyTwilioCode(){
   if(data.verified){
    await completeRegistration();
   }else if(data.expired){
-   if(errEl)errEl.textContent=he?"⏳ הקוד פג תוקף — שולחים קוד חדש...":"⏳ Code expired — sending a new one...";
-   if(inp){inp.value="";}
+   if(errEl)errEl.textContent=he?"⏳ הקוד פג תוקף — לחצ/י ״שלח/י קוד שוב״":"⏳ Code expired — tap “Resend code”";
+   if(inp){inp.value="";inp.focus();}
    if(btn){btn.disabled=false;btn.textContent=he?"אמת/י ✓":"Verify ✓";}
-   setTimeout(function(){ try{ sendTwilioOTP(OTP_CHANNEL||'sms'); }catch(e){} }, 600);
   }else{
    if(errEl)errEl.textContent=he?"❌ קוד שגוי — נסה/י שוב":"❌ Wrong code — try again";
    if(btn){btn.disabled=false;btn.textContent=he?"אמת/י ✓":"Verify ✓";}
