@@ -5003,6 +5003,38 @@ function showCommunityNudge(msg, ctaLabel, action){
     setTimeout(function(){ try{ if(b.parentNode){ b.style.opacity='0'; b.style.transition='opacity .5s'; setTimeout(function(){ if(b.parentNode) b.remove(); },500); } }catch(e){} }, 15000);
   }catch(e){}
 }
+function communityNudge(){
+  try{
+    var he=(typeof currentLang!=='undefined' && currentLang==='he');
+    /* Only nudge occasionally — never spammy. Show at most once per ~3 opens, and never on
+       the very first session (let them settle in first). Citizens for citizens: we invite
+       contribution, we do not nag. */
+    var opens = parseInt(localStorage.getItem('shomerOpens')||'0',10) + 1;
+    localStorage.setItem('shomerOpens', String(opens));
+    if(opens < 2) return;                          // skip first session
+    var lastNudge = parseInt(localStorage.getItem('shomerLastNudge')||'0',10);
+    if(Date.now() - lastNudge < 36*60*60*1000) return;   // at most once every ~1.5 days
+    if(Math.random() > 0.6) return;                // even then, only sometimes
+
+    /* Rotate through community-contribution invitations. Each builds shared safety. */
+    var nudges = [
+      { he:'יש דפיברילטור (AED) בסביבתך? הוסף/י אותו למפה — זה יכול להציל חיים',
+        en:'Know a defibrillator (AED) nearby? Add it to the map — it can save a life',
+        act:function(){ try{ if(typeof aedPlaceMode==='function') aedPlaceMode(); }catch(e){} } },
+      { he:'ראית משהו שכדאי שאחרים ידעו? צור/י אירוע והזהר/י את הקהילה',
+        en:'Saw something others should know? Create an event and warn the community',
+        act:function(){ try{ if(typeof openReport==='function') openReport(); }catch(e){} } },
+      { he:'הזמן/י שכן או חבר להיות שומר — ככל שיותר עיניים, כולנו בטוחים יותר',
+        en:'Invite a neighbour or friend to be a guardian — more eyes keep us all safer',
+        act:function(){ try{ if(typeof openGuardians==='function') openGuardians(); }catch(e){} } }
+    ];
+    var n = nudges[opens % nudges.length];
+    localStorage.setItem('shomerLastNudge', String(Date.now()));
+    setTimeout(function(){
+      try{ toast(he?n.he:n.en, '', n.act); }catch(e){}
+    }, 4500);   // let the map settle before inviting
+  }catch(e){}
+}
 function checkInbox(){
   try{
     if(typeof FB==='undefined' || !FB.ready || !FB._myPhoneHash) { setTimeout(checkInbox, 1500); return; }
@@ -5067,7 +5099,7 @@ function initMap(){
  window.L.tileLayer(TILE_BASE,{maxZoom:20,subdomains:'abcd',className:'tiles-base',
  attribution:' <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> · <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>'}).addTo(MAP);
  window.L.tileLayer(TILE_LABELS,{maxZoom:20,subdomains:'abcd',className:'tiles-labels'}).addTo(MAP);
- buildStatMarkers(); try{ checkInbox(); }catch(e){} try{ setTimeout(communityNudge, 8000); }catch(e){} try{ renderPastEvents(); }catch(e){}
+ buildStatMarkers(); try{ checkInbox(); }catch(e){} try{ communityNudge(); }catch(e){} try{ setTimeout(communityNudge, 8000); }catch(e){} try{ renderPastEvents(); }catch(e){}
  // The container may have been laid out while hidden — recalc once visible.
  [120,400,900].forEach(ms=>setTimeout(()=>{if(MAP)MAP.invalidateSize(false);},ms));
  if(userLat!=null&&userLng!=null){moveUserDot(userLat,userLng);MAP.setView([userLat,userLng],15);_centeredOnOpen=true;}
@@ -11756,5 +11788,6 @@ html[dir="rtl"] .sh-back svg{transform:scaleX(-1)}
   setInterval(tag, 1000);
 }catch(e){} })();
 </script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"cb798ec108614ddcb55eacf0c7b5bf23","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
