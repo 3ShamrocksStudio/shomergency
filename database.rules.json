@@ -39,6 +39,12 @@
         ".write": "auth != null && (!data.exists() || data.child('by').val() == auth.uid)",
         ".validate": "newData.hasChildren(['lat','lng','by','ts'])"
       }
+    },
+    "inbox": {
+      "$phoneHash": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      }
     }
   }
 }
