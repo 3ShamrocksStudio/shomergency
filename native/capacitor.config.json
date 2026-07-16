@@ -2,30 +2,20 @@
   "appId": "il.co.shomerapp",
   "appName": "SHOMER",
   "webDir": "www",
-  "bundledWebRuntime": false,
   "backgroundColor": "#0A1628",
   "android": {
-    "allowMixedContent": false,
+    "allowMixedContent": true,
     "backgroundColor": "#0A1628"
   },
-  "ios": {
-    "contentInset": "always",
-    "backgroundColor": "#0A1628"
+  "server": {
+    "androidScheme": "https",
+    "cleartext": true
   },
   "plugins": {
     "SplashScreen": {
-      "launchShowDuration": 1200,
+      "launchShowDuration": 800,
       "backgroundColor": "#0A1628",
-      "androidSplashResourceName": "splash",
-      "showSpinner": false,
-      "splashFullScreen": true,
-      "splashImmersive": false
-    },
-    "PushNotifications": {
-      "presentationOptions": ["badge", "sound", "alert"]
+      "showSpinner": false
     }
-  },
-  "server": {
-    "androidScheme": "https"
   }
 }
