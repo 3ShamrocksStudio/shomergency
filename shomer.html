@@ -3201,7 +3201,7 @@ function buildDetailFromReport(rep){
  return {title:(currentLang==='he'?'דיווח: ':'Report: ')+(typeLabelOf(rep.type)||(currentLang==='he'?'אירוע':'incident')),
  type:rep.type||'viol',time:relTime(rep.ts),loc:rep.loc||'—',lat:rep.lat,lng:rep.lng,
  desc:rep.desc||'',responders:[],photos:(rep.photos?rep.photos.length:0),
- status:currentLang==='he'?'פתוח':'open'};
+ status:currentLang==='he'?'פתוח':'open', _rid:(rep.id||rep.key||null), _auth:(rep.fromUid||rep.uid||rep.by||null)};
 }
 /* User report → real Leaflet marker (crafted pin), tap opens full detail. */
 function addReportPin(rep){
@@ -3332,7 +3332,7 @@ function renderProfession(){
 }
 /* Re-create persisted reports as map pins + detail entries + updates cards on load. */
 function restorePersistedData(){
- SS.reports.forEach(rep=>{
+ SS.reports.forEach(rep=>{ if(typeof isBlockedAuthor==='function' && isBlockedAuthor(rep&&(rep.fromUid||rep.uid||rep.by))){return;} 
  rep._detIdx=DETAILS.push(buildDetailFromReport(rep))-1;
  addReportPin(rep);
  injectReportCard(rep,true);
@@ -5087,6 +5087,16 @@ function openDetail(idx){
  <div class="sec-cap mb12">${currentLang==='he'?'מיקום על המפה':'Location on map'}</div>
  <div class="det-map mb16">${mm}</div>
  ${pHtml}${rHtml}${ctas}
+ <div class="det-modrow" style="display:flex;gap:8px;justify-content:center;margin-top:14px;padding-top:12px;border-top:1px solid rgba(140,155,189,.12)">
+  <button onclick="reportContent(DETAILS[${idx}]&&DETAILS[${idx}]._rid, DETAILS[${idx}]&&DETAILS[${idx}]._auth)" style="background:none;border:0;color:var(--tx3,#6b7a8d);font:600 12px Heebo,sans-serif;cursor:pointer;display:flex;align-items:center;gap:5px">
+   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15V4a1 1 0 0 1 1-1h13l-2 4 2 4H5"/><path d="M4 22v-7"/></svg>
+   ${currentLang==='he'?'דווח על תוכן':'Report content'}
+  </button>
+  <button onclick="blockAuthor(DETAILS[${idx}]&&DETAILS[${idx}]._auth)" style="background:none;border:0;color:var(--tx3,#6b7a8d);font:600 12px Heebo,sans-serif;cursor:pointer;display:flex;align-items:center;gap:5px">
+   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg>
+   ${currentLang==='he'?'חסום משתמש':'Block user'}
+  </button>
+ </div>
  `;
  // Set text safely
  body.querySelector('.det-title').textContent=d.title;
@@ -8002,7 +8012,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v179';
+var APP_VER='v180';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -9203,6 +9213,33 @@ var MOD = (function(){
   }
   return { checkText:checkText, checkImage:checkImage, hasAbuse:hasAbuse };
 })();
+
+/* ═══ REPORT CONTENT / BLOCK USER — community moderation ═══ */
+var _blockedAuthors = (function(){ try{ return JSON.parse(localStorage.getItem('shomerBlocked')||'[]'); }catch(e){ return []; } })();
+function isBlockedAuthor(uid){ return uid && _blockedAuthors.indexOf(uid)>=0; }
+function reportContent(reportId, authorUid){
+  var he=(typeof currentLang!=='undefined' && currentLang==='he');
+  if(!reportId){ try{ toast(he?'לא ניתן לדווח על הפריט הזה':'Cannot report this item','amb'); }catch(e){} return; }
+  var ok=confirm(he?'לדווח על תוכן זה כלא הולם? צוות SHOMER יבדוק. תודה שאתה עוזר לשמור על הקהילה בטוחה.':'Report this content as inappropriate? The SHOMER team will review it. Thank you for keeping the community safe.');
+  if(!ok) return;
+  try{
+    var payload={ ts:Date.now(), by:(typeof FB!=='undefined'&&FB.uid)||'anon', reportId:reportId, authorUid:authorUid||null };
+    if(typeof fbRestWrite==='function'){ fbRestWrite('POST','moderation/flags', payload); }
+  }catch(e){}
+  try{ toast(he?'✓ הדיווח נשלח לבדיקה. תודה.':'✓ Reported for review. Thank you.',''); }catch(e){}
+  try{ if(typeof cl==='function') cl('det-sheet'); }catch(e){}
+}
+function blockAuthor(authorUid){
+  var he=(typeof currentLang!=='undefined' && currentLang==='he');
+  if(!authorUid){ try{ toast(he?'לא ניתן לחסום משתמש זה':'Cannot block this user','amb'); }catch(e){} return; }
+  var ok=confirm(he?'לחסום את מפרסם הדיווח הזה? לא תראה/י יותר תוכן ממנו במכשיר זה.':'Block the author of this report? You will no longer see their content on this device.');
+  if(!ok) return;
+  if(_blockedAuthors.indexOf(authorUid)<0){ _blockedAuthors.push(authorUid); try{ localStorage.setItem('shomerBlocked', JSON.stringify(_blockedAuthors)); }catch(e){} }
+  try{ toast(he?'✓ המשתמש נחסם':'✓ User blocked',''); }catch(e){}
+  try{ if(typeof renderReports==='function') renderReports(); }catch(e){}
+  try{ if(typeof cl==='function') cl('det-sheet'); }catch(e){}
+}
+
 
 
 /* ── reputation: a time-earned score, never a paywall ── */
