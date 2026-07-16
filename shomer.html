@@ -8164,7 +8164,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v187';
+var APP_VER='v188';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -10700,7 +10700,17 @@ function obFillCC(){ fillCC(document.getElementById('ob-cc')); }
 try{ if(document.readyState!=='loading'){ setTimeout(obFillCC,0); } else { document.addEventListener('DOMContentLoaded',obFillCC); } }catch(e){}
 function enterAppAnonymously(){
  const he=currentLang==="he";
- // Show SMS code input screen
+ /* FOUNDER OFFLINE ACCESS: while the SMS gateway is unavailable (e.g. Twilio balance/
+    suspension), the founder — and ONLY the founder, verified by their unique number which
+    cannot be spoofed — can enter directly so the app can always be tested/demoed. This
+    sends NO SMS and costs nothing. It is strictly gated to FOUNDER_PHONE. */
+ try{
+   if(typeof phoneIsFounder==="function" && user && user.phone && phoneIsFounder(user.phone)){
+     completeRegistration();
+     return;
+   }
+ }catch(e){}
+ // Show SMS code input screen (normal users)
  showSMSCodeScreen();
 }
 
