@@ -87,7 +87,8 @@
 
   /* Push notifications — SOS must reach a guardian whose phone is in their pocket. */
   function initPush() {
-    if (!Push) return;
+    if (!Push) return;              // push plugin not installed — skip entirely (no crash)
+    if (!LocalNotif) return;        // local-notif plugin not installed — skip (no crash)
     Push.requestPermissions().then(function (r) {
       if (r.receive === 'granted') Push.register();
     }).catch(function () {});
