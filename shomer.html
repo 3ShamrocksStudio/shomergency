@@ -8172,7 +8172,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v192';
+var APP_VER='v193';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -10405,8 +10405,37 @@ else { FB.swVer='no-sw-support'; }
 let deferredPrompt=null;
 window.addEventListener('beforeinstallprompt',e=>{
  e.preventDefault();deferredPrompt=e;
- setTimeout(showA2HS,3000);
+ setTimeout(showA2HS,3000); setTimeout(showGetAppBanner,5000);
 });
+function isRunningNative(){
+  try{ return !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()); }catch(e){ return false; }
+}
+function showGetAppBanner(){
+  try{
+    /* Only in a browser — never inside the installed native app. */
+    if(isRunningNative()) return;
+    /* Only on Android (APK is Android). iOS users see nothing (no APK for them yet). */
+    var isAndroid = /Android/i.test(navigator.userAgent||'');
+    if(!isAndroid) return;
+    /* Respect dismissal for 7 days. */
+    try{ var d=localStorage.getItem('shomerGetAppDismissed'); if(d && (Date.now()-parseInt(d,10) < 7*24*60*60*1000)) return; }catch(e){}
+    if(document.querySelector('.getapp-banner')) return;
+    var he=(typeof currentLang!=='undefined' && currentLang==='he');
+    var b=document.createElement('div');
+    b.className='getapp-banner';
+    b.style.cssText='position:fixed;left:12px;right:12px;bottom:calc(var(--nav,64px) + 12px);z-index:9600;background:linear-gradient(135deg,#0d1b30,#12233f);border:1px solid rgba(224,168,40,.35);border-radius:14px;padding:13px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 10px 30px rgba(0,0,0,.5);direction:'+(he?'rtl':'ltr');
+    b.innerHTML=''
+      +'<img src="logo-192.png" alt="" style="width:40px;height:40px;border-radius:9px;flex-shrink:0">'
+      +'<div style="flex:1;min-width:0">'
+        +'<div style="font:800 13.5px Heebo,sans-serif;color:#F5C840;margin-bottom:2px">'+(he?'התקן/י את אפליקציית שומר':'Get the SHOMER app')+'</div>'
+        +'<div style="font:600 11px Heebo,sans-serif;color:#9fb0d0;line-height:1.35">'+(he?'הגנה מלאה — מעקב מיקום גם כשהאפליקציה סגורה':'Full protection — location tracking even when the app is closed')+'</div>'
+      +'</div>'
+      +'<a href="https://www.shomer-app.co.il/SHOMER.apk" download style="background:linear-gradient(135deg,#C09020,#E0A828,#F5C840);color:#0a0c12;font:800 12.5px Heebo,sans-serif;padding:9px 14px;border-radius:10px;text-decoration:none;white-space:nowrap;flex-shrink:0">'+(he?'הורד/י':'Download')+'</a>'
+      +'<span class="getapp-x" style="cursor:pointer;color:#5a6a8a;font-size:20px;line-height:1;padding:2px 4px;flex-shrink:0">&times;</span>';
+    document.body.appendChild(b);
+    b.querySelector('.getapp-x').onclick=function(){ try{ localStorage.setItem('shomerGetAppDismissed', String(Date.now())); }catch(e){} b.remove(); };
+  }catch(e){}
+}
 async function showA2HS(){
  if(!deferredPrompt||document.querySelector('.a2hs'))return;
  const d=document.createElement('div');d.className='a2hs';
