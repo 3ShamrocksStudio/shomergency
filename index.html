@@ -54,6 +54,8 @@ nav{position:sticky; top:0; z-index:100; background:rgba(6,15,30,.82); backdrop-
 .hero{position:relative; min-height:92vh; display:flex; align-items:center; overflow:hidden}
 .hero-bg{position:absolute; inset:0; z-index:0}
 .hero-bg img{width:100%; height:100%; object-fit:cover; object-position:center}
+.hero-slide{position:absolute; inset:0; opacity:0; transition:opacity 1.2s ease}
+.hero-slide.on{opacity:1}
 .hero-bg::after{content:""; position:absolute; inset:0; background:
   linear-gradient(180deg, rgba(6,15,30,.72) 0%, rgba(6,15,30,.55) 40%, rgba(6,15,30,.88) 100%),
   radial-gradient(60% 50% at 50% 30%, rgba(224,168,40,.10), transparent 70%)}
@@ -175,7 +177,11 @@ footer{background:var(--n0); border-top:1px solid rgba(140,155,189,.1); padding:
 
 <!-- HERO -->
 <header class="hero">
-  <div class="hero-bg"><img src="site-assets/hero-treated.jpg" alt=""></div>
+  <div class="hero-bg">
+    <img class="hero-slide on" id="hs1" src="Shomer1080x1080px_A_blank.jpg" alt="">
+    <img class="hero-slide" id="hs2" src="Shomer1080x1080px_B_blank.jpg" alt="">
+    <img class="hero-slide" id="hs3" src="Shomer1080x1080px_C_blank.jpg" alt="">
+  </div>
   <div class="wrap hero-in">
     <img src="SHOMER_logo_big.png" class="hero-badge" alt="SHOMER badge">
     <div class="hero-eyebrow" data-t="hero_eye">אזרחים למען אזרחים</div>
@@ -307,6 +313,16 @@ var fab=document.getElementById('fab');
 window.addEventListener('scroll',function(){
   if(window.scrollY>640) fab.classList.add('show'); else fab.classList.remove('show');
 },{passive:true});
+
+// hero slideshow rotation
+(function(){
+  var slides=['hs1','hs2','hs3'], i=0;
+  setInterval(function(){
+    document.getElementById(slides[i]).classList.remove('on');
+    i=(i+1)%slides.length;
+    document.getElementById(slides[i]).classList.add('on');
+  }, 5000);
+})();
 </script>
 </body>
 </html>
