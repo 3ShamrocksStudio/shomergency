@@ -238,7 +238,7 @@ nav{gap:10px;min-width:0}
 }
 
 /* ══ SHOWCASE — elevated app section (replaces the old beige block) ══ */
-.showcase{position:relative;overflow:hidden;background:linear-gradient(165deg,#0A1628 0%,#0d1b30 45%,#060F1E 100%)}
+.showcase{position:relative;overflow:hidden;background:linear-gradient(180deg,#060F1E 0%,#04080F 55%,#02060C 100%)}
 /* layered depth: gold aura + topographic map lines echoing the app itself */
 .showcase-bg{position:absolute;inset:0;pointer-events:none;background:
    radial-gradient(46% 52% at 78% 40%, rgba(224,168,40,.20) 0%, rgba(224,168,40,0) 62%),
@@ -303,15 +303,15 @@ nav{gap:10px;min-width:0}
 
 
 /* light-background variants for the showcase */
-.showcase .section-title{color:#101E34}
-.showcase .section-sub{color:#4A5A78}
+.showcase .section-title{color:#F0F4FF}
+.showcase .section-sub{color:#9FB0D0}
 .showcase .feat-row{background:rgba(255,255,255,.72);border:1px solid rgba(22,36,64,.1);
   box-shadow:0 6px 18px -10px rgba(22,36,64,.25)}
 .showcase .feat-row:hover{background:#fff;border-color:rgba(224,168,40,.45)}
 .showcase .feat-row.active{background:linear-gradient(120deg,rgba(224,168,40,.16),rgba(255,255,255,.9));
   border-color:rgba(224,168,40,.6);box-shadow:0 10px 26px -10px rgba(224,168,40,.35)}
-.showcase .feat-title{color:#101E34}
-.showcase .feat-text{color:#5A6A88}
+.showcase .feat-title{color:#F0F4FF}
+.showcase .feat-text{color:#9FB0D0}
 /* 3. LAYOUT — phone on the LEFT, text on the RIGHT (page is RTL, so pin explicitly) */
 .showcase-grid{direction:ltr}
 .phone-col{grid-column:1}   /* left */
@@ -324,9 +324,9 @@ section{position:relative}
 .sec-dark::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;
   background:linear-gradient(90deg,transparent,rgba(224,168,40,.5),transparent)}
 /* warm light sections */
-.sec-light{background:linear-gradient(165deg,#0A1628 0%,#0d1b30 55%,#060F1E 100%);color:#e6ecf7}
-.sec-light .section-title{color:#f2f6ff}
-.sec-light .section-sub{color:#9fb0d0}
+.sec-light{background:linear-gradient(180deg,#FFFFFF 0%,#F4F7FB 100%);color:#3A4A63}
+.sec-light .section-title{color:#0D1B2E}
+.sec-light .section-sub{color:#5A6B85}
 .sec-light::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;
   background:linear-gradient(90deg,transparent,rgba(224,168,40,.4),transparent)}
 /* a mid navy-2 section for contrast */
@@ -336,6 +336,20 @@ section{position:relative}
 .how .step:nth-child(1) .step-num{background:linear-gradient(135deg,var(--acc-red),#B01530)}
 .how .step:nth-child(2) .step-num{background:var(--gold-grad)}
 .how .step:nth-child(3) .step-num{background:linear-gradient(135deg,var(--acc-blue),#0E4FA0)}
+
+.sec-light .feat-card{background:#FFFFFF;border:1px solid #E2E8F2;box-shadow:0 2px 10px rgba(13,27,46,.06)}
+.sec-light .feat-card:hover{border-color:rgba(224,168,40,.55);box-shadow:0 8px 24px rgba(13,27,46,.10)}
+.sec-light .feat-title{color:#0D1B2E}
+.sec-light .feat-text{color:#5A6B85}
+.sec-light .feat-icon{background:rgba(192,144,32,.10)}
+.sec-light .feat-icon svg{stroke:#B8860B}
+
+/* values band — grey, breaks the navy run; dark cards sit on it */
+.vals-band{background:linear-gradient(180deg,#E9EDF4 0%,#DDE3ED 100%)}
+.vals-band .section-title{color:#0D1B2E}
+.vals-band .eyebrow{color:#9A7418}
+
+.faq-band{background:linear-gradient(180deg,#0A1628 0%,#060F1E 100%)}
 </style>
 </head>
 <body>
@@ -459,7 +473,7 @@ section{position:relative}
 
 
 <!-- CORE VALUES -->
-<section class="fi" style="background:linear-gradient(180deg,#060F1E,#0A1628)">
+<section class="fi vals-band">
   <div class="wrap" style="text-align:center">
     <span class="eyebrow" style="font-family:'Cinzel',serif;font-weight:700;font-size:12px;letter-spacing:3px;color:var(--gold2,#F5C840);text-transform:uppercase;display:block;margin-bottom:14px">שומר אחי אנוכי</span>
     <h2 class="section-title">הערכים שלנו.</h2>
@@ -483,7 +497,7 @@ section{position:relative}
   </div>
 </section>
 <!-- FAQ -->
-<section class="fi">
+<section class="fi faq-band">
   <div class="wrap">
     <h2 class="section-title">שאלות נפוצות</h2>
     <div class="faq-list">
@@ -673,6 +687,7 @@ try{ var saved=localStorage.getItem('shomer-landing-lang'); if(saved&&saved!=='h
 })();
 </script>
 
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"cb798ec108614ddcb55eacf0c7b5bf23","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"cb798ec108614ddcb55eacf0c7b5bf23","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
