@@ -249,8 +249,7 @@ nav{gap:10px;min-width:0}
   mask-image:radial-gradient(75% 75% at 60% 45%, #000 0%, transparent 82%)}
 .showcase .wrap{position:relative;z-index:2}
 .showcase .section-title,.showcase .section-sub{text-align:center}
-.showcase-grid{display:grid;grid-template-columns:minmax(300px,46%) 1fr;gap:clamp(28px,5vw,64px);
-  align-items:center;margin-top:44px}
+.showcase-grid{display:flex;justify-content:center;align-items:center;margin-top:44px}
 
 /* phone column */
 .phone-col{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center}
@@ -413,32 +412,7 @@ section{position:relative}
       </div>
      </div>
      <!-- RIGHT: feature list -->
-     <div class="feat-col">
-      <button class="feat-row active" data-screen="0">
-       <span class="feat-ic red"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3h8l5 5v8l-5 5H8l-5-5V8Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 7.5v5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="16" r="1.2" fill="currentColor"/></svg></span>
-       <span class="feat-body"><span class="feat-title">אזעקת SOS</span><span class="feat-text">לחיצה אחת. אזעקה שלא ניתן להשתיק, מיקומך מגיע לשומרים מיד.</span></span>
-      </button>
-      <button class="feat-row active" data-screen="0">
-       <span class="feat-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4L3 6.5v13L9 17l6 2.5 6-2.5v-13L15 6.5 9 4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 4v13M15 6.5v13" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></span>
-       <span class="feat-body"><span class="feat-title">מפת אירועים חיה</span><span class="feat-text">אירועי ביטחון ורפואה באזורך בזמן אמת. תמיד מעודכן.</span></span>
-      </button>
-      <button class="feat-row" data-screen="1">
-       <span class="feat-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="9" cy="10" r="1.6" fill="currentColor"/><circle cx="15" cy="10" r="1.6" fill="currentColor"/></svg></span>
-       <span class="feat-body"><span class="feat-title">מעגלי שומרים</span><span class="feat-text">משפחה, חברים, שכנים. הם רואים אותך ומגיבים כשצריך.</span></span>
-      </button>
-      <button class="feat-row" data-screen="2">
-       <span class="feat-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6V4.8A1.8 1.8 0 0 1 10.8 3h2.4A1.8 1.8 0 0 1 15 4.8V6M4 8h16v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 11v5M9.5 13.5h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
-       <span class="feat-body"><span class="feat-title">מדריך חירום</span><span class="feat-text">CPR, מחנק, דימום, שבץ — לפי מד&quot;א. זמין ללא אינטרנט.</span></span>
-      </button>
-      <button class="feat-row" data-screen="0">
-       <span class="feat-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.9-7-10.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 7 3.5C19 16.1 12 21 12 21Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.2" fill="currentColor"/></svg></span>
-       <span class="feat-body"><span class="feat-title">שיתוף מיקום חי</span><span class="feat-text">השומרים שלך יודעים איפה את/ה — רק כשאת/ה מאשר/ת.</span></span>
-      </button>
-      <button class="feat-row" data-screen="0">
-       <span class="feat-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H7l-3 3Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M8 9h8M8 12h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
-       <span class="feat-body"><span class="feat-title">דיווח אירועים</span><span class="feat-text">דווח/י על אירועים בשכונה. בנה/י מפה קהילתית אמיתית.</span></span>
-      </button>
-     </div>
+     
     </div>
    </div>
   </section>
@@ -564,7 +538,7 @@ section{position:relative}
       <a class="fa-pill solid" href="SHOMER.apk" download>
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         הורד/י את אפליקציית שומר</a>
-      <a class="fa-pill" href="mailto:suport@shomer-app.co.il">
+      <a class="fa-pill" href="/cdn-cgi/l/email-protection#394a4c49564b4d794a5156545c4b14584949175a56175055">
         <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 7.5l8 5.5 8-5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         כתבו לנו</a>
       <a class="fa-pill" href="https://www.linkedin.com/company/sh%E2%9C%A1mer/" target="_blank" rel="noopener">
@@ -583,7 +557,7 @@ section{position:relative}
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // BG crossfade
 var imgs = document.querySelectorAll('.hero-bg-slide'), cur = 0;
 setInterval(function(){
@@ -699,5 +673,6 @@ try{ var saved=localStorage.getItem('shomer-landing-lang'); if(saved&&saved!=='h
 })();
 </script>
 
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"cb798ec108614ddcb55eacf0c7b5bf23","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
