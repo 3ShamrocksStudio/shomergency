@@ -1,8 +1,11 @@
 {
   "rules": {
     "registry": {
-      ".read": false,
-      ".write": "auth != null"
+      "$hash": {
+        ".read": false,
+        ".write": "auth != null && newData.child('uid').val() === auth.uid && (!data.exists() || data.child('uid').val() === auth.uid)",
+        ".validate": "newData.hasChildren(['uid'])"
+      }
     },
     "pairs": {
       "$uid": {
