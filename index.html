@@ -8,25 +8,28 @@
 <link rel="icon" href="badge-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&family=Heebo:wght@100;200;300;400;500;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Heebo:wght@200;400;700;900&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#02060C; --n0:#050B16; --n1:#0A1628; --n2:#101E34; --n3:#16273f;
+  --ink:#040A14; --n0:#060F1E; --n1:#0A1628; --n2:#101E34; --n3:#16273f; --n5:#24365E;
   --paper:#F4F1EA; --paper2:#E7E2D6; --stone:#C9C3B6;
-  --g1:#8A6A18; --g2:#C09020; --g3:#E0A828; --g4:#F5C840;
-  --gold:linear-gradient(135deg,#8A6A18,#C09020 35%,#F5C840 65%,#C09020);
+  --g1:#C9A84C; --g2:#C09020; --g3:#E0A828; --g4:#F5C840;
+  --gold:linear-gradient(135deg,#C09020,#E0A828,#F5C840);
   --tx0:#F2F5FC; --tx1:#A9B8D2; --tx2:#6B7C99;
   --sos:#E5484D;
+  /* type scale — 7 steps, 1.32 ratio. no arbitrary sizes. */
+  --t-cap:11px; --t-sm:13px; --t-base:15px; --t-md:17px; --t-lg:21px; --t-xl:28px; --t-2xl:38px;
+
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:hidden}
-body{overflow-x:clip;background:var(--ink);color:var(--tx0);font-family:'Heebo',sans-serif;font-weight:300;line-height:1.5;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body{overflow-x:clip;background:var(--ink);color:var(--tx0);font-family:'Heebo',sans-serif;font-weight:400;line-height:1.5;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}
 img{display:block;max-width:100%}
 .w{width:min(1180px,92vw);margin-inline:auto}
 
 /* ── ENGRAVED LABEL — the Cinzel micro-type that runs the whole system ── */
-.lbl{font-family:'Cinzel',serif;font-weight:700;font-size:10px;letter-spacing:.42em;text-transform:uppercase;color:var(--g3)}
+.lbl{font-family:'Cinzel',serif;font-weight:700;font-size:var(--t-cap);letter-spacing:.42em;text-transform:uppercase;color:var(--g3)}
 .lbl.dk{color:var(--g1)}
 /* hairline rule = the laurel engraving language */
 .hair{height:1px;background:linear-gradient(90deg,transparent,var(--g2),transparent);opacity:.55}
@@ -36,7 +39,7 @@ img{display:block;max-width:100%}
 .mono{font-family:'Heebo',sans-serif;font-weight:900;line-height:.86;letter-spacing:-.035em;
   font-size:clamp(56px,15vw,148px)}
 .mono.sm{font-size:clamp(40px,9.5vw,92px);line-height:.9}
-.thin{font-weight:100}
+.thin{font-weight:200}
 .gold-t{background:var(--gold);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 
 /* ── ANGULAR SECTION EDGES — derived from the star's 60° geometry ── */
@@ -51,17 +54,17 @@ nav{position:fixed;inset-inline:0;top:0;z-index:200;backdrop-filter:blur(18px);
 .nav-in{display:flex;align-items:center;justify-content:space-between;height:60px}
 .brand{display:flex;align-items:center;gap:11px}
 .brand img{width:34px;height:34px;filter:drop-shadow(0 0 10px rgba(224,168,40,.45))}
-.brand span{font-family:'Cinzel',serif;font-weight:800;font-size:17px;letter-spacing:.16em}
+.brand span{font-family:'Cinzel',serif;font-weight:700;font-size:var(--t-md);letter-spacing:.16em}
 .brand i{font-style:normal;color:var(--g4)}
 .nav-r{display:flex;align-items:center;gap:12px}
 .lang{display:flex;gap:4px}
-.lang button{width:30px;height:30px;border-radius:0;border:1px solid rgba(169,184,210,.26);background:none;
-  color:var(--tx2);font:700 10px 'Cinzel',serif;cursor:pointer;transition:.25s}
+.lang button{width:44px;height:44px;border-radius:0;border:1px solid rgba(169,184,210,.26);background:none;
+  color:var(--tx2);font:700 var(--t-cap) 'Cinzel',serif;cursor:pointer;transition:.25s}
 .lang button.on{border-color:var(--g3);color:var(--g4)}
-.ndl{font-family:'Cinzel',serif;font-weight:700;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
-  padding:11px 18px;color:var(--ink);background:var(--gold);transition:.25s;white-space:nowrap}
+.ndl{font-family:'Cinzel',serif;font-weight:900;font-size:var(--t-sm);letter-spacing:.16em;text-transform:uppercase;
+  min-height:44px;display:inline-flex;align-items:center;padding:0 20px;color:var(--ink);background:var(--gold);transition:.25s;white-space:nowrap}
 .ndl:hover{filter:brightness(1.12)}
-@media(max-width:520px){.ndl{font-size:9px;letter-spacing:.14em;padding:10px 12px}.brand span{font-size:14px}}
+@media(max-width:520px){.ndl{font-size:var(--t-cap);letter-spacing:.12em;padding:0 14px;min-height:44px}.brand span{font-size:14px}}
 
 /* ── HERO — asymmetric, type-led, image bleeds ── */
 .hero{min-height:100svh;display:flex;align-items:flex-end;padding:96px 0 40px;overflow:hidden}
@@ -75,25 +78,25 @@ nav{position:fixed;inset-inline:0;top:0;z-index:200;backdrop-filter:blur(18px);
 .star-wm{position:absolute;inset-inline-end:0;top:8vh;width:58vw;max-width:600px;opacity:.06;z-index:1;
   filter:drop-shadow(0 0 40px rgba(224,168,40,.5));pointer-events:none}
 .hero-in{position:relative;z-index:3;width:100%}
-.hero-rail{display:flex;align-items:center;gap:14px;margin-bottom:22px}
+.hero-rail{display:flex;align-items:center;gap:14px;margin-bottom:24px}
 .hero h1{margin:0 0 20px}
 .hero h1 .l2{display:block;margin-top:.04em}
-.hero-sub{font-size:clamp(15px,3.7vw,19px);font-weight:300;color:var(--tx1);max-width:46ch;line-height:1.6;margin-bottom:34px}
+.hero-sub{font-size:clamp(var(--t-base),3.7vw,var(--t-md));font-weight:400;color:var(--tx1);max-width:46ch;line-height:1.6;margin-bottom:32px}
 .hero-sub b{font-weight:700;color:var(--tx0)}
-.cta-row{display:flex;flex-wrap:wrap;align-items:center;gap:14px 22px}
+.cta-row{display:flex;flex-wrap:wrap;align-items:center;gap:16px 24px}
 .btn-dl{display:inline-flex;align-items:center;gap:12px;background:var(--gold);color:var(--ink);
-  font-family:'Cinzel',serif;font-weight:800;font-size:13px;letter-spacing:.16em;text-transform:uppercase;
-  padding:19px 34px;position:relative;transition:.28s;box-shadow:0 14px 44px -14px rgba(224,168,40,.75)}
+  font-family:'Cinzel',serif;font-weight:900;font-size:var(--t-sm);letter-spacing:.16em;text-transform:uppercase;
+  padding:20px 32px;position:relative;transition:.28s;box-shadow:0 14px 44px -14px rgba(224,168,40,.75)}
 .btn-dl:hover{transform:translateY(-2px);box-shadow:0 20px 54px -14px rgba(224,168,40,.9)}
 .btn-dl svg{width:17px;height:17px}
-.alt{font-size:13px;color:var(--tx2);font-weight:400}
-.alt a{color:var(--g3);border-bottom:1px solid rgba(224,168,40,.45);padding-bottom:1px}
+.alt{font-size:var(--t-sm);color:var(--tx2);font-weight:400}
+.alt a{color:var(--g3);border-bottom:1px solid rgba(224,168,40,.45);display:inline-block;padding:12px 2px;min-height:44px}
 
 /* ── COVENANT STRIP — the motto, monumental ── */
 .cov{background:var(--ink);padding:clamp(64px,11vw,120px) 0;text-align:center}
 .cov .verse{font-family:'Heebo';font-weight:200;font-size:clamp(30px,7.6vw,74px);line-height:1.08;letter-spacing:-.02em;color:var(--tx0)}
-.cov .verse b{font-weight:800;background:var(--gold);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.cov .src{margin-top:20px;font-family:'Cinzel',serif;font-size:10px;letter-spacing:.4em;color:var(--tx2);text-transform:uppercase}
+.cov .verse b{font-weight:700;background:var(--gold);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.cov .src{margin-top:24px;font-family:'Cinzel',serif;font-size:var(--t-cap);letter-spacing:.4em;color:var(--tx2);text-transform:uppercase}
 
 /* ── STATS — huge numerals, engraved rules ── */
 .stats{background:var(--n0);padding:clamp(44px,7vw,72px) 0;border-block:1px solid rgba(224,168,40,.16)}
@@ -103,7 +106,7 @@ nav{position:fixed;inset-inline:0;top:0;z-index:200;backdrop-filter:blur(18px);
   background:linear-gradient(180deg,transparent,rgba(224,168,40,.4),transparent)}
 .stat .n{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(34px,8.5vw,64px);line-height:1;
   background:var(--gold);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.stat .c{margin-top:10px;font-size:11px;font-weight:500;color:var(--tx2);letter-spacing:.02em}
+.stat .c{margin-top:12px;font-size:var(--t-sm);font-weight:400;color:var(--tx2);letter-spacing:.02em}
 
 /* ── SECTION HEAD (shared, asymmetric) ── */
 .sh{margin-bottom:clamp(34px,5vw,58px)}
@@ -116,9 +119,9 @@ nav{position:fixed;inset-inline:0;top:0;z-index:200;backdrop-filter:blur(18px);
   padding:clamp(24px,4vw,38px) 0;border-top:1px solid rgba(169,184,210,.14);align-items:baseline}
 .step:last-child{border-bottom:1px solid rgba(169,184,210,.14)}
 .step .num{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(30px,7vw,58px);line-height:.9;
-  color:transparent;-webkit-text-stroke:1px var(--g2);opacity:.85}
-.step h3{font-size:clamp(19px,4.4vw,27px);font-weight:800;letter-spacing:-.01em;margin-bottom:8px}
-.step p{color:var(--tx1);font-weight:300;font-size:clamp(14px,3.4vw,16px);max-width:52ch;line-height:1.62}
+  color:transparent;-webkit-text-stroke:1.4px var(--g4);opacity:1}
+.step h3{font-size:clamp(var(--t-lg),4.4vw,var(--t-xl));font-weight:700;letter-spacing:-.01em;margin-bottom:8px}
+.step p{color:var(--tx1);font-weight:400;font-size:clamp(var(--t-base),3.4vw,var(--t-md));max-width:52ch;line-height:1.62}
 
 /* ── SHOWCASE — phone offset, type beside it ── */
 .show{background:var(--ink);padding:clamp(72px,12vw,132px) 0;overflow:hidden}
@@ -133,13 +136,15 @@ nav{position:fixed;inset-inline:0;top:0;z-index:200;backdrop-filter:blur(18px);
 .ring:nth-child(2){animation-delay:1.5s}
 .ring:nth-child(3){animation-delay:3s}
 @keyframes pulse{0%{transform:scale(.82);opacity:0}25%{opacity:.5}100%{transform:scale(1.22);opacity:0}}
-.dots{display:flex;gap:9px;justify-content:center;margin-top:22px}
-.dot{width:26px;height:2px;background:rgba(169,184,210,.28);border:0;padding:0;cursor:pointer;transition:.3s}
-.dot.on{background:var(--g4);width:44px}
+.dots{display:flex;gap:9px;justify-content:center;margin-top:24px}
+.dot{width:44px;height:44px;background:none;border:0;padding:0;cursor:pointer;position:relative}
+.dot::after{content:"";position:absolute;inset-inline:0;top:50%;height:2px;transform:translateY(-50%);background:rgba(169,184,210,.3);transition:.3s}
+.dot.on::after{background:var(--g4)}
+.dot.on{width:52px}
 .show-list{display:flex;flex-direction:column;gap:2px}
-.si{padding:15px 0;border-bottom:1px solid rgba(169,184,210,.1)}
-.si h4{font-size:16px;font-weight:700;margin-bottom:5px}
-.si p{font-size:13.5px;font-weight:300;color:var(--tx2);line-height:1.55}
+.si{padding:16px 0;border-bottom:1px solid rgba(169,184,210,.1)}
+.si h4{font-size:var(--t-md);font-weight:700;margin-bottom:4px}
+.si p{font-size:var(--t-sm);font-weight:400;color:var(--tx2);line-height:1.55}
 @media(max-width:860px){.show-g{grid-template-columns:1fr;gap:40px}.dev{max-width:270px;margin-inline:auto}}
 
 /* ── VALUES — paper break, monumental numerals ── */
@@ -151,9 +156,9 @@ nav{position:fixed;inset-inline:0;top:0;z-index:200;backdrop-filter:blur(18px);
   padding:clamp(24px,4vw,36px) 0;border-top:1px solid rgba(26,21,8,.16)}
 .val:last-child{border-bottom:1px solid rgba(26,21,8,.16)}
 .val .rn{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(26px,6vw,44px);line-height:.95;
-  color:transparent;-webkit-text-stroke:1px rgba(138,106,24,.75)}
-.val h3{font-size:clamp(20px,4.8vw,30px);font-weight:800;color:#12100a;letter-spacing:-.015em;margin-bottom:7px}
-.val p{color:#4a4232;font-weight:300;font-size:clamp(14px,3.4vw,16px);line-height:1.62;max-width:54ch}
+  color:transparent;-webkit-text-stroke:1.4px rgba(138,106,24,.95)}
+.val h3{font-size:clamp(var(--t-lg),4.8vw,var(--t-xl));font-weight:700;color:#12100a;letter-spacing:-.015em;margin-bottom:8px}
+.val p{color:#4a4232;font-weight:400;font-size:clamp(var(--t-base),3.4vw,var(--t-md));line-height:1.62;max-width:54ch}
 
 /* ── NATURE ── */
 .nat{position:relative;padding:clamp(84px,13vw,150px) 0;background:#080f0a;overflow:hidden}
@@ -164,22 +169,22 @@ nav{position:fixed;inset-inline:0;top:0;z-index:200;backdrop-filter:blur(18px);
 .nat .lbl{color:#50db0f}
 .nat h2{color:#fff}
 .nat h2 em{font-style:normal;color:#50db0f}
-.nat p{color:#adc4ad;font-weight:300;max-width:50ch;margin-top:16px;font-size:clamp(14px,3.4vw,17px);line-height:1.6}
+.nat p{color:#adc4ad;font-weight:400;max-width:50ch;margin-top:16px;font-size:clamp(var(--t-base),3.4vw,var(--t-md));line-height:1.6}
 .nat-b{display:inline-flex;align-items:center;gap:10px;margin-top:30px;padding:16px 30px;
   border:1px solid rgba(80,219,15,.55);color:#8ef25a;font-family:'Cinzel',serif;font-weight:700;
-  font-size:11px;letter-spacing:.2em;text-transform:uppercase;transition:.28s}
+  font-size:var(--t-sm);letter-spacing:.2em;text-transform:uppercase;transition:.28s}
 .nat-b:hover{background:rgba(80,219,15,.12)}
 
 /* ── CLOSE ── */
 .close{background:var(--ink);padding:clamp(84px,13vw,150px) 0;text-align:center;position:relative;overflow:hidden}
-.seal{width:clamp(96px,22vw,150px);margin:0 auto 30px;position:relative;filter:drop-shadow(0 0 44px rgba(224,168,40,.5))}
-.emg{margin:38px auto 0;max-width:560px;padding:16px 20px;border:1px solid rgba(229,72,77,.34);
-  background:rgba(229,72,77,.06);font-size:12.5px;font-weight:300;color:var(--tx1);line-height:1.62}
+.seal{width:clamp(96px,22vw,150px);margin:0 auto 32px;position:relative;filter:drop-shadow(0 0 44px rgba(224,168,40,.5))}
+.emg{margin:40px auto 0;max-width:560px;padding:16px 24px;border:1px solid rgba(229,72,77,.34);
+  background:rgba(229,72,77,.06);font-size:var(--t-sm);font-weight:400;color:var(--tx1);line-height:1.62}
 .emg b{color:#ff9095;font-weight:700}
 
 footer{background:var(--ink);border-top:1px solid rgba(224,168,40,.14);padding:40px 0;text-align:center}
-footer .lbl{display:block;margin-bottom:10px}
-footer p{font-size:12px;color:var(--tx2);font-weight:300}
+footer .lbl{display:block;margin-bottom:8px}
+footer p{font-size:var(--t-sm);color:var(--tx2);font-weight:400}
 
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto}}
 </style>
@@ -306,7 +311,7 @@ footer p{font-size:12px;color:var(--tx2);font-weight:300}
   <div class="nat-bg"><img src="SHOMERNature_BannerBIG.jpg" alt=""></div>
   <div class="w nat-in">
     <span class="lbl" data-t="n_lbl">בקרוב · COMING SOON</span>
-    <h2 class="mono sm" style="margin-top:14px">SH<em>✡</em>MER <em>Nature</em></h2>
+    <h2 class="mono sm" style="margin-top:16px">SH<em>✡</em>MER <em>Nature</em></h2>
     <p data-t="n_p">אותה רשת שמירה — הפעם ליער, לחוף, לחי ולסביבה.</p>
     <a href="nature.html" class="nat-b" data-t="n_c">גלה/י עוד</a>
   </div>
@@ -317,7 +322,7 @@ footer p{font-size:12px;color:var(--tx2);font-weight:300}
   <div class="w">
     <img class="seal" src="SHOMER_logo_big.png" alt="">
     <h2 class="mono sm"><span class="thin" data-t="c_h1">הצטרפו</span> <span class="gold-t" data-t="c_h2">עכשיו.</span></h2>
-    <p class="hero-sub" style="margin:20px auto 30px;text-align:center" data-t="c_p">מחזירים את הביטחון לרחובות.</p>
+    <p class="hero-sub" style="margin:24px auto 32px;text-align:center" data-t="c_p">מחזירים את הביטחון לרחובות.</p>
     <a href="SHOMER.apk" download class="btn-dl">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
       <span data-t="dl_l2">הורדת האפליקציה</span>
