@@ -1,317 +1,277 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>SH✡MER Nature — שומרים על מי שאין לו קול</title>
-<meta name="description" content="אותה רשת שמירה — הפעם ליער, לחוף, לחי ולסביבה. דיווח מפגע, חילוץ בעל חיים, מפת סכנות חיה. מאת 3Shamrocks Studio.">
-<meta name="theme-color" content="#0E121C">
-<meta property="og:title" content="SH✡MER Nature">
-<meta property="og:description" content="אותה רשת שמירה — הפעם ליער, לחוף, לחי ולסביבה.">
-<meta property="og:image" content="nature-assets/nature-logo-white.png">
-<link rel="icon" href="nature-assets/shomerNature_W.svg">
+<meta name="description" content="אותה רשת שמירה — הפעם ליער, לחוף, לחי ולסביבה.">
+<link rel="icon" href="badge-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&family=Cinzel:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&family=Heebo:wght@100;200;300;400;500;700;800;900&display=swap" rel="stylesheet">
 <style>
-/* ══ SH✡MER NATURE ══
-   The SAME architecture as SH✡MER: hero media, crest over the fold, stat row, feature cards,
-   steps, family band, CTA band, footer. Only the palette shifts — navy+gold becomes deep
-   forest + living green. One system, two worlds. If it doesn't feel like SH✡MER, it isn't. */
 :root{
-  /* ── SH✡MER Nature — official brand palette ── */
-  /* foundation: deep ink navy (matches logo bg) */
-  --n0:#0E121C; --n1:#171d2b; --n2:#1E2536; --n3:#273044; --n4:#333E56; --n5:#42506E;
-  /* primary: neon green */
-  --g1:#2E8A0A; --g2:#3DB40D; --g3:#50db0f; --g4:#74E63F; --g5:#A8F27D;
-  --green-grad:linear-gradient(135deg,#2E8A0A 0%,#50db0f 55%,#8CF04A 100%);
-  /* the SOS button lives in neon green */
-  --sos:#50db0f; --sos-glow:#8CF04A;
-  /* accents */
-  --acc-amber:#faac22;   /* warmth / sunlight / secondary CTA */
-  --acc-teal:#0b5a5f;    /* water / coast / depth */
-  --acc-teal-lt:#12888F;
-  --amber-grad:linear-gradient(135deg,#F08E12 0%,#faac22 60%,#FFCB5E 100%);
-  /* the logo's signature sweep */
-  --brand-grad:linear-gradient(135deg,#faac22 0%,#50db0f 55%,#0b5a5f 100%);
-  /* warm light surfaces */
-  --l0:#F3F6F0; --l1:#E9EFE4; --l2:#DCE6D4; --l3:#C9D8BE;
-  /* text */
-  --tx0:#EEF3EA; --tx1:#C4D2C0; --tx2:#849688; --tx3:#4E6156;
-  --ink0:#171d2b; --ink1:#2A3548; --ink2:#4E6156;
-  --p2:#849688; --p3:#B0C4B4;
-  --danger:#E0492A; --safe:#50db0f;
-  --border:rgba(80,219,15,.18); --border-l:rgba(23,29,43,.12);
-  --r:14px; --r-lg:20px;
+  --ink:#0A0F0B; --n0:#0F1712; --n1:#171d2b; --n2:#1b2a20;
+  --grn:#50db0f; --grn2:#8ef25a; --grn3:#2f8a10;
+  --amber:#faac22; --teal:#0b5a5f;
+  --paper:#EDF1E8; --paper2:#DDE5D6;
+  --tx0:#F2F7F0; --tx1:#AEC2AC; --tx2:#6E8470;
+  --grad:linear-gradient(135deg,#2f8a10,#50db0f 45%,#8ef25a 75%,#50db0f);
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{font-family:'Heebo',sans-serif;background:var(--n0);color:var(--tx0);-webkit-font-smoothing:antialiased;overflow-x:hidden}
-a{text-decoration:none;color:inherit}
-.wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:hidden}
+body{overflow-x:clip;background:var(--ink);color:var(--tx0);font-family:'Heebo',sans-serif;font-weight:300;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+.w{width:min(1180px,92vw);margin-inline:auto}
+section{position:relative;overflow:clip}
 
-.topbar{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:rgba(4,20,11,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
-.brandmark{display:flex;align-items:center;gap:9px;font-weight:900;font-size:15px;letter-spacing:.04em}
-.brandmark img{height:26px;width:auto;display:block}
-.brandmark .n{background:var(--green-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.tb-back{font-size:12.5px;font-weight:700;color:var(--tx2);display:flex;align-items:center;gap:5px}
-.tb-back svg{width:14px;height:14px;transform:scaleX(-1)}
+.lbl{font-family:'Cinzel',serif;font-weight:700;font-size:10px;letter-spacing:.42em;text-transform:uppercase;color:var(--grn)}
+.hair{height:1px;background:linear-gradient(90deg,transparent,var(--grn3),transparent);opacity:.6}
+.hair.s{width:64px;background:linear-gradient(90deg,var(--grn),transparent)}
+.mono{font-family:'Heebo';font-weight:900;line-height:.86;letter-spacing:-.035em;font-size:clamp(52px,13.5vw,138px)}
+.mono.sm{font-size:clamp(38px,9vw,86px);line-height:.9}
+.thin{font-weight:100}
+.grn-t{background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.cut-t{clip-path:polygon(0 3.2vw,100% 0,100% 100%,0 100%)}
+.cut-tb{clip-path:polygon(0 3.2vw,100% 0,100% calc(100% - 3.2vw),0 100%)}
 
-.hero{position:relative;background:var(--n1);padding-top:60px}
-.hero-media{position:relative;width:100%;aspect-ratio:1/1;max-height:52vh;overflow:hidden;background:var(--n0)}
-.hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55}
-/* until the photography lands this is a living forest field — never a flat colour block */
-.hero-fallback{position:absolute;inset:0;
-  background:
-    radial-gradient(ellipse at 30% 18%, rgba(61,187,102,.22), transparent 55%),
-    radial-gradient(ellipse at 78% 62%, rgba(31,168,160,.16), transparent 58%),
-    radial-gradient(circle at 50% 105%, rgba(124,235,155,.12), transparent 62%),
-    linear-gradient(170deg,#1E2536 0%,#0E121C 100%)}
-.hero-fallback::after{content:'';position:absolute;inset:0;opacity:.35;
-  background-image:
-    repeating-linear-gradient(115deg, rgba(255,255,255,.03) 0 2px, transparent 2px 7px),
-    repeating-linear-gradient(65deg, rgba(0,0,0,.10) 0 3px, transparent 3px 9px)}
-.hero-media::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg, rgba(4,20,11,.35) 0%, transparent 30%, rgba(4,20,11,.94) 100%)}
-.hero-logo{position:relative;z-index:3;display:block;width:min(560px,86vw);height:auto;margin:0 auto 8px;filter:drop-shadow(0 8px 30px rgba(80,219,15,.25))}
-.hero-content{position:relative;z-index:2;padding:14px 24px 46px;display:flex;flex-direction:column;align-items:center;text-align:center}
-.hero-title{font-size:clamp(32px,9vw,58px);font-weight:900;line-height:1.12;letter-spacing:-1px;color:var(--tx0);margin-bottom:10px}
-.grn{background:var(--green-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero-sub{font-size:clamp(14px,3.8vw,17px);color:var(--tx1);line-height:1.65;margin-bottom:24px;max-width:500px}
-.hero-cta-row{display:flex;flex-direction:column;gap:12px;margin-bottom:34px;width:100%;max-width:380px}
-.btn-primary{background:var(--green-grad);color:#0E121C;padding:17px 32px;border-radius:var(--r);font-weight:900;font-size:17px;text-align:center;display:block;transition:transform .15s;box-shadow:0 10px 30px rgba(61,187,102,.26)}
-.btn-primary:active{transform:scale(.98)}
-.btn-ghost{border:1px solid var(--border);color:var(--tx1);padding:16px 32px;border-radius:var(--r);font-weight:800;font-size:15px;text-align:center;display:block}
+nav{position:fixed;inset-inline:0;top:0;z-index:200;backdrop-filter:blur(18px);
+  background:linear-gradient(180deg,rgba(10,15,11,.94),rgba(10,15,11,.55));border-bottom:1px solid rgba(80,219,15,.16)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;height:60px}
+.brand{display:flex;align-items:center;gap:11px}
+.brand img{width:32px;height:32px;filter:drop-shadow(0 0 10px rgba(80,219,15,.45))}
+.brand span{font-family:'Cinzel',serif;font-weight:800;font-size:16px;letter-spacing:.14em}
+.brand i{font-style:normal;color:var(--grn)}
+.brand em{font-style:normal;color:var(--grn);font-weight:600}
+.nbtn{font-family:'Cinzel',serif;font-weight:700;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
+  padding:10px 16px;border:1px solid rgba(80,219,15,.5);color:var(--grn2);transition:.25s;white-space:nowrap}
+.nbtn:hover{background:rgba(80,219,15,.12)}
 
-.hero-stats{display:flex;gap:8px;justify-content:center;align-items:flex-start;width:100%;max-width:500px;margin:0 auto}
-.stat{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;gap:7px}
-.stat-ic{width:52px;height:52px;border-radius:50%;background:var(--green-grad);display:flex;align-items:center;justify-content:center;color:#0E121C;box-shadow:0 8px 22px rgba(61,187,102,.32),inset 0 1px 0 rgba(255,255,255,.35)}
-.stat-ic svg{width:24px;height:24px}
-.stat-n{display:block;font-size:22px;font-weight:900;color:var(--g3);font-family:'Cinzel',serif;line-height:1}
-.stat-l{display:block;font-size:11px;color:var(--tx1);line-height:1.45;max-width:112px}
+/* HERO */
+.hero{min-height:100svh;display:flex;align-items:flex-end;padding:100px 0 46px}
+.hero-bg{position:absolute;inset:0;z-index:0}
+.hero-bg img{width:100%;height:100%;object-fit:cover;opacity:.42}
+.hero-bg::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(10,15,11,.72),rgba(10,15,11,.42) 40%,rgba(10,15,11,.96)),
+             linear-gradient(270deg,rgba(10,15,11,.7),transparent 60%)}
+.leaf-wm{position:absolute;inset-inline-end:0;top:10vh;width:56vw;max-width:560px;opacity:.07;z-index:1;pointer-events:none;
+  filter:drop-shadow(0 0 40px rgba(80,219,15,.6))}
+.hero-in{position:relative;z-index:3;width:100%}
+.rail{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.soon{display:inline-flex;align-items:center;gap:8px;font-family:'Cinzel',serif;font-weight:700;font-size:10px;
+  letter-spacing:.3em;color:var(--grn);border:1px solid rgba(80,219,15,.45);padding:7px 15px;text-transform:uppercase}
+.hero h1{margin:16px 0 20px}
+.hero-sub{font-size:clamp(15px,3.6vw,18px);font-weight:300;color:var(--tx1);max-width:52ch;line-height:1.62;margin-bottom:32px}
+.cta-row{display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px}
+.btn-g{display:inline-flex;align-items:center;gap:11px;background:var(--grad);color:#08140a;
+  font-family:'Cinzel',serif;font-weight:800;font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;
+  padding:18px 32px;transition:.28s;box-shadow:0 14px 44px -14px rgba(80,219,15,.7)}
+.btn-g:hover{transform:translateY(-2px)}
+.alt{font-size:13px;color:var(--tx2)}
+.alt a{color:var(--grn2);border-bottom:1px solid rgba(80,219,15,.45);padding-bottom:1px}
 
-section{padding:72px 0}
-.bg-surface{background:var(--n1);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.section-title{font-size:clamp(26px,6vw,42px);font-weight:900;color:var(--tx0);margin-bottom:12px;letter-spacing:-.4px;line-height:1.2;text-align:center}
-.section-sub{font-size:16px;font-weight:600;color:var(--tx2);line-height:1.65;text-align:center;max-width:520px;margin:0 auto 40px}
+/* STATS */
+.stats{background:var(--n0);padding:clamp(42px,7vw,70px) 0;border-block:1px solid rgba(80,219,15,.18)}
+.sg{display:grid;grid-template-columns:repeat(3,1fr)}
+.st{padding:0 10px;text-align:center;position:relative}
+.st+.st::before{content:"";position:absolute;inset-block:6px;inset-inline-start:0;width:1px;
+  background:linear-gradient(180deg,transparent,rgba(80,219,15,.4),transparent)}
+.st .n{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(30px,7.5vw,58px);line-height:1;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.st .c{margin-top:9px;font-size:11px;color:var(--tx2);font-weight:500}
 
-.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
-.fcard{background:linear-gradient(160deg,var(--n2),var(--n1));border:1px solid var(--border);border-radius:18px;padding:24px;position:relative;overflow:hidden;transition:transform .2s,border-color .2s}
-.fcard::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .25s;background:radial-gradient(circle at 15% 0%, rgba(61,187,102,.12), transparent 60%)}
-.fcard:hover{transform:translateY(-3px);border-color:rgba(61,187,102,.35)}
-.fcard:hover::before{opacity:1}
-.f-ic{width:46px;height:46px;border-radius:13px;background:rgba(61,187,102,.12);border:1px solid rgba(61,187,102,.3);display:flex;align-items:center;justify-content:center;color:var(--g3);margin-bottom:14px;position:relative;z-index:1}
-.f-ic svg{width:23px;height:23px}
-.f-t{font-size:17px;font-weight:900;color:var(--tx0);margin-bottom:7px;position:relative;z-index:1}
-.f-s{font-size:13.5px;color:var(--tx2);line-height:1.7;position:relative;z-index:1}
+.sh{margin-bottom:clamp(32px,5vw,54px)}
+.sh .lbl{display:block;margin-bottom:14px}
+.sh .kicker{margin-top:16px;color:var(--tx1);font-weight:300;font-size:clamp(14px,3.4vw,17px);max-width:48ch}
 
-.steps{display:flex;flex-direction:column;gap:26px;max-width:620px;margin-inline:auto}
-.step{display:flex;gap:16px;align-items:flex-start}
-.step-num{flex:0 0 auto;width:38px;height:38px;border-radius:50%;background:var(--green-grad);color:#0E121C;font-weight:900;font-size:16px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(61,187,102,.25)}
-.step-t{font-size:16px;font-weight:900;color:var(--tx0);margin-bottom:4px}
-.step-s{font-size:13.5px;color:var(--tx2);line-height:1.7}
+/* WHAT IT DOES — editorial list */
+.does{background:var(--n1);padding:clamp(72px,12vw,130px) 0}
+.row{display:grid;grid-template-columns:auto 1fr;gap:clamp(16px,4vw,40px);
+  padding:clamp(22px,3.6vw,34px) 0;border-top:1px solid rgba(174,194,172,.14);align-items:start}
+.row:last-child{border-bottom:1px solid rgba(174,194,172,.14)}
+.row .rn{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(24px,5.6vw,44px);line-height:.95;
+  color:transparent;-webkit-text-stroke:1px var(--grn3)}
+.row h3{font-size:clamp(18px,4.2vw,26px);font-weight:800;letter-spacing:-.012em;margin-bottom:7px}
+.row p{color:var(--tx1);font-weight:300;font-size:clamp(13.5px,3.3vw,15.5px);line-height:1.62;max-width:56ch}
 
-.family{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:720px;margin:0 auto}
-.fam{border-radius:18px;padding:26px 20px;text-align:center;border:1px solid var(--border);display:block}
-.fam-urban{background:linear-gradient(160deg,#101E34,#0A1628);border-color:rgba(224,168,40,.28)}
-.fam-nature{background:linear-gradient(160deg,#1E2536,#171d2b);border-color:rgba(61,187,102,.35)}
-.fam img{height:34px;width:auto;margin-bottom:12px}
-.fam-t{font-size:15px;font-weight:900;margin-bottom:5px}
-.fam-urban .fam-t{color:#E0A828}
-.fam-nature .fam-t{color:#50db0f}
-.fam-s{font-size:12px;color:var(--tx2);line-height:1.6;margin-bottom:14px}
-.fam-b{display:inline-block;font-size:12.5px;font-weight:800;padding:9px 18px;border-radius:999px}
-.fam-urban .fam-b{background:linear-gradient(135deg,#C09020,#E0A828 60%,#F5C840);color:#23170a}
-.fam-nature .fam-b{background:var(--green-grad);color:#0E121C}
+/* HOW — paper break */
+.how{background:linear-gradient(175deg,var(--paper),var(--paper2));color:#141a12;padding:clamp(80px,12vw,142px) 0}
+.how .lbl{color:var(--grn3)}
+.how h2{color:#101508}
+.how .kicker{color:#48533f}
+.hrow{display:grid;grid-template-columns:auto 1fr;gap:clamp(16px,4vw,40px);
+  padding:clamp(22px,3.6vw,34px) 0;border-top:1px solid rgba(20,26,18,.16);align-items:start}
+.hrow:last-child{border-bottom:1px solid rgba(20,26,18,.16)}
+.hrow .rn{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(24px,5.6vw,44px);line-height:.95;
+  color:transparent;-webkit-text-stroke:1px rgba(47,138,16,.85)}
+.hrow h3{font-size:clamp(18px,4.2vw,26px);font-weight:800;color:#101508;margin-bottom:6px}
+.hrow p{color:#48533f;font-weight:300;font-size:clamp(13.5px,3.3vw,15.5px);line-height:1.62;max-width:56ch}
 
-.cta-band{background:linear-gradient(135deg,rgba(80,219,15,.14),rgba(23,29,43,.94));border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:70px 24px;text-align:center}
-.notify-form{display:flex;gap:9px;max-width:420px;margin:22px auto 0}
-.notify-form input{flex:1;padding:15px 16px;border-radius:var(--r);border:1px solid var(--border);background:rgba(4,20,11,.6);color:var(--tx0);font-family:inherit;font-size:14.5px}
-.notify-form input::placeholder{color:var(--tx3)}
-.notify-form button{padding:15px 24px;border-radius:var(--r);border:0;background:var(--green-grad);color:#0E121C;font-family:inherit;font-weight:900;font-size:14.5px;cursor:pointer;white-space:nowrap}
-.notify-note{font-size:11.5px;color:var(--tx3);margin-top:12px}
+/* FAMILY */
+.fam{background:var(--ink);padding:clamp(72px,12vw,130px) 0}
+.fam-g{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:34px}
+.card{border:1px solid rgba(174,194,172,.18);padding:clamp(24px,4vw,36px);position:relative;transition:.3s}
+.card:hover{border-color:rgba(80,219,15,.45)}
+.card .tag{font-family:'Cinzel',serif;font-size:9.5px;letter-spacing:.28em;text-transform:uppercase;
+  padding:5px 11px;border:1px solid currentColor;display:inline-block;margin-bottom:16px}
+.card.urban .tag{color:#E0A828}
+.card.nat .tag{color:var(--grn)}
+.card h3{font-family:'Cinzel',serif;font-weight:800;font-size:clamp(17px,3.6vw,23px);letter-spacing:.06em;margin-bottom:10px}
+.card h3 i{font-style:normal}
+.card.urban h3 i{color:#F5C840}
+.card.nat h3 i{color:var(--grn)}
+.card p{color:var(--tx1);font-weight:300;font-size:14px;line-height:1.6}
+@media(max-width:680px){.fam-g{grid-template-columns:1fr}}
 
-.site-foot{padding:40px 24px;text-align:center;border-top:1px solid var(--border)}
-.foot-3s{height:22px;width:auto;opacity:.9;margin-bottom:10px}
-.foot-c{font-size:11px;color:var(--tx3);line-height:1.6}
+/* WAITLIST */
+.wait{background:var(--n0);padding:clamp(80px,12vw,140px) 0;text-align:center}
+.wl{display:flex;gap:10px;max-width:440px;margin:26px auto 12px;flex-wrap:wrap}
+.wl input{flex:1;min-width:180px;background:rgba(255,255,255,.05);border:1px solid rgba(174,194,172,.28);
+  color:var(--tx0);padding:15px 16px;font-family:inherit;font-size:14px;font-weight:400}
+.wl input:focus{outline:none;border-color:var(--grn)}
+.wl button{background:var(--grad);color:#08140a;border:0;padding:15px 26px;cursor:pointer;
+  font-family:'Cinzel',serif;font-weight:800;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase}
+.note{font-size:12px;color:var(--tx2)}
+.msg{margin-top:14px;font-size:13px;color:var(--grn2);min-height:18px;font-weight:500}
 
-.fi{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
-.fi.in{opacity:1;transform:none}
-@media(max-width:640px){section{padding:56px 0}.family{grid-template-columns:1fr}.notify-form{flex-direction:column}}
-
-/* ══ NATURE BRAND SECTION SYSTEM ══ */
-section{position:relative}
-.sec-dark{background:radial-gradient(120% 80% at 50% 0%, var(--n2) 0%, var(--n1) 55%, var(--n0) 100%);color:var(--tx1)}
-.sec-dark::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(61,187,102,.5),transparent)}
-.sec-light{background:linear-gradient(160deg,var(--l0) 0%,var(--l1) 55%,var(--l2) 100%);color:var(--ink1)}
-.sec-light .section-title,.sec-light h2{color:var(--ink0)}
-.sec-light .section-sub{color:var(--ink2)}
-.sec-light::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(61,187,102,.4),transparent)}
+footer{background:var(--ink);border-top:1px solid rgba(80,219,15,.14);padding:36px 0;text-align:center}
+footer .lbl{display:block;margin-bottom:10px;color:var(--grn3)}
+footer p{font-size:12px;color:var(--tx2);font-weight:300}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 
-<div class="topbar">
-  <a class="brandmark" href="index.html">
-    <img src="nature-assets/shomerNature_W.svg" alt="">
-    <span>SH✡MER <span class="n">Nature</span></span>
-  </a>
-  <a class="tb-back" href="index.html">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-    <span>SH✡MER</span>
-  </a>
-</div>
-
-<section class="hero">
-  <div class="hero-media">
-    <div class="hero-fallback"></div>
-    <img class="hero-bg" src="nature-hero.jpg" alt="" onerror="this.style.display='none'">
+<nav>
+  <div class="w nav-in">
+    <div class="brand"><img src="nature-badge.png" alt=""><span>SH<i>✡</i>MER <em>Nature</em></span></div>
+    <a href="index.html" class="nbtn">SH✡MER העירוני</a>
   </div>
-  <img class="hero-logo" src="nature-assets/shomerNature_W.svg" alt="SH✡MER Nature">
-  <div class="hero-content">
-    <h1 class="hero-title">שומרים על<br><span class="grn">מה שאין לו קול</span></h1>
+</nav>
+
+<header class="hero">
+  <div class="hero-bg"><img src="nature-hero.jpg" alt=""></div>
+  <svg class="leaf-wm" viewBox="0 0 100 100" aria-hidden="true">
+    <path d="M50 6 C74 20 86 42 78 64 C71 84 55 92 50 94 C45 92 29 84 22 64 C14 42 26 20 50 6 Z" fill="none" stroke="#50db0f" stroke-width=".6"/>
+    <path d="M50 12 L50 90 M50 34 L30 26 M50 34 L70 26 M50 52 L28 45 M50 52 L72 45 M50 70 L34 65 M50 70 L66 65" fill="none" stroke="#50db0f" stroke-width=".5"/>
+  </svg>
+  <div class="w hero-in">
+    <div class="rail"><span class="hair s"></span><span class="soon">בקרוב · Coming soon</span></div>
+    <h1 class="mono"><span class="thin">שומרים על</span><br><span class="grn-t">מה שאין לו קול</span></h1>
     <p class="hero-sub">אותה רשת שמירה — הפעם ליער, לחוף, לחי ולסביבה. חיה פצועה, שריפה מתחילה, מפגע בשמורה: מישהו קרוב תמיד רואה ראשון.</p>
-    <div class="hero-cta-row">
-      <a href="#notify" class="btn-primary">הצטרפ/י לרשימת ההמתנה</a>
-      <a href="index.html" class="btn-ghost">ל-SH✡MER העירוני</a>
+    <div class="cta-row">
+      <a href="#waitlist" class="btn-g">הצטרפ/י לרשימת ההמתנה</a>
+      <span class="alt">כבר מוגן/ת בעיר? <a href="index.html">ל-SH✡MER העירוני</a></span>
     </div>
-    <div class="hero-stats">
-      <div class="stat">
-        <div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-4-3-7-6.5-7-10a7 7 0 0 1 14 0c0 3.5-3 7-7 10Z"/><circle cx="12" cy="11" r="2.5"/></svg></div>
-        <span class="stat-n">1</span><span class="stat-l">דיווח מזניק תגובה</span>
+  </div>
+</header>
+
+<section class="stats">
+  <div class="w sg">
+    <div class="st"><div class="n">1</div><div class="c">דיווח מזניק תגובה</div></div>
+    <div class="st"><div class="n">24/7</div><div class="c">מתנדבים בשטח</div></div>
+    <div class="st"><div class="n">₪0</div><div class="c">חינם לכל אזרח</div></div>
+  </div>
+</section>
+
+<section class="does cut-t">
+  <div class="w">
+    <div class="sh">
+      <span class="lbl">מה SH✡MER Nature עושה</span>
+      <h2 class="mono sm"><span class="thin">הטבע לא מתקשר</span><br><span class="grn-t">למוקד. אנחנו כן.</span></h2>
+    </div>
+    <div class="row"><div class="rn">01</div><div><h3>חילוץ בעל חיים</h3><p>חיה פצועה או לכודה? דיווח אחד — והמתנדב הקרוב שיודע לטפל בה מקבל התרעה, עם מיקום מדויק.</p></div></div>
+    <div class="row"><div class="rn">02</div><div><h3>שריפה בהתחלה</h3><p>שריפת חורש מתחילה קטנה. דקות קובעות. דיווח מוקדם מגיע מיד לכל מי שבטווח הסכנה — ולרשויות.</p></div></div>
+    <div class="row"><div class="rn">03</div><div><h3>חופים וים</h3><p>זיהום, דגה פגועה, זרם מסוכן, מדוזות. מפה חיה של החוף — מאנשים שנמצאים שם עכשיו.</p></div></div>
+    <div class="row"><div class="rn">04</div><div><h3>מפגעים בשמורות</h3><p>השלכת פסולת, פגיעה בצמחייה, רכב במקום אסור. תיעוד עם מיקום — ראיה שאפשר לפעול לפיה.</p></div></div>
+    <div class="row"><div class="rn">05</div><div><h3>מפת סכנות חיה</h3><p>לפני שיוצאים לטיול — מה מסוכן היום באזור. לא ארכיון. מה שקורה עכשיו.</p></div></div>
+    <div class="row"><div class="rn">06</div><div><h3>אותה רשת שומרים</h3><p>אותם מעגלי אמון של SH✡MER — הפעם עבור הטבע. מי שכבר שומר על אנשים, ישמור גם על מה שסביבם.</p></div></div>
+  </div>
+</section>
+
+<section class="how cut-tb">
+  <div class="w">
+    <div class="sh">
+      <span class="lbl">איך זה עובד</span>
+      <h2 class="mono sm">שלושה צעדים.</h2>
+      <p class="kicker">בלי טפסים, בלי מוקד, בלי להמתין על הקו.</p>
+    </div>
+    <div class="hrow"><div class="rn">I</div><div><h3>רואה — מדווח/ת</h3><p>צילום, סוג המפגע, והמיקום נלכד אוטומטית. עשר שניות.</p></div></div>
+    <div class="hrow"><div class="rn">II</div><div><h3>מי שקרוב — מקבל התרעה</h3><p>המתנדבים והגורמים הרלוונטיים באזור מקבלים את הדיווח מיד. לא מייל שייקרא מחר.</p></div></div>
+    <div class="hrow"><div class="rn">III</div><div><h3>מישהו מגיע — ואת/ה יודע/ת</h3><p>רואים מי בדרך ומה קרה בסוף. דיווח שנעלם הוא דיווח שלא יחזור על עצמו.</p></div></div>
+  </div>
+</section>
+
+<section class="fam">
+  <div class="w">
+    <div class="sh">
+      <span class="lbl">משפחת SH✡MER</span>
+      <h2 class="mono sm"><span class="thin">שתי אפליקציות.</span><br><span class="grn-t">אותה רשת אנושית.</span></h2>
+    </div>
+    <div class="fam-g">
+      <div class="card urban">
+        <span class="tag">כבר פעיל</span>
+        <h3>SH<i>✡</i>MER</h3>
+        <p>אזרחים למען אזרחים. SOS, מעגלי שומרים, מפת אירועים.</p>
       </div>
-      <div class="stat">
-        <div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-8-8"/><path d="M12 8v4l3 2"/></svg></div>
-        <span class="stat-n">24/7</span><span class="stat-l">מתנדבים בשטח</span>
-      </div>
-      <div class="stat">
-        <div class="stat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M12 7c0-2 2-4 5-4 0 3-2 5-5 5ZM12 12c0-2-2-4-5-4 0 3 2 5 5 5Z"/></svg></div>
-        <span class="stat-n">0₪</span><span class="stat-l">חינם לכל אזרח</span>
+      <div class="card nat">
+        <span class="tag">בקרוב</span>
+        <h3>SH<i>✡</i>MER <i>Nature</i></h3>
+        <p>היער, החוף, החי והסביבה. דיווח, חילוץ, מפת סכנות.</p>
       </div>
     </div>
   </div>
 </section>
 
-<section class="fi sec-light">
-  <div class="wrap">
-    <h2 class="section-title">מה SH✡MER <span class="grn">Nature</span> עושה</h2>
-    <p class="section-sub">הטבע לא מתקשר למוקד. אנחנו כן.</p>
-    <div class="fgrid">
-      <div class="fcard">
-        <div class="f-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16c1.5-4 4-6 7.5-6s6 2 7.5 6"/><circle cx="8.5" cy="8" r="1.6"/><circle cx="15.5" cy="8" r="1.6"/><path d="M12 16v4"/></svg></div>
-        <div class="f-t">חילוץ בעל חיים</div>
-        <div class="f-s">חיה פצועה או לכודה? דיווח אחד — והמתנדב הקרוב שיודע לטפל בה מקבל התרעה, עם מיקום מדויק.</div>
-      </div>
-      <div class="fcard">
-        <div class="f-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c1 3.5-1.5 4.5-1.5 7A3.5 3.5 0 0 0 14 13.5c0-2 1-3 1-3s2 2 2 5a5 5 0 0 1-10 0c0-5 5-6 5-12.5Z"/></svg></div>
-        <div class="f-t">שריפה בהתחלה</div>
-        <div class="f-s">שריפת חורש מתחילה קטנה. דקות קובעות. דיווח מוקדם מגיע מיד לכל מי שבטווח הסכנה — ולרשויות.</div>
-      </div>
-      <div class="fcard">
-        <div class="f-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 16c2-1.5 4-1.5 6 0s4 1.5 6 0 4-1.5 6 0"/><path d="M2 20c2-1.5 4-1.5 6 0s4 1.5 6 0 4-1.5 6 0"/><path d="M7 11l4-7 4 7"/></svg></div>
-        <div class="f-t">חופים וים</div>
-        <div class="f-s">זיהום, דגה פגועה, זרם מסוכן, מדוזות. מפה חיה של החוף — מאנשים שנמצאים שם עכשיו.</div>
-      </div>
-      <div class="fcard">
-        <div class="f-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18M6 20V9l6-5 6 5v11"/><path d="M10 20v-5h4v5"/></svg></div>
-        <div class="f-t">מפגעים בשמורות</div>
-        <div class="f-s">השלכת פסולת, פגיעה בצמחייה, רכב במקום אסור. תיעוד עם מיקום — ראיה שאפשר לפעול לפיה.</div>
-      </div>
-      <div class="fcard">
-        <div class="f-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg></div>
-        <div class="f-t">מפת סכנות חיה</div>
-        <div class="f-s">לפני שיוצאים לטיול — מה מסוכן היום באזור. לא ארכיון. מה שקורה עכשיו.</div>
-      </div>
-      <div class="fcard">
-        <div class="f-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M17 11.5a3 3 0 1 0-2.5-4.6"/><path d="M18 20a5.5 5.5 0 0 0-2-4.2"/></svg></div>
-        <div class="f-t">אותה רשת שומרים</div>
-        <div class="f-s">אותם מעגלי אמון של SH✡MER — הפעם עבור הטבע. מי שכבר שומר על אנשים, ישמור גם על מה שסביבם.</div>
-      </div>
+<section class="wait" id="waitlist">
+  <div class="w">
+    <span class="lbl">רשימת המתנה</span>
+    <h2 class="mono sm" style="margin-top:14px"><span class="thin">רוצה להיות</span> <span class="grn-t">הראשון?</span></h2>
+    <p class="hero-sub" style="margin:18px auto 0;text-align:center">נעדכן אותך ברגע ש-SH✡MER Nature עולה לאוויר.</p>
+    <div class="wl">
+      <input type="email" id="wl-mail" placeholder="you@email.com" autocomplete="email" inputmode="email">
+      <button onclick="joinWL()">עדכנו אותי</button>
     </div>
+    <p class="note">בלי ספאם. רק כשזה באמת עולה.</p>
+    <div class="msg" id="wl-msg"></div>
   </div>
 </section>
 
-<section class="fi">
-  <div class="wrap">
-    <h2 class="section-title">איך זה עובד</h2>
-    <p class="section-sub">שלושה צעדים. בלי טפסים, בלי מוקד, בלי להמתין על הקו.</p>
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">1</div>
-        <div><div class="step-t">רואה — מדווח/ת</div><div class="step-s">צילום, סוג המפגע, והמיקום נלכד אוטומטית. עשר שניות.</div></div>
-      </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <div><div class="step-t">מי שקרוב — מקבל התרעה</div><div class="step-s">המתנדבים והגורמים הרלוונטיים באזור מקבלים את הדיווח מיד. לא מייל שייקרא מחר.</div></div>
-      </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <div><div class="step-t">מישהו מגיע — ואת/ה יודע/ת</div><div class="step-s">רואים מי בדרך ומה קרה בסוף. דיווח שנעלם הוא דיווח שלא יחזור על עצמו.</div></div>
-      </div>
-    </div>
+<footer>
+  <div class="w">
+    <span class="lbl">אזרחים למען אזרחים</span>
+    <div class="hair" style="max-width:190px;margin:0 auto 12px"></div>
+    <p>SH✡MER Nature · © 2026 3Shamrocks Studio</p>
   </div>
-</section>
-
-<section class="fi sec-light">
-  <div class="wrap">
-    <h2 class="section-title">משפחת <span class="grn">SH✡MER</span></h2>
-    <p class="section-sub">שתי אפליקציות. אותה רשת אנושית.</p>
-    <div class="family">
-      <a class="fam fam-urban" href="index.html">
-        <img src="SHOMER_logo_big.png" alt="SH✡MER">
-        <div class="fam-t">SH✡MER</div>
-        <div class="fam-s">אזרחים למען אזרחים. SOS, מעגלי שומרים, מפת אירועים.</div>
-        <span class="fam-b">כבר פעיל</span>
-      </a>
-      <div class="fam fam-nature">
-        <img src="nature-badge.png" alt="SH✡MER Nature">
-        <div class="fam-t">SH✡MER Nature</div>
-        <div class="fam-s">היער, החוף, החי והסביבה. דיווח, חילוץ, מפת סכנות.</div>
-        <span class="fam-b">בקרוב</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="cta-band fi" id="notify">
-  <h2 class="section-title">רוצה להיות <span class="grn">הראשון</span>?</h2>
-  <p class="section-sub" style="margin-bottom:0">נעדכן אותך ברגע ש-SH✡MER Nature עולה לאוויר.</p>
-  <form class="notify-form" onsubmit="return natNotify(event)">
-    <input type="email" id="nat-email" placeholder="האימייל שלך" required aria-label="אימייל">
-    <button type="submit">עדכנו אותי</button>
-  </form>
-  <div class="notify-note" id="nat-note">בלי ספאם. רק כשזה באמת עולה.</div>
-</section>
-
-<footer class="site-foot">
-  <img class="foot-3s" src="3shamrocks.png" alt="3Shamrocks Studio">
-  <div class="foot-c">SH✡MER Nature · 2026 3Shamrocks Studio</div>
 </footer>
 
 <script>
-(function(){
-  var io=new IntersectionObserver(function(es){
-    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
-  },{threshold:.12});
-  document.querySelectorAll('.fi').forEach(function(el){ io.observe(el); });
-})();
-
-function natNotify(ev){
-  ev.preventDefault();
-  var i=document.getElementById('nat-email');
-  var n=document.getElementById('nat-note');
+function joinWL(){
+  var i=document.getElementById('wl-mail'), m=document.getElementById('wl-msg');
   var v=(i.value||'').trim();
-  if(!v || v.indexOf('@')<0){ n.textContent='כתובת אימייל לא תקינה'; return false; }
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){ m.style.color='#ff8a8f'; m.textContent='נא להזין כתובת אימייל תקינה'; return; }
   try{
-    var list=JSON.parse(localStorage.getItem('nat_waitlist')||'[]');
-    if(list.indexOf(v)<0) list.push(v);
-    localStorage.setItem('nat_waitlist', JSON.stringify(list));
+    var k='shomerNatureWL';
+    var list=JSON.parse(localStorage.getItem(k)||'[]');
+    if(list.indexOf(v)===-1) list.push(v);
+    localStorage.setItem(k, JSON.stringify(list));
   }catch(e){}
+  m.style.color='#8ef25a';
+  m.textContent='נרשמת! נעדכן אותך ברגע שנעלה לאוויר.';
   i.value='';
-  n.textContent='\u2713 נרשמת. נעדכן אותך ברגע שזה עולה.';
-  return false;
 }
+document.addEventListener('keydown',function(e){
+  if(e.key==='Enter' && document.activeElement && document.activeElement.id==='wl-mail') joinWL();
+});
+(function(){
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='none';io.unobserve(e.target);}})},{threshold:.12});
+  document.querySelectorAll('.row,.hrow,.card,.st').forEach(function(e,n){
+    e.style.opacity='0';e.style.transform='translateY(18px)';
+    e.style.transition='opacity .6s ease '+(n%5*.06)+'s, transform .6s ease '+(n%5*.06)+'s';
+    io.observe(e);
+  });
+})();
 </script>
 </body>
 </html>
