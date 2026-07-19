@@ -105,7 +105,7 @@ nav{position:fixed;inset-inline:0;top:0;z-index:200;backdrop-filter:blur(18px);
 @media(max-width:900px){.hero-grid{grid-template-columns:1fr}.hero-mock{display:none}}
 
 /* ── COVENANT STRIP — the motto, monumental ── */
-.cov{background:var(--ink);padding:clamp(64px,11vw,120px) 0;text-align:center}
+.cov{background:linear-gradient(180deg,#02060C,#050B16);padding:clamp(64px,11vw,120px) 0;text-align:center}
 .cov .verse{font-family:'Heebo';font-weight:200;font-size:clamp(30px,7.6vw,74px);line-height:1.08;letter-spacing:-.02em;color:var(--tx0)}
 .cov .verse b{font-weight:700;background:var(--gold);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .cov .src{margin-top:24px;font-family:'Cinzel',serif;font-size:var(--t-cap);letter-spacing:.4em;color:var(--tx2);text-transform:uppercase}
@@ -126,7 +126,15 @@ nav{position:fixed;inset-inline:0;top:0;z-index:200;backdrop-filter:blur(18px);
 .sh h2{margin:0}
 
 /* ── PROCESS — editorial numbered list, no cards ── */
-.proc{background:var(--n1);padding:clamp(72px,12vw,132px) 0}
+.proc{background:linear-gradient(180deg,#E8EBF1 0%,#DCE1EA 100%);color:#1a2230;padding:clamp(72px,12vw,132px) 0}
+.proc .lbl{color:#8A6A18}
+.proc h2{color:#0D1B2E}
+.proc .thin{color:#3A4A63}
+.proc .step{border-top-color:rgba(13,27,46,.16)}
+.proc .step:last-child{border-bottom-color:rgba(13,27,46,.16)}
+.proc .step .num{-webkit-text-stroke:1.4px rgba(138,106,24,.9)}
+.proc .step h3{color:#0D1B2E}
+.proc .step p{color:#4A5A72}
 .step{display:grid;grid-template-columns:auto 1fr;gap:clamp(18px,4vw,44px);
   padding:clamp(24px,4vw,38px) 0;border-top:1px solid rgba(169,184,210,.14);align-items:baseline}
 .step:last-child{border-bottom:1px solid rgba(169,184,210,.14)}
@@ -136,7 +144,7 @@ nav{position:fixed;inset-inline:0;top:0;z-index:200;backdrop-filter:blur(18px);
 .step p{color:var(--tx1);font-weight:400;font-size:clamp(var(--t-base),3.4vw,var(--t-md));max-width:52ch;line-height:1.62}
 
 /* ── SHOWCASE — phone offset, type beside it ── */
-.show{background:var(--ink);padding:clamp(72px,12vw,132px) 0;overflow:hidden}
+.show{background:linear-gradient(180deg,#050B16,#02060C);padding:clamp(72px,12vw,132px) 0;overflow:hidden}
 .show-g{display:grid;grid-template-columns:1fr minmax(240px,38%);gap:clamp(28px,6vw,72px);align-items:center}
 .dev{position:relative;justify-self:center}
 .dev-f{position:relative;border-radius:34px;padding:9px;background:linear-gradient(160deg,#20304d,#0a1220);
@@ -160,17 +168,17 @@ nav{position:fixed;inset-inline:0;top:0;z-index:200;backdrop-filter:blur(18px);
 @media(max-width:860px){.show-g{grid-template-columns:1fr;gap:40px}.dev{max-width:270px;margin-inline:auto}}
 
 /* ── VALUES — paper break, monumental numerals ── */
-.vals{background:linear-gradient(175deg,var(--paper) 0%,var(--paper2) 100%);color:#1a1508;
+.vals{background:linear-gradient(180deg,#FFFFFF 0%,#F5F7FA 100%);color:#26313f;
   padding:clamp(84px,13vw,150px) 0}
 .vals .lbl{color:var(--g1)}
-.vals h2{color:#12100a}
+.vals h2{color:#0D1B2E}
 .val{display:grid;grid-template-columns:auto 1fr;gap:clamp(16px,4vw,40px);align-items:start;
-  padding:clamp(24px,4vw,36px) 0;border-top:1px solid rgba(26,21,8,.16)}
-.val:last-child{border-bottom:1px solid rgba(26,21,8,.16)}
+  padding:clamp(24px,4vw,36px) 0;border-top:1px solid rgba(13,27,46,.14)}
+.val:last-child{border-bottom:1px solid rgba(13,27,46,.14)}
 .val .rn{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(26px,6vw,44px);line-height:.95;
   color:transparent;-webkit-text-stroke:1.4px rgba(138,106,24,.95)}
-.val h3{font-size:clamp(var(--t-lg),4.8vw,var(--t-xl));font-weight:700;color:#12100a;letter-spacing:-.015em;margin-bottom:8px}
-.val p{color:#4a4232;font-weight:400;font-size:clamp(var(--t-base),3.4vw,var(--t-md));line-height:1.62;max-width:54ch}
+.val h3{font-size:clamp(var(--t-lg),4.8vw,var(--t-xl));font-weight:700;color:#0D1B2E;letter-spacing:-.015em;margin-bottom:8px}
+.val p{color:#4A5A72;font-weight:400;font-size:clamp(var(--t-base),3.4vw,var(--t-md));line-height:1.62;max-width:54ch}
 
 /* ── NATURE ── */
 .nat{position:relative;padding:clamp(84px,13vw,150px) 0;background:#080f0a;overflow:hidden}
@@ -188,7 +196,7 @@ nav{position:fixed;inset-inline:0;top:0;z-index:200;backdrop-filter:blur(18px);
 .nat-b:hover{background:rgba(80,219,15,.12)}
 
 /* ── CLOSE ── */
-.close{background:var(--ink);padding:clamp(84px,13vw,150px) 0;text-align:center;position:relative;overflow:hidden}
+.close{background:linear-gradient(180deg,#0A1628,#060F1E);padding:clamp(84px,13vw,150px) 0;text-align:center;position:relative;overflow:hidden}
 .seal{width:clamp(96px,22vw,150px);margin:0 auto 32px;position:relative;filter:drop-shadow(0 0 44px rgba(224,168,40,.5))}
 .emg{margin:40px auto 0;max-width:560px;padding:16px 24px;border:1px solid rgba(229,72,77,.34);
   background:rgba(229,72,77,.06);font-size:var(--t-sm);font-weight:400;color:var(--tx1);line-height:1.62}
