@@ -69,7 +69,7 @@ nav{position:fixed;inset-inline:0;top:0;z-index:200;backdrop-filter:blur(18px);
 /* ── HERO — asymmetric, type-led, image bleeds ── */
 .hero{min-height:100svh;display:flex;align-items:flex-end;padding:96px 0 40px;overflow:hidden}
 .hero-bg{position:absolute;inset:0;z-index:0}
-.hero-bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.6s ease}
+.hero-bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 28%;opacity:0;transition:opacity 1.6s ease}
 .hero-bg img.on{opacity:1}
 .hero-bg::after{content:"";position:absolute;inset:0;
   background:linear-gradient(180deg,rgba(2,6,12,.62) 0%,rgba(2,6,12,.35) 35%,rgba(2,6,12,.93) 88%),
@@ -91,6 +91,18 @@ nav{position:fixed;inset-inline:0;top:0;z-index:200;backdrop-filter:blur(18px);
 .btn-dl svg{width:17px;height:17px}
 .alt{font-size:var(--t-sm);color:var(--tx2);font-weight:400}
 .alt a{color:var(--g3);border-bottom:1px solid rgba(224,168,40,.45);display:inline-block;padding:12px 2px;min-height:44px}
+
+
+/* hero: scenario photography behind, app mockup in the foreground (per brief) */
+.hero-grid{display:grid;grid-template-columns:1fr auto;gap:clamp(24px,5vw,64px);align-items:end}
+.hero-mock{position:relative;width:min(268px,26vw);justify-self:end;align-self:end;margin-bottom:8px}
+.hm-glow{position:absolute;inset:-18% -22%;background:radial-gradient(closest-side,rgba(224,168,40,.32),transparent 72%);filter:blur(6px)}
+.hm-frame{position:relative;border-radius:30px;padding:8px;background:linear-gradient(160deg,#25344f,#0a1220);
+  box-shadow:0 44px 90px -28px rgba(0,0,0,.95),0 0 0 1px rgba(224,168,40,.35)}
+.hm-screen{position:relative;border-radius:23px;overflow:hidden;background:#000;aspect-ratio:1080/2146}
+.hm-screen img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top center;opacity:0;transition:opacity 1s ease}
+.hm-screen img.on{opacity:1}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr}.hero-mock{display:none}}
 
 /* ── COVENANT STRIP — the motto, monumental ── */
 .cov{background:var(--ink);padding:clamp(64px,11vw,120px) 0;text-align:center}
@@ -216,7 +228,8 @@ footer p{font-size:var(--t-sm);color:var(--tx2);font-weight:400}
     <path d="M50 4 L61 27 L86 27 L69 46 L78 70 L50 57 L22 70 L31 46 L14 27 L39 27 Z" fill="none" stroke="#F5C840" stroke-width=".5"/>
     <path d="M50 96 L39 73 L14 73 L31 54 L22 30 L50 43 L78 30 L69 54 L86 73 L61 73 Z" fill="none" stroke="#F5C840" stroke-width=".5"/>
   </svg>
-  <div class="w hero-in">
+  <div class="w hero-in hero-grid">
+   <div class="hero-copy">
     <div class="hero-rail"><span class="hair s"></span><span class="lbl" data-t="eyebrow">אזרחים למען אזרחים</span></div>
     <h1 class="mono"><span class="thin" data-t="h1a">הקהילה</span><span class="l2 gold-t" data-t="h1b">שומרת.</span></h1>
     <p class="hero-sub" data-t="sub">לחיצה אחת מזעיקה את השומרים שסביבך — <b>בלי לדבר, בלי לחכות.</b></p>
@@ -225,8 +238,16 @@ footer p{font-size:var(--t-sm);color:var(--tx2);font-weight:400}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
         <span data-t="dl_l">הורדת האפליקציה</span>
       </a>
-      <span class="alt" data-t="alt">מעדיף/ה לא להוריד? <a href="shomer.html">המשך/י בדפדפן</a></span>
+      <span class="alt" data-t="alt">או <a href="shomer.html">נסה/י את גרסת הדפדפן</a></span>
     </div>
+   </div>
+   <div class="hero-mock" aria-hidden="true">
+     <div class="hm-glow"></div>
+     <div class="hm-frame"><div class="hm-screen">
+       <img class="on" id="m1" src="site-assets/app-map-clean.jpg" alt="">
+       <img id="m2" src="site-assets/app-guardians-clean.jpg" alt="">
+     </div></div>
+   </div>
   </div>
 </header>
 
@@ -343,7 +364,7 @@ footer p{font-size:var(--t-sm);color:var(--tx2);font-weight:400}
 var T={
  he:{dl_s:"הורדה",eyebrow:"אזרחים למען אזרחים",eyebrow2:"אזרחים למען אזרחים",h1a:"הקהילה",h1b:"שומרת.",
   sub:"לחיצה אחת מזעיקה את השומרים שסביבך — <b>בלי לדבר, בלי לחכות.</b>",dl_l:"הורדת האפליקציה",dl_l2:"הורדת האפליקציה",
-  alt:"מעדיף/ה לא להוריד? <a href='shomer.html'>המשך/י בדפדפן</a>",verse:"הֲשֹׁמֵר אָחִי<br><b>אָנֹכִי</b>",src:"Genesis 4:9 · בראשית ד׳ ט׳",
+  alt:"או <a href='shomer.html'>נסה/י את גרסת הדפדפן</a>",verse:"הֲשֹׁמֵר אָחִי<br><b>אָנֹכִי</b>",src:"Genesis 4:9 · בראשית ד׳ ט׳",
   st1:"לחיצה לשליחת SOS",st2:"רשת קהילתית",st3:"חינם לאזרחים, לתמיד",p_lbl:"איך זה עובד",p_h1:"הגנה שמתחילה",p_h2:"בלחיצה אחת.",
   s1t:"הרשמה מהירה",s1d:"מורידים את האפליקציה ונרשמים בחינם עם מספר הטלפון.",
   s2t:"בונים מעגל שמירה",s2d:"מוסיפים בני משפחה וחברים כשומרים אישיים — הרשת ההדדית שלכם.",
@@ -361,7 +382,7 @@ var T={
   emg:"<b>SH✡MER אינו תחליף לשירותי חירום.</b> במצב חירום חייג/י 100 (משטרה) · 101 (מד״א) · 102 (כבאות)."},
  en:{dl_s:"Get app",eyebrow:"Citizens for Citizens",eyebrow2:"Citizens for Citizens",h1a:"The community",h1b:"watches.",
   sub:"One press alerts the guardians around you — <b>no talking, no waiting.</b>",dl_l:"Download the app",dl_l2:"Download the app",
-  alt:"Prefer not to download? <a href='shomer.html'>Continue in browser</a>",verse:"Am I my<br><b>brother's keeper</b>",src:"Genesis 4:9",
+  alt:"or <a href='shomer.html'>try the web version</a>",verse:"Am I my<br><b>brother's keeper</b>",src:"Genesis 4:9",
   st1:"press to send SOS",st2:"community network",st3:"free for citizens, always",p_lbl:"How it works",p_h1:"Protection that starts",p_h2:"with one press.",
   s1t:"Quick sign-up",s1d:"Download the app and register free with your phone number.",
   s2t:"Build your circle",s2d:"Add family and friends as personal guardians — your mutual network.",
@@ -379,7 +400,7 @@ var T={
   emg:"<b>SH✡MER is not a substitute for emergency services.</b> In an emergency call 100 (Police) · 101 (MDA) · 102 (Fire)."},
  ar:{dl_s:"تحميل",eyebrow:"مواطنون من أجل مواطنين",eyebrow2:"مواطنون من أجل مواطنين",h1a:"المجتمع",h1b:"يحرس.",
   sub:"ضغطة واحدة تنبّه الحُرّاس من حولك — <b>دون كلام، دون انتظار.</b>",dl_l:"حمّل التطبيق",dl_l2:"حمّل التطبيق",
-  alt:"تفضّل عدم التحميل؟ <a href='shomer.html'>تابع في المتصفح</a>",verse:"أحارسٌ أنا<br><b>لأخي</b>",src:"تكوين ٤:٩",
+  alt:"أو <a href='shomer.html'>جرّب نسخة الويب</a>",verse:"أحارسٌ أنا<br><b>لأخي</b>",src:"تكوين ٤:٩",
   st1:"ضغطة لإرسال SOS",st2:"شبكة مجتمعية",st3:"مجاني للمواطنين دائمًا",p_lbl:"كيف يعمل",p_h1:"حماية تبدأ",p_h2:"بضغطة واحدة.",
   s1t:"تسجيل سريع",s1d:"حمّل التطبيق وسجّل مجانًا برقم هاتفك.",
   s2t:"ابنِ دائرتك",s2d:"أضف العائلة والأصدقاء كحُرّاس شخصيين — شبكتك المتبادلة.",
@@ -411,6 +432,11 @@ try{var sl=localStorage.getItem('shomerLang'); if(sl&&sl!=='he')setLang(sl);}cat
 (function(){var a=['s1','s2','s3'],i=0;setInterval(function(){
   var c=document.getElementById(a[i]); if(c)c.classList.remove('on');
   i=(i+1)%a.length; var n=document.getElementById(a[i]); if(n)n.classList.add('on');},5200);})();
+
+/* hero mockup crossfade */
+(function(){var a=['m1','m2'],i=0;setInterval(function(){
+  var c=document.getElementById(a[i]); if(c)c.classList.remove('on');
+  i=(i+1)%a.length; var n=document.getElementById(a[i]); if(n)n.classList.add('on');},4600);})();
 
 /* phone carousel */
 var _p=0,_pt=null;
