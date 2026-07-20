@@ -3,618 +3,643 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#09090B">
-<title>SH✡MER — אזרחים שומרים על אזרחים</title>
-<meta name="description" content="אזעקת SOS חזקה, מיקום חי, מעגלי שומרים. בלחיצה אחת. אינך לבד.">
-<link rel="icon" href="logo-192.png">
+<meta name="theme-color" content="#060F1E">
+<title>SH✡MER — הקהילה שומרת</title>
+<meta name="description" content="אזעקת SOS חזקה, מיקום מדויק, מעגלי שומרים. הקהילה שומרת. אינך לבד.">
+<link rel="icon" href="badge-192.png">
+<link rel="apple-touch-icon" href="badge-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700;800;900&family=Sora:wght@700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Heebo:wght@200;400;700;900&display=swap" rel="stylesheet">
 <style>
-/* ── 3SDS SHOMER TOKENS ─────────────────────────────────── */
+/* ─── 3SDS SHOMER TOKENS ─────────────────────────────── */
 :root{
-  --obs:#09090B; --n1:#0A0D14; --n2:#101520; --n3:#161D2C;
-  --n4:#1C2638; --n5:#243050;
-  --cr1:#8A0E1A; --cr2:#B01220; --cr3:#CC1426; --cr4:#E8182C;
-  --g2:#C09020; --g3:#E0A828; --g4:#F5C840;
-  --amb:#C07808; --safe:#0E8840;
-  --p2:#5C6B82; --p3:#8392AB; --p4:#B6C2D6;
-  --tx0:#F0F4FF; --tx1:#C8D4E8; --tx2:#8898B8; --tx3:#506080; --tx4:#344060;
-  --gold-grad:linear-gradient(135deg,#C09020 0%,#E0A828 60%,#F5C840 100%);
-  --cr-grad:linear-gradient(135deg,#8A0E1A 0%,#CC1426 60%,#E8182C 100%);
-  --border:rgba(92,107,130,.2); --border-cr:rgba(204,20,38,.3);
-  --font-d:'Sora',sans-serif; --font-b:'Heebo',sans-serif; --font-m:'JetBrains Mono',monospace;
+  --ink:#040A14;
+  --n0:#060F1E; --n1:#0A1628; --n2:#101E34; --n3:#162440; --n4:#1C2C4E;
+  --g1:#9A6C1A; --g2:#C09020; --g3:#E0A828; --g4:#F5C840;
+  --gold:linear-gradient(135deg,#C09020 0%,#E0A828 55%,#F5C840 100%);
+  --tx0:#F2F5FC; --tx1:#A9B8D2; --tx2:#6B7C99; --tx3:#3E4F6A;
+  --sos:#E5484D;
+  --border:rgba(224,168,40,.14);
+  --font-d:'Cinzel',serif; --font-b:'Heebo',sans-serif;
+  --r:2px;
+  --cut:polygon(0 3vw,100% 0,100% calc(100% - 3vw),0 100%);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;overflow-x:hidden}
-body{background:var(--obs);color:var(--tx0);font-family:var(--font-b);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body{background:var(--n0);color:var(--tx0);font-family:var(--font-b);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}
-img{display:block;max-width:100%}
+img{display:block;max-width:100%;height:auto}
+.w{max-width:1080px;margin:0 auto;padding:0 20px}
 
-/* ── NAV ────────────────────────────────────────────────── */
-.nav{
-  position:fixed;top:0;left:0;right:0;z-index:200;
-  height:56px;
-  background:rgba(9,9,11,.85);
-  backdrop-filter:blur(20px) saturate(180%);
+/* ─── NAV ─────────────────────────────────────────────── */
+nav{
+  position:fixed;inset-inline:0;top:0;z-index:200;
+  background:linear-gradient(180deg,rgba(4,10,20,.94),rgba(4,10,20,.6));
+  backdrop-filter:blur(20px);
   border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 24px;
+  height:60px;
 }
-.nav-logo{display:flex;align-items:center;gap:10px}
-.nav-logo img{width:28px;height:28px}
-.nav-wordmark{font-family:var(--font-d);font-weight:900;font-size:17px;color:var(--tx0);letter-spacing:-.3px}
-.nav-wordmark span{background:var(--gold-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.nav-right{display:flex;align-items:center;gap:12px}
-.nav-status{display:flex;align-items:center;gap:6px;font-family:var(--font-m);font-size:11px;color:var(--safe);letter-spacing:.06em;text-transform:uppercase}
-.nav-status::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--safe);display:inline-block;animation:blink 2s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-.nav-cta{background:var(--cr-grad);color:#fff;padding:9px 18px;border-radius:8px;font-family:var(--font-b);font-weight:800;font-size:13px;letter-spacing:.01em;white-space:nowrap}
+.nav-in{display:flex;align-items:center;justify-content:space-between;height:100%}
+.brand{display:flex;align-items:center;gap:11px}
+.brand img{width:32px;height:32px;filter:drop-shadow(0 0 10px rgba(224,168,40,.4))}
+.brand span{font-family:var(--font-d);font-weight:700;font-size:16px;letter-spacing:.16em;color:var(--tx0)}
+.brand i{font-style:normal;color:var(--g4);background:var(--gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.nav-r{display:flex;align-items:center;gap:10px}
+.lang-sw{display:flex;gap:3px}
+.lang-sw button{
+  width:42px;height:42px;border:1px solid rgba(169,184,210,.2);
+  background:none;color:var(--tx2);font-family:var(--font-d);
+  font-size:12px;font-weight:700;letter-spacing:.08em;
+  cursor:pointer;transition:.2s;
+}
+.lang-sw button.on{border-color:var(--g3);color:var(--g4)}
+.btn-nav{
+  font-family:var(--font-d);font-weight:900;font-size:11px;
+  letter-spacing:.14em;text-transform:uppercase;
+  background:var(--gold);color:var(--ink);
+  padding:12px 20px;white-space:nowrap;
+  transition:.2s;
+}
+.btn-nav:hover{filter:brightness(1.1)}
+@media(max-width:480px){.btn-nav{font-size:10px;padding:12px 14px}}
 
-/* ── HERO ────────────────────────────────────────────────── */
+/* ─── HERO ─────────────────────────────────────────────── */
 .hero{
-  position:relative;min-height:100dvh;overflow:hidden;
-  display:flex;flex-direction:column;
-}
-.hero-bg-stack{position:absolute;inset:0}
-.hero-bg-slide{position:absolute;inset:0;object-fit:cover;width:100%;height:100%;opacity:0;transition:opacity 1.4s ease}
-.hero-bg-slide.on{opacity:1}
-/* Deep dramatic overlay — emergency dark */
-.hero-overlay{
-  position:absolute;inset:0;
-  background:
-    linear-gradient(to top, rgba(9,9,11,1) 0%, rgba(9,9,11,.92) 30%, rgba(9,9,11,.6) 60%, rgba(9,9,11,.2) 85%, rgba(9,9,11,.05) 100%),
-    linear-gradient(100deg, rgba(9,9,11,.95) 0%, rgba(9,9,11,.5) 55%, transparent 100%);
-}
-/* Crimson vignette — crisis atmosphere */
-.hero-cr-vignette{
-  position:absolute;inset:0;
-  background:radial-gradient(ellipse 80% 60% at 80% 30%, rgba(204,20,38,.12) 0%, transparent 70%);
-}
-.hero-content{
-  position:relative;z-index:10;
-  flex:1;display:flex;flex-direction:column;justify-content:flex-end;
-  padding:72px 24px 48px;
-}
-
-/* TERMINAL STATUS BAR */
-.terminal-bar{
-  font-family:var(--font-m);font-size:11px;color:var(--amb);
-  letter-spacing:.08em;text-transform:uppercase;
-  display:flex;align-items:center;gap:12px;
-  margin-bottom:28px;
-}
-.terminal-bar::before{content:'█ ';color:var(--cr3);animation:cursor 1s step-end infinite}
-@keyframes cursor{0%,100%{opacity:1}50%{opacity:0}}
-.t-sep{color:var(--p2);margin:0 4px}
-
-/* HERO HEADLINE */
-.hero-eyebrow{
-  font-family:var(--font-m);font-size:11px;font-weight:500;
-  color:var(--cr3);letter-spacing:.1em;text-transform:uppercase;
-  margin-bottom:16px;display:flex;align-items:center;gap:8px;
-}
-.hero-eyebrow::after{content:'';flex:1;height:1px;background:var(--border-cr);max-width:120px}
-.hero-title{
-  font-family:var(--font-d);font-weight:900;
-  font-size:clamp(42px,10vw,80px);
-  line-height:.95;letter-spacing:-2.5px;
-  color:var(--tx0);margin-bottom:6px;
-}
-.hero-title .cr{color:var(--cr3)}
-.hero-title .dim{color:var(--tx3);font-weight:300}
-.hero-sub{
-  font-family:var(--font-b);font-weight:300;
-  font-size:clamp(16px,3.5vw,20px);
-  color:var(--tx1);line-height:1.6;
-  max-width:520px;margin-bottom:36px;
-}
-.hero-sub strong{font-weight:800;color:var(--tx0)}
-
-/* HERO ACTIONS */
-.hero-actions{display:flex;flex-direction:column;gap:12px;margin-bottom:44px}
-.btn-sos{
-  display:flex;align-items:center;justify-content:center;gap:12px;
-  height:60px;border-radius:12px;
-  background:var(--cr-grad);
-  color:#fff;font-family:var(--font-d);font-weight:900;font-size:17px;
-  letter-spacing:.02em;
-  box-shadow:0 0 0 0 rgba(204,20,38,.4);
-  animation:sosGlow 3s ease-in-out infinite;
+  min-height:100dvh;display:flex;align-items:flex-end;
+  padding-bottom:clamp(40px,7vw,72px);
   position:relative;overflow:hidden;
 }
-.btn-sos::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);
-  transform:translateX(-100%);
-  animation:shimmer 3s ease-in-out infinite 1s;
+.hero-bg{position:absolute;inset:0;z-index:0}
+.hero-slide{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;opacity:0;
+  transition:opacity 1.8s ease;
 }
-@keyframes shimmer{to{transform:translateX(100%)}}
-@keyframes sosGlow{0%,100%{box-shadow:0 0 0 0 rgba(204,20,38,.4)}50%{box-shadow:0 0 20px 4px rgba(204,20,38,.25)}}
-.btn-sos-icon{width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:14px}
-.btn-ghost{
-  display:flex;align-items:center;justify-content:center;
-  height:52px;border-radius:12px;
-  border:1px solid var(--border);
-  color:var(--tx2);font-family:var(--font-b);font-weight:600;font-size:15px;
-  background:rgba(255,255,255,.03);
+.hero-slide.on{opacity:1}
+.hero-bg::after{
+  content:"";position:absolute;inset:0;
+  background:
+    linear-gradient(180deg,rgba(4,10,20,.5) 0%,rgba(4,10,20,.2) 30%,rgba(4,10,20,.88) 72%,rgba(4,10,20,.98) 100%),
+    linear-gradient(90deg,rgba(4,10,20,.8),transparent 65%);
 }
-
-/* HERO STATS — monospaced terminal */
-.hero-stats{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:0;
-  border:1px solid var(--border);border-radius:12px;overflow:hidden;
+/* Star of David watermark */
+.star-wm{
+  position:absolute;inset-inline-end:-2%;top:8vh;
+  width:clamp(220px,50vw,560px);opacity:.055;
+  filter:drop-shadow(0 0 40px rgba(224,168,40,.4));
+  z-index:1;pointer-events:none;
 }
-.stat-cell{
-  padding:16px 14px;display:flex;flex-direction:column;gap:3px;
-  border-left:1px solid var(--border);
+.hero-in{position:relative;z-index:3;width:100%}
+/* Big logo watermark in hero */
+.hero-logo{
+  width:clamp(90px,18vw,200px);height:auto;
+  margin-bottom:clamp(20px,4vw,36px);
+  filter:drop-shadow(0 8px 32px rgba(224,168,40,.35));
 }
-.stat-cell:first-child{border-left:none}
-.stat-n{font-family:var(--font-d);font-weight:900;font-size:26px;color:var(--g3);line-height:1}
-.stat-l{font-family:var(--font-m);font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.07em;margin-top:2px}
-
-/* PHONE MOCKUP — desktop only */
-.hero-mockup{display:none}
-
-/* ── BENTO FEATURES ────────────────────────────────────── */
-.features{padding:88px 0;background:var(--obs)}
-.features .wrap{padding:0 24px}
-.section-eyebrow{
-  font-family:var(--font-m);font-size:11px;color:var(--cr3);
-  letter-spacing:.1em;text-transform:uppercase;
-  margin-bottom:10px;display:flex;align-items:center;gap:10px;
+.lbl{
+  font-family:var(--font-d);font-weight:700;
+  font-size:clamp(10px,2vw,13px);
+  letter-spacing:.28em;text-transform:uppercase;
+  color:var(--g3);display:inline-block;margin-bottom:18px;
 }
-.section-eyebrow::before{content:'//'}
-.section-title{
+.lbl::before{content:"· ";opacity:.5}
+.lbl::after{content:" ·";opacity:.5}
+h1{
+  font-family:var(--font-b);font-weight:900;
+  font-size:clamp(52px,13vw,130px);
+  line-height:.88;letter-spacing:-.03em;margin-bottom:20px;
+}
+h1 .thin{font-weight:200;color:var(--tx0)}
+h1 .gold-t{
+  background:var(--gold);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;display:block;
+}
+.hero-sub{
+  font-size:clamp(16px,3.2vw,20px);font-weight:400;
+  color:var(--tx1);max-width:44ch;line-height:1.65;
+  margin-bottom:32px;
+}
+.hero-sub b{font-weight:700;color:var(--tx0)}
+.cta-row{display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px}
+.btn-dl{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--gold);color:var(--ink);
   font-family:var(--font-d);font-weight:900;
-  font-size:clamp(30px,6vw,48px);line-height:1;letter-spacing:-1.5px;
-  color:var(--tx0);margin-bottom:8px;
+  font-size:clamp(11px,2vw,13px);letter-spacing:.16em;text-transform:uppercase;
+  padding:18px 28px;
+  box-shadow:0 14px 44px -14px rgba(224,168,40,.7);
+  transition:.25s;
 }
-.section-sub{font-family:var(--font-b);font-weight:300;font-size:16px;color:var(--tx1);max-width:480px;line-height:1.65;margin-bottom:52px}
-
-/* Asymmetric bento grid */
-.bento{display:flex;flex-direction:column;gap:12px}
-.bento-row{display:flex;flex-direction:column;gap:12px}
-
-.bento-card{
-  background:var(--n2);border:1px solid var(--border);border-radius:14px;
-  padding:24px;overflow:hidden;position:relative;
-  transition:border-color .2s,transform .2s;
+.btn-dl:hover{transform:translateY(-2px);box-shadow:0 20px 52px -12px rgba(224,168,40,.9)}
+.btn-ghost-hero{
+  font-size:clamp(13px,2.5vw,15px);font-weight:400;
+  color:var(--g3);border-bottom:1px solid rgba(224,168,40,.4);
+  padding-bottom:3px;transition:.2s;
 }
-.bento-card:hover{border-color:var(--border-cr);transform:translateY(-2px)}
-.bento-card::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:2px;
-  background:var(--cr-grad);opacity:0;transition:opacity .2s;
+.btn-ghost-hero:hover{color:var(--g4);border-color:var(--g4)}
+
+/* ─── COVENANT ─────────────────────────────────────────── */
+.cov{
+  background:var(--ink);
+  padding:clamp(64px,11vw,120px) 0;
+  text-align:center;
 }
-.bento-card:hover::before{opacity:1}
-
-.card-tag{
-  font-family:var(--font-m);font-size:10px;color:var(--cr3);
-  letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px;
-  display:flex;align-items:center;gap:6px;
+.cov .verse{
+  font-family:var(--font-b);font-weight:200;
+  font-size:clamp(28px,7.5vw,72px);
+  line-height:1.1;letter-spacing:-.02em;
+  color:var(--tx0);
 }
-.card-tag::before{content:'◈';font-size:8px}
-.card-icon{font-size:28px;margin-bottom:14px;display:block}
-.card-title{font-family:var(--font-d);font-weight:800;font-size:20px;color:var(--tx0);margin-bottom:6px;line-height:1.1}
-.card-text{font-family:var(--font-b);font-weight:300;font-size:14px;color:var(--tx1);line-height:1.65}
+.cov .verse b{
+  font-weight:900;
+  background:var(--gold);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.cov .src{
+  margin-top:22px;
+  font-family:var(--font-d);font-size:11px;
+  letter-spacing:.38em;color:var(--tx2);text-transform:uppercase;
+}
 
-/* Wide card variant */
-.bento-card.wide{display:flex;flex-direction:column;gap:12px}
-.bento-card.hero-card{background:linear-gradient(135deg,var(--n2) 0%,rgba(204,20,38,.08) 100%)}
-.bento-card.terminal{background:var(--obs);font-family:var(--font-m)}
-.terminal-line{font-size:12px;color:var(--p3);line-height:2;display:flex;gap:8px}
-.terminal-line .t-cmd{color:var(--cr3)}
-.terminal-line .t-ok{color:var(--safe)}
-.terminal-line .t-data{color:var(--g3)}
+/* ─── STATS ─────────────────────────────────────────────── */
+.stats{
+  background:var(--n0);
+  padding:clamp(44px,7vw,72px) 0;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+}
+.stat-g{display:grid;grid-template-columns:repeat(3,1fr)}
+.stat{padding:0 clamp(10px,3vw,28px);text-align:center;position:relative}
+.stat+.stat::before{
+  content:"";position:absolute;inset-block:6px;inset-inline-start:0;
+  width:1px;
+  background:linear-gradient(180deg,transparent,rgba(224,168,40,.4),transparent);
+}
+.stat .n{
+  font-family:var(--font-d);font-weight:900;
+  font-size:clamp(32px,8vw,60px);line-height:1;
+  background:var(--gold);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.stat .c{
+  margin-top:10px;font-size:clamp(12px,2.5vw,15px);
+  font-weight:400;color:var(--tx2);
+}
 
-/* ── HOW IT WORKS ────────────────────────────────────── */
-.how{padding:88px 0;background:var(--n1)}
-.steps-grid{display:flex;flex-direction:column;gap:0;margin-top:52px}
+/* ─── PROCESS ───────────────────────────────────────────── */
+.proc{
+  background:var(--n1);
+  padding:clamp(64px,10vw,120px) 0;
+}
+.sh{margin-bottom:clamp(32px,5vw,56px)}
+.sh .lbl{margin-bottom:12px}
+.sh h2{
+  font-family:var(--font-b);font-weight:900;
+  font-size:clamp(30px,6.5vw,58px);
+  line-height:.95;letter-spacing:-.025em;margin-bottom:8px;
+}
+.sh h2 .thin{font-weight:200}
+.sh h2 .gold-t{background:var(--gold);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.sh p{color:var(--tx1);font-size:clamp(14px,3vw,17px);max-width:48ch;line-height:1.65}
 .step{
-  display:flex;gap:20px;align-items:flex-start;
-  padding:24px 0;border-bottom:1px solid var(--border);
+  display:grid;grid-template-columns:auto 1fr;
+  gap:clamp(16px,4vw,40px);
+  padding:clamp(22px,4vw,36px) 0;
+  border-top:1px solid rgba(169,184,210,.12);
+  align-items:start;
+}
+.step:last-child{border-bottom:1px solid rgba(169,184,210,.12)}
+.step .num{
+  font-family:var(--font-d);font-weight:900;
+  font-size:clamp(28px,7vw,56px);
+  line-height:.88;color:transparent;
+  -webkit-text-stroke:1.5px var(--g3);
+}
+.step h3{
+  font-size:clamp(17px,3.5vw,22px);
+  font-weight:700;margin-bottom:6px;letter-spacing:-.01em;
+}
+.step p{color:var(--tx1);font-size:clamp(13px,2.5vw,15px);line-height:1.65}
+
+/* ─── SHOWCASE ───────────────────────────────────────────── */
+.show{
+  background:var(--n0);
+  padding:clamp(64px,10vw,120px) 0;
+  clip-path:var(--cut);margin-block:-3vw;z-index:1;
+}
+.show-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:clamp(16px,3vw,28px);
+  margin-top:clamp(32px,5vw,56px);
+}
+.show-card{
+  background:var(--n2);
+  border:1px solid rgba(169,184,210,.1);
+  overflow:hidden;
   position:relative;
 }
-.step:last-child{border-bottom:none}
-.step-num-wrap{display:flex;flex-direction:column;align-items:center;gap:0;flex-shrink:0}
-.step-num{
-  width:40px;height:40px;border-radius:50%;
-  background:rgba(204,20,38,.1);border:1.5px solid var(--border-cr);
-  display:flex;align-items:center;justify-content:center;
-  font-family:var(--font-d);font-weight:900;font-size:14px;color:var(--cr3);
-  flex-shrink:0;
+.show-card img{
+  width:100%;aspect-ratio:4/3;object-fit:cover;
+  filter:brightness(.85) saturate(.8);
+  transition:filter .4s ease,transform .4s ease;
 }
-.step-connector{width:1px;flex:1;background:var(--border);min-height:20px;margin-top:6px}
-.step-body{flex:1}
-.step-tag{font-family:var(--font-m);font-size:10px;color:var(--amb);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
-.step-title{font-family:var(--font-d);font-weight:800;font-size:18px;color:var(--tx0);margin-bottom:4px;line-height:1.2}
-.step-text{font-family:var(--font-b);font-weight:300;font-size:14px;color:var(--tx2);line-height:1.65}
+.show-card:hover img{filter:brightness(.95) saturate(.95);transform:scale(1.02)}
+.show-cap{
+  padding:18px 20px;
+  display:flex;align-items:center;gap:12px;
+}
+.show-icon{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--gold);display:flex;align-items:center;justify-content:center;
+  font-size:16px;flex-shrink:0;
+}
+.show-cap h3{
+  font-size:clamp(14px,2.5vw,16px);font-weight:700;
+  color:var(--tx0);margin-bottom:2px;
+}
+.show-cap p{font-size:clamp(12px,2vw,13px);color:var(--tx1)}
+@media(min-width:600px){.show-grid{grid-template-columns:repeat(3,1fr)}}
 
-/* ── SCENARIOS ────────────────────────────────────────── */
-.scenarios{padding:88px 0;background:var(--obs)}
-.scenarios-grid{display:flex;flex-direction:column;gap:12px;margin-top:52px}
-.scenario-card{
-  position:relative;border-radius:14px;overflow:hidden;
-  aspect-ratio:16/9;
+/* ─── NATURE BLOCK ───────────────────────────────────────── */
+.nature-block{
+  background:var(--n0);
+  padding:clamp(64px,10vw,120px) 0;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
 }
-.scenario-card img{width:100%;height:100%;object-fit:cover;filter:saturate(.7) brightness(.7);transition:transform .5s ease,filter .3s}
-.scenario-card:hover img{transform:scale(1.03);filter:saturate(.9) brightness(.8)}
-.scenario-overlay{
-  position:absolute;inset:0;
-  background:linear-gradient(to top,rgba(9,9,11,.97) 0%,rgba(9,9,11,.6) 45%,rgba(9,9,11,.1) 80%);
-  display:flex;flex-direction:column;justify-content:flex-end;
-  padding:22px;
+.nature-in{
+  display:grid;grid-template-columns:1fr;
+  gap:clamp(36px,6vw,72px);
+  align-items:center;
 }
-.sc-tag{font-family:var(--font-m);font-size:10px;color:var(--cr3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
-.sc-title{font-family:var(--font-d);font-weight:800;font-size:20px;color:var(--tx0);line-height:1.2;margin-bottom:4px}
-.sc-sub{font-family:var(--font-b);font-weight:300;font-size:13px;color:var(--tx2)}
+.nature-img{
+  position:relative;overflow:hidden;
+}
+.nature-img img{
+  width:100%;aspect-ratio:16/9;object-fit:cover;
+  filter:brightness(.7) saturate(.75);
+}
+.nature-img::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(6,15,30,.8),transparent 50%);
+}
+.nature-badge-over{
+  position:absolute;bottom:20px;inset-inline-start:20px;z-index:2;
+  display:flex;align-items:center;gap:10px;
+}
+.nature-badge-over img{width:48px;height:48px}
+.nature-badge-over span{
+  font-family:var(--font-d);font-weight:700;
+  font-size:14px;letter-spacing:.12em;
+  color:var(--tx0);
+}
+.nature-copy h2{
+  font-family:var(--font-b);font-weight:900;
+  font-size:clamp(28px,6vw,52px);
+  line-height:.95;letter-spacing:-.025em;
+  margin-bottom:14px;
+}
+.nature-copy .gr{color:#14803F}
+.nature-copy p{color:var(--tx1);font-size:clamp(14px,2.5vw,16px);line-height:1.65;margin-bottom:24px}
+.btn-nature{
+  display:inline-flex;align-items:center;gap:10px;
+  background:linear-gradient(135deg,#0A2E1F,#0E5C38,#14803F);
+  color:#fff;
+  font-family:var(--font-d);font-weight:700;
+  font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  padding:16px 24px;
+  box-shadow:0 12px 36px -10px rgba(20,128,63,.5);
+  transition:.25s;
+}
+.btn-nature:hover{transform:translateY(-2px)}
+@media(min-width:720px){.nature-in{grid-template-columns:1fr 1fr}}
 
-/* ── FINAL CTA ────────────────────────────────────────── */
-.cta-zone{
-  padding:88px 24px;
-  background:var(--n1);
-  position:relative;overflow:hidden;text-align:center;
+/* ─── CLOSE CTA ──────────────────────────────────────────── */
+.close{
+  background:var(--ink);
+  padding:clamp(80px,13vw,140px) 0;
+  text-align:center;position:relative;overflow:hidden;
 }
-.cta-zone::before{
-  content:'';position:absolute;top:-40%;left:50%;transform:translateX(-50%);
-  width:700px;height:700px;border-radius:50%;
-  background:radial-gradient(circle,rgba(204,20,38,.08) 0%,transparent 70%);
+.close::before{
+  content:"";position:absolute;
+  top:-40%;left:50%;transform:translateX(-50%);
+  width:clamp(400px,80vw,700px);height:clamp(400px,80vw,700px);
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(224,168,40,.07) 0%,transparent 65%);
   pointer-events:none;
 }
-.cta-eyebrow{font-family:var(--font-m);font-size:11px;color:var(--cr3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px;display:block}
-.cta-title{font-family:var(--font-d);font-weight:900;font-size:clamp(32px,8vw,60px);line-height:1;letter-spacing:-1.5px;color:var(--tx0);margin-bottom:14px}
-.cta-sub{font-family:var(--font-b);font-weight:300;font-size:16px;color:var(--tx1);margin-bottom:36px;max-width:420px;margin-left:auto;margin-right:auto;line-height:1.65}
-.cta-actions{display:flex;flex-direction:column;gap:12px;max-width:380px;margin:0 auto 32px}
-.cta-disclaimer{font-family:var(--font-m);font-size:11px;color:var(--tx3);line-height:1.8;letter-spacing:.02em}
+.close h2{
+  font-family:var(--font-b);font-weight:900;
+  font-size:clamp(34px,8vw,72px);
+  line-height:.92;letter-spacing:-.025em;
+  margin-bottom:16px;
+}
+.close h2 .gold-t{background:var(--gold);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.close p{
+  font-size:clamp(15px,3vw,18px);font-weight:300;
+  color:var(--tx1);max-width:42ch;margin:0 auto 36px;line-height:1.65;
+}
+.close-cta{display:flex;flex-wrap:wrap;justify-content:center;gap:14px}
+.close-note{
+  margin-top:28px;
+  font-family:var(--font-b);font-size:11px;
+  color:var(--tx3);line-height:2;letter-spacing:.03em;
+}
 
-/* ── FOOTER ────────────────────────────────────────────── */
+/* ─── FOOTER ─────────────────────────────────────────────── */
 footer{
-  background:var(--obs);border-top:1px solid var(--border);
-  padding:40px 24px;
+  background:var(--n0);border-top:1px solid var(--border);
+  padding:36px 20px;
 }
-.footer-inner{display:flex;flex-direction:column;gap:20px}
-.footer-logo-row{display:flex;align-items:center;gap:10px}
-.footer-logo-row img{width:24px;height:24px;opacity:.7}
-.footer-wm{font-family:var(--font-d);font-weight:900;font-size:14px;color:var(--tx2)}
-.footer-links{display:flex;flex-wrap:wrap;gap:16px}
-.footer-links a{font-family:var(--font-b);font-size:13px;color:var(--tx3);transition:color .2s}
-.footer-links a:hover{color:var(--tx1)}
-.footer-copy{font-family:var(--font-m);font-size:11px;color:var(--tx4);letter-spacing:.03em}
-
-/* ── SCROLL ANIMATIONS ─────────────────────────────────── */
-.reveal{opacity:0;transform:translateY(32px);transition:opacity .65s ease,transform .65s ease}
-.reveal.in{opacity:1;transform:none}
-.reveal-l{opacity:0;transform:translateX(-24px);transition:opacity .6s ease,transform .6s ease}
-.reveal-l.in{opacity:1;transform:none}
-
-/* ── DESKTOP BREAKPOINT ────────────────────────────────── */
-@media(min-width:800px){
-  .hero-content{padding:80px 48px 56px;max-width:58%}
-  .hero-actions{flex-direction:row}
-  .btn-sos,.btn-ghost{display:inline-flex;width:auto;padding:0 32px}
-  .hero-mockup{
-    display:block;position:absolute;
-    right:48px;bottom:56px;z-index:10;
-    width:220px;
-  }
-  .phone-shell{
-    border-radius:32px;overflow:hidden;
-    border:2.5px solid rgba(204,20,38,.25);
-    box-shadow:0 40px 80px rgba(0,0,0,.7),0 0 60px rgba(204,20,38,.08);
-    position:relative;
-  }
-  .phone-shell img{width:100%;display:block;filter:brightness(.9) saturate(.9)}
-  .phone-badge{
-    position:absolute;bottom:-16px;left:-32px;
-    background:var(--n2);border:1px solid var(--border-cr);
-    border-radius:12px;padding:10px 14px;
-    display:flex;align-items:center;gap:10px;
-    box-shadow:0 8px 32px rgba(0,0,0,.6);
-    white-space:nowrap;
-  }
-  .pb-label{font-family:var(--font-d);font-weight:800;font-size:11px;color:var(--cr3)}
-  .pb-sub{font-family:var(--font-m);font-size:10px;color:var(--tx2)}
-
-  .bento-row{flex-direction:row}
-  .bento-row .bento-card:first-child{flex:6}
-  .bento-row .bento-card:last-child{flex:4}
-  .bento-row.flip .bento-card:first-child{flex:4}
-  .bento-row.flip .bento-card:last-child{flex:6}
-
-  .scenarios-grid{flex-direction:row}
-  .scenario-card{aspect-ratio:unset;flex:1;min-height:340px}
-
-  .cta-actions{flex-direction:row;max-width:480px}
-  .footer-inner{flex-direction:row;align-items:center;justify-content:space-between}
-  .footer-links{gap:24px}
+.foot-in{
+  display:flex;flex-direction:column;gap:18px;
+  align-items:flex-start;
 }
-@media(min-width:1100px){
-  .hero-content{padding:80px 64px 64px;max-width:55%}
-  .hero-mockup{right:72px;width:250px}
+.foot-brand{
+  display:flex;align-items:center;gap:9px;
+  font-family:var(--font-d);font-size:13px;font-weight:700;
+  letter-spacing:.14em;color:var(--tx1);
 }
+.foot-brand img{width:22px;height:22px;opacity:.7}
+.foot-links{display:flex;flex-wrap:wrap;gap:10px 20px}
+.foot-links a{font-size:13px;color:var(--tx2);transition:.15s}
+.foot-links a:hover{color:var(--tx0)}
+.foot-copy{font-size:11px;color:var(--tx3)}
+@media(min-width:640px){.foot-in{flex-direction:row;align-items:center;justify-content:space-between}}
+
+/* ─── SCROLL ANIMATIONS ──────────────────────────────────── */
+.fade{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease}
+.fade-l{opacity:0;transform:translateX(-24px);transition:opacity .6s ease,transform .6s ease}
+.fade.in,.fade-l.in{opacity:1;transform:none}
 </style>
 </head>
 <body>
 
 <!-- NAV -->
-<nav class="nav">
-  <div class="nav-logo">
-    <img src="logo-192.png" alt="">
-    <span class="nav-wordmark">SH<span>✡</span>MER</span>
-  </div>
-  <div class="nav-right">
-    <div class="nav-status">רשת פעילה</div>
-    <a href="shomer.html" class="nav-cta">הצטרף/י עכשיו</a>
+<nav>
+  <div class="w nav-in">
+    <a href="/" class="brand">
+      <img src="badge-192.png" alt="">
+      <span>SH<i>✡</i>MER</span>
+    </a>
+    <div class="nav-r">
+      <div class="lang-sw">
+        <button class="on" id="L-he" onclick="setLang('he')">עב</button>
+        <button id="L-en" onclick="setLang('en')">EN</button>
+      </div>
+      <a href="shomer.html" class="btn-nav" data-t="nav_cta">הצטרפו עכשיו</a>
+    </div>
   </div>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-bg-stack">
-    <img class="hero-bg-slide on" id="s1" src="img/benefits-woman.jpg" alt="">
-    <img class="hero-bg-slide" id="s2" src="img/benefits-parents.jpg" alt="">
-    <img class="hero-bg-slide" id="s3" src="img/benefits-hiker.jpg" alt="">
-    <div class="hero-overlay"></div>
-    <div class="hero-cr-vignette"></div>
+  <div class="hero-bg">
+    <img class="hero-slide on" src="Shomer1080x1080px_A_blank.jpg" alt="">
+    <img class="hero-slide" src="Shomer1080x1080px_B_blank.jpg" alt="">
+    <img class="hero-slide" src="Shomer1080x1080px_C_blank.jpg" alt="">
   </div>
-
-  <div class="hero-content">
-    <div class="terminal-bar">SH<span style="color:var(--g3)">✡</span>MER<span class="t-sep">·</span>v86<span class="t-sep">·</span>LIVE<span class="t-sep">·</span>IL-NETWORK
-    </div>
-    <div class="hero-eyebrow">אזרחים שומרים על אזרחים</div>
-    <h1 class="hero-title">
-      כי ברגע<br>
-      <span class="cr">אמת</span><br>
-      <span class="dim">אינך לבד</span>
+  <!-- Star of David SVG watermark -->
+  <svg class="star-wm" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="100,10 190,165 10,165" stroke="#E0A828" stroke-width="1.5" fill="none"/>
+    <polygon points="100,190 190,35 10,35" stroke="#E0A828" stroke-width="1.5" fill="none"/>
+  </svg>
+  <div class="w hero-in">
+    <img class="hero-logo" src="SHOMER_logo_big.png" alt="SH✡MER">
+    <div class="lbl" data-t="hero_lbl">אזרחים שומרים על אזרחים</div>
+    <h1>
+      <span class="thin" data-t="h1a">הקהילה</span>
+      <span class="gold-t" data-t="h1b">שומרת.</span>
     </h1>
-    <p class="hero-sub">
-      <strong>SH✡MER</strong> מחבר/ת אותך לרשת שמירה קהילתית חיה.
-      SOS בלחיצה אחת, מפת אירועים, ומעגלי שומרים שתמיד עליך.
+    <p class="hero-sub" data-t="hero_sub">
+      <b>SH✡MER</b> מחבר/ת אותך לרשת שמירה קהילתית.
+      SOS בלחיצה אחת, מפת אירועים חיה, מעגלי שומרים שתמיד עליך.
     </p>
-    <div class="hero-actions">
-      <a href="shomer.html" class="btn-sos">
-        <span class="btn-sos-icon">🆘</span>
-        הצטרף/י עכשיו — חינם
+    <div class="cta-row">
+      <a href="shomer.html" class="btn-dl" data-t="hero_cta">
+        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M9 2v10m0 0l-4-4m4 4l4-4M2 16h14"/></svg>
+        <span data-t="hero_cta_lbl">הצטרפו עכשיו — חינם</span>
       </a>
-      <a href="#how" class="btn-ghost">איך זה עובד</a>
+      <a href="#process" class="btn-ghost-hero" data-t="hero_sec">איך זה עובד</a>
     </div>
-    <div class="hero-stats">
-      <div class="stat-cell">
-        <span class="stat-n">1</span>
-        <span class="stat-l">לחיצה · SOS</span>
+  </div>
+</section>
+
+<!-- COVENANT -->
+<section class="cov fade">
+  <div class="w">
+    <p class="verse" data-t="cov_v">
+      <b>שמור</b> עלי כאישון בת עין,<br>
+      בצל כנפיך תסתירני.
+    </p>
+    <p class="src">תהלים יז, ח · Psalms 17:8</p>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats fade">
+  <div class="w">
+    <div class="stat-g">
+      <div class="stat">
+        <div class="n">1</div>
+        <div class="c" data-t="s1">לחיצה לשליחת SOS</div>
       </div>
-      <div class="stat-cell">
-        <span class="stat-n">24/7</span>
-        <span class="stat-l">רשת · חיה</span>
+      <div class="stat">
+        <div class="n">24/7</div>
+        <div class="c" data-t="s2">רשת קהילתית פעילה</div>
       </div>
-      <div class="stat-cell">
-        <span class="stat-n">0₪</span>
-        <span class="stat-l">חינם · תמיד</span>
+      <div class="stat">
+        <div class="n">0₪</div>
+        <div class="c" data-t="s3">חינם לאזרחים תמיד</div>
       </div>
     </div>
   </div>
+</section>
 
-  <div class="hero-mockup">
-    <div class="phone-shell">
-      <img src="img/real-sos.jpg" alt="SH✡MER SOS">
-      <div class="phone-badge">
-        <span style="font-size:18px">🆘</span>
+<!-- PROCESS -->
+<section class="proc fade" id="process">
+  <div class="w">
+    <div class="sh">
+      <div class="lbl">תהליך</div>
+      <h2><span class="thin">ממשק אחד.</span><br><span class="gold-t">כל מה שצריך.</span></h2>
+      <p data-t="proc_sub">מהרשמה ועד ל-SOS — ארבע פעולות. רשת שלמה.</p>
+    </div>
+    <div class="steps-list">
+      <div class="step fade-l">
+        <div class="num">01</div>
         <div>
-          <div class="pb-label">SOS פעיל</div>
-          <div class="pb-sub">3 שומרים מגיבים</div>
+          <h3 data-t="p1h">נכנסים עם מספר טלפון</h3>
+          <p data-t="p1p">קוד SMS. מספרך קושר לחשבון ייחודי — SH✡MER0001 שלך. לתמיד.</p>
+        </div>
+      </div>
+      <div class="step fade-l">
+        <div class="num">02</div>
+        <div>
+          <h3 data-t="p2h">בונים את מעגל השמירה</h3>
+          <p data-t="p2p">משפחה, חברים, שכנים — מאנשי הקשר שלך. שלושה מעגלים, שלושה צבעים, אמון הדדי.</p>
+        </div>
+      </div>
+      <div class="step fade-l">
+        <div class="num">03</div>
+        <div>
+          <h3 data-t="p3h">לוחצים SOS — הכל קורה מיד</h3>
+          <p data-t="p3p">אזעקה שלא ניתן להשתיק, שיתוף מיקום חי, התראה לשומרים. ללא דיבור.</p>
+        </div>
+      </div>
+      <div class="step fade-l">
+        <div class="num">04</div>
+        <div>
+          <h3 data-t="p4h">הקהילה מגיבה</h3>
+          <p data-t="p4p">שומרים בסביבתך יוצאים לדרך. ישראל שומרת על ישראל.</p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- FEATURES BENTO -->
-<section class="features reveal" id="features">
-  <div class="wrap">
-    <div class="section-eyebrow">מה SH✡MER עושה</div>
-    <h2 class="section-title">ממשק אחד.<br>כל מה שצריך.</h2>
-    <p class="section-sub">בנוי לרגעים האמיתיים — לא לתרחישים תיאורטיים. אפס פרסום, אפס מכירת נתונים.</p>
-
-    <div class="bento">
-      <!-- Row 1: 60/40 -->
-      <div class="bento-row">
-        <div class="bento-card hero-card">
-          <div class="card-tag">SOS · 01</div>
-          <span class="card-icon">🆘</span>
-          <div class="card-title">אזעקת SOS<br>שלא ניתן להשתיק</div>
-          <div class="card-text">לחיצה אחת. AudioContext מייצר אזעקה עוצמתית שמתגברת על כפתור הווליום. מיקומך מגיע לשומרים תוך שניות.</div>
-        </div>
-        <div class="bento-card terminal">
-          <div class="card-tag">STATUS · TERMINAL</div>
-          <div class="terminal-line"><span class="t-cmd">›</span> <span>SOS_TRIGGERED</span><span class="t-ok">✓</span></div>
-          <div class="terminal-line"><span class="t-cmd">›</span> <span>GPS_LOCK</span><span class="t-data">31.91°N 35.03°E</span></div>
-          <div class="terminal-line"><span class="t-cmd">›</span> <span>GUARDIANS_ALERTED</span><span class="t-ok">3/3</span></div>
-          <div class="terminal-line"><span class="t-cmd">›</span> <span>ALARM_ACTIVE</span><span style="color:var(--cr3)">■■■■■■</span></div>
-          <div class="terminal-line"><span class="t-cmd">›</span> <span>RESPONSE_ETA</span><span class="t-data">02:34</span></div>
+<!-- SHOWCASE -->
+<section class="show fade">
+  <div class="w">
+    <div class="sh">
+      <div class="lbl">בפנים האפליקציה</div>
+      <h2><span class="thin">מפה,</span> <span class="gold-t">שומרים, פרופיל.</span></h2>
+    </div>
+    <div class="show-grid">
+      <div class="show-card">
+        <img src="site-assets/app-map-clean.jpg" alt="מפת אירועים">
+        <div class="show-cap">
+          <div class="show-icon">🗺️</div>
+          <div>
+            <h3 data-t="sc1h">מפת אירועים חיה</h3>
+            <p data-t="sc1p">אירועים, אמצעים, שומרים — בזמן אמת</p>
+          </div>
         </div>
       </div>
-
-      <!-- Row 2: 40/60 -->
-      <div class="bento-row flip">
-        <div class="bento-card">
-          <div class="card-tag">MAP · 02</div>
-          <span class="card-icon">🗺️</span>
-          <div class="card-title">מפת אירועים<br>בזמן אמת</div>
-          <div class="card-text">אירועי ביטחון, רפואה ואלימות באזורך — מדווחים על ידי האזרחים, עבור האזרחים. ניווט חי, לא נתוני עבר.</div>
-        </div>
-        <div class="bento-card">
-          <div class="card-tag">CIRCLES · 03</div>
-          <span class="card-icon">🛡️</span>
-          <div class="card-title">מעגלי שומרים:<br>משפחה · חברים · שכנים</div>
-          <div class="card-text">שלושה מעגלי אמון. כל מעגל בצבע. כולם רואים אותך על המפה. רק כשאת/ה רוצה.</div>
+      <div class="show-card">
+        <img src="site-assets/app-guardians-clean.jpg" alt="מעגלי שומרים">
+        <div class="show-cap">
+          <div class="show-icon">🛡️</div>
+          <div>
+            <h3 data-t="sc2h">מעגלי שומרים</h3>
+            <p data-t="sc2p">שלושה מעגלי אמון, מיקום חי, התראות</p>
+          </div>
         </div>
       </div>
-
-      <!-- Row 3: three equal -->
-      <div class="bento-row">
-        <div class="bento-card">
-          <div class="card-tag">GUIDE · 04</div>
-          <span class="card-icon">📋</span>
-          <div class="card-title">מדריך חירום</div>
-          <div class="card-text">CPR, מחנק, דימום, שבץ — לפי הנחיות מד"א. זמין ללא אינטרנט.</div>
-        </div>
-        <div class="bento-card">
-          <div class="card-tag">LOCATION · 05</div>
-          <span class="card-icon">📍</span>
-          <div class="card-title">שיתוף<br>מיקום חי</div>
-          <div class="card-text">רק כשאת/ה מאשר/ת. פרטיות מלאה עד הרגע שבו צריך.</div>
-        </div>
-        <div class="bento-card">
-          <div class="card-tag">REPORT · 06</div>
-          <span class="card-icon">🔔</span>
-          <div class="card-title">דיווח<br>אירועים</div>
-          <div class="card-text">צלם/י, סווג/י, שדר/י. בנה/י מפה קהילתית שמציאות מזינה.</div>
+      <div class="show-card">
+        <img src="site-assets/app-profile-clean.jpg" alt="פרופיל">
+        <div class="show-cap">
+          <div class="show-icon">👤</div>
+          <div>
+            <h3 data-t="sc3h">הפרופיל שלך</h3>
+            <p data-t="sc3p">SH✡MER ID, מעגלים, סטטיסטיקות</p>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- HOW IT WORKS -->
-<section class="how reveal" id="how">
-  <div class="wrap" style="padding:0 24px">
-    <div class="section-eyebrow">תהליך</div>
-    <h2 class="section-title">ארבע פעולות.<br>רשת שלמה.</h2>
-    <p class="section-sub">מהרשמה ועד ל-SOS — אפס פרסום, אפס פריחה מיותרת.</p>
-    <div class="steps-grid">
-      <div class="step reveal-l">
-        <div class="step-num-wrap">
-          <div class="step-num">01</div>
-          <div class="step-connector"></div>
-        </div>
-        <div class="step-body">
-          <div class="step-tag">SMS · אימות</div>
-          <div class="step-title">נכנס/ת עם מספר טלפון ישראלי</div>
-          <div class="step-text">קוד SMS — מספרך מוצמד לחשבון ייחודי. SH✡MER0001 שלך. לתמיד.</div>
+<!-- NATURE BLOCK -->
+<section class="nature-block fade">
+  <div class="w">
+    <div class="nature-in">
+      <div class="nature-img">
+        <img src="nature-hero-final.jpg" alt="SH✡MER Nature">
+        <div class="nature-badge-over">
+          <img src="nature-badge-sm.png" alt="Nature">
+          <span>SH✡MER NATURE</span>
         </div>
       </div>
-      <div class="step reveal-l">
-        <div class="step-num-wrap">
-          <div class="step-num">02</div>
-          <div class="step-connector"></div>
-        </div>
-        <div class="step-body">
-          <div class="step-tag">CONTACTS · מעגלים</div>
-          <div class="step-title">בנה/י את מעגל השמירה מאנשי הקשר</div>
-          <div class="step-text">בחר/י מהטלפון. משפחה, חברים, שכנים. כולם רואים ומגיבים.</div>
-        </div>
-      </div>
-      <div class="step reveal-l">
-        <div class="step-num-wrap">
-          <div class="step-num">03</div>
-          <div class="step-connector"></div>
-        </div>
-        <div class="step-body">
-          <div class="step-tag">SOS · פעולה</div>
-          <div class="step-title">לחץ/י SOS — הכל קורה מיד</div>
-          <div class="step-text">אזעקה, מיקום חי, התראה לשומרים — בלחיצה אחת. ללא צורך בדיבור.</div>
-        </div>
-      </div>
-      <div class="step reveal-l">
-        <div class="step-num-wrap">
-          <div class="step-num">04</div>
-        </div>
-        <div class="step-body">
-          <div class="step-tag">RESPONSE · תגובה</div>
-          <div class="step-title">הקהילה מגיבה</div>
-          <div class="step-text">שומרים בסביבתך יוצאים לדרך. ישראל שומרת על ישראל.</div>
-        </div>
+      <div class="nature-copy">
+        <div class="lbl">גרסת הטבע</div>
+        <h2>הטבע יפה.<br><span class="gr">גם מסוכן.</span></h2>
+        <p data-t="nat_p">SH✡MER Nature שומר/ת עליך ביערות, חופים ושמורות. אזהרות חיות בר, ניווט GPS ללא רשת, ו-SOS שמגיע לכל מקום.</p>
+        <a href="nature.html" class="btn-nature">
+          <span>🌿</span>
+          <span data-t="nat_cta">SH✡MER Nature</span>
+        </a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- SCENARIOS -->
-<section class="scenarios reveal">
-  <div class="wrap" style="padding:0 24px">
-    <div class="section-eyebrow">תרחישים · REAL</div>
-    <h2 class="section-title">SH✡MER שם<br>כשזה קורה.</h2>
-    <p class="section-sub">לא תיאורטי. לא "כנראה". כשזה קורה — SH✡MER שם.</p>
-    <div class="scenarios-grid">
-      <div class="scenario-card">
-        <img src="img/benefits-woman.jpg" alt="בטיחות אישית">
-        <div class="scenario-overlay">
-          <div class="sc-tag">01 · בטיחות אישית</div>
-          <div class="sc-title">הולכת לבד בלילה</div>
-          <div class="sc-sub">SOS בלחיצה. שומרים מגיבים תוך שניות.</div>
-        </div>
-      </div>
-      <div class="scenario-card">
-        <img src="img/benefits-parents.jpg" alt="משפחה">
-        <div class="scenario-overlay">
-          <div class="sc-tag">02 · מעגל משפחה</div>
-          <div class="sc-title">ילד לא מגיע הביתה</div>
-          <div class="sc-sub">מיקום חי. התראה מיידית.</div>
-        </div>
-      </div>
-      <div class="scenario-card">
-        <img src="img/real-sos.jpg" alt="אירוע">
-        <div class="scenario-overlay">
-          <div class="sc-tag">03 · אירוע רפואי</div>
-          <div class="sc-title">רופא/ה בסביבה</div>
-          <div class="sc-sub">מעגל המקצוענים מגיב לפני האמבולנס.</div>
-        </div>
-      </div>
+<!-- CLOSE CTA -->
+<section class="close fade">
+  <div class="w">
+    <div class="lbl" style="justify-content:center;display:flex">הצטרפו עכשיו</div>
+    <h2>
+      <span class="gold-t" data-t="cl_h1">SH✡MER שלך</span><br>
+      <span style="font-weight:200" data-t="cl_h2">מחכה לך.</span>
+    </h2>
+    <p data-t="cl_sub">בלי הורדה. בלי תשלום. שם ומספר טלפון — ואת/ה ברשת.</p>
+    <div class="close-cta">
+      <a href="shomer.html" class="btn-dl" data-t="cl_cta">
+        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M9 2v10m0 0l-4-4m4 4l4-4M2 16h14"/></svg>
+        <span>הצטרפו עכשיו — חינם</span>
+      </a>
     </div>
-  </div>
-</section>
-
-<!-- FINAL CTA -->
-<section class="cta-zone reveal">
-  <span class="cta-eyebrow">// הצטרף/י עכשיו</span>
-  <h2 class="cta-title">SH✡MER שלך<br>מחכה לך</h2>
-  <p class="cta-sub">בלי הורדה. בלי תשלום. שם + מספר טלפון — ואת/ה ברשת.</p>
-  <div class="cta-actions">
-    <a href="shomer.html" class="btn-sos">
-      <span class="btn-sos-icon">🆘</span>
-      הצטרף/י עכשיו — חינם
-    </a>
-  </div>
-  <div class="cta-disclaimer">
-    SH✡MER אינו תחליף לשירותי חירום<br>
-    בחירום — חייג/י 100 (משטרה) · 101 (מד"א) · 102 (כיבוי)
+    <div class="close-note">
+      SH✡MER אינו תחליף לשירותי חירום<br>
+      בחירום — 100 (משטרה) · 101 (מד"א) · 102 (כיבוי אש)
+    </div>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-inner">
+  <div class="foot-in">
     <div>
-      <div class="footer-logo-row" style="margin-bottom:12px">
-        <img src="logo-192.png" alt="">
-        <span class="footer-wm">SH✡MER.APP</span>
+      <div class="foot-brand">
+        <img src="badge-192.png" alt="">
+        SH✡MER.APP
       </div>
-      <div class="footer-copy">© 2026 3Shamrocks Studio · אזרחים שומרים על אזרחים</div>
+      <div class="foot-copy" style="margin-top:8px">© 2026 3Shamrocks Studio · אזרחים שומרים על אזרחים</div>
     </div>
-    <div class="footer-links">
+    <div class="foot-links">
       <a href="shomer.html">כניסה לאפליקציה</a>
       <a href="nature.html">SH✡MER Nature</a>
       <a href="#">פרטיות</a>
       <a href="#">תנאים</a>
-      <a href="#">יצירת קשר</a>
     </div>
   </div>
 </footer>
 
 <script>
-var slides=document.querySelectorAll('.hero-bg-slide'),cur=0;
+// Hero crossfade
+var slides=document.querySelectorAll('.hero-slide'),ci=0;
 setInterval(function(){
-  slides[cur].classList.remove('on');
-  cur=(cur+1)%slides.length;
-  slides[cur].classList.add('on');
-},4500);
+  slides[ci].classList.remove('on');
+  ci=(ci+1)%slides.length;
+  slides[ci].classList.add('on');
+},5000);
 
-var io=new IntersectionObserver(function(entries){
-  entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('in');});
-},{threshold:0.07});
-document.querySelectorAll('.reveal,.reveal-l').forEach(function(el){io.observe(el);});
+// Language switcher
+var t={
+  he:{hero_lbl:'אזרחים שומרים על אזרחים',h1a:'הקהילה',h1b:'שומרת.',hero_sub:'<b>SH✡MER</b> מחבר/ת אותך לרשת שמירה קהילתית. SOS בלחיצה אחת, מפת אירועים חיה, מעגלי שומרים שתמיד עליך.',hero_cta_lbl:'הצטרפו עכשיו — חינם',hero_sec:'איך זה עובד',s1:'לחיצה לשליחת SOS',s2:'רשת קהילתית פעילה',s3:'חינם לאזרחים תמיד',p1h:'נכנסים עם מספר טלפון',p1p:'קוד SMS. מספרך קושר לחשבון ייחודי — SH✡MER0001 שלך. לתמיד.',p2h:'בונים את מעגל השמירה',p2p:'משפחה, חברים, שכנים — מאנשי הקשר שלך. שלושה מעגלים, שלושה צבעים, אמון הדדי.',p3h:'לוחצים SOS — הכל קורה מיד',p3p:'אזעקה שלא ניתן להשתיק, שיתוף מיקום חי, התראה לשומרים. ללא דיבור.',p4h:'הקהילה מגיבה',p4p:'שומרים בסביבתך יוצאים לדרך. ישראל שומרת על ישראל.',sc1h:'מפת אירועים חיה',sc1p:'אירועים, אמצעים, שומרים — בזמן אמת',sc2h:'מעגלי שומרים',sc2p:'שלושה מעגלי אמון, מיקום חי, התראות',sc3h:'הפרופיל שלך',sc3p:'SH✡MER ID, מעגלים, סטטיסטיקות',nat_p:'SH✡MER Nature שומר/ת עליך ביערות, חופים ושמורות. אזהרות חיות בר, ניווט GPS ללא רשת, ו-SOS שמגיע לכל מקום.',nat_cta:'SH✡MER Nature',cl_h1:'SH✡MER שלך',cl_h2:'מחכה לך.',cl_sub:'בלי הורדה. בלי תשלום. שם ומספר טלפון — ואת/ה ברשת.',nav_cta:'הצטרפו עכשיו',proc_sub:'מהרשמה ועד ל-SOS — ארבע פעולות. רשת שלמה.'},
+  en:{hero_lbl:'Citizens Protecting Citizens',h1a:'The Community',h1b:'Guards.',hero_sub:'<b>SH✡MER</b> connects you to a live community safety network. One-tap SOS, live incident map, and guardians always watching over you.',hero_cta_lbl:'Join Now — Free',hero_sec:'How it works',s1:'One tap SOS',s2:'Active network 24/7',s3:'Free for citizens',p1h:'Sign in with your phone',p1p:'SMS code. Your number is tied to a unique account — your SH✡MER ID. Forever.',p2h:'Build your guardian circle',p2p:'Family, friends, neighbors — from your contacts. Three circles, three colors, mutual trust.',p3h:'Tap SOS — it all happens instantly',p3p:'Unstoppable alarm, live location share, guardian alert. No talking needed.',p4h:'The community responds',p4p:'Guardians nearby mobilize. Citizens protecting citizens.',sc1h:'Live Incident Map',sc1p:'Events, resources, guardians — real time',sc2h:'Guardian Circles',sc2p:'Three trust circles, live location, alerts',sc3h:'Your Profile',sc3p:'SH✡MER ID, circles, statistics',nat_p:'SH✡MER Nature keeps you safe in forests, beaches and reserves. Wildlife alerts, offline GPS navigation, and SOS that reaches anywhere.',nat_cta:'SH✡MER Nature',cl_h1:'Your SH✡MER',cl_h2:'is waiting.',cl_sub:'No download. No payment. Name and phone number — and you're in.',nav_cta:'Join Now',proc_sub:'Four steps. A complete network.'}
+};
+var lang='he';
+function setLang(l){
+  lang=l;
+  document.documentElement.lang=l;
+  document.documentElement.dir=l==='he'?'rtl':'ltr';
+  document.querySelectorAll('.lang-sw button').forEach(function(b){b.classList.toggle('on',b.id==='L-'+l)});
+  document.querySelectorAll('[data-t]').forEach(function(el){
+    var k=el.getAttribute('data-t');
+    if(t[l]&&t[l][k]!==undefined)el.innerHTML=t[l][k];
+  });
+}
+
+// Scroll reveal
+var io=new IntersectionObserver(function(e){
+  e.forEach(function(x){if(x.isIntersecting)x.target.classList.add('in')});
+},{threshold:0.08});
+document.querySelectorAll('.fade,.fade-l').forEach(function(el){io.observe(el)});
 </script>
 </body>
-<!-- build -->
 </html>
