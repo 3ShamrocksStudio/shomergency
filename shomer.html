@@ -1449,7 +1449,7 @@ body.otp-active .ob-steps{display:none!important;}
  <!-- Studio credit / copyright footer -->
  <div class="legal-links" id="ob-legal-links">
  <button onclick="openLegal('tos')" id="ob-ll-tos">תנאי שימוש</button><span class="sep">·</span>
- <button onclick="openLegal('privacy')" id="ob-ll-priv">מדיניות פרטיות</button><span class="sep">·</span>
+ <button onclick="openLegal('privacy')" id="ob-ll-priv">מדיניות פרטיות</button><span class="legal-sep" aria-hidden="true"> · </span><button onclick="openLegal('a11y')" id="ob-ll-a11y" data-he="הצהרת נגישות" data-en="Accessibility" data-ar="بيان الوصول">הצהרת נגישות</button><span class="sep">·</span>
  <button onclick="openLegal('disclaimer')" id="ob-ll-disc">כתב ויתור חירום</button>
  </div>
  <footer class="studio-credit"> <span class="cr">© 2026 3Shamrocks Studio</span> </footer>
@@ -2065,7 +2065,7 @@ body.otp-active .ob-steps{display:none!important;}
 
    <div class="legal-links" id="set-legal-links">
  <button onclick="openLegal('tos')" id="set-ll-tos">תנאי שימוש</button><span class="sep">·</span>
- <button onclick="openLegal('privacy')" id="set-ll-priv">מדיניות פרטיות</button><span class="sep">·</span>
+ <button onclick="openLegal('privacy')" id="set-ll-priv">מדיניות פרטיות</button><span class="legal-sep" aria-hidden="true"> · </span><button onclick="openLegal('a11y')" id="set-ll-a11y" data-he="הצהרת נגישות" data-en="Accessibility" data-ar="بيان الوصول">הצהרת נגישות</button><span class="sep">·</span>
  <button onclick="openLegal('disclaimer')" id="set-ll-disc">כתב ויתור חירום</button>
  </div>
  <footer class="studio-credit">
@@ -2432,7 +2432,7 @@ body.otp-active .ob-steps{display:none!important;}
  </div>
 
  <!-- ═══ PRIVACY POLICY ═══ -->
- <div class="sheet light-sheet" id="sh-privacy" role="dialog" aria-modal="true" aria-labelledby="priv-ttl">
+ <div class="sheet light-sheet" id="sh-a11y" role="dialog" aria-modal="true" aria-labelledby="a11y-ttl"><div class="sh-pill" aria-hidden="true"></div><div class="sh-head"><span class="sh-ttl" id="a11y-ttl">הצהרת נגישות</span><button class="sh-x" onclick="cl('sh-a11y')" aria-label="סגור"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button></div><div class="sh-body"><div id="a11y-body"></div></div></div><div class="sheet light-sheet" id="sh-privacy" role="dialog" aria-modal="true" aria-labelledby="priv-ttl">
  <div class="sh-pill" aria-hidden="true"></div>
  <div class="sh-head"><span class="sh-ttl" id="priv-ttl">מדיניות פרטיות</span><button class="sh-x" onclick="cl('sh-privacy')" aria-label="סגור"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button></div>
  <div class="sh-body"><div class="legal-body" id="priv-body"></div></div>
@@ -7919,9 +7919,42 @@ function renderLegal(){
  :`<div class="disc-call"><button class="pr" onclick="callNum(policeNum())"> <span class="em-p">100</span> Police</button><button onclick="callNum(ambulanceNum())"> 101 MDA</button><button onclick="callNum(fireNum())"> 102 Fire</button></div>`);
  const t=document.getElementById('tos-body'); if(t)t.innerHTML=tosHTML()+legalFooter();
  const p=document.getElementById('priv-body'); if(p)p.innerHTML=privacyHTML()+legalFooter();
+ const a=document.getElementById('a11y-body'); if(a)a.innerHTML=a11yHTML()+legalFooter();
  if(d)d.innerHTML+=legalFooter();
 }
 /* 3Shamrocks Studio brand footer for the legal screens (per 3S branding rule). */
+
+function a11yHTML(){
+  const he=currentLang==='he', ar=currentLang==='ar';
+  const upd = (typeof legalUpdated==='function') ? legalUpdated() : '';
+  if(ar) return `
+    <p class="legal-h">بيان إمكانية الوصول</p>
+    <p>نحن في 3Shamrocks Studio نلتزم بإتاحة شومير لكل شخص، بما في ذلك ذوو الإعاقة، وفقاً لقانون مساواة حقوق الأشخاص ذوي الإعاقة (إسرائيل) والمعيار الإسرائيلي 5568 المستند إلى WCAG 2.1 المستوى AA.</p>
+    <p class="legal-h">ما تم تنفيذه</p>
+    <p>تباين ألوان مرتفع، أحجام نص قابلة للقراءة، مساحات لمس لا تقل عن 44 بكسل، تسميات ARIA على الحوارات والأزرار، تنقل بلوحة المفاتيح، دعم قارئات الشاشة، واحترام إعداد "تقليل الحركة".</p>
+    <p class="legal-h">قيود معروفة</p>
+    <p>الخريطة التفاعلية تعتمد على مكوّن خارجي وقد لا تكون متاحة بالكامل لقارئات الشاشة. المعلومات الحرجة متاحة دائماً كنص بديل.</p>
+    <p class="legal-h">تواصل بشأن إمكانية الوصول</p>
+    <p>إذا واجهت عائقاً، تواصل معنا على <b>dave@3shamrocks.com</b> وسنعالجه في أقرب وقت.</p>${upd}`;
+  if(he) return `
+    <p class="legal-h">הצהרת נגישות</p>
+    <p>ב-3Shamrocks Studio אנו רואים חשיבות עליונה בהנגשת SH✡MER לכלל הציבור, לרבות אנשים עם מוגבלות, בהתאם לחוק שוויון זכויות לאנשים עם מוגבלות, התשנ״ח–1998, ולתקן הישראלי ת״י 5568 המבוסס על WCAG 2.1 ברמה AA.</p>
+    <p class="legal-h">מה הונגש</p>
+    <p>ניגודיות צבעים גבוהה, גדלי טקסט קריאים, אזורי מגע של 44 פיקסל לפחות, תוויות ARIA לחלונות ולכפתורים, ניווט מקלדת, תמיכה בקוראי מסך, וכיבוד העדפת "הפחתת תנועה" במערכת ההפעלה.</p>
+    <p class="legal-h">מגבלות ידועות</p>
+    <p>המפה האינטראקטיבית מבוססת על רכיב צד־שלישי ועשויה שלא להיות נגישה במלואה לקוראי מסך. מידע קריטי זמין תמיד גם כטקסט חלופי מחוץ למפה.</p>
+    <p class="legal-h">פנייה בנושא נגישות</p>
+    <p>נתקלתם בבעיית נגישות? נשמח לדעת ולתקן. רכז הנגישות: <b>dave@3shamrocks.com</b>. נטפל בפנייה בהקדם האפשרי.</p>${upd}`;
+  return `
+    <p class="legal-h">Accessibility Statement</p>
+    <p>3Shamrocks Studio is committed to making SH✡MER usable by everyone, including people with disabilities, in line with the Israeli Equal Rights for Persons with Disabilities Law (1998) and Israeli Standard IS 5568, based on WCAG 2.1 Level AA.</p>
+    <p class="legal-h">What has been implemented</p>
+    <p>High colour contrast, readable text sizes, touch targets of at least 44px, ARIA labels on dialogs and controls, keyboard navigation, screen-reader support, and respect for the operating system's "reduce motion" preference.</p>
+    <p class="legal-h">Known limitations</p>
+    <p>The interactive map relies on a third-party component and may not be fully accessible to screen readers. Critical information is always also available as text outside the map.</p>
+    <p class="legal-h">Accessibility contact</p>
+    <p>If you encounter a barrier, please tell us: <b>dave@3shamrocks.com</b>. We will address it as soon as possible.</p>${upd}`;
+}
 function legalFooter(){
  return '<div class="legal-3s" style="margin-top:22px;padding-top:14px;border-top:1px solid #e6dcc4;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center">'
   
@@ -8239,7 +8272,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v193';
+var APP_VER='v196';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
