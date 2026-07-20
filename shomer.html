@@ -5296,7 +5296,20 @@ function openDetail(idx){
  op('det-sheet');
 }
 /* Declaring you are on the way and navigating there are one decision — do both. */
-function respondAndGo(btn){
+
+/* One-time responder-safety acknowledgement. Civilians are being pointed toward an
+   incident; they must be told, at the moment of acting, not to confront or intervene. */
+function responderSafetyOK(){
+  try{ if(localStorage.getItem('shomerResponderAck')==='1') return true; }catch(e){}
+  var he=currentLang==='he', ar=currentLang==='ar';
+  var msg = he ? 'הבטיחות שלך קודמת.\n\nאין לעמת אף אחד ואין להתערב פיזית. התקשרו למשטרה (100) ותנו לה לטפל. שמרו מרחק והיו עדים בלבד.\n\nהמענה הוא התנדבותי ובאחריותך האישית.'
+    : ar ? 'سلامتك أولاً.\n\nلا تواجه أحداً ولا تتدخّل جسدياً. اتصل بالشرطة (100) ودعها تتولّى الأمر. حافظ على مسافة وكن شاهداً فقط.\n\nالاستجابة طوعية وعلى مسؤوليتك.'
+    : 'Your safety comes first.\n\nDo not confront anyone or physically intervene. Call the police (100) and let them handle it. Keep your distance and act as a witness only.\n\nResponding is voluntary and at your own risk.';
+  var ok = confirm(msg);
+  if(ok){ try{ localStorage.setItem('shomerResponderAck','1'); }catch(e){} }
+  return ok;
+}
+function respondAndGo(btn){ if(!responderSafetyOK()) return;
   try{ respondDet(btn); }catch(e){}
   try{ if(_curDetail && _curDetail.lat!=null && _curDetail.lng!=null) navigateToEvent(); }catch(e){}
 }
@@ -5309,7 +5322,7 @@ function respondDet(btn){
 var _curDetail=null;
 /* Item 10 — Google-Maps-style shortest path to an EVENT (not just SOS).
    Closes the sheet, drops a pulsing red dot on the event + draws the live glowing route. */
-function navigateToEvent(){
+function navigateToEvent(){ if(!responderSafetyOK()) return;
  var d=_curDetail;
  if(!d||d.lat==null||d.lng==null){ toast(currentLang==='he'?'אין מיקום מדויק לאירוע זה':'No precise location for this event',''); return; }
  cl('det-sheet');
@@ -7697,7 +7710,7 @@ function disclaimerHTML(){ const he=currentLang==='he', ar=currentLang==='ar';
  <li> التنبيهات في الخلفية وعلى الشاشة المقفلة محدودة في نسخة الويب — أبقِ التطبيق مفتوحاً للحصول على حماية كاملة.</li>
  </ul>
  <p>الاعتماد على التطبيق يقع على مسؤوليتك وحدك. استخدمه كأداة مكمّلة — وليس بديلاً أبداً — لخدمات الطوارئ الرسمية.</p>
- <p class="legal-meta">${legalUpdated()}</p>`;
+ <p class="legal-h">سلامتك أولاً — لست من رجال الأمن</p><p>عند تلقّي تنبيه: <b>لا تواجه أحداً، ولا تتدخّل جسدياً، ولا تحاول احتجاز أي شخص.</b> اتصل بالشرطة (100) ودعها تتولّى الأمر. اقترب فقط إذا كان ذلك آمناً، وابقَ على مسافة، وكن شاهداً — لا مُنفِّذاً للقانون. الاستجابة طوعية بالكامل وعلى مسؤوليتك الشخصية.</p><p class="legal-meta">${legalUpdated()}</p>`;
  return he?`
  <p><strong>שומר הוא כלי לבטיחות אישית ולשיתוף מיקום — ולא תחליף לשירותי חירום.</strong></p>
  <p>במצב חירום אמיתי, התקשרו מיד לשירותי החירום:</p>
@@ -7714,7 +7727,7 @@ function disclaimerHTML(){ const he=currentLang==='he', ar=currentLang==='ar';
  <li> התראות ברקע ובמסך נעול מוגבלות בגרסת הדפדפן — מומלץ להשאיר את האפליקציה פתוחה להגנה מלאה.</li>
  </ul>
  <p>הסתמכות על האפליקציה היא באחריותך בלבד. השתמשו בה כתוספת, לא כתחליף, לשירותי החירום הרשמיים.</p>
- <p class="legal-meta">${legalUpdated()}</p>`
+ <p class="legal-h">הבטיחות שלך קודמת — אינך כוח אכיפה</p><p>כשמתקבלת התראה: <b>אין לעמת אף אחד, אין להתערב פיזית ואין לנסות לעכב אדם.</b> התקשרו למשטרה (100) ותנו לה לטפל. התקרבו רק אם זה בטוח, שמרו מרחק, והיו עדים — לא אוכפי חוק. המענה לקריאה הוא התנדבותי לחלוטין ובאחריותכם האישית בלבד.</p><p class="legal-meta">${legalUpdated()}</p>`
  :`
  <p><strong>SHOMER is a personal-safety & location-sharing tool — NOT a replacement for emergency services.</strong></p>
  <p>In a real emergency, call emergency services immediately:</p>
@@ -7731,7 +7744,7 @@ function disclaimerHTML(){ const he=currentLang==='he', ar=currentLang==='ar';
  <li> Background and locked-screen alerts are limited on the web — keep the app open for full protection.</li>
  </ul>
  <p>Relying on the app is at your own risk. Use it as a supplement to — never a substitute for — official emergency services.</p>
- <p class="legal-meta">${legalUpdated()}</p>`;
+ <p class="legal-h">Your safety first — you are not law enforcement</p><p>When you receive an alert: <b>do not confront anyone, do not physically intervene, and do not attempt to detain any person.</b> Call the police (100) and let them handle it. Approach only if it is safe, keep your distance, and act as a witness — not as an enforcer. Responding is entirely voluntary and at your own personal risk.</p><p class="legal-meta">${legalUpdated()}</p>`;
 }
 
 /* Terms of Service — plain language. */
@@ -8226,7 +8239,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v194';
+var APP_VER='v193';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
