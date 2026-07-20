@@ -3,531 +3,447 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#09090B">
+<meta name="theme-color" content="#060F1E">
 <title>SH✡MER Nature — שמירה בטבע</title>
-<meta name="description" content="בטיחות בטיולים, אזהרות חיות בר, ניווט חירום. SH✡MER Nature שם כשהאמת.">
-<link rel="icon" href="logo-192.png">
+<meta name="description" content="בטיחות בטיולים, אזהרות חיות בר, ניווט חירום GPS. SH✡MER Nature שם כשצריך.">
+<link rel="icon" href="nature-badge-sm.png">
+<link rel="apple-touch-icon" href="nature-badge-sm.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700;800;900&family=Sora:wght@700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Heebo:wght@200;400;700;900&display=swap" rel="stylesheet">
 <style>
-/* ── 3SDS NATURE TOKENS ────────────────────────────────── */
+/* ─── 3SDS NATURE TOKENS ─────────────────────────────────
+   Same base as SHOMER. ONE colour change: --nat replaces --sos.
+   All navy/gold/Cinzel/Heebo untouched.                    */
 :root{
-  --obs:#09090B; --n1:#08100D; --n2:#0D1A14; --n3:#12231A;
-  --n4:#172E21; --n5:#1E3D2D;
-  --fg1:#0A2E1F; --fg2:#0E5C38; --fg3:#14803F; --fg4:#1AAD52;
-  --cr3:#CC1426; --cr4:#E8182C;
-  --amb:#C07808; --amb-l:#E09020;
-  --p2:#5C6B82; --p3:#8392AB;
-  --tx0:#F0F4FF; --tx1:#C8D4E8; --tx2:#8898B8; --tx3:#506080; --tx4:#344060;
-  --fg-grad:linear-gradient(135deg,#0A2E1F 0%,#0E5C38 55%,#14803F 100%);
-  --fg-glow:rgba(14,92,56,.3);
-  --border:rgba(92,107,130,.18); --border-fg:rgba(14,128,63,.28);
-  --font-d:'Sora',sans-serif; --font-b:'Heebo',sans-serif; --font-m:'JetBrains Mono',monospace;
+  --ink:#040A14;
+  --n0:#060F1E; --n1:#0A1628; --n2:#101E34; --n3:#162440; --n4:#1C2C4E;
+  --g1:#9A6C1A; --g2:#C09020; --g3:#E0A828; --g4:#F5C840;
+  --gold:linear-gradient(135deg,#C09020 0%,#E0A828 55%,#F5C840 100%);
+  --nat:#14803F; --nat-d:#0A2E1F; --nat-l:#1AAD52;
+  --nat-grad:linear-gradient(135deg,#0A2E1F 0%,#0E5C38 55%,#14803F 100%);
+  --tx0:#F2F5FC; --tx1:#A9B8D2; --tx2:#6B7C99; --tx3:#3E4F6A;
+  --border:rgba(224,168,40,.14);
+  --border-n:rgba(20,128,63,.25);
+  --font-d:'Cinzel',serif; --font-b:'Heebo',sans-serif;
+  --cut:polygon(0 3vw,100% 0,100% calc(100% - 3vw),0 100%);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;overflow-x:hidden}
-body{background:var(--obs);color:var(--tx0);font-family:var(--font-b);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body{background:var(--n0);color:var(--tx0);font-family:var(--font-b);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}
-img{display:block;max-width:100%}
+img{display:block;max-width:100%;height:auto}
+.w{max-width:1080px;margin:0 auto;padding:0 20px}
 
-/* ── NAV ────────────────────────────────────────────────── */
-.nav{
-  position:fixed;top:0;left:0;right:0;z-index:200;
-  height:56px;
-  background:rgba(8,16,13,.9);
-  backdrop-filter:blur(20px) saturate(180%);
-  border-bottom:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 24px;
+/* ─── NAV ─────────────────────────────────────────────── */
+nav{
+  position:fixed;inset-inline:0;top:0;z-index:200;
+  background:linear-gradient(180deg,rgba(4,10,20,.96),rgba(4,10,20,.65));
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border-n);
+  height:60px;
 }
-.nav-logo{display:flex;align-items:center;gap:10px}
-.nav-logo img{width:28px;height:28px;filter:hue-rotate(80deg) saturate(.7)}
-.nav-wordmark{font-family:var(--font-d);font-weight:900;font-size:16px;color:var(--tx0);letter-spacing:-.3px}
-.nav-wordmark .gr{background:var(--fg-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.nav-badge{font-family:var(--font-m);font-size:10px;color:var(--fg4);background:rgba(20,128,63,.12);border:1px solid var(--border-fg);border-radius:4px;padding:2px 8px;letter-spacing:.06em}
-.nav-right{display:flex;align-items:center;gap:12px}
-.nav-status{font-family:var(--font-m);font-size:11px;color:var(--fg4);display:flex;align-items:center;gap:6px;letter-spacing:.05em}
-.nav-status::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--fg4);display:inline-block;animation:blink 2.5s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
-.nav-cta{background:var(--fg-grad);color:#fff;padding:9px 18px;border-radius:8px;font-family:var(--font-b);font-weight:800;font-size:13px}
+.nav-in{display:flex;align-items:center;justify-content:space-between;height:100%}
+.brand{display:flex;align-items:center;gap:11px}
+.brand img{width:32px;height:32px;filter:drop-shadow(0 0 10px rgba(20,128,63,.5))}
+.brand-text{display:flex;flex-direction:column;gap:0}
+.brand span{font-family:var(--font-d);font-weight:700;font-size:15px;letter-spacing:.16em;color:var(--tx0);line-height:1.1}
+.brand sub{
+  font-family:var(--font-d);font-size:9px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--nat-l);font-weight:700;
+}
+.brand i{font-style:normal;color:var(--g4)}
+.nav-r{display:flex;align-items:center;gap:10px}
+.btn-nav{
+  font-family:var(--font-d);font-weight:900;font-size:11px;
+  letter-spacing:.14em;text-transform:uppercase;
+  background:var(--nat-grad);color:#fff;
+  padding:12px 20px;white-space:nowrap;
+  box-shadow:0 8px 28px -8px rgba(14,92,56,.6);
+  transition:.2s;
+}
+.btn-nav:hover{filter:brightness(1.1);transform:translateY(-1px)}
+@media(max-width:480px){.btn-nav{font-size:10px;padding:12px 14px}}
 
-/* ── HERO ────────────────────────────────────────────────── */
-.hero{position:relative;min-height:100dvh;overflow:hidden;display:flex;flex-direction:column}
-.hero-bg-stack{position:absolute;inset:0}
-.hero-bg-slide{position:absolute;inset:0;object-fit:cover;width:100%;height:100%;opacity:0;transition:opacity 1.4s ease;filter:saturate(.65) brightness(.75)}
-.hero-bg-slide.on{opacity:1}
-.hero-overlay{
-  position:absolute;inset:0;
-  background:
-    linear-gradient(to top,rgba(8,16,13,1) 0%,rgba(8,16,13,.93) 28%,rgba(8,16,13,.55) 62%,rgba(8,16,13,.12) 90%,rgba(8,16,13,.0) 100%),
-    linear-gradient(105deg,rgba(8,16,13,.96) 0%,rgba(8,16,13,.5) 50%,transparent 100%);
-}
-.hero-fg-vignette{
-  position:absolute;inset:0;
-  background:radial-gradient(ellipse 70% 50% at 70% 30%,rgba(14,92,56,.18) 0%,transparent 70%);
-}
-.hero-content{
-  position:relative;z-index:10;
-  flex:1;display:flex;flex-direction:column;justify-content:flex-end;
-  padding:72px 24px 48px;
-}
-
-/* TOPOGRAPHIC STATUS BAR */
-.topo-bar{
-  font-family:var(--font-m);font-size:11px;
-  color:var(--amb);letter-spacing:.08em;text-transform:uppercase;
-  display:flex;align-items:center;gap:12px;
-  margin-bottom:24px;padding:10px 14px;
-  background:rgba(8,16,13,.8);border:1px solid var(--border);
-  border-radius:8px;width:fit-content;max-width:100%;overflow:hidden;
-}
-.topo-dot{width:7px;height:7px;border-radius:50%;background:var(--fg4);animation:blink 2s infinite;flex-shrink:0}
-.topo-item{white-space:nowrap}
-.topo-sep{color:var(--p2);flex-shrink:0}
-
-/* HERO HEADLINE */
-.hero-eyebrow{
-  font-family:var(--font-m);font-size:11px;font-weight:500;
-  color:var(--fg4);letter-spacing:.1em;text-transform:uppercase;
-  margin-bottom:14px;display:flex;align-items:center;gap:8px;
-}
-.hero-eyebrow::after{content:'';flex:1;height:1px;background:var(--border-fg);max-width:100px}
-.hero-title{
-  font-family:var(--font-d);font-weight:900;
-  font-size:clamp(40px,10vw,78px);
-  line-height:.95;letter-spacing:-2.5px;
-  color:var(--tx0);margin-bottom:8px;
-}
-.hero-title .gr{background:var(--fg-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hero-title .dim{color:var(--tx3);font-weight:300}
-.hero-sub{
-  font-family:var(--font-b);font-weight:300;
-  font-size:clamp(15px,3.5vw,19px);
-  color:var(--tx1);line-height:1.65;
-  max-width:500px;margin-bottom:34px;
-}
-.hero-sub strong{font-weight:800;color:var(--tx0)}
-
-/* ACTIONS */
-.hero-actions{display:flex;flex-direction:column;gap:12px;margin-bottom:40px}
-.btn-primary-nature{
-  display:flex;align-items:center;justify-content:center;gap:12px;
-  height:58px;border-radius:12px;
-  background:var(--fg-grad);color:#fff;
-  font-family:var(--font-d);font-weight:900;font-size:17px;
-  box-shadow:0 0 30px var(--fg-glow);
+/* ─── HERO ─────────────────────────────────────────────── */
+.hero{
+  min-height:100dvh;display:flex;align-items:flex-end;
+  padding-bottom:clamp(40px,7vw,72px);
   position:relative;overflow:hidden;
 }
-.btn-primary-nature::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent);
-  transform:translateX(-100%);animation:shimmer 4s ease-in-out infinite 1.5s;
+.hero-bg{position:absolute;inset:0;z-index:0}
+.hero-slide{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;opacity:0;
+  transition:opacity 1.8s ease;
+  filter:saturate(.7) brightness(.75);
 }
-@keyframes shimmer{to{transform:translateX(100%)}}
-.btn-ghost-nature{
-  display:flex;align-items:center;justify-content:center;
-  height:50px;border-radius:12px;
-  border:1px solid var(--border);color:var(--tx2);
-  font-family:var(--font-b);font-weight:600;font-size:15px;
-  background:rgba(255,255,255,.03);
+.hero-slide.on{opacity:1}
+.hero-bg::after{
+  content:"";position:absolute;inset:0;
+  background:
+    linear-gradient(180deg,rgba(4,10,20,.45) 0%,rgba(4,10,20,.18) 28%,rgba(4,10,20,.88) 72%,rgba(4,10,20,.98) 100%),
+    linear-gradient(90deg,rgba(4,10,20,.85),transparent 65%);
 }
-
-/* STATS */
-.hero-stats{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:0;border:1px solid var(--border);border-radius:12px;overflow:hidden;
-}
-.stat-cell{padding:14px;display:flex;flex-direction:column;gap:3px;border-right:1px solid var(--border)}
-.stat-cell:last-child{border-right:none}
-.stat-n{font-family:var(--font-d);font-weight:900;font-size:24px;color:var(--fg4);line-height:1}
-.stat-l{font-family:var(--font-m);font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.06em}
-
-/* HAZARD TICKER */
-.hazard-ticker{
-  display:flex;gap:8px;overflow:hidden;margin-top:16px;
-}
-.hazard-chip{
-  flex-shrink:0;
-  font-family:var(--font-m);font-size:11px;letter-spacing:.05em;
-  padding:5px 10px;border-radius:6px;
-  display:flex;align-items:center;gap:5px;
-}
-.chip-red{background:rgba(204,20,38,.15);border:1px solid rgba(204,20,38,.3);color:#E8182C}
-.chip-amb{background:rgba(192,120,8,.12);border:1px solid rgba(192,120,8,.3);color:var(--amb)}
-.chip-fg{background:rgba(14,92,56,.15);border:1px solid var(--border-fg);color:var(--fg4)}
-
-/* PHONE MOCKUP desktop */
-.hero-mockup{display:none}
-
-/* ── HAZARD BENTO ─────────────────────────────────────── */
-.hazard-section{padding:88px 0;background:var(--obs)}
-.section-eyebrow{font-family:var(--font-m);font-size:11px;color:var(--fg4);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px}
-.section-eyebrow::before{content:'//'}
-.section-title{font-family:var(--font-d);font-weight:900;font-size:clamp(28px,6vw,48px);line-height:1;letter-spacing:-1.5px;color:var(--tx0);margin-bottom:10px}
-.section-sub{font-family:var(--font-b);font-weight:300;font-size:16px;color:var(--tx1);max-width:480px;line-height:1.65;margin-bottom:48px}
-
-.bento{display:flex;flex-direction:column;gap:12px}
-.bento-row{display:flex;flex-direction:column;gap:12px}
-
-.bento-card{
-  background:var(--n2);border:1px solid var(--border);border-radius:14px;
-  padding:24px;overflow:hidden;position:relative;
-  transition:border-color .2s,transform .2s;
-}
-.bento-card:hover{border-color:var(--border-fg);transform:translateY(-2px)}
-.bento-card::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:2px;
-  background:var(--fg-grad);opacity:0;transition:opacity .2s;
-}
-.bento-card:hover::before{opacity:1}
-.card-tag{font-family:var(--font-m);font-size:10px;color:var(--fg4);letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:6px}
-.card-tag::before{content:'◈';font-size:8px}
-.card-icon{font-size:28px;margin-bottom:14px;display:block}
-.card-title{font-family:var(--font-d);font-weight:800;font-size:20px;color:var(--tx0);margin-bottom:6px;line-height:1.1}
-.card-text{font-family:var(--font-b);font-weight:300;font-size:14px;color:var(--tx1);line-height:1.65}
-
-/* HAZARD FEED */
-.hazard-feed{display:flex;flex-direction:column;gap:0}
-.feed-item{
-  padding:14px 16px;border-bottom:1px solid var(--border);
-  display:flex;gap:12px;align-items:flex-start;
-}
-.feed-item:last-child{border-bottom:none}
-.feed-bar{width:3px;border-radius:2px;flex-shrink:0;align-self:stretch}
-.bar-red{background:var(--cr3)}
-.bar-amb{background:var(--amb)}
-.bar-fg{background:var(--fg4)}
-.feed-content{flex:1}
-.feed-ts{font-family:var(--font-m);font-size:10px;color:var(--tx3);letter-spacing:.05em;margin-bottom:3px}
-.feed-label{font-family:var(--font-b);font-weight:700;font-size:14px;color:var(--tx0);margin-bottom:2px}
-.feed-loc{font-family:var(--font-m);font-size:11px;color:var(--tx2)}
-
-/* CONDITION PANEL */
-.condition-panel{display:flex;flex-direction:column;gap:10px}
-.cond-metric{
-  background:var(--n3);border:1px solid var(--border);border-radius:10px;
-  padding:12px 14px;display:flex;justify-content:space-between;align-items:center;
-}
-.cond-key{font-family:var(--font-m);font-size:11px;color:var(--tx3);text-transform:uppercase;letter-spacing:.06em}
-.cond-val{font-family:var(--font-d);font-weight:900;font-size:18px;color:var(--fg4)}
-.cond-val.red{color:var(--cr3)}
-.cond-val.amb{color:var(--amb)}
-
-/* TERMINAL REPORT */
-.bento-card.terminal{background:var(--obs)}
-.t-line{font-family:var(--font-m);font-size:12px;color:var(--p3);line-height:2.1;display:flex;gap:8px}
-.t-cmd{color:var(--fg4)}
-.t-ok{color:var(--fg4)}
-.t-amb{color:var(--amb)}
-.t-red{color:var(--cr3)}
-.t-data{color:var(--tx1)}
-
-/* ── SCENARIOS ────────────────────────────────────────── */
-.scenarios{padding:88px 0;background:var(--n1)}
-.scenarios-grid{display:flex;flex-direction:column;gap:12px;margin-top:48px}
-.scenario-card{
-  position:relative;border-radius:14px;overflow:hidden;
-  aspect-ratio:16/9;
-}
-.scenario-card img{width:100%;height:100%;object-fit:cover;filter:saturate(.7) brightness(.7);transition:transform .5s,filter .3s}
-.scenario-card:hover img{transform:scale(1.04);filter:saturate(.9) brightness(.8)}
-.scenario-overlay{
+/* Nature-green glow in hero */
+.hero-nat-glow{
   position:absolute;inset:0;
-  background:linear-gradient(to top,rgba(8,16,13,.96) 0%,rgba(8,16,13,.5) 45%,rgba(8,16,13,.08) 80%);
-  display:flex;flex-direction:column;justify-content:flex-end;padding:22px;
+  background:radial-gradient(ellipse 60% 50% at 75% 25%,rgba(14,92,56,.2) 0%,transparent 70%);
 }
-.sc-tag{font-family:var(--font-m);font-size:10px;color:var(--fg4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
-.sc-title{font-family:var(--font-d);font-weight:800;font-size:20px;color:var(--tx0);line-height:1.2;margin-bottom:4px}
-.sc-sub{font-family:var(--font-b);font-weight:300;font-size:13px;color:var(--tx2)}
+/* Star watermark */
+.star-wm{
+  position:absolute;inset-inline-end:-3%;top:6vh;
+  width:clamp(200px,48vw,540px);opacity:.05;
+  filter:drop-shadow(0 0 40px rgba(20,128,63,.4));
+  z-index:1;pointer-events:none;
+}
+.hero-in{position:relative;z-index:3;width:100%}
+.hero-logo{
+  width:clamp(80px,16vw,180px);height:auto;
+  margin-bottom:clamp(18px,3.5vw,32px);
+  filter:drop-shadow(0 6px 28px rgba(20,128,63,.5));
+}
+.lbl{
+  font-family:var(--font-d);font-weight:700;
+  font-size:clamp(10px,2vw,12px);
+  letter-spacing:.28em;text-transform:uppercase;
+  color:var(--nat-l);display:inline-block;margin-bottom:16px;
+}
+.lbl::before{content:"· ";opacity:.5}
+.lbl::after{content:" ·";opacity:.5}
+h1{
+  font-family:var(--font-b);font-weight:900;
+  font-size:clamp(50px,12vw,122px);
+  line-height:.88;letter-spacing:-.03em;margin-bottom:18px;
+}
+h1 .thin{font-weight:200;color:var(--tx0)}
+h1 .nat-t{color:var(--nat-l)}
+h1 .gold-t{
+  background:var(--gold);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;display:block;
+}
+.hero-sub{
+  font-size:clamp(15px,3.2vw,19px);font-weight:400;
+  color:var(--tx1);max-width:44ch;line-height:1.65;
+  margin-bottom:32px;
+}
+.hero-sub b{font-weight:700;color:var(--tx0)}
+.cta-row{display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px}
+.btn-dl{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--nat-grad);color:#fff;
+  font-family:var(--font-d);font-weight:900;
+  font-size:clamp(11px,2vw,13px);letter-spacing:.16em;text-transform:uppercase;
+  padding:18px 28px;
+  box-shadow:0 14px 40px -12px rgba(14,92,56,.65);
+  transition:.25s;
+}
+.btn-dl:hover{transform:translateY(-2px);box-shadow:0 20px 52px -10px rgba(14,92,56,.8)}
+.btn-ghost{
+  font-size:clamp(13px,2.5vw,15px);font-weight:400;
+  color:var(--nat-l);border-bottom:1px solid rgba(20,128,63,.45);
+  padding-bottom:3px;transition:.2s;
+}
+.btn-ghost:hover{color:var(--nat-l);filter:brightness(1.2)}
 
-/* ── ECOSYSTEM ─────────────────────────────────────────── */
-.ecosystem{padding:88px 0;background:var(--obs);border-top:1px solid var(--border)}
-.ecosystem-grid{display:flex;flex-direction:column;gap:12px;margin-top:48px}
-.eco-card{
-  background:var(--n2);border:1px solid var(--border);border-radius:14px;padding:24px;
-  display:flex;gap:16px;align-items:flex-start;
+/* ─── COVENANT ─────────────────────────────────────────── */
+.cov{background:var(--ink);padding:clamp(60px,10vw,112px) 0;text-align:center}
+.cov .verse{
+  font-family:var(--font-b);font-weight:200;
+  font-size:clamp(26px,7vw,68px);
+  line-height:1.1;letter-spacing:-.02em;color:var(--tx0);
+}
+.cov .verse b{
+  font-weight:900;color:var(--nat-l);
+}
+.cov .src{margin-top:20px;font-family:var(--font-d);font-size:11px;letter-spacing:.38em;color:var(--tx2);text-transform:uppercase}
+
+/* ─── STATS ─────────────────────────────────────────────── */
+.stats{
+  background:var(--n0);
+  padding:clamp(44px,7vw,72px) 0;
+  border-top:1px solid var(--border-n);
+  border-bottom:1px solid var(--border-n);
+}
+.stat-g{display:grid;grid-template-columns:repeat(3,1fr)}
+.stat{padding:0 clamp(8px,3vw,28px);text-align:center;position:relative}
+.stat+.stat::before{
+  content:"";position:absolute;inset-block:6px;inset-inline-start:0;
+  width:1px;
+  background:linear-gradient(180deg,transparent,rgba(20,128,63,.45),transparent);
+}
+.stat .n{
+  font-family:var(--font-d);font-weight:900;
+  font-size:clamp(30px,8vw,58px);line-height:1;
+  color:var(--nat-l);
+}
+.stat .c{margin-top:10px;font-size:clamp(11px,2.5vw,14px);font-weight:400;color:var(--tx2)}
+
+/* ─── HAZARD GRID ────────────────────────────────────────── */
+.hazards{background:var(--n1);padding:clamp(64px,10vw,120px) 0}
+.sh{margin-bottom:clamp(32px,5vw,56px)}
+.sh .lbl{margin-bottom:12px}
+.sh h2{
+  font-family:var(--font-b);font-weight:900;
+  font-size:clamp(28px,6.5vw,56px);
+  line-height:.95;letter-spacing:-.025em;margin-bottom:8px;
+}
+.sh h2 .thin{font-weight:200}
+.sh h2 .nat-t{color:var(--nat-l)}
+.sh p{color:var(--tx1);font-size:clamp(14px,2.5vw,16px);max-width:46ch;line-height:1.65}
+.haz-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:clamp(10px,2vw,18px);
+  margin-top:clamp(32px,5vw,52px);
+}
+.haz-card{
+  background:var(--n2);border:1px solid rgba(169,184,210,.1);
+  padding:clamp(18px,3vw,28px);
+  display:flex;gap:14px;align-items:flex-start;
   transition:border-color .2s,transform .2s;
 }
-.eco-card:hover{border-color:var(--border-fg);transform:translateY(-2px)}
-.eco-icon{font-size:26px;flex-shrink:0;width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center}
-.eco-title{font-family:var(--font-d);font-weight:800;font-size:18px;color:var(--tx0);margin-bottom:4px}
-.eco-text{font-family:var(--font-b);font-weight:300;font-size:14px;color:var(--tx1);line-height:1.65}
-
-/* ── CTA ZONE ──────────────────────────────────────────── */
-.cta-zone{
-  padding:88px 24px;background:var(--n1);
-  position:relative;overflow:hidden;text-align:center;
+.haz-card:hover{border-color:var(--border-n);transform:translateY(-2px)}
+.haz-icon{
+  font-size:clamp(24px,5vw,32px);flex-shrink:0;
+  width:clamp(40px,8vw,52px);height:clamp(40px,8vw,52px);
+  border-radius:50%;background:var(--n3);
+  display:flex;align-items:center;justify-content:center;
 }
-.cta-zone::before{
-  content:'';position:absolute;top:-40%;left:50%;transform:translateX(-50%);
-  width:600px;height:600px;border-radius:50%;
-  background:radial-gradient(circle,rgba(14,92,56,.15) 0%,transparent 70%);
+.haz-card h3{font-size:clamp(14px,3vw,17px);font-weight:700;margin-bottom:5px;color:var(--tx0)}
+.haz-card p{font-size:clamp(12px,2vw,14px);color:var(--tx1);line-height:1.6;font-weight:300}
+@media(min-width:600px){.haz-grid{grid-template-columns:repeat(3,1fr)}}
+
+/* ─── SCENARIOS ──────────────────────────────────────────── */
+.scenes{background:var(--n0);padding:clamp(64px,10vw,120px) 0;clip-path:var(--cut);margin-block:-3vw;z-index:1}
+.scene-grid{
+  display:grid;grid-template-columns:1fr;
+  gap:clamp(12px,2.5vw,20px);
+  margin-top:clamp(32px,5vw,52px);
+}
+.scene{position:relative;overflow:hidden;aspect-ratio:16/9}
+.scene img{width:100%;height:100%;object-fit:cover;filter:saturate(.65) brightness(.7);transition:filter .4s,transform .5s}
+.scene:hover img{filter:saturate(.9) brightness(.85);transform:scale(1.03)}
+.scene-ov{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(4,10,20,.95) 0%,rgba(4,10,20,.4) 50%,transparent 80%);
+  display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(16px,3vw,24px);
+}
+.sc-tag{font-family:var(--font-d);font-size:10px;color:var(--nat-l);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px}
+.sc-title{font-family:var(--font-b);font-weight:700;font-size:clamp(16px,3.5vw,21px);line-height:1.2;margin-bottom:4px}
+.sc-sub{font-size:clamp(12px,2vw,13px);color:var(--tx1);font-weight:300}
+@media(min-width:600px){.scene-grid{grid-template-columns:repeat(3,1fr)}.scene{aspect-ratio:3/4}}
+
+/* ─── URBAN LINK ─────────────────────────────────────────── */
+.urban{background:var(--n0);padding:clamp(64px,10vw,120px) 0;border-top:1px solid var(--border)}
+.urban-in{
+  display:grid;grid-template-columns:1fr;
+  gap:clamp(32px,6vw,64px);align-items:center;
+}
+.urban-copy .lbl{margin-bottom:14px}
+.urban-copy h2{
+  font-family:var(--font-b);font-weight:900;
+  font-size:clamp(26px,5.5vw,50px);
+  line-height:.95;letter-spacing:-.025em;margin-bottom:14px;
+}
+.urban-copy p{color:var(--tx1);font-size:clamp(14px,2.5vw,16px);line-height:1.65;margin-bottom:24px;font-weight:300}
+.btn-urban{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--gold);color:var(--ink);
+  font-family:var(--font-d);font-weight:900;
+  font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  padding:16px 24px;
+  box-shadow:0 12px 36px -10px rgba(224,168,40,.5);
+  transition:.25s;
+}
+.btn-urban:hover{transform:translateY(-2px)}
+.ecosystem{
+  display:flex;flex-direction:column;gap:10px;
+}
+.eco-pill{
+  display:flex;align-items:center;gap:12px;
+  background:var(--n2);border:1px solid rgba(169,184,210,.1);
+  padding:14px 18px;
+}
+.eco-pill .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.eco-pill span{font-family:var(--font-b);font-size:14px;font-weight:700;color:var(--tx0)}
+.eco-pill small{color:var(--tx2);font-size:12px;font-weight:300;margin-inline-start:auto}
+@media(min-width:680px){.urban-in{grid-template-columns:1fr 1fr}}
+
+/* ─── CLOSE CTA ──────────────────────────────────────────── */
+.close{
+  background:var(--ink);padding:clamp(80px,13vw,140px) 0;
+  text-align:center;position:relative;overflow:hidden;
+}
+.close::before{
+  content:"";position:absolute;
+  top:-40%;left:50%;transform:translateX(-50%);
+  width:clamp(400px,80vw,680px);height:clamp(400px,80vw,680px);
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(14,92,56,.1) 0%,transparent 65%);
   pointer-events:none;
 }
-.cta-eyebrow{font-family:var(--font-m);font-size:11px;color:var(--fg4);letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px;display:block}
-.cta-title{font-family:var(--font-d);font-weight:900;font-size:clamp(30px,7vw,58px);line-height:1;letter-spacing:-1.5px;color:var(--tx0);margin-bottom:14px}
-.cta-sub{font-family:var(--font-b);font-weight:300;font-size:16px;color:var(--tx1);margin-bottom:36px;max-width:420px;margin-left:auto;margin-right:auto;line-height:1.65}
-.cta-actions{display:flex;flex-direction:column;gap:12px;max-width:380px;margin:0 auto 28px}
-
-/* BRAND STRIP */
-.brand-strip{
-  display:flex;align-items:center;justify-content:center;gap:14px;
-  margin-top:52px;padding-top:32px;border-top:1px solid var(--border);
+.close h2{
+  font-family:var(--font-b);font-weight:900;
+  font-size:clamp(32px,8vw,70px);
+  line-height:.92;letter-spacing:-.025em;margin-bottom:16px;
 }
-.brand-pill{
-  font-family:var(--font-m);font-size:11px;padding:6px 14px;
-  border-radius:20px;border:1px solid var(--border);color:var(--tx3);
-  display:flex;align-items:center;gap:6px;
+.close h2 .nat-t{color:var(--nat-l)}
+.close p{
+  font-size:clamp(14px,2.8vw,17px);font-weight:300;
+  color:var(--tx1);max-width:42ch;margin:0 auto 36px;line-height:1.65;
 }
-.brand-pill .dot{width:6px;height:6px;border-radius:50%}
+.close-cta{display:flex;flex-wrap:wrap;justify-content:center;gap:14px}
+.close-note{margin-top:28px;font-size:11px;color:var(--tx3);line-height:2}
 
-/* ── FOOTER ─────────────────────────────────────────────── */
-footer{background:var(--obs);border-top:1px solid var(--border);padding:40px 24px}
-.footer-inner{display:flex;flex-direction:column;gap:20px}
-.footer-logo-row{display:flex;align-items:center;gap:10px}
-.footer-logo-row img{width:24px;height:24px;opacity:.6;filter:hue-rotate(80deg) saturate(.7)}
-.footer-wm{font-family:var(--font-d);font-weight:900;font-size:14px;color:var(--tx2)}
-.footer-links{display:flex;flex-wrap:wrap;gap:16px}
-.footer-links a{font-family:var(--font-b);font-size:13px;color:var(--tx3);transition:color .2s}
-.footer-links a:hover{color:var(--tx1)}
-.footer-copy{font-family:var(--font-m);font-size:11px;color:var(--tx4);letter-spacing:.03em}
+/* ─── FOOTER ─────────────────────────────────────────────── */
+footer{background:var(--n0);border-top:1px solid var(--border-n);padding:36px 20px}
+.foot-in{display:flex;flex-direction:column;gap:18px}
+.foot-brand{display:flex;align-items:center;gap:9px;font-family:var(--font-d);font-size:13px;font-weight:700;letter-spacing:.14em;color:var(--tx1)}
+.foot-brand img{width:22px;height:22px;opacity:.8}
+.foot-links{display:flex;flex-wrap:wrap;gap:10px 20px}
+.foot-links a{font-size:13px;color:var(--tx2);transition:.15s}
+.foot-links a:hover{color:var(--tx0)}
+.foot-copy{font-size:11px;color:var(--tx3)}
+@media(min-width:640px){.foot-in{flex-direction:row;align-items:center;justify-content:space-between}}
 
-/* ANIMATIONS */
-.reveal{opacity:0;transform:translateY(28px);transition:opacity .6s ease,transform .6s ease}
-.reveal.in{opacity:1;transform:none}
-
-/* DESKTOP */
-@media(min-width:800px){
-  .hero-content{padding:80px 48px 56px;max-width:60%}
-  .hero-actions{flex-direction:row}
-  .btn-primary-nature,.btn-ghost-nature{display:inline-flex;width:auto;padding:0 32px}
-  .hero-mockup{
-    display:block;position:absolute;right:48px;bottom:48px;z-index:10;width:200px;
-  }
-  .phone-shell{border-radius:30px;overflow:hidden;border:2.5px solid rgba(14,92,56,.35);box-shadow:0 40px 80px rgba(0,0,0,.7),0 0 60px rgba(14,92,56,.1);position:relative}
-  .phone-shell img{width:100%;display:block;filter:brightness(.9) saturate(.8)}
-  .phone-badge{position:absolute;bottom:-14px;left:-28px;background:var(--n2);border:1px solid var(--border-fg);border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(0,0,0,.6);white-space:nowrap}
-  .pb-label{font-family:var(--font-d);font-weight:800;font-size:11px;color:var(--fg4)}
-  .pb-sub{font-family:var(--font-m);font-size:10px;color:var(--tx2)}
-
-  .bento-row{flex-direction:row}
-  .bento-row .bento-card:first-child{flex:6}
-  .bento-row .bento-card:last-child{flex:4}
-  .bento-row.flip .bento-card:first-child{flex:4}
-  .bento-row.flip .bento-card:last-child{flex:6}
-
-  .scenarios-grid{flex-direction:row}
-  .scenario-card{aspect-ratio:unset;flex:1;min-height:320px}
-  .ecosystem-grid{flex-direction:row}
-  .eco-card{flex:1}
-
-  .cta-actions{flex-direction:row;max-width:480px}
-  .footer-inner{flex-direction:row;align-items:center;justify-content:space-between}
-}
+/* ─── ANIMATIONS ──────────────────────────────────────────── */
+.fade{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease}
+.fade-l{opacity:0;transform:translateX(-24px);transition:opacity .6s ease,transform .6s ease}
+.fade.in,.fade-l.in{opacity:1;transform:none}
 </style>
 </head>
 <body>
 
 <!-- NAV -->
-<nav class="nav">
-  <div class="nav-logo">
-    <img src="logo-192.png" alt="">
-    <div style="display:flex;flex-direction:column;gap:0">
-      <span class="nav-wordmark">SH<span class="gr">✡</span>MER <span style="color:var(--fg4);font-size:13px">Nature</span></span>
+<nav>
+  <div class="w nav-in">
+    <a href="nature.html" class="brand">
+      <img src="nature-badge-sm.png" alt="SH✡MER Nature">
+      <div class="brand-text">
+        <span>SH<i>✡</i>MER</span>
+        <sub>Nature</sub>
+      </div>
+    </a>
+    <div class="nav-r">
+      <a href="shomer.html" class="btn-nav">הצטרפו עכשיו</a>
     </div>
-  </div>
-  <div class="nav-right">
-    <div class="nav-status">Trail Network · Live</div>
-    <a href="shomer.html" class="nav-cta">הצטרף/י עכשיו</a>
   </div>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-bg-stack">
-    <img class="hero-bg-slide on" id="n1" src="img/benefits-hiker.jpg" alt="">
-    <img class="hero-bg-slide" id="n2" src="img/real-guide.jpg" alt="">
-    <img class="hero-bg-slide" id="n3" src="img/benefits-woman.jpg" alt="">
-    <div class="hero-overlay"></div>
-    <div class="hero-fg-vignette"></div>
+  <div class="hero-bg">
+    <img class="hero-slide on" src="nature-hero-final.jpg" alt="">
+    <img class="hero-slide" src="nature-hero-dog-23.jpg" alt="">
+    <img class="hero-slide" src="nature-hero-dog-34.jpg" alt="">
   </div>
-
-  <div class="hero-content">
-    <div class="topo-bar">
-      <span class="topo-dot"></span>
-      <span class="topo-item">TRAIL MONITOR</span>
-      <span class="topo-sep">·</span>
-      <span class="topo-item" style="color:var(--cr3)">⚠ WILDLIFE ALERT</span>
-      <span class="topo-sep">·</span>
-      <span class="topo-item">31°C · UV HIGH</span>
-    </div>
-    <div class="hero-eyebrow">SH✡MER Nature · שמירה בטבע</div>
-    <h1 class="hero-title">
-      הטבע<br>
-      <span class="gr">יפה.</span><br>
-      <span class="dim">גם מסוכן.</span>
+  <div class="hero-nat-glow"></div>
+  <svg class="star-wm" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="100,10 190,165 10,165" stroke="#14803F" stroke-width="1.5" fill="none"/>
+    <polygon points="100,190 190,35 10,35" stroke="#14803F" stroke-width="1.5" fill="none"/>
+  </svg>
+  <div class="w hero-in">
+    <img class="hero-logo" src="nature-badge.png" alt="SH✡MER Nature">
+    <div class="lbl">SH✡MER Nature · שמירה בטבע</div>
+    <h1>
+      <span class="thin">הטבע</span>
+      <span class="nat-t" style="display:block">יפה.</span>
+      <span class="gold-t">גם מסוכן.</span>
     </h1>
     <p class="hero-sub">
-      <strong>SH✡MER Nature</strong> שומר/ת עליך ביערות, חופים, שמורות ושטחים פתוחים.
-      אזהרות חיות בר, ניווט חירום, ו-SOS שמגיע לכל מקום.
+      <b>SH✡MER Nature</b> שומר/ת עליך ביערות, חופים, שמורות ושטחים פתוחים.
+      אזהרות חיות בר, ניווט GPS ללא רשת, ו-SOS שמגיע לכל מקום.
     </p>
-    <div class="hero-actions">
-      <a href="shomer.html" class="btn-primary-nature">
-        <span style="font-size:18px">🏕️</span>
-        הצטרף/י לרשת הטבע — חינם
+    <div class="cta-row">
+      <a href="shomer.html" class="btn-dl">
+        <span>🌿</span>
+        הצטרפו לרשת הטבע — חינם
       </a>
-      <a href="#hazards" class="btn-ghost-nature">אזהרות פעילות</a>
-    </div>
-    <div class="hero-stats">
-      <div class="stat-cell">
-        <span class="stat-n">3</span>
-        <span class="stat-l">סוגי שמירה</span>
-      </div>
-      <div class="stat-cell">
-        <span class="stat-n">GPS</span>
-        <span class="stat-l">ניווט · ללא רשת</span>
-      </div>
-      <div class="stat-cell">
-        <span class="stat-n">0₪</span>
-        <span class="stat-l">חינם · תמיד</span>
-      </div>
-    </div>
-    <div class="hazard-ticker" style="margin-top:16px">
-      <div class="hazard-chip chip-red">⚠ נחש · הר מירון</div>
-      <div class="hazard-chip chip-amb">🐗 חזיר בר · ישי</div>
-      <div class="hazard-chip chip-fg">✓ שביל ישראל · פתוח</div>
-      <div class="hazard-chip chip-amb">🔥 סיכון שריפה · גבוה</div>
+      <a href="#hazards" class="btn-ghost">מה מגינים</a>
     </div>
   </div>
+</section>
 
-  <div class="hero-mockup">
-    <div class="phone-shell">
-      <img src="img/real-sos-map.jpg" alt="SH✡MER Nature">
-      <div class="phone-badge">
-        <span style="font-size:18px">🌿</span>
-        <div>
-          <div class="pb-label">Nature Shield · Active</div>
-          <div class="pb-sub">GPS Lock · Trail Mode</div>
-        </div>
+<!-- COVENANT -->
+<section class="cov fade">
+  <div class="w">
+    <p class="verse">
+      שמור עלי<br><b>כאישון בת עין.</b>
+    </p>
+    <p class="src">תהלים יז, ח · גם בשטח הפתוח</p>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats fade">
+  <div class="w">
+    <div class="stat-g">
+      <div class="stat">
+        <div class="n">GPS</div>
+        <div class="c">ניווט ללא רשת</div>
+      </div>
+      <div class="stat">
+        <div class="n">24/7</div>
+        <div class="c">ניטור חיות בר</div>
+      </div>
+      <div class="stat">
+        <div class="n">0₪</div>
+        <div class="c">חינם תמיד</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- HAZARD BENTO -->
-<section class="hazard-section reveal" id="hazards">
-  <div class="wrap" style="padding:0 24px">
-    <div class="section-eyebrow">HAZARD · INTELLIGENCE</div>
-    <h2 class="section-title">מוניטור סיכונים<br>בזמן אמת</h2>
-    <p class="section-sub">נתוני שדה ממשתמשים, מוסדות ממלכתיים ורשות הטבע — בממשק אחד.</p>
-
-    <div class="bento">
-      <div class="bento-row">
-        <!-- LIVE FEED 60% -->
-        <div class="bento-card" style="background:var(--n1)">
-          <div class="card-tag">LIVE · HAZARD FEED</div>
-          <div class="hazard-feed">
-            <div class="feed-item">
-              <div class="feed-bar bar-red"></div>
-              <div class="feed-content">
-                <div class="feed-ts">14:22 · 2.3KM</div>
-                <div class="feed-label">נחש ארסי — הר מירון</div>
-                <div class="feed-loc">COORD 32.9847°N 35.4231°E</div>
-              </div>
-            </div>
-            <div class="feed-item">
-              <div class="feed-bar bar-red"></div>
-              <div class="feed-content">
-                <div class="feed-ts">13:51 · 5.1KM</div>
-                <div class="feed-label">חזיר בר אגרסיבי — יישי</div>
-                <div class="feed-loc">COORD 31.7845°N 34.9201°E</div>
-              </div>
-            </div>
-            <div class="feed-item">
-              <div class="feed-bar bar-amb"></div>
-              <div class="feed-content">
-                <div class="feed-ts">12:40 · 1.8KM</div>
-                <div class="feed-label">סיכון שריפה גבוה — כרמל</div>
-                <div class="feed-loc">UV INDEX 9 · WIND 34KMH</div>
-              </div>
-            </div>
-            <div class="feed-item">
-              <div class="feed-bar bar-fg"></div>
-              <div class="feed-content">
-                <div class="feed-ts">11:10 · OPEN</div>
-                <div class="feed-label">שביל ישראל — סגמנט 14</div>
-                <div class="feed-loc">CLEARED · SAFE TO HIKE</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- CONDITIONS 40% -->
-        <div class="bento-card" style="background:var(--n1)">
-          <div class="card-tag">CONDITIONS · NOW</div>
-          <div class="condition-panel">
-            <div class="cond-metric">
-              <span class="cond-key">TEMP</span>
-              <span class="cond-val amb">31°C</span>
-            </div>
-            <div class="cond-metric">
-              <span class="cond-key">UV INDEX</span>
-              <span class="cond-val red">9 · גבוה</span>
-            </div>
-            <div class="cond-metric">
-              <span class="cond-key">WIND</span>
-              <span class="cond-val">34 KMH</span>
-            </div>
-            <div class="cond-metric">
-              <span class="cond-key">FIRE RISK</span>
-              <span class="cond-val red">HIGH ⚠</span>
-            </div>
-            <div class="cond-metric">
-              <span class="cond-key">NEAREST AED</span>
-              <span class="cond-val" style="font-size:14px;color:var(--fg4)">1.2KM</span>
-            </div>
-          </div>
+<!-- HAZARDS -->
+<section class="hazards fade" id="hazards">
+  <div class="w">
+    <div class="sh">
+      <div class="lbl">ממה שומרים</div>
+      <h2><span class="thin">ששה</span> <span class="nat-t">מגינים.</span></h2>
+      <p>כל איום בשטח הפתוח — SH✡MER Nature מכסה.</p>
+    </div>
+    <div class="haz-grid">
+      <div class="haz-card">
+        <div class="haz-icon">🐍</div>
+        <div>
+          <h3>חיות בר</h3>
+          <p>נחשים, עקרבים, חזירי בר — דיווחים מהשטח בזמן אמת.</p>
         </div>
       </div>
-
-      <!-- TERMINAL REPORT -->
-      <div class="bento-row flip">
-        <div class="bento-card terminal">
-          <div class="card-tag">TERMINAL · REPORT FLOW</div>
-          <div class="t-line"><span class="t-cmd">›</span><span class="t-data">HAZARD_TYPE</span><span class="t-ok">▸ SNAKE</span></div>
-          <div class="t-line"><span class="t-cmd">›</span><span class="t-data">GPS_LOCK</span><span class="t-ok">32.98°N 35.42°E ✓</span></div>
-          <div class="t-line"><span class="t-cmd">›</span><span class="t-data">PHOTO_ATTACHED</span><span class="t-ok">IMG_0482.jpg</span></div>
-          <div class="t-line"><span class="t-cmd">›</span><span class="t-data">SEVERITY</span><span class="t-red">CRITICAL</span></div>
-          <div class="t-line"><span class="t-cmd">›</span><span class="t-data">BROADCASTING</span><span class="t-ok">✓ 47 HIKERS NOTIFIED</span></div>
-        </div>
-        <div class="bento-card">
-          <div class="card-tag">FEATURE · 04</div>
-          <span class="card-icon">🧭</span>
-          <div class="card-title">ניווט חירום ללא רשת</div>
-          <div class="card-text">GPS offline. מסלולי מילוט מסומנים. קואורדינטות לכוחות הצלה. עובד כשהסלולרי לא.</div>
+      <div class="haz-card">
+        <div class="haz-icon">🔥</div>
+        <div>
+          <h3>שריפות</h3>
+          <p>ניטור סיכון שריפה, רוח, UV — ממקורות רשמיים.</p>
         </div>
       </div>
-
-      <!-- THREE CARDS -->
-      <div class="bento-row">
-        <div class="bento-card">
-          <div class="card-tag">FEATURE · 01</div>
-          <span class="card-icon">🐍</span>
-          <div class="card-title">אזהרות חיות בר</div>
-          <div class="card-text">נחשים, חזירי בר, עקרבים ועוד — דיווחים מהשטח, מסוננים ומדויקים.</div>
+      <div class="haz-card">
+        <div class="haz-icon">🌊</div>
+        <div>
+          <h3>חופים ומים</h3>
+          <p>זרמים, גלים, מדוזות — אזהרות לחופי ישראל.</p>
         </div>
-        <div class="bento-card">
-          <div class="card-tag">FEATURE · 02</div>
-          <span class="card-icon">🔥</span>
-          <div class="card-title">ניטור שריפות<br>ומזג אוויר</div>
-          <div class="card-text">UV, רוח, לחות, סיכון שריפה — ממקורות רשמיים, ממוזגים למסך אחד.</div>
+      </div>
+      <div class="haz-card">
+        <div class="haz-icon">🧭</div>
+        <div>
+          <h3>ניווט GPS</h3>
+          <p>מסלולים ומיקומים ללא אינטרנט, גם בנקודות עיוורות.</p>
         </div>
-        <div class="bento-card">
-          <div class="card-tag">FEATURE · 03</div>
-          <span class="card-icon">🚁</span>
-          <div class="card-title">SOS לחילוץ<br>בשטח פתוח</div>
-          <div class="card-text">לחיצה אחת → קואורדינטות מדויקות → שידור לגורמי חירום. עובד בכל שטח.</div>
+      </div>
+      <div class="haz-card">
+        <div class="haz-icon">🚁</div>
+        <div>
+          <h3>SOS לחילוץ</h3>
+          <p>קואורדינטות מדויקות לגורמי חירום. ללא שיחה.</p>
+        </div>
+      </div>
+      <div class="haz-card">
+        <div class="haz-icon">🌡️</div>
+        <div>
+          <h3>מזג אוויר</h3>
+          <p>טמפרטורה, לחות, UV — מידע קריטי להישרדות.</p>
         </div>
       </div>
     </div>
@@ -535,118 +451,123 @@ footer{background:var(--obs);border-top:1px solid var(--border);padding:40px 24p
 </section>
 
 <!-- SCENARIOS -->
-<section class="scenarios reveal">
-  <div class="wrap" style="padding:0 24px">
-    <div class="section-eyebrow">תרחישים · FIELD</div>
-    <h2 class="section-title">מה קורה<br>כשזה קורה?</h2>
-    <div class="scenarios-grid">
-      <div class="scenario-card">
-        <img src="img/benefits-hiker.jpg" alt="טיול">
-        <div class="scenario-overlay">
-          <div class="sc-tag">01 · שטח פתוח</div>
-          <div class="sc-title">פציעה בשביל</div>
-          <div class="sc-sub">SOS → קואורדינטות → חילוץ. ללא שיחה. ללא אינטרנט.</div>
+<section class="scenes fade">
+  <div class="w">
+    <div class="sh">
+      <div class="lbl">תרחישים · שדה</div>
+      <h2><span class="nat-t">SH✡MER Nature</span> <span class="thin">שם כשצריך.</span></h2>
+    </div>
+    <div class="scene-grid">
+      <div class="scene">
+        <img src="nature-hero-dog-11.jpg" alt="חיות בר">
+        <div class="scene-ov">
+          <div class="sc-tag">01 · חיות בר</div>
+          <div class="sc-title">פגישה עם נחש בשביל</div>
+          <div class="sc-sub">זיהוי, מדריך חירום, דיווח שמגן על כולם.</div>
         </div>
       </div>
-      <div class="scenario-card">
-        <img src="img/real-guide.jpg" alt="מדריך">
-        <div class="scenario-overlay">
-          <div class="sc-tag">02 · חיות בר</div>
-          <div class="sc-title">פגישה עם נחש</div>
-          <div class="sc-sub">זיהוי מיד, מדריך חירום, דיווח שמגן על כולם.</div>
+      <div class="scene">
+        <img src="img/benefits-hiker.jpg" alt="פציעה בשטח">
+        <div class="scene-ov">
+          <div class="sc-tag">02 · שטח פתוח</div>
+          <div class="sc-title">פציעה בשביל ישראל</div>
+          <div class="sc-sub">SOS + קואורדינטות GPS. חילוץ מדויק.</div>
         </div>
       </div>
-      <div class="scenario-card">
-        <img src="img/benefits-parents.jpg" alt="ילדים">
-        <div class="scenario-overlay">
-          <div class="sc-tag">03 · משפחות</div>
-          <div class="sc-title">ילד שאבד בשטח</div>
-          <div class="sc-sub">מיקום חי → שומרים מתגייסים → נמצא.</div>
+      <div class="scene">
+        <img src="img/benefits-parents.jpg" alt="ילד שאבד">
+        <div class="scene-ov">
+          <div class="sc-tag">03 · משפחה</div>
+          <div class="sc-title">ילד שאבד בגן לאומי</div>
+          <div class="sc-sub">מיקום חי + שומרים מתגייסים. נמצא.</div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ECOSYSTEM -->
-<section class="ecosystem reveal">
-  <div class="wrap" style="padding:0 24px">
-    <div class="section-eyebrow">ECOSYSTEM · SHOMER</div>
-    <h2 class="section-title">שתי אפליקציות.<br>רשת אחת.</h2>
-    <p class="section-sub">SH✡MER ו-SH✡MER Nature — אותו ID, אותם שומרים, שני עולמות.</p>
-    <div class="ecosystem-grid">
-      <div class="eco-card">
-        <div class="eco-icon" style="background:rgba(204,20,38,.12)">🆘</div>
-        <div>
-          <div class="eco-title">SH✡MER — עיר</div>
-          <div class="eco-text">אירועי ביטחון, אלימות, רפואה. רשת עירונית. SOS קהילתי.</div>
+<!-- URBAN LINK -->
+<section class="urban fade">
+  <div class="w">
+    <div class="urban-in">
+      <div class="urban-copy">
+        <div class="lbl">SH✡MER Urban</div>
+        <h2>גם בעיר.<br><span style="background:var(--gold);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">אותה רשת.</span></h2>
+        <p>SH✡MER Urban ו-SH✡MER Nature — אותו SH✡MER ID, אותם שומרים, שני עולמות. הצטרפות לאחד = הצטרפות לשניהם.</p>
+        <a href="index.html" class="btn-urban">
+          <span>🛡️</span>
+          SH✡MER Urban
+        </a>
+      </div>
+      <div class="ecosystem">
+        <div class="eco-pill" style="border-color:rgba(224,168,40,.2)">
+          <span class="dot" style="background:var(--g3)"></span>
+          <span>SH✡MER Urban</span>
+          <small>עיר, שכונה, קהילה</small>
+        </div>
+        <div class="eco-pill" style="border-color:var(--border-n)">
+          <span class="dot" style="background:var(--nat-l)"></span>
+          <span>SH✡MER Nature</span>
+          <small>טבע, שמורות, חופים</small>
+        </div>
+        <div class="eco-pill" style="border-color:rgba(224,168,40,.35)">
+          <span class="dot" style="background:var(--g4)"></span>
+          <span>כיסוי מלא</span>
+          <small>אחד ID · שתי אפליקציות</small>
         </div>
       </div>
-      <div class="eco-card" style="border-color:var(--border-fg)">
-        <div class="eco-icon" style="background:rgba(14,92,56,.15)">🌿</div>
-        <div>
-          <div class="eco-title" style="color:var(--fg4)">SH✡MER Nature</div>
-          <div class="eco-text">חיות בר, שריפות, פציעות בשטח. GPS ללא רשת. חילוץ מדויק.</div>
-        </div>
-      </div>
-    </div>
-    <div class="brand-strip">
-      <div class="brand-pill"><span class="dot" style="background:var(--cr3)"></span>SH✡MER Urban</div>
-      <div style="font-family:var(--font-m);font-size:14px;color:var(--tx3)">+</div>
-      <div class="brand-pill" style="border-color:var(--border-fg);color:var(--fg4)"><span class="dot" style="background:var(--fg4)"></span>SH✡MER Nature</div>
-      <div style="font-family:var(--font-m);font-size:14px;color:var(--tx3)">=</div>
-      <div class="brand-pill" style="border-color:rgba(224,168,40,.3);color:var(--g3)"><span class="dot" style="background:var(--g3)"></span>Full Coverage</div>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
-<section class="cta-zone reveal">
-  <span class="cta-eyebrow">// הצטרף/י עכשיו</span>
-  <h2 class="cta-title">הטבע קורא.<br><span style="background:var(--fg-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">SH✡MER שומר.</span></h2>
-  <p class="cta-sub">בלי הורדה. בלי תשלום. מספר טלפון — ואת/ה ברשת.</p>
-  <div class="cta-actions">
-    <a href="shomer.html" class="btn-primary-nature" style="height:58px;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:12px;font-family:var(--font-d);font-weight:900;font-size:17px;color:#fff">
-      <span style="font-size:18px">🏕️</span>
-      הצטרף/י לרשת הטבע — חינם
-    </a>
-  </div>
-  <div style="font-family:var(--font-m);font-size:11px;color:var(--tx3);line-height:2;letter-spacing:.02em">
-    SH✡MER אינו תחליף לשירותי חירום<br>
-    בחירום — חייג/י 100 · 101 · 102
+<!-- CLOSE CTA -->
+<section class="close fade">
+  <div class="w">
+    <div class="lbl" style="justify-content:center;display:flex;color:var(--nat-l)">SH✡MER Nature</div>
+    <h2>
+      <span class="nat-t">הטבע קורא.</span><br>
+      <span style="font-weight:200">SH✡MER שומר.</span>
+    </h2>
+    <p>בלי הורדה. בלי תשלום. מספר טלפון — ואת/ה ברשת.</p>
+    <div class="close-cta">
+      <a href="shomer.html" class="btn-dl">
+        <span>🌿</span>
+        הצטרפו לרשת הטבע — חינם
+      </a>
+    </div>
+    <div class="close-note">
+      SH✡MER אינו תחליף לשירותי חירום<br>
+      בחירום — 100 · 101 · 102
+    </div>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-inner">
+  <div class="foot-in">
     <div>
-      <div class="footer-logo-row" style="margin-bottom:12px">
-        <img src="logo-192.png" alt="">
-        <span class="footer-wm">SH✡MER NATURE</span>
-      </div>
-      <div class="footer-copy">© 2026 3Shamrocks Studio · SH✡MER Urban + Nature</div>
+      <div class="foot-brand"><img src="nature-badge-sm.png" alt="">SH✡MER NATURE</div>
+      <div class="foot-copy" style="margin-top:8px">© 2026 3Shamrocks Studio · SH✡MER Urban + Nature</div>
     </div>
-    <div class="footer-links">
-      <a href="shomer.html">SH✡MER Urban</a>
-      <a href="index.html">דף הבית</a>
+    <div class="foot-links">
+      <a href="shomer.html">כניסה לאפליקציה</a>
+      <a href="index.html">SH✡MER Urban</a>
       <a href="#">פרטיות</a>
-      <a href="#">תנאים</a>
     </div>
   </div>
 </footer>
 
 <script>
-var slides=document.querySelectorAll('.hero-bg-slide'),cur=0;
+var slides=document.querySelectorAll('.hero-slide'),ci=0;
 setInterval(function(){
-  slides[cur].classList.remove('on');
-  cur=(cur+1)%slides.length;
-  slides[cur].classList.add('on');
-},4000);
+  slides[ci].classList.remove('on');
+  ci=(ci+1)%slides.length;
+  slides[ci].classList.add('on');
+},5000);
 var io=new IntersectionObserver(function(e){
-  e.forEach(function(x){if(x.isIntersecting)x.target.classList.add('in');});
-},{threshold:0.07});
-document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+  e.forEach(function(x){if(x.isIntersecting)x.target.classList.add('in')});
+},{threshold:0.08});
+document.querySelectorAll('.fade,.fade-l').forEach(function(el){io.observe(el)});
 </script>
 </body>
 </html>
