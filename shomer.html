@@ -1266,6 +1266,20 @@ body.otp-active .ob-steps{display:none!important;}
 .stats .st:nth-child(1){border-top-color:rgba(224,168,40,.7);}
 .stats .st:nth-child(2){border-top-color:rgba(255,90,90,.7);}
 .stats .st:nth-child(3){border-top-color:rgba(46,204,113,.7);}
+
+.ucard.uc-past{filter:saturate(.45);opacity:.92;border-inline-start:3px solid #5B8CA8}
+.ucard.uc-past .uc-dot{background:#5B8CA8!important;animation:none!important;box-shadow:none!important}
+.ucard.uc-past .ubdg{background:rgba(91,140,168,.16)!important;color:#8FB6CC!important}
+.ucard.uc-past .uc-ttl::after{content:attr(data-arch);margin-inline-start:8px;font:700 9.5px Heebo,sans-serif;
+  letter-spacing:.12em;color:#8FB6CC;border:1px solid rgba(91,140,168,.45);padding:2px 6px;border-radius:3px;vertical-align:middle}
+.det-archive{background:rgba(91,140,168,.12);border:1px solid rgba(91,140,168,.42);color:#9FC2D6;
+  border-radius:10px;padding:13px 15px;font:600 13px Heebo,sans-serif;margin-bottom:12px;line-height:1.5}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px;background:rgba(255,255,255,.05);padding:5px;border-radius:12px}
+.seg button{min-height:44px;border:0;border-radius:9px;background:none;cursor:pointer;font:800 13px Heebo,sans-serif;
+  color:var(--tx2,#8194b4);transition:.22s;display:flex;align-items:center;justify-content:center;gap:7px}
+.seg button.on{background:linear-gradient(135deg,#C09020,#E0A828);color:#0A1628}
+.seg button.on.past-on{background:linear-gradient(135deg,#4A7C96,#5B8CA8);color:#04121B}
+.seg .sdot{width:7px;height:7px;border-radius:50%;background:currentColor}
 </style>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 </head>
@@ -1812,7 +1826,7 @@ body.otp-active .ob-steps{display:none!important;}
  <button class="sh-x" onclick="cl('sh-upd')" aria-label="סגור"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
  </div>
  <div class="sh-body">
- <div class="chip-row" role="group" aria-label="סנן עדכונים">
+ <div class="seg" role="tablist"><button class="on" id="seg-live" role="tab" onclick="setUpdSeg('live')"><span class="sdot"></span><span data-he="עכשיו" data-en="Live now" data-ar="الآن">עכשיו</span></button><button id="seg-past" role="tab" onclick="setUpdSeg('past')"><span data-he="ארכיון" data-en="Archive" data-ar="الأرشيف">ארכיון</span></button></div><div class="chip-row" role="group" aria-label="סנן עדכונים">
  <button class="chip on" data-f="all" onclick="chipOn(this)">הכל</button>
  <button class="chip" data-f="sos" onclick="chipOn(this)">SOS פעיל</button>
  <button class="chip" data-f="near" onclick="chipOn(this)">קרוב אליי</button>
@@ -5185,6 +5199,19 @@ window.addEventListener('resize',()=>{if(MAP)MAP.invalidateSize(false);});
  INCIDENT DETAIL
 ═══════════════════════════════════ */
 const DETAILS=[];   /* LIVE — real events only. No demo data. */
+
+/* ══ LIVE vs PAST ══ A safety app must never let someone "respond" to
+   something that is over. LIVE = unresolved AND recent. Else ARCHIVE. */
+var LIVE_WINDOW_MS = 2*60*60*1000;
+function isPastEvent(d){
+  try{
+    if(!d) return false;
+    if(/טופל|נסגר|closed|resolved|handled/i.test((d.status||'')+'')) return true;
+    var ts=d.ts||d._ts||null;
+    if(ts && !isNaN(+ts)) return (Date.now()-(+ts))>LIVE_WINDOW_MS;
+    return false;
+  }catch(e){ return false; }
+}
 function openDetail(idx){
  if(idx<0||!DETAILS[idx]) return;
  const d=DETAILS[idx];
@@ -5202,7 +5229,8 @@ function openDetail(idx){
  const rHtml=d.responders.length?`<div class="sec-cap mb12"> ${currentLang==='he'?'שומרים שהגיבו':'Responders'}</div>${d.responders.map(r=>`<div class="resp-row"><div class="resp-av">${ESC(r.nm[0])}</div><div><div class="resp-nm">${ESC(r.nm)}</div><div class="resp-d">${ESC(r.dist)}</div></div><span class="resp-st">${ESC(r.st)}</span></div>`).join('')}`:'';
  _curDetail=d;
  let ctas='';
- const canNav=(d.lat!=null&&d.lng!=null&&d.status!=='טופל');
+ const _isPast=isPastEvent(d);
+  const canNav=(d.lat!=null&&d.lng!=null&&d.status!=='טופל'&&!_isPast);
  const navBtn=canNav?`<button class="dcta pr" style="width:100%;margin-bottom:8px;background:linear-gradient(135deg,#0E8840,#14A857)" onclick="navigateToEvent()"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:18px;height:18px;vertical-align:-3px;margin-inline-end:6px"><path d="M3 11l18-8-8 18-2-8-8-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>${currentLang==='he'?'נווט לאירוע · מסלול חי':'Navigate to event · live route'}</button>`:'';
  if(['sos','viol','stalk','med'].includes(d.type)){
  /* ONE primary action. "Navigate" and "I'm on my way" were two buttons for what the
@@ -5246,7 +5274,21 @@ function openDetail(idx){
  </div>
  `;
  // Set text safely
- body.querySelector('.det-title').textContent=d.title;
+ if(_isPast){
+    try{
+      /* strip every live-only action (navigate / on-my-way) from the DOM */
+      body.querySelectorAll('.dcta.pr').forEach(function(b){ b.remove(); });
+      var _btn=body.querySelector('#det-respond-btn'); if(_btn) _btn.remove();
+      var _n=document.createElement('div'); _n.className='det-archive';
+      _n.textContent = (currentLang==='he'
+        ? '\u25CF ארכיון — האירוע הזה אינו פעיל. מוצג לצורך מודעות בלבד.'
+        : (currentLang==='ar'
+          ? '\u25CF الأرشيف — هذا الحدث لم يعد نشطًا. يُعرض للعلم فقط.'
+          : '\u25CF Archive \u2014 this event is no longer active. Shown for awareness only.'));
+      body.insertBefore(_n, body.firstChild);
+    }catch(e){}
+  }
+  body.querySelector('.det-title').textContent=d.title;
  body.querySelector('.det-loc').textContent=d.loc;
  body.querySelector('.det-time').textContent=d.time;
  body.querySelector('.det-status').textContent=d.status;
@@ -5331,6 +5373,8 @@ function injectCard(d,silent){
  div.setAttribute('role','listitem');
  div.setAttribute('data-kind', (d.cls||'') + ' ' + (d.kind||'') + ' ' + (d.title||''));
  div.setAttribute('data-dist', (d.distKm!=null? d.distKm : ''));
+  var _pd=(d.detIdx>=0&&typeof DETAILS!=='undefined'&&DETAILS[d.detIdx])?isPastEvent(DETAILS[d.detIdx]):false;
+  div.setAttribute('data-live', _pd?'0':'1'); if(_pd) div.classList.add('uc-past');
  div.setAttribute('tabindex','0');
  if(d.detIdx>=0){div.onclick=()=>openDetail(d.detIdx);}
  const inner=document.createElement('div');inner.className='uc-in';
@@ -5338,6 +5382,7 @@ function injectCard(d,silent){
  const hd=document.createElement('div');hd.className='uc-hd';
  const dot=document.createElement('div');dot.className='uc-dot';dot.setAttribute('aria-hidden','true');
  const ttl=document.createElement('span');ttl.className='uc-ttl';ttl.textContent=d.title;
+  ttl.setAttribute('data-arch', currentLang==='he'?'ארכיון':(currentLang==='ar'?'أرشيف':'ARCHIVE'));
  hd.appendChild(dot);hd.appendChild(ttl);
  const bdg=document.createElement('span');bdg.className='ubdg';bdg.innerHTML=d.bdg;
  top.appendChild(hd);top.appendChild(bdg);
@@ -5357,6 +5402,15 @@ function chipOn(btn){
   applyUpdFilter();
 }
 /* Really filters the feed — these chips used to do nothing at all. */
+
+var UPD_SEG='live';
+function setUpdSeg(s){
+  UPD_SEG=(s==='past')?'past':'live';
+  var lb=document.getElementById('seg-live'), pb=document.getElementById('seg-past');
+  if(lb) lb.classList.toggle('on', UPD_SEG==='live');
+  if(pb){ pb.classList.toggle('on', UPD_SEG==='past'); pb.classList.toggle('past-on', UPD_SEG==='past'); }
+  try{ applyUpdFilter(); }catch(e){}
+}
 function applyUpdFilter(){
   var l=document.getElementById('upd-list'); if(!l)return;
   var he=currentLang==='he', shown=0;
@@ -8172,7 +8226,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v193';
+var APP_VER='v194';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -11880,6 +11934,7 @@ html[dir="rtl"] .sh-back svg{transform:scaleX(-1)}
   setInterval(tag, 1000);
 }catch(e){} })();
 </script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"cb798ec108614ddcb55eacf0c7b5bf23","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"cb798ec108614ddcb55eacf0c7b5bf23","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"cb798ec108614ddcb55eacf0c7b5bf23","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
