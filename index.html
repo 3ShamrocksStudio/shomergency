@@ -3,250 +3,139 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>SH✡MER — אזרחים למען אזרחים</title>
+<title>SH✡MER — לחיצה אחת. הקהילה מגיעה.</title>
 <meta name="description" content="רשת שמירה קהילתית. לחיצה אחת מזעיקה את השומרים שסביבך.">
 <link rel="icon" href="badge-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Heebo:wght@200;400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
-/*═══════════════════════════════════════════════════════════════
-  3SDS™ TOKEN LAYER — every value below is enforced.
-  Any literal not derived from these tokens is a defect.
-═══════════════════════════════════════════════════════════════*/
 :root{
-  /* SURFACE — 5 depths, each with one job */
-  --srf-abyss:#02060C; --srf-base:#060F1E; --srf-raised:#0A1628;
-  --srf-float:#101E34; --srf-edge:#16273F;
-  /* INVERSE — interruption bands only */
-  --srf-paper:#FFFFFF; --srf-stone:#E9EDF4;
-  --ink-strong:#0D1B2E; --ink-muted:#4A5A72;
-  /* BRAND — minted metal */
-  --au-deep:#C09020; --au-core:#E0A828; --au-light:#F5C840;
-  --au-mint:linear-gradient(135deg,#C09020,#E0A828,#F5C840);
-  /* SEMANTIC — one meaning each. --sem-sos is NEVER decorative. */
-  --sem-sos:#E5484D; --sem-police:#1670E0; --sem-fire:#E8811C;
-  --sem-aed:#16A34A; --sem-self:#19A8FF; --sem-archive:#5B8CA8;
-  /* TEXT on dark */
-  --tx-0:#F2F5FC; --tx-1:#A9B8D2; --tx-2:#6B7C99;
-
-  /* TYPE — 7 steps. RTL leading is +0.08 looser above --t-md. */
-  --t-cap:11px; --t-sm:13px; --t-base:15px; --t-md:17px;
-  --t-lg:21px;  --t-xl:28px; --t-2xl:38px;
-  --t-mono:clamp(52px,13vw,148px);
-
-  /* SPACE — 4px base. Values outside this set are defects. */
-  --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-6:24px;
-  --s-8:32px; --s-12:48px; --s-16:64px; --s-24:96px;
-
-  /* ELEVATION — multi-layer ambient, never a single blur */
-  --e1:0 1px 2px rgba(2,6,12,.5);
-  --e2:0 1px 2px rgba(2,6,12,.5),0 8px 24px -12px rgba(2,6,12,.7);
-  --e3:0 1px 2px rgba(2,6,12,.55),0 16px 40px -16px rgba(2,6,12,.8),0 0 0 1px rgba(224,168,40,.14);
-
-  --r-card:12px; --r-ctl:10px;
-  --ease:cubic-bezier(.2,.8,.2,1); --ease-sheet:cubic-bezier(.32,.72,0,1);
+  --ink:#0E1116;        /* near-black, neutral — not navy */
+  --ink-2:#5B6472;      /* secondary text */
+  --ink-3:#9AA2AE;      /* tertiary */
+  --paper:#FBFBF9;      /* off-white canvas */
+  --paper-2:#F1F1EE;    /* subtle band */
+  --line:#E3E3DF;       /* hairlines */
+  --au:#B8860B;         /* single accent. used sparingly. */
+  --sos:#D93B3B;
+  --s1:8px; --s2:16px; --s3:24px; --s4:40px; --s5:64px; --s6:96px; --s7:144px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:hidden}
-body{overflow-x:clip;background:var(--srf-abyss);color:var(--tx-0);
-  font-family:'Heebo',sans-serif;font-weight:400;font-size:var(--t-base);line-height:1.62;
-  -webkit-font-smoothing:antialiased}
+body{background:var(--paper);color:var(--ink);font-family:'Heebo',sans-serif;
+  font-weight:400;font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}
 img{display:block;max-width:100%}
-.w{width:min(1180px,92vw);margin-inline:auto}
-section{position:relative;overflow:clip}
+.w{width:min(1080px,88vw);margin-inline:auto}
+a:focus-visible,button:focus-visible{outline:2px solid var(--au);outline-offset:3px}
 
-/* ── INTERACTION PHYSICS (§1.6) — focus ring is never removed ── */
-a,button{transition:transform .22s var(--ease),background .22s var(--ease),box-shadow .22s var(--ease),opacity .22s var(--ease)}
-a:focus-visible,button:focus-visible{outline:2px solid var(--au-core);outline-offset:3px}
-button:active,a:active{transform:translateY(0) scale(.985);transition-duration:.09s}
-[disabled],.is-disabled{opacity:.42;cursor:not-allowed;transform:none!important}
-
-/* ── LATIN-ONLY ANNOTATION. Cinzel has no Hebrew glyphs (§1.3 law 3) ── */
-.lbl{font-family:'Cinzel',serif;font-weight:700;font-size:var(--t-cap);
-  letter-spacing:.42em;text-transform:uppercase;color:var(--au-core);line-height:1.45}
-.lbl-he{font-family:'Heebo',sans-serif;font-weight:700;font-size:var(--t-cap);
-  letter-spacing:.22em;color:var(--au-core);line-height:1.5}
-.rule{height:1px;background:linear-gradient(90deg,transparent,var(--au-deep),transparent);opacity:.5}
-.rule-s{width:var(--s-16);height:1px;background:linear-gradient(90deg,var(--au-core),transparent)}
-bdi{unicode-bidi:isolate}
-.num{font-variant-numeric:tabular-nums;white-space:nowrap}
-
-/* ── TYPE ── */
-.d-mono{font-weight:900;font-size:var(--t-mono);line-height:.86;letter-spacing:-.035em}
-.d-xl{font-weight:900;font-size:clamp(var(--t-xl),8vw,86px);line-height:.94;letter-spacing:-.03em}
-.d-lg{font-weight:700;font-size:var(--t-lg);line-height:1.35;letter-spacing:-.012em}
-.thin{font-weight:200}
-.au-t{background:var(--au-mint);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+/* ── TYPE: 5 steps only ── */
+.t-eyebrow{font-size:12px;font-weight:700;letter-spacing:.18em;color:var(--ink-3)}
+.t-body{font-size:17px;color:var(--ink-2);line-height:1.7}
+.t-lead{font-size:clamp(19px,2.4vw,23px);color:var(--ink-2);line-height:1.6;font-weight:300}
+.t-h2{font-size:clamp(30px,5vw,52px);font-weight:700;line-height:1.1;letter-spacing:-.025em}
+.t-h1{font-size:clamp(42px,8.5vw,84px);font-weight:900;line-height:1.02;letter-spacing:-.035em}
 
 /* ── NAV ── */
-nav{position:fixed;inset-inline:0;top:0;z-index:200;backdrop-filter:blur(18px);
-  background:linear-gradient(180deg,rgba(2,6,12,.94),rgba(2,6,12,.6));
-  border-bottom:1px solid var(--srf-edge)}
-.nav-in{display:flex;align-items:center;justify-content:space-between;height:60px}
-.brand{display:flex;align-items:center;gap:var(--s-3)}
-.brand img{width:34px;height:34px}
-.brand b{font-family:'Cinzel',serif;font-weight:900;font-size:var(--t-md);letter-spacing:.16em}
-.brand i{font-style:normal;color:var(--au-light)}
-.nav-r{display:flex;align-items:center;gap:var(--s-2)}
-.lang{display:flex;gap:var(--s-1)}
-.lang button{width:44px;height:44px;border:1px solid var(--srf-edge);background:none;
-  color:var(--tx-2);font:700 var(--t-cap)/1 'Heebo',sans-serif;cursor:pointer;border-radius:var(--r-ctl)}
-.lang button.on{border-color:var(--au-core);color:var(--au-light)}
-.lang button:hover{border-color:var(--au-deep)}
-.cta-sm{min-height:44px;display:inline-flex;align-items:center;padding:0 var(--s-4);
-  background:var(--au-mint);color:var(--srf-abyss);border-radius:var(--r-ctl);
-  font-weight:900;font-size:var(--t-sm);letter-spacing:.02em;box-shadow:var(--e1)}
-.cta-sm:hover{transform:translateY(-2px);box-shadow:var(--e2)}
+nav{position:fixed;inset-inline:0;top:0;z-index:50;background:rgba(251,251,249,.86);
+  backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:17px;letter-spacing:.04em}
+.brand img{width:28px;height:28px}
+.brand i{font-style:normal;color:var(--au)}
+.nav-r{display:flex;align-items:center;gap:var(--s1)}
+.lang{display:flex}
+.lang button{width:44px;height:44px;border:0;background:none;color:var(--ink-3);
+  font:500 12px/1 'Heebo',sans-serif;cursor:pointer}
+.lang button.on{color:var(--ink);font-weight:700}
+.btn-sm{min-height:44px;display:inline-flex;align-items:center;padding:0 var(--s3);
+  background:var(--ink);color:var(--paper);border-radius:999px;font-weight:700;font-size:14px}
+.btn-sm:hover{opacity:.86}
 
-/* ── HERO ── */
-.hero{min-height:100svh;display:flex;align-items:flex-end;padding:var(--s-24) 0 var(--s-12)}
-.hero-bg{position:absolute;inset:0;z-index:0}
+/* ── HERO: image, one line, one action ── */
+.hero{position:relative;min-height:96svh;display:flex;align-items:flex-end;
+  padding:var(--s6) 0 var(--s5);overflow:hidden}
+.hero-bg{position:absolute;inset:0}
 .hero-bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-  object-position:50% 28%;opacity:0;transition:opacity 1.6s var(--ease)}
+  object-position:50% 30%;opacity:0;transition:opacity 1.8s ease}
 .hero-bg img.on{opacity:1}
 .hero-bg::after{content:"";position:absolute;inset:0;
-  background:linear-gradient(180deg,rgba(2,6,12,.66) 0%,rgba(2,6,12,.34) 38%,rgba(2,6,12,.95) 92%),
-             linear-gradient(270deg,rgba(2,6,12,.74),transparent 58%)}
-.hero-in{position:relative;z-index:3;width:100%;
-  display:grid;grid-template-columns:1fr auto;gap:var(--s-16);align-items:end}
-.rail{display:flex;align-items:center;gap:var(--s-3);margin-bottom:var(--s-6)}
-.hero h1{margin-bottom:var(--s-6)}
-.hero h1 .l2{display:block}
-.hero-sub{font-size:var(--t-md);color:var(--tx-1);max-width:46ch;margin-bottom:var(--s-8);line-height:1.62}
-.hero-sub b{font-weight:700;color:var(--tx-0)}
-.acts{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s-4) var(--s-6)}
-.cta{display:inline-flex;align-items:center;gap:var(--s-3);min-height:56px;
-  padding:0 var(--s-8);background:var(--au-mint);color:var(--srf-abyss);border-radius:var(--r-ctl);
-  font-weight:900;font-size:var(--t-md);box-shadow:var(--e2)}
-.cta:hover{transform:translateY(-2px);box-shadow:var(--e3)}
-.cta svg{width:20px;height:20px;stroke-width:2.4}
-.alt{font-size:var(--t-sm);color:var(--tx-2)}
-.alt a{color:var(--au-core);border-bottom:1px solid rgba(224,168,40,.45);
-  display:inline-block;min-height:44px;padding-block:var(--s-3)}
-/* app mockup — foreground, per brief */
-.mock{position:relative;width:min(264px,26vw);justify-self:end;margin-bottom:var(--s-2)}
-.mock-glow{position:absolute;inset:-18% -22%;
-  background:radial-gradient(closest-side,rgba(224,168,40,.3),transparent 72%)}
-.mock-f{position:relative;border-radius:30px;padding:var(--s-2);
-  background:linear-gradient(160deg,#25344f,#0a1220);box-shadow:var(--e3)}
-.mock-s{position:relative;border-radius:22px;overflow:hidden;background:#000;aspect-ratio:1080/2146}
-.mock-s img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-  object-position:top center;opacity:0;transition:opacity 1s var(--ease)}
-.mock-s img.on{opacity:1}
-@media(max-width:900px){.hero-in{grid-template-columns:1fr}.mock{display:none}}
+  background:linear-gradient(180deg,rgba(14,17,22,.30) 0%,rgba(14,17,22,.15) 42%,rgba(14,17,22,.88) 100%)}
+.hero-in{position:relative;z-index:2;color:#fff}
+.hero .t-h1{max-width:16ch}
+.hero .t-lead{color:rgba(255,255,255,.82);max-width:34ch;margin-top:var(--s3)}
+.hero-cta{margin-top:var(--s4);display:flex;flex-wrap:wrap;align-items:center;gap:var(--s3)}
+.btn{min-height:58px;display:inline-flex;align-items:center;gap:10px;padding:0 var(--s4);
+  background:#fff;color:var(--ink);border-radius:999px;font-weight:700;font-size:17px;
+  transition:transform .2s ease,box-shadow .2s ease}
+.btn:hover{transform:translateY(-2px);box-shadow:0 12px 32px -12px rgba(0,0,0,.5)}
+.btn svg{width:18px;height:18px;stroke-width:2.2}
+.hero-alt{color:rgba(255,255,255,.62);font-size:15px;min-height:44px;display:inline-flex;align-items:center}
+.hero-alt a{color:#fff;border-bottom:1px solid rgba(255,255,255,.4);display:inline-flex;align-items:center;min-height:44px;padding:0 2px}
 
-/* ── COVENANT ── */
-.cov{background:linear-gradient(180deg,var(--srf-abyss),#050B16);
-  padding:var(--s-24) 0;text-align:center}
-.verse{font-weight:200;font-size:clamp(var(--t-xl),7.6vw,74px);line-height:1.16;letter-spacing:-.02em}
-.verse b{font-weight:900}
-.src{margin-top:var(--s-6);font-family:'Cinzel',serif;font-size:var(--t-cap);
-  letter-spacing:.4em;color:var(--tx-2);text-transform:uppercase}
+/* ── PROOF: one line, no boxes ── */
+.proof{border-bottom:1px solid var(--line)}
+.proof-in{display:flex;flex-wrap:wrap;gap:var(--s2) var(--s5);
+  padding:var(--s4) 0;align-items:baseline;justify-content:center}
+.proof b{font-size:19px;font-weight:900;margin-inline-end:8px}
+.proof span{color:var(--ink-2);font-size:15px}
 
-/* ── STATS ── */
-.stats{background:var(--srf-base);padding:var(--s-16) 0;border-block:1px solid var(--srf-edge)}
-.st-g{display:grid;grid-template-columns:repeat(3,1fr)}
-.st{text-align:center;padding-inline:var(--s-2);position:relative}
-.st+.st::before{content:"";position:absolute;inset-block:var(--s-1);inset-inline-start:0;width:1px;
-  background:linear-gradient(180deg,transparent,rgba(224,168,40,.4),transparent)}
-.st .n{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(var(--t-xl),8vw,64px);
-  line-height:1;font-variant-numeric:tabular-nums;
-  background:var(--au-mint);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.st .c{margin-top:var(--s-3);font-size:var(--t-sm);color:var(--tx-2)}
+/* ── SECTIONS: air, not boxes ── */
+.sec{padding:var(--s7) 0}
+.sec-band{background:var(--paper-2);border-block:1px solid var(--line)}
+.sec-head{max-width:22ch;margin-bottom:var(--s5)}
+.sec-head .t-eyebrow{display:block;margin-bottom:var(--s2)}
 
-/* ── SECTION HEAD ── */
-.sh{margin-bottom:var(--s-12)}
-.sh .lbl,.sh .lbl-he{display:block;margin-bottom:var(--s-4)}
+/* three points — text only, hairline separated */
+.pt{padding:var(--s4) 0;border-top:1px solid var(--line);
+  display:grid;grid-template-columns:1fr;gap:var(--s1);max-width:62ch}
+.pt:last-child{border-bottom:1px solid var(--line)}
+.pt h3{font-size:22px;font-weight:700;letter-spacing:-.015em}
+.pt p{color:var(--ink-2);font-size:16px;line-height:1.7}
 
-/* ── PROCESS · STONE BAND ── */
-.proc{background:linear-gradient(180deg,var(--srf-stone),#DCE1EA);color:var(--ink-muted);
-  padding:var(--s-24) 0;clip-path:polygon(0 3.2vw,100% 0,100% 100%,0 100%)}
-.proc .lbl,.proc .lbl-he{color:#8A6A18}
-.proc h2{color:var(--ink-strong)}
-.proc .thin{color:var(--ink-muted)}
-.step{display:grid;grid-template-columns:auto 1fr;gap:var(--s-6);
-  padding:var(--s-8) 0;border-top:1px solid rgba(13,27,46,.16);align-items:baseline}
-.step:last-child{border-bottom:1px solid rgba(13,27,46,.16)}
-.step .sn{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(var(--t-xl),7vw,58px);
-  line-height:.9;color:transparent;-webkit-text-stroke:1.4px rgba(138,106,24,.9);font-variant-numeric:tabular-nums}
-.step h3{font-size:var(--t-lg);font-weight:700;color:var(--ink-strong);margin-bottom:var(--s-2)}
-.step p{color:var(--ink-muted);max-width:52ch;overflow-wrap:break-word}
-
-/* ── SHOWCASE ── */
-.show{background:linear-gradient(180deg,#050B16,var(--srf-abyss));padding:var(--s-24) 0}
-.show-g{display:grid;grid-template-columns:1fr minmax(232px,36%);gap:var(--s-16);align-items:center}
-.feat{padding:var(--s-4) 0;border-bottom:1px solid var(--srf-edge)}
-.feat h4{font-size:var(--t-md);font-weight:700;margin-bottom:var(--s-1)}
-.feat p{font-size:var(--t-sm);color:var(--tx-2);line-height:1.55}
-.dev{position:relative;justify-self:center;width:min(248px,72vw)}
-.dev-f{border-radius:30px;padding:var(--s-2);background:linear-gradient(160deg,#25344f,#0a1220);box-shadow:var(--e3)}
-.dev-s{position:relative;border-radius:22px;overflow:hidden;background:#000;aspect-ratio:1080/2146}
-.dev-s img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .8s var(--ease)}
+/* device — one, centred, unadorned */
+.dev-wrap{display:flex;justify-content:center;margin-top:var(--s5)}
+.dev{width:min(258px,68vw);border-radius:34px;padding:9px;background:var(--ink);
+  box-shadow:0 40px 80px -40px rgba(14,17,22,.5)}
+.dev-s{border-radius:26px;overflow:hidden;background:#000;aspect-ratio:1080/2146;position:relative}
+.dev-s img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .9s ease}
 .dev-s img.on{opacity:1}
-.dots{display:flex;gap:var(--s-2);justify-content:center;margin-top:var(--s-6)}
-.dot{width:44px;height:44px;border:0;background:none;padding:0;cursor:pointer;position:relative}
-.dot::after{content:"";position:absolute;inset-inline:var(--s-2);top:50%;height:2px;
-  transform:translateY(-50%);background:rgba(169,184,210,.3);transition:background .3s var(--ease)}
-.dot.on::after{background:var(--au-light)}
-@media(max-width:860px){.show-g{grid-template-columns:1fr;gap:var(--s-12)}}
-
-/* ── INVISIBLE STATES (§2.3) ── */
-.states{background:var(--srf-base);padding:var(--s-24) 0}
-.sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:var(--s-4);margin-top:var(--s-8)}
-.scard{background:var(--srf-raised);border:1px solid var(--srf-edge);border-radius:var(--r-card);
-  padding:var(--s-4);min-height:72px;box-shadow:var(--e2)}
-.scard .st-lbl{font-size:var(--t-cap);letter-spacing:.2em;color:var(--tx-2);
-  text-transform:uppercase;margin-bottom:var(--s-3);display:block}
-/* skeleton — shape-matched, zero CLS */
-.sk{height:12px;border-radius:3px;background:var(--srf-float);position:relative;overflow:hidden;margin-bottom:var(--s-2)}
-.sk::after{content:"";position:absolute;inset:0;transform:translateX(-100%);
-  background:linear-gradient(90deg,transparent,rgba(224,168,40,.07),transparent);
-  animation:shim 1.4s linear infinite}
-.sk.w60{width:60%} .sk.w40{width:40%} .sk.w80{width:80%}
-@keyframes shim{100%{transform:translateX(100%)}}
-/* empty — zero incidents is GOOD NEWS, never "0 results" */
-.empty{display:flex;align-items:center;gap:var(--s-3);color:var(--tx-1);font-size:var(--t-sm)}
-.empty .ok{width:8px;height:8px;border-radius:50%;background:var(--sem-aed);flex:none}
-/* validation — amber, not red. Red means a person is in danger. */
-.field{width:100%;min-height:44px;background:rgba(255,255,255,.05);
-  border:1px solid var(--srf-edge);border-radius:var(--r-ctl);color:var(--tx-0);
-  padding:0 var(--s-3);font:400 var(--t-base)/1 'Heebo',sans-serif}
-.field.err{border-color:var(--sem-fire);border-inline-start-width:2px}
-.errmsg{margin-top:var(--s-2);font-size:var(--t-sm);color:var(--sem-fire)}
-/* archive — never actionable */
-.arch{border-inline-start:3px solid var(--sem-archive);filter:saturate(.45)}
-.arch-tag{font-size:var(--t-cap);letter-spacing:.12em;color:#8FB6CC;
-  border:1px solid rgba(91,140,168,.45);padding:var(--s-1) var(--s-2);border-radius:3px}
-.clamp2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.dots{display:flex;justify-content:center;gap:4px;margin-top:var(--s3)}
+.dot{width:44px;height:44px;border:0;background:none;cursor:pointer;position:relative;padding:0}
+.dot::after{content:"";position:absolute;inset-inline:16px;top:50%;transform:translateY(-50%);
+  height:6px;border-radius:999px;background:var(--line);transition:background .25s ease}
+.dot.on::after{background:var(--ink)}
 
 /* ── CLOSE ── */
-.close{background:linear-gradient(180deg,var(--srf-raised),var(--srf-base));
-  padding:var(--s-24) 0;text-align:center}
-.seal{width:clamp(88px,20vw,132px);margin:0 auto var(--s-8)}
-.emg{margin:var(--s-8) auto 0;max-width:56ch;padding:var(--s-4) var(--s-6);
-  border:1px solid rgba(229,72,77,.34);background:rgba(229,72,77,.06);
-  border-radius:var(--r-card);font-size:var(--t-sm);color:var(--tx-1);line-height:1.62}
-.emg b{color:#FF9095;font-weight:700}
-footer{background:var(--srf-abyss);border-top:1px solid var(--srf-edge);padding:var(--s-12) 0;text-align:center}
-footer p{font-size:var(--t-sm);color:var(--tx-2);margin-top:var(--s-3)}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto}}
+.close{text-align:center;padding:var(--s7) 0}
+.close .t-h2{max-width:18ch;margin-inline:auto}
+.close .t-lead{max-width:40ch;margin:var(--s3) auto var(--s4)}
+.btn-dark{background:var(--ink);color:var(--paper)}
+.btn-dark:hover{box-shadow:0 12px 32px -12px rgba(14,17,22,.6)}
+.note{margin-top:var(--s5);font-size:14px;color:var(--ink-3);max-width:52ch;
+  margin-inline:auto;line-height:1.65}
+.note b{color:var(--sos);font-weight:700}
+.note .num{font-variant-numeric:tabular-nums;white-space:nowrap}
+
+footer{border-top:1px solid var(--line);padding:var(--s4) 0;text-align:center}
+footer p{font-size:13px;color:var(--ink-3)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 
 <nav>
   <div class="w nav-in">
-    <div class="brand"><img src="badge-192.png" alt=""><b>SH<i>✡</i>MER</b></div>
-    <div class="nav-r">
-      <div class="lang">
+    <span class="brand"><img src="badge-192.png" alt="">SH<i>✡</i>MER</span>
+    <span class="nav-r">
+      <span class="lang">
         <button class="on" id="L-he" onclick="setLang('he')">עב</button>
         <button id="L-en" onclick="setLang('en')">EN</button>
         <button id="L-ar" onclick="setLang('ar')">عر</button>
-      </div>
-      <a href="SHOMER.apk" download class="cta-sm" data-t="dl_s">הורדה</a>
-    </div>
+      </span>
+      <a href="SHOMER.apk" download class="btn-sm" data-t="nav">הורדה</a>
+    </span>
   </div>
 </nav>
 
@@ -257,72 +146,47 @@ footer p{font-size:var(--t-sm);color:var(--tx-2);margin-top:var(--s-3)}
     <img id="s3" src="Shomer1080x1080px_C_blank.jpg" alt="">
   </div>
   <div class="w hero-in">
-    <div>
-      <div class="rail"><span class="rule-s"></span><span class="lbl-he" data-t="eyebrow">אזרחים למען אזרחים</span></div>
-      <h1 class="d-mono"><span class="thin" data-t="h1a">הקהילה</span><span class="l2 au-t" data-t="h1b">שומרת.</span></h1>
-      <p class="hero-sub" data-t="sub">לחיצה אחת מזעיקה את השומרים שסביבך — <b>בלי לדבר, בלי לחכות.</b></p>
-      <div class="acts">
-        <a href="SHOMER.apk" download class="cta">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
-          <span data-t="dl_l">הורדת האפליקציה</span>
-        </a>
-        <span class="alt" data-t="alt">או <a href="shomer.html">נסה/י את גרסת הדפדפן</a></span>
-      </div>
-    </div>
-    <div class="mock" aria-hidden="true">
-      <div class="mock-glow"></div>
-      <div class="mock-f"><div class="mock-s">
-        <img class="on" id="m1" src="site-assets/app-map-clean.jpg" alt="">
-        <img id="m2" src="site-assets/app-guardians-clean.jpg" alt="">
-      </div></div>
+    <h1 class="t-h1" data-t="h1">לחיצה אחת.<br>הקהילה מגיעה.</h1>
+    <p class="t-lead" data-t="sub">רשת שמירה קהילתית. בלי לדבר, בלי לחכות.</p>
+    <div class="hero-cta">
+      <a href="SHOMER.apk" download class="btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
+        <span data-t="dl">הורדת האפליקציה</span>
+      </a>
+      <span class="hero-alt" data-t="alt">או <a href="shomer.html">גרסת הדפדפן</a></span>
     </div>
   </div>
 </header>
 
-<section class="cov">
-  <div class="w">
-    <p class="verse" data-t="verse">הֲשֹׁמֵר אָחִי <b class="au-t">אָנֹכִי</b></p>
-    <div class="src">Genesis 4:9</div>
+<div class="proof">
+  <div class="w proof-in">
+    <span><b>חינם</b><span data-t="p1">לאזרחים, לתמיד</span></span>
+    <span><b>3</b><span data-t="p2">שפות</span></span>
+    <span><b>24/7</b><span data-t="p3">רשת קהילתית</span></span>
   </div>
-</section>
+</div>
 
-<section class="stats">
-  <div class="w st-g">
-    <div class="st"><div class="n"><bdi>1</bdi></div><div class="c" data-t="st1">לחיצה לשליחת SOS</div></div>
-    <div class="st"><div class="n"><bdi>24/7</bdi></div><div class="c" data-t="st2">רשת קהילתית</div></div>
-    <div class="st"><div class="n"><bdi>₪0</bdi></div><div class="c" data-t="st3">חינם לאזרחים, לתמיד</div></div>
-  </div>
-</section>
-
-<section class="proc">
+<section class="sec">
   <div class="w">
-    <div class="sh">
-      <span class="lbl-he" data-t="p_lbl">איך זה עובד</span>
-      <h2 class="d-xl"><span class="thin" data-t="p_h1">הגנה שמתחילה</span><br><span data-t="p_h2">בלחיצה אחת.</span></h2>
+    <div class="sec-head">
+      <span class="t-eyebrow" data-t="e1">איך זה עובד</span>
+      <h2 class="t-h2" data-t="h2a">שלושה צעדים.</h2>
     </div>
-    <div class="step"><div class="sn"><bdi>01</bdi></div><div><h3 data-t="s1t">הרשמה מהירה</h3><p data-t="s1d">מורידים את האפליקציה ונרשמים בחינם עם מספר הטלפון.</p></div></div>
-    <div class="step"><div class="sn"><bdi>02</bdi></div><div><h3 data-t="s2t">בונים מעגל שמירה</h3><p data-t="s2d">מוסיפים בני משפחה וחברים כשומרים אישיים — הרשת ההדדית שלכם.</p></div></div>
-    <div class="step"><div class="sn"><bdi>03</bdi></div><div><h3 data-t="s3t">לוחצים SOS</h3><p data-t="s3d">אזעקה, שיתוף מיקום והתראה לשומרים — בלחיצה אחת, ללא צורך בדיבור.</p></div></div>
-    <div class="step"><div class="sn"><bdi>04</bdi></div><div><h3 data-t="s4t">הקהילה מגיעה</h3><p data-t="s4d">שומרים בסביבתך מקבלים התראה, מגיעים ומסייעים.</p></div></div>
+    <div class="pt"><h3 data-t="s1t">נרשמים</h3><p data-t="s1d">מספר טלפון, אימות אחד. בחינם.</p></div>
+    <div class="pt"><h3 data-t="s2t">בוחרים שומרים</h3><p data-t="s2d">משפחה, חברים, שכנים — האנשים שיגיעו.</p></div>
+    <div class="pt"><h3 data-t="s3t">לוחצים SOS</h3><p data-t="s3d">מיקום והתראה נשלחים מיד. בלי להסביר, בלי לדבר.</p></div>
   </div>
 </section>
 
-<section class="show">
+<section class="sec sec-band">
   <div class="w">
-    <div class="sh">
-      <span class="lbl-he" data-t="w_lbl">בתוך האפליקציה</span>
-      <h2 class="d-xl"><span class="thin" data-t="w_h1">ממשק אחד.</span><br><span class="au-t" data-t="w_h2">כל מה שצריך.</span></h2>
+    <div class="sec-head">
+      <span class="t-eyebrow" data-t="e2">האפליקציה</span>
+      <h2 class="t-h2" data-t="h2b">כל מה שצריך. שום דבר מיותר.</h2>
     </div>
-    <div class="show-g">
+    <div class="dev-wrap">
       <div>
-        <div class="feat"><h4 data-t="f1t">מפה חיה</h4><p data-t="f1d">אירועים ושומרים סביבך, בזמן אמת.</p></div>
-        <div class="feat"><h4 data-t="f2t">מעגל שומרים</h4><p data-t="f2d">משפחה, חברים, שכנים — רואים זה את זה.</p></div>
-        <div class="feat"><h4 data-t="f3t">כפתור SOS</h4><p data-t="f3d">אזעקה, מיקום מדויק ושידור חי.</p></div>
-        <div class="feat"><h4 data-t="f4t">מדריך חירום</h4><p data-t="f4d">הוראות ברורות — גם בלי אינטרנט.</p></div>
-        <div class="feat"><h4 data-t="f5t">קוד ביטול</h4><p data-t="f5d">רק את/ה יכול/ה לעצור אזעקה.</p></div>
-      </div>
-      <div class="dev">
-        <div class="dev-f"><div class="dev-s">
+        <div class="dev"><div class="dev-s">
           <img class="on" id="p1" src="site-assets/app-map-clean.jpg" alt="">
           <img id="p2" src="site-assets/app-guardians-clean.jpg" alt="">
           <img id="p3" src="site-assets/app-profile-clean.jpg" alt="">
@@ -337,108 +201,52 @@ footer p{font-size:var(--t-sm);color:var(--tx-2);margin-top:var(--s-3)}
   </div>
 </section>
 
-<!-- INVISIBLE STATES — the layer that separates a system from a page -->
-<section class="states">
-  <div class="w">
-    <div class="sh">
-      <span class="lbl">Invisible States</span>
-      <h2 class="d-xl"><span class="thin" data-t="v_h1">המצבים</span> <span class="au-t" data-t="v_h2">שאף אחד לא מעצב.</span></h2>
-    </div>
-    <div class="sgrid">
-      <div class="scard">
-        <span class="st-lbl">Skeleton · טעינה</span>
-        <div class="sk w80"></div><div class="sk w60"></div><div class="sk w40"></div>
-      </div>
-      <div class="scard">
-        <span class="st-lbl">Empty · אין אירועים</span>
-        <div class="empty"><span class="ok"></span><span data-t="empty">שקט באזור שלך.</span></div>
-      </div>
-      <div class="scard">
-        <span class="st-lbl">Validation · שגיאה</span>
-        <input class="field err" value="05X-XXX" aria-invalid="true" aria-describedby="e1" readonly>
-        <div class="errmsg" id="e1" data-t="err">מספר טלפון לא תקין</div>
-      </div>
-      <div class="scard arch">
-        <span class="st-lbl">Archive · לא פעיל</span>
-        <div style="display:flex;align-items:center;gap:var(--s-2);flex-wrap:wrap">
-          <span class="d-lg" style="font-size:var(--t-md)" data-t="arch">אירוע קודם</span>
-          <span class="arch-tag">ארכיון</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <section class="close">
   <div class="w">
-    <img class="seal" src="SHOMER_logo_big.png" alt="">
-    <h2 class="d-xl"><span class="thin" data-t="c_h1">הצטרפו</span> <span class="au-t" data-t="c_h2">עכשיו.</span></h2>
-    <p class="hero-sub" style="margin:var(--s-6) auto var(--s-8);text-align:center" data-t="c_p">מחזירים את הביטחון לרחובות.</p>
-    <a href="SHOMER.apk" download class="cta">
+    <h2 class="t-h2" data-t="c1">אף אחד לא צריך להיות לבד.</h2>
+    <p class="t-lead" data-t="c2">אזרחים למען אזרחים.</p>
+    <a href="SHOMER.apk" download class="btn btn-dark">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
-      <span data-t="dl_l2">הורדת האפליקציה</span>
+      <span data-t="dl2">הורדת האפליקציה</span>
     </a>
-    <div class="emg" data-t="emg"><b>SH✡MER אינו תחליף לשירותי חירום.</b> במצב חירום חייג/י <bdi class="num">100</bdi> (משטרה) · <bdi class="num">101</bdi> (מד״א) · <bdi class="num">102</bdi> (כבאות).</div>
+    <p class="note" data-t="note"><b>SH✡MER אינו תחליף לשירותי חירום.</b> במצב חירום חייג/י <span class="num">100</span> · <span class="num">101</span> · <span class="num">102</span>.</p>
   </div>
 </section>
 
-<footer>
-  <div class="w">
-    <span class="lbl">Citizens for Citizens</span>
-    <p>SH✡MER · © 2026 3Shamrocks Studio</p>
-  </div>
-</footer>
+<footer><div class="w"><p>SH✡MER · © 2026 3Shamrocks Studio</p></div></footer>
 
 <script>
 var T={
- he:{dl_s:"הורדה",eyebrow:"אזרחים למען אזרחים",h1a:"הקהילה",h1b:"שומרת.",
-  sub:"לחיצה אחת מזעיקה את השומרים שסביבך — <b>בלי לדבר, בלי לחכות.</b>",
-  dl_l:"הורדת האפליקציה",dl_l2:"הורדת האפליקציה",alt:"או <a href='shomer.html'>נסה/י את גרסת הדפדפן</a>",
-  verse:"הֲשֹׁמֵר אָחִי <b class='au-t'>אָנֹכִי</b>",st1:"לחיצה לשליחת SOS",st2:"רשת קהילתית",st3:"חינם לאזרחים, לתמיד",
-  p_lbl:"איך זה עובד",p_h1:"הגנה שמתחילה",p_h2:"בלחיצה אחת.",
-  s1t:"הרשמה מהירה",s1d:"מורידים את האפליקציה ונרשמים בחינם עם מספר הטלפון.",
-  s2t:"בונים מעגל שמירה",s2d:"מוסיפים בני משפחה וחברים כשומרים אישיים — הרשת ההדדית שלכם.",
-  s3t:"לוחצים SOS",s3d:"אזעקה, שיתוף מיקום והתראה לשומרים — בלחיצה אחת, ללא צורך בדיבור.",
-  s4t:"הקהילה מגיעה",s4d:"שומרים בסביבתך מקבלים התראה, מגיעים ומסייעים.",
-  w_lbl:"בתוך האפליקציה",w_h1:"ממשק אחד.",w_h2:"כל מה שצריך.",
-  f1t:"מפה חיה",f1d:"אירועים ושומרים סביבך, בזמן אמת.",f2t:"מעגל שומרים",f2d:"משפחה, חברים, שכנים — רואים זה את זה.",
-  f3t:"כפתור SOS",f3d:"אזעקה, מיקום מדויק ושידור חי.",f4t:"מדריך חירום",f4d:"הוראות ברורות — גם בלי אינטרנט.",
-  f5t:"קוד ביטול",f5d:"רק את/ה יכול/ה לעצור אזעקה.",
-  v_h1:"המצבים",v_h2:"שאף אחד לא מעצב.",empty:"שקט באזור שלך.",err:"מספר טלפון לא תקין",arch:"אירוע קודם",
-  c_h1:"הצטרפו",c_h2:"עכשיו.",c_p:"מחזירים את הביטחון לרחובות.",
-  emg:"<b>SH✡MER אינו תחליף לשירותי חירום.</b> במצב חירום חייג/י <bdi class='num'>100</bdi> (משטרה) · <bdi class='num'>101</bdi> (מד״א) · <bdi class='num'>102</bdi> (כבאות)."},
- en:{dl_s:"Get app",eyebrow:"Citizens for Citizens",h1a:"The community",h1b:"watches.",
-  sub:"One press alerts the guardians around you — <b>no talking, no waiting.</b>",
-  dl_l:"Download the app",dl_l2:"Download the app",alt:"or <a href='shomer.html'>try the web version</a>",
-  verse:"Am I my <b class='au-t'>brother's keeper</b>",st1:"press to send SOS",st2:"community network",st3:"free for citizens, always",
-  p_lbl:"How it works",p_h1:"Protection that starts",p_h2:"with one press.",
-  s1t:"Quick sign-up",s1d:"Download the app and register free with your phone number.",
-  s2t:"Build your circle",s2d:"Add family and friends as personal guardians — your mutual network.",
-  s3t:"Press SOS",s3d:"Alarm, location sharing and guardian alerts — one press, no need to speak.",
-  s4t:"The community comes",s4d:"Nearby guardians are alerted, arrive and help.",
-  w_lbl:"Inside the app",w_h1:"One interface.",w_h2:"Everything you need.",
-  f1t:"Live map",f1d:"Events and guardians around you, in real time.",f2t:"Guardian circle",f2d:"Family, friends, neighbours — visible to each other.",
-  f3t:"SOS button",f3d:"Alarm, precise location and live broadcast.",f4t:"Emergency guide",f4d:"Clear instructions — even offline.",
-  f5t:"Cancel code",f5d:"Only you can stop an alarm.",
-  v_h1:"The states",v_h2:"nobody designs.",empty:"All quiet in your area.",err:"Invalid phone number",arch:"Past event",
-  c_h1:"Join",c_h2:"now.",c_p:"Bringing safety back to the streets.",
-  emg:"<b>SH✡MER is not a substitute for emergency services.</b> In an emergency call <bdi class='num'>100</bdi> (Police) · <bdi class='num'>101</bdi> (MDA) · <bdi class='num'>102</bdi> (Fire)."},
- ar:{dl_s:"تحميل",eyebrow:"مواطنون من أجل مواطنين",h1a:"المجتمع",h1b:"يحرس.",
-  sub:"ضغطة واحدة تنبّه الحُرّاس من حولك — <b>دون كلام، دون انتظار.</b>",
-  dl_l:"حمّل التطبيق",dl_l2:"حمّل التطبيق",alt:"أو <a href='shomer.html'>جرّب نسخة الويب</a>",
-  verse:"أحارسٌ أنا <b class='au-t'>لأخي</b>",st1:"ضغطة لإرسال SOS",st2:"شبكة مجتمعية",st3:"مجاني للمواطنين دائمًا",
-  p_lbl:"كيف يعمل",p_h1:"حماية تبدأ",p_h2:"بضغطة واحدة.",
-  s1t:"تسجيل سريع",s1d:"حمّل التطبيق وسجّل مجانًا برقم هاتفك.",
-  s2t:"ابنِ دائرتك",s2d:"أضف العائلة والأصدقاء كحُرّاس شخصيين — شبكتك المتبادلة.",
-  s3t:"اضغط SOS",s3d:"إنذار ومشاركة موقع وتنبيه الحُرّاس — بضغطة واحدة دون كلام.",
-  s4t:"المجتمع يصل",s4d:"الحُرّاس القريبون يُنبَّهون ويصلون ويساعدون.",
-  w_lbl:"داخل التطبيق",w_h1:"واجهة واحدة.",w_h2:"كل ما تحتاجه.",
-  f1t:"خريطة حية",f1d:"الأحداث والحُرّاس حولك في الوقت الفعلي.",f2t:"دائرة الحُرّاس",f2d:"العائلة والأصدقاء والجيران — يرون بعضهم.",
-  f3t:"زر SOS",f3d:"إنذار وموقع دقيق وبث مباشر.",f4t:"دليل الطوارئ",f4d:"تعليمات واضحة — حتى دون إنترنت.",
-  f5t:"رمز الإلغاء",f5d:"أنت وحدك من يوقف الإنذار.",
-  v_h1:"الحالات",v_h2:"التي لا يصممها أحد.",empty:"كل شيء هادئ في منطقتك.",err:"رقم هاتف غير صالح",arch:"حدث سابق",
-  c_h1:"انضم",c_h2:"الآن.",c_p:"نعيد الأمان إلى الشوارع.",
-  emg:"<b>شومير ليس بديلاً عن خدمات الطوارئ.</b> في الطوارئ اتصل بـ <bdi class='num'>100</bdi> (شرطة) · <bdi class='num'>101</bdi> (إسعاف) · <bdi class='num'>102</bdi> (إطفاء)."}
+ he:{nav:"הורדה",h1:"לחיצה אחת.<br>הקהילה מגיעה.",sub:"רשת שמירה קהילתית. בלי לדבר, בלי לחכות.",
+  dl:"הורדת האפליקציה",dl2:"הורדת האפליקציה",alt:"או <a href='shomer.html'>גרסת הדפדפן</a>",
+  p1:"לאזרחים, לתמיד",p2:"שפות",p3:"רשת קהילתית",
+  e1:"איך זה עובד",h2a:"שלושה צעדים.",
+  s1t:"נרשמים",s1d:"מספר טלפון, אימות אחד. בחינם.",
+  s2t:"בוחרים שומרים",s2d:"משפחה, חברים, שכנים — האנשים שיגיעו.",
+  s3t:"לוחצים SOS",s3d:"מיקום והתראה נשלחים מיד. בלי להסביר, בלי לדבר.",
+  e2:"האפליקציה",h2b:"כל מה שצריך. שום דבר מיותר.",
+  c1:"אף אחד לא צריך להיות לבד.",c2:"אזרחים למען אזרחים.",
+  note:"<b>SH✡MER אינו תחליף לשירותי חירום.</b> במצב חירום חייג/י <span class='num'>100</span> · <span class='num'>101</span> · <span class='num'>102</span>."},
+ en:{nav:"Get app",h1:"One press.<br>The community comes.",sub:"A community safety network. No talking, no waiting.",
+  dl:"Download the app",dl2:"Download the app",alt:"or <a href='shomer.html'>the web version</a>",
+  p1:"for citizens, always",p2:"languages",p3:"community network",
+  e1:"How it works",h2a:"Three steps.",
+  s1t:"Sign up",s1d:"A phone number, one verification. Free.",
+  s2t:"Choose your guardians",s2d:"Family, friends, neighbours — the people who will come.",
+  s3t:"Press SOS",s3d:"Location and alert sent instantly. No explaining, no talking.",
+  e2:"The app",h2b:"Everything you need. Nothing you don't.",
+  c1:"No one should be alone.",c2:"Citizens for citizens.",
+  note:"<b>SH✡MER is not a substitute for emergency services.</b> In an emergency call <span class='num'>100</span> · <span class='num'>101</span> · <span class='num'>102</span>."},
+ ar:{nav:"تحميل",h1:"ضغطة واحدة.<br>المجتمع يصل.",sub:"شبكة أمان مجتمعية. دون كلام، دون انتظار.",
+  dl:"حمّل التطبيق",dl2:"حمّل التطبيق",alt:"أو <a href='shomer.html'>نسخة الويب</a>",
+  p1:"للمواطنين دائمًا",p2:"لغات",p3:"شبكة مجتمعية",
+  e1:"كيف يعمل",h2a:"ثلاث خطوات.",
+  s1t:"التسجيل",s1d:"رقم هاتف، تحقّق واحد. مجانًا.",
+  s2t:"اختر حُرّاسك",s2d:"العائلة، الأصدقاء، الجيران — من سيصلون.",
+  s3t:"اضغط SOS",s3d:"يُرسل الموقع والتنبيه فورًا. دون شرح، دون كلام.",
+  e2:"التطبيق",h2b:"كل ما تحتاجه. لا شيء زائد.",
+  c1:"لا أحد يجب أن يكون وحيدًا.",c2:"مواطنون من أجل مواطنين.",
+  note:"<b>شومير ليس بديلاً عن خدمات الطوارئ.</b> في الطوارئ اتصل بـ <span class='num'>100</span> · <span class='num'>101</span> · <span class='num'>102</span>."}
 };
 function setLang(l){
   document.documentElement.lang=l;
@@ -452,25 +260,22 @@ function setLang(l){
 try{var sl=localStorage.getItem('shomerLang'); if(sl&&sl!=='he')setLang(sl);}catch(e){}
 (function(){var a=['s1','s2','s3'],i=0;setInterval(function(){
   var c=document.getElementById(a[i]); if(c)c.classList.remove('on');
-  i=(i+1)%a.length; var n=document.getElementById(a[i]); if(n)n.classList.add('on');},5200);})();
-(function(){var a=['m1','m2'],i=0;setInterval(function(){
-  var c=document.getElementById(a[i]); if(c)c.classList.remove('on');
-  i=(i+1)%a.length; var n=document.getElementById(a[i]); if(n)n.classList.add('on');},4600);})();
+  i=(i+1)%a.length; var n=document.getElementById(a[i]); if(n)n.classList.add('on');},5400);})();
 var _p=0,_pt=null;
 function pshow(i){
   var s=['p1','p2','p3'],d=document.querySelectorAll('.dot');
   _p=(i+s.length)%s.length;
   s.forEach(function(id,n){var e=document.getElementById(id); if(e)e.classList.toggle('on',n===_p);});
   d.forEach(function(e,n){e.classList.toggle('on',n===_p);});
-  if(_pt)clearInterval(_pt); _pt=setInterval(function(){pshow(_p+1);},4200);
+  if(_pt)clearInterval(_pt); _pt=setInterval(function(){pshow(_p+1);},4400);
 }
-_pt=setInterval(function(){pshow(_p+1);},4200);
+_pt=setInterval(function(){pshow(_p+1);},4400);
 (function(){
   var io=new IntersectionObserver(function(es){es.forEach(function(e){
-    if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='none';io.unobserve(e.target);}})},{threshold:.12});
-  document.querySelectorAll('.step,.feat,.st,.scard').forEach(function(e,n){
-    e.style.opacity='0';e.style.transform='translateY(18px)';
-    e.style.transition='opacity .6s var(--ease) '+(n%5*.06)+'s, transform .6s var(--ease) '+(n%5*.06)+'s';
+    if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='none';io.unobserve(e.target);}})},{threshold:.15});
+  document.querySelectorAll('.pt,.sec-head,.dev-wrap').forEach(function(e,n){
+    e.style.opacity='0';e.style.transform='translateY(14px)';
+    e.style.transition='opacity .7s ease '+(n%4*.07)+'s, transform .7s ease '+(n%4*.07)+'s';
     io.observe(e);});
 })();
 </script>
