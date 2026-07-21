@@ -5115,7 +5115,7 @@ function initMap(){
  if(MAP)return;
  if(typeof window.L==='undefined'||!window.L.map){ setTimeout(initMap,90); return; } // Leaflet loads deferred
  const el=document.getElementById('map'); if(!el)return;
- MAP=window.L.map('map',{zoomControl:false,attributionControl:true,
+ MAP=window.L.map('map',{preferCanvas:true,zoomControl:false,attributionControl:true,
  center:[32.0853,34.7818],zoom:14,minZoom:3,maxZoom:19,
  zoomSnap:.5,worldCopyJump:true});
  window.L.tileLayer(TILE_BASE,{maxZoom:20,subdomains:'abcd',className:'tiles-base',
@@ -8272,7 +8272,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v196';
+var APP_VER='v197';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -9738,6 +9738,39 @@ async function busRead(key){
 }
 
 /* ── THE VICTIM: broadcast ── */
+/* ══ SOS QUEUE-AND-FORWARD ══
+   A distress alert must survive a network drop: persist it, keep retrying,
+   flush on reconnect. Never silently succeed, never silently forget.
+   Stale cap — an alert older than SOS_Q_MAX_AGE is discarded, because firing
+   a 30-minute-old SOS creates a false live incident, which is its own harm. */
+var SOS_Q_KEY='shomerSosQueue', SOS_Q_MAX_AGE=30*60*1000, _sosQTimer=null;
+function sosQueueRead(){ try{ return JSON.parse(localStorage.getItem(SOS_Q_KEY)||'[]'); }catch(e){ return []; } }
+function sosQueueWrite(q){ try{ localStorage.setItem(SOS_Q_KEY, JSON.stringify(q||[])); }catch(e){} }
+function sosQueuePush(chan,payload){ var q=sosQueueRead(); q.push({chan:chan,payload:payload,queuedAt:Date.now(),tries:0}); sosQueueWrite(q); sosQueueSchedule(); }
+function sosQueueSchedule(){ if(_sosQTimer) return; _sosQTimer=setInterval(function(){ sosQueueFlush(); },12000); }
+async function sosQueueFlush(){
+  var q=sosQueueRead();
+  if(!q.length){ if(_sosQTimer){clearInterval(_sosQTimer);_sosQTimer=null;} return; }
+  if(typeof FB==='undefined'||!FB.ready||!FB.uid) return;
+  var he=(typeof currentLang!=='undefined'&&currentLang==='he'), keep=[], sent=0, expired=0;
+  for(var i=0;i<q.length;i++){
+    var it=q[i];
+    if(Date.now()-it.queuedAt > SOS_Q_MAX_AGE){ expired++; continue; }
+    var ok=false;
+    try{ ok=await busWrite(it.chan, it.payload); }catch(e){ ok=false; }
+    if(ok){ sent++; } else { it.tries=(it.tries||0)+1; keep.push(it); }
+  }
+  sosQueueWrite(keep);
+  if(sent){ try{ toast(he?'\u2713 התרעה שהמתינה נשלחה':'\u2713 Queued alert delivered','grn'); }catch(e){}
+            try{ sosWatchMyResponders(); }catch(e){} }
+  if(expired){ try{ toast(he?'\u26A0 התרעה ישנה בוטלה — אם את/ה עדיין בסכנה לחצ/י SOS שוב':'\u26A0 Stale alert discarded — press SOS again if still in danger','sos'); }catch(e){} }
+  if(!keep.length && _sosQTimer){ clearInterval(_sosQTimer); _sosQTimer=null; }
+}
+try{
+  window.addEventListener('online', function(){ sosQueueFlush(); });
+  document.addEventListener('visibilitychange', function(){ if(!document.hidden) sosQueueFlush(); });
+  setTimeout(function(){ if(sosQueueRead().length) sosQueueSchedule(); }, 4000);
+}catch(e){}
 async function sosBroadcast(sosId, type){
   /* accidental double-fire guard: swallow repeats within 3s (never blocks a real re-alert) */
   try{ var _now=Date.now(); if(window._sosLastFire && (_now-window._sosLastFire)<3000){ return false; } window._sosLastFire=_now; }catch(e){}
@@ -9756,10 +9789,7 @@ async function sosBroadcast(sosId, type){
     var n=(SS.circleMembers||[]).filter(function(m){return !m.pending;}).length;
     toast(he?('\u2713 נשלחה התרעה ל'+n+' שומרים'):('\u2713 Alert sent to '+n+' guardians'),'grn');
     sosWatchMyResponders();
-  } else {
-    /* NEVER pretend. If the alert did not leave the phone, the user must know NOW. */
-    toast(he?'\u26A0 ההתרעה לא נשלחה — התקשר/י 100':'\u26A0 Alert NOT sent — call emergency services','sos');
-  }
+  } else { /* Queue it, keep retrying, and tell the user to call 100 NOW. */ try{ sosQueuePush(sosChan(FB.uid, sosSalt()), payload); }catch(e){} toast(he?'\u26A0 ההתרעה טרם נשלחה — ננסה שוב אוטומטית. התקשר/י 100 עכשיו':'\u26A0 Alert not sent yet \u2014 retrying automatically. Call 100 now','sos'); }
   return ok;
 }
 async function sosClearBroadcast(){
