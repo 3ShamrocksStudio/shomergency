@@ -8272,7 +8272,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v198';
+var APP_VER='v199';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -9857,8 +9857,7 @@ function showIncomingSOS(puid, nm, v){
    +'<button class="in-b go">'+(he?'אני בדרך':'I am coming')+'</button>'
    +'<button class="in-b map">'+(he?'נווט/י':'Navigate')+'</button>'
    +'<button class="in-b call">'+(he?'התקשר/י':'Call')+'</button>'
-   +'</div>'
-   +'<button class="in-b sd-alarm" style="width:100%;margin-top:7px;background:linear-gradient(135deg,#C09020,#E0A828 60%,#F5C840);color:#23170a;font-weight:800;border:none;border-radius:10px;padding:10px">🛡 '+(he?'השתק אזעקה — הם בטוחים':currentLang==='ar'?'أوقف الإنذار — إنهم بأمان':'Silence alarm — they are safe')+'</button>';
+   +'</div>';
   document.body.appendChild(d);
 
   function shrink(){
@@ -9890,7 +9889,6 @@ function showIncomingSOS(puid, nm, v){
     var mp=d.querySelector('.map'); if(mp) mp.onclick=nav;
     var cl=d.querySelector('.call'); if(cl) cl.onclick=callThem;
     var st=d.querySelector('.stand'); if(st) st.onclick=function(){ sosStandDown(); d.remove(); };
-    var sda=d.querySelector('.sd-alarm'); if(sda) sda.onclick=function(){ sosStandDownAlarm(puid, nm); };
     var sg=d.querySelector('.sig'); if(sg) sg.onclick=openSignalSheet;
   }
   wire();
@@ -9913,7 +9911,6 @@ async function sosRespond(victimUid, mode){
 
 /* ── THE VICTIM WATCHES WHO IS COMING ── */
 function sosWatchMyResponders(){
-  try{ sosWatchStandDown(); }catch(e){}   // also arm the trusted-guardian remote stand-down channel
   var g=gdState();
   (g.pairs||[]).forEach(function(pr){
     var puid=pr&&pr.partnerUid; if(!puid) return;
