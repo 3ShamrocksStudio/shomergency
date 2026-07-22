@@ -2,630 +2,1290 @@
 <html lang="he" dir="rtl" data-brand="shomer">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#060F1E">
-<script>try{if(window.top!==window.self){window.top.location.replace(window.self.location.href);}}catch(e){}</script>
-<title>SH✡MER — עזרה אמיתית, במרחק לחיצה אחת | אזרחים למען אזרחים</title>
-<meta name="description" content="SH✡MER — רשת בטיחות קהילתית. אזעקת SOS בלחיצה אחת, מפת אירועים חיה ומעגלי שומרים. חינם לאזרחים, ללא פרסומות. אינך לבד.">
-<meta property="og:type" content="website">
-<meta property="og:title" content="SH✡MER — עזרה אמיתית, במרחק לחיצה אחת">
-<meta property="og:description" content="אזעקת SOS בלחיצה אחת, מפת אירועים חיה, מעגלי שומרים. חינם לאזרחים. אזרחים למען אזרחים.">
-<meta property="og:url" content="https://www.shomer-app.co.il/">
-<meta property="og:image" content="https://www.shomer-app.co.il/og-share.jpg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:locale" content="he_IL">
-<meta property="og:locale:alternate" content="ar_IL">
-<meta property="og:locale:alternate" content="en_US">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://www.shomer-app.co.il/og-share.jpg">
-<link rel="canonical" href="https://www.shomer-app.co.il/">
-<link rel="icon" href="logo-192.png">
-<link rel="apple-touch-icon" href="logo-192.png">
+<title>SH✡MER — הקהילה שומרת</title>
+<meta name="description" content="אזעקת SOS, מפת אירועים, מעגלי שומרים. בלחיצה אחת. בחינם. אינך לבד.">
+<meta property="og:title" content="SH✡MER — הקהילה שומרת">
+<meta property="og:image" content="og-share.jpg">
+<link rel="icon" href="badge-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Heebo:wght@200;300;400;700;900&display=swap" rel="stylesheet">
 <style>
-/* ══════════════════════════════════════════════════════════════
-   SH✡MER · Landing — 3S Design System
-   Authority-navy · signal-gold · emergency-red · brushed platinum.
-   Palette LOCKED to the metal badge (SHOMER_logo_big.png). No off-palette.
-   © 2026 3Shamrocks Studio.
-   ══════════════════════════════════════════════════════════════ */
-:root{
-  /* Navy — depth / base */
-  --n0:#060F1E; --n1:#0A1628; --n2:#101E34; --n3:#162440; --n4:#1C2C4E; --n5:#243460;
-  /* Gold — brand authority (the badge's Star of David) */
-  --g1:#9A6C1A; --g2:#C09020; --g3:#E0A828; --g4:#F5C840;
-  --gold:linear-gradient(135deg,#C09020 0%,#E0A828 55%,#F5C840 100%);
-  /* Platinum — brushed metal */
-  --p2:#8392AB; --p3:#B6C2D6; --p4:#E6ECF6;
-  /* Emergency red — SOS only */
-  --r2:#B01220; --r3:#CC1426; --r4:#E8182C;
+/* ─────────────────────────────────────────────────────────
+   3SDS SHOMER DESIGN TOKENS
+   Navy base · Gold accent only · Cinzel + Heebo
+───────────────────────────────────────────────────────── */
+:root {
+  /* Palette */
+  --ink:    #02060F;
+  --n0:     #060F1E;
+  --n1:     #091628;
+  --n2:     #0E1F36;
+  --n3:     #152840;
+  --n4:     #1E3554;
+
+  /* Gold system */
+  --g1: #9A6C1A;
+  --g2: #C09020;
+  --g3: #E0A828;
+  --g4: #F5C840;
+  --gold: linear-gradient(135deg, #C09020 0%, #E0A828 55%, #F5C840 100%);
+
   /* Text */
-  --tx0:#F2F6FF; --tx1:#C8D4E8; --tx2:#8C9BBD; --tx3:#5C6B88;
-  --safe:#16A06A;
-  --border:rgba(140,155,189,.16);
-  --border-2:rgba(140,155,189,.28);
-  --gold-soft:rgba(224,168,40,.10);
-  --gold-line:rgba(224,168,40,.32);
-  /* Type scale (fluid) */
-  --fs-display:clamp(38px,7.4vw,68px);
-  --fs-h2:clamp(28px,4.6vw,44px);
-  --fs-h3:clamp(19px,2.4vw,23px);
-  --fs-lead:clamp(16px,2.4vw,19px);
-  --fs-body:16px;
-  --fs-sm:14px;
-  --fs-xs:12.5px;
-  --fs-eyebrow:13px;
-  /* Rhythm */
-  --sp-section:clamp(64px,10vw,110px);
-  --r:16px; --r-sm:12px; --r-lg:22px;
-  --shadow-card:0 4px 24px rgba(0,0,0,.28);
-  --shadow-cta:0 10px 30px rgba(224,168,40,.22);
-  --maxw:1120px;
+  --tx0: #F2F5FC;
+  --tx1: #A9B8D2;
+  --tx2: #6B7C99;
+  --tx3: #3E4F6A;
+
+  /* UI */
+  --border:     rgba(224,168,40,.12);
+  --border-dim: rgba(169,184,210,.08);
+  --sos:        #E5484D;
+
+  /* Typography */
+  --font-d: 'Cinzel', serif;
+  --font-b: 'Heebo', sans-serif;
+
+  /* Spacing (8px grid) */
+  --s1:  8px;
+  --s2:  16px;
+  --s3:  24px;
+  --s4:  32px;
+  --s5:  40px;
+  --s6:  48px;
+  --s7:  56px;
+  --s8:  64px;
+  --s10: 80px;
+  --s12: 96px;
+
+  /* Layout */
+  --max: 1120px;
+  --pad: 20px;
+  --nav-h: 60px;
 }
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;overflow-x:hidden;-webkit-text-size-adjust:100%}
-body{
-  background:var(--n0);color:var(--tx0);
-  font-family:'Heebo',system-ui,-apple-system,sans-serif;
-  font-size:var(--fs-body);line-height:1.65;letter-spacing:-.1px;
-  overflow-x:hidden;-webkit-font-smoothing:antialiased;
+
+/* ─ Reset ─────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; overflow-x: hidden; font-size: 16px; }
+body {
+  background: var(--n0);
+  color: var(--tx0);
+  font-family: var(--font-b);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
-a{color:var(--g3);text-decoration:none}
-img{max-width:100%;height:auto;display:block}
-h1,h2,h3{line-height:1.14;letter-spacing:-.6px;font-weight:900}
-::selection{background:rgba(224,168,40,.28);color:#fff}
-:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(224,168,40,.55);border-radius:8px}
-.wrap{max-width:var(--maxw);margin:0 auto;padding-inline:22px}
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; height: auto; }
+button { font-family: var(--font-b); cursor: pointer; border: none; background: none; }
 
-/* ── Wordmark ── */
-.wm{font-weight:900;letter-spacing:.02em;font-size:21px;color:var(--tx0)}
-.wm .star{color:var(--g3)}
+/* ─ Layout helpers ────────────────────────────────────── */
+.wrap {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--pad);
+}
+.section { position: relative; overflow: clip; }
 
-/* ── Buttons ── */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;
-  font-weight:800;font-size:16px;border-radius:var(--r-sm);
-  padding:15px 26px;transition:transform .15s ease,opacity .15s ease,box-shadow .15s ease;
-  cursor:pointer;border:0;font-family:inherit;text-align:center;white-space:nowrap}
-.btn svg{width:19px;height:19px;flex-shrink:0}
-.btn-primary{background:var(--gold);color:#1A1204;box-shadow:var(--shadow-cta)}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 38px rgba(224,168,40,.32)}
-.btn-ghost{background:rgba(255,255,255,.05);border:1.5px solid var(--border-2);color:var(--tx0)}
-.btn-ghost:hover{background:rgba(255,255,255,.09);transform:translateY(-2px)}
-.btn-lg{padding:17px 34px;font-size:17px}
+/* ─ Gold text ─────────────────────────────────────────── */
+.g {
+  background: var(--gold);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
-/* ── Eyebrow / section head ── */
-.eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:var(--fs-eyebrow);
-  font-weight:800;letter-spacing:.12em;color:var(--g3);text-transform:uppercase;margin-bottom:16px}
-.eyebrow::before{content:'';width:26px;height:1.5px;background:var(--gold);border-radius:2px}
-.sec-head{max-width:640px;margin:0 auto 12px}
-.sec-head.center{text-align:center;margin-inline:auto}
-.sec-title{font-size:var(--fs-h2)}
-.sec-title .gold{background:var(--gold);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.sec-sub{font-size:var(--fs-lead);color:var(--tx1);font-weight:500;margin-top:14px;line-height:1.6}
+/* ─────────────────────────────────────────────────────────
+   NAV
+───────────────────────────────────────────────────────── */
+.nav {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: 100;
+  height: var(--nav-h);
+  background: rgba(6,15,30,.88);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid var(--border);
+}
+.nav-in {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.nav-badge {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px rgba(224,168,40,.45));
+  flex-shrink: 0;
+}
+.nav-wm {
+  font-family: var(--font-d);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: .16em;
+  color: var(--tx0);
+  white-space: nowrap;
+}
+.nav-wm i { font-style: normal; }
+.nav-r { display: flex; align-items: center; gap: var(--s2); }
+.lang-sw { display: flex; gap: 4px; }
+.lang-btn {
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid rgba(169,184,210,.18);
+  background: none;
+  color: var(--tx2);
+  font-family: var(--font-d);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  border-radius: 0;
+  transition: border-color .2s, color .2s;
+}
+.lang-btn.on { border-color: var(--g3); color: var(--g4); }
+.nav-cta {
+  height: 40px;
+  padding: 0 20px;
+  background: var(--gold);
+  color: var(--ink);
+  font-family: var(--font-d);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: filter .2s, transform .15s;
+}
+.nav-cta:hover { filter: brightness(1.1); transform: translateY(-1px); }
 
-/* ── NAV ── */
-nav{position:fixed;inset:0 0 auto 0;z-index:100;display:flex;align-items:center;gap:12px;
-  justify-content:space-between;padding:12px 22px;
-  background:rgba(6,15,30,.72);backdrop-filter:blur(16px) saturate(1.2);-webkit-backdrop-filter:blur(16px) saturate(1.2);
-  border-bottom:1px solid var(--border);transition:background .3s,border-color .3s}
-nav.scrolled{background:rgba(6,15,30,.94)}
-.nav-brand{display:flex;align-items:center;gap:11px;min-width:0;flex-shrink:1}
-.nav-brand img{width:40px;height:40px;flex-shrink:0;
-  filter:drop-shadow(0 2px 8px rgba(0,0,0,.5))}
-.nav-right{display:flex;align-items:center;gap:12px;flex-shrink:0}
-.langs{display:flex;gap:4px}
-.lp{padding:6px 10px;border:1px solid var(--border);border-radius:999px;font-size:12px;
-  font-weight:700;color:var(--tx2);background:rgba(16,30,52,.6);cursor:pointer;font-family:inherit;
-  transition:.15s}
-.lp:hover{color:var(--tx1);border-color:var(--border-2)}
-.lp.on{color:var(--g3);border-color:var(--gold-line);background:var(--gold-soft)}
-.nav-cta{background:var(--gold);color:#1A1204;padding:9px 18px;border-radius:var(--r-sm);
-  font-weight:800;font-size:14px;white-space:nowrap}
+/* ─────────────────────────────────────────────────────────
+   HERO
+───────────────────────────────────────────────────────── */
+.hero {
+  min-height: 100svh;
+  display: flex;
+  align-items: flex-end;
+  padding-top: var(--nav-h);
+  position: relative;
+  overflow: hidden;
+}
 
-/* ── HERO ── */
-.hero{position:relative;padding:calc(78px + 6vh) 0 clamp(48px,9vw,84px);text-align:center;overflow:hidden}
-.hero::before{content:'';position:absolute;inset:0;z-index:0;
+/* Background image stack */
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  opacity: 0;
+  transition: opacity 1.8s ease;
+}
+.hero-slide.on { opacity: 1; }
+.hero-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
   background:
-    radial-gradient(120% 90% at 50% -10%,rgba(224,168,40,.14) 0%,transparent 46%),
-    radial-gradient(90% 70% at 50% 4%,rgba(36,52,96,.55) 0%,transparent 60%),
-    linear-gradient(180deg,var(--n1) 0%,var(--n0) 100%)}
-.hero::after{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.5;
-  background-image:radial-gradient(rgba(140,155,189,.05) 1px,transparent 1px);background-size:26px 26px;
-  -webkit-mask-image:radial-gradient(70% 60% at 50% 30%,#000,transparent 80%);
-          mask-image:radial-gradient(70% 60% at 50% 30%,#000,transparent 80%)}
-.hero .wrap{position:relative;z-index:2}
-.hero-badge{width:clamp(104px,20vw,148px);height:auto;margin:0 auto 26px;
-  filter:drop-shadow(0 14px 34px rgba(0,0,0,.55)) drop-shadow(0 0 34px rgba(224,168,40,.18));
-  animation:floatBadge 6s ease-in-out infinite}
-@keyframes floatBadge{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
-.hero-eyebrow{justify-content:center}
-.hero-h1{font-size:var(--fs-display);max-width:14ch;margin:0 auto 18px;letter-spacing:-1.4px}
-.hero-h1 .gold{background:var(--gold);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.hero-sub{font-size:var(--fs-lead);color:var(--tx1);font-weight:500;max-width:52ch;margin:0 auto 30px;line-height:1.62}
-.hero-cta{display:flex;flex-direction:column;gap:12px;max-width:360px;margin:0 auto 22px}
-.hero-cta .btn{width:100%}
-.trust-row{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 18px;max-width:560px;margin:0 auto}
-.trust-item{display:inline-flex;align-items:center;gap:7px;font-size:var(--fs-sm);color:var(--tx2);font-weight:600}
-.trust-item svg{width:16px;height:16px;color:var(--safe);flex-shrink:0}
-
-/* ── SECTION base ── */
-section{padding:var(--sp-section) 0}
-.bg-2{background:var(--n1)}
-.bg-3{background:linear-gradient(180deg,var(--n0),var(--n1))}
-
-/* ── FEATURES ── */
-.feat-grid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:44px}
-.feat{background:linear-gradient(180deg,var(--n3),var(--n2));border:1px solid var(--border);
-  border-radius:var(--r);padding:24px 22px;transition:transform .2s,border-color .2s;position:relative;overflow:hidden}
-.feat:hover{transform:translateY(-3px);border-color:var(--gold-line)}
-.feat-ic{width:50px;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;
-  background:var(--gold-soft);border:1px solid var(--gold-line);color:var(--g3);margin-bottom:16px}
-.feat-ic svg{width:25px;height:25px}
-.feat-ic.red{background:rgba(220,38,38,.12);border-color:rgba(220,38,38,.4);color:#ff6b6b}
-.feat h3{font-size:var(--fs-h3);margin-bottom:8px;color:var(--tx0);letter-spacing:-.3px}
-.feat p{font-size:var(--fs-sm);color:var(--tx2);line-height:1.62}
-
-/* ── HOW ── */
-.steps{display:grid;grid-template-columns:1fr;gap:18px;margin-top:46px}
-.step{display:flex;gap:18px;align-items:flex-start;background:var(--n2);border:1px solid var(--border);
-  border-radius:var(--r);padding:22px 22px}
-.step-n{width:44px;height:44px;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  background:var(--gold-soft);border:1.5px solid var(--gold-line);color:var(--g3);font-weight:900;font-size:19px}
-.step h3{font-size:var(--fs-h3);margin-bottom:6px;color:var(--tx0)}
-.step p{font-size:var(--fs-sm);color:var(--tx2);line-height:1.6}
-
-/* ── MOMENTS (scenario photography, with captions) ── */
-.moments{display:grid;grid-template-columns:1fr;gap:16px;margin-top:46px}
-.moment{position:relative;border-radius:var(--r-lg);overflow:hidden;aspect-ratio:16/11;
-  border:1px solid var(--border);background:var(--n0)}
-.moment img{width:100%;height:100%;object-fit:cover;object-position:center 32%;transition:transform .6s ease}
-.moment:hover img{transform:scale(1.04)}
-.moment::after{content:'';position:absolute;inset:0;
-  background:linear-gradient(to top,rgba(6,15,30,.94) 6%,rgba(6,15,30,.35) 42%,transparent 68%)}
-.moment-cap{position:absolute;inset-inline:0;bottom:0;z-index:2;padding:22px 22px 20px;text-align:start}
-.moment-cap .k{font-size:var(--fs-xs);font-weight:800;letter-spacing:.1em;color:var(--g3);text-transform:uppercase;display:block;margin-bottom:5px}
-.moment-cap h3{font-size:19px;color:#fff;letter-spacing:-.3px}
-
-/* ── APP SHOWCASE ── */
-.shots{display:flex;gap:18px;overflow-x:auto;padding:44px 4px 22px;scroll-snap-type:x mandatory;
-  -webkit-overflow-scrolling:touch;scrollbar-width:none}
-.shots::-webkit-scrollbar{display:none}
-.shot{flex:0 0 auto;scroll-snap-align:center;width:min(232px,64vw)}
-.phone{border-radius:30px;border:3px solid #24344E;background:#060F1E;overflow:hidden;
-  box-shadow:0 22px 50px rgba(0,0,0,.5),0 0 0 1px rgba(224,168,40,.14)}
-.phone img{width:100%;display:block}
-.shot-cap{text-align:center;font-size:var(--fs-sm);color:var(--tx1);margin-top:13px;font-weight:600}
-
-/* ── TRUST / SAFETY ── */
-.trust-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:44px}
-.tcard{background:var(--n2);border:1px solid var(--border);border-radius:var(--r);padding:24px 22px}
-.tcard .feat-ic{margin-bottom:14px}
-.tcard h3{font-size:var(--fs-h3);margin-bottom:8px;color:var(--tx0)}
-.tcard p{font-size:var(--fs-sm);color:var(--tx2);line-height:1.62}
-/* emergency banner */
-.emg{display:flex;gap:15px;align-items:flex-start;max-width:720px;margin:36px auto 0;
-  background:rgba(176,18,32,.12);border:1.5px solid rgba(220,38,38,.42);
-  border-inline-start:4px solid var(--r4);border-radius:var(--r);padding:20px 22px;text-align:start}
-.emg-ic{flex-shrink:0;width:42px;height:42px;border-radius:12px;background:rgba(220,38,38,.18);
-  display:flex;align-items:center;justify-content:center;color:#ff6b6b}
-.emg-ic svg{width:23px;height:23px}
-.emg p{font-size:var(--fs-sm);color:#ffd9d9;line-height:1.62}
-.emg b{color:#fff;font-weight:800}
-.emg .dials{margin-top:8px;display:flex;flex-wrap:wrap;gap:8px}
-.dial{display:inline-flex;align-items:center;gap:6px;background:rgba(220,38,38,.2);border:1px solid rgba(232,24,44,.5);
-  color:#fff;font-weight:800;font-size:var(--fs-xs);padding:5px 11px;border-radius:999px}
-
-/* ── FAQ ── */
-.faq-list{margin-top:40px;display:flex;flex-direction:column;gap:11px;max-width:760px;margin-inline:auto}
-.faq{background:var(--n2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:border-color .2s}
-.faq[open]{border-color:var(--gold-line)}
-.faq summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:14px;
-  padding:19px 22px;font-size:16px;font-weight:700;color:var(--tx0)}
-.faq summary::-webkit-details-marker{display:none}
-.faq summary::after{content:'+';font-size:24px;font-weight:300;color:var(--g3);transition:transform .25s;line-height:1;flex-shrink:0}
-.faq[open] summary::after{transform:rotate(45deg)}
-.faq-a{padding:0 22px 20px;font-size:var(--fs-sm);color:var(--tx1);line-height:1.72}
-
-/* ── FINAL CTA ── */
-.cta-band{position:relative;text-align:center;overflow:hidden;
-  background:radial-gradient(90% 120% at 50% 0%,rgba(224,168,40,.14),transparent 55%),linear-gradient(180deg,var(--n1),var(--n0))}
-.cta-band .wrap{position:relative;z-index:2}
-.cta-title{font-size:var(--fs-h2);margin-bottom:14px}
-.cta-title .gold{background:var(--gold);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.cta-sub{font-size:var(--fs-lead);color:var(--tx1);margin-bottom:30px;font-weight:500}
-
-/* ── FOOTER ── */
-footer{background:linear-gradient(180deg,var(--n1),var(--n0));border-top:1px solid var(--border);
-  padding:52px 22px 30px;text-align:center}
-.foot-badge{width:clamp(84px,20vw,112px);height:auto;margin:0 auto 14px;
-  filter:drop-shadow(0 8px 22px rgba(0,0,0,.55)) drop-shadow(0 0 26px rgba(224,168,40,.14))}
-.foot-tag{font-size:var(--fs-sm);color:var(--tx1);font-weight:600;margin-bottom:26px}
-.foot-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:26px}
-.pill{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:999px;
-  font-size:var(--fs-sm);font-weight:700;border:1.5px solid var(--gold-line);color:var(--g3);
-  background:var(--gold-soft);transition:.15s}
-.pill svg{width:17px;height:17px}
-.pill:hover{background:var(--gold);color:#1A1204;transform:translateY(-2px);border-color:transparent}
-.pill.solid{background:var(--gold);color:#1A1204;border-color:transparent;box-shadow:var(--shadow-cta)}
-.pill.solid:hover{opacity:.9}
-.foot-legal{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:18px}
-.foot-legal a{font-size:var(--fs-xs);color:var(--tx3);font-weight:600}
-.foot-legal a:hover{color:var(--tx1)}
-.foot-copy{font-size:var(--fs-xs);color:var(--tx3);display:flex;align-items:center;justify-content:center;gap:9px;flex-wrap:wrap}
-.foot-copy img{height:13px;width:auto;opacity:.7}
-
-/* ── Scroll reveal ── */
-.fi{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s ease}
-.fi.vis{opacity:1;transform:none}
-@media(prefers-reduced-motion:reduce){
-  .fi{opacity:1;transform:none;transition:none}
-  .hero-badge{animation:none}
-  *{scroll-behavior:auto!important}
+    linear-gradient(180deg,
+      rgba(6,15,30,.45) 0%,
+      rgba(6,15,30,.2)  25%,
+      rgba(6,15,30,.75) 65%,
+      rgba(6,15,30,.98) 100%),
+    linear-gradient(90deg,
+      rgba(6,15,30,.82) 0%,
+      transparent 60%);
 }
 
-/* ── Desktop ── */
-@media(min-width:760px){
-  .feat-grid{grid-template-columns:repeat(3,1fr);gap:16px}
-  .steps{grid-template-columns:repeat(3,1fr);gap:16px}
-  .step{flex-direction:column;text-align:center;align-items:center}
-  .moments{grid-template-columns:repeat(3,1fr)}
-  .moment{aspect-ratio:3/4}
-  .trust-grid{grid-template-columns:repeat(3,1fr)}
-  .shots{justify-content:center;overflow-x:visible;flex-wrap:wrap}
-  .hero-cta{flex-direction:row;max-width:none;justify-content:center}
-  .hero-cta .btn{width:auto}
+/* Star of David watermark */
+.star-wm {
+  position: absolute;
+  inset-inline-end: -4%;
+  top: 10%;
+  width: clamp(180px, 46vw, 520px);
+  opacity: .05;
+  z-index: 1;
+  pointer-events: none;
+  filter: drop-shadow(0 0 40px rgba(224,168,40,.35));
 }
-@media(min-width:1000px){
-  .moment-cap h3{font-size:20px}
+
+/* Hero content */
+.hero-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding-bottom: clamp(var(--s8), 8vw, var(--s12));
 }
-/* small phones */
-@media(max-width:560px){
-  .nav-brand .wm{display:none}
-  .nav-cta{padding:9px 14px;font-size:13px}
+.hero-inner {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--s6);
+  align-items: end;
 }
-[dir="ltr"] .eyebrow{letter-spacing:.14em}
-[dir="ltr"] body{letter-spacing:-.2px}
+.hero-text { max-width: 580px; }
+
+/* Eyebrow */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s1);
+  font-family: var(--font-d);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--g3);
+  margin-bottom: var(--s2);
+}
+.eyebrow::before { content: "·"; opacity: .5; }
+.eyebrow::after  { content: "·"; opacity: .5; }
+
+/* Hero badge logo */
+.hero-logo-wrap { margin-bottom: var(--s4); }
+.hero-logo {
+  width: clamp(72px, 15vw, 180px);
+  height: auto;
+  filter: drop-shadow(0 8px 28px rgba(224,168,40,.4));
+}
+
+/* Headline */
+.hero-h1 {
+  font-family: var(--font-b);
+  font-weight: 900;
+  font-size: clamp(48px, 11vw, 120px);
+  line-height: .9;
+  letter-spacing: -.03em;
+  color: var(--tx0);
+  margin-bottom: var(--s2);
+}
+.hero-h1 .light { font-weight: 200; }
+
+/* Sub */
+.hero-sub {
+  font-size: clamp(15px, 2.8vw, 19px);
+  font-weight: 300;
+  color: var(--tx1);
+  line-height: 1.65;
+  max-width: 44ch;
+  margin-bottom: var(--s5);
+}
+.hero-sub b { font-weight: 700; color: var(--tx0); }
+
+/* CTA row */
+.hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s2) var(--s3);
+  margin-bottom: var(--s6);
+}
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 56px;
+  padding: 0 var(--s4);
+  background: var(--gold);
+  color: var(--ink);
+  font-family: var(--font-d);
+  font-size: clamp(10px, 1.6vw, 13px);
+  font-weight: 900;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  box-shadow: 0 12px 40px -12px rgba(224,168,40,.65);
+  transition: transform .15s, box-shadow .15s, filter .15s;
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 48px -10px rgba(224,168,40,.8);
+  filter: brightness(1.05);
+}
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  height: 56px;
+  padding: 0 var(--s3);
+  font-family: var(--font-b);
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--g3);
+  border-bottom: 1px solid rgba(224,168,40,.35);
+  padding-bottom: 3px;
+  height: auto;
+  transition: color .15s, border-color .15s;
+}
+.btn-ghost:hover { color: var(--g4); border-color: var(--g4); }
+
+/* Stats bar */
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--border);
+  border-radius: 0;
+  overflow: hidden;
+}
+.stat {
+  padding: var(--s2) var(--s2);
+  text-align: center;
+  position: relative;
+}
+.stat + .stat::before {
+  content: "";
+  position: absolute;
+  inset-block: var(--s1);
+  inset-inline-start: 0;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, rgba(224,168,40,.35), transparent);
+}
+.stat-n {
+  font-family: var(--font-d);
+  font-weight: 900;
+  font-size: clamp(28px, 6vw, 52px);
+  line-height: 1;
+  background: var(--gold);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.stat-l {
+  margin-top: var(--s1);
+  font-size: clamp(10px, 1.8vw, 13px);
+  font-weight: 400;
+  color: var(--tx2);
+  letter-spacing: .02em;
+}
+
+/* Phone mockup — desktop only */
+.hero-mockup { display: none; }
+
+/* ─────────────────────────────────────────────────────────
+   COVENANT STRIP
+───────────────────────────────────────────────────────── */
+.cov {
+  background: var(--ink);
+  padding: clamp(56px, 10vw, 112px) 0;
+  text-align: center;
+}
+.cov-verse {
+  font-family: var(--font-b);
+  font-weight: 200;
+  font-size: clamp(24px, 6.5vw, 64px);
+  line-height: 1.15;
+  letter-spacing: -.015em;
+  color: var(--tx0);
+}
+.cov-verse b {
+  font-weight: 900;
+  background: var(--gold);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.cov-src {
+  margin-top: var(--s3);
+  font-family: var(--font-d);
+  font-size: 11px;
+  letter-spacing: .36em;
+  color: var(--tx3);
+  text-transform: uppercase;
+}
+
+/* ─────────────────────────────────────────────────────────
+   STATS SECTION
+───────────────────────────────────────────────────────── */
+.stats-section {
+  padding: clamp(var(--s6), 8vw, var(--s10)) 0;
+  background: var(--n0);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.stat-big {
+  padding: 0 var(--s3);
+  text-align: center;
+  position: relative;
+}
+.stat-big + .stat-big::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, rgba(224,168,40,.35), transparent);
+}
+.stat-big-n {
+  font-family: var(--font-d);
+  font-weight: 900;
+  font-size: clamp(36px, 9vw, 72px);
+  line-height: 1;
+  background: var(--gold);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.stat-big-l {
+  margin-top: var(--s1);
+  font-size: clamp(11px, 2vw, 15px);
+  font-weight: 400;
+  color: var(--tx2);
+  line-height: 1.4;
+}
+
+/* ─────────────────────────────────────────────────────────
+   SECTION HEADER (shared)
+───────────────────────────────────────────────────────── */
+.sec-head { margin-bottom: clamp(var(--s5), 6vw, var(--s8)); }
+.sec-lbl {
+  display: block;
+  font-family: var(--font-d);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .32em;
+  text-transform: uppercase;
+  color: var(--g3);
+  margin-bottom: var(--s2);
+}
+.sec-h2 {
+  font-family: var(--font-b);
+  font-weight: 900;
+  font-size: clamp(28px, 5.5vw, 56px);
+  line-height: .95;
+  letter-spacing: -.025em;
+  color: var(--tx0);
+  margin-bottom: var(--s2);
+}
+.sec-h2 .light { font-weight: 200; }
+.sec-sub {
+  font-size: clamp(14px, 2.5vw, 17px);
+  font-weight: 300;
+  color: var(--tx1);
+  max-width: 48ch;
+  line-height: 1.65;
+}
+
+/* ─────────────────────────────────────────────────────────
+   APP SHOWCASE — 4 real screenshots
+───────────────────────────────────────────────────────── */
+.showcase {
+  padding: clamp(var(--s8), 10vw, 128px) 0;
+  background: var(--n1);
+}
+.phones-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--s3);
+  margin-top: clamp(var(--s5), 6vw, var(--s8));
+}
+.phone-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+}
+.phone-shell {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1.5px solid rgba(169,184,210,.12);
+  box-shadow:
+    0 20px 60px rgba(0,0,0,.45),
+    0 0 0 1px rgba(255,255,255,.04);
+  background: var(--n0);
+  aspect-ratio: 9/19.5;
+}
+.phone-shell img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+/* Gold top accent on phone */
+.phone-shell::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 2px;
+  background: var(--gold);
+  opacity: .6;
+  z-index: 2;
+}
+.phone-cap {
+  padding: 0 var(--s1);
+}
+.phone-cap-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--tx0);
+  margin-bottom: 2px;
+}
+.phone-cap-sub {
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--tx2);
+  line-height: 1.5;
+}
+
+/* ─────────────────────────────────────────────────────────
+   HOW IT WORKS
+───────────────────────────────────────────────────────── */
+.process {
+  padding: clamp(var(--s8), 10vw, 128px) 0;
+  background: var(--n0);
+}
+.steps-list { margin-top: clamp(var(--s5), 6vw, var(--s8)); }
+.step {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: clamp(var(--s2), 3.5vw, var(--s5));
+  padding: clamp(var(--s3), 4vw, var(--s5)) 0;
+  border-top: 1px solid var(--border-dim);
+  align-items: start;
+}
+.step:last-child { border-bottom: 1px solid var(--border-dim); }
+.step-num {
+  font-family: var(--font-d);
+  font-weight: 900;
+  font-size: clamp(28px, 6vw, 56px);
+  line-height: .9;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--g3);
+  flex-shrink: 0;
+  min-width: clamp(40px, 7vw, 72px);
+  text-align: center;
+}
+.step-body {}
+.step-tag {
+  font-family: var(--font-d);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--g2);
+  margin-bottom: var(--s1);
+  display: block;
+}
+.step-title {
+  font-size: clamp(17px, 3vw, 22px);
+  font-weight: 700;
+  color: var(--tx0);
+  letter-spacing: -.01em;
+  margin-bottom: var(--s1);
+  line-height: 1.2;
+}
+.step-copy {
+  font-size: clamp(13px, 2vw, 15px);
+  font-weight: 300;
+  color: var(--tx1);
+  line-height: 1.7;
+  max-width: 54ch;
+}
+
+/* ─────────────────────────────────────────────────────────
+   SCENARIOS — cinematic images
+───────────────────────────────────────────────────────── */
+.scenarios {
+  padding: clamp(var(--s8), 10vw, 128px) 0;
+  background: var(--n1);
+}
+.scenes-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--s2);
+  margin-top: clamp(var(--s5), 6vw, var(--s8));
+}
+.scene {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0;
+  aspect-ratio: 16/9;
+}
+.scene img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: saturate(.75) brightness(.72);
+  transition: transform .5s ease, filter .3s;
+}
+.scene:hover img {
+  transform: scale(1.04);
+  filter: saturate(.9) brightness(.82);
+}
+.scene-ov {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top,
+    rgba(6,15,30,.97) 0%,
+    rgba(6,15,30,.45) 42%,
+    transparent 75%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: clamp(var(--s2), 3vw, var(--s4));
+}
+.scene-tag {
+  font-family: var(--font-d);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--g3);
+  margin-bottom: 6px;
+}
+.scene-title {
+  font-family: var(--font-b);
+  font-weight: 700;
+  font-size: clamp(16px, 3vw, 22px);
+  color: var(--tx0);
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+.scene-copy {
+  font-size: clamp(12px, 1.8vw, 14px);
+  font-weight: 300;
+  color: var(--tx1);
+}
+
+/* ─────────────────────────────────────────────────────────
+   CLOSE CTA
+───────────────────────────────────────────────────────── */
+.close {
+  padding: clamp(var(--s10), 14vw, 160px) var(--pad);
+  background: var(--ink);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.close::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(400px, 80vw, 680px);
+  height: clamp(400px, 80vw, 680px);
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    rgba(224,168,40,.07) 0%,
+    transparent 65%);
+  pointer-events: none;
+}
+.close-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 680px;
+  margin: 0 auto;
+}
+.close-h2 {
+  font-family: var(--font-b);
+  font-weight: 900;
+  font-size: clamp(36px, 8vw, 80px);
+  line-height: .92;
+  letter-spacing: -.03em;
+  color: var(--tx0);
+  margin-bottom: var(--s2);
+}
+.close-sub {
+  font-size: clamp(15px, 2.5vw, 18px);
+  font-weight: 300;
+  color: var(--tx1);
+  max-width: 42ch;
+  margin: 0 auto var(--s5);
+  line-height: 1.65;
+}
+.close-note {
+  margin-top: var(--s4);
+  font-family: var(--font-b);
+  font-size: 11px;
+  color: var(--tx3);
+  line-height: 2;
+  letter-spacing: .025em;
+}
+
+/* ─────────────────────────────────────────────────────────
+   FOOTER
+───────────────────────────────────────────────────────── */
+.footer {
+  background: var(--n0);
+  border-top: 1px solid var(--border);
+  padding: clamp(var(--s5), 6vw, var(--s8)) 0;
+}
+.footer-in {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s4);
+}
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+}
+.footer-brand img {
+  width: 24px;
+  height: 24px;
+  opacity: .65;
+  filter: drop-shadow(0 0 4px rgba(224,168,40,.25));
+}
+.footer-wm {
+  font-family: var(--font-d);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  color: var(--tx2);
+}
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s1) var(--s3);
+}
+.footer-links a {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--tx2);
+  transition: color .15s;
+}
+.footer-links a:hover { color: var(--tx0); }
+.footer-copy {
+  font-size: 11px;
+  color: var(--tx3);
+  line-height: 1.6;
+}
+
+/* ─────────────────────────────────────────────────────────
+   SCROLL REVEALS
+───────────────────────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity .65s ease, transform .65s ease;
+}
+.reveal.on { opacity: 1; transform: none; }
+
+/* ─────────────────────────────────────────────────────────
+   DESKTOP LAYOUT — 800px+
+───────────────────────────────────────────────────────── */
+@media (min-width: 800px) {
+  :root { --pad: 40px; }
+
+  /* Hero */
+  .hero-inner {
+    grid-template-columns: 1fr 1fr;
+    align-items: end;
+    gap: var(--s8);
+  }
+
+  /* Phone mockup visible */
+  .hero-mockup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    padding-bottom: clamp(var(--s8), 8vw, var(--s12));
+  }
+  .hero-phone {
+    width: clamp(200px, 22vw, 280px);
+    border-radius: 28px;
+    overflow: hidden;
+    border: 2px solid rgba(224,168,40,.2);
+    box-shadow:
+      0 48px 96px rgba(0,0,0,.65),
+      0 0 0 1px rgba(255,255,255,.04),
+      0 0 60px rgba(224,168,40,.07);
+    position: relative;
+  }
+  .hero-phone img {
+    width: 100%;
+    display: block;
+    aspect-ratio: 9/19.5;
+    object-fit: cover;
+    object-position: center top;
+  }
+  /* Gold accent line on phone */
+  .hero-phone::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: 2px;
+    background: var(--gold);
+    opacity: .55;
+  }
+  /* Floating badge */
+  .hero-badge-float {
+    position: absolute;
+    bottom: clamp(var(--s8), 9vw, var(--s10));
+    inset-inline-start: -clamp(24px, 3vw, 40px);
+    background: var(--n2);
+    border: 1px solid rgba(224,168,40,.25);
+    border-radius: 12px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.55);
+    white-space: nowrap;
+    animation: floatIn .7s .4s cubic-bezier(.36,1.56,.64,1) both;
+  }
+  @keyframes floatIn {
+    from { opacity: 0; transform: translateX(-16px) scale(.9); }
+    to   { opacity: 1; transform: none; }
+  }
+  .fbadge-ico { font-size: 20px; }
+  .fbadge-title { font-family: var(--font-d); font-size: 11px; font-weight: 700; letter-spacing: .06em; color: var(--g3); }
+  .fbadge-sub { font-size: 10px; font-weight: 300; color: var(--tx2); margin-top: 1px; }
+
+  /* Phones showcase */
+  .phones-row {
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--s3);
+  }
+  .phone-shell { aspect-ratio: 9/19; }
+
+  /* Scenarios */
+  .scenes-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .scene { aspect-ratio: 3/4; }
+
+  /* Footer */
+  .footer-in {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--s3) var(--s6);
+  }
+  .footer-links { order: 0; }
+}
+
+/* ─────────────────────────────────────────────────────────
+   WIDE DESKTOP — 1100px+
+───────────────────────────────────────────────────────── */
+@media (min-width: 1100px) {
+  :root { --pad: 48px; }
+  .hero-phone { width: clamp(240px, 24vw, 300px); }
+  .phones-row { gap: var(--s4); }
+}
 </style>
 </head>
 <body>
 
-<!-- ═══ NAV ═══ -->
-<nav id="nav">
-  <a href="./" class="nav-brand" aria-label="SH✡MER">
-    <img src="logo-192.png" alt="SHOMER" width="40" height="40">
-    <span class="wm">SH<span class="star">✡</span>MER</span>
-  </a>
-  <div class="nav-right">
-    <div class="langs" dir="ltr" role="group" aria-label="Language">
-      <button class="lp" data-lang="en" onclick="setLang('en')">EN</button>
-      <button class="lp" data-lang="ar" onclick="setLang('ar')">عر</button>
-      <button class="lp on" data-lang="he" onclick="setLang('he')">עב</button>
+<!-- ───── NAV ─────────────────────────────────────────── -->
+<nav class="nav">
+  <div class="wrap nav-in">
+    <a href="/" class="nav-brand">
+      <img src="badge-192.png" alt="" class="nav-badge">
+      <span class="nav-wm">SH<i class="g">✡</i>MER</span>
+    </a>
+    <div class="nav-r">
+      <div class="lang-sw">
+        <button class="lang-btn on" id="L-he" onclick="setLang('he')">עב</button>
+        <button class="lang-btn" id="L-en" onclick="setLang('en')">EN</button>
+      </div>
+      <a href="shomer.html" class="nav-cta" data-t="nav_cta">הצטרפו עכשיו</a>
     </div>
-    <a href="shomer.html" class="nav-cta" data-i="navcta">פתח את האפליקציה</a>
   </div>
 </nav>
 
-<!-- ═══ HERO ═══ -->
-<header class="hero">
-  <div class="wrap">
-    <img class="hero-badge" src="SHOMER_logo_big.png" alt="SHOMER — שומר אחי אנוכי" width="148">
-    <span class="eyebrow hero-eyebrow" data-i="eyebrow">אזרחים למען אזרחים</span>
-    <h1 class="hero-h1"><span data-i="h1a">עזרה אמיתית,</span><br><span class="gold" data-i="h1b">במרחק לחיצה אחת.</span></h1>
-    <p class="hero-sub" data-i="hsub">SH✡MER מחבר אותך לרשת שמירה קהילתית: אזעקת SOS בלחיצה אחת, מפת אירועים חיה, ומעגלי שומרים שמשגיחים עליך. כשכל שנייה קובעת — אינך לבד.</p>
-    <div class="hero-cta">
-      <a href="shomer.html" class="btn btn-primary btn-lg">
-        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span data-i="ctajoin">הצטרפו עכשיו — חינם</span>
-      </a>
-      <a href="#how" class="btn btn-ghost btn-lg" data-i="ctahow">איך זה עובד</a>
-    </div>
-    <div class="trust-row">
-      <span class="trust-item"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i="tr1">חינם לאזרחים</span></span>
-      <span class="trust-item"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i="tr2">ללא פרסומות</span></span>
-      <span class="trust-item"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i="tr3">פרטיות מלאה</span></span>
-      <span class="trust-item"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i="tr4">עובד גם ללא רשת</span></span>
+<!-- ───── HERO ────────────────────────────────────────── -->
+<section class="hero section">
+  <!-- Background: cinematic civilian images -->
+  <div class="hero-bg">
+    <img class="hero-slide on" src="Shomer1080x1080px_A_blank.jpg" alt="" loading="eager">
+    <img class="hero-slide"    src="Shomer1080x1080px_B_blank.jpg" alt="" loading="lazy">
+    <img class="hero-slide"    src="Shomer1080x1080px_C_blank.jpg" alt="" loading="lazy">
+  </div>
+
+  <!-- Star of David watermark -->
+  <svg class="star-wm" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <polygon points="100,8 192,164 8,164" stroke="#E0A828" stroke-width="1.4" fill="none"/>
+    <polygon points="100,192 192,36 8,36"  stroke="#E0A828" stroke-width="1.4" fill="none"/>
+  </svg>
+
+  <div class="wrap hero-content">
+    <div class="hero-inner">
+
+      <!-- Left: text -->
+      <div class="hero-text">
+        <div class="hero-logo-wrap">
+          <img src="SHOMER_logo_big.png" alt="SH✡MER" class="hero-logo">
+        </div>
+        <div class="eyebrow" data-t="eyebrow">אזרחים שומרים על אזרחים</div>
+        <h1 class="hero-h1">
+          <span class="light" data-t="h1a">הקהילה</span><br>
+          <span class="g" data-t="h1b">שומרת.</span>
+        </h1>
+        <p class="hero-sub" data-t="hero_sub">
+          <b>SH✡MER</b> מחבר/ת אותך לרשת שמירה קהילתית חיה.
+          SOS בלחיצה אחת, מפת אירועים, מעגלי שומרים שתמיד עליך.
+        </p>
+        <div class="hero-cta">
+          <a href="shomer.html" class="btn-primary" data-t="cta_main">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8zm8-3.5a.75.75 0 01.75.75v2.5h2.5a.75.75 0 010 1.5h-2.5v2.5a.75.75 0 01-1.5 0v-2.5h-2.5a.75.75 0 010-1.5h2.5v-2.5A.75.75 0 018 4.5z"/></svg>
+            <span data-t="cta_main_txt">הצטרפו עכשיו — חינם</span>
+          </a>
+          <a href="#process" class="btn-ghost" data-t="cta_sec">איך זה עובד</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat">
+            <div class="stat-n">1</div>
+            <div class="stat-l" data-t="s1">לחיצה לשליחת SOS</div>
+          </div>
+          <div class="stat">
+            <div class="stat-n">24/7</div>
+            <div class="stat-l" data-t="s2">רשת קהילתית פעילה</div>
+          </div>
+          <div class="stat">
+            <div class="stat-n">0₪</div>
+            <div class="stat-l" data-t="s3">חינם לאזרחים תמיד</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: phone mockup (desktop only) -->
+      <div class="hero-mockup">
+        <div class="hero-phone">
+          <img src="img/real-sos.jpg" alt="SH✡MER — מסך SOS" loading="eager">
+        </div>
+        <div class="hero-badge-float">
+          <span class="fbadge-ico">🆘</span>
+          <div>
+            <div class="fbadge-title">SOS פעיל</div>
+            <div class="fbadge-sub">3 שומרים מגיבים</div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
-</header>
+</section>
 
-<!-- ═══ FEATURES ═══ -->
-<section class="bg-2 fi" id="features">
+<!-- ───── COVENANT ─────────────────────────────────────── -->
+<section class="cov section reveal">
   <div class="wrap">
-    <div class="sec-head center">
-      <span class="eyebrow" style="justify-content:center" data-i="fkicker">האפליקציה</span>
-      <h2 class="sec-title"><span data-i="ftitle">ממשק אחד.</span> <span class="gold" data-i="ftitle2">כל מה שצריך.</span></h2>
-      <p class="sec-sub" data-i="fsub">מורידים, מצטרפים, עוזרים. כל כלי הבטיחות במקום אחד — פשוט ומיידי.</p>
-    </div>
-    <div class="feat-grid">
-      <div class="feat">
-        <div class="feat-ic red"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 3h8l5 5v8l-5 5H8l-5-5V8Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 7.5v5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="16" r="1.2" fill="currentColor"/></svg></div>
-        <h3 data-i="ft1">אזעקת SOS</h3><p data-i="fx1">לחיצה אחת. אזעקה חזקה שלא ניתן להשתיק — ומיקומך המדויק מגיע לשומרים שלך מיד.</p>
+    <p class="cov-verse">
+      <b>שמור</b> עלי כאישון בת עין,<br>
+      בצל כנפיך תסתירני.
+    </p>
+    <p class="cov-src">תהלים יז, ח · Psalms 17:8</p>
+  </div>
+</section>
+
+<!-- ───── STATS ────────────────────────────────────────── -->
+<section class="stats-section section reveal">
+  <div class="wrap">
+    <div class="stats-grid">
+      <div class="stat-big">
+        <div class="stat-big-n">1</div>
+        <div class="stat-big-l" data-t="sb1">לחיצה<br>לשליחת SOS</div>
       </div>
-      <div class="feat">
-        <div class="feat-ic"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 4L3 6.5v13L9 17l6 2.5 6-2.5v-13L15 6.5 9 4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 4v13M15 6.5v13" stroke="currentColor" stroke-width="1.6"/></svg></div>
-        <h3 data-i="ft2">מפת אירועים חיה</h3><p data-i="fx2">אירועי ביטחון ורפואה באזורך בזמן אמת. תמונת מצב שכונתית, תמיד מעודכנת.</p>
+      <div class="stat-big">
+        <div class="stat-big-n">24/7</div>
+        <div class="stat-big-l" data-t="sb2">רשת<br>קהילתית פעילה</div>
       </div>
-      <div class="feat">
-        <div class="feat-ic"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <h3 data-i="ft3">מעגלי שומרים</h3><p data-i="fx3">משפחה, חברים, שכנים. הם רואים אותך ומגיבים כשצריך — רשת הדדית של שמירה.</p>
-      </div>
-      <div class="feat">
-        <div class="feat-ic"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5" stroke="currentColor" stroke-width="2"/><path d="M12 9v6M9 12h6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></div>
-        <h3 data-i="ft4">מדריך חירום</h3><p data-i="fx4">החייאה, מחנק, דימום, שבץ — לפי הנחיות מד״א. זמין גם ללא חיבור לאינטרנט.</p>
-      </div>
-      <div class="feat">
-        <div class="feat-ic"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 22s7-6.4 7-12a7 7 0 1 0-14 0c0 5.6 7 12 7 12Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.6" fill="currentColor"/></svg></div>
-        <h3 data-i="ft5">שיתוף מיקום חי</h3><p data-i="fx5">השומרים שלך יודעים איפה אתה — רק כשאתה מאשר. שליטה מלאה, תמיד בידיים שלך.</p>
-      </div>
-      <div class="feat">
-        <div class="feat-ic"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M13.7 21a2 2 0 0 1-3.4 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
-        <h3 data-i="ft6">דיווח אירועים</h3><p data-i="fx6">דווח על אירועים בשכונה בכמה שניות. יחד בונים מפת ביטחון קהילתית אמיתית.</p>
+      <div class="stat-big">
+        <div class="stat-big-n">0₪</div>
+        <div class="stat-big-l" data-t="sb3">חינם<br>לאזרחים תמיד</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══ HOW IT WORKS ═══ -->
-<section class="fi" id="how">
+<!-- ───── APP SHOWCASE ─────────────────────────────────── -->
+<section class="showcase section reveal" id="app">
   <div class="wrap">
-    <div class="sec-head center">
-      <span class="eyebrow" style="justify-content:center" data-i="hkicker">שלושה צעדים</span>
-      <h2 class="sec-title" data-i="how">איך זה עובד</h2>
-      <p class="sec-sub" data-i="hsub2">מהורדה ועד רשת שמירה פעילה — בפחות מדקה.</p>
+    <div class="sec-head">
+      <span class="sec-lbl" data-t="sh_lbl">בפנים האפליקציה</span>
+      <h2 class="sec-h2">
+        <span class="light" data-t="sh_h1">ממשק אחד.</span><br>
+        <span class="g" data-t="sh_h2">כל מה שצריך.</span>
+      </h2>
+      <p class="sec-sub" data-t="sh_sub">מוּרד, מצטרפים, שומרים. ללא עלות, ללא הורדה, ללא בירוקרטיה.</p>
     </div>
-    <div class="steps">
-      <div class="step"><div class="step-n">1</div><div><h3 data-i="h1t">נרשמים בחינם</h3><p data-i="h1x">מורידים את SH✡MER למסך הבית ונרשמים תוך שניות. ללא עלות, ללא מנוי.</p></div></div>
-      <div class="step"><div class="step-n">2</div><div><h3 data-i="h2t">בונים מעגל שמירה</h3><p data-i="h2x">מוסיפים משפחה, חברים ושכנים מאנשי הקשר. רשת הדדית שמגיבה כשצריך.</p></div></div>
-      <div class="step"><div class="step-n">3</div><div><h3 data-i="h3t">לוחצים SOS — והכל קורה</h3><p data-i="h3x">אזעקה, שיתוף מיקום והתראה לשומרים — בלחיצה אחת. בלי צורך לדבר.</p></div></div>
-    </div>
-  </div>
-</section>
 
-<!-- ═══ MOMENTS (scenario photography) ═══ -->
-<section class="bg-2 fi">
-  <div class="wrap">
-    <div class="sec-head center">
-      <span class="eyebrow" style="justify-content:center" data-i="mkicker">רגעים אמיתיים</span>
-      <h2 class="sec-title" data-i="scen">SH✡MER שם כשצריך</h2>
-      <p class="sec-sub" data-i="msub">הרגעים שבהם עזרה מהירה עושה את כל ההבדל.</p>
-    </div>
-    <div class="moments">
-      <div class="moment"><img src="Shomer1080x1080px_B_blank.jpg" alt="" loading="lazy"><div class="moment-cap"><span class="k" data-i="m1k">בדרך הביתה</span><h3 data-i="m1t">כשהולכים לבד בלילה</h3></div></div>
-      <div class="moment"><img src="Shomer1080x1080px_A_blank.jpg" alt="" loading="lazy"><div class="moment-cap"><span class="k" data-i="m2k">מול איום</span><h3 data-i="m2t">כשמרגישים מאוימים</h3></div></div>
-      <div class="moment"><img src="Shomer1080x1080px_C_blank.jpg" alt="" loading="lazy"><div class="moment-cap"><span class="k" data-i="m3k">חירום רפואי</span><h3 data-i="m3t">כשכל שנייה קובעת</h3></div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ APP SHOWCASE ═══ -->
-<section class="fi">
-  <div class="wrap">
-    <div class="sec-head center">
-      <span class="eyebrow" style="justify-content:center" data-i="skicker">הצצה פנימה</span>
-      <h2 class="sec-title" data-i="shots">מעוצב לרגע הקריטי</h2>
-      <p class="sec-sub" data-i="ssub">ממשק בהיר, מהיר וברור — כדי שתמצא את מה שצריך בדיוק כשצריך.</p>
-    </div>
-    <div class="shots">
-      <div class="shot"><div class="phone"><img src="img/real-sos-map.jpg" alt="מפת בטיחות חיה עם כפתור SOS" loading="lazy"></div><div class="shot-cap" data-i="cap1">מפה חיה + SOS</div></div>
-      <div class="shot"><div class="phone"><img src="img/real-guide.jpg" alt="מדריך חירום מלא" loading="lazy"></div><div class="shot-cap" data-i="cap2">מדריך חירום</div></div>
-      <div class="shot"><div class="phone"><img src="img/real-myshomer.jpg" alt="מעגלי השומרים שלי" loading="lazy"></div><div class="shot-cap" data-i="cap3">השומרים שלי</div></div>
-      <div class="shot"><div class="phone"><img src="img/real-map.jpg" alt="מפת ניווט חיה" loading="lazy"></div><div class="shot-cap" data-i="cap4">ניווט ומיקום</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ TRUST & SAFETY ═══ -->
-<section class="bg-3 fi" id="trust">
-  <div class="wrap">
-    <div class="sec-head center">
-      <span class="eyebrow" style="justify-content:center" data-i="tkicker">אמון ופרטיות</span>
-      <h2 class="sec-title" data-i="ttitle">בנוי סביב ההגנה עליך</h2>
-      <p class="sec-sub" data-i="tsub">בטיחות מתחילה באמון. הנה איך אנחנו שומרים עליך — ועל המידע שלך.</p>
-    </div>
-    <div class="trust-grid">
-      <div class="tcard">
-        <div class="feat-ic"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 8.5v3.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="15.4" r="1.1" fill="currentColor"/></svg></div>
-        <h3 data-i="tc1t">המיקום שלך — בשליטתך</h3><p data-i="tc1x">מיקומך משותף רק כשאתה מאשר: ב-SOS או בשיתוף יזום. אף פעם לא ברקע ללא ידיעתך.</p>
+    <div class="phones-row">
+      <div class="phone-card">
+        <div class="phone-shell">
+          <img src="img/real-sos.jpg" alt="SOS" loading="lazy">
+        </div>
+        <div class="phone-cap">
+          <div class="phone-cap-title" data-t="pc1t">אזעקת SOS</div>
+          <div class="phone-cap-sub" data-t="pc1s">לחיצה אחת. אזעקה שלא ניתן להשתיק.</div>
+        </div>
       </div>
-      <div class="tcard">
-        <div class="feat-ic"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4.5" y="10" width="15" height="10" rx="2.5" stroke="currentColor" stroke-width="2"/><path d="M8 10V7.5a4 4 0 0 1 8 0V10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
-        <h3 data-i="tc2t">פרטיות כברירת מחדל</h3><p data-i="tc2x">מספר הטלפון משמש לאימות בלבד ונשמר מוצפן. לא מוכרים מידע. לא מפרסמים. לעולם.</p>
+      <div class="phone-card">
+        <div class="phone-shell">
+          <img src="img/real-sos-map.jpg" alt="Map" loading="lazy">
+        </div>
+        <div class="phone-cap">
+          <div class="phone-cap-title" data-t="pc2t">מפת אירועים חיה</div>
+          <div class="phone-cap-sub" data-t="pc2s">אירועים וסטטוס שומרים בזמן אמת.</div>
+        </div>
       </div>
-      <div class="tcard">
-        <div class="feat-ic"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3c2.5 2 5 3 8 3 0 7-3 11.5-8 13-5-1.5-8-6-8-13 3 0 5.5-1 8-3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div>
-        <h3 data-i="tc3t">שכבה, לא תחליף</h3><p data-i="tc3x">SH✡MER מוסיף שכבת קהילה מעל שירותי החירום — הוא לא בא במקומם. בחירום אמיתי, מתקשרים לרשויות.</p>
+      <div class="phone-card">
+        <div class="phone-shell">
+          <img src="img/real-myshomer.jpg" alt="My SH✡MER" loading="lazy">
+        </div>
+        <div class="phone-cap">
+          <div class="phone-cap-title" data-t="pc3t">מעגלי שומרים</div>
+          <div class="phone-cap-sub" data-t="pc3s">משפחה, חברים, שכנים — אמון הדדי.</div>
+        </div>
       </div>
-    </div>
-    <div class="emg">
-      <div class="emg-ic"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3.5l9 16H3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 10v4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="17" r="1.2" fill="currentColor"/></svg></div>
-      <div>
-        <p data-i-html="emg"><b>SH✡MER אינו תחליף לשירותי חירום וביטחון.</b> במצב חירום אמיתי חייגו מיד:</p>
-        <div class="dials"><span class="dial" data-i="d1">100 · משטרה</span><span class="dial" data-i="d2">101 · מד״א</span><span class="dial" data-i="d3">102 · כבאות</span></div>
+      <div class="phone-card">
+        <div class="phone-shell">
+          <img src="img/real-guide.jpg" alt="Guide" loading="lazy">
+        </div>
+        <div class="phone-cap">
+          <div class="phone-cap-title" data-t="pc4t">מדריך חירום</div>
+          <div class="phone-cap-sub" data-t="pc4s">CPR, מחנק, דימום — זמין ללא רשת.</div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══ FAQ ═══ -->
-<section class="fi" id="faq">
+<!-- ───── HOW IT WORKS ─────────────────────────────────── -->
+<section class="process section reveal" id="process">
   <div class="wrap">
-    <div class="sec-head center">
-      <span class="eyebrow" style="justify-content:center" data-i="qkicker">שאלות ותשובות</span>
-      <h2 class="sec-title" data-i="faqt">שאלות נפוצות</h2>
+    <div class="sec-head">
+      <span class="sec-lbl" data-t="pr_lbl">תהליך</span>
+      <h2 class="sec-h2">
+        <span class="light" data-t="pr_h1">ארבע פעולות.</span><br>
+        <span class="g" data-t="pr_h2">רשת שלמה.</span>
+      </h2>
     </div>
-    <div class="faq-list">
-      <details class="faq"><summary data-i="q1">מה זה SH✡MER?</summary><div class="faq-a" data-i="a1">רשת בטיחות קהילתית: כפתור SOS שמפעיל אזעקה ושולח את מיקומך לשומרים שלך, מפת אירועים חיה, מעגלי משפחה וחברים, ומדריך חירום מלא — הכל באפליקציה אחת.</div></details>
-      <details class="faq"><summary data-i="q2">כמה זה עולה?</summary><div class="faq-a" data-i="a2">כלום. SH✡MER חינם לחלוטין לאזרחים — בלי מנוי, בלי פרסומות, בלי מכירת מידע. אזרחים למען אזרחים.</div></details>
-      <details class="faq"><summary data-i="q3">איך עובד כפתור ה-SOS?</summary><div class="faq-a" data-i="a3">לחיצה אחת מפעילה אזעקה חזקה שלא ניתן להשתיק ללא קוד אישי, הבזק מסך ורטט, ושולחת את מיקומך המדויק מיד למעגלי השומרים שלך ולשומרים בסביבה.</div></details>
-      <details class="faq"><summary data-i="q4">מה עם הפרטיות שלי?</summary><div class="faq-a" data-i="a4">המיקום שלך משותף רק כשאתה מאשר — ב-SOS או בשיתוף יזום. מספר הטלפון משמש לאימות בלבד ונשמר מוצפן. לעולם לא נשתמש בו לשיווק.</div></details>
-      <details class="faq"><summary data-i="q5">האם זה מחליף את המשטרה או מד״א?</summary><div class="faq-a" data-i="a5">לא. SH✡MER אינו תחליף לשירותי חירום. במצב חירום אמיתי חייגו 100 (משטרה), 101 (מד״א) או 102 (כבאות). SH✡MER מוסיף שכבת קהילה — לא מחליף רשויות.</div></details>
-      <details class="faq"><summary data-i="q6">איך מתקינים?</summary><div class="faq-a" data-i="a6">פותחים את האפליקציה בדפדפן הטלפון. באייפון: שיתוף ← הוספה למסך הבית. באנדרואיד: תפריט ← התקנת אפליקציה. זהו — SH✡MER על מסך הבית, כמו כל אפליקציה.</div></details>
+    <div class="steps-list">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-body">
+          <span class="step-tag">SMS · אימות</span>
+          <div class="step-title" data-t="p1h">נכנסים עם מספר טלפון</div>
+          <p class="step-copy" data-t="p1p">קוד SMS. מספרך קושר לחשבון ייחודי — SH✡MER0001 שלך. לתמיד.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-body">
+          <span class="step-tag">CONTACTS · מעגלים</span>
+          <div class="step-title" data-t="p2h">בונים את מעגל השמירה</div>
+          <p class="step-copy" data-t="p2p">משפחה, חברים, שכנים — מאנשי הקשר. שלושה מעגלי אמון, שלושה צבעים.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-body">
+          <span class="step-tag">SOS · פעולה</span>
+          <div class="step-title" data-t="p3h">לוחצים SOS — הכל קורה מיד</div>
+          <p class="step-copy" data-t="p3p">אזעקה שלא ניתן להשתיק, מיקום חי, התראה לשומרים. ללא דיבור.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-body">
+          <span class="step-tag">RESPONSE · תגובה</span>
+          <div class="step-title" data-t="p4h">הקהילה מגיבה</div>
+          <p class="step-copy" data-t="p4p">שומרים בסביבתך יוצאים לדרך. ישראל שומרת על ישראל.</p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ═══ FINAL CTA ═══ -->
-<section class="cta-band fi">
+<!-- ───── SCENARIOS ─────────────────────────────────────── -->
+<section class="scenarios section reveal">
   <div class="wrap">
-    <h2 class="cta-title"><span data-i="ctatitle">מחזירים את הביטחון</span> <span class="gold" data-i="ctatitle2">לרחובות.</span></h2>
-    <p class="cta-sub" data-i="ctasub">הצטרפו לרשת השמירה הקהילתית. אזרחים למען אזרחים.</p>
-    <a href="shomer.html" class="btn btn-primary btn-lg" style="margin:0 auto">
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span data-i="ctajoin2">הצטרפו עכשיו — חינם</span>
+    <div class="sec-head">
+      <span class="sec-lbl" data-t="sc_lbl">תרחישים</span>
+      <h2 class="sec-h2">
+        <span class="g" data-t="sc_h1">SH✡MER שם</span><br>
+        <span class="light" data-t="sc_h2">כשזה קורה.</span>
+      </h2>
+    </div>
+    <div class="scenes-grid">
+      <div class="scene">
+        <img src="img/benefits-woman.jpg" alt="בטיחות אישית" loading="lazy">
+        <div class="scene-ov">
+          <div class="scene-tag" data-t="sc1t">01 · בטיחות אישית</div>
+          <div class="scene-title" data-t="sc1h">הולכת לבד בלילה</div>
+          <div class="scene-copy" data-t="sc1p">SOS בלחיצה. שומרים מגיבים תוך שניות.</div>
+        </div>
+      </div>
+      <div class="scene">
+        <img src="img/benefits-parents.jpg" alt="משפחה" loading="lazy">
+        <div class="scene-ov">
+          <div class="scene-tag" data-t="sc2t">02 · מעגל משפחה</div>
+          <div class="scene-title" data-t="sc2h">ילד לא מגיע הביתה</div>
+          <div class="scene-copy" data-t="sc2p">מיקום חי. התראה מיידית לכל המעגל.</div>
+        </div>
+      </div>
+      <div class="scene">
+        <img src="img/benefits-hiker.jpg" alt="טיול" loading="lazy">
+        <div class="scene-ov">
+          <div class="scene-tag" data-t="sc3t">03 · שטח פתוח</div>
+          <div class="scene-title" data-t="sc3h">תאונה בטיול</div>
+          <div class="scene-copy" data-t="sc3p">SOS עם קואורדינטות. חילוץ מדויק.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───── CLOSE CTA ─────────────────────────────────────── -->
+<section class="close section reveal">
+  <div class="close-inner">
+    <span class="sec-lbl" style="display:block;text-align:center;margin-bottom:var(--s2)" data-t="cl_lbl">הצטרפו עכשיו</span>
+    <h2 class="close-h2">
+      <span class="g" data-t="cl_h1">SH✡MER שלך</span><br>
+      <span style="font-weight:200" data-t="cl_h2">מחכה לך.</span>
+    </h2>
+    <p class="close-sub" data-t="cl_sub">בלי הורדה. בלי תשלום. שם ומספר טלפון — ואת/ה ברשת.</p>
+    <a href="shomer.html" class="btn-primary" style="margin:0 auto" data-t="cl_cta">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8zm8-3.5a.75.75 0 01.75.75v2.5h2.5a.75.75 0 010 1.5h-2.5v2.5a.75.75 0 01-1.5 0v-2.5h-2.5a.75.75 0 010-1.5h2.5v-2.5A.75.75 0 018 4.5z"/></svg>
+      <span data-t="cl_cta_txt">הצטרפו עכשיו — חינם</span>
     </a>
+    <div class="close-note">
+      SH✡MER אינו תחליף לשירותי חירום<br>
+      בחירום — חייג/י 100 (משטרה) · 101 (מד"א) · 102 (כיבוי אש)
+    </div>
   </div>
 </section>
 
-<!-- ═══ FOOTER ═══ -->
-<footer>
+<!-- ───── FOOTER ─────────────────────────────────────────── -->
+<footer class="footer">
   <div class="wrap">
-    <img class="foot-badge" src="SHOMER_logo_big.png" alt="SHOMER — שומר אחי אנוכי">
-    <div class="foot-tag" data-i="eyebrow2">אזרחים למען אזרחים</div>
-    <div class="foot-actions">
-      <a class="pill solid" href="shomer.html">
-        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3.4 8.5-7 10-3.6-1.5-7-5-7-10V6Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-        <span data-i="fl1">פתחו את האפליקציה</span></a>
-      <a class="pill" href="mailto:support@shomer-app.co.il">
-        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5" stroke="currentColor" stroke-width="2"/><path d="M4 7.5l8 5.5 8-5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span data-i="flmail">כתבו לנו</span></a>
-      <a class="pill" href="https://www.linkedin.com/company/sh%E2%9C%A1mer/" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="3" stroke="currentColor" stroke-width="2"/><path d="M8 10.5V16.5M8 7.6v.1M12 16.5v-3.4c0-1.4 1-2.4 2.3-2.4s2.2 1 2.2 2.4v3.4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        LinkedIn</a>
-      <a class="pill" href="https://www.instagram.com/shomer.app/" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3.6" stroke="currentColor" stroke-width="2"/><circle cx="17" cy="7" r="1.15" fill="currentColor"/></svg>
-        Instagram</a>
+    <div class="footer-in">
+      <div>
+        <div class="footer-brand" style="margin-bottom:var(--s1)">
+          <img src="badge-192.png" alt="">
+          <span class="footer-wm">SH✡MER.APP</span>
+        </div>
+        <div class="footer-copy">© 2026 3Shamrocks Studio · אזרחים שומרים על אזרחים</div>
+      </div>
+      <div class="footer-links">
+        <a href="shomer.html" data-t="fl1">כניסה לאפליקציה</a>
+        <a href="nature.html" data-t="fl2">SH✡MER Nature</a>
+        <a href="#" data-t="fl3">פרטיות</a>
+        <a href="#" data-t="fl4">תנאים</a>
+        <a href="#" data-t="fl5">יצירת קשר</a>
+      </div>
     </div>
-    <div class="foot-legal">
-      <a href="privacy.html" data-i="fl2">פרטיות</a>
-      <a href="terms.html" data-i="fl3">תנאים</a>
-      <a href="accessibility.html" data-i="fl4">הצהרת נגישות</a>
-    </div>
-    <div class="foot-copy"><img src="3shamrocks.png" alt="3Shamrocks Studio"><span data-i="fcopy">© 2026 3Shamrocks Studio · אזרחים למען אזרחים</span></div>
   </div>
 </footer>
 
 <script>
-/* ── Nav scroll state ── */
-var navEl=document.getElementById('nav');
-addEventListener('scroll',function(){navEl.classList.toggle('scrolled',scrollY>16);},{passive:true});
+/* ── Hero crossfade ─────────────────────────────────── */
+(function(){
+  var slides = document.querySelectorAll('.hero-slide');
+  var i = 0;
+  setInterval(function(){
+    slides[i].classList.remove('on');
+    i = (i + 1) % slides.length;
+    slides[i].classList.add('on');
+  }, 5000);
+})();
 
-/* ── Scroll reveal ── */
-var obs=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('vis');obs.unobserve(e.target);}});},{threshold:.08});
-document.querySelectorAll('.fi').forEach(function(el){obs.observe(el);});
+/* ── Scroll reveals ─────────────────────────────────── */
+(function(){
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -48px 0px' });
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+})();
 
-/* ── FAQ: one open at a time ── */
-document.querySelectorAll('.faq').forEach(function(d){
-  d.addEventListener('toggle',function(){
-    if(d.open)document.querySelectorAll('.faq[open]').forEach(function(o){if(o!==d)o.open=false;});
-  });
-});
-
-/* ── Trilingual (HE default · AR · EN) ── */
-var I18N={
- navcta:{he:"פתח את האפליקציה",en:"Open the app",ar:"افتح التطبيق"},
- eyebrow:{he:"אזרחים למען אזרחים",en:"Citizens for Citizens",ar:"مواطنون من أجل مواطنين"},
- eyebrow2:{he:"אזרחים למען אזרחים",en:"Citizens for Citizens",ar:"مواطنون من أجل مواطنين"},
- h1a:{he:"עזרה אמיתית,",en:"Real help,",ar:"مساعدة حقيقية،"},
- h1b:{he:"במרחק לחיצה אחת.",en:"one tap away.",ar:"بلمسة واحدة."},
- hsub:{he:"SH✡MER מחבר אותך לרשת שמירה קהילתית: אזעקת SOS בלחיצה אחת, מפת אירועים חיה, ומעגלי שומרים שמשגיחים עליך. כשכל שנייה קובעת — אינך לבד.",en:"SH✡MER connects you to a community safety network: one-tap SOS, a live incident map, and circles of SH✡MERs watching over you. When every second counts — you're not alone.",ar:"يربطك SH✡MER بشبكة أمان مجتمعية: SOS بلمسة واحدة، وخريطة أحداث مباشرة، ودوائر حماية ترافقك. عندما تهمّ كل ثانية — لست وحدك."},
- ctajoin:{he:"הצטרפו עכשיו — חינם",en:"Join now — free",ar:"انضم الآن — مجانًا"},
- ctajoin2:{he:"הצטרפו עכשיו — חינם",en:"Join now — free",ar:"انضم الآن — مجانًا"},
- ctahow:{he:"איך זה עובד",en:"How it works",ar:"كيف يعمل"},
- tr1:{he:"חינם לאזרחים",en:"Free for citizens",ar:"مجاني للمواطنين"},
- tr2:{he:"ללא פרסומות",en:"No ads",ar:"بدون إعلانات"},
- tr3:{he:"פרטיות מלאה",en:"Full privacy",ar:"خصوصية كاملة"},
- tr4:{he:"עובד גם ללא רשת",en:"Works offline",ar:"يعمل دون إنترنت"},
- fkicker:{he:"האפליקציה",en:"The app",ar:"التطبيق"},
- ftitle:{he:"ממשק אחד.",en:"One interface.",ar:"واجهة واحدة."},
- ftitle2:{he:"כל מה שצריך.",en:"Everything you need.",ar:"كل ما تحتاجه."},
- fsub:{he:"מורידים, מצטרפים, עוזרים. כל כלי הבטיחות במקום אחד — פשוט ומיידי.",en:"Download, join, help. Every safety tool in one place — simple and instant.",ar:"حمّل، انضم، ساعد. كل أدوات الأمان في مكان واحد — بسيطة وفورية."},
- ft1:{he:"אזעקת SOS",en:"SOS alarm",ar:"إنذار SOS"},
- fx1:{he:"לחיצה אחת. אזעקה חזקה שלא ניתן להשתיק — ומיקומך המדויק מגיע לשומרים שלך מיד.",en:"One tap. A loud, unmutable alarm — and your exact location reaches your SH✡MERs instantly.",ar:"لمسة واحدة. إنذار عالٍ لا يمكن كتمه — وموقعك الدقيق يصل إلى حُماتك فورًا."},
- ft2:{he:"מפת אירועים חיה",en:"Live incident map",ar:"خريطة أحداث مباشرة"},
- fx2:{he:"אירועי ביטחון ורפואה באזורך בזמן אמת. תמונת מצב שכונתית, תמיד מעודכנת.",en:"Security and medical incidents around you in real time. A neighborhood picture, always current.",ar:"أحداث أمنية وطبية حولك في الوقت الفعلي. صورة للحي، محدّثة دائمًا."},
- ft3:{he:"מעגלי שומרים",en:"SH✡MER circles",ar:"دوائر الحماية"},
- fx3:{he:"משפחה, חברים, שכנים. הם רואים אותך ומגיבים כשצריך — רשת הדדית של שמירה.",en:"Family, friends, neighbors. They see you and respond when needed — a mutual network of protection.",ar:"العائلة والأصدقاء والجيران. يرونك ويستجيبون عند الحاجة — شبكة حماية متبادلة."},
- ft4:{he:"מדריך חירום",en:"Emergency guide",ar:"دليل الطوارئ"},
- fx4:{he:"החייאה, מחנק, דימום, שבץ — לפי הנחיות מד״א. זמין גם ללא חיבור לאינטרנט.",en:"CPR, choking, bleeding, stroke — per MDA guidelines. Available even offline.",ar:"إنعاش، اختناق، نزيف، سكتة — وفق إرشادات نجمة داوود. متاح دون إنترنت."},
- ft5:{he:"שיתוף מיקום חי",en:"Live location sharing",ar:"مشاركة الموقع المباشر"},
- fx5:{he:"השומרים שלך יודעים איפה אתה — רק כשאתה מאשר. שליטה מלאה, תמיד בידיים שלך.",en:"Your SH✡MERs know where you are — only when you allow it. Full control, always yours.",ar:"حُماتك يعرفون مكانك — فقط بموافقتك. تحكم كامل، دائمًا بين يديك."},
- ft6:{he:"דיווח אירועים",en:"Incident reporting",ar:"الإبلاغ عن الأحداث"},
- fx6:{he:"דווח על אירועים בשכונה בכמה שניות. יחד בונים מפת ביטחון קהילתית אמיתית.",en:"Report neighborhood incidents in seconds. Together we build a real community safety map.",ar:"أبلغ عن أحداث الحي في ثوانٍ. معًا نبني خريطة أمان مجتمعية حقيقية."},
- hkicker:{he:"שלושה צעדים",en:"Three steps",ar:"ثلاث خطوات"},
- how:{he:"איך זה עובד",en:"How it works",ar:"كيف يعمل"},
- hsub2:{he:"מהורדה ועד רשת שמירה פעילה — בפחות מדקה.",en:"From download to an active watch network — in under a minute.",ar:"من التحميل إلى شبكة حماية فعّالة — في أقل من دقيقة."},
- h1t:{he:"נרשמים בחינם",en:"Sign up free",ar:"سجّل مجانًا"},
- h1x:{he:"מורידים את SH✡MER למסך הבית ונרשמים תוך שניות. ללא עלות, ללא מנוי.",en:"Add SH✡MER to your home screen and sign up in seconds. No cost, no subscription.",ar:"أضف SH✡MER إلى شاشتك الرئيسية وسجّل في ثوانٍ. دون تكلفة أو اشتراك."},
- h2t:{he:"בונים מעגל שמירה",en:"Build your circle",ar:"ابنِ دائرتك"},
- h2x:{he:"מוסיפים משפחה, חברים ושכנים מאנשי הקשר. רשת הדדית שמגיבה כשצריך.",en:"Add family, friends and neighbors from your contacts. A mutual network that responds when needed.",ar:"أضف العائلة والأصدقاء والجيران من جهات اتصالك. شبكة متبادلة تستجيب عند الحاجة."},
- h3t:{he:"לוחצים SOS — והכל קורה",en:"Tap SOS — it all happens",ar:"اضغط SOS — يحدث كل شيء"},
- h3x:{he:"אזעקה, שיתוף מיקום והתראה לשומרים — בלחיצה אחת. בלי צורך לדבר.",en:"Alarm, location sharing and alerts to your SH✡MERs — one tap. No talking needed.",ar:"إنذار ومشاركة موقع وتنبيه للحُماة — بلمسة واحدة. دون حاجة للكلام."},
- mkicker:{he:"רגעים אמיתיים",en:"Real moments",ar:"لحظات حقيقية"},
- scen:{he:"SH✡MER שם כשצריך",en:"SH✡MER is there when it matters",ar:"SH✡MER موجود عند الحاجة"},
- msub:{he:"הרגעים שבהם עזרה מהירה עושה את כל ההבדל.",en:"The moments where fast help makes all the difference.",ar:"اللحظات التي تصنع فيها المساعدة السريعة كل الفرق."},
- m1k:{he:"בדרך הביתה",en:"Walking home",ar:"في الطريق للبيت"},
- m1t:{he:"כשהולכים לבד בלילה",en:"Walking alone at night",ar:"عند المشي وحيدًا ليلًا"},
- m2k:{he:"מול איום",en:"Facing a threat",ar:"مواجهة تهديد"},
- m2t:{he:"כשמרגישים מאוימים",en:"When you feel threatened",ar:"عندما تشعر بالتهديد"},
- m3k:{he:"חירום רפואי",en:"Medical emergency",ar:"طوارئ طبية"},
- m3t:{he:"כשכל שנייה קובעת",en:"When every second counts",ar:"عندما تهمّ كل ثانية"},
- skicker:{he:"הצצה פנימה",en:"A look inside",ar:"نظرة من الداخل"},
- shots:{he:"מעוצב לרגע הקריטי",en:"Designed for the critical moment",ar:"مصمّم للحظة الحرجة"},
- ssub:{he:"ממשק בהיר, מהיר וברור — כדי שתמצא את מה שצריך בדיוק כשצריך.",en:"A clear, fast, focused interface — so you find what you need exactly when you need it.",ar:"واجهة واضحة وسريعة ومركّزة — لتجد ما تحتاجه عندما تحتاجه تمامًا."},
- cap1:{he:"מפה חיה + SOS",en:"Live map + SOS",ar:"خريطة مباشرة + SOS"},
- cap2:{he:"מדריך חירום",en:"Emergency guide",ar:"دليل الطوارئ"},
- cap3:{he:"השומרים שלי",en:"My SH✡MERs",ar:"حُماتي"},
- cap4:{he:"ניווט ומיקום",en:"Map & navigation",ar:"خريطة وتنقّل"},
- tkicker:{he:"אמון ופרטיות",en:"Trust & privacy",ar:"ثقة وخصوصية"},
- ttitle:{he:"בנוי סביב ההגנה עליך",en:"Built around protecting you",ar:"مبني حول حمايتك"},
- tsub:{he:"בטיחות מתחילה באמון. הנה איך אנחנו שומרים עליך — ועל המידע שלך.",en:"Safety starts with trust. Here's how we protect you — and your data.",ar:"الأمان يبدأ بالثقة. إليك كيف نحميك — ونحمي بياناتك."},
- tc1t:{he:"המיקום שלך — בשליטתך",en:"Your location — your control",ar:"موقعك — تحت سيطرتك"},
- tc1x:{he:"מיקומך משותף רק כשאתה מאשר: ב-SOS או בשיתוף יזום. אף פעם לא ברקע ללא ידיעתך.",en:"Your location is shared only when you allow it: in SOS or an active share. Never in the background without your knowledge.",ar:"يُشارك موقعك فقط بموافقتك: في SOS أو مشاركة مقصودة. لا يعمل في الخلفية دون علمك."},
- tc2t:{he:"פרטיות כברירת מחדל",en:"Privacy by default",ar:"خصوصية افتراضية"},
- tc2x:{he:"מספר הטלפון משמש לאימות בלבד ונשמר מוצפן. לא מוכרים מידע. לא מפרסמים. לעולם.",en:"Your phone number is used for verification only and stored encrypted. We don't sell data. We don't advertise. Ever.",ar:"يُستخدم رقم هاتفك للتحقق فقط ويُخزَّن مشفّرًا. لا نبيع البيانات. لا نعلن. أبدًا."},
- tc3t:{he:"שכבה, לא תחליף",en:"A layer, not a replacement",ar:"طبقة، وليست بديلًا"},
- tc3x:{he:"SH✡MER מוסיף שכבת קהילה מעל שירותי החירום — הוא לא בא במקומם. בחירום אמיתי, מתקשרים לרשויות.",en:"SH✡MER adds a community layer on top of emergency services — it doesn't replace them. In a real emergency, call the authorities.",ar:"يضيف SH✡MER طبقة مجتمعية فوق خدمات الطوارئ — لا يحل محلها. في حالة طوارئ حقيقية، اتصل بالسلطات."},
- emg:{he:"<b>SH✡MER אינו תחליף לשירותי חירום וביטחון.</b> במצב חירום אמיתי חייגו מיד:",en:"<b>SH✡MER is not a replacement for emergency services.</b> In a real emergency, call immediately:",ar:"<b>SH✡MER ليس بديلاً عن خدمات الطوارئ.</b> في حالة طوارئ حقيقية اتصل فورًا:"},
- d1:{he:"100 · משטרה",en:"100 · Police",ar:"100 · شرطة"},
- d2:{he:"101 · מד״א",en:"101 · MDA",ar:"101 · نجمة داوود"},
- d3:{he:"102 · כבאות",en:"102 · Fire",ar:"102 · إطفاء"},
- qkicker:{he:"שאלות ותשובות",en:"Q&A",ar:"أسئلة وأجوبة"},
- faqt:{he:"שאלות נפוצות",en:"Frequently asked questions",ar:"أسئلة شائعة"},
- q1:{he:"מה זה SH✡MER?",en:"What is SH✡MER?",ar:"ما هو SH✡MER؟"},
- a1:{he:"רשת בטיחות קהילתית: כפתור SOS שמפעיל אזעקה ושולח את מיקומך לשומרים שלך, מפת אירועים חיה, מעגלי משפחה וחברים, ומדריך חירום מלא — הכל באפליקציה אחת.",en:"A community safety network: an SOS button that triggers an alarm and sends your location to your SH✡MERs, a live incident map, circles of family and friends, and a full emergency guide — all in one app.",ar:"شبكة أمان مجتمعية: زر SOS يُطلق إنذارًا ويرسل موقعك إلى حُماتك، وخريطة أحداث مباشرة، ودوائر عائلة وأصدقاء، ودليل طوارئ كامل — كله في تطبيق واحد."},
- q2:{he:"כמה זה עולה?",en:"How much does it cost?",ar:"كم يكلّف؟"},
- a2:{he:"כלום. SH✡MER חינם לחלוטין לאזרחים — בלי מנוי, בלי פרסומות, בלי מכירת מידע. אזרחים למען אזרחים.",en:"Nothing. SH✡MER is completely free for citizens — no subscription, no ads, no selling of data. Citizens for citizens.",ar:"لا شيء. SH✡MER مجاني تمامًا للمواطنين — دون اشتراك أو إعلانات أو بيع بيانات. مواطنون من أجل مواطنين."},
- q3:{he:"איך עובד כפתור ה-SOS?",en:"How does the SOS button work?",ar:"كيف يعمل زر SOS؟"},
- a3:{he:"לחיצה אחת מפעילה אזעקה חזקה שלא ניתן להשתיק ללא קוד אישי, הבזק מסך ורטט, ושולחת את מיקומך המדויק מיד למעגלי השומרים שלך ולשומרים בסביבה.",en:"One tap triggers a loud alarm that can't be silenced without your personal code, a screen flash and vibration, and instantly sends your exact location to your SH✡MER circles and nearby SH✡MERs.",ar:"لمسة واحدة تُطلق إنذارًا عاليًا لا يمكن كتمه دون رمزك الشخصي، ووميض شاشة واهتزاز، وترسل موقعك الدقيق فورًا إلى دوائرك والحُماة القريبين."},
- q4:{he:"מה עם הפרטיות שלי?",en:"What about my privacy?",ar:"ماذا عن خصوصيتي؟"},
- a4:{he:"המיקום שלך משותף רק כשאתה מאשר — ב-SOS או בשיתוף יזום. מספר הטלפון משמש לאימות בלבד ונשמר מוצפן. לעולם לא נשתמש בו לשיווק.",en:"Your location is shared only when you allow it — in SOS or an active share. Your phone number is used for verification only and stored encrypted. We will never use it for marketing.",ar:"يُشارك موقعك فقط بموافقتك — في SOS أو مشاركة مقصودة. يُستخدم رقم هاتفك للتحقق فقط ويُخزَّن مشفّرًا. لن نستخدمه للتسويق أبدًا."},
- q5:{he:"האם זה מחליף את המשטרה או מד״א?",en:"Does it replace the police or MDA?",ar:"هل يحل محل الشرطة أو الإسعاف؟"},
- a5:{he:"לא. SH✡MER אינו תחליף לשירותי חירום. במצב חירום אמיתי חייגו 100 (משטרה), 101 (מד״א) או 102 (כבאות). SH✡MER מוסיף שכבת קהילה — לא מחליף רשויות.",en:"No. SH✡MER is not a replacement for emergency services. In a real emergency call 100 (Police), 101 (MDA) or 102 (Fire). SH✡MER adds a community layer — it does not replace the authorities.",ar:"لا. SH✡MER ليس بديلاً عن خدمات الطوارئ. في حالة طوارئ حقيقية اتصل بـ100 (شرطة) أو 101 (إسعاف) أو 102 (إطفاء). يضيف SH✡MER طبقة مجتمعية — لا يحل محل السلطات."},
- q6:{he:"איך מתקינים?",en:"How do I install it?",ar:"كيف أثبّته؟"},
- a6:{he:"פותחים את האפליקציה בדפדפן הטלפון. באייפון: שיתוף ← הוספה למסך הבית. באנדרואיד: תפריט ← התקנת אפליקציה. זהו — SH✡MER על מסך הבית, כמו כל אפליקציה.",en:"Open the app in your phone's browser. On iPhone: Share ← Add to Home Screen. On Android: Menu ← Install app. That's it — SH✡MER on your home screen, like any app.",ar:"افتح التطبيق في متصفح هاتفك. على آيفون: مشاركة ← إضافة إلى الشاشة الرئيسية. على أندرويد: القائمة ← تثبيت التطبيق. هذا كل شيء — SH✡MER على شاشتك الرئيسية."},
- ctatitle:{he:"מחזירים את הביטחון",en:"Bringing safety back",ar:"نعيد الأمان"},
- ctatitle2:{he:"לרחובות.",en:"to the streets.",ar:"إلى الشوارع."},
- ctasub:{he:"הצטרפו לרשת השמירה הקהילתית. אזרחים למען אזרחים.",en:"Join the community watch network. Citizens for citizens.",ar:"انضم إلى شبكة الحماية المجتمعية. مواطنون من أجل مواطنين."},
- fl1:{he:"פתחו את האפליקציה",en:"Open the app",ar:"افتح التطبيق"},
- flmail:{he:"כתבו לנו",en:"Contact us",ar:"راسلنا"},
- fl2:{he:"פרטיות",en:"Privacy",ar:"الخصوصية"},
- fl3:{he:"תנאים",en:"Terms",ar:"الشروط"},
- fl4:{he:"הצהרת נגישות",en:"Accessibility",ar:"إمكانية الوصول"},
- fcopy:{he:"© 2026 3Shamrocks Studio · אזרחים למען אזרחים",en:"© 2026 3Shamrocks Studio · Citizens for Citizens",ar:"© 2026 3Shamrocks Studio · مواطنون من أجل مواطنين"}
+/* ── Language switcher ──────────────────────────────── */
+var T = {
+  he: {
+    nav_cta:'הצטרפו עכשיו', eyebrow:'אזרחים שומרים על אזרחים',
+    h1a:'הקהילה', h1b:'שומרת.',
+    hero_sub:'<b>SH✡MER</b> מחבר/ת אותך לרשת שמירה קהילתית חיה. SOS בלחיצה אחת, מפת אירועים, מעגלי שומרים שתמיד עליך.',
+    cta_main:'', cta_main_txt:'הצטרפו עכשיו — חינם', cta_sec:'איך זה עובד',
+    s1:'לחיצה לשליחת SOS', s2:'רשת קהילתית פעילה', s3:'חינם לאזרחים תמיד',
+    sb1:'לחיצה<br>לשליחת SOS', sb2:'רשת<br>קהילתית פעילה', sb3:'חינם<br>לאזרחים תמיד',
+    sh_lbl:'בפנים האפליקציה', sh_h1:'ממשק אחד.', sh_h2:'כל מה שצריך.',
+    sh_sub:'מוּרד, מצטרפים, שומרים. ללא עלות, ללא הורדה, ללא בירוקרטיה.',
+    pc1t:'אזעקת SOS', pc1s:'לחיצה אחת. אזעקה שלא ניתן להשתיק.',
+    pc2t:'מפת אירועים חיה', pc2s:'אירועים וסטטוס שומרים בזמן אמת.',
+    pc3t:'מעגלי שומרים', pc3s:'משפחה, חברים, שכנים — אמון הדדי.',
+    pc4t:'מדריך חירום', pc4s:'CPR, מחנק, דימום — זמין ללא רשת.',
+    pr_lbl:'תהליך', pr_h1:'ארבע פעולות.', pr_h2:'רשת שלמה.',
+    p1h:'נכנסים עם מספר טלפון', p1p:'קוד SMS. מספרך קושר לחשבון ייחודי — SH✡MER0001 שלך. לתמיד.',
+    p2h:'בונים את מעגל השמירה', p2p:'משפחה, חברים, שכנים — מאנשי הקשר. שלושה מעגלי אמון.',
+    p3h:'לוחצים SOS — הכל קורה מיד', p3p:'אזעקה שלא ניתן להשתיק, מיקום חי, התראה לשומרים.',
+    p4h:'הקהילה מגיבה', p4p:'שומרים בסביבתך יוצאים לדרך. ישראל שומרת על ישראל.',
+    sc_lbl:'תרחישים', sc_h1:'SH✡MER שם', sc_h2:'כשזה קורה.',
+    sc1t:'01 · בטיחות אישית', sc1h:'הולכת לבד בלילה', sc1p:'SOS בלחיצה. שומרים מגיבים תוך שניות.',
+    sc2t:'02 · מעגל משפחה', sc2h:'ילד לא מגיע הביתה', sc2p:'מיקום חי. התראה מיידית לכל המעגל.',
+    sc3t:'03 · שטח פתוח', sc3h:'תאונה בטיול', sc3p:'SOS עם קואורדינטות. חילוץ מדויק.',
+    cl_lbl:'הצטרפו עכשיו', cl_h1:'SH✡MER שלך', cl_h2:'מחכה לך.',
+    cl_sub:'בלי הורדה. בלי תשלום. שם ומספר טלפון — ואת/ה ברשת.',
+    cl_cta:'', cl_cta_txt:'הצטרפו עכשיו — חינם',
+    fl1:'כניסה לאפליקציה', fl2:'SH✡MER Nature', fl3:'פרטיות', fl4:'תנאים', fl5:'יצירת קשר'
+  },
+  en: {
+    nav_cta:'Join Now', eyebrow:'Citizens protecting citizens',
+    h1a:'The Community', h1b:'Guards.',
+    hero_sub:'<b>SH✡MER</b> connects you to a live community safety network. One-tap SOS, live incident map, guardian circles that always have your back.',
+    cta_main:'', cta_main_txt:'Join Now — Free', cta_sec:'How it works',
+    s1:'One tap SOS', s2:'Active network 24/7', s3:'Free for citizens',
+    sb1:'One tap<br>SOS', sb2:'Active network<br>24/7', sb3:'Always<br>free',
+    sh_lbl:'Inside the app', sh_h1:'One interface.', sh_h2:'Everything you need.',
+    sh_sub:'Download, join, guard. Zero cost, zero forms, zero bureaucracy.',
+    pc1t:'SOS Alarm', pc1s:'One tap. Unstoppable alarm.',
+    pc2t:'Live Incident Map', pc2s:'Events and guardian status in real time.',
+    pc3t:'Guardian Circles', pc3s:'Family, friends, neighbors — mutual trust.',
+    pc4t:'Emergency Guide', pc4s:'CPR, choking, bleeding — offline ready.',
+    pr_lbl:'Process', pr_h1:'Four steps.', pr_h2:'A complete network.',
+    p1h:'Sign in with your number', p1p:'SMS code. Your number is tied to a unique account — your SH✡MER ID. Forever.',
+    p2h:'Build your guardian circle', p2p:'Family, friends, neighbors from your contacts. Three circles of trust, three colors.',
+    p3h:'Tap SOS — it all happens instantly', p3p:'Unstoppable alarm, live location, guardian alert. No talking needed.',
+    p4h:'The community responds', p4p:'Nearby guardians mobilize. Citizens protecting citizens.',
+    sc_lbl:'Real scenarios', sc_h1:'SH✡MER there', sc_h2:'when it happens.',
+    sc1t:'01 · Personal safety', sc1h:'Walking alone at night', sc1p:'One tap SOS. Guardians respond in seconds.',
+    sc2t:'02 · Family circle', sc2h:'Child not home yet', sc2p:'Live location. Instant alert to the circle.',
+    sc3t:'03 · Open terrain', sc3h:'Accident on a hike', sc3p:'SOS with coordinates. Precise rescue.',
+    cl_lbl:'Join now', cl_h1:'Your SH✡MER', cl_h2:'is waiting.',
+    cl_sub:'No download. No payment. Name and phone number — and you\'re in.',
+    cl_cta:'', cl_cta_txt:'Join Now — Free',
+    fl1:'Open the app', fl2:'SH✡MER Nature', fl3:'Privacy', fl4:'Terms', fl5:'Contact'
+  }
 };
-function setLang(l){
- try{localStorage.setItem('shomer-landing-lang',l);}catch(e){}
- var d=document.documentElement;
- d.lang=l; d.dir=(l==='en')?'ltr':'rtl';
- document.querySelectorAll('.lp').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-lang')===l);});
- var pick=function(k){var o=I18N[k];return o?(o[l]||o.he):'';};
- document.querySelectorAll('[data-i]').forEach(function(el){var v=pick(el.getAttribute('data-i'));if(v)el.textContent=v;});
- document.querySelectorAll('[data-i-html]').forEach(function(el){var v=pick(el.getAttribute('data-i-html'));if(v)el.innerHTML=v;});
+
+var lang = 'he';
+function setLang(l) {
+  lang = l;
+  document.documentElement.lang = l;
+  document.documentElement.dir = l === 'he' ? 'rtl' : 'ltr';
+  document.querySelectorAll('.lang-btn').forEach(function(b){
+    b.classList.toggle('on', b.id === 'L-' + l);
+  });
+  document.querySelectorAll('[data-t]').forEach(function(el){
+    var k = el.getAttribute('data-t');
+    if (T[l] && T[l][k] !== undefined) el.innerHTML = T[l][k];
+  });
 }
-try{var saved=localStorage.getItem('shomer-landing-lang');if(saved&&saved!=='he')setLang(saved);}catch(e){}
 </script>
 </body>
 </html>
