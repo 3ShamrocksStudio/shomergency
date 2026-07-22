@@ -8272,7 +8272,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v197';
+var APP_VER='v198';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -9857,7 +9857,8 @@ function showIncomingSOS(puid, nm, v){
    +'<button class="in-b go">'+(he?'אני בדרך':'I am coming')+'</button>'
    +'<button class="in-b map">'+(he?'נווט/י':'Navigate')+'</button>'
    +'<button class="in-b call">'+(he?'התקשר/י':'Call')+'</button>'
-   +'</div>';
+   +'</div>'
+   +'<button class="in-b sd-alarm" style="width:100%;margin-top:7px;background:linear-gradient(135deg,#C09020,#E0A828 60%,#F5C840);color:#23170a;font-weight:800;border:none;border-radius:10px;padding:10px">🛡 '+(he?'השתק אזעקה — הם בטוחים':currentLang==='ar'?'أوقف الإنذار — إنهم بأمان':'Silence alarm — they are safe')+'</button>';
   document.body.appendChild(d);
 
   function shrink(){
@@ -9889,6 +9890,7 @@ function showIncomingSOS(puid, nm, v){
     var mp=d.querySelector('.map'); if(mp) mp.onclick=nav;
     var cl=d.querySelector('.call'); if(cl) cl.onclick=callThem;
     var st=d.querySelector('.stand'); if(st) st.onclick=function(){ sosStandDown(); d.remove(); };
+    var sda=d.querySelector('.sd-alarm'); if(sda) sda.onclick=function(){ sosStandDownAlarm(puid, nm); };
     var sg=d.querySelector('.sig'); if(sg) sg.onclick=openSignalSheet;
   }
   wire();
@@ -9911,6 +9913,7 @@ async function sosRespond(victimUid, mode){
 
 /* ── THE VICTIM WATCHES WHO IS COMING ── */
 function sosWatchMyResponders(){
+  try{ sosWatchStandDown(); }catch(e){}   // also arm the trusted-guardian remote stand-down channel
   var g=gdState();
   (g.pairs||[]).forEach(function(pr){
     var puid=pr&&pr.partnerUid; if(!puid) return;
@@ -9955,6 +9958,73 @@ function sosPaintMyHelp(){
    +(names.length?'<div class="help-n">'+ESC(names.slice(0,3).join(' · '))+(ks.length>3?(' +'+(ks.length-3)):'')+'</div>':'')
    +'<div class="help-s">'+(ks.length===1?(he?'שומר אחד בדרך אליך':'1 guardian on the way')
                                          :(he?(ks.length+' שומרים בדרך אליך'):(ks.length+' guardians on the way')))+'</div>';
+}
+/* ══ REMOTE ALARM STAND-DOWN ══════════════════════════════════════════════════════
+   A trusted, paired "My SHOMER" can ask a blaring alarm to stand down — the recovery valve
+   for a locked-out legitimate owner who can't enter their secret cancel code. Anti-abuse:
+     1. GUARDIAN side confirms before sending (no accidental taps).
+     2. Only a MUTUALLY-PAIRED guardian's request is honoured (client verifies fromUid is a
+        linked partner — a random authed user's message is ignored).
+     3. VICTIM side must actively CONFIRM on-device — a guardian can never silence it silently.
+   The secret code stays the PRIMARY anti-thief stop; this never bypasses that on its own.
+   Rides the existing invites-bus (sd_<victimUid>) over REST+SSE — NO rules change, NO RTDB WS. */
+async function sosStandDownAlarm(victimUid, victimName){
+  var he=currentLang==='he', ar=currentLang==='ar';
+  if(!FB.ready||!FB.uid||!victimUid){ toast(he?'עדיין מתחבר':'Still connecting','amb'); return; }
+  var msg=he?('להשתיק את האזעקה של '+(victimName||'')+'? עשה/י זאת רק אם וידאת שהם בטוחים.')
+         :ar?('إيقاف إنذار '+(victimName||'')+'؟ افعل ذلك فقط إذا تأكدت أنهم بأمان.')
+         :('Stand down '+(victimName||'their')+" alarm? Only do this if you've confirmed they are safe.");
+  if(!window.confirm(msg)) return;                       // guardian-side confirm (anti-abuse #1)
+  var myName=cut((SS.user&&SS.user.name)||'SHOMER',20);
+  // Proven invites-bus shape {fromUid, ts, name} — the sd_ key IS the stand-down channel
+  // (the deployed rules reject unknown fields, so no 'type' here).
+  var ok=await busWrite('sd_'+victimUid, { fromUid:FB.uid, ts:Date.now(), name:myName });
+  toast(ok?(he?'✓ בקשת השתקה נשלחה — ממתין לאישורם':ar?'✓ أُرسل الطلب — بانتظار تأكيدهم':'✓ Stand-down sent — waiting for their confirm')
+          :(he?'שליחה נכשלה — נסה/י שוב':'Send failed — try again'), ok?'grn':'amb');
+}
+/* Victim: watch my own stand-down channel while an SOS/alarm is live (SSE). */
+var _sdSeen=0, _sdWatching=false;
+function sosWatchStandDown(){
+  if(_sdWatching||!FB.ready||!FB.uid) return; _sdWatching=true;
+  try{
+    FB.db.ref('invites/sd_'+FB.uid).on('value', function(snap){
+      var v=snap&&snap.val?snap.val():null;
+      if(!v||!v.ts||!v.fromUid) return;
+      if(!sosActive) return;                              // only while an alarm is live
+      if(v.ts===_sdSeen) return;                          // already handled this request
+      if(Date.now()-v.ts > 5*60*1000) return;            // ignore stale
+      // anti-abuse #2 — only honour a MUTUALLY-PAIRED guardian (this also ignores the
+      // owner's own ack writes, since the owner is not their own paired partner).
+      var trusted=(gdState().pairs||[]).some(function(p){ return p&&p.linked&&p.partnerUid===v.fromUid; });
+      if(!trusted) return;
+      _sdSeen=v.ts;
+      showStandDownPrompt(v);
+    });
+  }catch(e){}
+}
+function showStandDownPrompt(v){
+  if(document.getElementById('sd-prompt')) return;
+  var he=currentLang==='he', ar=currentLang==='ar', rtl=(he||ar);
+  var name=String((v&&v.name)||'').trim()||(he?'שומר/ת מהימן/ה':ar?'حارس موثوق':'a trusted SHOMER');
+  var d=document.createElement('div'); d.id='sd-prompt';
+  d.setAttribute('style','position:fixed;inset:0;z-index:100002;background:rgba(4,10,22,.93);display:flex;align-items:center;justify-content:center;padding:22px;direction:'+(rtl?'rtl':'ltr'));
+  d.innerHTML='<div style="max-width:360px;background:linear-gradient(160deg,#0e1d3a,#122850);border:1px solid #E0A82e66;border-radius:18px;padding:22px;text-align:center;color:#f2f6ff;font-family:system-ui,-apple-system,sans-serif">'
+   +'<div style="font-size:40px;margin-bottom:6px">🛡</div>'
+   +'<div style="font-size:16px;font-weight:800;margin-bottom:8px">'+ESC(name)+' '+(he?'מבקש/ת להשתיק את האזעקה שלך':ar?'يطلب إيقاف إنذارك':'is asking to stand down your alarm')+'</div>'
+   +'<div style="font-size:12.5px;color:#c8d4e8;line-height:1.55;margin-bottom:16px">'+(he?'אשר/י רק אם את/ה באמת בטוח/ה. פעולה זו תפסיק את האזעקה.':ar?'أكّد فقط إذا كنت بأمان فعلاً. سيؤدي ذلك إلى إيقاف الإنذار.':'Only confirm if you are truly safe. This stops the alarm.')+'</div>'
+   +'<button id="sd-yes" style="width:100%;padding:13px;border:none;border-radius:12px;background:linear-gradient(135deg,#0E8840,#14A857);color:#fff;font-size:15px;font-weight:800;margin-bottom:9px;cursor:pointer">'+(he?'✓ אני בטוח/ה — השתק אזעקה':ar?'✓ أنا بأمان — أوقف الإنذار':'✓ I am safe — stand down')+'</button>'
+   +'<button id="sd-no" style="width:100%;padding:12px;border:1px solid #CC142688;border-radius:12px;background:transparent;color:#FF9aa3;font-size:14px;font-weight:800;cursor:pointer">'+(he?'✗ השאר/י את האזעקה פועלת':ar?'✗ أبقِ الإنذار يعمل':'✗ Keep the alarm on')+'</button>'
+   +'</div>';
+  document.body.appendChild(d);
+  try{ if(navigator.vibrate) navigator.vibrate([120,80,120]); }catch(e){}
+  document.getElementById('sd-yes').onclick=function(){ d.remove(); sosStandDownConfirmed(); };
+  document.getElementById('sd-no').onclick=function(){ d.remove(); try{ busWrite('sd_'+FB.uid, {fromUid:FB.uid,ts:Date.now(),name:'kept'}); }catch(e){} };
+}
+function sosStandDownConfirmed(){
+  var he=currentLang==='he';
+  try{ if(typeof cancelSOS==='function') cancelSOS(); else { stopSosAlarm(); if(typeof stopMaxAttention==='function')stopMaxAttention(); } }catch(e){ try{stopSosAlarm();}catch(_){} }
+  try{ busWrite('sd_'+FB.uid, {fromUid:FB.uid,ts:Date.now(),name:'done'}); }catch(e){}   // ack/clear (fromUid=self → ignored by watcher)
+  try{ toast(he?'האזעקה הושתקה באישורך (שומר מהימן)':'Alarm stood down with your confirmation (trusted SHOMER)','grn'); }catch(e){}
 }
 var STATS={data:null, layer:[], on:true};   /* real police data is ALWAYS shown */
 
