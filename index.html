@@ -98,13 +98,14 @@ header.bar{position:relative;z-index:60;background:var(--bar)}
 /* ══ ARRIVES FIRST ══ */
 .arrive{background:var(--white);padding:clamp(56px,7vw,96px) 0}
 .arrive-inner{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;direction:ltr}
-.arrive-text{direction:rtl;text-align:right}
+.arrive-text{direction:rtl;text-align:right;position:relative;z-index:2}
 .arrive-kicker{font-size:16px;color:var(--grey);margin-bottom:10px;font-weight:500}
 .arrive-lead{font-size:clamp(18px,1.7vw,23px);color:var(--ink-2);font-weight:800;margin-bottom:6px}
 .arrive-big{font-size:clamp(64px,11vw,200px);line-height:.94;font-weight:900;color:var(--orange);letter-spacing:-3px}
 .arrive-figure{position:relative;display:flex;justify-content:center;align-items:center;min-height:300px}
 .arrive-figure .blk{position:absolute;background:var(--orange);border-radius:22px;z-index:0}
-.arrive-figure .blk.b1{width:62%;height:78%;left:-21%;top:6%}
+/* peeks left of the photo but must never reach the text column */
+.arrive-figure .blk.b1{width:56%;height:78%;left:-11%;top:6%}
 /* bleeds off the right edge of the viewport, as in the reference */
 .arrive-figure .blk.b2{width:180px;height:62%;top:13%;border-radius:22px;
   right:calc((min(1180px,100vw) - 48px)/2 - 50vw)}
