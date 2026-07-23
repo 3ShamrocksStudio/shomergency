@@ -91,15 +91,9 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none}
 }
 .nav-r{display:flex;align-items:center;gap:var(--s2)}
 .lang-sw{display:flex;gap:4px}
-.lang-btn{
-  height:40px;padding:0 12px;
-  border:1px solid rgba(169,190,221,.18);
-  background:none;color:var(--tx2);
-  font-family:var(--fd);font-size:11px;font-weight:700;letter-spacing:.08em;
-  transition:border-color .2s,color .2s;
-}
+.lang-btn{height:36px;padding:0 14px;border:1.5px solid rgba(169,190,221,.18);background:none;color:var(--tx2);font-family:var(--fd);font-size:11px;font-weight:700;letter-spacing:.08em;border-radius:50px;transition:border-color .2s,color .2s}
 .lang-btn.on{border-color:var(--y2);color:var(--y2)}
-.nav-dl{
+.nav-dl{border-radius:50px;
   height:40px;padding:0 20px;
   background:var(--y-grad);color:#0a0c12;
   font-family:var(--fd);font-size:11px;font-weight:900;
@@ -178,7 +172,7 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none}
 
 /* single APK CTA — no web version promo */
 .hero-cta{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s2);margin-bottom:var(--s6)}
-.btn-dl{
+.btn-dl{border-radius:50px;
   display:inline-flex;align-items:center;gap:10px;
   height:56px;padding:0 var(--s4);
   background:var(--y-grad);color:#0a0c12;
@@ -298,21 +292,9 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none}
   display:grid;grid-template-columns:1fr;
   gap:var(--s4);margin-top:clamp(var(--s5),6vw,var(--s8));
 }
-.step-card{
-  background:var(--mb);
-  border:1px solid var(--border-dim);
-  padding:var(--s4) var(--s3);
-  display:flex;flex-direction:column;align-items:center;
-  text-align:center;gap:var(--s2);
-}
+.step-card{display:flex;flex-direction:column;align-items:center;text-align:center;gap:var(--s2);padding:var(--s4) var(--s2);background:none;border:none}
 /* Branded SVG icon wrapper */
-.step-icon{
-  width:72px;height:72px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  background:rgba(250,172,34,.12);border:2px solid rgba(250,172,34,.3);
-  margin-bottom:var(--s1);
-  flex-shrink:0;
-}
+.step-icon{width:96px;height:96px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(250,172,34,.1);border:2.5px solid rgba(250,172,34,.45);margin-bottom:var(--s2);flex-shrink:0}
 .step-icon svg{width:36px;height:36px}
 .step-n{
   font-family:var(--fd);font-size:10px;font-weight:700;
@@ -335,11 +317,7 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none}
 }
 .values-grid{display:grid;grid-template-columns:1fr;gap:var(--s5)}
 .value-item{display:flex;flex-direction:column;align-items:center;text-align:center;gap:var(--s2)}
-.value-icon-wrap{
-  width:96px;height:96px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  position:relative;
-}
+.value-icon-wrap{width:112px;height:112px;border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative}
 .value-icon-wrap::before{
   content:"";position:absolute;inset:-3px;border-radius:50%;
   background:var(--y-grad);z-index:0;opacity:.35;
@@ -383,7 +361,7 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none}
   display:flex;flex-direction:column;gap:var(--s2);
 }
 .phone-shell{
-  border-radius:20px;overflow:hidden;
+  border-radius:28px;overflow:hidden;
   border:1.5px solid rgba(250,172,34,.18);
   box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.04);
   background:var(--mb);
@@ -467,7 +445,7 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none}
     padding-bottom:clamp(var(--s8),8vw,var(--s12));
   }
   .hero-phone{
-    width:clamp(200px,22vw,270px);border-radius:28px;overflow:hidden;
+    width:clamp(200px,22vw,270px);border-radius:36px;overflow:hidden;
     border:2px solid rgba(250,172,34,.2);
     box-shadow:0 48px 96px rgba(0,0,0,.65),0 0 60px rgba(250,172,34,.07);
     position:relative;aspect-ratio:9/19.5;
@@ -478,7 +456,7 @@ button{font-family:var(--fb);cursor:pointer;border:none;background:none}
     position:absolute;bottom:clamp(var(--s8),9vw,var(--s10));
     inset-inline-start:-clamp(20px,2.5vw,36px);
     background:var(--mb);border:1px solid rgba(250,172,34,.25);
-    border-radius:12px;padding:10px 14px;
+    border-radius:50px;padding:10px 18px;
     display:flex;align-items:center;gap:10px;
     box-shadow:0 8px 32px rgba(0,0,0,.55);white-space:nowrap;
     animation:floatIn .7s .4s cubic-bezier(.36,1.56,.64,1) both;
