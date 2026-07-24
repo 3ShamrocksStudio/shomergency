@@ -40,7 +40,37 @@ jobs:
         working-directory: native
         run: |
           npm install @capacitor/assets --save-dev
+          npm install sharp --save-dev
           npx capacitor-assets generate --android || echo "asset gen fallback"
+
+
+      - name: Force correct adaptive-icon resolutions (108dp)
+        run: |
+          node - <<'EOF'
+          /* Android adaptive icons are 108dp. capacitor-assets emits the LEGACY 48dp
+             sizes (48/72/96/144/192), so launchers upscale the foreground into a 432px
+             slot and the icon looks blurry. Regenerate foreground + background at the
+             correct 108dp sizes from the full-resolution 2048px sources. */
+          const sharp = require('sharp');
+          const fs = require('fs'), path = require('path');
+          const RES = 'android/app/src/main/res';
+          const SIZES = { mdpi:108, hdpi:162, xhdpi:216, xxhdpi:324, xxxhdpi:432 };
+          const LEGACY = { mdpi:48, hdpi:72, xhdpi:96, xxhdpi:144, xxxhdpi:192 };
+          (async () => {
+            for (const [d, px] of Object.entries(SIZES)) {
+              const dir = path.join(RES, 'mipmap-' + d);
+              fs.mkdirSync(dir, { recursive: true });
+              await sharp('assets/icon-fg-src.png').resize(px, px, { fit:'contain',
+                background:{r:0,g:0,b:0,alpha:0} }).png().toFile(path.join(dir,'ic_launcher_foreground.png'));
+              await sharp('assets/icon-bg-src.png').resize(px, px).png()
+                .toFile(path.join(dir,'ic_launcher_background.png'));
+              const lp = LEGACY[d];
+              await sharp('assets/icon-src.png').resize(lp, lp).png().toFile(path.join(dir,'ic_launcher.png'));
+              await sharp('assets/icon-src.png').resize(lp, lp).png().toFile(path.join(dir,'ic_launcher_round.png'));
+              console.log(d + ': adaptive ' + px + 'px, legacy ' + lp + 'px');
+            }
+          })();
+          EOF
 
       - name: Sync Capacitor
         working-directory: native
