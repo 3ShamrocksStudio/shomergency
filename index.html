@@ -255,7 +255,8 @@ footer.foot{background:var(--foot);color:#C3CCDF;padding:clamp(56px,7vw,84px) 0 
 /* ══ SH✡MER Nature banner — sibling product, brand green, coming soon ══ */
 .nat-band{position:relative;overflow:hidden;isolation:isolate;background:#0B140E}
 .nat-band .nat-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-  object-position:center 42%;opacity:.30;z-index:0}
+  object-position:84% center;opacity:.34;z-index:0}
+@media (max-width:620px){.nat-band .nat-photo{object-position:80% center;opacity:.30}}
 .nat-band::after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
   background:radial-gradient(120% 85% at 50% 20%,rgba(18,36,22,.55) 0%,rgba(11,20,14,.88) 58%,rgba(7,15,9,.97) 100%)}
 .nat-band img.nat-logo{width:clamp(88px,15vw,132px);height:auto;margin:0 auto 18px;display:block;
