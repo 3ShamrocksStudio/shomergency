@@ -24,7 +24,7 @@
 <link rel="apple-touch-icon" href="logo-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Alef:wght@400;700&display=swap" rel="stylesheet">
 <style>
 /* ══════════════════════════════════════════════════════
    SH✡MER · Landing — built to match the approved
@@ -47,7 +47,7 @@
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;overflow-x:hidden;-webkit-text-size-adjust:100%}
-body{font-family:'Heebo',system-ui,-apple-system,sans-serif;color:var(--ink);
+body{font-family:'Alef',system-ui,-apple-system,sans-serif;color:var(--ink);
   background:var(--white);line-height:1.55;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 img{display:block;max-width:100%}
 a{text-decoration:none;color:inherit}
@@ -58,7 +58,7 @@ h1,h2,h3{line-height:1.2;font-weight:800}
 
 /* ── orange pill CTA ── */
 .btn-orange{display:inline-flex;align-items:center;justify-content:center;gap:10px;background:var(--orange);color:#fff;
-  font-weight:800;font-size:17px;min-height:56px;padding:0 34px;border-radius:999px;white-space:nowrap;
+  font-weight:800;font-size:17px;min-height:56px;padding:0 46px;border-radius:999px;white-space:nowrap;
   transition:background .18s,transform .12s,box-shadow .18s;box-shadow:0 6px 18px rgba(252,153,24,.28)}
 .btn-orange:hover{background:var(--orange-d);transform:translateY(-1px)}
 .btn-orange:active{transform:scale(.98)}
@@ -111,7 +111,7 @@ header.bar{position:relative;z-index:60;background:var(--bar)}
   aspect-ratio:1/1;object-fit:cover;box-shadow:0 24px 50px -20px rgba(0,0,0,.38);max-width:410px}
 
 /* ══ ADVANTAGES ══ */
-.adv{background:var(--navy);color:#fff;padding:clamp(58px,7vw,92px) 0 clamp(64px,8vw,100px)}
+.adv{background:var(--navy);color:#fff;padding:clamp(58px,7vw,92px) 0 clamp(64px,8vw,100px);background-image:linear-gradient(180deg,rgba(12,27,58,0) 55%,#08152F 100%)}
 .adv h2{text-align:center;font-size:clamp(25px,3vw,38px);font-weight:800;margin-bottom:clamp(40px,5vw,64px);color:#fff}
 .adv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:46px;direction:ltr}
 .adv-col{text-align:center;direction:rtl}
@@ -181,17 +181,26 @@ footer.foot{background:var(--foot);color:#C3CCDF;padding:clamp(56px,7vw,84px) 0 
   /* ── 3. hero CTA clear and large (not oversized) ── */
   .hero-cta{font-size:17px;min-height:56px;padding:0 30px}
   /* ── 4. hero image ends at the fold; phone 3/4 above it, 1/4 below ── */
-  .hero{min-height:auto}
-  .hero-bg{height:calc(100svh - 124px);top:0;bottom:auto}
-  .hero-shade{height:calc(100svh - 124px);top:0;bottom:auto}
-  .hero-inner{grid-template-columns:1fr;gap:58px;min-height:0;
-    padding:34px 0 0;text-align:center;justify-items:center}
+  /* hero image is a fixed band; the phone FLOATS OVER it and overhangs the
+     bottom edge onto the next section, so it is never clipped by the image. */
+  .hero{min-height:auto;padding-bottom:120px;overflow:visible}
+  .hero-bg{height:520px;top:0;bottom:auto}
+  .hero-shade{height:520px;top:0;bottom:auto}
+  .hero-inner{grid-template-columns:1fr;gap:26px;min-height:0;
+    padding:26px 0 0;text-align:center;justify-items:center}
   .hero-text{order:1}
-  .hero-phone{order:2;width:230px;margin-bottom:-25%}
+  .hero-phone{order:2;width:216px;position:relative;z-index:4;margin-bottom:-120px;
+    filter:drop-shadow(0 22px 40px rgba(0,0,0,.55))}
   .hero h1{font-size:clamp(26px,7vw,34px)}
   /* 5 */
   .arrive-figure{min-height:0}
-  .arrive-figure img{max-width:80%}
+  /* order: mobile mockup overhang · then text · then the square image */
+  .arrive{padding-top:0}
+  .arrive-inner{display:flex;flex-direction:column;gap:22px}
+  .arrive-text{order:1}
+  .arrive-figure{order:2}
+  .arrive-figure img{max-width:66%}
+
   .b1{width:26%!important;height:54%!important;left:5%!important;top:16%!important}
   .b2{width:26%!important;height:44%!important;top:24%!important;right:5%!important}
   /* 7 — one screen at a time */
@@ -199,7 +208,7 @@ footer.foot{background:var(--foot);color:#C3CCDF;padding:clamp(56px,7vw,84px) 0 
   .car-track>.shot{flex:0 0 78%!important}
   /* 8 */
   .close-cta p{max-width:none;width:min(300px,88%);font-size:clamp(19px,5vw,23px);line-height:1.42}
-  .btn-orange{font-size:16px;min-height:54px;padding:0 26px}
+  .btn-orange{font-size:16px;min-height:54px;padding:0 36px}
   .bar-left .btn-orange{padding:0}
   .foot-badge{height:clamp(112px,26vw,150px)}
 }
@@ -240,6 +249,27 @@ footer.foot{background:var(--foot);color:#C3CCDF;padding:clamp(56px,7vw,84px) 0 
 .car-dots button::after{content:"";position:absolute;inset-inline:16px;top:50%;transform:translateY(-50%);
   height:7px;border-radius:99px;background:#CBD3E4;transition:.25s}
 .car-dots button.on::after{background:var(--orange);inset-inline:12px}
+
+/* SHOMER wordmark — Marion Bold, everywhere the name appears with the ✡ */
+@font-face{font-family:'Marion';src:local('Marion Bold'),local('Marion-Bold'),local('Marion');font-weight:700;font-display:swap}
+.wordmark{font-family:'Marion','Alef',serif;font-weight:700;letter-spacing:.01em}
+
+/* ══ SH✡MER Nature banner — sibling product, brand green, coming soon ══ */
+.nat-band{position:relative;overflow:hidden;background:#0B140E;isolation:isolate}
+.nat-band img.nat-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.42;z-index:0}
+.nat-band::after{content:"";position:absolute;inset:0;z-index:1;
+  background:linear-gradient(180deg,rgba(11,20,14,.86),rgba(11,20,14,.58) 45%,rgba(11,20,14,.94))}
+.nat-in{position:relative;z-index:2;text-align:center;padding:clamp(58px,7vw,92px) 0}
+.nat-soon{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.18em;
+  color:#8EF25A;border:1px solid rgba(80,219,15,.5);border-radius:50px;padding:7px 18px;margin-bottom:18px}
+.nat-h{font-size:clamp(26px,4.4vw,42px);font-weight:700;color:#fff;letter-spacing:-.02em;margin-bottom:12px}
+.nat-h em{font-style:normal;color:#50DB0F}
+.nat-p{font-size:clamp(15px,1.7vw,19px);color:#BBD3BB;max-width:46ch;margin:0 auto 26px;line-height:1.65}
+.btn-green{display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  min-height:56px;padding:0 46px;border-radius:50px;background:linear-gradient(135deg,#2F8A10,#50DB0F);
+  color:#08140A;font-weight:700;font-size:17px;transition:transform .18s ease,box-shadow .18s ease}
+.btn-green:hover{transform:translateY(-2px);box-shadow:0 14px 34px -12px rgba(80,219,15,.6)}
+@media (max-width:620px){.nat-in{padding:48px 0}.btn-green{min-height:54px;padding:0 36px;font-size:16px}}
 </style>
 </head>
 <body>
@@ -259,7 +289,7 @@ footer.foot{background:var(--foot);color:#C3CCDF;padding:clamp(56px,7vw,84px) 0 
       </a>
     </div>
     <img class="bar-badge" src="SHOMER_logo_big.png" alt="" aria-hidden="true">
-    <a href="./" aria-label="SH✡MER"><img class="bar-mark" src="Brand/SVG/SHOMER.APP_WHITE.svg" alt="SH✡MER.app"></a>
+    
   </div>
 </header>
 
@@ -269,11 +299,11 @@ footer.foot{background:var(--foot);color:#C3CCDF;padding:clamp(56px,7vw,84px) 0 
   <div class="hero-shade"></div>
   <div class="wrap hero-inner">
     <div class="hero-phone">
-      <img src="app-v199-map.jpg" alt="מסך המפה של SH✡MER עם כפתור SOS" loading="lazy">
+      <img src="app-v200-map.jpg" alt="מסך המפה של SH✡MER עם כפתור SOS" loading="lazy">
     </div>
     <div class="hero-text">
       <h1 data-i="h1">הרשת החברתית הראשונה בישראל של אזרחים למען אזרחים</h1>
-      <p data-i="hsub">פועלים יחד לערבות הדדית, מחויבות חברתית ואהבת חינם.</p>
+      <p data-i="hsub">פועלים יחד לערבות הדדית<br>מחויבות חברתית ואהבת חינם</p>
       <a class="btn-orange hero-cta" href="SHOMER.apk" download>
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg>
         <span data-i="cta3">להורדה - חינם!</span>
@@ -286,7 +316,7 @@ footer.foot{background:var(--foot);color:#C3CCDF;padding:clamp(56px,7vw,84px) 0 
 <section class="arrive">
   <div class="wrap arrive-inner">
     <div class="arrive-text">
-      <div class="arrive-kicker"><span data-i="kick">העיקרון שעליו מתבסס</span> SH<span class="star">✡</span>MER</div>
+      <div class="arrive-kicker"><span data-i="kick">העיקרון שעליו מתבסס</span> <span class="wordmark">SH<span class="star">✡</span>MER</span></div>
       <div class="arrive-lead" data-i="lead">ברגעי סכנה ומצוקה, מי שנמצא הכי קרוב –</div>
       <div class="arrive-big" data-i="big">מגיע<br>ראשון.</div>
     </div>
@@ -301,9 +331,9 @@ footer.foot{background:var(--foot);color:#C3CCDF;padding:clamp(56px,7vw,84px) 0 
 <!-- ══ ADVANTAGES ══ -->
 <section class="adv">
   <div class="wrap">
-    <h2><span data-i="advt">היתרונות של</span> SH<span class="star">✡</span>MER</h2>
+    <h2><span data-i="advt">היתרונות של</span> <span class="wordmark">SH<span class="star">✡</span>MER</span></h2>
     <div class="adv-grid"><div class="adv-col">
-        <div class="adv-ic"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="9"/><path d="M24 8V3M24 45v-5M40 24h5M3 24h5M35.3 12.7l3.5-3.5M9.2 38.8l3.5-3.5M35.3 35.3l3.5 3.5M9.2 9.2l3.5 3.5"/></svg></div>
+        <div class="adv-ic"><svg viewBox="0 0 100 100"><path d="M74 76A34 34 0 1 0 50 86" stroke-width="4.6"/><path d="M45 56V33a5 5 0 0 1 10 0v18" stroke-width="4.6"/><path d="M55 49a5 5 0 0 1 10 0v6" stroke-width="4.6"/><path d="M65 53a5 5 0 0 1 10 0v13c0 10-6.6 18-17 18h-5c-6 0-9.2-3.2-13.4-9.2l-5.8-8.6a5 5 0 0 1 7.8-4.9l4.4 4.4" stroke-width="4.6"/></svg></div>
         <h3 data-i="a3t">לחיצה אחת=הרבה פעולות</h3>
         <p data-i="a3x">משמיעה אזעקה קולנית, שולחת התראה לכל המשתמשים, מציגה מסלול מהיר לאירוע, ועוד…</p>
       </div>
@@ -325,12 +355,22 @@ footer.foot{background:var(--foot);color:#C3CCDF;padding:clamp(56px,7vw,84px) 0 
 <section class="screens">
   <div class="wrap">
     <h2 data-i="screens">”שומר אחי אנוכי“</h2>
-    <div class="car"><div class="car-track" id="cartrack"><div class="shot"><img src="app-v199-map.jpg" alt="מפה חיה עם כפתור SOS" loading="lazy"></div><div class="shot"><img src="app-v199-circles.jpg" alt="מעגלי השומרים שלי" loading="lazy"></div><div class="shot"><img src="app-v199-guide.jpg" alt="מדריך חירום" loading="lazy"></div><div class="shot"><img src="app-v199-profile.jpg" alt="הפרופיל שלי" loading="lazy"></div></div><div class="car-dots" id="cardots"></div></div></div></section>
+    <div class="car"><div class="car-track" id="cartrack"><div class="shot"><img src="app-v200-map.jpg" alt="מפה חיה עם כפתור SOS" loading="lazy"></div><div class="shot"><img src="app-v200-circles.jpg" alt="מעגלי השומרים שלי" loading="lazy"></div><div class="shot"><img src="app-v200-guide.jpg" alt="מדריך חירום" loading="lazy"></div><div class="shot"><img src="app-v200-profile.jpg" alt="הפרופיל שלי" loading="lazy"></div></div><div class="car-dots" id="cardots"></div></div></div></section>
 
 <!-- ══ CLOSING CTA ══ -->
+<!-- ══ SH✡MER NATURE ══ -->
+<section class="nat-band">
+  <img class="nat-bg" src="SHOMERNature_BannerBIG.jpg" alt="" aria-hidden="true">
+  <div class="wrap nat-in">
+    <span class="nat-soon" data-i="nsoon">בקרוב · COMING SOON</span>
+    <div class="nat-h"><span class="wordmark">SH<span class="star" style="color:#50DB0F">✡</span>MER</span> <em>Nature</em></div>
+    <p class="nat-p" data-i="np">אותה רשת שמירה — הפעם ליער, לחוף, לחי ולסביבה.</p>
+    <a class="btn-green" href="nature.html" data-i="ncta">גלה/י עוד</a>
+  </div>
+</section>
 <section class="close-cta">
   <div class="wrap">
-    <p data-i="closing">הצטרפו עכשיו לרשת השומרים הראשונה בישראל של אזרחים למען אזרחים. עזרו לנו להחזיר את הביטחון לרחובות בישראל.</p>
+    <p data-i="closing">הצטרפו עכשיו לרשת השומרים הראשונה בישראל של אזרחים למען אזרחים. הצטרפו אלינו, וביחד נוכל להחזיר את הביטחון לרחובות בישראל.</p>
     <a class="btn-orange" href="SHOMER.apk" download>
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg>
       <span data-i="cta2">להורדה - חינם!</span>
@@ -383,7 +423,7 @@ var I18N={
  a3t:{he:"לחיצה אחת=הרבה פעולות",en:"One tap = many actions",ar:"لمسة واحدة = إجراءات كثيرة"},
  a3x:{he:"משמיעה אזעקה קולנית, שולחת התראה לכל המשתמשים, מציגה מסלול מהיר לאירוע, ועוד…",en:"Sounds a loud alarm, alerts every user, shows the fastest route to the incident, and more…",ar:"يُطلق إنذارًا عاليًا، ينبّه جميع المستخدمين، ويعرض أسرع طريق إلى الحدث، والمزيد…"},
  screens:{he:"”שומר אחי אנוכי“",en:"”I am my brother's keeper“",ar:"”أنا حارس أخي“"},
- closing:{he:"הצטרפו עכשיו לרשת השומרים הראשונה בישראל של אזרחים למען אזרחים. עזרו לנו להחזיר את הביטחון לרחובות בישראל.",en:"Join Israel's first guardian network of citizens for citizens. Help us bring safety back to the streets of Israel.",ar:"انضموا الآن إلى أول شبكة حماية في إسرائيل من المواطنين لأجل المواطنين. ساعدونا في إعادة الأمان إلى الشوارع."},
+ closing:{he:"הצטרפו עכשיו לרשת השומרים הראשונה בישראל של אזרחים למען אזרחים. הצטרפו אלינו, וביחד נוכל להחזיר את הביטחון לרחובות בישראל.",en:"Join Israel's first guardian network of citizens for citizens. Help us bring safety back to the streets of Israel.",ar:"انضموا الآن إلى أول شبكة حماية في إسرائيل من المواطنين لأجل المواطنين. ساعدونا في إعادة الأمان إلى الشوارع."},
  disc:{he:"<strong>SH✡MER מחזק את הביטחון האישי — הוא אינו תחליף לשירותי החירום.</strong><br>במצב חירום אמיתי חייגו תמיד <span class=\"foot-nums\">101</span> (מד״א) · <span class=\"foot-nums\">100</span> (משטרה) · <span class=\"foot-nums\">102</span> (כבאות).",en:"<strong>SH✡MER strengthens personal safety — it is not a replacement for emergency services.</strong><br>In a real emergency always call <span class=\"foot-nums\">101</span> (MDA) · <span class=\"foot-nums\">100</span> (Police) · <span class=\"foot-nums\">102</span> (Fire).",ar:"<strong>SH✡MER يعزّز الأمان الشخصي — وليس بديلاً عن خدمات الطوارئ.</strong><br>في حالة طوارئ حقيقية اتصل دائمًا بـ<span class=\"foot-nums\">101</span> (إسعاف) · <span class=\"foot-nums\">100</span> (شرطة) · <span class=\"foot-nums\">102</span> (إطفاء)."},
  fl0:{he:"פתחו את האפליקציה",en:"Open the app",ar:"افتح التطبيق"},
  fl1:{he:"פרטיות",en:"Privacy",ar:"الخصوصية"},
