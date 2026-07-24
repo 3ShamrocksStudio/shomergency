@@ -1280,6 +1280,9 @@ body.otp-active .ob-steps{display:none!important;}
 .seg button.on{background:linear-gradient(135deg,#C09020,#E0A828);color:#0A1628}
 .seg button.on.past-on{background:linear-gradient(135deg,#4A7C96,#5B8CA8);color:#04121B}
 .seg .sdot{width:7px;height:7px;border-radius:50%;background:currentColor}
+
+.ob-returning{display:block;width:100%;margin-top:12px;min-height:44px;background:none;border:0;color:var(--g3,#E0A828);font:700 14px inherit;cursor:pointer;text-decoration:underline;text-underline-offset:4px;padding:10px 4px}
+.ob-returning:hover{color:var(--g4,#F5C840)}
 </style>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"><meta http-equiv="Pragma" content="no-cache"><meta http-equiv="Expires" content="0">
 </head>
@@ -1413,6 +1416,7 @@ body.otp-active .ob-steps{display:none!important;}
  </div>
 
  <button class="ob-cta" id="ob-submit-btn" onclick="obStep0()"><span id="ob-cta0-t">המשך</span></button>
+<button class="ob-returning" id="ob-returning" onclick="obReturningUser()" data-he="כבר יש לך חשבון שומר? התחבר/י" data-en="Already a SHOMER user? Sign in" data-ar="لديك حساب شومير؟ تسجيل الدخول">כבר יש לך חשבון שומר? התחבר/י</button>
  </div>
  </div>
 
@@ -3704,6 +3708,19 @@ function ilNormalize(d){ d=String(d).replace(/\D/g,''); return d.replace(/^0/,'9
 function shakeField(id){ var el=document.getElementById(id); if(!el)return; el.classList.add('shake'); try{el.focus();}catch(e){} setTimeout(function(){el.classList.remove('shake');},480); }
 let _obvCode='', _obvName='';
 function genVerifyCode(){ return String(Math.floor(1000+Math.random()*9000)); }
+
+/* Returning user: they already have an account, so the only thing we need is
+   proof they still control the phone. Skip the name/profile step entirely —
+   completeRegistration() detects the existing registry entry, adopts the new
+   uid and drops them straight into the app. */
+function obReturningUser(){
+  try{
+    var he=currentLang==='he';
+    var nm=document.getElementById('ob-name');
+    if(nm && !nm.value.trim()){ nm.value=he?'שומר':'Shomer'; }
+    if(typeof obStep0==='function'){ obStep0(); return; }
+  }catch(e){}
+}
 function obStep0(){
  const he=currentLang==="he";
  const raw=document.getElementById("ob-phone").value;
@@ -8313,7 +8330,7 @@ try{ hydrateIcons(document); }catch(e){}
 /* Loaded-build version — shown in the diagnostic panel so a phone can prove
    whether it's on the latest build or a STALE cached one. Keep in lock-step
    with sw.js SW_VERSION on every deploy. */
-var APP_VER='v200';
+var APP_VER='v201';
 var FB={ready:false,uid:null,db:null,_presTimer:null,connected:false,listening:false,pushState:'default',near:0,swVer:'?',
   authState:'connecting',sdkLoaded:false,persist:'',permErr:null,err:null,wsProbe:'',csp:''};
 /* Always log connection diagnostics to the console so the real failure can be SEEN in Chrome. */
@@ -11291,12 +11308,32 @@ async function completeRegistration(){ try{document.body.classList.remove("otp-a
   let existing=null;
   try{ existing=(await fbRestGet("registry/"+ph)).val(); }catch(e){ existing=null; }
   if(existing&&existing.uid){
-   toast(he?"✓ ברוך השב/ת, "+uname:"✓ Welcome back, "+uname,"grn");
-  }else{
-   /* Live rules accept exactly {uid,name,ts} — verified empirically. */
-   await fbRestWrite("PUT","registry/"+ph,{uid:uid,name:(user.name||uname).substring(0,60),ts:Date.now()});
-   toast(he?"✓ ברוך הבא/ה, "+uname:"✓ Welcome, "+uname,"grn");
-  }
+     /* RETURNING USER — this phone is already registered.
+        Two things must happen, and previously neither did:
+        1) ADOPT THE NEW UID. A reinstall gets a fresh anonymous uid, but the
+           registry still pointed at the dead one — so anyone inviting this
+           person by phone resolved to a uid that no longer exists and the
+           invite silently vanished. Their whole guardian network was orphaned.
+        2) SKIP ONBOARDING. They already signed up; make them verify the phone
+           and go straight in, restoring the name we already hold. */
+     var _prevName=(existing.name||"").trim();
+     try{ await fbRestWrite("PUT","registry/"+ph,{uid:uid,name:(_prevName||user.name||uname).substring(0,60),ts:Date.now()}); }catch(e){}
+     if(!SS.security)SS.security={};
+     SS.security.phoneVerified=true; SS.security.twilioVerified=true; SS.security.firebaseUid=uid;
+     if(!SS.user)SS.user={};
+     SS.user.username=uname; SS.user.phone=user.phone;
+     SS.user.name=_prevName||user.name||uname;
+     user.name=SS.user.name;
+     SS.onboarded=true;
+     saveStore();
+     toast(he?("✓ ברוך השב/ת, "+SS.user.name):("✓ Welcome back, "+SS.user.name),"grn");
+     try{ var _sp=document.getElementById("ob-sms-panel"); if(_sp)_sp.remove(); }catch(e){}
+     try{ enterApp(true); }catch(e){ goStep(1); }
+     return;
+   }else{ /* Live rules accept exactly {uid,name,ts} — verified empirically. */
+     await fbRestWrite("PUT","registry/"+ph,{uid:uid,name:(user.name||uname).substring(0,60),ts:Date.now()});
+     toast(he?"✓ ברוך הבא/ה, "+uname:"✓ Welcome, "+uname,"grn");
+   }
   if(!SS.security)SS.security={};
   SS.security.phoneVerified=true;SS.security.twilioVerified=true;SS.security.firebaseUid=uid;
   if(!SS.user)SS.user={};
