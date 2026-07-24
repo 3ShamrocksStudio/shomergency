@@ -99,7 +99,7 @@ header.bar{position:relative;z-index:60;background:var(--bar)}
 .arrive-text{direction:rtl;text-align:right;position:relative;z-index:2}
 .arrive-kicker{font-size:13.5px;color:#000;margin-bottom:10px;font-weight:600;letter-spacing:.01em}
 .arrive-lead{font-size:clamp(18px,1.7vw,23px);color:var(--ink-2);font-weight:800;margin-bottom:6px}
-.arrive-big{font-size:clamp(64px,11vw,200px);line-height:.94;font-weight:900;color:var(--orange);letter-spacing:-3px}
+.arrive-big{font-size:clamp(78px,13vw,220px);line-height:.92;font-weight:900;color:var(--orange);letter-spacing:-3px}
 .arrive-figure{position:relative;display:flex;justify-content:center;align-items:center;min-height:300px}
 .arrive-figure .blk{position:absolute;background:var(--orange);border-radius:22px;z-index:0}
 /* peeks left of the photo but must never reach the text column */
@@ -119,8 +119,7 @@ header.bar{position:relative;z-index:60;background:var(--bar)}
 .adv-ic svg{width:56px;height:56px;fill:none;stroke:var(--orange);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
 /* 3rd icon: the circle is an open arc broken by the pointing hand */
 
-.adv-ic.open{border:0;width:auto;height:auto}
-.adv-ic.open svg{width:56px;height:56px;stroke-width:2.6}
+.adv-ic.open svg{width:74px;height:74px;stroke-width:3.4}
 .adv-col h3{font-size:clamp(19px,1.7vw,23px);font-weight:800;margin-bottom:12px;color:#fff}
 .adv-col p{font-size:16px;color:var(--navy-text);max-width:300px;margin:0 auto;line-height:1.7}
 
@@ -183,26 +182,26 @@ footer.foot{background:var(--foot);color:#C3CCDF;padding:clamp(56px,7vw,84px) 0 
   /* ── 4. hero image ends at the fold; phone 3/4 above it, 1/4 below ── */
   /* hero image is a fixed band; the phone FLOATS OVER it and overhangs the
      bottom edge onto the next section, so it is never clipped by the image. */
-  .hero{min-height:auto;padding-bottom:120px;overflow:visible}
+  .hero{min-height:auto;padding-bottom:130px;overflow:visible;background:transparent}
   .hero-bg{height:520px;top:0;bottom:auto}
   .hero-shade{height:520px;top:0;bottom:auto}
   .hero-inner{grid-template-columns:1fr;gap:26px;min-height:0;
     padding:26px 0 0;text-align:center;justify-items:center}
   .hero-text{order:1}
   .hero-phone{order:2;width:216px;position:relative;z-index:4;margin-bottom:-120px;
-    filter:drop-shadow(0 22px 40px rgba(0,0,0,.55))}
+    filter:drop-shadow(0 10px 18px rgba(0,0,0,.42))}
   .hero h1{font-size:clamp(26px,7vw,34px)}
   /* 5 */
   .arrive-figure{min-height:0}
   /* order: mobile mockup overhang · then text · then the square image */
-  .arrive{padding-top:34px}
+  .arrive{padding-top:86px}
   .arrive-inner{display:flex;flex-direction:column;gap:34px}
   .arrive-text{order:1}
   .arrive-figure{order:2}
   .arrive-figure img{max-width:66%}
 
-  .b1{width:26%!important;height:54%!important;left:5%!important;top:16%!important}
-  .b2{width:26%!important;height:44%!important;top:24%!important;right:5%!important}
+  .b1{width:26%!important;height:46%!important;left:5%!important;top:50%!important;transform:translateY(-50%)!important}
+  .b2{width:26%!important;height:46%!important;top:50%!important;right:5%!important;transform:translateY(-50%)!important}
   /* 7 — one screen at a time */
   .car-track{gap:14px}
   .car-track>.shot{flex:0 0 78%!important}
@@ -254,8 +253,11 @@ footer.foot{background:var(--foot);color:#C3CCDF;padding:clamp(56px,7vw,84px) 0 
 .wordmark{font-family:'Marion','Alef',serif;font-weight:700;letter-spacing:.01em}
 
 /* ══ SH✡MER Nature banner — sibling product, brand green, coming soon ══ */
-.nat-band{position:relative;overflow:hidden;isolation:isolate;
-  background:radial-gradient(120% 90% at 50% 0%,#122416 0%,#0B140E 62%,#070F09 100%)}
+.nat-band{position:relative;overflow:hidden;isolation:isolate;background:#0B140E}
+.nat-band .nat-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  object-position:center 42%;opacity:.30;z-index:0}
+.nat-band::after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(120% 85% at 50% 20%,rgba(18,36,22,.55) 0%,rgba(11,20,14,.88) 58%,rgba(7,15,9,.97) 100%)}
 .nat-band img.nat-logo{width:clamp(88px,15vw,132px);height:auto;margin:0 auto 18px;display:block;
   filter:drop-shadow(0 6px 22px rgba(0,0,0,.5))}
 .nat-band::after{content:"";position:absolute;inset:0;z-index:1;
@@ -318,7 +320,7 @@ footer.foot{background:var(--foot);color:#C3CCDF;padding:clamp(56px,7vw,84px) 0 
   <div class="wrap arrive-inner">
     <div class="arrive-text">
       <div class="arrive-kicker"><span data-i="kick">העיקרון שעליו מתבסס</span> <span class="wordmark">SH<span class="star">✡</span>MER</span></div>
-      <div class="arrive-lead" data-i="lead">ברגעי סכנה ומצוקה, מי שנמצא הכי קרוב –</div>
+      <div class="arrive-lead" data-i="lead">ברגעי סכנה ומצוקה,<br>מי שנמצא הכי קרוב –</div>
       <div class="arrive-big" data-i="big">מגיע<br>ראשון.</div>
     </div>
     <div class="arrive-figure">
@@ -334,7 +336,7 @@ footer.foot{background:var(--foot);color:#C3CCDF;padding:clamp(56px,7vw,84px) 0 
   <div class="wrap">
     <h2><span data-i="advt">היתרונות של</span> <span class="wordmark">SH<span class="star">✡</span>MER</span></h2>
     <div class="adv-grid"><div class="adv-col">
-        <div class="adv-ic"><svg viewBox="0 0 100 100"><path d="M45 56V33a5 5 0 0 1 10 0v18" stroke-width="4.6"/><path d="M55 49a5 5 0 0 1 10 0v6" stroke-width="4.6"/><path d="M65 53a5 5 0 0 1 10 0v13c0 10-6.6 18-17 18h-5c-6 0-9.2-3.2-13.4-9.2l-5.8-8.6a5 5 0 0 1 7.8-4.9l4.4 4.4" stroke-width="4.6"/></svg></div>
+        <div class="adv-ic open"><svg viewBox="0 0 100 100"><path d="M45 56V33a5 5 0 0 1 10 0v18" stroke-width="4.6"/><path d="M55 49a5 5 0 0 1 10 0v6" stroke-width="4.6"/><path d="M65 53a5 5 0 0 1 10 0v13c0 10-6.6 18-17 18h-5c-6 0-9.2-3.2-13.4-9.2l-5.8-8.6a5 5 0 0 1 7.8-4.9l4.4 4.4" stroke-width="4.6"/></svg></div>
         <h3 data-i="a3t">לחיצה אחת=הרבה פעולות</h3>
         <p data-i="a3x">משמיעה אזעקה קולנית, שולחת התראה לכל המשתמשים, מציגה מסלול מהיר לאירוע, ועוד…</p>
       </div>
@@ -361,6 +363,7 @@ footer.foot{background:var(--foot);color:#C3CCDF;padding:clamp(56px,7vw,84px) 0 
 <!-- ══ CLOSING CTA ══ -->
 <!-- ══ SH✡MER NATURE ══ -->
 <section class="nat-band">
+  <img class="nat-photo" src="SHOMERNature_BannerBIG.jpg" alt="" aria-hidden="true">
   <div class="wrap nat-in">
     <img class="nat-logo" src="nature-badge.png" alt="SH✡MER Nature">
     <span class="nat-soon" data-i="nsoon">בקרוב · COMING SOON</span>
@@ -413,7 +416,7 @@ var I18N={nsoon:{he:"בקרוב · COMING SOON",en:"COMING SOON",ar:"قريبً�
  h1:{he:"הרשת החברתית הראשונה בישראל של אזרחים למען אזרחים",en:"Israel's first social network of citizens for citizens",ar:"أول شبكة اجتماعية في إسرائيل من المواطنين لأجل المواطنين"},
  hsub:{he:"פועלים יחד לערבות הדדית<br>מחויבות חברתית ואהבת חינם",en:"Acting together for mutual responsibility<br>social commitment and selfless care",ar:"نعمل معًا من أجل التكافل<br>والالتزام الاجتماعي والمحبة"},
  kick:{he:"העיקרון שעליו מתבסס",en:"The principle behind",ar:"المبدأ الذي يقوم عليه"},
- lead:{he:"ברגעי סכנה ומצוקה, מי שנמצא הכי קרוב –",en:"In moments of danger and distress, whoever is closest —",ar:"في لحظات الخطر والضيق، الأقرب —"},
+ lead:{he:"ברגעי סכנה ומצוקה,<br>מי שנמצא הכי קרוב –",en:"In moments of danger and distress, whoever is closest —",ar:"في لحظات الخطر والضيق، الأقرب —"},
  big:{he:"מגיע<br>ראשון.",en:"arrives<br>first.",ar:"يصل<br>أولًا."},
  advt:{he:"היתרונות של",en:"The advantages of",ar:"مزايا"},
  a1t:{he:"מעגלי שומרים",en:"SH✡MER circles",ar:"دوائر الحماية"},
