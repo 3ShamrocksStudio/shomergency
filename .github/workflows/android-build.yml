@@ -45,6 +45,7 @@ jobs:
 
 
       - name: Force correct adaptive-icon resolutions (108dp)
+        working-directory: native
         run: |
           node - <<'EOF'
           /* Android adaptive icons are 108dp. capacitor-assets emits the LEGACY 48dp
