@@ -58,7 +58,7 @@ h1,h2,h3{line-height:1.2;font-weight:800}
 
 /* ── orange pill CTA ── */
 .btn-orange{display:inline-flex;align-items:center;justify-content:center;gap:10px;background:var(--orange);color:#fff;
-  font-weight:800;font-size:17px;min-height:56px;padding:0 46px;border-radius:999px;white-space:nowrap;
+  font-weight:800;font-size:17px;min-height:56px;padding:0 62px;border-radius:999px;white-space:nowrap;
   transition:background .18s,transform .12s,box-shadow .18s;box-shadow:0 6px 18px rgba(252,153,24,.28)}
 .btn-orange:hover{background:var(--orange-d);transform:translateY(-1px)}
 .btn-orange:active{transform:scale(.98)}
@@ -119,7 +119,8 @@ header.bar{position:relative;z-index:60;background:var(--bar)}
 .adv-ic svg{width:56px;height:56px;fill:none;stroke:var(--orange);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
 /* 3rd icon: the circle is an open arc broken by the pointing hand */
 
-.adv-ic.open svg{width:140px;height:140px;stroke-width:1.5}
+.adv-ic.open{border:0;width:auto;height:auto}
+.adv-ic.open svg{width:56px;height:56px;stroke-width:2.6}
 .adv-col h3{font-size:clamp(19px,1.7vw,23px);font-weight:800;margin-bottom:12px;color:#fff}
 .adv-col p{font-size:16px;color:var(--navy-text);max-width:300px;margin:0 auto;line-height:1.7}
 
@@ -157,7 +158,7 @@ footer.foot{background:var(--foot);color:#C3CCDF;padding:clamp(56px,7vw,84px) 0 
   .hero-phone{order:2;margin:0 auto}
   .hero-text{order:1;text-align:center}
   .hero-text h1,.hero-text p{margin-inline:auto}
-  .hero-shade{background:linear-gradient(180deg,rgba(10,16,32,.55) 0%,rgba(10,16,32,.72) 100%)}
+  .hero-shade{background:linear-gradient(180deg,rgba(10,16,32,.42) 0%,rgba(10,16,32,.18) 62%,rgba(10,16,32,0) 100%)}
   .hero-cta{display:inline-flex}
   .arrive-inner{grid-template-columns:1fr;gap:38px}
   .arrive-text{order:2;text-align:center}
@@ -194,8 +195,8 @@ footer.foot{background:var(--foot);color:#C3CCDF;padding:clamp(56px,7vw,84px) 0 
   /* 5 */
   .arrive-figure{min-height:0}
   /* order: mobile mockup overhang · then text · then the square image */
-  .arrive{padding-top:0}
-  .arrive-inner{display:flex;flex-direction:column;gap:22px}
+  .arrive{padding-top:34px}
+  .arrive-inner{display:flex;flex-direction:column;gap:34px}
   .arrive-text{order:1}
   .arrive-figure{order:2}
   .arrive-figure img{max-width:66%}
@@ -207,18 +208,18 @@ footer.foot{background:var(--foot);color:#C3CCDF;padding:clamp(56px,7vw,84px) 0 
   .car-track>.shot{flex:0 0 78%!important}
   /* 8 */
   .close-cta p{max-width:none;width:min(300px,88%);font-size:clamp(19px,5vw,23px);line-height:1.42}
-  .btn-orange{font-size:16px;min-height:54px;padding:0 36px}
+  .btn-orange{font-size:16px;min-height:54px;padding:0 52px}
   .bar-left .btn-orange{padding:0}
   .foot-badge{height:clamp(112px,26vw,150px)}
 }
 @media (max-width:400px){
   .langs{gap:8px;font-size:12px}
-  .btn-orange{padding:9px 12px;font-size:12.5px}
+  .btn-orange{padding:0 26px;font-size:13px;min-height:48px}
 }
 @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 
 /* ── disclaimer: own block, white bg, brand red, red rounded outline ── */
-.disc-wrap{background:var(--white);padding:0 0 clamp(26px,4vw,40px)}
+.disc-wrap{background:var(--white);padding:0 0 clamp(96px,13vw,140px)}
 .disc-card{max-width:660px;margin:0 auto;border:2px solid #D42B2B;border-radius:18px;
   padding:18px 22px;background:#fff;text-align:center}
 .disc-txt{font-size:14.5px;line-height:1.7;color:#D42B2B;margin:0}
@@ -253,8 +254,10 @@ footer.foot{background:var(--foot);color:#C3CCDF;padding:clamp(56px,7vw,84px) 0 
 .wordmark{font-family:'Marion','Alef',serif;font-weight:700;letter-spacing:.01em}
 
 /* ══ SH✡MER Nature banner — sibling product, brand green, coming soon ══ */
-.nat-band{position:relative;overflow:hidden;background:#0B140E;isolation:isolate}
-.nat-band img.nat-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.42;z-index:0}
+.nat-band{position:relative;overflow:hidden;isolation:isolate;
+  background:radial-gradient(120% 90% at 50% 0%,#122416 0%,#0B140E 62%,#070F09 100%)}
+.nat-band img.nat-logo{width:clamp(88px,15vw,132px);height:auto;margin:0 auto 18px;display:block;
+  filter:drop-shadow(0 6px 22px rgba(0,0,0,.5))}
 .nat-band::after{content:"";position:absolute;inset:0;z-index:1;
   background:linear-gradient(180deg,rgba(11,20,14,.86),rgba(11,20,14,.58) 45%,rgba(11,20,14,.94))}
 .nat-in{position:relative;z-index:2;text-align:center;padding:clamp(58px,7vw,92px) 0}
@@ -331,7 +334,7 @@ footer.foot{background:var(--foot);color:#C3CCDF;padding:clamp(56px,7vw,84px) 0 
   <div class="wrap">
     <h2><span data-i="advt">היתרונות של</span> <span class="wordmark">SH<span class="star">✡</span>MER</span></h2>
     <div class="adv-grid"><div class="adv-col">
-        <div class="adv-ic"><svg viewBox="0 0 100 100"><path d="M74 76A34 34 0 1 0 50 86" stroke-width="4.6"/><path d="M45 56V33a5 5 0 0 1 10 0v18" stroke-width="4.6"/><path d="M55 49a5 5 0 0 1 10 0v6" stroke-width="4.6"/><path d="M65 53a5 5 0 0 1 10 0v13c0 10-6.6 18-17 18h-5c-6 0-9.2-3.2-13.4-9.2l-5.8-8.6a5 5 0 0 1 7.8-4.9l4.4 4.4" stroke-width="4.6"/></svg></div>
+        <div class="adv-ic"><svg viewBox="0 0 100 100"><path d="M45 56V33a5 5 0 0 1 10 0v18" stroke-width="4.6"/><path d="M55 49a5 5 0 0 1 10 0v6" stroke-width="4.6"/><path d="M65 53a5 5 0 0 1 10 0v13c0 10-6.6 18-17 18h-5c-6 0-9.2-3.2-13.4-9.2l-5.8-8.6a5 5 0 0 1 7.8-4.9l4.4 4.4" stroke-width="4.6"/></svg></div>
         <h3 data-i="a3t">לחיצה אחת=הרבה פעולות</h3>
         <p data-i="a3x">משמיעה אזעקה קולנית, שולחת התראה לכל המשתמשים, מציגה מסלול מהיר לאירוע, ועוד…</p>
       </div>
@@ -358,8 +361,8 @@ footer.foot{background:var(--foot);color:#C3CCDF;padding:clamp(56px,7vw,84px) 0 
 <!-- ══ CLOSING CTA ══ -->
 <!-- ══ SH✡MER NATURE ══ -->
 <section class="nat-band">
-  <img class="nat-bg" src="SHOMERNature_BannerBIG.jpg" alt="" aria-hidden="true">
   <div class="wrap nat-in">
+    <img class="nat-logo" src="nature-badge.png" alt="SH✡MER Nature">
     <span class="nat-soon" data-i="nsoon">בקרוב · COMING SOON</span>
     <div class="nat-h"><span class="wordmark">SH<span class="star" style="color:#50DB0F">✡</span>MER</span> <em>Nature</em></div>
     <p class="nat-p" data-i="np">אותה רשת שמירה — הפעם ליער, לחוף, לחי ולסביבה.</p>
@@ -392,12 +395,11 @@ footer.foot{background:var(--foot);color:#C3CCDF;padding:clamp(56px,7vw,84px) 0 
       <a href="mailto:support@shomer-app.co.il" data-i="fl4">כתבו לנו</a>
       </div>
       <div class="foot-social">
-        <a href="mailto:support@shomer-app.co.il" aria-label="Email"><svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2.6"/><path d="M3 7l9 6 9-6"/></svg></a>
-        <a href="https://www.instagram.com/shomer.app" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.2" fill="currentColor" stroke="none"/></svg></a>
-        <a href="https://www.facebook.com/shomer.app" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M14.5 8.5h2.6V5.2h-2.9c-2.6 0-4.2 1.7-4.2 4.3v2.1H7.4v3.3H10V21h3.4v-6.1h2.6l.5-3.3h-3.1V9.7c0-.8.4-1.2 1.1-1.2Z"/></svg></a>
-        <a href="https://wa.me/972524806699" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24"><path d="M20 11.6a8 8 0 0 1-11.9 7L4 20l1.5-4a8 8 0 1 1 14.5-4.4Z"/><path d="M9.2 9.4c.3-.7.6-.7.9-.7h.6c.2 0 .5 0 .7.5l.8 1.9c.1.3 0 .5-.1.7l-.4.5c-.1.2-.3.4-.1.7a7 7 0 0 0 3 2.6c.3.1.5.1.7-.1l.6-.7c.2-.2.4-.2.7-.1l1.8.9c.3.1.4.3.4.5 0 .5-.3 1.4-1.4 1.7-1 .3-2.4.2-4.6-1.2a10 10 0 0 1-3.6-4c-.4-.9-.5-1.7-.4-2.3Z" fill="currentColor" stroke="none"/></svg></a>
-      </div>
-      <div class="foot-links-hidden" style="display:none">
+  <a href="https://www.linkedin.com/company/3shamrocks-studio" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3.4"/><path d="M7.2 10.4v6.4M7.2 7.4v.02M11 16.8v-6.4M11 13.2c0-1.6 1-2.8 2.5-2.8s2.5 1.1 2.5 2.8v3.6"/></svg></a>
+  <a href="https://www.instagram.com/shomer.app" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.2" fill="currentColor" stroke="none"/></svg></a>
+  <a href="mailto:support@shomer-app.co.il" aria-label="Email"><svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2.6"/><path d="M3 7l9 6 9-6"/></svg></a>
+</div>
+<div class="foot-links-hidden" style="display:none">
     </div>
     <div class="foot-meta"><img src="3shamrocks.png" alt="3Shamrocks Studio"><span data-i="copy">© 2026 3Shamrocks Studio · SH✡MER</span></div>
   </div>
